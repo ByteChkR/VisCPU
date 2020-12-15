@@ -1,0 +1,29 @@
+:include "../register_layout.txt"
+
+.console_write ; (REG_A = value)
+COPY REG_A CONSOLE_OUT_ADDR
+RET
+
+.console_write_line ; (REG_A = ptr, REG_B = length)
+JSR console_write_buffer
+COPY NEW_LINE_CHAR CONSOLE_OUT_ADDR
+RET
+
+.console_write_buffer ; (REG_A = ptr, REG_B = length)
+COPY REG_A REG_Z
+ADD REG_Z REG_B ; END POSITION
+LOAD REG_Y CONSOLE_OUT_ADDR ; Create Pointer to Console Out
+
+
+.console_write_buffer_loop linker:hide
+
+CREF REG_A REG_Y ; Write Value to Console
+
+INC REG_A ; Move Ptr
+
+BLT REG_A REG_Z console_write_buffer_loop ; Exit Condition
+
+SUB REG_A REG_B ; Restore SRC Ptr
+
+RET
+

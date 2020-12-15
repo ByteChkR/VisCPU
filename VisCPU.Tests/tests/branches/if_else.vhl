@@ -1,0 +1,132 @@
+#include "../utils.vhl"
+
+
+string(test_if_else_v, "IF_ELSE_V_Test");
+string(test_if_else_c, "IF_ELSE_C_Test");
+string(test_if_else_vc, "IF_ELSE_VC_Test");
+string(test_if_else_cv, "IF_ELSE_CV_Test");
+string(test_if_else_vv, "IF_ELSE_VV_Test");
+string(test_if_else_cc, "IF_ELSE_CC_Test");
+
+string(test_eval_fail, "Evaluation is wrong.");
+
+private void TestIfElse_V()
+{
+	BeginTest(ptr_of(test_if_else_v), size_of(test_if_else_v));
+	var a = 0;
+	if(a)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElse_C()
+{
+	BeginTest(ptr_of(test_if_else_c), size_of(test_if_else_c));
+	if(0)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+private void TestIfElse_VC()
+{
+	BeginTest(ptr_of(test_if_else_vc), size_of(test_if_else_vc));
+	var a = 0;
+	if(a == 1)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElse_CV()
+{
+	BeginTest(ptr_of(test_if_else_cv), size_of(test_if_else_cv));
+	var a = 0;
+	if(1 == a)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElse_CC()
+{
+	BeginTest(ptr_of(test_if_else_cc), size_of(test_if_else_cc));
+	if(0 == 1)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElse_VV()
+{
+	BeginTest(ptr_of(test_if_else_vv), size_of(test_if_else_vv));
+
+	var a = 0;
+	var b = 1;
+	
+	if(a == b)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+TestIfElse_V();
+TestIfElse_C();
+TestIfElse_VC();
+TestIfElse_CV();
+TestIfElse_VV();
+TestIfElse_CC();

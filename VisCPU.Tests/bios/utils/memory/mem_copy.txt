@@ -1,0 +1,24 @@
+:include "../register_layout.txt"
+
+; Implements mem_copy(REG_A = src, REG_B = length, REG_X = dst)
+
+HLT ; Do not Execute this file
+
+.mem_copy
+COPY REG_A REG_Z
+ADD REG_Z REG_B ; END POSITION
+
+
+.mem_copy_loop linker:hide
+
+CREF REG_A REG_X ; Write Init Value
+
+INC REG_A ; Move Ptr
+INC REG_X ; Move Ptr
+
+BLT REG_A REG_Z mem_copy_loop ; Exit Condition
+
+SUB REG_A REG_B ; Restore SRC Ptr
+SUB REG_X REG_B ; Restore DST Ptr
+
+RET

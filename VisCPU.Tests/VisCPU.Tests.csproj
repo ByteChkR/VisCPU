@@ -1,0 +1,114 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VisCPU.Compiler\VisCPU.Compiler.csproj" />
+    <ProjectReference Include="..\VisCPU.HL\VisCPU.HL.csproj" />
+    <ProjectReference Include="..\VisCPU.Instructions\VisCPU.Instructions.csproj" />
+    <ProjectReference Include="..\VisCPU.Peripherals\VisCPU.Peripherals.csproj" />
+    <ProjectReference Include="..\VisCPU.Utility\VisCPU.Utility.csproj" />
+    <ProjectReference Include="..\VisCPU\VisCPU.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="tests\assignments\assign_ac_ac_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_ac_av_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_ac_c_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_ac_v_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_av_ac_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_av_av_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_av_c_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_av_v_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_c_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\assign_v_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments\simple_assignment.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_ac_ac_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_ac_av_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_ac_c_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_ac_v_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_av_ac_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_av_av_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_av_c_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\assignments_pointer\assign_av_v_test.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\branches\if_else.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\branches\if_elseif_else.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\branches\if_else_if.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\branches\if_simple.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\instructions\ADD_Tests.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\instructions\DIV_Tests.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\instructions\MOD_Tests.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\instructions\MUL_Tests.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\instructions\SUB_Tests.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\utils.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

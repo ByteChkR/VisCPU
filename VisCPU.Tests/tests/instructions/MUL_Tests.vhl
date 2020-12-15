@@ -1,0 +1,69 @@
+#include "../utils.vhl"
+
+string(test_mul_cc, "MUL_CC_Simple_Test");
+string(test_mul_cv, "MUL_CV_Simple_Test");
+string(test_mul_vv, "MUL_VV_Simple_Test");
+string(test_mul_vc, "MUL_VC_Simple_Test");
+
+string(test_generic_math_fail, "Calculation Failed.");
+
+private void MUL_VV_Simple_Test()
+{
+	BeginTest(ptr_of(test_mul_vv), size_of(test_mul_vv));
+	var a = 2;
+	var b = 2;
+	var c = a * b;
+	if(c == 4)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+private void MUL_VC_Simple_Test()
+{
+	BeginTest(ptr_of(test_mul_vc), size_of(test_mul_vc));
+	var a = 2;
+	var c = a * 2;
+	if(c == 4)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+private void MUL_CC_Simple_Test()
+{
+	BeginTest(ptr_of(test_mul_cc), size_of(test_mul_cc));
+	var c = 2 * 2;
+	if(c == 4)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+private void MUL_CV_Simple_Test()
+{
+	BeginTest(ptr_of(test_mul_cv), size_of(test_mul_cv));
+	var a = 2;
+	var c = 2 * a;
+	if(c == 4)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+MUL_VV_Simple_Test();
+MUL_VC_Simple_Test();
+MUL_CV_Simple_Test();
+MUL_CC_Simple_Test();

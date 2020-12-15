@@ -1,0 +1,39 @@
+:include "../register_layout.txt"
+:data TEMP_COMPARE_VAL0 0x01 linker:hide
+:data TEMP_COMPARE_VAL1 0x01 linker:hide
+
+; Implements mem_compare(REG_A = src, REG_B = length, REG_X = dst)
+; Returns 1 in REG_Y if Equal
+
+HLT ; Do not Execute this file
+
+.mem_compare
+	COPY REG_A REG_Z
+	ADD REG_Z REG_B ; END POSITION
+
+
+.mem_compare_loop linker:hide
+
+	DREF REG_A TEMP_COMPARE_VAL0
+	DREF REG_X TEMP_COMPARE_VAL1
+
+	BNE TEMP_COMPARE_VAL0 TEMP_COMPARE_VAL1 mem_compare_result_unequal
+
+
+	INC REG_A ; Move Ptr
+	INC REG_X ; Move Ptr
+
+	BLT REG_A REG_Z mem_compare_loop ; Exit Condition
+
+	SUB REG_A REG_B ; Restore SRC Ptr
+	SUB REG_X REG_B ; Restore DST Ptr
+
+	LOAD REG_Y 0x1
+	RET
+
+.mem_compare_result_unequal linker:hide
+	SUB REG_A REG_B ; Restore SRC Ptr
+	SUB REG_X REG_B ; Restore DST Ptr
+
+	LOAD REG_Y 0x0
+	RET

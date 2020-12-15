@@ -1,0 +1,13 @@
+const_ptr consoleOut = 0xFFFF1001;
+const_var A = 0x41;
+const_var B = 0x42;
+var C = B+1;
+var D = A+2+1;
+var E = D+1;
+var F = E+1;
+consoleOut = A;
+consoleOut = B;
+consoleOut = C;
+consoleOut = D;
+consoleOut = E;
+consoleOut = F;

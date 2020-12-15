@@ -1,0 +1,64 @@
+:include "main.txt"
+:include "utils.txt"
+:include "commands/halt_cpu.txt"
+:include "data/strings.txt"
+
+:data BIOS_TERMINAL_COMPONENT_ADDR 0x01 0x01
+:data BIOS_TERMINAL_COMMAND_BUFFER 0xFF 0x00
+:const BIOS_TERMINAL_COMMAND_BUFFER_LENGTH 0xFF
+:data BIOS_TERMINAL_SETUP_TEMP_VAR 0x01 0x01
+:data BIOS_TERMINAL_COMPONENT_UPDATE_ADDR 0x01 0x01
+
+.register_terminal_component linker:hide
+	JSR strings_print_terminal_starting
+
+	; Create Pointer to entry in Component Register
+	LOAD BIOS_TERMINAL_SETUP_TEMP_VAR COMPONENT_REGISTER ; Create Pointer
+	ADD BIOS_TERMINAL_COMPONENT_ADDR BIOS_TERMINAL_SETUP_TEMP_VAR ; Add Component Offset
+
+	; Create Pointer to update function
+	LOAD BIOS_TERMINAL_SETUP_TEMP_VAR component_update
+	LOAD BIOS_TERMINAL_COMPONENT_UPDATE_ADDR BIOS_TERMINAL_SETUP_TEMP_VAR
+
+	; Copy Update Function Address to entry in COMPONENT_REGISTER
+	CREF BIOS_TERMINAL_COMPONENT_UPDATE_ADDR BIOS_TERMINAL_COMPONENT_ADDR
+
+	JSR strings_print_terminal_loaded
+
+	JMP bios_entry ; Give Away Control to Bios
+
+
+.component_update linker:hide
+	JSR terminal_read_line
+	RET
+
+
+
+.terminal_read_line linker:hide
+
+	JSR strings_print_terminal_cmd_prefix
+
+	LOAD REG_A BIOS_TERMINAL_COMMAND_BUFFER
+	LOAD REG_B BIOS_TERMINAL_COMMAND_BUFFER_LENGTH
+	JSR console_read_line
+	JSR console_write_buffer
+	
+	LOAD REG_Z EXIT_COMMAND_KEY_LENGTH
+
+	BNE REG_B REG_Z terminal_read_line_abort ; If the buffers have different length we dont compare
+	LOAD REG_X EXIT_COMMAND_KEY
+	JSR mem_compare
+
+	LOAD REG_Z 0x01
+	BNE REG_Y REG_Z terminal_read_line_abort
+	JSR exit_command
+
+.terminal_read_line_abort linker:hide
+	JSR terminal_clear_arg_buffer
+	RET
+
+.terminal_clear_arg_buffer
+	LOAD REG_A BIOS_TERMINAL_COMMAND_BUFFER
+	LOAD REG_B BIOS_TERMINAL_COMMAND_BUFFER_LENGTH
+	JSR mem_init
+	RET

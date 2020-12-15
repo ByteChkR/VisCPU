@@ -1,0 +1,12 @@
+#include "inc_file_B.vhl"
+
+Function();
+public void PubFunc()
+{
+	Function();
+}
+
+void PrivFunc()
+{
+	Function();
+}

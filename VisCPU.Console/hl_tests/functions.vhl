@@ -1,0 +1,39 @@
+void Add()
+{
+	a = a + b;
+}
+
+void Subtract()
+{
+	a = a - b;
+}
+
+void Multiply()
+{
+	a = a * b;
+}
+
+void PrintAB()
+{
+	cout = 0x41;
+	coutNum=a;
+	cout = 0x42;
+	coutNum=b;
+}
+
+var a = 1;
+var b = 2;
+
+const_var coutNum = 0xFFFF1002;
+const_var cout = 0xFFFF1001;
+
+PrintAB();
+
+Add();
+PrintAB();
+
+Subtract();
+PrintAB();
+
+Multiply();
+PrintAB();

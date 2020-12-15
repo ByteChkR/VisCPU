@@ -1,0 +1,21 @@
+:include "../utils/console/console_write.txt"
+
+:data TEXT_TO_WRITE "Console Write Works"
+:const TEXT_LEN 19
+
+.test_start
+
+LOAD REG_A '0'
+JSR console_write ; Test Writing Single Char
+
+LOAD REG_A TEXT_TO_WRITE
+LOAD REG_B TEXT_LEN
+JSR console_write_buffer
+
+; Loading not needed as we still have it loaded
+; LOAD REG_A TEXT_TO_WRITE
+; LOAD REG_B TEXT_LEN
+
+JSR console_write_line
+
+HLT

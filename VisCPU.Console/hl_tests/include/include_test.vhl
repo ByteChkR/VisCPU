@@ -1,0 +1,9 @@
+#include "tests/inc_file_A.vhl"
+
+Function();
+PubFunc();
+void MyFunc()
+{
+	Function();
+	PubFunc();
+}

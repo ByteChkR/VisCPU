@@ -1,0 +1,49 @@
+:data COMPONENT_REGISTER 0x10 0x00
+:data COMPONENT_REGISTER_COUNTER 0x01 0x00 linker:hide
+:data COMPONENT_REGISTER_SIZE 0x01 0x10 linker:hide
+:data COMPONENT_REGISTER_CURRENT 0x01 0x00 linker:hide
+:data BIOS_TEMP_VAR 0x01 0x00 linker:hide
+:data BIOS_ZERO_VAR 0x01 0x00 linker:hide
+:include "data/strings.txt"
+
+.bios_entry
+
+	JSR strings_print_cpu_arch
+	JSR strings_print_bios_ver
+	JSR strings_print_loading_bios
+	JSR strings_print_bios_registering
+
+	LOAD COMPONENT_REGISTER_SIZE 0x10
+
+	JSR strings_print_bios_load_finished
+
+
+.bios_loop linker:hide
+
+	DREF COMPONENT_REGISTER_CURRENT BIOS_TEMP_VAR
+	BEQ BIOS_TEMP_VAR BIOS_ZERO_VAR bios_loop_internal
+	JSR bios_comp_reg_run
+
+.bios_loop_internal linker:hide
+	JSR bios_comp_reg_update
+	JMP bios_loop
+
+
+.bios_comp_reg_update linker:hide
+	INC COMPONENT_REGISTER_COUNTER
+
+	BEQ COMPONENT_REGISTER_SIZE COMPONENT_REGISTER_COUNTER bios_comp_reg_reset
+	RET
+
+.bios_comp_reg_reset linker:hide
+	LOAD COMPONENT_REGISTER_COUNTER 0x00
+	RET
+
+.bios_comp_reg_run linker:hide
+	LOAD BIOS_TEMP_VAR COMPONENT_REGISTER
+	ADD BIOS_TEMP_VAR COMPONENT_REGISTER_COUNTER
+	DREF BIOS_TEMP_VAR COMPONENT_REGISTER_CURRENT
+	BEQ COMPONENT_REGISTER_CURRENT BIOS_ZERO_VAR bios_skip_run_component
+	JSREF COMPONENT_REGISTER_CURRENT
+	.bios_skip_run_component
+	RET

@@ -1,0 +1,69 @@
+#include "../utils.vhl"
+
+string(test_add_cc, "ADD_CC_Simple_Test");
+string(test_add_cv, "ADD_CV_Simple_Test");
+string(test_add_vv, "ADD_VV_Simple_Test");
+string(test_add_vc, "ADD_VC_Simple_Test");
+
+string(test_generic_math_fail, "Calculation Failed.");
+
+private void ADD_VV_Simple_Test()
+{
+	BeginTest(ptr_of(test_add_vv), size_of(test_add_vv));
+	var a = 0;
+	var b = 1;
+	var c = a + b;
+	if(c == 1)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+private void ADD_VC_Simple_Test()
+{
+	BeginTest(ptr_of(test_add_vc), size_of(test_add_vc));
+	var a = 0;
+	var c = a + 1;
+	if(c == 1)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+private void ADD_CC_Simple_Test()
+{
+	BeginTest(ptr_of(test_add_cc), size_of(test_add_cc));
+	var c = 0 + 1;
+	if(c == 1)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+private void ADD_CV_Simple_Test()
+{
+	BeginTest(ptr_of(test_add_cv), size_of(test_add_cv));
+	var a = 0;
+	var c = 1 + a;
+	if(c == 1)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_generic_math_fail), size_of(test_generic_math_fail));
+	return;
+}
+
+ADD_VV_Simple_Test();
+ADD_VC_Simple_Test();
+ADD_CV_Simple_Test();
+ADD_CC_Simple_Test();

@@ -1,0 +1,34 @@
+const_var test_begin = 0xFFFF2000;
+const_var test_fail = 0xFFFF2001;
+const_var test_pass = 0xFFFF2002;
+
+
+public void BeginTest(var namePtr, var len)
+{
+	var i = 0;
+	while(i < len)
+	{
+		test_begin = namePtr[i];
+		i = i + 1;
+	}
+	test_begin = 0x0; //Send Null Byte
+	return;
+}
+
+public void FailTest(var reasonPtr, var len)
+{
+	var i = 0;
+	while(i < len)
+	{
+		test_fail = reasonPtr[i];
+		i = i + 1;
+	}
+	test_fail = 0x0; //Send Null Byte
+	return;
+}
+
+public void PassTest()
+{
+	test_pass = 0x01; //Set Pass Flag
+	return;
+}

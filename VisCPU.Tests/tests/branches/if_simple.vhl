@@ -1,0 +1,108 @@
+#include "../utils.vhl"
+
+
+string(test_if_v, "IF_V_Simple_Test");
+string(test_if_c, "IF_C_Simple_Test");
+string(test_if_vc, "IF_VC_Simple_Test");
+string(test_if_cv, "IF_CV_Simple_Test");
+string(test_if_vv, "IF_VV_Simple_Test");
+string(test_if_cc, "IF_CC_Simple_Test");
+
+string(test_eval_fail, "Evaluation is wrong.");
+
+private void TestSimpleIf_V()
+{
+	BeginTest(ptr_of(test_if_v), size_of(test_if_v));
+	var a = 0;
+	if(a)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	
+	PassTest();
+	return;
+}
+
+
+private void TestSimpleIf_C()
+{
+	BeginTest(ptr_of(test_if_c), size_of(test_if_c));
+	if(0)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	
+	PassTest();
+	return;
+}
+
+private void TestSimpleIf_VC()
+{
+	BeginTest(ptr_of(test_if_vc), size_of(test_if_vc));
+	var a = 0;
+	if(a == 1)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	
+	PassTest();
+	return;
+}
+
+
+private void TestSimpleIf_CV()
+{
+	BeginTest(ptr_of(test_if_cv), size_of(test_if_cv));
+	var a = 0;
+	if(1 == a)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	
+	PassTest();
+	return;
+}
+
+
+private void TestSimpleIf_CC()
+{
+	BeginTest(ptr_of(test_if_cc), size_of(test_if_cc));
+	if(0 == 1)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	
+	PassTest();
+	return;
+}
+
+
+private void TestSimpleIf_VV()
+{
+	BeginTest(ptr_of(test_if_vv), size_of(test_if_vv));
+
+	var a = 0;
+	var b = 1;
+	
+	if(a == b)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	
+	PassTest();
+	return;
+}
+
+
+TestSimpleIf_V();
+TestSimpleIf_C();
+TestSimpleIf_VC();
+TestSimpleIf_CV();
+TestSimpleIf_VV();
+TestSimpleIf_CC();

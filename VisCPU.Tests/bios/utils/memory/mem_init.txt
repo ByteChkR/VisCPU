@@ -1,0 +1,11 @@
+:include "../register_layout.txt"
+:include "mem_set.txt"
+
+; Implements mem_init(REG_A = ptr, REG_B = length)
+
+HLT ; Do not Execute this file
+
+.mem_init
+LOAD REG_X 0x00
+JSR mem_set
+RET

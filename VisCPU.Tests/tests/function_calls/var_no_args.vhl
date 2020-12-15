@@ -1,0 +1,32 @@
+#include "../utils.vhl"
+
+string(str_test_name, "VarNoArgsTest");
+string(str_ret_val_fail, "Return value is not 5");
+
+private void TestC()
+{
+	return 5;
+}
+
+private void TestV()
+{
+	var b = 5;
+	return b;
+}
+
+private void VarNoArgsTest()
+{
+	BeginTest(ptr_of(str_test_name), size_of(str_test_name));
+	var a = TestC();
+	if(a == 5)
+	{
+		var c = TestV();
+		if(c == 5)
+		{
+			PassTest();
+			return;
+		}
+	}
+	FailTest(ptr_of(str_ret_val_fail), size_of(str_ret_val_fail));
+	return;
+}
