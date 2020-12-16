@@ -1,32 +1,42 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
-namespace VisCPU.HL.Compiler
+namespace VisCPU.HL.Compiler.Math
 {
-    public class ModuloExpressionCompiler : HLExpressionCompiler<HLBinaryOp>
+
+    public class ModuloExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
     {
 
         protected override bool NeedsOutput => true;
 
+        #region Public
+
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation, HLBinaryOp expr, ExpressionTarget outputTarget)
+            HLCompilation compilation,
+            HLBinaryOp expr,
+            ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse(expr.Left, outputTarget);
+            ExpressionTarget target = compilation.Parse( expr.Left, outputTarget );
             string rtName = compilation.GetTempVar();
+
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right, new ExpressionTarget(rtName, true));
-            
-            if (target.ResultAddress == outputTarget.ResultAddress)
+                                                         expr.Right,
+                                                         new ExpressionTarget( rtName, true )
+                                                        );
+
+            if ( target.ResultAddress == outputTarget.ResultAddress )
             {
                 compilation.ProgramCode.Add(
                                             $"MOD {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
-                compilation.ReleaseTempVar(rtName);
+
+                compilation.ReleaseTempVar( rtName );
             }
-            else if (rTarget.ResultAddress == outputTarget.ResultAddress)
+            else if ( rTarget.ResultAddress == outputTarget.ResultAddress )
             {
                 compilation.ProgramCode.Add(
                                             $"MOD {rTarget.ResultAddress} {target.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
+
                 return rTarget;
             }
             else
@@ -34,13 +44,18 @@ namespace VisCPU.HL.Compiler
                 compilation.ProgramCode.Add(
                                             $"MOD {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
-                compilation.ReleaseTempVar(rtName);
-                compilation.ReleaseTempVar(target.ResultAddress);
+
+                compilation.ReleaseTempVar( rtName );
+                compilation.ReleaseTempVar( target.ResultAddress );
+
                 return outputTarget;
             }
 
             return target;
         }
 
+        #endregion
+
     }
+
 }

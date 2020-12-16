@@ -1,5 +1,6 @@
 ﻿namespace VisCPU.HL
 {
+
     public struct VariableData : IExternalData
     {
 
@@ -15,14 +16,14 @@
             return finalName;
         }
 
-        private string name;
-        private string finalName;
+        private readonly string name;
+        private readonly string finalName;
 
         public uint Size;
 
         public readonly string InitContent;
 
-        public VariableData(string name, string finalName, uint dataSize)
+        public VariableData( string name, string finalName, uint dataSize )
         {
             InitContent = null;
             Size = dataSize;
@@ -30,13 +31,14 @@
             this.finalName = finalName;
         }
 
-        public VariableData(string name, string finalName, string content)
+        public VariableData( string name, string finalName, string content )
         {
             this.name = name;
             this.finalName = finalName;
-            Size = (uint)(content?.Length ?? 1);
+            Size = ( uint ) ( content?.Length ?? 1 );
             InitContent = content;
         }
 
     }
+
 }

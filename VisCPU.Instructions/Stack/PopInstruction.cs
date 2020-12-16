@@ -1,5 +1,6 @@
 ﻿namespace VisCPU.Instructions.Stack
 {
+
     public class PopInstruction : StackInstruction
     {
 
@@ -11,14 +12,19 @@
 
         public override uint ArgumentCount => 1;
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            uint addr = cpu.DecodeArgument(0);
+            uint addr = cpu.DecodeArgument( 0 );
 
             uint val = cpu.Pop();
-            Log(cpu, $"Popping Value: {val}");
-            cpu.MemoryBus.Write(addr, val);
+            Log( cpu, $"Popping Value: {val}" );
+            cpu.MemoryBus.Write( addr, val );
         }
 
+        #endregion
+
     }
+
 }

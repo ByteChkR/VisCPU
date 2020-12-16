@@ -2,6 +2,7 @@
 
 namespace VisCPU.HL.Parser.Tokens.Combined
 {
+
     /// <summary>
     ///     Implements a Variable(Property) Definition Token
     /// </summary>
@@ -30,6 +31,8 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// </summary>
         public readonly IHLToken TypeName;
 
+        #region Public
+
         /// <summary>
         ///     Public Constructor
         /// </summary>
@@ -39,12 +42,16 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="initializerExpression">Initializer Expression</param>
         public VariableDefinitionToken(
-            IHLToken name, IHLToken typeName, IHLToken[] modifiers, IHLToken[] subtokens,
-            HLExpression initializerExpression, IHLToken size = null) : base(
-                                                                             HLTokenType.OpVariableDefinition,
-                                                                             subtokens,
-                                                                             typeName.SourceIndex
-                                                                            )
+            IHLToken name,
+            IHLToken typeName,
+            IHLToken[] modifiers,
+            IHLToken[] subtokens,
+            HLExpression initializerExpression,
+            IHLToken size = null ) : base(
+                                          HLTokenType.OpVariableDefinition,
+                                          subtokens,
+                                          typeName.SourceIndex
+                                         )
         {
             Modifiers = modifiers;
             Name = name;
@@ -59,8 +66,11 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Unpack(Modifiers)} {TypeName} {Name}";
+            return $"{Unpack( Modifiers )} {TypeName} {Name}";
         }
 
+        #endregion
+
     }
+
 }

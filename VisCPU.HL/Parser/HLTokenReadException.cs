@@ -9,6 +9,7 @@ using VisCPU.HL.Parser.Tokens;
 /// </summary>
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     Occurs if the Parser Encounters a Token that is unexpected
     /// </summary>
@@ -23,12 +24,14 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     The Sequence that was unexpected
         /// </summary>
-        private readonly IEnumerable<IHLToken> sequence;
+        private readonly IEnumerable < IHLToken > sequence;
 
         /// <summary>
         ///     The Token that led to the Exception
         /// </summary>
         private readonly HLTokenType unmatched;
+
+        #region Public
 
         /// <summary>
         ///     Public Constructor
@@ -38,8 +41,11 @@ namespace VisCPU.HL.Parser
         /// <param name="unmatched">Unmatched Token</param>
         /// <param name="start">Start index in source</param>
         public HLTokenReadException(
-            IEnumerable<IHLToken> tokenSequence, HLTokenType[] expected, HLTokenType unmatched, int start) :
-            base($"Expected '{GetExpectedTokenString(expected)}' but got '{unmatched} at index {start}'")
+            IEnumerable < IHLToken > tokenSequence,
+            HLTokenType[] expected,
+            HLTokenType unmatched,
+            int start ) :
+            base( $"Expected '{GetExpectedTokenString( expected )}' but got '{unmatched} at index {start}'" )
         {
             sequence = tokenSequence;
             this.expected = expected;
@@ -54,35 +60,46 @@ namespace VisCPU.HL.Parser
         /// <param name="unmatched">Unmatched Token</param>
         /// <param name="start">Start index in source</param>
         public HLTokenReadException(
-            IEnumerable<IHLToken> tokenSequence, HLTokenType expected, HLTokenType unmatched,
-            int start) : this(
-                              tokenSequence,
-                              new[] { expected },
-                              unmatched,
-                              start
-                             )
+            IEnumerable < IHLToken > tokenSequence,
+            HLTokenType expected,
+            HLTokenType unmatched,
+            int start ) : this(
+                               tokenSequence,
+                               new[] { expected },
+                               unmatched,
+                               start
+                              )
         {
         }
+
+        #endregion
+
+        #region Private
 
         /// <summary>
         ///     Returns the string representation of the expected tokens
         /// </summary>
         /// <param name="expected">Expected Tokens</param>
         /// <returns></returns>
-        private static string GetExpectedTokenString(HLTokenType[] expected)
+        private static string GetExpectedTokenString( HLTokenType[] expected )
         {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < expected.Length; i++)
+
+            for ( int i = 0; i < expected.Length; i++ )
             {
-                sb.Append(expected[i]);
-                if (i != expected.Length - 1)
+                sb.Append( expected[i] );
+
+                if ( i != expected.Length - 1 )
                 {
-                    sb.Append(", ");
+                    sb.Append( ", " );
                 }
             }
 
             return sb.ToString();
         }
 
+        #endregion
+
     }
+
 }

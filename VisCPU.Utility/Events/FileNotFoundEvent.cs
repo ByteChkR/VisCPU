@@ -5,9 +5,18 @@
     {
 
         private const string EVENT_KEY = "file-not-found";
-        public FileNotFoundEvent(string file, bool canContinue) : base($"The file '{file}' could not be found.", EVENT_KEY, canContinue)
+
+        #region Public
+
+        public FileNotFoundEvent( string file, bool canContinue ) : base(
+                                                                         $"The file '{file}' could not be found.",
+                                                                         EVENT_KEY,
+                                                                         canContinue
+                                                                        )
         {
         }
+
+        #endregion
 
     }
 

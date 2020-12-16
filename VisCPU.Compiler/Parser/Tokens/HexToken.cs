@@ -1,23 +1,22 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
+using VisCPU.Compiler.Parser.Events;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
+
     public class HexToken : ValueToken
     {
-
-        public HexToken(string originalText, int start, int length) : base(originalText, start, length)
-        {
-        }
 
         public override uint Value
         {
             get
             {
-                string val = GetValue().Remove(0, 2);
-                if (uint.TryParse(val, NumberStyles.HexNumber, null, out uint hexVal))
+                string val = GetValue().Remove( 0, 2 );
+
+                if ( uint.TryParse( val, NumberStyles.HexNumber, null, out uint hexVal ) )
                 {
                     return hexVal;
                 }
@@ -28,10 +27,19 @@ namespace VisCPU.Compiler.Parser.Tokens
             }
         }
 
+        #region Public
+
+        public HexToken( string originalText, int start, int length ) : base( originalText, start, length )
+        {
+        }
+
         public override string ToString()
         {
             return base.ToString() + $"({Value})";
         }
 
+        #endregion
+
     }
+
 }

@@ -4,6 +4,7 @@
 
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     Token Type Enum containing all tokens used inside XL
     /// </summary>
@@ -115,4 +116,5 @@ namespace VisCPU.HL.Parser
         EOF
 
     }
+
 }

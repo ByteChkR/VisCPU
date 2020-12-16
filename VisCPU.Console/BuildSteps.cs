@@ -1,4 +1,6 @@
-﻿namespace viscc
+﻿namespace VisCPU.Console
 {
-    public delegate string BuildSteps(string originalFile);
+
+    public delegate string BuildSteps( string originalFile );
+
 }

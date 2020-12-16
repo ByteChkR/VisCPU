@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
+
     /// <summary>
     ///     For Operator Implementation
     /// </summary>
@@ -24,7 +25,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         private readonly HLTokenType OperationType = HLTokenType.OpFor;
 
-
         /// <summary>
         ///     Variable Declaration
         /// </summary>
@@ -35,6 +35,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         private readonly HLExpression VInc;
 
+        #region Public
 
         /// <summary>
         ///     Public Constructor
@@ -46,8 +47,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="operationType">Operation Type</param>
         /// <param name="exprBody">The Expression Body</param>
         public HLForOp(
-            HLExpression vDecl, HLExpression condition, HLExpression vInc, HLExpression[] exprBody,
-            int sourceIdx) : base(sourceIdx)
+            HLExpression vDecl,
+            HLExpression condition,
+            HLExpression vInc,
+            HLExpression[] exprBody,
+            int sourceIdx ) : base( sourceIdx )
         {
             Condition = condition;
             VDecl = vDecl;
@@ -59,15 +63,19 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List<IHLToken> GetChildren()
+        public override List < IHLToken > GetChildren()
         {
-            return new List<IHLToken>
+            return new List < IHLToken >
                    {
                        VDecl,
                        Condition,
                        VInc
-                   }.Concat(ExprBody).ToList();
+                   }.Concat( ExprBody ).
+                     ToList();
         }
 
+        #endregion
+
     }
+
 }

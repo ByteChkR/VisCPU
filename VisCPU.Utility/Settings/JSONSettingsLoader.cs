@@ -8,15 +8,20 @@ namespace VisCPU.Utility.Settings
 
     public class JSONSettingsLoader : SettingsLoader
     {
-        public override object LoadSettings(Type t, string file)
+
+        #region Public
+
+        public override object LoadSettings( Type t, string file )
         {
-            return JsonConvert.DeserializeObject(File.ReadAllText(file), t);
+            return JsonConvert.DeserializeObject( File.ReadAllText( file ), t );
         }
 
-        public override void SaveSettings(object o, string file)
+        public override void SaveSettings( object o, string file )
         {
-            File.WriteAllText(file, JsonConvert.SerializeObject(o, Formatting.Indented));
+            File.WriteAllText( file, JsonConvert.SerializeObject( o, Formatting.Indented ) );
         }
+
+        #endregion
 
     }
 

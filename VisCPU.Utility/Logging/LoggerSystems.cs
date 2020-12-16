@@ -4,7 +4,7 @@ namespace VisCPU.Utility.Logging
 {
 
     [Flags]
-    public enum LoggerSystems : int
+    public enum LoggerSystems
     {
 
         EventSystem = 1,
@@ -37,8 +37,9 @@ namespace VisCPU.Utility.Logging
         HL = HL_Parser | HL_Compiler,
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
-        
+
         Default = UriResolver | Console
+
     }
 
 }

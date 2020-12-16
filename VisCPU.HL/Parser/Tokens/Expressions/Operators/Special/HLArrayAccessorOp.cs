@@ -6,6 +6,7 @@ using System.Linq;
 /// </summary>
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
+
     /// <summary>
     ///     Array Accessor Operator Implementation
     /// </summary>
@@ -23,31 +24,35 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public readonly HLExpression[] ParameterList;
 
         /// <summary>
+        ///     The Operator Token
+        /// </summary>
+        public override HLTokenType Type => HLTokenType.OpArrayAccess;
+
+        #region Public
+
+        /// <summary>
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="list">Left Side Array</param>
         /// <param name="parameterList">Array Accessor Parameters</param>
-        public HLArrayAccessorOp(HLExpression list, List<HLExpression> parameterList) : base(list.SourceIndex)
+        public HLArrayAccessorOp( HLExpression list, List < HLExpression > parameterList ) : base( list.SourceIndex )
         {
             Left = list;
             ParameterList = parameterList.ToArray();
         }
 
         /// <summary>
-        ///     The Operator Token
-        /// </summary>
-        public override HLTokenType Type => HLTokenType.OpArrayAccess;
-
-
-        /// <summary>
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List<IHLToken> GetChildren()
+        public override List < IHLToken > GetChildren()
         {
-            return ParameterList.Cast<IHLToken>().Concat(new[] { Left }).ToList();
+            return ParameterList.Cast < IHLToken >().Concat( new[] { Left } ).ToList();
         }
 
+        #endregion
+
     }
+
 }

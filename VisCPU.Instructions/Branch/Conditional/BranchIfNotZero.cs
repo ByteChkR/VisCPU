@@ -2,6 +2,7 @@
 
 namespace VisCPU.Instructions.Branch.Conditional
 {
+
     public class BranchIfNotZero : BranchInstruction
     {
 
@@ -13,20 +14,25 @@ namespace VisCPU.Instructions.Branch.Conditional
 
         public override string Key => "BNZ";
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            uint a = cpu.MemoryBus.Read(cpu.DecodeArgument(0));
-            uint address = cpu.DecodeArgument(1);
+            uint a = cpu.MemoryBus.Read( cpu.DecodeArgument( 0 ) );
+            uint address = cpu.DecodeArgument( 1 );
 
             bool jmp = a != 0;
 
-            Log(cpu, $"{a} != 0? Branch to 0x{Convert.ToUInt32(address)}: {jmp}");
+            Log( cpu, $"{a} != 0? Branch to 0x{Convert.ToUInt32( address )}: {jmp}" );
 
-            if (jmp)
+            if ( jmp )
             {
-                cpu.SetState(address - InstructionSize);
+                cpu.SetState( address - InstructionSize );
             }
         }
 
+        #endregion
+
     }
+
 }

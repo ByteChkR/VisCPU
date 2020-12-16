@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using VisCPU;
 using VisCPU.Compiler.Linking;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
-using VisCPU.Utility.Logging;
+using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
 
-namespace viscc
+namespace VisCPU.Console.Subsystems
 {
 
     internal class ProgramBuilder : ConsoleSubsystem
     {
 
-        private readonly List < uint > ignored = new List < uint >();
+        private readonly List < uint > ignored = new();
 
         #region Public
 
@@ -30,8 +29,8 @@ namespace viscc
                                        ls
                                       );
 
-            Settings.SaveSettings(ls);
-            Settings.SaveSettings(settings);
+            Settings.SaveSettings( ls );
+            Settings.SaveSettings( settings );
 
             if ( settings.InputFiles == null )
             {
@@ -48,6 +47,7 @@ namespace viscc
                     EventManager < ErrorEvent >.SendEvent(
                                                           new FileNotFoundEvent( Path.GetFullPath( file ), true )
                                                          );
+
                     continue;
                 }
 
@@ -69,6 +69,7 @@ namespace viscc
         }
 
         #endregion
+
     }
 
 }

@@ -6,145 +6,154 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
-using VisCPU;
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
 
-namespace viscc
+namespace VisCPU.Console.Subsystems
 {
 
     public class BuilderSettings
     {
-        
-        static BuilderSettings()
-        {
-            Settings.RegisterDefaultLoader(new JSONSettingsLoader(), "config/build.json", new BuilderSettings());
-        }
 
-        public static BuilderSettings Create()
-        {
-            return Settings.GetSettings<BuilderSettings>();
-        }
-        public static readonly Dictionary<string, BuildSteps> AllBuildSteps =
-            new Dictionary<string, BuildSteps>
+        public static readonly Dictionary < string, BuildSteps > AllBuildSteps =
+            new()
             {
                 { "HL-expr", CreateExpressionBuildStep },
                 { "bin", CreateBinary },
                 { "compress", CompressFile }
             };
 
-        [Argument(Name = "clean")]
+        [Argument( Name = "clean" )]
         public bool CleanBuildOutput = true;
 
-        [Argument(Name = "build-steps")]
-        [Argument(Name = "steps")]
+        [Argument( Name = "build-steps" )]
+        [Argument( Name = "steps" )]
         public readonly string[] buildSteps = { "bin" };
 
-        [Argument(Name = "input-files")]
-        [Argument(Name = "i")]
-        [XmlIgnore, JsonIgnore]
+        [Argument( Name = "input-files" )]
+        [Argument( Name = "i" )]
+        [XmlIgnore]
+        [JsonIgnore]
         public string[] inputFiles;
 
-        [Argument(Name = "input-folders")]
-        [Argument(Name = "if")]
-        [XmlIgnore, JsonIgnore]
+        [Argument( Name = "input-folders" )]
+        [Argument( Name = "if" )]
+        [XmlIgnore]
+        [JsonIgnore]
         public string[] inputFolders;
 
-        [XmlIgnore, JsonIgnore]
-        public IEnumerable<(string, BuildSteps)> BuildSteps => buildSteps.Select(x => (x, AllBuildSteps[x]));
+        [XmlIgnore]
+        [JsonIgnore]
+        public IEnumerable < (string, BuildSteps) > BuildSteps => buildSteps.Select( x => ( x, AllBuildSteps[x] ) );
 
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore]
+        [JsonIgnore]
         public string[] InputFiles
         {
             get
             {
-                List<string> ret = new List<string>();
+                List < string > ret = new();
 
-                if (inputFolders != null)
+                if ( inputFolders != null )
                 {
-                    ret.AddRange(inputFolders.SelectMany(x => Directory.GetFiles(x, "*.vasm")));
+                    ret.AddRange( inputFolders.SelectMany( x => Directory.GetFiles( x, "*.vasm" ) ) );
                 }
 
-                if (inputFiles != null)
+                if ( inputFiles != null )
                 {
-                    ret.AddRange(inputFiles);
+                    ret.AddRange( inputFiles );
                 }
 
                 return ret.ToArray();
             }
         }
 
+        #region Public
+
+        public static BuilderSettings Create()
+        {
+            return Settings.GetSettings < BuilderSettings >();
+        }
+
+        #endregion
+
         #region Private
 
-        private static string CompressFile(string originalfile)
+        static BuilderSettings()
+        {
+            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), "config/build.json", new BuilderSettings() );
+        }
+
+        private static string CompressFile( string originalfile )
         {
             string newFile = originalfile + ".z";
 
-            using Stream input = File.OpenRead(originalfile);
+            using Stream input = File.OpenRead( originalfile );
 
-            using Stream output = File.Create(newFile);
+            using Stream output = File.Create( newFile );
 
-            using Stream s = new GZipStream(output, CompressionLevel.Optimal);
+            using Stream s = new GZipStream( output, CompressionLevel.Optimal );
 
-
-            input.CopyTo(s);
+            input.CopyTo( s );
 
             return newFile;
         }
 
-        private static string CreateBinary(string originalFile)
+        private static string CreateBinary( string originalFile )
         {
-            if (Path.GetExtension(originalFile) != ".vasm")
+            if ( Path.GetExtension( originalFile ) != ".vasm" )
             {
-                EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(originalFile, true));
+                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( originalFile, true ) );
 
                 return originalFile;
             }
 
-            Compilation comp = new Compilation(new MultiFileStaticLinker(), new DefaultAssemblyGenerator());
-            comp.Compile(originalFile);
+            Compilation comp = new( new MultiFileStaticLinker(), new DefaultAssemblyGenerator() );
+            comp.Compile( originalFile );
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName(Path.GetFullPath(originalFile)),
-                                          Path.GetFileNameWithoutExtension(originalFile)
+                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
+                                          Path.GetFileNameWithoutExtension( originalFile )
                                          ) +
                              ".vbin";
 
-            if (Settings.GetSettings<LinkerSettings>().ExportLinkerInfo)
+            if ( Settings.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
-                comp.LinkerInfo.Save(newFile, LinkerInfo.LinkerInfoFormat.Text);
+                comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }
 
-            File.WriteAllBytes(newFile, comp.ByteCode.ToArray());
+            File.WriteAllBytes( newFile, comp.ByteCode.ToArray() );
 
             return newFile;
         }
 
-        private static string CreateExpressionBuildStep(string originalFile)
+        private static string CreateExpressionBuildStep( string originalFile )
         {
-            if (Path.GetExtension(originalFile) != ".vhl")
+            if ( Path.GetExtension( originalFile ) != ".vhl" )
             {
-                EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(originalFile, true));
+                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( originalFile, true ) );
 
                 return originalFile;
             }
 
-            ExpressionParser p = new ExpressionParser();
-            string file = File.ReadAllText(originalFile);
+            ExpressionParser p = new();
+            string file = File.ReadAllText( originalFile );
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName(Path.GetFullPath(originalFile)),
-                                          Path.GetFileNameWithoutExtension(originalFile)
+                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
+                                          Path.GetFileNameWithoutExtension( originalFile )
                                          ) +
                              ".vasm";
 
             File.WriteAllText(
                               newFile,
-                              p.Parse(file, Path.GetDirectoryName(Path.GetFullPath(originalFile))).Parse()
+                              p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( originalFile ) ) ).Parse()
                              );
 
             return newFile;

@@ -12,14 +12,19 @@
 
         public override uint ArgumentCount => 1;
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            uint addr = cpu.DecodeArgument(0);
+            uint addr = cpu.DecodeArgument( 0 );
 
             uint val = cpu.Peek();
-            Log(cpu, $"Peeking Value: {val}");
-            cpu.MemoryBus.Write(addr, val);
+            Log( cpu, $"Peeking Value: {val}" );
+            cpu.MemoryBus.Write( addr, val );
         }
 
+        #endregion
+
     }
+
 }

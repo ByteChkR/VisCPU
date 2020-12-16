@@ -1,14 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 using VisCPU.Utility;
-using VisCPU.Utility.Events;
 
-namespace VisCPU.Peripherals
+namespace VisCPU.Peripherals.Memory
 {
-    
-    
-    
+
     public class Memory : Peripheral
     {
 
@@ -18,7 +14,13 @@ namespace VisCPU.Peripherals
 
         public readonly uint[] InternalMemory;
 
-        public Memory(uint memorySize, uint startAddress, bool enableRead = true, bool enableWrite = true)
+        public uint StartAddress { get; set; }
+
+        public uint EndAddress => StartAddress + ( uint ) InternalMemory.Length;
+
+        #region Public
+
+        public Memory( uint memorySize, uint startAddress, bool enableRead = true, bool enableWrite = true )
         {
             StartAddress = startAddress;
             InternalMemory = new uint[memorySize];
@@ -26,31 +28,24 @@ namespace VisCPU.Peripherals
             EnableWrite = enableWrite;
         }
 
-        public uint StartAddress { get; set; }
-
-        public uint EndAddress => StartAddress + (uint) InternalMemory.Length;
-
-        public override bool CanWrite(uint address)
-        {
-            return EnableWrite && address < EndAddress && address >= StartAddress;
-        }
-
-        public override bool CanRead(uint address)
+        public override bool CanRead( uint address )
         {
             return EnableRead && address < EndAddress && address >= StartAddress;
         }
 
-        public override void WriteData(uint address, uint data)
+        public override bool CanWrite( uint address )
         {
-            if (CanWrite(address))
-            {
-                InternalMemory[address - StartAddress] = data;
-            }
+            return EnableWrite && address < EndAddress && address >= StartAddress;
         }
 
-        public override uint ReadData(uint address)
+        public override void Dump( Stream str )
         {
-            if (CanWrite(address))
+            str.Write( InternalMemory.ToBytes(), 0, InternalMemory.Length * sizeof( uint ) );
+        }
+
+        public override uint ReadData( uint address )
+        {
+            if ( CanWrite( address ) )
             {
                 return InternalMemory[address - StartAddress];
             }
@@ -58,10 +53,16 @@ namespace VisCPU.Peripherals
             return 0;
         }
 
-        public override void Dump(Stream str)
+        public override void WriteData( uint address, uint data )
         {
-            str.Write(InternalMemory.ToBytes(), 0, InternalMemory.Length * sizeof(uint));
+            if ( CanWrite( address ) )
+            {
+                InternalMemory[address - StartAddress] = data;
+            }
         }
 
+        #endregion
+
     }
+
 }

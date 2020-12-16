@@ -1,50 +1,57 @@
-﻿using System;
-
-
+﻿using VisCPU.Peripherals.Events;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
 
-namespace VisCPU.Peripherals
+namespace VisCPU.Peripherals.Console
 {
 
     public class ConsoleInInterface : Peripheral
     {
 
-        private ConsoleInInterfaceSettings settings;
-        
+        private readonly ConsoleInInterfaceSettings settings;
+
+        #region Public
+
         public ConsoleInInterface()
         {
             settings = Settings.GetSettings < ConsoleInInterfaceSettings >();
         }
 
-        public override bool CanWrite(uint address)
-        {
-            return false;
-        }
-
-        public override bool CanRead(uint address)
+        public override bool CanRead( uint address )
         {
             return address == settings.ReadInputAddress || address == settings.InterfacePresentPin;
         }
 
-        public override void WriteData(uint address, uint data)
+        public override bool CanWrite( uint address )
         {
-            EventManager < WarningEvent >.SendEvent( new InvalidPeripheralWriteEvent( address, data, this ) );
+            return false;
         }
 
-        public override uint ReadData(uint address)
+        public override uint ReadData( uint address )
         {
             if ( address == settings.InterfacePresentPin )
-                return 1;
-            if (address == settings.ReadInputAddress)
             {
-                return (uint) Console.Read();
+                return 1;
             }
-            
-            EventManager<WarningEvent>.SendEvent(new InvalidPeripheralReadEvent(address, this));
+
+            if ( address == settings.ReadInputAddress )
+            {
+                return ( uint ) System.Console.Read();
+            }
+
+            EventManager < WarningEvent >.SendEvent( new InvalidPeripheralReadEvent( address, this ) );
 
             return 0;
         }
 
+        public override void WriteData( uint address, uint data )
+        {
+            EventManager < WarningEvent >.SendEvent( new InvalidPeripheralWriteEvent( address, data, this ) );
+        }
+
+        #endregion
+
     }
+
 }

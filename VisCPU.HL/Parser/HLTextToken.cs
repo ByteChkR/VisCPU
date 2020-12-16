@@ -7,24 +7,12 @@ using VisCPU.HL.Parser.Tokens;
 /// </summary>
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     Represents a Token that contains a Sequence of Characters
     /// </summary>
     public class HLTextToken : IHLToken
     {
-
-        /// <summary>
-        ///     Public Constructor
-        /// </summary>
-        /// <param name="type">Token Type</param>
-        /// <param name="value">Token Value</param>
-        /// <param name="startIndex">Start index in the source stream</param>
-        public HLTextToken(HLTokenType type, string value, int startIndex)
-        {
-            Type = type;
-            Value = value;
-            SourceIndex = startIndex;
-        }
 
         /// <summary>
         ///     The Token Value
@@ -41,16 +29,29 @@ namespace VisCPU.HL.Parser
         /// </summary>
         public int SourceIndex { get; }
 
+        #region Public
+
+        /// <summary>
+        ///     Public Constructor
+        /// </summary>
+        /// <param name="type">Token Type</param>
+        /// <param name="value">Token Value</param>
+        /// <param name="startIndex">Start index in the source stream</param>
+        public HLTextToken( HLTokenType type, string value, int startIndex )
+        {
+            Type = type;
+            Value = value;
+            SourceIndex = startIndex;
+        }
 
         /// <summary>
         ///     Returns all Children of this token
         /// </summary>
         /// <returns>Child Tokens</returns>
-        public List<IHLToken> GetChildren()
+        public List < IHLToken > GetChildren()
         {
-            return new List<IHLToken>();
+            return new List < IHLToken >();
         }
-
 
         /// <summary>
         ///     Returns the String Representation of this token
@@ -61,5 +62,8 @@ namespace VisCPU.HL.Parser
             return Value;
         }
 
+        #endregion
+
     }
+
 }

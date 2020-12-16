@@ -2,6 +2,7 @@
 
 namespace VisCPU.Instructions.Branch
 {
+
     public class ReturnFromSubroutineInstruction : BranchInstruction
     {
 
@@ -13,12 +14,17 @@ namespace VisCPU.Instructions.Branch
 
         public override string Key => "RET";
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
             cpu.PopState();
 
-            Log(cpu, "Returning from Subroutine.");
+            Log( cpu, "Returning from Subroutine." );
         }
 
+        #endregion
+
     }
+
 }

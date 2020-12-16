@@ -1,6 +1,6 @@
-﻿using System;
-
+﻿using VisCPU.Compiler.Parser.Events;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
@@ -8,16 +8,13 @@ namespace VisCPU.Compiler.Parser.Tokens
     public class DecToken : ValueToken
     {
 
-        public DecToken(string originalText, int start, int length) : base(originalText, start, length)
-        {
-        }
-
         public override uint Value
         {
             get
             {
                 string val = GetValue();
-                if (uint.TryParse(val, out uint hexVal))
+
+                if ( uint.TryParse( val, out uint hexVal ) )
                 {
                     return hexVal;
                 }
@@ -28,10 +25,19 @@ namespace VisCPU.Compiler.Parser.Tokens
             }
         }
 
+        #region Public
+
+        public DecToken( string originalText, int start, int length ) : base( originalText, start, length )
+        {
+        }
+
         public override string ToString()
         {
             return base.ToString() + $"({Value})";
         }
 
+        #endregion
+
     }
+
 }

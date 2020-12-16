@@ -1,5 +1,6 @@
 ﻿namespace VisCPU.HL
 {
+
     public enum ExternalDataType
     {
 
@@ -7,4 +8,5 @@
         VARIABLE
 
     }
+
 }

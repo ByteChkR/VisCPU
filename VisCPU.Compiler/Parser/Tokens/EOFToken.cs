@@ -2,10 +2,13 @@
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
+
     public class EOFToken : AToken
     {
 
-        public EOFToken(string originalText, int start, int length) : base(originalText, start, length)
+        #region Public
+
+        public EOFToken( string originalText, int start, int length ) : base( originalText, start, length )
         {
         }
 
@@ -14,5 +17,8 @@ namespace VisCPU.Compiler.Parser.Tokens
             return "<EOF>";
         }
 
+        #endregion
+
     }
+
 }

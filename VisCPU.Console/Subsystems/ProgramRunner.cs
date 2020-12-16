@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-using VisCPU;
 using VisCPU.HL;
-using VisCPU.Peripherals;
+using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
-using VisCPU.Utility.Logging;
+using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
 
-namespace viscc
+namespace VisCPU.Console.Subsystems
 {
 
     public class ProgramRunner : ConsoleSubsystem
     {
 
-
-
         #region Public
 
-        public override void Run(IEnumerable<string> args)
+        public override void Run( IEnumerable < string > args )
         {
             RunnerSettings settings = RunnerSettings.Create();
             ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
             ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
             HLCompilerSettings hls = HLCompilerSettings.Create();
+
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
                                        settings,
@@ -35,41 +35,42 @@ namespace viscc
                                        hls
                                       );
 
-            Settings.SaveSettings(settings);
-            Settings.SaveSettings(cins);
-            Settings.SaveSettings(couts);
+            Settings.SaveSettings( settings );
+            Settings.SaveSettings( cins );
+            Settings.SaveSettings( couts );
             Settings.SaveSettings( hls );
-            
-            if (settings.InputFiles == null)
+
+            if ( settings.InputFiles == null )
             {
                 return;
             }
 
-            foreach (string f in settings.InputFiles)
+            foreach ( string f in settings.InputFiles )
             {
-                string file = Path.GetFullPath(f);
+                string file = Path.GetFullPath( f );
 
-                file = RunPreRunSteps(settings, file);
+                file = RunPreRunSteps( settings, file );
 
-                if (file == null || !File.Exists(file))
+                if ( file == null || !File.Exists( file ) )
                 {
-                    EventManager<ErrorEvent>.SendEvent(new FileNotFoundEvent(file, true));
+                    EventManager < ErrorEvent >.SendEvent( new FileNotFoundEvent( file, true ) );
+
                     continue;
                 }
 
-                Log($"Run File: '{file}'");
-                uint[] fileCode = File.ReadAllBytes(file).ToUInt();
+                Log( $"Run File: '{file}'" );
+                uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
 
-                Memory memory = new Memory(settings.MemorySize, 0);
-                ConsoleInInterface cin = new ConsoleInInterface();
+                Memory memory = new( settings.MemorySize, 0 );
+                ConsoleInInterface cin = new();
 
                 ConsoleOutInterface cout =
-                    new ConsoleOutInterface();
+                    new();
 
-                MemoryBus bus = new MemoryBus(memory, cout, cin);
+                MemoryBus bus = new( memory, cout, cin );
 
-                CPU cpu = new CPU(bus, settings.CpuResetAddr, settings.CpuIntAddr);
-                cpu.LoadBinary(fileCode);
+                CPU cpu = new( bus, settings.CpuResetAddr, settings.CpuIntAddr );
+                cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
         }
@@ -78,15 +79,15 @@ namespace viscc
 
         #region Private
 
-        private string RunPreRunSteps(RunnerSettings settings, string file)
+        private string RunPreRunSteps( RunnerSettings settings, string file )
         {
             string ret = file;
 
-            foreach (KeyValuePair<string, Func<string, string>> keyValuePair in settings.PreRunMap)
+            foreach ( KeyValuePair < string, Func < string, string > > keyValuePair in settings.PreRunMap )
             {
-                if (Path.GetExtension(ret) == keyValuePair.Key)
+                if ( Path.GetExtension( ret ) == keyValuePair.Key )
                 {
-                    ret = RunPreRunSteps(settings, keyValuePair.Value(ret));
+                    ret = RunPreRunSteps( settings, keyValuePair.Value( ret ) );
                 }
             }
 

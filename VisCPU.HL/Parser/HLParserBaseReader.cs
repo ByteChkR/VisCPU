@@ -5,6 +5,7 @@ using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     Contains the Different Token Reader Implementations for the Different parsing phases.
     /// </summary>
@@ -34,32 +35,17 @@ namespace VisCPU.HL.Parser
         /// </summary>
         private IHLToken currentToken;
 
+        #region Public
+
         /// <summary>
         ///     Public Constructor
         /// </summary>
         /// <param name="settings">XL Settings</param>
         /// <param name="input">Source</param>
-        public HLParserBaseReader(HLParserSettings settings, string input)
+        public HLParserBaseReader( HLParserSettings settings, string input )
         {
             this.input = input;
             this.settings = settings;
-        }
-
-        public List<IHLToken> ReadToEnd()
-        {
-            if (currentToken == null)
-            {
-                Advance();
-            }
-
-            List<IHLToken> ret = new List<IHLToken>();
-            while (currentToken.Type != HLTokenType.EOF)
-            {
-                ret.Add(currentToken);
-                Advance();
-            }
-
-            return ret;
         }
 
         /// <summary>
@@ -68,39 +54,40 @@ namespace VisCPU.HL.Parser
         /// <returns></returns>
         public IHLToken Advance()
         {
-            if (currentIndex < input.Length)
+            if ( currentIndex < input.Length )
             {
-                if (IsNewLine(input[currentIndex]))
+                if ( IsNewLine( input[currentIndex] ) )
                 {
                     currentToken = ReadNewLine();
                 }
-                else if (IsSpace(input[currentIndex]))
+                else if ( IsSpace( input[currentIndex] ) )
                 {
                     currentIndex++;
+
                     return Advance();
                 }
-                else if (IsSymbol(input[currentIndex]))
+                else if ( IsSymbol( input[currentIndex] ) )
                 {
                     currentToken = ReadSymbol();
                 }
-                else if (input[currentIndex] == '0' &&
-                         input.Length - 2 > currentIndex &&
-                         input[currentIndex + 1] == 'x' &&
-                         IsHexNumber(input[currentIndex + 2]))
+                else if ( input[currentIndex] == '0' &&
+                          input.Length - 2 > currentIndex &&
+                          input[currentIndex + 1] == 'x' &&
+                          IsHexNumber( input[currentIndex + 2] ) )
                 {
                     currentToken = ReadHexNumber();
                 }
-                else if (IsNumber(input[currentIndex]))
+                else if ( IsNumber( input[currentIndex] ) )
                 {
                     currentToken = ReadNumber();
                 }
-                else if (IsLetter(input[currentIndex]))
+                else if ( IsLetter( input[currentIndex] ) )
                 {
                     currentToken = ReadWord();
                 }
                 else
                 {
-                    currentToken = new HLTextToken(HLTokenType.Unknown, input[currentIndex].ToString(), currentIndex);
+                    currentToken = new HLTextToken( HLTokenType.Unknown, input[currentIndex].ToString(), currentIndex );
                     currentIndex++;
                 }
 
@@ -112,31 +99,31 @@ namespace VisCPU.HL.Parser
             return currentToken;
         }
 
-
-        /// <summary>
-        ///     Returns true if the Character is a Reserved Symbol
-        /// </summary>
-        /// <param name="c">Character to Check</param>
-        /// <returns>True if Reserved Symbol</returns>
-        private bool IsSymbol(char c)
+        public List < IHLToken > ReadToEnd()
         {
-            return settings.ReservedSymbols.ContainsKey(c);
+            if ( currentToken == null )
+            {
+                Advance();
+            }
+
+            List < IHLToken > ret = new List < IHLToken >();
+
+            while ( currentToken.Type != HLTokenType.EOF )
+            {
+                ret.Add( currentToken );
+                Advance();
+            }
+
+            return ret;
         }
 
+        #endregion
 
-        /// <summary>
-        ///     Returns true if the Character is a Number
-        /// </summary>
-        /// <param name="c">Character to Check</param>
-        /// <returns>True if number</returns>
-        private static bool IsNumber(char c)
-        {
-            return char.IsDigit(c);
-        }
+        #region Private
 
-        private static bool IsHexNumber(char c)
+        private static bool IsHexNumber( char c )
         {
-            return char.IsDigit(c) || char.ToUpper(c) >= 'A' && char.ToUpper(c) <= 'F';
+            return char.IsDigit( c ) || char.ToUpper( c ) >= 'A' && char.ToUpper( c ) <= 'F';
         }
 
         /// <summary>
@@ -144,26 +131,65 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="c">Character to Check</param>
         /// <returns>True if Letter or Underscore</returns>
-        private static bool IsLetter(char c)
+        private static bool IsLetter( char c )
         {
-            return char.IsLetter(c) || c == '_';
+            return char.IsLetter( c ) || c == '_';
         }
 
         /// <summary>
-        ///     Reads a sequence of spaces until the first "non-space" character is encountered.
+        ///     Returns true if the character is a new line '\n'
         /// </summary>
+        /// <param name="c">Character to Check</param>
         /// <returns></returns>
-        private IHLToken ReadSpace()
+        private static bool IsNewLine( char c )
         {
-            int len = 0;
+            return c == '\n';
+        }
+
+        /// <summary>
+        ///     Returns true if the Character is a Number
+        /// </summary>
+        /// <param name="c">Character to Check</param>
+        /// <returns>True if number</returns>
+        private static bool IsNumber( char c )
+        {
+            return char.IsDigit( c );
+        }
+
+        /// <summary>
+        ///     Returns true if the character is a new line ' ' || '\t' || '\r'
+        /// </summary>
+        /// <param name="c">Character to Check</param>
+        /// <returns></returns>
+        private static bool IsSpace( char c )
+        {
+            return c == ' ' || c == '\t' || c == '\r';
+        }
+
+        /// <summary>
+        ///     Returns true if the Character is a Reserved Symbol
+        /// </summary>
+        /// <param name="c">Character to Check</param>
+        /// <returns>True if Reserved Symbol</returns>
+        private bool IsSymbol( char c )
+        {
+            return settings.ReservedSymbols.ContainsKey( c );
+        }
+
+        private IHLToken ReadHexNumber()
+        {
             int start = currentIndex;
+            StringBuilder sb = new StringBuilder( "0x" );
+            currentIndex += 2;
+
             do
             {
-                len++;
+                sb.Append( input[currentIndex] );
                 currentIndex++;
-            } while (currentIndex < input.Length && IsSpace(input[currentIndex]));
+            }
+            while ( currentIndex < input.Length && IsHexNumber( input[currentIndex] ) );
 
-            return new HLTextToken(HLTokenType.OpSpace, new StringBuilder().Append(' ', len).ToString(), start);
+            return new HLTextToken( HLTokenType.OpNumber, sb.ToString(), start );
         }
 
         /// <summary>
@@ -174,30 +200,15 @@ namespace VisCPU.HL.Parser
         {
             int len = 0;
             int start = currentIndex;
+
             do
             {
                 len++;
                 currentIndex++;
-            } while (currentIndex < input.Length && IsNewLine(input[currentIndex]));
+            }
+            while ( currentIndex < input.Length && IsNewLine( input[currentIndex] ) );
 
-            return new HLTextToken(HLTokenType.OpNewLine, new StringBuilder().Append('\n', len).ToString(), start);
-        }
-
-        /// <summary>
-        ///     Reads a Word from the Source
-        /// </summary>
-        /// <returns></returns>
-        private IHLToken ReadWord()
-        {
-            int start = currentIndex;
-            StringBuilder sb = new StringBuilder();
-            do
-            {
-                sb.Append(input[currentIndex]);
-                currentIndex++;
-            } while (currentIndex < input.Length && (IsNumber(input[currentIndex]) || IsLetter(input[currentIndex])));
-
-            return new HLTextToken(HLTokenType.OpWord, sb.ToString(), start);
+            return new HLTextToken( HLTokenType.OpNewLine, new StringBuilder().Append( '\n', len ).ToString(), start );
         }
 
         /// <summary>
@@ -208,27 +219,34 @@ namespace VisCPU.HL.Parser
         {
             int start = currentIndex;
             StringBuilder sb = new StringBuilder();
+
             do
             {
-                sb.Append(input[currentIndex]);
+                sb.Append( input[currentIndex] );
                 currentIndex++;
-            } while (currentIndex < input.Length && IsNumber(input[currentIndex]));
+            }
+            while ( currentIndex < input.Length && IsNumber( input[currentIndex] ) );
 
-            return new HLTextToken(HLTokenType.OpNumber, sb.ToString(), start);
+            return new HLTextToken( HLTokenType.OpNumber, sb.ToString(), start );
         }
 
-        private IHLToken ReadHexNumber()
+        /// <summary>
+        ///     Reads a sequence of spaces until the first "non-space" character is encountered.
+        /// </summary>
+        /// <returns></returns>
+        private IHLToken ReadSpace()
         {
+            int len = 0;
             int start = currentIndex;
-            StringBuilder sb = new StringBuilder("0x");
-            currentIndex += 2;
+
             do
             {
-                sb.Append(input[currentIndex]);
+                len++;
                 currentIndex++;
-            } while (currentIndex < input.Length && IsHexNumber(input[currentIndex]));
+            }
+            while ( currentIndex < input.Length && IsSpace( input[currentIndex] ) );
 
-            return new HLTextToken(HLTokenType.OpNumber, sb.ToString(), start);
+            return new HLTextToken( HLTokenType.OpSpace, new StringBuilder().Append( ' ', len ).ToString(), start );
         }
 
         /// <summary>
@@ -240,28 +258,32 @@ namespace VisCPU.HL.Parser
             char val = input[currentIndex];
             int start = currentIndex;
             currentIndex++;
-            return new HLTextToken(settings.ReservedSymbols[val], val.ToString(), start);
+
+            return new HLTextToken( settings.ReservedSymbols[val], val.ToString(), start );
         }
 
         /// <summary>
-        ///     Returns true if the character is a new line '\n'
+        ///     Reads a Word from the Source
         /// </summary>
-        /// <param name="c">Character to Check</param>
         /// <returns></returns>
-        private static bool IsNewLine(char c)
+        private IHLToken ReadWord()
         {
-            return c == '\n';
+            int start = currentIndex;
+            StringBuilder sb = new StringBuilder();
+
+            do
+            {
+                sb.Append( input[currentIndex] );
+                currentIndex++;
+            }
+            while ( currentIndex < input.Length &&
+                    ( IsNumber( input[currentIndex] ) || IsLetter( input[currentIndex] ) ) );
+
+            return new HLTextToken( HLTokenType.OpWord, sb.ToString(), start );
         }
 
-        /// <summary>
-        ///     Returns true if the character is a new line ' ' || '\t' || '\r'
-        /// </summary>
-        /// <param name="c">Character to Check</param>
-        /// <returns></returns>
-        private static bool IsSpace(char c)
-        {
-            return c == ' ' || c == '\t' || c == '\r';
-        }
+        #endregion
 
     }
+
 }

@@ -12,11 +12,16 @@
 
         public override uint ArgumentCount => 0;
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            Log(cpu, "Set Break Flag");
-            cpu.Set(CPU.Flags.BREAK);
+            Log( cpu, "Set Break Flag" );
+            cpu.Set( CPU.Flags.BREAK );
         }
 
+        #endregion
+
     }
+
 }

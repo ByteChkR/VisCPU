@@ -3,6 +3,7 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements Unary Operators
     /// </summary>
@@ -14,13 +15,15 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         public override int PrecedenceLevel => 3;
 
+        #region Public
+
         /// <summary>
         ///     Returns true if the parser is in a state that allows the creation of an implemented operator
         /// </summary>
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return
                 parser.CurrentToken.Type == HLTokenType.OpBang &&
@@ -35,13 +38,17 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             HLTokenType type = parser.CurrentToken.Type;
-            parser.Eat(type);
-            HLExpression token = new HLUnaryOp(parser.ParseExpr(0), type);
+            parser.Eat( type );
+            HLExpression token = new HLUnaryOp( parser.ParseExpr( 0 ), type );
+
             return token;
         }
 
+        #endregion
+
     }
+
 }

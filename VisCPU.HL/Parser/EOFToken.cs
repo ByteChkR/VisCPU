@@ -5,6 +5,7 @@ using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.Parser
 {
+
     public class EOFToken : IHLToken
     {
 
@@ -12,10 +13,15 @@ namespace VisCPU.HL.Parser
 
         public int SourceIndex { get; }
 
-        public List<IHLToken> GetChildren()
+        #region Public
+
+        public List < IHLToken > GetChildren()
         {
             throw new NotImplementedException();
         }
 
+        #endregion
+
     }
+
 }

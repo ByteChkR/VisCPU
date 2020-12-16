@@ -2,8 +2,10 @@
 using System.IO;
 using System.Linq;
 
+using VisCPU.Events;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU

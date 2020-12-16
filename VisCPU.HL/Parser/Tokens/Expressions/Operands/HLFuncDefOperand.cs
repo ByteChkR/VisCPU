@@ -2,6 +2,7 @@
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
 {
+
     public class HLFuncDefOperand : HLVarOperand
     {
 
@@ -12,28 +13,31 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         public readonly FunctionDefinitionToken value;
 
+        /// <summary>
+        ///     The Variable Value
+        /// </summary>
+        public override IHLToken Value => value;
+
+        #region Public
 
         /// <summary>
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="value">Variable Value</param>
-        public HLFuncDefOperand(FunctionDefinitionToken value, HLExpression[] block) : base(value.SourceIndex)
+        public HLFuncDefOperand( FunctionDefinitionToken value, HLExpression[] block ) : base( value.SourceIndex )
         {
             this.value = value;
             Block = block;
         }
-
-        /// <summary>
-        ///     The Variable Value
-        /// </summary>
-        public override IHLToken Value => value;
-
 
         public override string ToString()
         {
             return "fdef " + Value;
         }
 
+        #endregion
+
     }
+
 }

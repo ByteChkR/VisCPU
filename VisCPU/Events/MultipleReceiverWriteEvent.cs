@@ -1,7 +1,7 @@
 ﻿using VisCPU.Utility;
 using VisCPU.Utility.Events;
 
-namespace VisCPU
+namespace VisCPU.Events
 {
 
     public class MultipleReceiverWriteEvent : WarningEvent

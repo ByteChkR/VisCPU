@@ -7,102 +7,113 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
-using VisCPU;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 
-namespace viscc
+namespace VisCPU.Console.Subsystems
 {
 
     public class RunnerSettings
     {
 
-        [Argument(Name = "cpu.interrupt")]
+        [Argument( Name = "cpu.interrupt" )]
         public uint CpuIntAddr = 0x00000000;
 
-        [Argument(Name = "cpu.reset")]
+        [Argument( Name = "cpu.reset" )]
         public uint CpuResetAddr = 0x00000000;
 
-        [XmlIgnore, JsonIgnore]
-        public Dictionary<string, Func<string, string>> PreRunMap = new()
-                                                                    {
-                                                                        { ".z", UnCompressFile },
-                                                                        { ".vasm", FindBinary },
-                                                                        { ".vhl", FindBinary },
-                                                                    };
+        [XmlIgnore]
+        [JsonIgnore]
+        public Dictionary < string, Func < string, string > > PreRunMap = new()
+                                                                          {
+                                                                              { ".z", UnCompressFile },
+                                                                              { ".vasm", FindBinary },
+                                                                              { ".vhl", FindBinary }
+                                                                          };
 
-        static RunnerSettings()
-        {
-            Settings.RegisterDefaultLoader(new JSONSettingsLoader(), "config/runner.json", new RunnerSettings());
-        }
-
-        public static RunnerSettings Create()
-        {
-            return Settings.GetSettings<RunnerSettings>();
-        }
-
-
-        private static string FindBinary(string arg)
-        {
-            string name = Path.Combine(Path.GetDirectoryName(arg), Path.GetFileNameWithoutExtension(arg));
-            string rawBin = name + ".vbin";
-            string compBin = name + ".vbin.z";
-
-            if (File.Exists(rawBin))
-                return rawBin;
-
-            if (File.Exists(compBin))
-                return compBin;
-
-            return null;
-        }
-
-        [Argument(Name = "memory.size")]
+        [Argument( Name = "memory.size" )]
         public uint MemorySize = 0xFFFF + 1;
 
-        [Argument(Name = "input-files")]
-        [Argument(Name = "i")]
-        [XmlIgnore, JsonIgnore]
+        [Argument( Name = "input-files" )]
+        [Argument( Name = "i" )]
+        [XmlIgnore]
+        [JsonIgnore]
         private string[] inputFiles;
 
-        [Argument(Name = "input-folders")]
-        [Argument(Name = "if")]
-        [XmlIgnore, JsonIgnore]
+        [Argument( Name = "input-folders" )]
+        [Argument( Name = "if" )]
+        [XmlIgnore]
+        [JsonIgnore]
         private string[] inputFolders;
 
-        [XmlIgnore, JsonIgnore]
+        [XmlIgnore]
+        [JsonIgnore]
         public string[] InputFiles
         {
             get
             {
-                List<string> ret = new List<string>();
+                List < string > ret = new();
 
-                if (inputFolders != null)
+                if ( inputFolders != null )
                 {
-                    ret.AddRange(inputFolders.SelectMany(x => Directory.GetFiles(x, "*.txt")));
+                    ret.AddRange( inputFolders.SelectMany( x => Directory.GetFiles( x, "*.txt" ) ) );
                 }
 
-                if (inputFiles != null)
+                if ( inputFiles != null )
                 {
-                    ret.AddRange(inputFiles);
+                    ret.AddRange( inputFiles );
                 }
 
                 return ret.ToArray();
             }
         }
 
+        #region Public
+
+        public static RunnerSettings Create()
+        {
+            return Settings.GetSettings < RunnerSettings >();
+        }
+
+        #endregion
+
         #region Private
 
-        private static string UnCompressFile(string originalfile)
+        static RunnerSettings()
         {
-            string newFile = originalfile.Remove(originalfile.Length - 2, 2);
+            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), "config/runner.json", new RunnerSettings() );
+        }
 
-            using Stream input = File.OpenRead(originalfile);
+        private static string FindBinary( string arg )
+        {
+            string name = Path.Combine( Path.GetDirectoryName( arg ), Path.GetFileNameWithoutExtension( arg ) );
+            string rawBin = name + ".vbin";
+            string compBin = name + ".vbin.z";
 
-            using Stream output = File.Create(newFile);
+            if ( File.Exists( rawBin ) )
+            {
+                return rawBin;
+            }
 
-            using Stream s = new GZipStream(input, CompressionMode.Decompress);
+            if ( File.Exists( compBin ) )
+            {
+                return compBin;
+            }
 
-            s.CopyTo(output);
+            return null;
+        }
+
+        private static string UnCompressFile( string originalfile )
+        {
+            string newFile = originalfile.Remove( originalfile.Length - 2, 2 );
+
+            using Stream input = File.OpenRead( originalfile );
+
+            using Stream output = File.Create( newFile );
+
+            using Stream s = new GZipStream( input, CompressionMode.Decompress );
+
+            s.CopyTo( output );
 
             return newFile;
         }

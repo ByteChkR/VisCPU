@@ -9,8 +9,13 @@ using VisCPU.Instructions.Stack;
 
 namespace VisCPU.Instructions
 {
+
     public class DefaultSet : InstructionSet
     {
+
+        public override string SetKey => "VisCPU-debug-set.v1";
+
+        #region Public
 
         public DefaultSet() : base(
                                    new Instruction[]
@@ -21,7 +26,7 @@ namespace VisCPU.Instructions
                                        new AddInstruction(),
                                        new AddSelfInstruction(),
                                        new SubInstruction(),
-                                       new SubSelfInstruction(), 
+                                       new SubSelfInstruction(),
                                        new IncInstruction(),
                                        new DecInstruction(),
                                        new MulInstruction(),
@@ -67,7 +72,8 @@ namespace VisCPU.Instructions
         {
         }
 
-        public override string SetKey => "VisCPU-debug-set.v1";
+        #endregion
 
     }
+
 }

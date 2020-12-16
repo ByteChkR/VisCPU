@@ -2,6 +2,7 @@
 
 namespace VisCPU.Instructions.Memory
 {
+
     public class LoadInstruction : MemoryInstruction
     {
 
@@ -13,18 +14,23 @@ namespace VisCPU.Instructions.Memory
 
         public override uint ArgumentCount => 2;
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            uint address = cpu.DecodeArgument(0);
-            uint value = cpu.DecodeArgument(1);
+            uint address = cpu.DecodeArgument( 0 );
+            uint value = cpu.DecodeArgument( 1 );
 
             Log(
-                           cpu,
-                           $"0x{Convert.ToString(address, 16)} => 0x{Convert.ToString(value, 16)}"
-                          );
+                cpu,
+                $"0x{Convert.ToString( address, 16 )} => 0x{Convert.ToString( value, 16 )}"
+               );
 
-            cpu.MemoryBus.Write(address, value); //Write back Result
+            cpu.MemoryBus.Write( address, value ); //Write back Result
         }
 
+        #endregion
+
     }
+
 }

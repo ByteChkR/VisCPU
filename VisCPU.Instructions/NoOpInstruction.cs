@@ -1,5 +1,6 @@
 ﻿namespace VisCPU.Instructions
 {
+
     public class NoOpInstruction : BaseInstruction
     {
 
@@ -11,10 +12,15 @@
 
         public override uint ArgumentCount => 0;
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            Log(cpu, "No Operation");
+            Log( cpu, "No Operation" );
         }
 
+        #endregion
+
     }
+
 }

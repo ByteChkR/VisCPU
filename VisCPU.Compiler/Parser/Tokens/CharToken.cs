@@ -1,7 +1,8 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
+using VisCPU.Compiler.Parser.Events;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
@@ -9,19 +10,16 @@ namespace VisCPU.Compiler.Parser.Tokens
     public class CharToken : ValueToken
     {
 
-        public CharToken(string originalText, int start, int length) : base(originalText, start, length)
-        {
-        }
-
         public override uint Value
         {
             get
             {
                 string val = GetValue();
-                if (char.TryParse(
-                                  Regex.Unescape(val),
-                                  out char chr
-                                 ))
+
+                if ( char.TryParse(
+                                   Regex.Unescape( val ),
+                                   out char chr
+                                  ) )
                 {
                     return chr;
                 }
@@ -32,10 +30,19 @@ namespace VisCPU.Compiler.Parser.Tokens
             }
         }
 
+        #region Public
+
+        public CharToken( string originalText, int start, int length ) : base( originalText, start, length )
+        {
+        }
+
         public override string ToString()
         {
             return base.ToString() + $"({Value})";
         }
 
+        #endregion
+
     }
+
 }

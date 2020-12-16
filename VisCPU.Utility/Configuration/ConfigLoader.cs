@@ -1,3 +1,4 @@
 ﻿namespace VisCPU.Utility.Configuration
 {
+
 }

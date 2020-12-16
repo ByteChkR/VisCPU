@@ -1,9 +1,10 @@
 ﻿using System;
 
-using VisCPU.Utility.Events;
+using VisCPU.Utility;
 
 namespace VisCPU
 {
+
     public abstract class Instruction : VisBase
     {
 
@@ -15,19 +16,26 @@ namespace VisCPU
 
         public abstract uint ArgumentCount { get; }
 
-        public abstract void Process(CPU cpu);
+        #region Public
 
-        protected void Log(CPU cpu, string mesg)
-        {
-            
-                Log($"[0x{Convert.ToString(cpu.ProgramCounter, 16)}]: {mesg}");
-            
-        }
+        public abstract void Process( CPU cpu );
 
         public override void Log( string message )
         {
             base.Log( $"[{Key}] " + message );
         }
 
+        #endregion
+
+        #region Protected
+
+        protected void Log( CPU cpu, string mesg )
+        {
+            Log( $"[0x{Convert.ToString( cpu.ProgramCounter, 16 )}]: {mesg}" );
+        }
+
+        #endregion
+
     }
+
 }

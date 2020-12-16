@@ -2,7 +2,7 @@
 
 using VisCPU.Utility.Events;
 
-namespace VisCPU
+namespace VisCPU.Events
 {
 
     public class ReadFromUnmappedAddressEvent : WarningEvent

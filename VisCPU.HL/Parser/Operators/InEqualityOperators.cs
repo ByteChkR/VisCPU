@@ -3,6 +3,7 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements Inequality Operator
     /// </summary>
@@ -14,18 +15,19 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         public override int PrecedenceLevel => 9;
 
+        #region Public
+
         /// <summary>
         ///     Returns true if the parser is in a state that allows the creation of an implemented operator
         /// </summary>
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpBang &&
                    parser.Reader.PeekNext().Type == HLTokenType.OpEquality;
         }
-
 
         /// <summary>
         ///     Creates an implemented expression
@@ -33,20 +35,23 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
-            parser.Eat(HLTokenType.OpBang);
-            parser.Eat(HLTokenType.OpEquality);
+            parser.Eat( HLTokenType.OpBang );
+            parser.Eat( HLTokenType.OpEquality );
 
             return new HLUnaryOp(
                                  new HLBinaryOp(
                                                 currentNode,
                                                 HLTokenType.OpComparison,
-                                                parser.ParseExpr(0)
+                                                parser.ParseExpr( 0 )
                                                ),
                                  HLTokenType.OpBang
                                 );
         }
 
+        #endregion
+
     }
+
 }

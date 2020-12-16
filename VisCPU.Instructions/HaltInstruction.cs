@@ -1,5 +1,6 @@
 ﻿namespace VisCPU.Instructions
 {
+
     public class HaltInstruction : BaseInstruction
     {
 
@@ -11,11 +12,16 @@
 
         public override uint ArgumentCount => 0;
 
-        public override void Process(CPU cpu)
+        #region Public
+
+        public override void Process( CPU cpu )
         {
-            Log(cpu, "Set Halt Flag");
-            cpu.Set(CPU.Flags.HALT);
+            Log( cpu, "Set Halt Flag" );
+            cpu.Set( CPU.Flags.HALT );
         }
 
+        #endregion
+
     }
+
 }

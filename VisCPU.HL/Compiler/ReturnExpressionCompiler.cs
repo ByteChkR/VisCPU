@@ -2,24 +2,31 @@
 
 namespace VisCPU.HL.Compiler
 {
-    public class ReturnExpressionCompiler : HLExpressionCompiler<HLReturnOp>
+
+    public class ReturnExpressionCompiler : HLExpressionCompiler < HLReturnOp >
     {
 
-        public override ExpressionTarget ParseExpression(
-            HLCompilation compilation, HLReturnOp expr )
+        #region Public
+
+        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLReturnOp expr )
         {
-            if (expr.Right != null)
+            if ( expr.Right != null )
             {
                 ExpressionTarget pt = compilation.Parse(
                                                         expr.Right
-                                                       ).MakeAddress(compilation);
-                compilation.ProgramCode.Add($"PUSH {pt.ResultAddress}");
+                                                       ).
+                                                  MakeAddress( compilation );
+
+                compilation.ProgramCode.Add( $"PUSH {pt.ResultAddress}" );
             }
 
-            compilation.ProgramCode.Add("RET");
+            compilation.ProgramCode.Add( "RET" );
 
             return new ExpressionTarget();
         }
 
+        #endregion
+
     }
+
 }

@@ -1,6 +1,5 @@
-﻿
-using VisCPU.Compiler.Compiler;
-using VisCPU.Utility.Events;
+﻿using VisCPU.Compiler.Compiler;
+using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Compiler.Linking
@@ -11,7 +10,12 @@ namespace VisCPU.Compiler.Linking
 
         protected override LoggerSystems SubSystem => LoggerSystems.Linker;
 
-        public abstract LinkerResult Link(LinkerTarget target, Compilation compilation);
+        #region Public
+
+        public abstract LinkerResult Link( LinkerTarget target, Compilation compilation );
+
+        #endregion
 
     }
+
 }

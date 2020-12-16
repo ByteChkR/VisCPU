@@ -1,6 +1,6 @@
 ﻿using VisCPU.Utility.Logging;
 
-namespace VisCPU.Utility.Events
+namespace VisCPU.Utility
 {
 
     public abstract class VisBase
@@ -8,11 +8,15 @@ namespace VisCPU.Utility.Events
 
         protected abstract LoggerSystems SubSystem { get; }
 
+        #region Public
+
         public virtual void Log( string message )
         {
             Logger.LogMessage( SubSystem, message );
         }
-        
+
+        #endregion
+
     }
 
 }

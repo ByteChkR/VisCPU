@@ -1,16 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace VisCPU.Utility.Events
+using VisCPU.Utility.Events;
+
+namespace VisCPU.Utility.EventSystem
 {
 
     public static class EventManager
     {
 
+        public static event Action < Event > OnEventReceive;
+
+        #region Public
+
         public static void Initialize()
         {
-            EventManager<ErrorEvent>.OnEventReceive += EventManagerOnErrorEventReceive;
-            EventManager<WarningEvent>.OnEventReceive += EventManagerOnWarningEventReceive;
+            EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
+            EventManager < WarningEvent >.OnEventReceive += EventManagerOnWarningEventReceive;
+        }
+
+        public static void SendEvent( Event eventItem )
+        {
+            OnEventReceive?.Invoke( eventItem );
+        }
+
+        #endregion
+
+        #region Private
+
+        private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
+        {
+            throw new Exception( $"[{obj.EventKey}] {obj.Message}" );
         }
 
         private static void EventManagerOnWarningEventReceive( WarningEvent obj )
@@ -18,16 +37,8 @@ namespace VisCPU.Utility.Events
             Console.WriteLine( $"[{obj.EventKey}] {obj.Message}" );
         }
 
-        private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
-        {
-            throw new Exception( $"[{obj.EventKey}] {obj.Message}" );
-        }
+        #endregion
 
-        public static event Action<Event> OnEventReceive;
-        public static void SendEvent(Event eventItem)
-        {
-            OnEventReceive?.Invoke(eventItem);
-        }
     }
 
     public static class EventManager < T > where T : Event
@@ -35,11 +46,15 @@ namespace VisCPU.Utility.Events
 
         public static event Action < T > OnEventReceive;
 
-        public static void SendEvent(T eventItem)
+        #region Public
+
+        public static void SendEvent( T eventItem )
         {
             OnEventReceive?.Invoke( eventItem );
             EventManager.SendEvent( eventItem );
         }
+
+        #endregion
 
     }
 

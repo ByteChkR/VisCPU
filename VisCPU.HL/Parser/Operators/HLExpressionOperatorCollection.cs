@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     A Collection of Expression Operators
     /// </summary>
@@ -11,29 +12,36 @@ namespace VisCPU.HL.Parser.Operators
     {
 
         /// <summary>
-        ///     Operators Sorted by Precedence
+        ///     Precedence Bucket
         /// </summary>
-        private readonly Dictionary<int, PrecedenceBucket> buckets = new Dictionary<int, PrecedenceBucket>();
+        private struct PrecedenceBucket : IEquatable < PrecedenceBucket >
+        {
+
+            /// <summary>
+            ///     Operators in this Precedence Bucket
+            /// </summary>
+            public readonly List < HLExpressionOperator > bucket;
+
+            /// <summary>
+            ///     Public Constructor
+            /// </summary>
+            /// <param name="operators">Operators</param>
+            public PrecedenceBucket( List < HLExpressionOperator > operators )
+            {
+                bucket = operators;
+            }
+
+            public bool Equals( PrecedenceBucket other )
+            {
+                throw new NotImplementedException();
+            }
+
+        }
 
         /// <summary>
-        ///     Public Constructor
+        ///     Operators Sorted by Precedence
         /// </summary>
-        /// <param name="operators">Operators</param>
-        public HLExpressionOperatorCollection(HLExpressionOperator[] operators)
-        {
-            foreach (HLExpressionOperator xLangExpressionOperator in operators)
-            {
-                if (buckets.ContainsKey(xLangExpressionOperator.PrecedenceLevel))
-                {
-                    buckets[xLangExpressionOperator.PrecedenceLevel].bucket.Add(xLangExpressionOperator);
-                }
-                else
-                {
-                    buckets[xLangExpressionOperator.PrecedenceLevel] =
-                        new PrecedenceBucket(new List<HLExpressionOperator> { xLangExpressionOperator });
-                }
-            }
-        }
+        private readonly Dictionary < int, PrecedenceBucket > buckets = new Dictionary < int, PrecedenceBucket >();
 
         /// <summary>
         ///     The Highest Operator precedence
@@ -45,14 +53,26 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         public int Lowest => buckets.Keys.Min();
 
+        #region Public
+
         /// <summary>
-        ///     Returns true if one or more operators exist with the specified precedence level
+        ///     Public Constructor
         /// </summary>
-        /// <param name="level">Precedence Level</param>
-        /// <returns></returns>
-        public bool HasLevel(int level)
+        /// <param name="operators">Operators</param>
+        public HLExpressionOperatorCollection( HLExpressionOperator[] operators )
         {
-            return buckets.ContainsKey(level);
+            foreach ( HLExpressionOperator xLangExpressionOperator in operators )
+            {
+                if ( buckets.ContainsKey( xLangExpressionOperator.PrecedenceLevel ) )
+                {
+                    buckets[xLangExpressionOperator.PrecedenceLevel].bucket.Add( xLangExpressionOperator );
+                }
+                else
+                {
+                    buckets[xLangExpressionOperator.PrecedenceLevel] =
+                        new PrecedenceBucket( new List < HLExpressionOperator > { xLangExpressionOperator } );
+                }
+            }
         }
 
         /// <summary>
@@ -60,37 +80,23 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         /// <param name="level">Precedence Level</param>
         /// <returns></returns>
-        public List<HLExpressionOperator> GetLevel(int level)
+        public List < HLExpressionOperator > GetLevel( int level )
         {
             return buckets[level].bucket;
         }
 
         /// <summary>
-        ///     Precedence Bucket
+        ///     Returns true if one or more operators exist with the specified precedence level
         /// </summary>
-        private struct PrecedenceBucket : IEquatable<PrecedenceBucket>
+        /// <param name="level">Precedence Level</param>
+        /// <returns></returns>
+        public bool HasLevel( int level )
         {
-
-            /// <summary>
-            ///     Operators in this Precedence Bucket
-            /// </summary>
-            public readonly List<HLExpressionOperator> bucket;
-
-            /// <summary>
-            ///     Public Constructor
-            /// </summary>
-            /// <param name="operators">Operators</param>
-            public PrecedenceBucket(List<HLExpressionOperator> operators)
-            {
-                bucket = operators;
-            }
-
-            public bool Equals(PrecedenceBucket other)
-            {
-                throw new NotImplementedException();
-            }
-
+            return buckets.ContainsKey( level );
         }
 
+        #endregion
+
     }
+
 }

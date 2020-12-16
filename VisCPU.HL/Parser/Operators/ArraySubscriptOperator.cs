@@ -8,6 +8,7 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 /// </summary>
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements ArraySubscript Operator
     /// </summary>
@@ -19,13 +20,15 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         public override int PrecedenceLevel => 2;
 
+        #region Public
+
         /// <summary>
         ///     Returns true if the parser is in a state that allows the creation of an implemented operator
         /// </summary>
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpIndexerBracketOpen;
         }
@@ -36,27 +39,32 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
-            parser.Eat(HLTokenType.OpIndexerBracketOpen);
-            List<HLExpression> parameterList = new List<HLExpression>();
+            parser.Eat( HLTokenType.OpIndexerBracketOpen );
+            List < HLExpression > parameterList = new List < HLExpression >();
             bool comma = false;
-            while (parser.CurrentToken.Type != HLTokenType.OpIndexerBracketClose)
+
+            while ( parser.CurrentToken.Type != HLTokenType.OpIndexerBracketClose )
             {
-                if (comma)
+                if ( comma )
                 {
-                    parser.Eat(HLTokenType.OpComma);
+                    parser.Eat( HLTokenType.OpComma );
                 }
                 else
                 {
-                    parameterList.Add(parser.ParseExpr(0));
+                    parameterList.Add( parser.ParseExpr( 0 ) );
                     comma = true;
                 }
             }
 
-            parser.Eat(HLTokenType.OpIndexerBracketClose);
-            return new HLArrayAccessorOp(currentNode, parameterList);
+            parser.Eat( HLTokenType.OpIndexerBracketClose );
+
+            return new HLArrayAccessorOp( currentNode, parameterList );
         }
 
+        #endregion
+
     }
+
 }

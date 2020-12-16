@@ -5,6 +5,7 @@
 /// </summary>
 namespace VisCPU.HL.Parser.Tokens
 {
+
     /// <summary>
     ///     Defines the Interface of a XLang Parsing Token
     /// </summary>
@@ -12,9 +13,10 @@ namespace VisCPU.HL.Parser.Tokens
     {
 
         /// <summary>
-        ///     The Token Type
+        ///     Returns the Child Tokens
         /// </summary>
-        HLTokenType Type { get; }
+        /// <returns>Child Tokens</returns>
+        List < IHLToken > GetChildren();
 
         /// <summary>
         ///     The Start index in the source code.
@@ -22,10 +24,10 @@ namespace VisCPU.HL.Parser.Tokens
         int SourceIndex { get; }
 
         /// <summary>
-        ///     Returns the Child Tokens
+        ///     The Token Type
         /// </summary>
-        /// <returns>Child Tokens</returns>
-        List<IHLToken> GetChildren();
+        HLTokenType Type { get; }
 
     }
+
 }

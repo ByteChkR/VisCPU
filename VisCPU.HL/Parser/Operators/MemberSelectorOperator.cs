@@ -3,6 +3,7 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements Member Selector Operator
     /// </summary>
@@ -14,13 +15,15 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         public override int PrecedenceLevel => 2;
 
+        #region Public
+
         /// <summary>
         ///     Returns true if the parser is in a state that allows the creation of an implemented operator
         /// </summary>
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpDot;
         }
@@ -31,13 +34,17 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
-            parser.Eat(HLTokenType.OpDot);
+            parser.Eat( HLTokenType.OpDot );
             string name = parser.CurrentToken.ToString();
-            parser.Eat(parser.CurrentToken.Type);
-            return new HLMemberAccessOp(currentNode, name);
+            parser.Eat( parser.CurrentToken.Type );
+
+            return new HLMemberAccessOp( currentNode, name );
         }
 
+        #endregion
+
     }
+
 }
