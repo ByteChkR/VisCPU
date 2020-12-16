@@ -1,0 +1,26 @@
+#include "../../sys/driver/test/test_device.vhl"
+string(test_arrayC_add_c, "Assignment_ArrayC_C_Simple_Test");
+string(test_assignment_fail, "Assignment b[5] = 1 Failed.");
+
+var bArray[10];
+
+private void Assign_ArrayC_C_Simple_Test(var b)
+{
+	BeginTest(ptr_of(test_arrayC_add_c), size_of(test_arrayC_add_c));
+	
+	b[5] = 1;
+	if(b[5] == 1)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_assignment_fail), size_of(test_assignment_fail));
+	return;
+}
+
+Assign_ArrayC_C_Simple_Test(ptr_of(bArray));
+public void PtrRunAssign_ArrayC_C_Simple_Test()
+{
+	Assign_ArrayC_C_Simple_Test(ptr_of(bArray));
+	return;
+}

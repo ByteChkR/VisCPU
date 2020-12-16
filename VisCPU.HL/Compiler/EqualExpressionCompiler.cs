@@ -24,10 +24,9 @@ namespace VisCPU.HL.Compiler
             }
             else
             {
+                string rtName = compilation.GetTempVar();
                 ExpressionTarget rTarget = compilation.Parse(
-                                                             expr.Right,
-                                                             new ExpressionTarget(compilation.GetTempVar(), true)
-                                                            );
+                                                             expr.Right, new ExpressionTarget(rtName, true));
 
                 List<string> lines = new List<string>();
                 //lines.Add(
@@ -50,6 +49,8 @@ namespace VisCPU.HL.Compiler
                         lines.Add(
                                   $"CREF {tmpTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
                                  );
+
+                        compilation.ReleaseTempVar( tmpTarget.ResultAddress );
                     }
                 }
                 else
@@ -63,6 +64,7 @@ namespace VisCPU.HL.Compiler
                         lines.Add(
                                   $"CREF {rTarget.ResultAddress} {tmpTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
                                  );
+                        compilation.ReleaseTempVar(tmpTarget.ResultAddress);
                     }
                     else if (rTarget.ResultAddress != target.ResultAddress)
                     {
@@ -81,6 +83,7 @@ namespace VisCPU.HL.Compiler
                     }
                 }
 
+                compilation.ReleaseTempVar( rtName );
                 compilation.ProgramCode.AddRange(lines);
 
                 return target;

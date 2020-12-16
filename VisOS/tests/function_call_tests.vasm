@@ -1,0 +1,54 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\void_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\void_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\void_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\var_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\if_var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\if_var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\if_var_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_var_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_if_var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_if_var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_if_var_2_args.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.RunFunctionCallTests
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\void_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\void_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\void_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\var_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\if_var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\if_var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\if_var_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_var_2_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_if_var_no_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_if_var_1_args.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_calls\eq_if_var_2_args.vasm"
+JSR VoidNoArgsTest
+JSR Void1ArgsTest
+JSR Void2ArgsTest
+JSR VarNoArgsTest
+JSR Var1ArgsTest
+JSR Var2ArgsTest
+JSR IfVarNoArgsTest
+JSR IfVar1ArgsTest
+JSR IfVar2ArgsTest
+JSR EqVarNoArgsTest
+JSR EqVar1ArgsTest
+JSR EqVar2ArgsTest
+JSR EqIfVarNoArgsTest
+JSR EqIfVar1ArgsTest
+JSR EqIfVar2ArgsTest
+RET
+

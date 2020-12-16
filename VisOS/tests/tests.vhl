@@ -1,0 +1,16 @@
+#include "function_call_tests.vhl"
+#include "assignment_tests.vhl"
+#include "pointer_assignment_tests.vhl"
+#include "branch_tests.vhl"
+#include "instruction_tests.vhl"
+
+public void RunTests()
+{
+	RunInstructionTests();
+	RunFunctionCallTests();
+	RunAssignmentTests();
+	RunPointerAssignmentTests();
+	RunBranchTests();
+
+	return;
+}

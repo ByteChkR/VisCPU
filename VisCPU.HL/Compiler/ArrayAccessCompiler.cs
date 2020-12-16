@@ -9,10 +9,12 @@ namespace VisCPU.HL.Compiler
 
         public override ExpressionTarget ParseExpression(HLCompilation compilation, HLArrayAccessorOp expr, ExpressionTarget outputTarget)
         {
-            ExpressionTarget tempPtr = new ExpressionTarget(compilation.GetTempVar(), true, true);
-
+            string tmpPtrName = compilation.GetTempVar();
+            ExpressionTarget tempPtr = new ExpressionTarget(tmpPtrName, true, true);
             ExpressionTarget tempPtrVar = compilation.Parse(expr.Left);
-            ExpressionTarget pn = compilation.Parse(expr.ParameterList[0], new ExpressionTarget(compilation.GetTempVar(), true));
+
+            string pnName = compilation.GetTempVar();
+            ExpressionTarget pn = compilation.Parse(expr.ParameterList[0], new ExpressionTarget(pnName, true));
 
 
             if (tempPtrVar.IsArray)
@@ -23,11 +25,14 @@ namespace VisCPU.HL.Compiler
             {
                 compilation.ProgramCode.Add($"COPY {tempPtrVar.ResultAddress} {tempPtr.ResultAddress}");
             }
+            
+            
             compilation.ProgramCode.Add($"ADD {tempPtr.ResultAddress} {pn.ResultAddress} ; Apply offset");
 
             if (outputTarget.ResultAddress != null)
             {
                 compilation.ProgramCode.Add($"DREF {tempPtr.ResultAddress} {outputTarget.ResultAddress} ; Dereference Array Pointer");
+                compilation.ReleaseTempVar( tmpPtrName );
                 return outputTarget;
             }
 

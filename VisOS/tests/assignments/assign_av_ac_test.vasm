@@ -1,0 +1,69 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __test_assignment_fail "Assignment b[a]=d[5]Failed." linker:hide
+:data __test_arrayV_add_arrayC "Assignment_ArrayV_ArrayC_Simple_Test" linker:hide
+:data tmp_1229 1 linker:hide
+:data __Assign_ArrayV_ArrayC_Simple_Test_b 10 linker:hide
+:data __Assign_ArrayV_ArrayC_Simple_Test_a 1 linker:hide
+:data __Assign_ArrayV_ArrayC_Simple_Test_d 10 linker:hide
+:data tmp_1230 1 linker:hide
+:data tmp_1231 1 linker:hide
+:data tmp_1232 1 linker:hide
+:data tmp_1233 1 linker:hide
+:data tmp_1234 1 linker:hide
+:data tmp_1235 1 linker:hide
+:data tmp_1239 1 linker:hide
+:data tmp_1240 1 linker:hide
+:data tmp_1241 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR Assign_ArrayV_ArrayC_Simple_Test
+HLT
+; ________________ FUNCTION CODE ________________
+.Assign_ArrayV_ArrayC_Simple_Test
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_1229 __test_arrayV_add_arrayC
+PUSH tmp_1229; Push Param ptr_of(test_arrayV_add_arrayC)
+LOAD tmp_1229 36
+PUSH tmp_1229; Push Param size_of(test_arrayV_add_arrayC)
+JSR BeginTest
+LOAD tmp_1229 5
+COPY tmp_1229 __Assign_ArrayV_ArrayC_Simple_Test_a ; Left: def a ; Right: 5
+LOAD tmp_1230 5
+LOAD tmp_1229 __Assign_ArrayV_ArrayC_Simple_Test_d
+ADD tmp_1229 tmp_1230 ; Apply offset
+LOAD tmp_1231 1
+LOAD tmp_1232 tmp_1231 ; Load Pointer for assignment
+CREF tmp_1232 tmp_1229 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: 1
+COPY __Assign_ArrayV_ArrayC_Simple_Test_a tmp_1231
+LOAD tmp_1232 __Assign_ArrayV_ArrayC_Simple_Test_b
+ADD tmp_1232 tmp_1231 ; Apply offset
+LOAD tmp_1235 5
+LOAD tmp_1234 __Assign_ArrayV_ArrayC_Simple_Test_d
+ADD tmp_1234 tmp_1235 ; Apply offset
+DREF tmp_1234 tmp_1233 ; Dereference Array Pointer
+LOAD tmp_1234 tmp_1233 ; Load Pointer for assignment
+CREF tmp_1234 tmp_1232 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp
+; Start IF
+COPY __Assign_ArrayV_ArrayC_Simple_Test_a tmp_1239
+LOAD tmp_1233 __Assign_ArrayV_ArrayC_Simple_Test_b
+ADD tmp_1233 tmp_1239 ; Apply offset
+LOAD tmp_1240 1
+DREF tmp_1233 tmp_1241 ; Dereference Array Pointer (Equality Comparison)
+LOAD tmp_1234 0
+BNE tmp_1241 tmp_1240 bexpr_eq_1242
+LOAD tmp_1234 1
+.bexpr_eq_1242 linker:hide
+BEZ tmp_1234 if_end_1236
+JSR PassTest
+RET
+JMP if_end_1236
+.if_end_1236 linker:hide
+LOAD tmp_1233 __test_assignment_fail
+PUSH tmp_1233; Push Param ptr_of(test_assignment_fail)
+LOAD tmp_1240 27
+PUSH tmp_1240; Push Param size_of(test_assignment_fail)
+JSR FailTest
+RET
+

@@ -1,0 +1,64 @@
+#include "../term/out.vhl"
+
+const_var test_begin = 0xFFFF2000;
+const_var test_fail = 0xFFFF2001;
+const_var test_pass = 0xFFFF2002;
+const_var test_device_present = 0xFFFF2003;
+
+string(str_test_passed, "PASSED!");
+string(str_test_failed, "FAILED!");
+string(str_test_started, "Starting Test: ");
+string(str_test_started_2, ".....");
+
+
+public void BeginTest(var namePtr, var len)
+{
+	if(!test_device_present)
+	{
+		WriteString(ptr_of(str_test_started), size_of(str_test_started));
+		WriteString(namePtr, len);
+		WriteString(ptr_of(str_test_started_2), size_of(str_test_started_2));
+
+		return;
+	}
+
+	var i = 0;
+	while(i < len)
+	{
+		test_begin = namePtr[i];
+		i = i + 1;
+	}
+	test_begin = 0x0; //Send Null Byte
+	return;
+}
+
+public void FailTest(var reasonPtr, var len)
+{
+	if(!test_device_present)
+	{
+		WriteLine(ptr_of(str_test_failed), size_of(str_test_failed));
+		WriteLine(reasonPtr, len);
+		return;
+	}
+
+	var i = 0;
+	while(i < len)
+	{
+		test_fail = reasonPtr[i];
+		i = i + 1;
+	}
+	test_fail = 0x0; //Send Null Byte
+	return;
+}
+
+public void PassTest()
+{
+	if(!test_device_present)
+	{
+		WriteLine(ptr_of(str_test_passed), size_of(str_test_passed));
+		return;
+	}
+	
+	test_pass = 0x01; //Set Pass Flag
+	return;
+}

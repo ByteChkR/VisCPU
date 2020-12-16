@@ -1,0 +1,78 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_test_name "IfVar1ArgsTest" linker:hide
+:data __str_ret_val_fail "Return value is not5" linker:hide
+:data __TestC_arg1 1 linker:hide
+:data __TestC_a 1 linker:hide
+:data tmp_588 1 linker:hide
+:data __TestV_arg1 1 linker:hide
+:data tmp_589 1 linker:hide
+:data tmp_593 1 linker:hide
+:data tmp_594 1 linker:hide
+:data __IfVar1ArgsTest_x 1 linker:hide
+:data tmp_599 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR IfVar1ArgsTest
+HLT
+; ________________ FUNCTION CODE ________________
+.TestC linker:hide
+POP __TestC_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+COPY __TestC_arg1 tmp_588
+COPY tmp_588 __TestC_a ; Left: def a ; Right: arg1
+PUSH __TestC_a
+RET
+
+.TestV linker:hide
+POP __TestV_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+PUSH __TestV_arg1
+RET
+
+.IfVar1ArgsTest
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_589 __str_test_name
+PUSH tmp_589; Push Param ptr_of(str_test_name)
+LOAD tmp_589 14
+PUSH tmp_589; Push Param size_of(str_test_name)
+JSR BeginTest
+; Start IF
+LOAD tmp_593 5
+PUSH tmp_593; Push Param 5
+JSR TestC
+; Write back return value to 'tmp_593'
+POP tmp_593
+LOAD tmp_594 5
+LOAD tmp_589 0
+BNE tmp_593 tmp_594 bexpr_eq_595
+LOAD tmp_589 1
+.bexpr_eq_595 linker:hide
+BEZ tmp_589 if_end_590
+LOAD tmp_594 5
+COPY tmp_594 __IfVar1ArgsTest_x ; Left: def x ; Right: 5
+; Start IF
+PUSH __IfVar1ArgsTest_x; Push Param x
+JSR TestV
+; Write back return value to 'tmp_594'
+POP tmp_594
+LOAD tmp_599 5
+LOAD tmp_593 0
+BNE tmp_594 tmp_599 bexpr_eq_600
+LOAD tmp_593 1
+.bexpr_eq_600 linker:hide
+BEZ tmp_593 if_end_596
+JSR PassTest
+RET
+JMP if_end_596
+.if_end_596 linker:hide
+JMP if_end_590
+.if_end_590 linker:hide
+LOAD tmp_599 __str_ret_val_fail
+PUSH tmp_599; Push Param ptr_of(str_ret_val_fail)
+LOAD tmp_594 20
+PUSH tmp_594; Push Param size_of(str_ret_val_fail)
+JSR FailTest
+RET
+

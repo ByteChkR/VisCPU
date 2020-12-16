@@ -1,0 +1,45 @@
+#include "function_calls/void_no_args.vhl"
+#include "function_calls/void_1_args.vhl"
+#include "function_calls/void_2_args.vhl"
+
+#include "function_calls/var_no_args.vhl"
+#include "function_calls/var_1_args.vhl"
+#include "function_calls/var_2_args.vhl"
+
+#include "function_calls/if_var_no_args.vhl"
+#include "function_calls/if_var_1_args.vhl"
+#include "function_calls/if_var_2_args.vhl"
+
+#include "function_calls/eq_var_no_args.vhl"
+#include "function_calls/eq_var_1_args.vhl"
+#include "function_calls/eq_var_2_args.vhl"
+
+#include "function_calls/eq_if_var_no_args.vhl"
+#include "function_calls/eq_if_var_1_args.vhl"
+#include "function_calls/eq_if_var_2_args.vhl"
+
+public void RunFunctionCallTests()
+{
+
+	VoidNoArgsTest();
+	Void1ArgsTest();
+	Void2ArgsTest();
+
+	VarNoArgsTest();
+	Var1ArgsTest();
+	Var2ArgsTest();
+
+	IfVarNoArgsTest();
+	IfVar1ArgsTest();
+	IfVar2ArgsTest();
+
+	EqVarNoArgsTest();
+	EqVar1ArgsTest();
+	EqVar2ArgsTest();
+
+	EqIfVarNoArgsTest();
+	EqIfVar1ArgsTest();
+	EqIfVar2ArgsTest();
+
+	return;	
+}

@@ -112,22 +112,5 @@ namespace VisCPU.Compiler.Assembler
         }
 
     }
-    public class TokenRecognitionFailureEvent : ErrorEvent
-    {
 
-        private const string EVENT_KEY = "asm-gen-token-recognition-failure";
-        public TokenRecognitionFailureEvent(string value) : base($"Failed to recognize token '{value}'", EVENT_KEY, false)
-        {
-        }
-
-    }
-    public class InvalidArgumentCountEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "asm-gen-too-many-args";
-        public InvalidArgumentCountEvent(int line) : base($"Too many arguments in line: '{line}'", EVENT_KEY, false)
-        {
-        }
-
-    }
 }

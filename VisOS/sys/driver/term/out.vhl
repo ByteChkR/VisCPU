@@ -1,0 +1,54 @@
+const_var cOut = 0xFFFF1001; //Console Out => Write Character
+const_var cOutNum = 0xFFFF1002; //Console Out => Write Number
+
+string(arr_sep, ", ");
+
+public void Write(var chr)
+{
+	cOut = chr;
+	return;
+}
+
+public void WriteString(var str, var len)
+{
+	var i = 0;
+	while(i < len)
+	{
+		cOut = str[i];
+		i = i + 1;
+	}
+	return;
+}
+
+public void WriteNumber(var number)
+{
+	cOutNum = number;
+	return;
+}
+
+public void WriteNewLine()
+{
+	cOut = 0xA;
+	return;
+}
+
+
+public void WriteLine(var str, var len)
+{
+	WriteString(str, len);
+	WriteNewLine();
+	return;
+}
+
+public void WriteNumbers(var ptr, var len)
+{
+	var i = 0;
+	while(i < len)
+	{
+		cOutNum = ptr[i];
+		i = i + 1;
+	WriteNewLine();
+	}
+	return;
+}
+

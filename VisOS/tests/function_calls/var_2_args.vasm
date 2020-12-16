@@ -1,0 +1,166 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_test_name "Var2ArgsTest" linker:hide
+:data __str_ret_val_fail "Return value is not5" linker:hide
+:data __TestC_arg1 1 linker:hide
+:data __TestC_arg2 1 linker:hide
+:data tmp_448 1 linker:hide
+:data tmp_449 1 linker:hide
+:data __TestV_arg1 1 linker:hide
+:data __TestV_arg2 1 linker:hide
+:data __TestV_b 1 linker:hide
+:data tmp_450 1 linker:hide
+:data __TestV_c 1 linker:hide
+:data tmp_451 1 linker:hide
+:data tmp_452 1 linker:hide
+:data __VarV2ArgsTest_ar 1 linker:hide
+:data __VarV2ArgsTest_br 1 linker:hide
+:data __VarV2ArgsTest_a 1 linker:hide
+:data tmp_453 1 linker:hide
+:data tmp_457 1 linker:hide
+:data __VarV2ArgsTest_c 1 linker:hide
+:data tmp_459 1 linker:hide
+:data tmp_463 1 linker:hide
+:data tmp_465 1 linker:hide
+:data __VarC2ArgsTest_a 1 linker:hide
+:data tmp_466 1 linker:hide
+:data tmp_470 1 linker:hide
+:data __VarC2ArgsTest_c 1 linker:hide
+:data tmp_472 1 linker:hide
+:data tmp_476 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR Var2ArgsTest
+HLT
+; ________________ FUNCTION CODE ________________
+.TestC linker:hide
+POP __TestC_arg2
+POP __TestC_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+COPY __TestC_arg1 tmp_448
+COPY __TestC_arg2 tmp_449
+ADD tmp_448 tmp_449; Left: arg1 ; Right: arg2
+PUSH tmp_448
+RET
+
+.TestV linker:hide
+POP __TestV_arg2
+POP __TestV_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+COPY __TestV_arg1 tmp_450
+COPY tmp_450 __TestV_b ; Left: def b ; Right: arg1
+COPY __TestV_arg2 tmp_450
+COPY tmp_450 __TestV_c ; Left: def c ; Right: arg2
+COPY __TestV_b tmp_450
+COPY __TestV_c tmp_451
+ADD tmp_450 tmp_451; Left: b ; Right: c
+PUSH tmp_450
+RET
+
+.VarV2ArgsTest linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_452 __str_test_name
+PUSH tmp_452; Push Param ptr_of(str_test_name)
+LOAD tmp_452 12
+PUSH tmp_452; Push Param size_of(str_test_name)
+JSR BeginTest
+LOAD tmp_452 3
+COPY tmp_452 __VarV2ArgsTest_ar ; Left: def ar ; Right: 3
+LOAD tmp_452 2
+COPY tmp_452 __VarV2ArgsTest_br ; Left: def br ; Right: 2
+PUSH __VarV2ArgsTest_ar; Push Param ar
+PUSH __VarV2ArgsTest_br; Push Param br
+JSR TestC
+; Write back return value to 'tmp_453'
+POP tmp_453
+COPY tmp_453 __VarV2ArgsTest_a ; Left: def a ; Right: TestC(ar,br)
+; Start IF
+LOAD tmp_457 5
+LOAD tmp_452 0
+BNE __VarV2ArgsTest_a tmp_457 bexpr_eq_458
+LOAD tmp_452 1
+.bexpr_eq_458 linker:hide
+BEZ tmp_452 if_end_454
+PUSH __VarV2ArgsTest_ar; Push Param ar
+PUSH __VarV2ArgsTest_br; Push Param br
+JSR TestV
+; Write back return value to 'tmp_459'
+POP tmp_459
+COPY tmp_459 __VarV2ArgsTest_c ; Left: def c ; Right: TestV(ar,br)
+; Start IF
+LOAD tmp_463 5
+LOAD tmp_457 0
+BNE __VarV2ArgsTest_c tmp_463 bexpr_eq_464
+LOAD tmp_457 1
+.bexpr_eq_464 linker:hide
+BEZ tmp_457 if_end_460
+JSR PassTest
+RET
+JMP if_end_460
+.if_end_460 linker:hide
+JMP if_end_454
+.if_end_454 linker:hide
+LOAD tmp_463 __str_ret_val_fail
+PUSH tmp_463; Push Param ptr_of(str_ret_val_fail)
+LOAD tmp_457 20
+PUSH tmp_457; Push Param size_of(str_ret_val_fail)
+JSR FailTest
+RET
+
+.VarC2ArgsTest linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_465 __str_test_name
+PUSH tmp_465; Push Param ptr_of(str_test_name)
+LOAD tmp_465 12
+PUSH tmp_465; Push Param size_of(str_test_name)
+JSR BeginTest
+LOAD tmp_466 2
+PUSH tmp_466; Push Param 2
+LOAD tmp_466 3
+PUSH tmp_466; Push Param 3
+JSR TestC
+; Write back return value to 'tmp_466'
+POP tmp_466
+COPY tmp_466 __VarC2ArgsTest_a ; Left: def a ; Right: TestC(2,3)
+; Start IF
+LOAD tmp_470 5
+LOAD tmp_465 0
+BNE __VarC2ArgsTest_a tmp_470 bexpr_eq_471
+LOAD tmp_465 1
+.bexpr_eq_471 linker:hide
+BEZ tmp_465 if_end_467
+LOAD tmp_472 2
+PUSH tmp_472; Push Param 2
+LOAD tmp_472 3
+PUSH tmp_472; Push Param 3
+JSR TestV
+; Write back return value to 'tmp_472'
+POP tmp_472
+COPY tmp_472 __VarC2ArgsTest_c ; Left: def c ; Right: TestV(2,3)
+; Start IF
+LOAD tmp_476 5
+LOAD tmp_470 0
+BNE __VarC2ArgsTest_c tmp_476 bexpr_eq_477
+LOAD tmp_470 1
+.bexpr_eq_477 linker:hide
+BEZ tmp_470 if_end_473
+JSR PassTest
+RET
+JMP if_end_473
+.if_end_473 linker:hide
+JMP if_end_467
+.if_end_467 linker:hide
+LOAD tmp_476 __str_ret_val_fail
+PUSH tmp_476; Push Param ptr_of(str_ret_val_fail)
+LOAD tmp_470 20
+PUSH tmp_470; Push Param size_of(str_ret_val_fail)
+JSR FailTest
+RET
+
+.Var2ArgsTest
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+JSR VarC2ArgsTest
+JSR VarV2ArgsTest
+RET
+

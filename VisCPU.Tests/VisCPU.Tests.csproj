@@ -91,6 +91,51 @@
     <None Update="tests\branches\if_simple.vhl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="tests\function_calls\eq_if_var_1_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\eq_if_var_2_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\eq_if_var_no_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\eq_var_1_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\eq_var_2_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\eq_var_no_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\if_var_1_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\if_var_2_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\if_var_no_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\var_1_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\var_2_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\var_no_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\void_1_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\void_2_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\function_calls\void_no_args.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="tests\instructions\ADD_Tests.vhl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

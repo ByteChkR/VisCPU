@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using VisCPU.Utility.Events;
@@ -13,50 +15,101 @@ namespace VisCPU.HL.Forms
     public partial class HLLiveOutputViewerForm : Form
     {
 
-        private const string CONSOLE_BIN_CONFIG_PATH = "runtime_path.txt";
+        private readonly ConcurrentQueue < Action> taskQueue = new ConcurrentQueue <Action>();
+        private Task taskProcessor = null;
+        private void EnqueueTask(Action t)
+        {
+            taskQueue.Enqueue( t );
+
+            if ( taskProcessor == null )
+            {
+                taskProcessor = Task.Run( ProcessTasks );
+            }
+        }
+
+        private void ProcessTasks()
+        {
+            while ( !taskQueue.IsEmpty )
+            {
+                if ( taskQueue.TryDequeue( out Action res ) )
+                    res();
+            }
+        }
+        
+        private static string ConsoleBinConfigPath => Path.Combine(Application.StartupPath, "runtime_path.txt");
         private const string CONSOLE_BUILD_DEFAULT_ARGS = "[build] -export -i {0} -steps HL-expr bin -clean false";
         private const string CONSOLE_RUN_DEFAULT_ARGS = "[build;run] -export -i {0} -steps HL-expr bin -clean false";
-        private const string CONSOLE_RUN_ARG_CONFIG_PATH = "runtime_args.txt";
-        private const string CONSOLE_BUILD_ARG_CONFIG_PATH = "runtime_build_args.txt";
-        private const string ENTRY_VHL_FILE = "src";
-        private const string ENTRY_FILE_NAME = ENTRY_VHL_FILE + ".vhl";
-        private const string SOURCE_FOLDER = "src";
+        private static string ConsoleRunArgConfigPath => Path.Combine(Application.StartupPath, "runtime_args.txt");
+        private static string ConsoleBuildArgConfigPath => Path.Combine(Application.StartupPath, "runtime_build_args.txt");
+        private static string LastWorkingDirConfig => Path.Combine(Application.StartupPath, "last_working_dir.txt");
+        private string EntryVhlFile => Path.Combine(m_SourceFolder, "src");
+        private string EntryFileName => EntryVhlFile + ".vhl";
 
-        private readonly Dictionary<string, RichTextBox> CodeInPages = new Dictionary<string, RichTextBox>();
-        private readonly Dictionary<string, RichTextBox> CodeOutPages = new Dictionary<string, RichTextBox>();
-        private bool IsBuilding;
-        private TextWriter ConsoleIn;
-        private Process ConsoleProcess;
+        private readonly Dictionary<string, RichTextBox> m_CodeInPages = new Dictionary<string, RichTextBox>();
+        private readonly Dictionary<string, RichTextBox> m_CodeOutPages = new Dictionary<string, RichTextBox>();
+        private bool m_IsBuilding;
+        private TextWriter m_ConsoleIn;
+        private Process m_ConsoleProcess;
+        private string m_SourceFolder = null;
 
-        private string BuildArgs => File.ReadAllText(CONSOLE_BUILD_ARG_CONFIG_PATH);
+        private bool m_EnableIO = true;
+        private ConcurrentQueue<Action> EnableIOQueue = new ConcurrentQueue<Action>();
 
-        private string RunArgs => File.ReadAllText(CONSOLE_RUN_ARG_CONFIG_PATH);
+        private string BuildArgs => File.ReadAllText(ConsoleBuildArgConfigPath);
+
+        private string RunArgs => File.ReadAllText(ConsoleRunArgConfigPath);
 
         #region Public
 
-        public HLLiveOutputViewerForm()
+        private void OpenFolder()
         {
-            if (!File.Exists(CONSOLE_BUILD_ARG_CONFIG_PATH))
+            if (File.Exists(LastWorkingDirConfig))
             {
-                File.WriteAllText(CONSOLE_BUILD_ARG_CONFIG_PATH, CONSOLE_BUILD_DEFAULT_ARGS);
+                m_SourceFolder = File.ReadAllText(LastWorkingDirConfig);
+
+                if (Directory.Exists(m_SourceFolder))
+                {
+                    Directory.SetCurrentDirectory(m_SourceFolder);
+                    return;
+                }
             }
 
-            if (!File.Exists(CONSOLE_RUN_ARG_CONFIG_PATH))
+            DialogResult r = DialogResult.None;
+            while (r != DialogResult.OK)
             {
-                File.WriteAllText(CONSOLE_RUN_ARG_CONFIG_PATH, CONSOLE_RUN_DEFAULT_ARGS);
+                r = fbdSelectDir.ShowDialog();
+            }
+
+            m_SourceFolder = fbdSelectDir.SelectedPath + "/";
+            Directory.SetCurrentDirectory(m_SourceFolder);
+            File.WriteAllText(LastWorkingDirConfig, m_SourceFolder);
+        }
+
+        public HLLiveOutputViewerForm()
+        {
+            if (!File.Exists(ConsoleBuildArgConfigPath))
+            {
+                File.WriteAllText(ConsoleBuildArgConfigPath, CONSOLE_BUILD_DEFAULT_ARGS);
+            }
+
+            if (!File.Exists(ConsoleRunArgConfigPath))
+            {
+                File.WriteAllText(ConsoleRunArgConfigPath, CONSOLE_RUN_DEFAULT_ARGS);
             }
 
             InitializeComponent();
 
+            OpenFolder();
+
             EventManager.Initialize();
-            EventManager < WarningEvent >.OnEventReceive += x => WriteConsoleOut( $"[WARNING] [{x.EventKey}] {x.Message}" );
+            EventManager<WarningEvent>.OnEventReceive += x => WriteConsoleOut($"[WARNING] [{x.EventKey}] {x.Message}");
             Logger.OnLogReceive += (x, y) => WriteConsoleOut($"[LOG] [{x}] {y}");
 
             DisableConsoleIn();
 
             tbConsoleIn.KeyUp += ConsoleInKeyHandler;
 
-            Directory.CreateDirectory(SOURCE_FOLDER);
+            Directory.CreateDirectory(m_SourceFolder);
 
             if (!File.Exists(GetEntryPath()))
             {
@@ -64,10 +117,14 @@ namespace VisCPU.HL.Forms
             }
 
             CheckForIllegalCrossThreadCalls = false;
-            (RichTextBox rIn, RichTextBox rOut) = GetPage(Path.Combine(SOURCE_FOLDER, ENTRY_VHL_FILE));
-            BuildHL(GetEntryPath());
+            (RichTextBox rIn, RichTextBox rOut) = GetPage(Path.Combine(m_SourceFolder, EntryVhlFile));
+            
             SizeChanged += HLLiveOutputViewerForm_SizeChanged;
-            Closing += (a,b) => ConsoleProcess?.Kill();
+            Closing += (a, b) => m_ConsoleProcess?.Kill();
+
+
+            EnqueueTask( () => BuildHl( GetEntryPath() ) );
+            
         }
 
         #endregion
@@ -79,11 +136,20 @@ namespace VisCPU.HL.Forms
             WriteConsoleIn(tbConsoleIn.Text);
             tbConsoleIn.Text = "";
         }
+        
+        private void SetStatus(string taskDesc, float process)
+        {
+            tsProgress.Value = (int)(process * 100);
+            tslPercentage.Text = $"{Math.Round( process * 100, 1 )}%";
+            tslCurrentTask.Text = $"Task: {taskDesc}";
+            Application.DoEvents();
+        }
 
-        private void BuildHL(string src)
+        private void BuildHl(string src)
         {
             try
             {
+                SetStatus( "Building " + src, 0 );
                 ExpressionParser p = new ExpressionParser();
                 string file = File.ReadAllText(src);
 
@@ -95,6 +161,7 @@ namespace VisCPU.HL.Forms
 
                 HLCompilation c = p.Parse(file, Path.GetDirectoryName(Path.GetFullPath(src)));
                 c.OnCompiledIncludedScript += OnFileCompiled;
+                SetStatus("Updating Pages " + src, 0.75f);
 
                 File.WriteAllText(
                                   newFile,
@@ -107,6 +174,7 @@ namespace VisCPU.HL.Forms
             catch (Exception e)
             {
             }
+            SetStatus("Build Complete " + src, 1);
         }
 
         private void BuildProgram(string consolePath)
@@ -128,13 +196,13 @@ namespace VisCPU.HL.Forms
 
         private void DisableConsoleIn()
         {
-            ConsoleIn = null;
+            m_ConsoleIn = null;
             panelConsoleIn.Enabled = false;
         }
 
         private void EnableConsoleIn(TextWriter tw)
         {
-            ConsoleIn = tw;
+            m_ConsoleIn = tw;
             panelConsoleIn.Enabled = true;
         }
 
@@ -154,8 +222,10 @@ namespace VisCPU.HL.Forms
 
             tbIn.TextChanged += (sender, args) =>
                                 {
-                                    File.WriteAllText(name + ".vhl", tbIn.Text);
-                                    BuildHL(name + ".vhl");
+                                    if (m_EnableIO)
+                                        UpdateIO(name, tbIn);
+                                    else
+                                        EnableIOQueue.Enqueue(() => UpdateIO(name, tbIn));
                                 };
 
             tbIn.KeyUp += ProcessKeyUpEvent;
@@ -165,9 +235,15 @@ namespace VisCPU.HL.Forms
             return (tbIn, tbOut);
         }
 
+        private void UpdateIO(string name, RichTextBox rtb)
+        {
+            File.WriteAllText(name + ".vhl", rtb.Text);
+            BuildHl(name + ".vhl");
+        }
+
         private string GetEntryPath()
         {
-            return Path.Combine(SOURCE_FOLDER, ENTRY_FILE_NAME);
+            return Path.Combine(m_SourceFolder, EntryFileName);
         }
 
         private (RichTextBox input, RichTextBox output) GetPage(string name)
@@ -175,10 +251,10 @@ namespace VisCPU.HL.Forms
             RichTextBox inp;
             RichTextBox outp;
 
-            if (CodeInPages.ContainsKey(name))
+            if (m_CodeInPages.ContainsKey(name))
             {
-                inp = CodeInPages[name];
-                outp = CodeOutPages[name];
+                inp = m_CodeInPages[name];
+                outp = m_CodeOutPages[name];
             }
             else
             {
@@ -200,8 +276,8 @@ namespace VisCPU.HL.Forms
                     outp.Text = $"File: '{name}.vasm' not found";
                 }
 
-                CodeInPages[name] = inp;
-                CodeOutPages[name] = outp;
+                m_CodeInPages[name] = inp;
+                m_CodeOutPages[name] = outp;
             }
 
             return (inp, outp);
@@ -215,21 +291,21 @@ namespace VisCPU.HL.Forms
         private void OnConsoleProcessExit(object sender, EventArgs e)
         {
             DisableConsoleIn();
-            ConsoleProcess = null;
-            IsBuilding = false;
+            m_ConsoleProcess = null;
+            m_IsBuilding = false;
             UpdateOutputPages();
         }
 
         private void OnFileCompiled(string arg1, string arg2)
         {
-            BuildHL(arg1);
+            EnqueueTask(() => BuildHl(arg1));
 
             Uri u = new Uri(
                             Path.Combine(Path.GetDirectoryName(arg1), Path.GetFileNameWithoutExtension(arg1)),
                             UriKind.Absolute
                            );
 
-            Uri u1 = new Uri(Path.GetFullPath(SOURCE_FOLDER), UriKind.Absolute);
+            Uri u1 = new Uri(Path.GetFullPath(m_SourceFolder), UriKind.Absolute);
             Uri ret = u1.MakeRelativeUri(u);
             GetPage(ret.OriginalString);
         }
@@ -238,9 +314,9 @@ namespace VisCPU.HL.Forms
         {
             if (e.KeyCode == Keys.F5)
             {
-                if (File.Exists(CONSOLE_BIN_CONFIG_PATH))
+                if (File.Exists(ConsoleBinConfigPath))
                 {
-                    string cPath = File.ReadAllText(CONSOLE_BIN_CONFIG_PATH);
+                    string cPath = File.ReadAllText(ConsoleBinConfigPath);
 
                     if (File.Exists(cPath))
                     {
@@ -249,7 +325,7 @@ namespace VisCPU.HL.Forms
                     else
                     {
                         MessageBox.Show(
-                                        $"No Console Runtime Set. Create {CONSOLE_BIN_CONFIG_PATH} with path to Console"
+                                        $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
                                        );
                     }
 
@@ -257,9 +333,9 @@ namespace VisCPU.HL.Forms
             }
             else if (e.KeyCode == Keys.F6)
             {
-                if (File.Exists(CONSOLE_BIN_CONFIG_PATH))
+                if (File.Exists(ConsoleBinConfigPath))
                 {
-                    string cPath = File.ReadAllText(CONSOLE_BIN_CONFIG_PATH);
+                    string cPath = File.ReadAllText(ConsoleBinConfigPath);
 
                     if (File.Exists(cPath))
                     {
@@ -268,29 +344,37 @@ namespace VisCPU.HL.Forms
                     else
                     {
                         MessageBox.Show(
-                                        $"No Console Runtime Set. Create {CONSOLE_BIN_CONFIG_PATH} with path to Console"
+                                        $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
                                        );
                     }
                 }
             }
-            else if(e.KeyCode == Keys.F7 && ConsoleProcess != null)
+            else if (e.KeyCode == Keys.F7 && m_ConsoleProcess != null)
             {
-                ConsoleProcess.Kill();
+                m_ConsoleProcess.Kill();
                 WriteConsoleOut("");
                 WriteConsoleOut("Console Process Killed");
+            }
+            else if (e.KeyCode == Keys.F8)
+            {
+                UpdateInputPages();
+                UpdateOutputPages();
+                WriteConsoleOut("");
+                WriteConsoleOut("Updated Pages");
             }
         }
 
         private void RunConsoleProcess(string path, string args)
         {
-            if (IsBuilding)
+            if (m_IsBuilding)
             {
                 return;
             }
 
             rtbConsoleOut.Text = "";
-            IsBuilding = true;
+            m_IsBuilding = true;
             ProcessStartInfo psi = new ProcessStartInfo(path, args);
+            psi.WorkingDirectory = Path.GetDirectoryName(path);
             psi.CreateNoWindow = true;
             psi.UseShellExecute = false;
             psi.RedirectStandardOutput = true;
@@ -302,7 +386,7 @@ namespace VisCPU.HL.Forms
                 EnableRaisingEvents = true
             };
 
-            ConsoleProcess = p;
+            m_ConsoleProcess = p;
 
             p.OutputDataReceived += WriteConsoleOutput;
             p.ErrorDataReceived += WriteConsoleError;
@@ -323,15 +407,26 @@ namespace VisCPU.HL.Forms
 
         private void UpdateInputPages()
         {
-            foreach (KeyValuePair<string, RichTextBox> keyValuePair in CodeInPages)
+            m_EnableIO = false;
+            foreach (KeyValuePair<string, RichTextBox> keyValuePair in m_CodeInPages)
             {
                 UpdatePage(keyValuePair.Key + ".vhl", keyValuePair.Value);
+            }
+            m_EnableIO = true;
+            ProcessIOQueue();
+        }
+
+        private void ProcessIOQueue()
+        {
+            foreach (Action action in EnableIOQueue)
+            {
+                action();
             }
         }
 
         private void UpdateOutputPages()
         {
-            foreach (KeyValuePair<string, RichTextBox> keyValuePair in CodeOutPages)
+            foreach (KeyValuePair<string, RichTextBox> keyValuePair in m_CodeOutPages)
             {
                 UpdatePage(keyValuePair.Key + ".vasm", keyValuePair.Value);
             }
@@ -367,9 +462,9 @@ namespace VisCPU.HL.Forms
                 return;
             }
 
-            WriteConsoleOut( $"[LOG]{e.Data}" );
+            WriteConsoleOut($"[LOG]{e.Data}");
         }
-        
+
         private void WriteConsoleOut(string line)
         {
             rtbConsoleOut.AppendText($"{line}\n");
@@ -379,12 +474,13 @@ namespace VisCPU.HL.Forms
 
         private void WriteConsoleIn(string line)
         {
-            if (ConsoleIn == null)
+            if (m_ConsoleIn == null)
             {
                 return;
             }
 
-            ConsoleIn.WriteLine(line);
+            WriteConsoleOut(line);
+            m_ConsoleIn.WriteLine(line);
         }
 
         #endregion

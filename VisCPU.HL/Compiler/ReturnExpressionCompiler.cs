@@ -12,7 +12,7 @@ namespace VisCPU.HL.Compiler
             {
                 ExpressionTarget pt = compilation.Parse(
                                                         expr.Right
-                                                       );
+                                                       ).MakeAddress(compilation);
                 compilation.ProgramCode.Add($"PUSH {pt.ResultAddress}");
             }
 

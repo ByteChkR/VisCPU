@@ -169,7 +169,7 @@ namespace VisCPU.HL.Parser
             }
 
 
-            throw new Exception("Invalid Token: " + parser.CurrentToken.Type);
+            throw new Exception("Invalid Token: " + parser.CurrentToken.Type+ "\n"+parser.Reader);
         }
 
     }

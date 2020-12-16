@@ -1,0 +1,22 @@
+
+#include "../../sys/driver/test/test_device.vhl"
+string(test_arrayV_add_c, "Assignment_ArrayV_C_Simple_Test");
+string(test_assignment_fail, "Assignment b[a] = 1 Failed.");
+
+
+public void Assign_ArrayV_C_Simple_Test()
+{
+	BeginTest(ptr_of(test_arrayV_add_c), size_of(test_arrayV_add_c));
+	var b[10];
+	var a = 5;
+	b[a] = 1;
+	if(b[a] == 1)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_assignment_fail), size_of(test_assignment_fail));
+	return;
+}
+
+Assign_ArrayV_C_Simple_Test();

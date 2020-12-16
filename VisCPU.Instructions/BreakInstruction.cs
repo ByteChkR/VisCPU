@@ -1,14 +1,6 @@
-﻿using VisCPU.Utility.Logging;
-
-namespace VisCPU.Instructions
+﻿namespace VisCPU.Instructions
 {
-    public abstract class BaseInstruction:Instruction
-    {
 
-        protected override LoggerSystems SubSystem => LoggerSystems.BaseInstructions;
-
-    }
-    
     public class BreakInstruction : BaseInstruction
     {
 

@@ -1,14 +1,15 @@
 #include "../utils.vhl"
 
 string(str_test_name, "VarNoArgsTest");
-string(str_ret_val_fail, "Return value is not 5");
+string(str_ret_c_val_fail, "C:Return value is not 5");
+string(str_ret_v_val_fail, "V:Return value is not 5");
 
-private void TestC()
+private var TestC()
 {
 	return 5;
 }
 
-private void TestV()
+private var TestV()
 {
 	var b = 5;
 	return b;
@@ -26,7 +27,11 @@ private void VarNoArgsTest()
 			PassTest();
 			return;
 		}
+		FailTest(ptr_of(str_ret_v_val_fail), size_of(str_ret_v_val_fail));
+		return;
 	}
-	FailTest(ptr_of(str_ret_val_fail), size_of(str_ret_val_fail));
+	FailTest(ptr_of(str_ret_c_val_fail), size_of(str_ret_c_val_fail));
 	return;
 }
+
+VarNoArgsTest();

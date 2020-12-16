@@ -1,0 +1,119 @@
+; ________________ Includes ________________
+; ________________ CONST VALUES ________________
+:const cIn 0xFFFF1004 linker:hide
+; ________________ VARIABLE FIELDS ________________
+:data __ReadBuffer_buf 1 linker:hide
+:data __ReadBuffer_len 1 linker:hide
+:data __ReadBuffer_counter 1 linker:hide
+:data tmp_67 1 linker:hide
+:data tmp_70 1 linker:hide
+:data __ReadBuffer_char 1 linker:hide
+:data tmp_72 1 linker:hide
+:data tmp_73 1 linker:hide
+:data tmp_74 1 linker:hide
+:data tmp_75 1 linker:hide
+:data __ReadLine_buf 1 linker:hide
+:data __ReadLine_len 1 linker:hide
+:data __ReadLine_counter 1 linker:hide
+:data tmp_76 1 linker:hide
+:data tmp_79 1 linker:hide
+:data __ReadLine_char 1 linker:hide
+:data tmp_81 1 linker:hide
+:data tmp_85 1 linker:hide
+:data tmp_87 1 linker:hide
+:data tmp_92 1 linker:hide
+:data tmp_93 1 linker:hide
+:data tmp_94 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.Read
+PUSH cIn
+RET
+
+.ReadBuffer
+POP __ReadBuffer_len
+POP __ReadBuffer_buf
+LOAD tmp_67 0
+COPY tmp_67 __ReadBuffer_counter ; Left: def counter ; Right: 0
+.while_start_68 linker:hide
+LOAD tmp_67 0x00
+COPY __ReadBuffer_len tmp_70
+BGE __ReadBuffer_counter tmp_70 bexpr_lt_71
+LOAD tmp_67 1
+.bexpr_lt_71 linker:hide
+BEZ tmp_67 while_end_69
+JSR Read
+; Write back return value to 'tmp_72'
+POP tmp_72
+COPY tmp_72 __ReadBuffer_char ; Left: def char ; Right: Read()
+COPY __ReadBuffer_counter tmp_73
+COPY __ReadBuffer_buf tmp_70
+ADD tmp_70 tmp_73 ; Apply offset
+COPY __ReadBuffer_char tmp_74
+LOAD tmp_75 tmp_74 ; Load Pointer for assignment
+CREF tmp_75 tmp_70 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: char
+COPY __ReadBuffer_counter tmp_75
+LOAD tmp_74 1
+ADD tmp_75 tmp_74; Left: counter ; Right: 1
+COPY tmp_75 __ReadBuffer_counter ; Left: counter ; Right: counter(OpPlus)1
+JMP while_start_68
+.while_end_69 linker:hide
+RET
+
+.ReadLine
+POP __ReadLine_len
+POP __ReadLine_buf
+LOAD tmp_76 0
+COPY tmp_76 __ReadLine_counter ; Left: def counter ; Right: 0
+.while_start_77 linker:hide
+LOAD tmp_76 0x00
+COPY __ReadLine_len tmp_79
+BGE __ReadLine_counter tmp_79 bexpr_lt_80
+LOAD tmp_76 1
+.bexpr_lt_80 linker:hide
+BEZ tmp_76 while_end_78
+JSR Read
+; Write back return value to 'tmp_81'
+POP tmp_81
+COPY tmp_81 __ReadLine_char ; Left: def char ; Right: Read()
+; Start IF
+LOAD tmp_85 0xD
+LOAD tmp_79 0
+BNE __ReadLine_char tmp_85 bexpr_eq_86
+LOAD tmp_79 1
+.bexpr_eq_86 linker:hide
+BEZ tmp_79 if_end_82
+JSR Read
+; Write back return value to 'tmp_87'
+POP tmp_87
+COPY tmp_87 __ReadLine_char ; Left: char ; Right: Read()
+JMP if_end_82
+.if_end_82 linker:hide
+; Start IF
+LOAD tmp_79 0xA
+LOAD tmp_85 0
+BNE __ReadLine_char tmp_79 bexpr_eq_91
+LOAD tmp_85 1
+.bexpr_eq_91 linker:hide
+BEZ tmp_85 if_else_89
+PUSH __ReadLine_counter
+RET
+JMP if_end_88
+.if_else_89 linker:hide
+COPY __ReadLine_counter tmp_92
+COPY __ReadLine_buf tmp_79
+ADD tmp_79 tmp_92 ; Apply offset
+COPY __ReadLine_char tmp_93
+LOAD tmp_94 tmp_93 ; Load Pointer for assignment
+CREF tmp_94 tmp_79 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: char
+COPY __ReadLine_counter tmp_94
+LOAD tmp_93 1
+ADD tmp_94 tmp_93; Left: counter ; Right: 1
+COPY tmp_94 __ReadLine_counter ; Left: counter ; Right: counter(OpPlus)1
+.if_end_88 linker:hide
+JMP while_start_77
+.while_end_78 linker:hide
+PUSH __ReadLine_counter
+RET
+

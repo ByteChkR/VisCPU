@@ -1,0 +1,24 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\ADD_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\SUB_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\MUL_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\DIV_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\MOD_Tests.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.RunInstructionTests
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\ADD_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\SUB_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\MUL_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\DIV_Tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instructions\MOD_Tests.vasm"
+JSR Run_ADD_Tests
+JSR Run_SUB_Tests
+JSR Run_MUL_Tests
+JSR Run_DIV_Tests
+JSR Run_MOD_Tests
+RET
+

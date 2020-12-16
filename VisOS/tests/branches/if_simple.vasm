@@ -1,0 +1,198 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __test_if_v "IF_V_Simple_Test" linker:hide
+:data __test_if_c "IF_C_Simple_Test" linker:hide
+:data __test_if_vc "IF_VC_Simple_Test" linker:hide
+:data __test_if_cv "IF_CV_Simple_Test" linker:hide
+:data __test_if_vv "IF_VV_Simple_Test" linker:hide
+:data __test_if_cc "IF_CC_Simple_Test" linker:hide
+:data __test_eval_fail "Evaluation is wrong." linker:hide
+:data tmp_2197 1 linker:hide
+:data __TestSimpleIf_V_a 1 linker:hide
+:data tmp_2201 1 linker:hide
+:data tmp_2202 1 linker:hide
+:data tmp_2206 1 linker:hide
+:data tmp_2207 1 linker:hide
+:data __TestSimpleIf_VC_a 1 linker:hide
+:data tmp_2211 1 linker:hide
+:data tmp_2213 1 linker:hide
+:data __TestSimpleIf_CV_a 1 linker:hide
+:data tmp_2217 1 linker:hide
+:data tmp_2218 1 linker:hide
+:data tmp_2220 1 linker:hide
+:data tmp_2224 1 linker:hide
+:data tmp_2225 1 linker:hide
+:data tmp_2227 1 linker:hide
+:data __TestSimpleIf_VV_a 1 linker:hide
+:data __TestSimpleIf_VV_b 1 linker:hide
+:data tmp_2231 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR RunIfSimpleTests
+HLT
+; ________________ FUNCTION CODE ________________
+.TestSimpleIf_V linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2197 __test_if_v
+PUSH tmp_2197; Push Param ptr_of(test_if_v)
+LOAD tmp_2197 16
+PUSH tmp_2197; Push Param size_of(test_if_v)
+JSR BeginTest
+LOAD tmp_2197 0
+COPY tmp_2197 __TestSimpleIf_V_a ; Left: def a ; Right: 0
+; Start IF
+COPY __TestSimpleIf_V_a tmp_2197
+BEZ tmp_2197 if_end_2198
+LOAD tmp_2201 __test_eval_fail
+PUSH tmp_2201; Push Param ptr_of(test_eval_fail)
+LOAD tmp_2201 20
+PUSH tmp_2201; Push Param size_of(test_eval_fail)
+JSR FailTest
+RET
+JMP if_end_2198
+.if_end_2198 linker:hide
+JSR PassTest
+RET
+
+.TestSimpleIf_C linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2202 __test_if_c
+PUSH tmp_2202; Push Param ptr_of(test_if_c)
+LOAD tmp_2202 16
+PUSH tmp_2202; Push Param size_of(test_if_c)
+JSR BeginTest
+; Start IF
+LOAD tmp_2202 0
+BEZ tmp_2202 if_end_2203
+LOAD tmp_2206 __test_eval_fail
+PUSH tmp_2206; Push Param ptr_of(test_eval_fail)
+LOAD tmp_2206 20
+PUSH tmp_2206; Push Param size_of(test_eval_fail)
+JSR FailTest
+RET
+JMP if_end_2203
+.if_end_2203 linker:hide
+JSR PassTest
+RET
+
+.TestSimpleIf_VC linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2207 __test_if_vc
+PUSH tmp_2207; Push Param ptr_of(test_if_vc)
+LOAD tmp_2207 17
+PUSH tmp_2207; Push Param size_of(test_if_vc)
+JSR BeginTest
+LOAD tmp_2207 0
+COPY tmp_2207 __TestSimpleIf_VC_a ; Left: def a ; Right: 0
+; Start IF
+LOAD tmp_2211 1
+LOAD tmp_2207 0
+BNE __TestSimpleIf_VC_a tmp_2211 bexpr_eq_2212
+LOAD tmp_2207 1
+.bexpr_eq_2212 linker:hide
+BEZ tmp_2207 if_end_2208
+LOAD tmp_2211 __test_eval_fail
+PUSH tmp_2211; Push Param ptr_of(test_eval_fail)
+LOAD tmp_2211 20
+PUSH tmp_2211; Push Param size_of(test_eval_fail)
+JSR FailTest
+RET
+JMP if_end_2208
+.if_end_2208 linker:hide
+JSR PassTest
+RET
+
+.TestSimpleIf_CV linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2213 __test_if_cv
+PUSH tmp_2213; Push Param ptr_of(test_if_cv)
+LOAD tmp_2213 17
+PUSH tmp_2213; Push Param size_of(test_if_cv)
+JSR BeginTest
+LOAD tmp_2213 0
+COPY tmp_2213 __TestSimpleIf_CV_a ; Left: def a ; Right: 0
+; Start IF
+LOAD tmp_2217 1
+COPY __TestSimpleIf_CV_a tmp_2218
+LOAD tmp_2213 0
+BNE tmp_2217 tmp_2218 bexpr_eq_2219
+LOAD tmp_2213 1
+.bexpr_eq_2219 linker:hide
+BEZ tmp_2213 if_end_2214
+LOAD tmp_2218 __test_eval_fail
+PUSH tmp_2218; Push Param ptr_of(test_eval_fail)
+LOAD tmp_2217 20
+PUSH tmp_2217; Push Param size_of(test_eval_fail)
+JSR FailTest
+RET
+JMP if_end_2214
+.if_end_2214 linker:hide
+JSR PassTest
+RET
+
+.TestSimpleIf_CC linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2220 __test_if_cc
+PUSH tmp_2220; Push Param ptr_of(test_if_cc)
+LOAD tmp_2220 17
+PUSH tmp_2220; Push Param size_of(test_if_cc)
+JSR BeginTest
+; Start IF
+LOAD tmp_2224 0
+LOAD tmp_2225 1
+LOAD tmp_2220 0
+BNE tmp_2224 tmp_2225 bexpr_eq_2226
+LOAD tmp_2220 1
+.bexpr_eq_2226 linker:hide
+BEZ tmp_2220 if_end_2221
+LOAD tmp_2225 __test_eval_fail
+PUSH tmp_2225; Push Param ptr_of(test_eval_fail)
+LOAD tmp_2224 20
+PUSH tmp_2224; Push Param size_of(test_eval_fail)
+JSR FailTest
+RET
+JMP if_end_2221
+.if_end_2221 linker:hide
+JSR PassTest
+RET
+
+.TestSimpleIf_VV linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2227 __test_if_vv
+PUSH tmp_2227; Push Param ptr_of(test_if_vv)
+LOAD tmp_2227 17
+PUSH tmp_2227; Push Param size_of(test_if_vv)
+JSR BeginTest
+LOAD tmp_2227 0
+COPY tmp_2227 __TestSimpleIf_VV_a ; Left: def a ; Right: 0
+LOAD tmp_2227 1
+COPY tmp_2227 __TestSimpleIf_VV_b ; Left: def b ; Right: 1
+; Start IF
+COPY __TestSimpleIf_VV_b tmp_2231
+LOAD tmp_2227 0
+BNE __TestSimpleIf_VV_a tmp_2231 bexpr_eq_2232
+LOAD tmp_2227 1
+.bexpr_eq_2232 linker:hide
+BEZ tmp_2227 if_end_2228
+LOAD tmp_2231 __test_eval_fail
+PUSH tmp_2231; Push Param ptr_of(test_eval_fail)
+LOAD tmp_2231 20
+PUSH tmp_2231; Push Param size_of(test_eval_fail)
+JSR FailTest
+RET
+JMP if_end_2228
+.if_end_2228 linker:hide
+JSR PassTest
+RET
+
+.RunIfSimpleTests
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+JSR TestSimpleIf_V
+JSR TestSimpleIf_C
+JSR TestSimpleIf_VC
+JSR TestSimpleIf_CV
+JSR TestSimpleIf_VV
+JSR TestSimpleIf_CC
+RET
+

@@ -1,0 +1,89 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_test_name "EqIfVarNoArgsTest" linker:hide
+:data __str_ret_v_val_fail "V:Return value is not5" linker:hide
+:data __str_ret_c_val_fail "C:Return value is not5" linker:hide
+:data tmp_906 1 linker:hide
+:data __TestV_b 1 linker:hide
+:data tmp_907 1 linker:hide
+:data tmp_908 1 linker:hide
+:data tmp_912 1 linker:hide
+:data tmp_913 1 linker:hide
+:data tmp_914 1 linker:hide
+:data tmp_915 1 linker:hide
+:data tmp_921 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR EqIfVarNoArgsTest
+HLT
+; ________________ FUNCTION CODE ________________
+.TestC linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_906 5
+PUSH tmp_906
+RET
+
+.TestV linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_907 5
+COPY tmp_907 __TestV_b ; Left: def b ; Right: 5
+PUSH __TestV_b
+RET
+
+.EqIfVarNoArgsTest
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_908 __str_test_name
+PUSH tmp_908; Push Param ptr_of(str_test_name)
+LOAD tmp_908 17
+PUSH tmp_908; Push Param size_of(str_test_name)
+JSR BeginTest
+; Start IF
+LOAD tmp_912 1
+JSR TestC
+; Write back return value to 'tmp_914'
+POP tmp_914
+LOAD tmp_915 5
+LOAD tmp_913 0
+BNE tmp_914 tmp_915 bexpr_eq_916
+LOAD tmp_913 1
+.bexpr_eq_916 linker:hide
+LOAD tmp_908 0
+BNE tmp_912 tmp_913 bexpr_eq_917
+LOAD tmp_908 1
+.bexpr_eq_917 linker:hide
+BEZ tmp_908 if_end_909
+; Start IF
+LOAD tmp_914 1
+JSR TestV
+; Write back return value to 'tmp_912'
+POP tmp_912
+LOAD tmp_921 5
+LOAD tmp_913 0
+BNE tmp_912 tmp_921 bexpr_eq_922
+LOAD tmp_913 1
+.bexpr_eq_922 linker:hide
+LOAD tmp_915 0
+BNE tmp_914 tmp_913 bexpr_eq_923
+LOAD tmp_915 1
+.bexpr_eq_923 linker:hide
+BEZ tmp_915 if_end_918
+JSR PassTest
+RET
+JMP if_end_918
+.if_end_918 linker:hide
+LOAD tmp_921 __str_ret_v_val_fail
+PUSH tmp_921; Push Param ptr_of(str_ret_v_val_fail)
+LOAD tmp_912 22
+PUSH tmp_912; Push Param size_of(str_ret_v_val_fail)
+JSR FailTest
+RET
+JMP if_end_909
+.if_end_909 linker:hide
+LOAD tmp_913 __str_ret_c_val_fail
+PUSH tmp_913; Push Param ptr_of(str_ret_c_val_fail)
+LOAD tmp_914 22
+PUSH tmp_914; Push Param size_of(str_ret_c_val_fail)
+JSR FailTest
+RET
+

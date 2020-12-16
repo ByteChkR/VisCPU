@@ -7,6 +7,7 @@ using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Tests
 {
@@ -39,7 +40,7 @@ namespace VisCPU.Tests
                                           Path.GetFileNameWithoutExtension(file)
                                          ) + ".vbin";
 
-            if (CPUSettings.ExportLinkerInfo)
+            if (Settings.GetSettings<LinkerSettings>().ExportLinkerInfo)
             {
                 comp.LinkerInfo.Save(newFile, LinkerInfo.LinkerInfoFormat.Text);
             }

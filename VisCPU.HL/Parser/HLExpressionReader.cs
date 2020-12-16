@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using VisCPU.HL.Parser.Tokens;
 
@@ -67,6 +68,18 @@ namespace VisCPU.HL.Parser
             HLParsingTools.ReadAnyOrNone(Tokens, currentIdx, out IHLToken result);
             currentIdx++;
             return result;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            foreach ( IHLToken hlToken in Tokens )
+            {
+                sb.Append( $"{hlToken} " );
+            }
+
+            return sb.ToString();
         }
 
     }

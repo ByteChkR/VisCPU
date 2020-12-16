@@ -1,0 +1,73 @@
+
+Sourcecode was not included.
+$src-end
+$start-constants
+$start-labels
+WriteOSHeader : 0x13c
+WriteOSName : 0x180
+WriteOSVersion : 0x198
+WriteTerminalPrefix : 0x1b0
+Compare : 0x1cc
+Copy : 0x268
+Set : 0x2cc
+Read : 0x320
+ReadBuffer : 0x328
+ReadLine : 0x388
+VoidNoArgsTest : 0x440
+Void1ArgsTest : 0x4fc
+Void2ArgsTest : 0x5cc
+VarNoArgsTest : 0x5fc
+Var1ArgsTest : 0x7d0
+Var2ArgsTest : 0x964
+IfVarNoArgsTest : 0x994
+IfVar1ArgsTest : 0xa48
+IfVar2ArgsTest : 0xb14
+EqVarNoArgsTest : 0xbd4
+EqVar1ArgsTest : 0xcb0
+EqVar2ArgsTest : 0xda4
+EqIfVarNoArgsTest : 0xe8c
+EqIfVar1ArgsTest : 0xf60
+EqIfVar2ArgsTest : 0x1064
+RunFunctionCallTests : 0x113c
+Assign_ArrayC_ArrayC_Simple_Test : 0x1184
+Assign_ArrayC_ArrayV_Simple_Test : 0x1224
+Assign_ArrayV_ArrayC_Simple_Test : 0x12cc
+Assign_ArrayV_ArrayV_Simple_Test : 0x1374
+Assign_ArrayC_C_Simple_Test : 0x141c
+Assign_ArrayC_V_Simple_Test : 0x1498
+Assign_ArrayV_C_Simple_Test : 0x151c
+Assign_ArrayV_V_Simple_Test : 0x15a0
+Assign_C_Simple_Test : 0x162c
+Assign_V_Simple_Test : 0x1688
+RunAssignmentTests : 0x16e8
+PtrRunAssign_ArrayC_ArrayC_Simple_Test : 0x17cc
+PtrRunAssign_ArrayC_ArrayV_Simple_Test : 0x18a4
+PtrRunAssign_ArrayV_ArrayC_Simple_Test : 0x197c
+PtrRunAssign_ArrayV_ArrayV_Simple_Test : 0x1a54
+PtrRunAssign_ArrayC_C_Simple_Test : 0x1af4
+PtrRunAssign_ArrayC_V_Simple_Test : 0x1b94
+PtrRunAssign_ArrayV_C_Simple_Test : 0x1c34
+PtrRunAssign_ArrayV_V_Simple_Test : 0x1cdc
+RunPointerAssignmentTests : 0x1cf0
+RunIfSimpleTests : 0x1efc
+RunIfElseTests : 0x2190
+RunIfElseIfTests : 0x249c
+RunIfElseIfElseTests : 0x2898
+RunBranchTests : 0x28b8
+Run_ADD_Tests : 0x2a64
+Run_SUB_Tests : 0x2c10
+Run_MUL_Tests : 0x2dbc
+Run_DIV_Tests : 0x2f68
+Write : 0x2f80
+WriteString : 0x2f90
+WriteNumber : 0x2fe0
+WriteNewLine : 0x2ff0
+WriteLine : 0x2ffc
+WriteNumbers : 0x3018
+BeginTest : 0x3070
+FailTest : 0x311c
+PassTest : 0x31b4
+Run_MOD_Tests : 0x338c
+RunInstructionTests : 0x33a4
+RunTests : 0x33c0
+$start-data-section

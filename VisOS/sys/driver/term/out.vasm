@@ -1,0 +1,107 @@
+; ________________ Includes ________________
+; ________________ CONST VALUES ________________
+:const cOut 0xFFFF1001 linker:hide
+:const cOutNum 0xFFFF1002 linker:hide
+; ________________ VARIABLE FIELDS ________________
+:data __arr_sep "," linker:hide
+:data __Write_chr 1 linker:hide
+:data tmp_2785 1 linker:hide
+:data __WriteString_str 1 linker:hide
+:data __WriteString_len 1 linker:hide
+:data __WriteString_i 1 linker:hide
+:data tmp_2786 1 linker:hide
+:data tmp_2789 1 linker:hide
+:data tmp_2791 1 linker:hide
+:data tmp_2792 1 linker:hide
+:data __WriteNumber_number 1 linker:hide
+:data tmp_2793 1 linker:hide
+:data tmp_2794 1 linker:hide
+:data __WriteLine_str 1 linker:hide
+:data __WriteLine_len 1 linker:hide
+:data __WriteNumbers_ptr 1 linker:hide
+:data __WriteNumbers_len 1 linker:hide
+:data __WriteNumbers_i 1 linker:hide
+:data tmp_2795 1 linker:hide
+:data tmp_2798 1 linker:hide
+:data tmp_2800 1 linker:hide
+:data tmp_2801 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.Write
+POP __Write_chr
+COPY __Write_chr tmp_2785
+COPY tmp_2785 cOut ; Left: cOut ; Right: chr
+RET
+
+.WriteString
+POP __WriteString_len
+POP __WriteString_str
+LOAD tmp_2786 0
+COPY tmp_2786 __WriteString_i ; Left: def i ; Right: 0
+.while_start_2787 linker:hide
+LOAD tmp_2786 0x00
+COPY __WriteString_len tmp_2789
+BGE __WriteString_i tmp_2789 bexpr_lt_2790
+LOAD tmp_2786 1
+.bexpr_lt_2790 linker:hide
+BEZ tmp_2786 while_end_2788
+COPY __WriteString_i tmp_2792
+COPY __WriteString_str tmp_2791
+ADD tmp_2791 tmp_2792 ; Apply offset
+DREF tmp_2791 tmp_2789 ; Dereference Array Pointer
+COPY tmp_2789 cOut ; Left: cOut ; Right: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp
+COPY __WriteString_i tmp_2791
+LOAD tmp_2789 1
+ADD tmp_2791 tmp_2789; Left: i ; Right: 1
+COPY tmp_2791 __WriteString_i ; Left: i ; Right: i(OpPlus)1
+JMP while_start_2787
+.while_end_2788 linker:hide
+RET
+
+.WriteNumber
+POP __WriteNumber_number
+COPY __WriteNumber_number tmp_2793
+COPY tmp_2793 cOutNum ; Left: cOutNum ; Right: number
+RET
+
+.WriteNewLine
+LOAD tmp_2794 0xA
+COPY tmp_2794 cOut ; Left: cOut ; Right: 0xA
+RET
+
+.WriteLine
+POP __WriteLine_len
+POP __WriteLine_str
+PUSH __WriteLine_str; Push Param str
+PUSH __WriteLine_len; Push Param len
+JSR WriteString
+JSR WriteNewLine
+RET
+
+.WriteNumbers
+POP __WriteNumbers_len
+POP __WriteNumbers_ptr
+LOAD tmp_2795 0
+COPY tmp_2795 __WriteNumbers_i ; Left: def i ; Right: 0
+.while_start_2796 linker:hide
+LOAD tmp_2795 0x00
+COPY __WriteNumbers_len tmp_2798
+BGE __WriteNumbers_i tmp_2798 bexpr_lt_2799
+LOAD tmp_2795 1
+.bexpr_lt_2799 linker:hide
+BEZ tmp_2795 while_end_2797
+COPY __WriteNumbers_i tmp_2801
+COPY __WriteNumbers_ptr tmp_2800
+ADD tmp_2800 tmp_2801 ; Apply offset
+DREF tmp_2800 tmp_2798 ; Dereference Array Pointer
+COPY tmp_2798 cOutNum ; Left: cOutNum ; Right: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp
+COPY __WriteNumbers_i tmp_2800
+LOAD tmp_2798 1
+ADD tmp_2800 tmp_2798; Left: i ; Right: 1
+COPY tmp_2800 __WriteNumbers_i ; Left: i ; Right: i(OpPlus)1
+JSR WriteNewLine
+JMP while_start_2796
+.while_end_2797 linker:hide
+RET
+

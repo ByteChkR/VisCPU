@@ -6,52 +6,6 @@ using VisCPU.Utility.Events;
 
 namespace VisCPU
 {
-    public class DuplicateInstructionOpCodesEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "instr-dup-op-code";
-        public DuplicateInstructionOpCodesEvent(Instruction a, Instruction b, byte opCode) : base($"Instruction {a.Key} and {b.Key} share the same OpCode {opCode}", EVENT_KEY, false)
-        {
-        }
-
-    }
-
-    public class DuplicateVarDefinitionEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "var-duplicate-def";
-        public DuplicateVarDefinitionEvent(string varName) : base($"Duplicate Definition of: {varName}", EVENT_KEY, false)
-        {
-        }
-
-    }
-    public class DuplicateConstVarDefinitionEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "var-duplicate-def";
-        public DuplicateConstVarDefinitionEvent(string varName) : base($"Duplicate Definition of: {varName}", EVENT_KEY, false)
-        {
-        }
-
-    }
-
-    public class InstructionNotFoundEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "instr-op-not-found";
-        public InstructionNotFoundEvent(byte opCode) : base($"Can not find Instruction with op code: {opCode}", EVENT_KEY, false)
-        {
-        }
-
-        public InstructionNotFoundEvent(Instruction instruction) : base($"Can not find Instruction {instruction.Key}", EVENT_KEY, false)
-        {
-        }
-        
-        public InstructionNotFoundEvent(string key, int args) : base($"Can not find Instruction {key} with argument count {args}", EVENT_KEY, false)
-        {
-        }
-
-    }
 
     public abstract class InstructionSet
     {

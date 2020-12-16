@@ -1,0 +1,24 @@
+#include "assignments_pointer/assign_ac_ac_test.vhl"
+#include "assignments_pointer/assign_ac_av_test.vhl"
+#include "assignments_pointer/assign_av_ac_test.vhl"
+#include "assignments_pointer/assign_av_av_test.vhl"
+
+#include "assignments_pointer/assign_ac_c_test.vhl"
+#include "assignments_pointer/assign_ac_v_test.vhl"
+#include "assignments_pointer/assign_av_c_test.vhl"
+#include "assignments_pointer/assign_av_v_test.vhl"
+
+public void RunPointerAssignmentTests()
+{
+
+	PtrRunAssign_ArrayC_C_Simple_Test();
+	PtrRunAssign_ArrayC_V_Simple_Test();
+	PtrRunAssign_ArrayV_C_Simple_Test();
+	PtrRunAssign_ArrayV_V_Simple_Test();
+
+	PtrRunAssign_ArrayC_ArrayC_Simple_Test();
+	PtrRunAssign_ArrayC_ArrayV_Simple_Test();
+	PtrRunAssign_ArrayV_ArrayC_Simple_Test();
+	PtrRunAssign_ArrayV_ArrayV_Simple_Test();
+	return;
+}

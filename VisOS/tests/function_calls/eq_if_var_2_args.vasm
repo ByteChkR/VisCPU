@@ -1,0 +1,115 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_test_name "EqIfVar2ArgsTest" linker:hide
+:data __str_ret_v_val_fail "V:Return value is not5" linker:hide
+:data __str_ret_c_val_fail "C:Return value is not5" linker:hide
+:data __TestC_arg1 1 linker:hide
+:data __TestC_arg2 1 linker:hide
+:data tmp_1037 1 linker:hide
+:data tmp_1038 1 linker:hide
+:data __TestV_arg1 1 linker:hide
+:data __TestV_arg2 1 linker:hide
+:data __TestV_b 1 linker:hide
+:data tmp_1039 1 linker:hide
+:data tmp_1040 1 linker:hide
+:data tmp_1041 1 linker:hide
+:data tmp_1045 1 linker:hide
+:data tmp_1046 1 linker:hide
+:data tmp_1047 1 linker:hide
+:data tmp_1048 1 linker:hide
+:data __EqIfVar2ArgsTest_x 1 linker:hide
+:data __EqIfVar2ArgsTest_y 1 linker:hide
+:data tmp_1054 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR EqIfVar2ArgsTest
+HLT
+; ________________ FUNCTION CODE ________________
+.TestC linker:hide
+POP __TestC_arg2
+POP __TestC_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+COPY __TestC_arg1 tmp_1037
+COPY __TestC_arg2 tmp_1038
+ADD tmp_1037 tmp_1038; Left: arg1 ; Right: arg2
+PUSH tmp_1037
+RET
+
+.TestV linker:hide
+POP __TestV_arg2
+POP __TestV_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+COPY __TestV_arg1 tmp_1039
+COPY __TestV_arg2 tmp_1040
+ADD tmp_1039 tmp_1040; Left: arg1 ; Right: arg2
+COPY tmp_1039 __TestV_b ; Left: def b ; Right: arg1(OpPlus)arg2
+PUSH __TestV_b
+RET
+
+.EqIfVar2ArgsTest
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_1041 __str_test_name
+PUSH tmp_1041; Push Param ptr_of(str_test_name)
+LOAD tmp_1041 16
+PUSH tmp_1041; Push Param size_of(str_test_name)
+JSR BeginTest
+; Start IF
+LOAD tmp_1045 1
+LOAD tmp_1047 3
+PUSH tmp_1047; Push Param 3
+LOAD tmp_1047 2
+PUSH tmp_1047; Push Param 2
+JSR TestC
+; Write back return value to 'tmp_1047'
+POP tmp_1047
+LOAD tmp_1048 5
+LOAD tmp_1046 0
+BNE tmp_1047 tmp_1048 bexpr_eq_1049
+LOAD tmp_1046 1
+.bexpr_eq_1049 linker:hide
+LOAD tmp_1041 0
+BNE tmp_1045 tmp_1046 bexpr_eq_1050
+LOAD tmp_1041 1
+.bexpr_eq_1050 linker:hide
+BEZ tmp_1041 if_end_1042
+LOAD tmp_1048 2
+COPY tmp_1048 __EqIfVar2ArgsTest_x ; Left: def x ; Right: 2
+LOAD tmp_1047 3
+COPY tmp_1047 __EqIfVar2ArgsTest_y ; Left: def y ; Right: 3
+; Start IF
+LOAD tmp_1045 1
+PUSH __EqIfVar2ArgsTest_x; Push Param x
+PUSH __EqIfVar2ArgsTest_y; Push Param y
+JSR TestV
+; Write back return value to 'tmp_1047'
+POP tmp_1047
+LOAD tmp_1054 5
+LOAD tmp_1048 0
+BNE tmp_1047 tmp_1054 bexpr_eq_1055
+LOAD tmp_1048 1
+.bexpr_eq_1055 linker:hide
+LOAD tmp_1046 0
+BNE tmp_1045 tmp_1048 bexpr_eq_1056
+LOAD tmp_1046 1
+.bexpr_eq_1056 linker:hide
+BEZ tmp_1046 if_end_1051
+JSR PassTest
+RET
+JMP if_end_1051
+.if_end_1051 linker:hide
+LOAD tmp_1054 __str_ret_v_val_fail
+PUSH tmp_1054; Push Param ptr_of(str_ret_v_val_fail)
+LOAD tmp_1047 22
+PUSH tmp_1047; Push Param size_of(str_ret_v_val_fail)
+JSR FailTest
+RET
+JMP if_end_1042
+.if_end_1042 linker:hide
+LOAD tmp_1048 __str_ret_c_val_fail
+PUSH tmp_1048; Push Param ptr_of(str_ret_c_val_fail)
+LOAD tmp_1045 22
+PUSH tmp_1045; Push Param size_of(str_ret_c_val_fail)
+JSR FailTest
+RET
+

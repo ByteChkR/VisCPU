@@ -1,0 +1,15 @@
+#include "instructions/ADD_Tests.vhl"
+#include "instructions/SUB_Tests.vhl"
+#include "instructions/MUL_Tests.vhl"
+#include "instructions/DIV_Tests.vhl"
+#include "instructions/MOD_Tests.vhl"
+
+public void RunInstructionTests()
+{
+	Run_ADD_Tests();
+	Run_SUB_Tests();
+	Run_MUL_Tests();
+	Run_DIV_Tests();
+	Run_MOD_Tests();
+	return;
+}

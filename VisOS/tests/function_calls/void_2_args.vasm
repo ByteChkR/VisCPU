@@ -1,0 +1,87 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_test_name "Void2ArgsTest" linker:hide
+:data __str_ret_val_fail "Value is not5" linker:hide
+:data __Test_arg1 1 linker:hide
+:data __Test_arg2 1 linker:hide
+:data __Test_a 1 linker:hide
+:data tmp_251 1 linker:hide
+:data tmp_252 1 linker:hide
+:data tmp_256 1 linker:hide
+:data tmp_260 1 linker:hide
+:data __VoidV2ArgsTest_ar 1 linker:hide
+:data __VoidV2ArgsTest_br 1 linker:hide
+:data tmp_261 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.Test linker:hide
+POP __Test_arg2
+POP __Test_arg1
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+COPY __Test_arg1 tmp_251
+COPY __Test_arg2 tmp_252
+ADD tmp_251 tmp_252; Left: arg1 ; Right: arg2
+COPY tmp_251 __Test_a ; Left: def a ; Right: arg1(OpPlus)arg2
+; Start IF
+LOAD tmp_256 5
+LOAD tmp_251 0
+BNE __Test_a tmp_256 bexpr_eq_257
+LOAD tmp_251 1
+.bexpr_eq_257 linker:hide
+BNZ tmp_251 bexpr_not_f_259
+LOAD tmp_252 1
+JMP bexpr_not_258
+.bexpr_not_f_259 linker:hide
+LOAD tmp_252 0
+.bexpr_not_258 linker:hide
+BEZ tmp_252 if_end_253
+LOAD tmp_256 __str_ret_val_fail
+PUSH tmp_256; Push Param ptr_of(str_ret_val_fail)
+LOAD tmp_251 13
+PUSH tmp_251; Push Param size_of(str_ret_val_fail)
+JSR FailTest
+JMP if_end_253
+.if_end_253 linker:hide
+RET
+
+.VoidV2ArgsTest linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_260 __str_test_name
+PUSH tmp_260; Push Param ptr_of(str_test_name)
+LOAD tmp_260 13
+PUSH tmp_260; Push Param size_of(str_test_name)
+JSR BeginTest
+LOAD tmp_260 3
+COPY tmp_260 __VoidV2ArgsTest_ar ; Left: def ar ; Right: 3
+LOAD tmp_260 2
+COPY tmp_260 __VoidV2ArgsTest_br ; Left: def br ; Right: 2
+PUSH __VoidV2ArgsTest_ar; Push Param ar
+PUSH __VoidV2ArgsTest_br; Push Param br
+JSR Test
+JSR PassTest
+RET
+
+.VoidC2ArgsTest linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_261 __str_test_name
+PUSH tmp_261; Push Param ptr_of(str_test_name)
+LOAD tmp_261 13
+PUSH tmp_261; Push Param size_of(str_test_name)
+JSR BeginTest
+LOAD tmp_261 3
+PUSH tmp_261; Push Param 3
+LOAD tmp_261 2
+PUSH tmp_261; Push Param 2
+JSR Test
+JSR PassTest
+RET
+
+.Void2ArgsTest
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+JSR VoidC2ArgsTest
+JSR VoidV2ArgsTest
+RET
+

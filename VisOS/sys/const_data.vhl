@@ -1,0 +1,34 @@
+#include "driver/term/out.vhl"
+
+string(str_version, "v0.1");
+string(str_name, "VisOS");
+string(str_term_prefix, "VisOS>>");
+string(str_header_sep, " @ ");
+string(str_fatal_error, "A fatal error occurred, the Virtual Machine has to be stopped.");
+
+public void WriteOSHeader()
+{
+	WriteString(ptr_of(str_name), size_of(str_name));
+	WriteString(ptr_of(str_header_sep), size_of(str_header_sep));
+	WriteLine(ptr_of(str_version), size_of(str_version));
+	WriteNewLine();
+	return;
+}
+
+public void WriteOSName()
+{
+	WriteLine(ptr_of(str_name), size_of(str_name));
+	return;
+}
+
+public void WriteOSVersion()
+{
+	WriteLine(ptr_of(str_version), size_of(str_version));
+	return;
+}
+
+public void WriteTerminalPrefix()
+{
+	WriteString(ptr_of(str_term_prefix), size_of(str_term_prefix));
+	return;
+}

@@ -6,18 +6,10 @@ using System.Linq;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Compiler.Linking
 {
-    public class DuplicateLinkerItemEvent : WarningEvent
-    {
-
-        private const string EVENT_KEY = "lnk-dup-item";
-        public DuplicateLinkerItemEvent(string item) : base($"The item '{item}' has a duplicated entry.", EVENT_KEY)
-        {
-        }
-
-    }
 
     public class MultiFileStaticLinker : Linker
     {
@@ -179,7 +171,7 @@ namespace VisCPU.Compiler.Linking
         {
             Dictionary<FileReference, LinkerTarget> tree = DiscoverCompilationTree(target);
 
-            return ProcessOrdered(target, tree, !CPUSettings.NoHiddenItems);
+            return ProcessOrdered(target, tree, !Settings.GetSettings<LinkerSettings>().NoHiddenItems);
         }
 
     }

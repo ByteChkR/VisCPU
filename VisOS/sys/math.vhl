@@ -1,0 +1,51 @@
+public var Pow(var a, var exp)
+{
+	var ret = 1;
+	var count = exp;
+	while(count)
+	{
+		ret = ret * a;
+		count = count - 1;
+	}
+
+	return ret;
+}
+
+public var IsPrime(var num)
+{
+        if (num <= 1)
+        {
+        	return 0;
+        }
+        if (num == 2)
+        {
+        	return 1;
+        }
+        var i = 3;
+        var end = num / 2;
+        while(i <= end)
+        {
+        	var val = num % i;
+        	if (val == 0)
+            {
+            	return 0;
+            }
+            i = i + 2;
+        }
+
+        return 1;        
+}
+
+public var Clamp(var a, var min, var max)
+{
+	if(a < min)
+	{
+		return min;
+	}
+	if(a > max)
+	{
+		return max;
+	}
+
+	return a;
+}

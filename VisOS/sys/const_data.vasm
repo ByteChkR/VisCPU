@@ -1,0 +1,63 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\term\out.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_version "v0.1" linker:hide
+:data __str_name "VisOS" linker:hide
+:data __str_term_prefix "VisOS>>" linker:hide
+:data __str_header_sep "@" linker:hide
+:data __str_fatal_error "A fatal error occurred,the Virtual Machine has to be stopped." linker:hide
+:data tmp_17 1 linker:hide
+:data tmp_18 1 linker:hide
+:data tmp_19 1 linker:hide
+:data tmp_20 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.WriteOSHeader
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\term\out.vasm"
+LOAD tmp_17 __str_name
+PUSH tmp_17; Push Param ptr_of(str_name)
+LOAD tmp_17 5
+PUSH tmp_17; Push Param size_of(str_name)
+JSR WriteString
+LOAD tmp_17 __str_header_sep
+PUSH tmp_17; Push Param ptr_of(str_header_sep)
+LOAD tmp_17 1
+PUSH tmp_17; Push Param size_of(str_header_sep)
+JSR WriteString
+LOAD tmp_17 __str_version
+PUSH tmp_17; Push Param ptr_of(str_version)
+LOAD tmp_17 4
+PUSH tmp_17; Push Param size_of(str_version)
+JSR WriteLine
+JSR WriteNewLine
+RET
+
+.WriteOSName
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\term\out.vasm"
+LOAD tmp_18 __str_name
+PUSH tmp_18; Push Param ptr_of(str_name)
+LOAD tmp_18 5
+PUSH tmp_18; Push Param size_of(str_name)
+JSR WriteLine
+RET
+
+.WriteOSVersion
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\term\out.vasm"
+LOAD tmp_19 __str_version
+PUSH tmp_19; Push Param ptr_of(str_version)
+LOAD tmp_19 4
+PUSH tmp_19; Push Param size_of(str_version)
+JSR WriteLine
+RET
+
+.WriteTerminalPrefix
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\term\out.vasm"
+LOAD tmp_20 __str_term_prefix
+PUSH tmp_20; Push Param ptr_of(str_term_prefix)
+LOAD tmp_20 7
+PUSH tmp_20; Push Param size_of(str_term_prefix)
+JSR WriteString
+RET
+

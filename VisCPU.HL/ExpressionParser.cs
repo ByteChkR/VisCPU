@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using VisCPU.Utility.Events;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL
 {
+
     public class ExpressionParser : VisBase
     {
 

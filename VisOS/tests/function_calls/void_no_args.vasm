@@ -1,0 +1,25 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __str_test_name "VoidNoArgsTest" linker:hide
+:data tmp_143 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR VoidNoArgsTest
+HLT
+; ________________ FUNCTION CODE ________________
+.TestC linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+JSR PassTest
+RET
+
+.VoidNoArgsTest
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_143 __str_test_name
+PUSH tmp_143; Push Param ptr_of(str_test_name)
+LOAD tmp_143 14
+PUSH tmp_143; Push Param size_of(str_test_name)
+JSR BeginTest
+JSR TestC
+RET
+

@@ -1,0 +1,29 @@
+#include "assignments/assign_ac_ac_test.vhl"
+#include "assignments/assign_ac_av_test.vhl"
+#include "assignments/assign_av_ac_test.vhl"
+#include "assignments/assign_av_av_test.vhl"
+
+#include "assignments/assign_ac_c_test.vhl"
+#include "assignments/assign_ac_v_test.vhl"
+#include "assignments/assign_av_c_test.vhl"
+#include "assignments/assign_av_v_test.vhl"
+
+#include "assignments/assign_c_test.vhl"
+#include "assignments/assign_v_test.vhl"
+
+public void RunAssignmentTests()
+{
+	Assign_C_Simple_Test();
+	Assign_V_Simple_Test();
+
+	Assign_ArrayC_C_Simple_Test();
+	Assign_ArrayC_V_Simple_Test();
+	Assign_ArrayV_C_Simple_Test();
+	Assign_ArrayV_V_Simple_Test();
+
+	Assign_ArrayC_ArrayC_Simple_Test();
+	Assign_ArrayC_ArrayV_Simple_Test();
+	Assign_ArrayV_ArrayC_Simple_Test();
+	Assign_ArrayV_ArrayV_Simple_Test();
+	return;
+}

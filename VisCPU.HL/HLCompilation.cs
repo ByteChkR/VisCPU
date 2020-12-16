@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+
 using VisCPU.HL.Compiler;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
@@ -18,15 +19,6 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL
 {
-    public class HLVariableNotFoundEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "hl-var-not-found";
-        public HLVariableNotFoundEvent(string varName, bool canContinue) : base($"Can not find variable: {varName}", EVENT_KEY, canContinue)
-        {
-        }
-
-    }
 
     public class HLCompilation : VisBase
     {
@@ -669,14 +661,14 @@ namespace VisCPU.HL
                 {
                     Log($"Importing File: {includedFile}");
 
-                    string name =Path.GetFullPath( includedFile.StartsWith( Directory )
-                                      ? includedFile.Remove( includedFile.Length - 3, 3 )
+                    string name = Path.GetFullPath(includedFile.StartsWith(Directory)
+                                      ? includedFile.Remove(includedFile.Length - 3, 3)
                                       : Directory +
                                         "/" +
-                                        includedFile.Remove( includedFile.Length - 3, 3 ));
+                                        includedFile.Remove(includedFile.Length - 3, 3));
 
-                    string newInclude = Path.GetFullPath( name + ".vasm" );
-                    string file = Path.GetFullPath( name + ".vhl" );
+                    string newInclude = Path.GetFullPath(name + ".vasm");
+                    string file = Path.GetFullPath(name + ".vhl");
                     HLCompilation comp = exP.Parse(File.ReadAllText(file), Path.GetDirectoryName(file));
                     File.WriteAllText(newInclude, comp.Parse());
                     ExternalSymbols.AddRange(comp.FunctionMap.Values.Where(x => x.Public));
@@ -707,38 +699,36 @@ namespace VisCPU.HL
             return (prefix == null ? "" : prefix + "_") + counter++;
         }
 
-        internal string GetTempVar(string prefix = "TMP")
-        {
-            string name = GetUniqueName(prefix);
+        private Queue<string> unusedTempVars = new Queue<string>();
+        private List<string> usedTempVars = new List<string>();
 
-            VariableMap[name] = new VariableData(name, name, 1);
-            return name;
+        private VariableData GetFreeTempVar()
+        {
+            if (unusedTempVars.Count != 0)
+            {
+                return VariableMap[unusedTempVars.Dequeue()];
+            }
+
+            string name = GetUniqueName("tmp");
+
+            return VariableMap[name] = new VariableData(name, name, 1);
         }
 
-    }
-
-    public class HLTokenInvalidReadEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "hl-parser-token-invalid";
-        public HLTokenInvalidReadEvent(HLTokenType expected, HLTokenType got) : base($"Expected Token '{expected}' but got '{got}'", EVENT_KEY, false)
+        internal string GetTempVar()
         {
+            VariableData tmp = GetFreeTempVar();
+            usedTempVars.Add( tmp.GetName() );
+            return tmp.GetName();
         }
 
-    }
-
-    public class ExpressionCompilerNotFoundEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "hl-compiler-not-found";
-
-        public ExpressionCompilerNotFoundEvent(HLExpression expr) : base(
-                                                                           $"No Compiler found for expression: ({expr.Type}) '{expr}'",
-                                                                           EVENT_KEY,
-                                                                           false
-                                                                          )
+        internal void ReleaseTempVar(string varName)
         {
+            if ( usedTempVars.Contains( varName ) )
+            {
+                usedTempVars.Remove(varName);
+                unusedTempVars.Enqueue(varName);
+            }
         }
-
     }
+
 }

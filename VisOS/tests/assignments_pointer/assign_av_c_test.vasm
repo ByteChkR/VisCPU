@@ -1,0 +1,69 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __test_arrayV_add_c "Assignment_ArrayV_C_Simple_Test" linker:hide
+:data __test_assignment_fail "Assignment b[a]=1Failed." linker:hide
+:data __bArray 10 linker:hide
+:data tmp_2075 1 linker:hide
+:data __Assign_ArrayV_C_Simple_Test_b 1 linker:hide
+:data tmp_2076 1 linker:hide
+:data __Assign_ArrayV_C_Simple_Test_a 1 linker:hide
+:data tmp_2077 1 linker:hide
+:data tmp_2078 1 linker:hide
+:data tmp_2079 1 linker:hide
+:data tmp_2083 1 linker:hide
+:data tmp_2084 1 linker:hide
+:data tmp_2085 1 linker:hide
+:data tmp_2087 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+LOAD tmp_2075 __bArray
+PUSH tmp_2075; Push Param ptr_of(bArray)
+JSR Assign_ArrayV_C_Simple_Test
+HLT
+; ________________ FUNCTION CODE ________________
+.Assign_ArrayV_C_Simple_Test linker:hide
+POP __Assign_ArrayV_C_Simple_Test_b
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2076 __test_arrayV_add_c
+PUSH tmp_2076; Push Param ptr_of(test_arrayV_add_c)
+LOAD tmp_2076 31
+PUSH tmp_2076; Push Param size_of(test_arrayV_add_c)
+JSR BeginTest
+LOAD tmp_2076 5
+COPY tmp_2076 __Assign_ArrayV_C_Simple_Test_a ; Left: def a ; Right: 5
+COPY __Assign_ArrayV_C_Simple_Test_a tmp_2077
+COPY __Assign_ArrayV_C_Simple_Test_b tmp_2076
+ADD tmp_2076 tmp_2077 ; Apply offset
+LOAD tmp_2078 1
+LOAD tmp_2079 tmp_2078 ; Load Pointer for assignment
+CREF tmp_2079 tmp_2076 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: 1
+; Start IF
+COPY __Assign_ArrayV_C_Simple_Test_a tmp_2083
+COPY __Assign_ArrayV_C_Simple_Test_b tmp_2078
+ADD tmp_2078 tmp_2083 ; Apply offset
+LOAD tmp_2084 1
+DREF tmp_2078 tmp_2085 ; Dereference Array Pointer (Equality Comparison)
+LOAD tmp_2079 0
+BNE tmp_2085 tmp_2084 bexpr_eq_2086
+LOAD tmp_2079 1
+.bexpr_eq_2086 linker:hide
+BEZ tmp_2079 if_end_2080
+JSR PassTest
+RET
+JMP if_end_2080
+.if_end_2080 linker:hide
+LOAD tmp_2078 __test_assignment_fail
+PUSH tmp_2078; Push Param ptr_of(test_assignment_fail)
+LOAD tmp_2084 24
+PUSH tmp_2084; Push Param size_of(test_assignment_fail)
+JSR FailTest
+RET
+
+.PtrRunAssign_ArrayV_C_Simple_Test
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2087 __bArray
+PUSH tmp_2087; Push Param ptr_of(bArray)
+JSR Assign_ArrayV_C_Simple_Test
+RET
+

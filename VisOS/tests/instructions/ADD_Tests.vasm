@@ -1,0 +1,161 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __test_add_cc "ADD_CC_Simple_Test" linker:hide
+:data __test_add_cv "ADD_CV_Simple_Test" linker:hide
+:data __test_add_vv "ADD_VV_Simple_Test" linker:hide
+:data __test_add_vc "ADD_VC_Simple_Test" linker:hide
+:data __test_generic_math_fail "Calculation Failed." linker:hide
+:data tmp_2545 1 linker:hide
+:data __ADD_VV_Simple_Test_a 1 linker:hide
+:data __ADD_VV_Simple_Test_b 1 linker:hide
+:data __ADD_VV_Simple_Test_c 1 linker:hide
+:data tmp_2546 1 linker:hide
+:data tmp_2551 1 linker:hide
+:data __ADD_VC_Simple_Test_a 1 linker:hide
+:data __ADD_VC_Simple_Test_c 1 linker:hide
+:data tmp_2552 1 linker:hide
+:data tmp_2557 1 linker:hide
+:data __ADD_CC_Simple_Test_c 1 linker:hide
+:data tmp_2558 1 linker:hide
+:data tmp_2563 1 linker:hide
+:data __ADD_CV_Simple_Test_a 1 linker:hide
+:data __ADD_CV_Simple_Test_c 1 linker:hide
+:data tmp_2564 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR Run_ADD_Tests
+HLT
+; ________________ FUNCTION CODE ________________
+.ADD_VV_Simple_Test linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2545 __test_add_vv
+PUSH tmp_2545; Push Param ptr_of(test_add_vv)
+LOAD tmp_2545 18
+PUSH tmp_2545; Push Param size_of(test_add_vv)
+JSR BeginTest
+LOAD tmp_2545 0
+COPY tmp_2545 __ADD_VV_Simple_Test_a ; Left: def a ; Right: 0
+LOAD tmp_2545 1
+COPY tmp_2545 __ADD_VV_Simple_Test_b ; Left: def b ; Right: 1
+COPY __ADD_VV_Simple_Test_a tmp_2545
+COPY __ADD_VV_Simple_Test_b tmp_2546
+ADD tmp_2545 tmp_2546; Left: a ; Right: b
+COPY tmp_2545 __ADD_VV_Simple_Test_c ; Left: def c ; Right: a(OpPlus)b
+; Start IF
+LOAD tmp_2545 1
+LOAD tmp_2546 0
+BNE __ADD_VV_Simple_Test_c tmp_2545 bexpr_eq_2550
+LOAD tmp_2546 1
+.bexpr_eq_2550 linker:hide
+BEZ tmp_2546 if_end_2547
+JSR PassTest
+RET
+JMP if_end_2547
+.if_end_2547 linker:hide
+LOAD tmp_2545 __test_generic_math_fail
+PUSH tmp_2545; Push Param ptr_of(test_generic_math_fail)
+LOAD tmp_2546 19
+PUSH tmp_2546; Push Param size_of(test_generic_math_fail)
+JSR FailTest
+RET
+
+.ADD_VC_Simple_Test linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2551 __test_add_vc
+PUSH tmp_2551; Push Param ptr_of(test_add_vc)
+LOAD tmp_2551 18
+PUSH tmp_2551; Push Param size_of(test_add_vc)
+JSR BeginTest
+LOAD tmp_2551 0
+COPY tmp_2551 __ADD_VC_Simple_Test_a ; Left: def a ; Right: 0
+COPY __ADD_VC_Simple_Test_a tmp_2551
+LOAD tmp_2552 1
+ADD tmp_2551 tmp_2552; Left: a ; Right: 1
+COPY tmp_2551 __ADD_VC_Simple_Test_c ; Left: def c ; Right: a(OpPlus)1
+; Start IF
+LOAD tmp_2551 1
+LOAD tmp_2552 0
+BNE __ADD_VC_Simple_Test_c tmp_2551 bexpr_eq_2556
+LOAD tmp_2552 1
+.bexpr_eq_2556 linker:hide
+BEZ tmp_2552 if_end_2553
+JSR PassTest
+RET
+JMP if_end_2553
+.if_end_2553 linker:hide
+LOAD tmp_2551 __test_generic_math_fail
+PUSH tmp_2551; Push Param ptr_of(test_generic_math_fail)
+LOAD tmp_2552 19
+PUSH tmp_2552; Push Param size_of(test_generic_math_fail)
+JSR FailTest
+RET
+
+.ADD_CC_Simple_Test linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2557 __test_add_cc
+PUSH tmp_2557; Push Param ptr_of(test_add_cc)
+LOAD tmp_2557 18
+PUSH tmp_2557; Push Param size_of(test_add_cc)
+JSR BeginTest
+LOAD tmp_2557 0
+LOAD tmp_2558 1
+ADD tmp_2557 tmp_2558; Left: 0 ; Right: 1
+COPY tmp_2557 __ADD_CC_Simple_Test_c ; Left: def c ; Right: 0(OpPlus)1
+; Start IF
+LOAD tmp_2557 1
+LOAD tmp_2558 0
+BNE __ADD_CC_Simple_Test_c tmp_2557 bexpr_eq_2562
+LOAD tmp_2558 1
+.bexpr_eq_2562 linker:hide
+BEZ tmp_2558 if_end_2559
+JSR PassTest
+RET
+JMP if_end_2559
+.if_end_2559 linker:hide
+LOAD tmp_2557 __test_generic_math_fail
+PUSH tmp_2557; Push Param ptr_of(test_generic_math_fail)
+LOAD tmp_2558 19
+PUSH tmp_2558; Push Param size_of(test_generic_math_fail)
+JSR FailTest
+RET
+
+.ADD_CV_Simple_Test linker:hide
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_2563 __test_add_cv
+PUSH tmp_2563; Push Param ptr_of(test_add_cv)
+LOAD tmp_2563 18
+PUSH tmp_2563; Push Param size_of(test_add_cv)
+JSR BeginTest
+LOAD tmp_2563 0
+COPY tmp_2563 __ADD_CV_Simple_Test_a ; Left: def a ; Right: 0
+LOAD tmp_2563 1
+COPY __ADD_CV_Simple_Test_a tmp_2564
+ADD tmp_2563 tmp_2564; Left: 1 ; Right: a
+COPY tmp_2563 __ADD_CV_Simple_Test_c ; Left: def c ; Right: 1(OpPlus)a
+; Start IF
+LOAD tmp_2563 1
+LOAD tmp_2564 0
+BNE __ADD_CV_Simple_Test_c tmp_2563 bexpr_eq_2568
+LOAD tmp_2564 1
+.bexpr_eq_2568 linker:hide
+BEZ tmp_2564 if_end_2565
+JSR PassTest
+RET
+JMP if_end_2565
+.if_end_2565 linker:hide
+LOAD tmp_2563 __test_generic_math_fail
+PUSH tmp_2563; Push Param ptr_of(test_generic_math_fail)
+LOAD tmp_2564 19
+PUSH tmp_2564; Push Param size_of(test_generic_math_fail)
+JSR FailTest
+RET
+
+.Run_ADD_Tests
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+JSR ADD_VV_Simple_Test
+JSR ADD_VC_Simple_Test
+JSR ADD_CV_Simple_Test
+JSR ADD_CC_Simple_Test
+RET
+

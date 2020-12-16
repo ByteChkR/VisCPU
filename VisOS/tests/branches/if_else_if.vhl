@@ -1,0 +1,143 @@
+#include "../../sys/driver/test/test_device.vhl"
+
+
+string(test_if_else_if_v, "IF_ELSE_IF_V_Test");
+string(test_if_else_if_c, "IF_ELSE_IF_C_Test");
+string(test_if_else_if_vc, "IF_ELSE_IF_VC_Test");
+string(test_if_else_if_cv, "IF_ELSE_IF_CV_Test");
+string(test_if_else_if_vv, "IF_ELSE_IF_VV_Test");
+string(test_if_else_if_cc, "IF_ELSE_IF_CC_Test");
+
+string(test_eval_fail, "Evaluation is wrong.");
+
+private void TestIfElseIf_V()
+{
+	BeginTest(ptr_of(test_if_else_if_v), size_of(test_if_else_if_v));
+	var a = 0;
+	var b = 1;
+	if(a)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else if(b)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElseIf_C()
+{
+	BeginTest(ptr_of(test_if_else_if_c), size_of(test_if_else_if_c));
+	var b = 1;
+	if(0)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else if(b)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+private void TestIfElseIf_VC()
+{
+	BeginTest(ptr_of(test_if_else_if_vc), size_of(test_if_else_if_vc));
+	var a = 0;
+	var b = 1;
+	if(a == 1)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else if(b)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElseIf_CV()
+{
+	BeginTest(ptr_of(test_if_else_if_cv), size_of(test_if_else_if_cv));
+	var a = 0;
+	var b = 1;
+	if(1 == a)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else if(b)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElseIf_CC()
+{
+	BeginTest(ptr_of(test_if_else_if_cc), size_of(test_if_else_if_cc));
+	var b = 1;
+	if(0 == 1)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else if(b)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+
+private void TestIfElseIf_VV()
+{
+	BeginTest(ptr_of(test_if_else_if_vv), size_of(test_if_else_if_vv));
+
+	var a = 0;
+	var b = 1;
+	var c = 1;
+	
+	if(a == b)
+	{
+		FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+		return;
+	}
+	else if(b)
+	{
+		PassTest();
+		return;
+	}
+	FailTest(ptr_of(test_eval_fail), size_of(test_eval_fail));
+	return;
+}
+
+public void RunIfElseIfTests()
+{
+	TestIfElseIf_V();
+	TestIfElseIf_C();
+	TestIfElseIf_VC();
+	TestIfElseIf_CV();
+	TestIfElseIf_VV();
+	TestIfElseIf_CC();
+	return;
+}
+
+RunIfElseIfTests();

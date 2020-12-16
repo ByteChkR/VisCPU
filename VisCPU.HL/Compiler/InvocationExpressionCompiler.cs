@@ -9,26 +9,6 @@ using VisCPU.Utility.Events;
 namespace VisCPU.HL.Compiler
 {
 
-    public class FunctionArgumentMismatchEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "func-arg-mismatch";
-        public FunctionArgumentMismatchEvent(string errMessage) : base(errMessage, EVENT_KEY, false)
-        {
-        }
-
-    }
-
-    public class FunctionNotFoundEvent : ErrorEvent
-    {
-
-        private const string EVENT_KEY = "func-not-found";
-        public FunctionNotFoundEvent(string funcName) : base($"Function '{funcName}' not found", EVENT_KEY, false)
-        {
-        }
-
-    }
-
     public class InvocationExpressionCompiler : HLExpressionCompiler<HLInvocationOp>
     {
 
@@ -38,7 +18,7 @@ namespace VisCPU.HL.Compiler
             string target = expr.Left.ToString();
             if (target == "ptr_of")
             {
-                string v =  compilation.GetTempVar("ptr_of");
+                string v =  compilation.GetTempVar();
                 compilation.ProgramCode.Add(
                                             $"LOAD {v} {compilation.Parse(expr.ParameterList.First()).ResultAddress}"
                                            );
@@ -56,7 +36,7 @@ namespace VisCPU.HL.Compiler
                                                          );
                 }
 
-                string v =   compilation.GetTempVar("size_of");
+                string v =   compilation.GetTempVar();
                 if (!compilation.ContainsVariable(expr.ParameterList[0].ToString()))
                 {
                     EventManager < ErrorEvent >.SendEvent(
@@ -95,15 +75,13 @@ namespace VisCPU.HL.Compiler
 
             if (target == "val_of")
             {
-                string v =  compilation.GetTempVar("val_of");
+                string v =  compilation.GetTempVar();
                 compilation.ProgramCode.Add(
                                             $"DREF {compilation.Parse(expr.ParameterList.First()).ResultAddress} {v}"
                                            );
                 return new ExpressionTarget(v, true);
             }
 
-
-            //target = compilation.Parse(expr.Left, possibleTarget).ResultAddress;
 
             bool isInternalFunc = compilation.FunctionMap.ContainsKey(target);
             IExternalData externalSymbol =
@@ -131,13 +109,15 @@ namespace VisCPU.HL.Compiler
                     compilation.ProgramCode.Add(
                                                 $"PUSH {arg.ResultAddress}; Push Param {parameter}"
                                                );
+
+                    compilation.ReleaseTempVar( arg.ResultAddress );
                 }
 
                 compilation.ProgramCode.Add($"JSR {target}");
                 if (isInternalFunc && compilation.FunctionMap[target].HasReturnValue ||
                     !isInternalFunc && ((FunctionData) externalSymbol).HasReturnValue)
                 {
-                    ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar("ret_" + target), true);
+                    ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar(), true);
                     compilation.ProgramCode.Add(
                                                 $"; Write back return value to '{tempReturn.ResultAddress}'"
                                                );
@@ -158,7 +138,8 @@ namespace VisCPU.HL.Compiler
                     compilation.ProgramCode.Add(
                                                 $"PUSH {tt.ResultAddress}; Push Param {parameter}"
                                                );
-                    compilation.ProgramCode.Add($"LOAD {tt.ResultAddress} 0x00; Reset Temp");
+
+                    compilation.ReleaseTempVar( tt.ResultAddress );
                 }
 
                 if (compilation.ContainsVariable(target))

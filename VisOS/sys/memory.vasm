@@ -1,0 +1,148 @@
+; ________________ Includes ________________
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __Compare_source 1 linker:hide
+:data __Compare_length 1 linker:hide
+:data __Compare_destination 1 linker:hide
+:data __Compare_i 1 linker:hide
+:data tmp_37 1 linker:hide
+:data __Compare_ret 1 linker:hide
+:data tmp_40 1 linker:hide
+:data tmp_41 1 linker:hide
+:data __Compare_tmpdst 1 linker:hide
+:data tmp_42 1 linker:hide
+:data tmp_46 1 linker:hide
+:data tmp_47 1 linker:hide
+:data tmp_48 1 linker:hide
+:data tmp_21 1 linker:hide
+:data tmp_24 1 linker:hide
+:data tmp_26 1 linker:hide
+:data tmp_27 1 linker:hide
+:data tmp_31 1 linker:hide
+:data tmp_32 1 linker:hide
+:data tmp_33 1 linker:hide
+:data __Copy_source 1 linker:hide
+:data __Copy_length 1 linker:hide
+:data __Copy_destination 1 linker:hide
+:data __Copy_i 1 linker:hide
+:data tmp_52 1 linker:hide
+:data tmp_55 1 linker:hide
+:data tmp_56 1 linker:hide
+:data __Copy_temp 1 linker:hide
+:data tmp_57 1 linker:hide
+:data tmp_58 1 linker:hide
+:data tmp_59 1 linker:hide
+:data __Set_source 1 linker:hide
+:data __Set_length 1 linker:hide
+:data __Set_value 1 linker:hide
+:data __Set_i 1 linker:hide
+:data tmp_60 1 linker:hide
+:data tmp_63 1 linker:hide
+:data tmp_64 1 linker:hide
+:data tmp_65 1 linker:hide
+:data tmp_66 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.Compare
+POP __Compare_destination
+POP __Compare_length
+POP __Compare_source
+LOAD tmp_21 0
+COPY tmp_21 __Compare_i ; Left: def i ; Right: 0
+.while_start_22 linker:hide
+LOAD tmp_21 0x00
+COPY __Compare_length tmp_24
+BGE __Compare_i tmp_24 bexpr_lt_25
+LOAD tmp_21 1
+.bexpr_lt_25 linker:hide
+BEZ tmp_21 while_end_23
+COPY __Compare_i tmp_27
+COPY __Compare_destination tmp_26
+ADD tmp_26 tmp_27 ; Apply offset
+DREF tmp_26 tmp_24 ; Dereference Array Pointer
+COPY tmp_24 __Compare_tmpdst ; Left: def tmpdst ; Right: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp
+; Start IF
+COPY __Compare_i tmp_33
+COPY __Compare_source tmp_32
+ADD tmp_32 tmp_33 ; Apply offset
+DREF tmp_32 tmp_31 ; Dereference Array Pointer
+LOAD tmp_24 0
+BNE __Compare_tmpdst tmp_31 bexpr_eq_34
+LOAD tmp_24 1
+.bexpr_eq_34 linker:hide
+BNZ tmp_24 bexpr_not_f_36
+LOAD tmp_26 1
+JMP bexpr_not_35
+.bexpr_not_f_36 linker:hide
+LOAD tmp_26 0
+.bexpr_not_35 linker:hide
+BEZ tmp_26 if_end_28
+LOAD tmp_32 0
+PUSH tmp_32
+RET
+JMP if_end_28
+.if_end_28 linker:hide
+COPY __Compare_i tmp_31
+LOAD tmp_24 1
+SUB tmp_31 tmp_24; Left: i ; Right: 1
+COPY tmp_31 __Compare_i ; Left: i ; Right: i(OpMinus)1
+JMP while_start_22
+.while_end_23 linker:hide
+LOAD tmp_26 1
+PUSH tmp_26
+RET
+
+.Copy
+POP __Copy_destination
+POP __Copy_length
+POP __Copy_source
+COPY __Copy_length tmp_52
+COPY tmp_52 __Copy_i ; Left: def i ; Right: length
+.while_start_53 linker:hide
+LOAD tmp_52 0x00
+COPY __Copy_i tmp_52
+BEZ tmp_52 while_end_54
+COPY __Copy_i tmp_55
+LOAD tmp_56 1
+SUB tmp_55 tmp_56; Left: i ; Right: 1
+COPY tmp_55 __Copy_i ; Left: i ; Right: i(OpMinus)1
+COPY __Copy_i tmp_57
+COPY __Copy_destination tmp_55
+ADD tmp_55 tmp_57 ; Apply offset
+DREF tmp_55 tmp_56 ; Dereference Array Pointer
+COPY tmp_56 __Copy_temp ; Left: def temp ; Right: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp
+COPY __Copy_i tmp_56
+COPY __Copy_source tmp_55
+ADD tmp_55 tmp_56 ; Apply offset
+COPY __Copy_temp tmp_58
+LOAD tmp_59 tmp_58 ; Load Pointer for assignment
+CREF tmp_59 tmp_55 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: temp
+JMP while_start_53
+.while_end_54 linker:hide
+RET
+
+.Set
+POP __Set_value
+POP __Set_length
+POP __Set_source
+COPY __Set_length tmp_60
+COPY tmp_60 __Set_i ; Left: def i ; Right: length
+.while_start_61 linker:hide
+LOAD tmp_60 0x00
+COPY __Set_i tmp_60
+BEZ tmp_60 while_end_62
+COPY __Set_i tmp_63
+LOAD tmp_64 1
+SUB tmp_63 tmp_64; Left: i ; Right: 1
+COPY tmp_63 __Set_i ; Left: i ; Right: i(OpMinus)1
+COPY __Set_i tmp_63
+COPY __Set_source tmp_64
+ADD tmp_64 tmp_63 ; Apply offset
+COPY __Set_value tmp_65
+LOAD tmp_66 tmp_65 ; Load Pointer for assignment
+CREF tmp_66 tmp_64 ; Left: VisCPU.HL.Parser.Tokens.Expressions.Operators.Special.HLArrayAccessorOp ; Right: value
+JMP while_start_61
+.while_end_62 linker:hide
+RET
+

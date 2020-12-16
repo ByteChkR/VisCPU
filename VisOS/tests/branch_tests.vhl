@@ -1,0 +1,13 @@
+#include "branches/if_simple.vhl"
+#include "branches/if_else.vhl"
+#include "branches/if_else_if.vhl"
+#include "branches/if_elseif_else.vhl"
+
+public void RunBranchTests()
+{
+	RunIfSimpleTests();
+	RunIfElseTests();
+	RunIfElseIfTests();
+	RunIfElseIfElseTests();
+	return;
+}

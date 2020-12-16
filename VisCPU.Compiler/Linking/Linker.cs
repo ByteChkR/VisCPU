@@ -1,9 +1,11 @@
-﻿using VisCPU.Compiler.Compiler;
+﻿
+using VisCPU.Compiler.Compiler;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Compiler.Linking
 {
+
     public abstract class Linker : VisBase
     {
 

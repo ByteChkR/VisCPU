@@ -1,0 +1,40 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+:data __test_assignment_fail "Assignment a=1Failed." linker:hide
+:data __test_c "Assignment_C_Simple_Test" linker:hide
+:data tmp_1589 1 linker:hide
+:data __Assign_C_Simple_Test_a 1 linker:hide
+:data tmp_1593 1 linker:hide
+; ________________ MAIN PROGRAM CODE ________________
+JSR Assign_C_Simple_Test
+HLT
+; ________________ FUNCTION CODE ________________
+.Assign_C_Simple_Test
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\sys\driver\test\test_device.vasm"
+LOAD tmp_1589 __test_c
+PUSH tmp_1589; Push Param ptr_of(test_c)
+LOAD tmp_1589 24
+PUSH tmp_1589; Push Param size_of(test_c)
+JSR BeginTest
+LOAD tmp_1589 1
+COPY tmp_1589 __Assign_C_Simple_Test_a ; Left: def a ; Right: 1
+; Start IF
+LOAD tmp_1593 1
+LOAD tmp_1589 0
+BNE __Assign_C_Simple_Test_a tmp_1593 bexpr_eq_1594
+LOAD tmp_1589 1
+.bexpr_eq_1594 linker:hide
+BEZ tmp_1589 if_end_1590
+JSR PassTest
+RET
+JMP if_end_1590
+.if_end_1590 linker:hide
+LOAD tmp_1593 __test_assignment_fail
+PUSH tmp_1593; Push Param ptr_of(test_assignment_fail)
+LOAD tmp_1589 21
+PUSH tmp_1589; Push Param size_of(test_assignment_fail)
+JSR FailTest
+RET
+

@@ -13,6 +13,7 @@ namespace VisCPU.Tests
         private const uint TEST_BEGIN = 0xFFFF2000;
         private const uint TEST_FAIL = 0xFFFF2001;
         private const uint TEST_PASS = 0xFFFF2002;
+        private const uint TEST_DEVICE_PRESENT = 0xFFFF2003;
         private uint CurrentCommand;
 
         private string CurrentTest;
@@ -25,7 +26,7 @@ namespace VisCPU.Tests
 
         public override bool CanRead(uint address)
         {
-            return false;
+            return address== TEST_DEVICE_PRESENT;
         }
 
         private void BeginTest()
@@ -98,6 +99,8 @@ namespace VisCPU.Tests
 
         public override uint ReadData(uint address)
         {
+            if ( address == TEST_DEVICE_PRESENT )
+                return 1;
             throw new NotImplementedException();
         }
 

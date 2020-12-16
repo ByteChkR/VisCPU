@@ -1,0 +1,54 @@
+#include "sys/const_data.vhl"
+
+#include "sys/memory.vhl"
+
+#include "sys/driver/term/in.vhl"
+
+#include "tests/tests.vhl"
+
+string(cmd_exit, "exit");
+string(cmd_test, "test");
+string(cmd_help, "help");
+
+string(cmd_help_test, "test = Run Built in Tests");
+string(cmd_help_help, "help = Display this Help Text");
+string(cmd_help_exit, "exit = Exit VM");
+
+private void WriteHelp()
+{
+	WriteLine(ptr_of(cmd_help_test), size_of(cmd_help_test));
+	WriteLine(ptr_of(cmd_help_help), size_of(cmd_help_help));
+	WriteLine(ptr_of(cmd_help_exit), size_of(cmd_help_exit));
+}
+
+private void CommandLoop()
+{
+	var in_test[5];
+	var count;
+	while(1)
+	{
+		WriteTerminalPrefix();
+		count = ReadLine(ptr_of(in_test), size_of(in_test));
+		var isExit = Compare(ptr_of(cmd_exit), size_of(cmd_exit), ptr_of(in_test));
+		if(isExit)
+		{
+			return;
+		}
+		var isTest = Compare(ptr_of(cmd_test), size_of(cmd_test), ptr_of(in_test));
+		if(isTest)
+		{
+			RunTests();
+		}
+		var isHelp = Compare(ptr_of(cmd_help), size_of(cmd_help), ptr_of(in_test));
+		if(isHelp)
+		{
+			WriteHelp();
+		}
+		Set(ptr_of(in_test), size_of(in_test), 0);
+	}
+	return;
+
+}
+WriteOSHeader();
+WriteHelp();
+CommandLoop();

@@ -1,0 +1,24 @@
+; ________________ Includes ________________
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_call_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\assignment_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\pointer_assignment_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\branch_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instruction_tests.vasm"
+; ________________ CONST VALUES ________________
+; ________________ VARIABLE FIELDS ________________
+; ________________ MAIN PROGRAM CODE ________________
+HLT
+; ________________ FUNCTION CODE ________________
+.RunTests
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\function_call_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\assignment_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\pointer_assignment_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\branch_tests.vasm"
+:include "D:\Users\Tim\Documents\VisCPU\VisOS\tests\instruction_tests.vasm"
+JSR RunInstructionTests
+JSR RunFunctionCallTests
+JSR RunAssignmentTests
+JSR RunPointerAssignmentTests
+JSR RunBranchTests
+RET
+

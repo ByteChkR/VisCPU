@@ -11,6 +11,7 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console
 {
+
     internal static class Program
     {
 
@@ -18,7 +19,8 @@ namespace VisCPU.Console
             new Dictionary<string, ConsoleSubsystem>
             {
                 { "run", new ProgramRunner() },
-                { "build", new ProgramBuilder() }
+                { "build", new ProgramBuilder() },
+                {"help", new HelpSubSystem() }
             };
 
         private static void RunConsole(CLISettings settings, string[] args)
@@ -71,7 +73,7 @@ namespace VisCPU.Console
                 return;
             }
 
-            CLISettings s = new CLISettings();
+            CLISettings s = CLISettings.Create();
             EventManager.Initialize();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse(args, s, Logger.Settings);
@@ -82,13 +84,5 @@ namespace VisCPU.Console
         
 
     }
-    public class CLISettings
-    {
-        [Argument(Name = "continuous")]
-        [Argument(Name = "loop")]
-        public readonly bool Continuous = false;
-        [Argument(Name = "waitOnExit")]
-        public readonly bool WaitOnExit = false;
 
-    }
 }
