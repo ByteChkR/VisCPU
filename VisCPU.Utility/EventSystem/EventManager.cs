@@ -12,7 +12,7 @@ namespace VisCPU.Utility.EventSystem
 
         #region Public
 
-        public static void Initialize()
+        public static void RegisterDefaultHandlers()
         {
             EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
             EventManager < WarningEvent >.OnEventReceive += EventManagerOnWarningEventReceive;

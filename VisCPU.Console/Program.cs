@@ -43,7 +43,7 @@ namespace VisCPU.Console
             }
 
             CLISettings s = CLISettings.Create();
-            EventManager.Initialize();
+            EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse( args, s, Logger.Settings );
 

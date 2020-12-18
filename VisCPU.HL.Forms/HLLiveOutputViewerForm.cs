@@ -66,7 +66,7 @@ namespace VisCPU.HL.Forms
 
             OpenFolder();
 
-            EventManager.Initialize();
+            EventManager.RegisterDefaultHandlers();
 
             EventManager < WarningEvent >.OnEventReceive +=
                 x => WriteConsoleOut( $"[WARNING] [{x.EventKey}] {x.Message}" );

@@ -1,5 +1,0 @@
-public void MyFunction()
-{
-	0xFFFF1002 = 420;
-	return;
-}
