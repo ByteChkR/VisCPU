@@ -46,6 +46,7 @@ namespace VisCPU.HL.Forms
             this.tsiOpenRuntimePath = new System.Windows.Forms.ToolStripMenuItem();
             this.tsiOpenBuildArgPath = new System.Windows.Forms.ToolStripMenuItem();
             this.tsiOpenRunArgPath = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearProjectDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tslPercentage = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tslCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
@@ -54,7 +55,6 @@ namespace VisCPU.HL.Forms
             this.panelRight = new System.Windows.Forms.Panel();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
-            this.clearProjectDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelConsole.SuspendLayout();
             this.panelConsoleIn.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -201,6 +201,13 @@ namespace VisCPU.HL.Forms
             this.tsiOpenRunArgPath.Text = "Open Run Argument Config";
             this.tsiOpenRunArgPath.Click += new System.EventHandler(this.tsiOpenRunArgPath_Click);
             // 
+            // clearProjectDirectoryToolStripMenuItem
+            // 
+            this.clearProjectDirectoryToolStripMenuItem.Name = "clearProjectDirectoryToolStripMenuItem";
+            this.clearProjectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.clearProjectDirectoryToolStripMenuItem.Text = "Clear Project Directory";
+            this.clearProjectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.clearProjectDirectoryToolStripMenuItem_Click);
+            // 
             // tslPercentage
             // 
             this.tslPercentage.Name = "tslPercentage";
@@ -259,13 +266,6 @@ namespace VisCPU.HL.Forms
             // fbdSelectDir
             // 
             this.fbdSelectDir.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            // 
-            // clearProjectDirectoryToolStripMenuItem
-            // 
-            this.clearProjectDirectoryToolStripMenuItem.Name = "clearProjectDirectoryToolStripMenuItem";
-            this.clearProjectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
-            this.clearProjectDirectoryToolStripMenuItem.Text = "Clear Project Directory";
-            this.clearProjectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.clearProjectDirectoryToolStripMenuItem_Click);
             // 
             // HLLiveOutputViewerForm
             // 

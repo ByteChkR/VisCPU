@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 
@@ -24,8 +25,10 @@ namespace VisCPU.Console.Core.Subsystems
             ConsoleInInterfaceSettings ins = new ConsoleInInterfaceSettings();
             ConsoleOutInterfaceSettings outs = new ConsoleOutInterfaceSettings();
             HLCompilerSettings hs = new HLCompilerSettings();
+            MemorySettings ms = new MemorySettings();
+            MemoryBusSettings mbs = new MemoryBusSettings();
 
-            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( bs, rs, cs, ls, ins, outs, hs );
+            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( bs, rs, cs, ls, ins, outs, hs, ms, mbs);
 
             foreach ( string s1 in args )
             {

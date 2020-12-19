@@ -29,6 +29,8 @@ namespace VisCPU.Utility.EventSystem
 
         private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
         {
+            if ( obj.CanContinue )
+                return;
             throw new Exception( $"[{obj.EventKey}] {obj.Message}" );
         }
 

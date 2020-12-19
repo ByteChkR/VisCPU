@@ -2,6 +2,7 @@ using System.IO;
 
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Tests.Utils
 {
@@ -13,8 +14,9 @@ namespace VisCPU.Tests.Utils
 
         public static void Run( string file, TestDevice testDevice )
         {
+            
             MemoryBus bus = new MemoryBus(
-                                          new Memory( 0xFFFF + 1, 0 ),
+                                          new Memory(),
                                           testDevice
                                          );
 

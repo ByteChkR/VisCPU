@@ -4,12 +4,15 @@ using System.Linq;
 
 using VisCPU.Events;
 using VisCPU.Utility;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU
 {
+    
 
     public class MemoryBus : VisBase
     {
@@ -29,9 +32,7 @@ namespace VisCPU
 
         #region Public
 
-        public MemoryBus() : this( new List < Peripheral >() )
-        {
-        }
+        public MemoryBus():this(new List < Peripheral>()) { }
 
         public MemoryBus( IEnumerable < Peripheral > peripherals )
         {
@@ -41,6 +42,12 @@ namespace VisCPU
         public MemoryBus( params Peripheral[] peripherals )
         {
             this.peripherals = peripherals.ToList();
+        }
+
+        public void Shutdown()
+        {
+            
+            peripherals.ForEach( x => x.Shutdown() );
         }
 
         public void Dump()

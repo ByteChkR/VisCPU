@@ -1,6 +1,8 @@
 ## VisCPU Data Formats
 # Binary Format
 *.vbin
+*.vbin.z
+*.vbin.linkertext
 # Vis Assembly Files
 *.vasm
 

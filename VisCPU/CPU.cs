@@ -183,6 +183,8 @@ namespace VisCPU
                     }
                 }
             }
+
+            MemoryBus.Shutdown();
         }
 
         public void Set( Flags flag )

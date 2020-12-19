@@ -7,11 +7,39 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
+using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems
 {
+
+    public class MemoryBusSettings
+    {
+        [Argument(Name = "bus.devices")]
+        public string[] MemoryDevices = new[] { "./config/memory/default.json" };
+
+        static MemoryBusSettings()
+        {
+            Settings.RegisterDefaultLoader(new JSONSettingsLoader(), "./config/memory_bus.json", new MemoryBusSettings());
+        }
+
+        public static MemoryBusSettings Create() => Settings.GetSettings<MemoryBusSettings>();
+
+        public MemoryBus CreateBus(params Peripheral[] additionalPeripherals)
+        {
+            return new MemoryBus(
+                                 MemoryDevices.Select(
+                                                      x => new Memory(
+                                                                      Settings.GetSettings < MemorySettings >(
+                                                                           x
+                                                                          )
+                                                                     )
+                                                     ).Concat(additionalPeripherals)
+                                );
+        }
+
+    }
 
     public class RunnerSettings
     {
@@ -31,9 +59,6 @@ namespace VisCPU.Console.Core.Subsystems
                 { ".vasm", FindBinary },
                 { ".vhl", FindBinary }
             };
-
-        [Argument( Name = "memory.size" )]
-        public uint MemorySize = 0xFFFF + 1;
 
         [Argument( Name = "input-files" )]
         [Argument( Name = "i" )]

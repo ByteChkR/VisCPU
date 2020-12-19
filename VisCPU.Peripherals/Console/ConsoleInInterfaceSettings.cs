@@ -5,7 +5,6 @@ using VisCPU.Utility.Settings;
 
 namespace VisCPU.Peripherals.Console
 {
-
     [Serializable]
     public class ConsoleInInterfaceSettings
     {

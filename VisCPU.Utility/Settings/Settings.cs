@@ -136,7 +136,8 @@ namespace VisCPU.Utility.Settings
             object defaultValues )
         {
             defaultLoaderMap[t] = new SettingsEntry( defaultFile, loader );
-            SaveSettings( loader, defaultValues, defaultFile );
+            if(!DefaultFileExists(t))
+                SaveSettings( loader, defaultValues, defaultFile );
         }
 
         public static void SaveSettings( object o )

@@ -19,6 +19,10 @@ namespace VisCPU
 
         #endregion
 
+        public virtual void Shutdown()
+        {
+        }
+        
         #region Public
 
         public abstract bool CanRead( uint address );

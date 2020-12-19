@@ -6,6 +6,7 @@ using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Tests.Utils
@@ -24,6 +25,7 @@ namespace VisCPU.Tests.Utils
             ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
             ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
             HLCompilerSettings hls = HLCompilerSettings.Create();
+            MemorySettings ms = MemorySettings.Create();
         }
 
         protected static object[] GetTestAssemblyInstructions( string testFolder )

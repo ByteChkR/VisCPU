@@ -13,11 +13,14 @@ namespace VisCPU.HL.Forms
         ///     The main entry point for the application.
         /// </summary>
         [STAThread]
-        private static void Main()
+        private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault( false );
-            Application.Run( new HLLiveOutputViewerForm() );
+
+            HLLiveOutputViewerForm frm =
+                args.Length == 0 ? new HLLiveOutputViewerForm() : new HLLiveOutputViewerForm( args[0] );
+            Application.Run( frm );
         }
 
         #endregion

@@ -38,6 +38,9 @@ namespace VisCPU.HL.Forms
 
         private static string ConsoleBinConfigPath => Path.Combine(Application.StartupPath, "runtime_path.txt");
 
+        private string ConsoleRuntimePath =>
+            Path.Combine( Application.StartupPath, File.ReadAllText( ConsoleBinConfigPath ) );
+
         private static string ConsoleRunArgConfigPath => Path.Combine(Application.StartupPath, "runtime_args.txt");
 
         private static string ConsoleBuildArgConfigPath =>
@@ -55,7 +58,8 @@ namespace VisCPU.HL.Forms
 
         #region Public
 
-        public HLLiveOutputViewerForm()
+        
+        public HLLiveOutputViewerForm(string file = null)
         {
             if (!File.Exists(ConsoleBuildArgConfigPath))
             {
@@ -69,7 +73,7 @@ namespace VisCPU.HL.Forms
 
             InitializeComponent();
 
-            OpenFolder();
+            OpenFolder(file);
 
             EventManager.RegisterDefaultHandlers();
 
@@ -110,21 +114,26 @@ namespace VisCPU.HL.Forms
         {
             if (File.Exists(ConsoleBinConfigPath))
             {
-                string cPath = File.ReadAllText(ConsoleBinConfigPath);
 
-                if (File.Exists(cPath))
+                if (File.Exists(ConsoleRuntimePath))
                 {
                     RunConsoleProcess(
-                                      cPath,
+                                      ConsoleRuntimePath,
                                       string.Format(RunArgs, GetEntryPath())
                                      );
                 }
                 else
                 {
                     MessageBox.Show(
-                                    $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
+                                    $"No Console Runtime Set. File {ConsoleRuntimePath} does not exist"
                                    );
                 }
+            }
+            else
+            {
+                MessageBox.Show(
+                                $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
+                               );
             }
         }
 
@@ -132,19 +141,18 @@ namespace VisCPU.HL.Forms
         {
             if (File.Exists(ConsoleBinConfigPath))
             {
-                string cPath = File.ReadAllText(ConsoleBinConfigPath);
 
-                if (File.Exists(cPath))
+                if (File.Exists(ConsoleRuntimePath))
                 {
                     RunConsoleProcess(
-                                      cPath,
+                                      ConsoleRuntimePath,
                                       string.Format(BuildArgs, GetEntryPath())
                                      );
                 }
                 else
                 {
                     MessageBox.Show(
-                                    $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
+                                    $"No Console Runtime Set. File {ConsoleRuntimePath} does not exist"
                                    );
                 }
             }
@@ -312,8 +320,13 @@ namespace VisCPU.HL.Forms
                                  );
         }
 
-        private void OpenFolder()
+        private void OpenFolder(string file)
         {
+            if ( file != null )
+            {
+                File.WriteAllText( LastWorkingDirConfig, file );
+            }
+            
             if (File.Exists(LastWorkingDirConfig))
             {
                 m_SourceFolder = File.ReadAllText(LastWorkingDirConfig);

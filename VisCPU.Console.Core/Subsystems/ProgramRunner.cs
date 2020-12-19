@@ -26,19 +26,25 @@ namespace VisCPU.Console.Core.Subsystems
             ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
             ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
             HLCompilerSettings hls = HLCompilerSettings.Create();
+            MemorySettings ms = MemorySettings.Create();
+            MemoryBusSettings mbs = MemoryBusSettings.Create();
 
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
                                        settings,
                                        cins,
                                        couts,
-                                       hls
+                                       hls,
+                                       ms,
+                                       mbs
                                       );
 
             Settings.SaveSettings( settings );
             Settings.SaveSettings( cins );
             Settings.SaveSettings( couts );
-            Settings.SaveSettings( hls );
+            Settings.SaveSettings(hls);
+            Settings.SaveSettings(ms);
+            Settings.SaveSettings(mbs);
 
             if ( settings.InputFiles == null )
             {
@@ -60,14 +66,14 @@ namespace VisCPU.Console.Core.Subsystems
 
                 Log( $"Run File: '{file}'" );
                 uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
-
-                Memory memory = new Memory( settings.MemorySize, 0 );
+                
                 ConsoleInInterface cin = new ConsoleInInterface();
 
                 ConsoleOutInterface cout =
                     new ConsoleOutInterface();
 
-                MemoryBus bus = new MemoryBus( memory, cout, cin );
+                MemoryBus bus = mbs.CreateBus(cout, cin);
+                
 
                 CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );
