@@ -32,6 +32,8 @@ namespace VisCPU.Utility.Settings
         private static readonly Dictionary < Type, SettingsEntry > defaultLoaderMap =
             new Dictionary < Type, SettingsEntry >();
 
+        public static bool EnableIO { get; set; } = true;
+
         #region Public
 
         public static bool DefaultExists( Type t )
@@ -104,7 +106,12 @@ namespace VisCPU.Utility.Settings
 
         public static object GetSettings( SettingsLoader loader, Type t, string file )
         {
-            return loader.LoadSettings( t, file );
+            if ( EnableIO )
+            {
+                return loader.LoadSettings( t, file );
+            }
+
+            throw new Exception( "IO Is disabled." );
         }
 
         public static void RegisterDefaultLoader < T >( SettingsLoader loader, string defaultFile )
@@ -156,7 +163,10 @@ namespace VisCPU.Utility.Settings
 
         public static void SaveSettings( SettingsLoader loader, object o, string file )
         {
-            loader.SaveSettings( o, file );
+            if ( EnableIO )
+            {
+                loader.SaveSettings( o, file );
+            }
         }
 
         #endregion

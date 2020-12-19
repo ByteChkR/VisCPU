@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.Compiler
 {
@@ -16,13 +17,18 @@ namespace VisCPU.HL.Compiler
             ExpressionTarget outputTarget )
         {
             string tmpPtrName = compilation.GetTempVar();
-            ExpressionTarget tempPtr = new ExpressionTarget( tmpPtrName, true, true );
             ExpressionTarget tempPtrVar = compilation.Parse( expr.Left );
+            ExpressionTarget tempPtr = new ExpressionTarget(tmpPtrName, true, tempPtrVar.TypeDefinition, true);
 
             string pnName = compilation.GetTempVar();
-            ExpressionTarget pn = compilation.Parse( expr.ParameterList[0], new ExpressionTarget( pnName, true ) );
+            ExpressionTarget pn = compilation.Parse( expr.ParameterList[0], new ExpressionTarget( pnName, true, compilation.TypeSystem.GetType("var")) );
 
-            if ( tempPtrVar.IsArray )
+            string tmpSName = compilation.GetTempVar();
+            compilation.ProgramCode.Add($"LOAD {tmpSName} {tempPtr.TypeDefinition.GetSize()}");
+            compilation.ProgramCode.Add($"MUL {pn.ResultAddress} {tmpSName}");
+            compilation.ReleaseTempVar( tmpSName );
+            
+            if ( tempPtrVar.IsPointer && !(tempPtrVar.TypeDefinition is ArrayTypeDefintion) )
             {
                 compilation.ProgramCode.Add( $"LOAD {tempPtr.ResultAddress} {tempPtrVar.ResultAddress}" );
             }
@@ -38,7 +44,7 @@ namespace VisCPU.HL.Compiler
                 compilation.ProgramCode.Add(
                                             $"DREF {tempPtr.ResultAddress} {outputTarget.ResultAddress} ; Dereference Array Pointer"
                                            );
-
+                
                 compilation.ReleaseTempVar( tmpPtrName );
 
                 return outputTarget;

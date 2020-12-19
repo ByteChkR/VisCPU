@@ -18,6 +18,7 @@ using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -39,11 +40,17 @@ namespace VisCPU.HL
         internal readonly string OriginalText;
         internal readonly List < string > ProgramCode = new List < string >();
 
-        internal Dictionary < Type, IHLExpressionCompiler > TypeMap = new Dictionary < Type, IHLExpressionCompiler >
+        internal void InitializeTypeMap(HLTypeSystem ts)
+        {
+            TypeMap = new Dictionary<Type, IHLExpressionCompiler>
                                                                       {
                                                                           {
+                                                                              typeof(HLMemberAccessOp),
+                                                                              new MemberAccessCompiler()
+                                                                          },
+                                                                          {
                                                                               typeof( HLVarDefOperand ),
-                                                                              new VariableDefinitionExpressionCompiler()
+                                                                              new VariableDefinitionExpressionCompiler(ts)
                                                                           },
                                                                           {
                                                                               typeof( HLArrayAccessorOp ),
@@ -173,6 +180,9 @@ namespace VisCPU.HL
                                                                                   )
                                                                           }
                                                                       };
+        }
+
+        internal Dictionary < Type, IHLExpressionCompiler > TypeMap;
 
         private static uint counter;
 
@@ -189,6 +199,7 @@ namespace VisCPU.HL
         public event Action < string, string > OnCompiledIncludedScript;
 
         protected override LoggerSystems SubSystem => LoggerSystems.HL_Compiler;
+        public readonly HLTypeSystem TypeSystem = new HLTypeSystem();
 
         #region Public
 
@@ -196,6 +207,7 @@ namespace VisCPU.HL
         {
             OriginalText = originalText;
             Directory = directory;
+            InitializeTypeMap(TypeSystem);
         }
 
         public HLCompilation( HLCompilation parent, string id )
@@ -208,10 +220,12 @@ namespace VisCPU.HL
             FunctionMap = new Dictionary < string, FunctionData >( parent.FunctionMap );
             ExternalSymbols = new List < IExternalData >( parent.ExternalSymbols );
             IncludedFiles = new List < string >( parent.IncludedFiles );
-
+            TypeSystem = parent.TypeSystem;
             this.parent = parent;
+            InitializeTypeMap(TypeSystem);
         }
-
+        
+        
         public static void ResetCounter()
         {
             counter = 0;
@@ -227,14 +241,14 @@ namespace VisCPU.HL
             return VariableMap.ContainsKey( GetFinalName( var ) ) || parent != null && parent.ContainsVariable( var );
         }
 
-        public void CreateVariable( string name, uint size )
+        public void CreateVariable( string name, uint size, HLTypeDefinition tdef)
         {
-            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size );
+            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size ,tdef);
         }
 
-        public void CreateVariable( string name, string content )
+        public void CreateVariable( string name, string content, HLTypeDefinition tdef)
         {
-            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), content );
+            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), content ,tdef);
         }
 
         public string GetFinalName( string name )
@@ -278,6 +292,7 @@ namespace VisCPU.HL
             ParseBlocks( tokens );
 
             ParseFunctionToken( tokens, hlpS );
+            ParseTypeDefinitions(TypeSystem, hlpS, tokens);
 
             HLExpressionParser p = HLExpressionParser.Create( new HLExpressionReader( tokens ) );
 
@@ -696,7 +711,7 @@ namespace VisCPU.HL
 
             string name = GetUniqueName( "tmp" );
 
-            return VariableMap[name] = new VariableData( name, name, 1 );
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd("var") );
         }
 
         private string GetPrefix()
@@ -716,6 +731,11 @@ namespace VisCPU.HL
             for ( int i = 0; i < IncludedFiles.Count; i++ )
             {
                 string includedFile = IncludedFiles[i];
+
+                if ( parent != null && parent.IncludedFiles.Contains( includedFile ) )
+                {
+                    continue;
+                }
 
                 if ( includedFile.EndsWith( ".vhl" ) )
                 {
@@ -784,8 +804,99 @@ namespace VisCPU.HL
             }
         }
 
+        private void ParseTypeDefinitionBody(
+            HLTypeSystem ts,
+            HLTypeDefinition tdef,
+            List < IHLToken > block )
+        {
+            HLExpressionParser p = HLExpressionParser.Create(new HLExpressionReader(block));
+            HLExpression[] exprs = p.Parse();
+            foreach ( HLExpression hlToken in exprs)
+            {
+                if ( hlToken is HLVarDefOperand t)
+                {
+                    HLTypeDefinition tt = ts.GetOrAdd( t.value.TypeName.ToString() );
+
+                    if ( t.value.Size != null )
+                    {
+                        tt = new ArrayTypeDefintion(
+                                                    tt,
+                                                    t.value.Size.ToString().ParseUInt()
+                                                   );
+                    }
+
+                    HLPropertyDefinition pdef = new HLPropertyDefinition(t.value.Name.ToString(), tt);
+
+                    
+                    tdef.AddMember( pdef );
+                }
+                else
+                {
+                    EventManager < ErrorEvent >.SendEvent(
+                                                          new HLTokenInvalidReadEvent(
+                                                               HLTokenType.OpVariableDefinition,
+                                                               hlToken.Type
+                                                              )
+                                                         );
+                }
+            }
+        }
+        
         #endregion
+        private void ParseTypeDefinitions(HLTypeSystem ts, HLParserSettings settings, List<IHLToken> tokens)
+        {
+            for (int i = tokens.Count - 1; i >= 0; i--)
+            {
+                if (tokens[i].Type == HLTokenType.OpBlockToken ||
+                    tokens[i].Type == HLTokenType.OpNamespaceDefinition)
+                {
+                    ParseTypeDefinitions(ts, settings, tokens[i].GetChildren());
+                }
+
+                if (tokens[i].Type == HLTokenType.OpClass)
+                {
+                    IHLToken classKey = tokens[i];
+
+                    IHLToken name = HLParsingTools.ReadOne(tokens, i + 1, HLTokenType.OpWord);
+
+                    IHLToken[] mods = HLParsingTools.ReadNoneOrManyOf(
+                                                                      tokens,
+                                                                      i - 1,
+                                                                      -1,
+                                                                      settings.ClassModifiers.Values.ToArray()
+                                                                     ).Reverse().ToArray();
+
+
+                    IHLToken baseClass = null;
+                    int offset = 2;
+                    if (HLParsingTools.ReadOneOrNone(
+                                                     tokens,
+                                                     i + offset,
+                                                     HLTokenType.OpColon,
+                                                     out IHLToken inhColon
+                                                    ))
+                    {
+                        baseClass = HLParsingTools.ReadOne(tokens, i + offset + 1, HLTokenType.OpWord);
+                        offset += 2;
+                    }
+                    IHLToken block = HLParsingTools.ReadOne(
+                                                            tokens,
+                                                            i + offset,
+                                                            HLTokenType.OpBlockToken
+                                                           );
+
+
+                    int start = i - mods.Length;
+                    int end = i + offset + 1;
+                    tokens.RemoveRange(start, end - start);
+                    HLTypeDefinition def = ts.CreateEmptyType( name.ToString() );
+                    ParseTypeDefinitionBody(ts,  def, block.GetChildren() );
+                    i = start;
+                }
+            }
+        }
 
     }
+
 
 }

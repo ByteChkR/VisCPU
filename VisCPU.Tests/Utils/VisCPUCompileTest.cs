@@ -5,6 +5,7 @@ using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
+using VisCPU.Peripherals.Console;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Tests.Utils
@@ -16,6 +17,14 @@ namespace VisCPU.Tests.Utils
         protected readonly TestDevice TestDevice = new TestDevice();
 
         #region Protected
+        
+        protected void Initialize()
+        {
+            LinkerSettings ls = LinkerSettings.Create();
+            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
+            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
+            HLCompilerSettings hls = HLCompilerSettings.Create();
+        }
 
         protected static object[] GetTestAssemblyInstructions( string testFolder )
         {

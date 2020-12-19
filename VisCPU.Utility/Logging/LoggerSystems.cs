@@ -38,7 +38,7 @@ namespace VisCPU.Utility.Logging
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console
+        Default = UriResolver | Console | HL_Compiler | FileCompilation | Linker
 
     }
 

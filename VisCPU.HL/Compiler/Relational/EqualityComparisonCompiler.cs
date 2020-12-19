@@ -24,19 +24,30 @@ namespace VisCPU.HL.Compiler.Relational
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
-                                                         new ExpressionTarget( rtName, true )
+                                                         new ExpressionTarget( rtName, true, compilation.TypeSystem.GetType("var"))
                                                         );
 
-            if ( target.IsArray )
+            if (target.IsPointer)
             {
-                ExpressionTarget tmp = new ExpressionTarget( compilation.GetTempVar(), true );
+                ExpressionTarget tmp = new ExpressionTarget(compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var"));
 
                 compilation.ProgramCode.Add(
                                             $"DREF {target.ResultAddress} {tmp.ResultAddress} ; Dereference Array Pointer (Equality Comparison)"
                                            );
 
-                compilation.ReleaseTempVar( target.ResultAddress );
+                compilation.ReleaseTempVar(target.ResultAddress);
                 target = tmp;
+            }
+            if (rTarget.IsPointer)
+            {
+                ExpressionTarget tmp = new ExpressionTarget(compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var"));
+
+                compilation.ProgramCode.Add(
+                                            $"DREF {rTarget.ResultAddress} {tmp.ResultAddress} ; Dereference Array Pointer (Equality Comparison)"
+                                           );
+
+                compilation.ReleaseTempVar(rTarget.ResultAddress);
+                rTarget = tmp;
             }
 
             //BNE target rTarget if_b0_fail

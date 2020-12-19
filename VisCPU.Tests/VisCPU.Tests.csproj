@@ -151,6 +151,15 @@
     <None Update="tests\instructions\SUB_Tests.vhl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="tests\type_system\multi_field_assign.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\type_system\nested_multi_field_assign.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="tests\type_system\single_field_assign.vhl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="tests\utils.vhl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

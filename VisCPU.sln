@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.HL", "VisCPU.HL\VisC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisCPU.HL.Forms", "VisCPU.HL.Forms\VisCPU.HL.Forms.csproj", "{1ED765C6-A8CD-4172-852B-8E1FCC5BFED3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisCPU.Console.Core", "VisCPU.Console.Core\VisCPU.Console.Core.csproj", "{09EBACAB-1814-4BE5-A7B2-C1CE9932D055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{1ED765C6-A8CD-4172-852B-8E1FCC5BFED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ED765C6-A8CD-4172-852B-8E1FCC5BFED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ED765C6-A8CD-4172-852B-8E1FCC5BFED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09EBACAB-1814-4BE5-A7B2-C1CE9932D055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09EBACAB-1814-4BE5-A7B2-C1CE9932D055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09EBACAB-1814-4BE5-A7B2-C1CE9932D055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09EBACAB-1814-4BE5-A7B2-C1CE9932D055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

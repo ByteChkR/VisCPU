@@ -19,7 +19,7 @@ namespace VisCPU.HL.Compiler.Logic
 
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left,
-                                                        new ExpressionTarget( tName, true )
+                                                        new ExpressionTarget( tName, true, compilation.TypeSystem.GetType("var"))
                                                        );
 
             //BNE target rTarget if_b0_fail

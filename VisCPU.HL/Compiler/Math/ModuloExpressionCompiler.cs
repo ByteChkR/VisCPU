@@ -20,7 +20,7 @@ namespace VisCPU.HL.Compiler.Math
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
-                                                         new ExpressionTarget( rtName, true )
+                                                         new ExpressionTarget( rtName, true, compilation.TypeSystem.GetType("var"))
                                                         );
 
             if ( target.ResultAddress == outputTarget.ResultAddress )

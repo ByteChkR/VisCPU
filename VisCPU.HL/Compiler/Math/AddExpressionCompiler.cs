@@ -20,7 +20,7 @@ namespace VisCPU.HL.Compiler.Math
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
-                                                         new ExpressionTarget( tmp, true )
+                                                         new ExpressionTarget( tmp, true, compilation.TypeSystem.GetType("var"))
                                                         );
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
@@ -42,13 +42,32 @@ namespace VisCPU.HL.Compiler.Math
 
                 return rTarget; //should never happen?
             }
+            
+            if ( target.IsPointer )
+            {
+                ExpressionTarget et = new ExpressionTarget(
+                                                           compilation.GetTempVar(),
+                                                           true,
+                                                           compilation.TypeSystem.GetType("var")
+                                                          );
 
+                compilation.ProgramCode.Add(
+                                            $"DREF {target.ResultAddress} {et.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
+                                           );
+                compilation.ProgramCode.Add(
+                                            $"ADD {et.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
+                                           );
+
+                compilation.ReleaseTempVar(tmp);
+                compilation.ReleaseTempVar(target.ResultAddress);
+
+                return outputTarget;
+            }
             compilation.ProgramCode.Add(
                                         $"ADD {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                        );
 
             compilation.ReleaseTempVar( tmp );
-            compilation.ReleaseTempVar( target.ResultAddress ); //??
 
             return outputTarget;
         }

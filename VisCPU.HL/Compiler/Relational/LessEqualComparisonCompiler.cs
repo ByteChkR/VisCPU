@@ -24,7 +24,7 @@ namespace VisCPU.HL.Compiler.Relational
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
-                                                         new ExpressionTarget( rtName, true )
+                                                         new ExpressionTarget( rtName, true, compilation.TypeSystem.GetType("var"))
                                                         );
 
             compilation.ReleaseTempVar( rtName );

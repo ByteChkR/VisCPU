@@ -3,14 +3,40 @@
 #include "pointer_assignment_tests.vhl"
 #include "branch_tests.vhl"
 #include "instruction_tests.vhl"
+#include "type_system_tests.vhl"
+#include "../sys/driver/term/out.vhl"
+
+string(str_instr, "Instruction Tests");
+string(str_func, "Function Tests");
+string(str_ptr, "Pointer Tests");
+string(str_assign, "Assignment Tests");
+string(str_branch, "Branch Tests");
+string(str_ts, "Type System Tests");
+string(str_sep, "-------------------------");
+
+private void PrintHeader(var testName, var testSize)
+{
+	WriteNewLine();
+	WriteNewLine();
+	WriteString(ptr_of(str_sep), size_of(str_sep));
+	WriteString(testName, testSize);
+	WriteLine(ptr_of(str_sep), size_of(str_sep));
+	return;
+}
 
 public void RunTests()
 {
+	PrintHeader(ptr_of(str_instr), size_of(str_instr));
 	RunInstructionTests();
+	PrintHeader(ptr_of(str_func), size_of(str_func));
 	RunFunctionCallTests();
+	PrintHeader(ptr_of(str_assign), size_of(str_assign));
 	RunAssignmentTests();
+	PrintHeader(ptr_of(str_ptr), size_of(str_ptr));
 	RunPointerAssignmentTests();
+	PrintHeader(ptr_of(str_branch), size_of(str_branch));
 	RunBranchTests();
-
+	PrintHeader(ptr_of(str_ts), size_of(str_ts));
+	RunTypeSystemTests();
 	return;
 }

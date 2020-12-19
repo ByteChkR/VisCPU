@@ -36,20 +36,29 @@ namespace VisCPU.HL.Forms
             this.panelConsole = new System.Windows.Forms.Panel();
             this.rtbConsoleOut = new System.Windows.Forms.RichTextBox();
             this.panelConsoleIn = new System.Windows.Forms.Panel();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.tsiEditorOptions = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsiTerminateRuntime = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiRun = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiBuild = new System.Windows.Forms.ToolStripMenuItem();
+            this.tslPercentage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsProgress = new System.Windows.Forms.ToolStripProgressBar();
+            this.tslCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
             this.tbConsoleIn = new System.Windows.Forms.TextBox();
             this.btnSendInput = new System.Windows.Forms.Button();
             this.panelRight = new System.Windows.Forms.Panel();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.tsProgress = new System.Windows.Forms.ToolStripProgressBar();
-            this.tslPercentage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tslCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsiConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiOpenRuntimePath = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiOpenBuildArgPath = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiOpenRunArgPath = new System.Windows.Forms.ToolStripMenuItem();
             this.panelConsole.SuspendLayout();
             this.panelConsoleIn.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.panelRight.SuspendLayout();
             this.panelLeft.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcCodeOut
@@ -103,6 +112,79 @@ namespace VisCPU.HL.Forms
             this.panelConsoleIn.Size = new System.Drawing.Size(913, 51);
             this.panelConsoleIn.TabIndex = 1;
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiEditorOptions,
+            this.tslPercentage,
+            this.tsProgress,
+            this.tslCurrentTask});
+            this.statusStrip.Location = new System.Drawing.Point(0, 29);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(838, 22);
+            this.statusStrip.TabIndex = 3;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // tsiEditorOptions
+            // 
+            this.tsiEditorOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsiEditorOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiTerminateRuntime,
+            this.tsiRefresh,
+            this.tsiRun,
+            this.tsiBuild,
+            this.tsiConfig});
+            this.tsiEditorOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsiEditorOptions.Name = "tsiEditorOptions";
+            this.tsiEditorOptions.Size = new System.Drawing.Size(96, 20);
+            this.tsiEditorOptions.Text = "Editor Options";
+            this.tsiEditorOptions.ToolTipText = "Editor Options";
+            // 
+            // tsiTerminateRuntime
+            // 
+            this.tsiTerminateRuntime.Name = "tsiTerminateRuntime";
+            this.tsiTerminateRuntime.Size = new System.Drawing.Size(217, 22);
+            this.tsiTerminateRuntime.Text = "Terminate Runtime Process";
+            this.tsiTerminateRuntime.Click += new System.EventHandler(this.tsiTerminateRuntime_Click);
+            // 
+            // tsiRefresh
+            // 
+            this.tsiRefresh.Name = "tsiRefresh";
+            this.tsiRefresh.Size = new System.Drawing.Size(217, 22);
+            this.tsiRefresh.Text = "Refresh";
+            this.tsiRefresh.Click += new System.EventHandler(this.tsiRefresh_Click);
+            // 
+            // tsiRun
+            // 
+            this.tsiRun.Name = "tsiRun";
+            this.tsiRun.Size = new System.Drawing.Size(217, 22);
+            this.tsiRun.Text = "Run";
+            this.tsiRun.Click += new System.EventHandler(this.tsiRun_Click);
+            // 
+            // tsiBuild
+            // 
+            this.tsiBuild.Name = "tsiBuild";
+            this.tsiBuild.Size = new System.Drawing.Size(217, 22);
+            this.tsiBuild.Text = "Build";
+            this.tsiBuild.Click += new System.EventHandler(this.tsiBuild_Click);
+            // 
+            // tslPercentage
+            // 
+            this.tslPercentage.Name = "tslPercentage";
+            this.tslPercentage.Size = new System.Drawing.Size(35, 17);
+            this.tslPercentage.Text = "100%";
+            // 
+            // tsProgress
+            // 
+            this.tsProgress.Name = "tsProgress";
+            this.tsProgress.Size = new System.Drawing.Size(100, 16);
+            // 
+            // tslCurrentTask
+            // 
+            this.tslCurrentTask.Name = "tslCurrentTask";
+            this.tslCurrentTask.Size = new System.Drawing.Size(62, 17);
+            this.tslCurrentTask.Text = "Task: none";
+            // 
             // tbConsoleIn
             // 
             this.tbConsoleIn.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -145,34 +227,36 @@ namespace VisCPU.HL.Forms
             // 
             this.fbdSelectDir.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
-            // statusStrip
+            // tsiConfig
             // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tslPercentage,
-            this.tsProgress,
-            this.tslCurrentTask});
-            this.statusStrip.Location = new System.Drawing.Point(0, 29);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(838, 22);
-            this.statusStrip.TabIndex = 3;
-            this.statusStrip.Text = "statusStrip1";
+            this.tsiConfig.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiOpenRuntimePath,
+            this.tsiOpenBuildArgPath,
+            this.tsiOpenRunArgPath});
+            this.tsiConfig.Name = "tsiConfig";
+            this.tsiConfig.Size = new System.Drawing.Size(217, 22);
+            this.tsiConfig.Text = "Configuration";
             // 
-            // tsProgress
+            // tsiOpenRuntimePath
             // 
-            this.tsProgress.Name = "tsProgress";
-            this.tsProgress.Size = new System.Drawing.Size(100, 16);
+            this.tsiOpenRuntimePath.Name = "tsiOpenRuntimePath";
+            this.tsiOpenRuntimePath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenRuntimePath.Text = "Open Runtime Path Config";
+            this.tsiOpenRuntimePath.Click += new System.EventHandler(this.tsiOpenRuntimePath_Click);
             // 
-            // tslPercentage
+            // tsiOpenBuildArgPath
             // 
-            this.tslPercentage.Name = "tslPercentage";
-            this.tslPercentage.Size = new System.Drawing.Size(35, 17);
-            this.tslPercentage.Text = "100%";
+            this.tsiOpenBuildArgPath.Name = "tsiOpenBuildArgPath";
+            this.tsiOpenBuildArgPath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenBuildArgPath.Text = "Open Build Argument Config";
+            this.tsiOpenBuildArgPath.Click += new System.EventHandler(this.tsiOpenBuildArgPath_Click);
             // 
-            // tslCurrentTask
+            // tsiOpenRunArgPath
             // 
-            this.tslCurrentTask.Name = "tslCurrentTask";
-            this.tslCurrentTask.Size = new System.Drawing.Size(62, 17);
-            this.tslCurrentTask.Text = "Task: none";
+            this.tsiOpenRunArgPath.Name = "tsiOpenRunArgPath";
+            this.tsiOpenRunArgPath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenRunArgPath.Text = "Open Run Argument Config";
+            this.tsiOpenRunArgPath.Click += new System.EventHandler(this.tsiOpenRunArgPath_Click);
             // 
             // HLLiveOutputViewerForm
             // 
@@ -185,13 +269,14 @@ namespace VisCPU.HL.Forms
             this.MinimumSize = new System.Drawing.Size(850, 449);
             this.Name = "HLLiveOutputViewerForm";
             this.Text = "HL Live Output Viewer";
+            this.Load += new System.EventHandler(this.HLLiveOutputViewerForm_Load);
             this.panelConsole.ResumeLayout(false);
             this.panelConsoleIn.ResumeLayout(false);
             this.panelConsoleIn.PerformLayout();
-            this.panelRight.ResumeLayout(false);
-            this.panelLeft.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
+            this.panelRight.ResumeLayout(false);
+            this.panelLeft.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -212,6 +297,15 @@ namespace VisCPU.HL.Forms
         private System.Windows.Forms.ToolStripStatusLabel tslPercentage;
         private System.Windows.Forms.ToolStripProgressBar tsProgress;
         private System.Windows.Forms.ToolStripStatusLabel tslCurrentTask;
+        private System.Windows.Forms.ToolStripDropDownButton tsiEditorOptions;
+        private System.Windows.Forms.ToolStripMenuItem tsiTerminateRuntime;
+        private System.Windows.Forms.ToolStripMenuItem tsiRefresh;
+        private System.Windows.Forms.ToolStripMenuItem tsiRun;
+        private System.Windows.Forms.ToolStripMenuItem tsiBuild;
+        private System.Windows.Forms.ToolStripMenuItem tsiConfig;
+        private System.Windows.Forms.ToolStripMenuItem tsiOpenRuntimePath;
+        private System.Windows.Forms.ToolStripMenuItem tsiOpenBuildArgPath;
+        private System.Windows.Forms.ToolStripMenuItem tsiOpenRunArgPath;
     }
 }
 

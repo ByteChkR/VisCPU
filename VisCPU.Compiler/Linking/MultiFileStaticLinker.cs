@@ -166,6 +166,8 @@ namespace VisCPU.Compiler.Linking
                 {
                     if ( targets.ContainsKey( reference ) )
                     {
+                        Log( $"File: {reference.File} was already referenced." );
+
                         continue;
                     }
 

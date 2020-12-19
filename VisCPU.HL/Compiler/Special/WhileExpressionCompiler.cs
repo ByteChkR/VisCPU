@@ -16,7 +16,7 @@ namespace VisCPU.HL.Compiler.Special
 
             compilation.ProgramCode.Add( $".{startLabel} linker:hide" );
             string tname = compilation.GetTempVar();
-            ExpressionTarget target = new ExpressionTarget( tname, true );
+            ExpressionTarget target = new ExpressionTarget( tname, true, compilation.TypeSystem.GetType("var"));
             compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} 0x00" );
             compilation.Parse( expr.Condition, target );
 

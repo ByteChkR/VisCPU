@@ -4,6 +4,7 @@ using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
@@ -21,13 +22,51 @@ namespace VisCPU.HL.Compiler
 
             if ( target == "ptr_of" )
             {
-                string v = compilation.GetTempVar();
 
+                ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
+                
+                string v = compilation.GetTempVar();
                 compilation.ProgramCode.Add(
-                                            $"LOAD {v} {compilation.Parse( expr.ParameterList.First() ).ResultAddress}"
+                                            $"LOAD {v} {et.ResultAddress}"
                                            );
 
-                return new ExpressionTarget( v, true );
+                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType("var"));
+            }
+
+            if ( target == "static_cast" )
+            {
+                if (expr.ParameterList.Length != 2)
+                {
+                    EventManager<ErrorEvent>.SendEvent(
+                                                       new FunctionArgumentMismatchEvent(
+                                                            "Invalid Arguments. Expected static_cast(variable, type)"
+                                                           )
+                                                      );
+                }
+                return compilation.Parse( expr.ParameterList[0] ).Cast(compilation.TypeSystem.GetType(expr.ParameterList[1].ToString()));
+
+            }
+
+            if ( target == "offset_of" )
+            {
+                if (expr.ParameterList.Length != 2)
+                {
+                    EventManager<ErrorEvent>.SendEvent(
+                                                       new FunctionArgumentMismatchEvent(
+                                                            "Invalid Arguments. Expected offset_of(type, member)"
+                                                           )
+                                                      );
+                }
+
+                HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString());
+                string v = compilation.GetTempVar();
+                uint off = type.GetOffset( expr.ParameterList[1].ToString() );
+                compilation.ProgramCode.Add(
+                                            $"LOAD {v} {off}"
+                                           );
+
+                return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
+
             }
 
             if ( target == "size_of" )
@@ -43,21 +82,30 @@ namespace VisCPU.HL.Compiler
 
                 string v = compilation.GetTempVar();
 
-                if ( !compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
+                if ( compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
                 {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new HLVariableNotFoundEvent(
-                                                               expr.ParameterList[0].ToString(),
-                                                               false
-                                                              )
-                                                         );
+                    compilation.ProgramCode.Add(
+                                                $"LOAD {v} {compilation.GetVariable(expr.ParameterList[0].ToString()).Size}"
+                                               );
+
+                    return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
                 }
+                else if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
+                {
+                    compilation.ProgramCode.Add(
+                                                $"LOAD {v} {compilation.TypeSystem.GetType(expr.ParameterList[0].ToString()).GetSize()}"
+                                               );
 
-                compilation.ProgramCode.Add(
-                                            $"LOAD {v} {compilation.GetVariable( expr.ParameterList[0].ToString() ).Size}"
-                                           );
+                    return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
+                }
+                EventManager<ErrorEvent>.SendEvent(
+                                                   new HLVariableNotFoundEvent(
+                                                                               expr.ParameterList[0].ToString(),
+                                                                               false
+                                                                              )
+                                                  );
 
-                return new ExpressionTarget( v, true );
+                return new ExpressionTarget();
             }
 
             if ( target == "string" )
@@ -78,20 +126,20 @@ namespace VisCPU.HL.Compiler
                                       Select( x => x.ToString() ).
                                       Aggregate( ( input, elem ) => input + ' ' + elem );
 
-                compilation.CreateVariable( varName, content );
+                compilation.CreateVariable( varName, content, compilation.TypeSystem.GetType("var") );
 
-                return new ExpressionTarget( compilation.GetFinalName( varName ), true );
+                return new ExpressionTarget( compilation.GetFinalName( varName ), true , compilation.TypeSystem.GetType("var"));
             }
 
             if ( target == "val_of" )
             {
                 string v = compilation.GetTempVar();
-
+                ExpressionTarget t = compilation.Parse( expr.ParameterList.First() );
                 compilation.ProgramCode.Add(
-                                            $"DREF {compilation.Parse( expr.ParameterList.First() ).ResultAddress} {v}"
+                                            $"DREF {t.ResultAddress} {v}"
                                            );
 
-                return new ExpressionTarget( v, true );
+                return new ExpressionTarget( v, true, t.TypeDefinition);
             }
 
             bool isInternalFunc = compilation.FunctionMap.ContainsKey( target );
@@ -133,7 +181,7 @@ namespace VisCPU.HL.Compiler
                 if ( isInternalFunc && compilation.FunctionMap[target].HasReturnValue ||
                      !isInternalFunc && ( ( FunctionData ) externalSymbol ).HasReturnValue )
                 {
-                    ExpressionTarget tempReturn = new ExpressionTarget( compilation.GetTempVar(), true );
+                    ExpressionTarget tempReturn = new ExpressionTarget( compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var") );
 
                     compilation.ProgramCode.Add(
                                                 $"; Write back return value to '{tempReturn.ResultAddress}'"

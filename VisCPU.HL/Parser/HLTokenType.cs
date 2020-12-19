@@ -97,7 +97,7 @@ namespace VisCPU.HL.Parser
         OpArrayAccess,
         OpRuntimeNamespace,
         OpOperatorImpl,
-        OpRuntimeMember,
+        OpPropertyDefinition,
 
         OpUnaryIncrement,
         OpUnaryDecrement,

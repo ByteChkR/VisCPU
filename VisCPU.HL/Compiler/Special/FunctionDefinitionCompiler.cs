@@ -25,12 +25,12 @@ namespace VisCPU.HL.Compiler.Special
                  isPublic,
                  () =>
                  {
-                     Log( $"Importing Function: {expr.value.FunctionName}" );
+                     //Log( $"Importing Function: {expr.value.FunctionName}" );
 
                      foreach ( IHLToken valueArgument in expr.value.Arguments )
                      {
                          string key = ( valueArgument as VariableDefinitionToken ).Name.ToString();
-                         fComp.CreateVariable( key, 1 );
+                         fComp.CreateVariable( key, 1, compilation.TypeSystem.GetType("var"));
                      }
 
                      List < string > parsedVal =

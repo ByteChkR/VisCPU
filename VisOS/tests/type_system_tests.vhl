@@ -1,0 +1,11 @@
+#include "type_system/single_field_assign.vhl"
+#include "type_system/multi_field_assign.vhl"
+#include "type_system/nested_multi_field_assign.vhl"
+
+public void RunTypeSystemTests()
+{
+	TestSingleField();
+	TestMultiField();
+	TestNestedMultiField();
+	return;
+}

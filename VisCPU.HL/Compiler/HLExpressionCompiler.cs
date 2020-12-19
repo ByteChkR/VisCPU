@@ -47,7 +47,7 @@ namespace VisCPU.HL.Compiler
 
                 if ( outputTarget.ResultAddress == null || !outputTarget.IsAddress )
                 {
-                    target = new ExpressionTarget( compilation.GetTempVar(), true );
+                    target = new ExpressionTarget( compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var"));
                 }
 
                 return ParseExpression( compilation, expr, target );

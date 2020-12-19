@@ -29,7 +29,7 @@ namespace VisCPU.HL.Compiler
 
                 ExpressionTarget rTarget = compilation.Parse(
                                                              expr.Right,
-                                                             new ExpressionTarget( rtName, true )
+                                                             new ExpressionTarget( rtName, true, compilation.TypeSystem.GetType("var"))
                                                             );
 
                 List < string > lines = new List < string >();
@@ -37,9 +37,9 @@ namespace VisCPU.HL.Compiler
                 //lines.Add(
                 //          $"COPY {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
                 //         );
-                if ( target.IsArray )
+                if ( target.IsPointer )
                 {
-                    if ( rTarget.IsArray )
+                    if ( rTarget.IsPointer )
                     {
                         lines.Add(
                                   $"CREF {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
@@ -47,7 +47,7 @@ namespace VisCPU.HL.Compiler
                     }
                     else
                     {
-                        ExpressionTarget tmpTarget = new ExpressionTarget( compilation.GetTempVar(), true );
+                        ExpressionTarget tmpTarget = new ExpressionTarget( compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var"));
 
                         lines.Add(
                                   $"LOAD {tmpTarget.ResultAddress} {rTarget.ResultAddress} ; Load Pointer for assignment"
@@ -62,9 +62,9 @@ namespace VisCPU.HL.Compiler
                 }
                 else
                 {
-                    if ( rTarget.IsArray )
+                    if ( rTarget.IsPointer )
                     {
-                        ExpressionTarget tmpTarget = new ExpressionTarget( compilation.GetTempVar(), true );
+                        ExpressionTarget tmpTarget = new ExpressionTarget( compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var"));
 
                         lines.Add(
                                   $"LOAD {tmpTarget.ResultAddress} {target.ResultAddress} ; Load Pointer for assignment"

@@ -11,12 +11,7 @@ namespace VisCPU.Tests
     public class BranchCompileTest : VisCPUCompileTest
     {
 
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            CPUSettings.InstructionSet = new DefaultSet();
-            TestDevice.OnFail += ( name, reason ) => Assert.Fail( $"Test '{name}' failed with Reason '{reason}'" );
-        }
+        #region Public
 
         [Test]
         [Order( 1 )]
@@ -41,6 +36,16 @@ namespace VisCPU.Tests
         {
             VisCPURun.Run( file, TestDevice );
         }
+
+        [OneTimeSetUp]
+        public void Setup()
+        {
+            Initialize();
+            CPUSettings.InstructionSet = new DefaultSet();
+            TestDevice.OnFail += ( name, reason ) => Assert.Fail( $"Test '{name}' failed with Reason '{reason}'" );
+        }
+
+        #endregion
 
     }
 

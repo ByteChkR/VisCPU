@@ -12,7 +12,7 @@ namespace VisCPU.HL.Compiler
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLValueOperand expr )
         {
-            ExpressionTarget tmp = new ExpressionTarget( expr.Value.ToString(), false );
+            ExpressionTarget tmp = new ExpressionTarget( expr.Value.ToString(), false, compilation.TypeSystem.GetType("var"));
 
             return tmp;
         }

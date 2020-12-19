@@ -31,7 +31,7 @@ namespace VisCPU.HL.Compiler.Special
 
                 ExpressionTarget exprTarget = compilation.Parse(
                                                                 expr.ConditionMap[i].Item1,
-                                                                new ExpressionTarget( iftempVar, true )
+                                                                new ExpressionTarget( iftempVar, true, compilation.TypeSystem.GetType("var"))
                                                                );
 
                 string nextLabel;

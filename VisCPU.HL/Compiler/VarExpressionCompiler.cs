@@ -25,7 +25,7 @@ namespace VisCPU.HL.Compiler
         {
             if ( compilation.ConstValTypes.ContainsKey( expr.Value.ToString() ) )
             {
-                return new ExpressionTarget( expr.Value.ToString(), true ).CopyIfNotNull( compilation, outputTarget );
+                return new ExpressionTarget( expr.Value.ToString(), true, compilation.TypeSystem.GetType("var")).CopyIfNotNull( compilation, outputTarget );
             }
 
             string varAddr;
@@ -35,14 +35,14 @@ namespace VisCPU.HL.Compiler
                 VariableData v = compilation.GetVariable( expr.Value.ToString() );
                 varAddr = v.GetFinalName();
 
-                return new ExpressionTarget( varAddr, true, v.Size != 1 ).CopyIfNotNull( compilation, outputTarget );
+                return new ExpressionTarget( varAddr, true, v.TypeDefinition, v.Size / v.TypeDefinition.GetSize() != 1).CopyIfNotNull( compilation, outputTarget );
             }
 
             if ( compilation.FunctionMap.ContainsKey( expr.Value.ToString() ) )
             {
                 varAddr = expr.Value.ToString();
 
-                return new ExpressionTarget( varAddr, true );
+                return new ExpressionTarget( varAddr, true, null );
             }
 
             EventManager < ErrorEvent >.SendEvent( new HLVariableNotFoundEvent( expr.Value.ToString(), false ) );
