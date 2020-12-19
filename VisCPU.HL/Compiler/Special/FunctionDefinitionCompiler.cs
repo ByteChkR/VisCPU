@@ -29,8 +29,9 @@ namespace VisCPU.HL.Compiler.Special
 
                      foreach ( IHLToken valueArgument in expr.value.Arguments )
                      {
-                         string key = ( valueArgument as VariableDefinitionToken ).Name.ToString();
-                         fComp.CreateVariable( key, 1, compilation.TypeSystem.GetType("var"));
+                         VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
+                         string key = vdef.Name.ToString();
+                         fComp.CreateVariable( key, 1, compilation.TypeSystem.GetType(vdef.TypeName.ToString()));
                      }
 
                      List < string > parsedVal =

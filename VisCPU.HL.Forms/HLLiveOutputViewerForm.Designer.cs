@@ -42,6 +42,10 @@ namespace VisCPU.HL.Forms
             this.tsiRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.tsiRun = new System.Windows.Forms.ToolStripMenuItem();
             this.tsiBuild = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiConfig = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiOpenRuntimePath = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiOpenBuildArgPath = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsiOpenRunArgPath = new System.Windows.Forms.ToolStripMenuItem();
             this.tslPercentage = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tslCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
@@ -50,10 +54,7 @@ namespace VisCPU.HL.Forms
             this.panelRight = new System.Windows.Forms.Panel();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.fbdSelectDir = new System.Windows.Forms.FolderBrowserDialog();
-            this.tsiConfig = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsiOpenRuntimePath = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsiOpenBuildArgPath = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsiOpenRunArgPath = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearProjectDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelConsole.SuspendLayout();
             this.panelConsoleIn.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -133,7 +134,8 @@ namespace VisCPU.HL.Forms
             this.tsiRefresh,
             this.tsiRun,
             this.tsiBuild,
-            this.tsiConfig});
+            this.tsiConfig,
+            this.clearProjectDirectoryToolStripMenuItem});
             this.tsiEditorOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsiEditorOptions.Name = "tsiEditorOptions";
             this.tsiEditorOptions.Size = new System.Drawing.Size(96, 20);
@@ -167,6 +169,37 @@ namespace VisCPU.HL.Forms
             this.tsiBuild.Size = new System.Drawing.Size(217, 22);
             this.tsiBuild.Text = "Build";
             this.tsiBuild.Click += new System.EventHandler(this.tsiBuild_Click);
+            // 
+            // tsiConfig
+            // 
+            this.tsiConfig.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsiOpenRuntimePath,
+            this.tsiOpenBuildArgPath,
+            this.tsiOpenRunArgPath});
+            this.tsiConfig.Name = "tsiConfig";
+            this.tsiConfig.Size = new System.Drawing.Size(217, 22);
+            this.tsiConfig.Text = "Configuration";
+            // 
+            // tsiOpenRuntimePath
+            // 
+            this.tsiOpenRuntimePath.Name = "tsiOpenRuntimePath";
+            this.tsiOpenRuntimePath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenRuntimePath.Text = "Open Runtime Path Config";
+            this.tsiOpenRuntimePath.Click += new System.EventHandler(this.tsiOpenRuntimePath_Click);
+            // 
+            // tsiOpenBuildArgPath
+            // 
+            this.tsiOpenBuildArgPath.Name = "tsiOpenBuildArgPath";
+            this.tsiOpenBuildArgPath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenBuildArgPath.Text = "Open Build Argument Config";
+            this.tsiOpenBuildArgPath.Click += new System.EventHandler(this.tsiOpenBuildArgPath_Click);
+            // 
+            // tsiOpenRunArgPath
+            // 
+            this.tsiOpenRunArgPath.Name = "tsiOpenRunArgPath";
+            this.tsiOpenRunArgPath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenRunArgPath.Text = "Open Run Argument Config";
+            this.tsiOpenRunArgPath.Click += new System.EventHandler(this.tsiOpenRunArgPath_Click);
             // 
             // tslPercentage
             // 
@@ -227,36 +260,12 @@ namespace VisCPU.HL.Forms
             // 
             this.fbdSelectDir.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
-            // tsiConfig
+            // clearProjectDirectoryToolStripMenuItem
             // 
-            this.tsiConfig.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsiOpenRuntimePath,
-            this.tsiOpenBuildArgPath,
-            this.tsiOpenRunArgPath});
-            this.tsiConfig.Name = "tsiConfig";
-            this.tsiConfig.Size = new System.Drawing.Size(217, 22);
-            this.tsiConfig.Text = "Configuration";
-            // 
-            // tsiOpenRuntimePath
-            // 
-            this.tsiOpenRuntimePath.Name = "tsiOpenRuntimePath";
-            this.tsiOpenRuntimePath.Size = new System.Drawing.Size(229, 22);
-            this.tsiOpenRuntimePath.Text = "Open Runtime Path Config";
-            this.tsiOpenRuntimePath.Click += new System.EventHandler(this.tsiOpenRuntimePath_Click);
-            // 
-            // tsiOpenBuildArgPath
-            // 
-            this.tsiOpenBuildArgPath.Name = "tsiOpenBuildArgPath";
-            this.tsiOpenBuildArgPath.Size = new System.Drawing.Size(229, 22);
-            this.tsiOpenBuildArgPath.Text = "Open Build Argument Config";
-            this.tsiOpenBuildArgPath.Click += new System.EventHandler(this.tsiOpenBuildArgPath_Click);
-            // 
-            // tsiOpenRunArgPath
-            // 
-            this.tsiOpenRunArgPath.Name = "tsiOpenRunArgPath";
-            this.tsiOpenRunArgPath.Size = new System.Drawing.Size(229, 22);
-            this.tsiOpenRunArgPath.Text = "Open Run Argument Config";
-            this.tsiOpenRunArgPath.Click += new System.EventHandler(this.tsiOpenRunArgPath_Click);
+            this.clearProjectDirectoryToolStripMenuItem.Name = "clearProjectDirectoryToolStripMenuItem";
+            this.clearProjectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.clearProjectDirectoryToolStripMenuItem.Text = "Clear Project Directory";
+            this.clearProjectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.clearProjectDirectoryToolStripMenuItem_Click);
             // 
             // HLLiveOutputViewerForm
             // 
@@ -306,6 +315,7 @@ namespace VisCPU.HL.Forms
         private System.Windows.Forms.ToolStripMenuItem tsiOpenRuntimePath;
         private System.Windows.Forms.ToolStripMenuItem tsiOpenBuildArgPath;
         private System.Windows.Forms.ToolStripMenuItem tsiOpenRunArgPath;
+        private System.Windows.Forms.ToolStripMenuItem clearProjectDirectoryToolStripMenuItem;
     }
 }
 

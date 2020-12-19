@@ -26,7 +26,7 @@ public var ReadLine(var buf, var len)
 	while(counter < len)
 	{
 		var char = Read();
-		if(char == 0xD)
+		while(char == 0xD)
 		{
 			char = Read();
 		}
@@ -35,11 +35,9 @@ public var ReadLine(var buf, var len)
 		{
 			return counter;
 		}
-		else
-		{
-			buf[counter]  = char;
-			counter = counter + 1;
-		}
+		
+		buf[counter]  = char;
+		counter = counter + 1;
 	}
 	return counter;
 }

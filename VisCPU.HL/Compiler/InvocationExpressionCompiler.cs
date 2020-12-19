@@ -169,9 +169,21 @@ namespace VisCPU.HL.Compiler
                 {
                     ExpressionTarget arg = compilation.Parse( parameter ).MakeAddress( compilation );
 
+                    if(arg.TypeDefinition.Name == "var")
                     compilation.ProgramCode.Add(
                                                 $"PUSH {arg.ResultAddress}; Push Param {parameter}"
                                                );
+                    else
+                    {
+                        string v = compilation.GetTempVar();
+                        compilation.ProgramCode.Add(
+                                                    $"LOAD {v} {arg.ResultAddress}; Push Param {parameter}"
+                                                   );
+                        compilation.ProgramCode.Add(
+                                                    $"PUSH {v}; Push Param {parameter}"
+                                                   );
+                        compilation.ReleaseTempVar(v);
+                    }
 
                     compilation.ReleaseTempVar( arg.ResultAddress );
                 }

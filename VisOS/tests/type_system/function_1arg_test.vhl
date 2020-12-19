@@ -1,0 +1,51 @@
+#include "../../sys/driver/test/test_device.vhl"
+
+string(str_var_test_name, "CTYPE_1VAR_ARGS_Test");
+string(str_const_test_name, "CTYPE_1CONST_ARGS_Test");
+string(str_generic_error, "Generic Error");
+
+class TestClass
+{
+	var a;
+	var b;
+}
+
+TestClass const_ar;
+
+private void TestXY(TestClass arg1)
+{
+	if(arg1.b == 5)
+	{
+		PassTest();
+		return;
+		
+	}
+	FailTest(ptr_of(str_generic_error), size_of(str_generic_error));
+	return;
+}
+
+private void CustomTypeV1ArgsTest()
+{
+	TestClass ar;
+	ar.b = 5;
+
+	BeginTest(ptr_of(str_var_test_name), size_of(str_var_test_name));
+	TestXY(ar);
+	return;
+}
+
+private void CustomTypeC1ArgsTest()
+{
+	const_ar.b = 5;
+	BeginTest(ptr_of(str_const_test_name), size_of(str_const_test_name));
+	TestXY(const_ar);
+	return;
+}
+
+public void CustomType1ArgsTest()
+{
+	CustomTypeC1ArgsTest();
+	CustomTypeV1ArgsTest();
+	return;
+}
+CustomType1ArgsTest();
