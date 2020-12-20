@@ -1,4 +1,7 @@
-﻿using VisCPU.Utility.ArgumentParser;
+﻿using System;
+using System.IO;
+
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core
@@ -29,7 +32,10 @@ namespace VisCPU.Console.Core
         {
             Settings.RegisterDefaultLoader(
                                            new JSONSettingsLoader(),
-                                           "config/console.json",
+                                           Path.Combine(
+                                                        AppDomain.CurrentDomain.BaseDirectory,
+                                                        "config/console.json"
+                                                       ),
                                            new CLISettings()
                                           );
         }

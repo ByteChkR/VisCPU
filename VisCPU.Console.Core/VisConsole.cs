@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using VisCPU.Console.Core.Subsystems;
+using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
@@ -14,12 +16,14 @@ namespace VisCPU.Console.Core
     public static class VisConsole
     {
 
-        private static readonly Dictionary < string, ConsoleSubsystem > subsystems =
+        private static readonly Dictionary < string, ConsoleSubsystem > subSystems =
             new Dictionary < string, ConsoleSubsystem >
             {
                 { "run", new ProgramRunner() },
                 { "build", new ProgramBuilder() },
-                { "help", new HelpSubSystem() }
+                { "help", new HelpSubSystem() },
+                { "project", new ModuleSubSystem() },
+                { "origin", new OriginSubSystem() },
             };
 
         #region Public
@@ -41,16 +45,16 @@ namespace VisCPU.Console.Core
 
                 return;
             }
-
+            
             CLISettings s = CLISettings.Create();
             EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse( args, s, Logger.Settings );
 
-            RunConsole( s, args );
+            RunConsole( s, args, subSystems );
         }
 
-        private static void RunConsole( CLISettings settings, string[] args )
+        internal static void RunConsole( CLISettings settings, string[] args, Dictionary<string, ConsoleSubsystem> subsystems )
         {
             do
             {

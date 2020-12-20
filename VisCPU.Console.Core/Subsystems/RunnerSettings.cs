@@ -107,7 +107,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         static RunnerSettings()
         {
-            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), "config/runner.json", new RunnerSettings() );
+            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
+                                                 AppDomain.CurrentDomain.BaseDirectory,
+                                                 "config/runner.json"
+                                                ), new RunnerSettings() );
         }
 
         private static string FindBinary( string arg )

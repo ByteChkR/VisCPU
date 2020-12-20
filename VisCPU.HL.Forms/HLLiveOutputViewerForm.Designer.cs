@@ -47,6 +47,11 @@ namespace VisCPU.HL.Forms
             this.tsiOpenBuildArgPath = new System.Windows.Forms.ToolStripMenuItem();
             this.tsiOpenRunArgPath = new System.Windows.Forms.ToolStripMenuItem();
             this.clearProjectDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.modulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addDependencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildModuleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.publishToLocalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tslPercentage = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tslCurrentTask = new System.Windows.Forms.ToolStripStatusLabel();
@@ -135,7 +140,8 @@ namespace VisCPU.HL.Forms
             this.tsiRun,
             this.tsiBuild,
             this.tsiConfig,
-            this.clearProjectDirectoryToolStripMenuItem});
+            this.clearProjectDirectoryToolStripMenuItem,
+            this.modulesToolStripMenuItem});
             this.tsiEditorOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsiEditorOptions.Name = "tsiEditorOptions";
             this.tsiEditorOptions.Size = new System.Drawing.Size(96, 20);
@@ -207,6 +213,45 @@ namespace VisCPU.HL.Forms
             this.clearProjectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.clearProjectDirectoryToolStripMenuItem.Text = "Clear Project Directory";
             this.clearProjectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.clearProjectDirectoryToolStripMenuItem_Click);
+            // 
+            // modulesToolStripMenuItem
+            // 
+            this.modulesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addDependencyToolStripMenuItem,
+            this.buildModuleToolStripMenuItem,
+            this.restoreToolStripMenuItem,
+            this.publishToLocalToolStripMenuItem});
+            this.modulesToolStripMenuItem.Name = "modulesToolStripMenuItem";
+            this.modulesToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.modulesToolStripMenuItem.Text = "Modules";
+            // 
+            // addDependencyToolStripMenuItem
+            // 
+            this.addDependencyToolStripMenuItem.Name = "addDependencyToolStripMenuItem";
+            this.addDependencyToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.addDependencyToolStripMenuItem.Text = "Add Dependency";
+            this.addDependencyToolStripMenuItem.Click += new System.EventHandler(this.addDependencyToolStripMenuItem_Click);
+            // 
+            // buildModuleToolStripMenuItem
+            // 
+            this.buildModuleToolStripMenuItem.Name = "buildModuleToolStripMenuItem";
+            this.buildModuleToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.buildModuleToolStripMenuItem.Text = "Build Module";
+            this.buildModuleToolStripMenuItem.Click += new System.EventHandler(this.buildModuleToolStripMenuItem_Click);
+            // 
+            // restoreToolStripMenuItem
+            // 
+            this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
+            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.restoreToolStripMenuItem.Text = "Restore";
+            this.restoreToolStripMenuItem.Click += new System.EventHandler(this.restoreToolStripMenuItem_Click);
+            // 
+            // publishToLocalToolStripMenuItem
+            // 
+            this.publishToLocalToolStripMenuItem.Name = "publishToLocalToolStripMenuItem";
+            this.publishToLocalToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.publishToLocalToolStripMenuItem.Text = "Publish to Local";
+            this.publishToLocalToolStripMenuItem.Click += new System.EventHandler(this.publishToLocalToolStripMenuItem_Click);
             // 
             // tslPercentage
             // 
@@ -316,6 +361,11 @@ namespace VisCPU.HL.Forms
         private System.Windows.Forms.ToolStripMenuItem tsiOpenBuildArgPath;
         private System.Windows.Forms.ToolStripMenuItem tsiOpenRunArgPath;
         private System.Windows.Forms.ToolStripMenuItem clearProjectDirectoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem modulesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addDependencyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem buildModuleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem restoreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem publishToLocalToolStripMenuItem;
     }
 }
 

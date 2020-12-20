@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -87,7 +88,11 @@ namespace VisCPU.Console.Core.Subsystems
 
         static BuilderSettings()
         {
-            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), "config/build.json", new BuilderSettings() );
+            
+            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
+                                                 AppDomain.CurrentDomain.BaseDirectory,
+                                                 "config/build.json"
+                                                ), new BuilderSettings() );
         }
 
         private static string CompressFile( string originalfile )

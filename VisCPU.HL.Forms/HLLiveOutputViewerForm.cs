@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using VisCPU.HL.Modules;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
@@ -21,6 +23,12 @@ namespace VisCPU.HL.Forms
         private Task taskProcessor = null;
         private const string CONSOLE_BUILD_DEFAULT_ARGS = "[build] -export -i {0} -steps HL-expr bin -clean false";
         private const string CONSOLE_RUN_DEFAULT_ARGS = "[build;run] -export -i {0} -steps HL-expr bin -clean false";
+        private const string CONSOLE_CREATE_PROJECT_ARGS = "project create";
+        private const string CONSOLE_ADD_DEP_PROJECT_ARGS = "project add";
+        private const string CONSOLE_PACK_PROJECT_ARGS = "project pack";
+        private const string CONSOLE_RESTORE_PROJECT_ARGS = "project restore";
+        private const string CONSOLE_PUBLISH_PROJECT_ARGS = "project [restore;pack;publish]";
+
 
         private readonly Dictionary<string, RichTextBox> m_CodeInPages = new Dictionary<string, RichTextBox>();
         private readonly Dictionary<string, RichTextBox> m_CodeOutPages = new Dictionary<string, RichTextBox>();
@@ -39,7 +47,7 @@ namespace VisCPU.HL.Forms
         private static string ConsoleBinConfigPath => Path.Combine(Application.StartupPath, "runtime_path.txt");
 
         private string ConsoleRuntimePath =>
-            Path.Combine( Application.StartupPath, File.ReadAllText( ConsoleBinConfigPath ) );
+            Path.Combine(Application.StartupPath, File.ReadAllText(ConsoleBinConfigPath));
 
         private static string ConsoleRunArgConfigPath => Path.Combine(Application.StartupPath, "runtime_args.txt");
 
@@ -58,7 +66,7 @@ namespace VisCPU.HL.Forms
 
         #region Public
 
-        
+
         public HLLiveOutputViewerForm(string file = null)
         {
             if (!File.Exists(ConsoleBuildArgConfigPath))
@@ -97,7 +105,11 @@ namespace VisCPU.HL.Forms
             (RichTextBox rIn, RichTextBox rOut) = GetPage(Path.Combine(m_SourceFolder, EntryVhlFile));
 
             SizeChanged += HLLiveOutputViewerForm_SizeChanged;
-            Closing += (a, b) => m_ConsoleProcess?.Kill();
+            Closing += (a, b) =>
+                       {
+                           if (m_ConsoleProcess != null && !m_ConsoleProcess.HasExited)
+                               m_ConsoleProcess.Kill();
+                       };
         }
 
         #endregion
@@ -117,6 +129,9 @@ namespace VisCPU.HL.Forms
 
                 if (File.Exists(ConsoleRuntimePath))
                 {
+                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
+                    p.Start();
+                    p.WaitForExit();
                     RunConsoleProcess(
                                       ConsoleRuntimePath,
                                       string.Format(RunArgs, GetEntryPath())
@@ -144,6 +159,9 @@ namespace VisCPU.HL.Forms
 
                 if (File.Exists(ConsoleRuntimePath))
                 {
+                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
+                    p.Start();
+                    p.WaitForExit();
                     RunConsoleProcess(
                                       ConsoleRuntimePath,
                                       string.Format(BuildArgs, GetEntryPath())
@@ -322,14 +340,21 @@ namespace VisCPU.HL.Forms
 
         private void OpenFolder(string file)
         {
-            if ( file != null )
+            if (file != null)
             {
-                File.WriteAllText( LastWorkingDirConfig, file );
+                File.WriteAllText(LastWorkingDirConfig, file);
             }
-            
+
             if (File.Exists(LastWorkingDirConfig))
             {
                 m_SourceFolder = File.ReadAllText(LastWorkingDirConfig);
+
+                if (!File.Exists(Path.Combine(m_SourceFolder, "project.json")))
+                {
+                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_CREATE_PROJECT_ARGS, m_SourceFolder);
+                    p.Start();
+                    p.WaitForExit();
+                }
 
                 if (Directory.Exists(m_SourceFolder))
                 {
@@ -346,7 +371,15 @@ namespace VisCPU.HL.Forms
                 r = fbdSelectDir.ShowDialog();
             }
 
-            m_SourceFolder = fbdSelectDir.SelectedPath + "/";
+            m_SourceFolder = fbdSelectDir.SelectedPath;
+
+            if (!File.Exists(Path.Combine(m_SourceFolder, "project.json")))
+            {
+                Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_CREATE_PROJECT_ARGS, m_SourceFolder);
+                p.Start();
+                p.WaitForExit();
+            }
+
             Directory.SetCurrentDirectory(m_SourceFolder);
             File.WriteAllText(LastWorkingDirConfig, m_SourceFolder);
         }
@@ -420,17 +453,10 @@ namespace VisCPU.HL.Forms
                        );
         }
 
-        private void RunConsoleProcess(string path, string args)
+        private Process RunConsoleProcessHidden(string path, string args, string workingDir = null)
         {
-            if (m_IsBuilding)
-            {
-                return;
-            }
-
-            rtbConsoleOut.Text = "";
-            m_IsBuilding = true;
             ProcessStartInfo psi = new ProcessStartInfo(path, args);
-            psi.WorkingDirectory = Path.GetDirectoryName(path);
+            psi.WorkingDirectory = workingDir ?? Path.GetDirectoryName(path);
             psi.CreateNoWindow = true;
             psi.UseShellExecute = false;
             psi.RedirectStandardOutput = true;
@@ -444,7 +470,19 @@ namespace VisCPU.HL.Forms
             };
 
             m_ConsoleProcess = p;
+            return p;
+        }
 
+        private void RunConsoleProcess(string path, string args, string workingDir = null)
+        {
+            if (m_IsBuilding)
+            {
+                return;
+            }
+
+            rtbConsoleOut.Text = "";
+            m_IsBuilding = true;
+            Process p = RunConsoleProcessHidden(path, args, workingDir);
             p.OutputDataReceived += WriteConsoleOutput;
             p.ErrorDataReceived += WriteConsoleError;
             p.Exited += OnConsoleProcessExit;
@@ -497,31 +535,7 @@ namespace VisCPU.HL.Forms
 
         private void Startup()
         {
-            EnqueueTask(
-                        () =>
-                        {
-                            RunEditorInternalHLBuild(GetEntryPath());
-
-                            lock (m_StartLock)
-                            {
-                                m_StartFlag = true;
-                            }
-                        }
-                       );
-
-            while (true)
-            {
-                lock (m_StartLock)
-                {
-                    if (m_StartFlag)
-                    {
-                        break;
-                    }
-                }
-
-                Application.DoEvents();
-            }
-
+            RunEditorInternalHLBuild(GetEntryPath());
             m_StartFlag = false;
             ProcessUIThreadQueue();
         }
@@ -665,13 +679,17 @@ namespace VisCPU.HL.Forms
 
         private void CleanProjectFolder()
         {
+            if (Directory.Exists(Path.Combine(m_SourceFolder, "build")))
+                Directory.Delete(Path.Combine(m_SourceFolder, "build"), true);
+
+
             IEnumerable<string> sourceFiles = Directory.
                                               GetFiles(m_SourceFolder, "*.*", SearchOption.AllDirectories).
                                               Select(Path.GetFullPath);
 
             foreach (string sourceFile in sourceFiles)
             {
-                if (Path.GetExtension(sourceFile) == ".vhl")
+                if (Path.GetExtension(sourceFile) == ".vhl" || Path.GetExtension(sourceFile) == ".json")
                 {
                     continue;
                 }
@@ -681,11 +699,42 @@ namespace VisCPU.HL.Forms
                 File.Delete(sourceFile);
             }
 
+            ModuleTarget t = ModuleManager.LoadModuleTarget(Path.Combine(m_SourceFolder, "project.json"));
+
+            foreach (ModuleDependency moduleDependency in t.Dependencies)
+            {
+                WriteConsoleOut("Deleting Dependency: " + moduleDependency.ModuleName);
+                if (Directory.Exists(Path.Combine(m_SourceFolder, moduleDependency.ModuleName)))
+                    Directory.Delete(Path.Combine(m_SourceFolder, moduleDependency.ModuleName), true);
+            }
+
         }
 
         private void clearProjectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             CleanProjectFolder();
+        }
+
+        private void addDependencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_ADD_DEP_PROJECT_ARGS, m_SourceFolder);
+        }
+
+        private void buildModuleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CleanProjectFolder();
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_PACK_PROJECT_ARGS, m_SourceFolder);
+        }
+
+        private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
+        }
+
+        private void publishToLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CleanProjectFolder();
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_PUBLISH_PROJECT_ARGS, m_SourceFolder);
         }
     }
 

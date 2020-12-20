@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Compiler.Linking;
+using VisCPU.HL.Modules;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -21,6 +22,7 @@ namespace VisCPU.Console.Core.Subsystems
         public override void Run( IEnumerable < string > args )
         {
             BuilderSettings settings = BuilderSettings.Create();
+            
             LinkerSettings ls = LinkerSettings.Create();
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
