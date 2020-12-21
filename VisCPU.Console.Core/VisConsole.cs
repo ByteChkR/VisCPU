@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
+using VisCPU.Console.Core.Subsystems.Modules;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;

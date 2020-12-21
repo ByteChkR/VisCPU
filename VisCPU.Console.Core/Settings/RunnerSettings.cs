@@ -4,43 +4,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
-
 using Newtonsoft.Json;
-
-using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 
-namespace VisCPU.Console.Core.Subsystems
+namespace VisCPU.Console.Core.Settings
 {
-
-    public class MemoryBusSettings
-    {
-        [Argument(Name = "bus.devices")]
-        public string[] MemoryDevices = new[] { "./config/memory/default.json" };
-
-        static MemoryBusSettings()
-        {
-            Settings.RegisterDefaultLoader(new JSONSettingsLoader(), "./config/memory_bus.json", new MemoryBusSettings());
-        }
-
-        public static MemoryBusSettings Create() => Settings.GetSettings<MemoryBusSettings>();
-
-        public MemoryBus CreateBus(params Peripheral[] additionalPeripherals)
-        {
-            return new MemoryBus(
-                                 MemoryDevices.Select(
-                                                      x => new Memory(
-                                                                      Settings.GetSettings < MemorySettings >(
-                                                                           x
-                                                                          )
-                                                                     )
-                                                     ).Concat(additionalPeripherals)
-                                );
-        }
-
-    }
-
     public class RunnerSettings
     {
 
@@ -98,7 +67,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static RunnerSettings Create()
         {
-            return Settings.GetSettings < RunnerSettings >();
+            return Utility.Settings.Settings.GetSettings < RunnerSettings >();
         }
 
         #endregion
@@ -107,7 +76,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         static RunnerSettings()
         {
-            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
+            Utility.Settings.Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
                                                  AppDomain.CurrentDomain.BaseDirectory,
                                                  "config/runner.json"
                                                 ), new RunnerSettings() );

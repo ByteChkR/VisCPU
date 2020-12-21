@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Compiler.Linking;
+using VisCPU.Console.Core.Settings;
 using VisCPU.HL.Modules;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;

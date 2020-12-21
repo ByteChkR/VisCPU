@@ -2,55 +2,11 @@
 
 using VisCPU.Peripherals.Console;
 using VisCPU.Utility;
-using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings;
 
 namespace VisCPU.Peripherals.Memory
 {
-    public class MemorySettings
-    {
-
-        [Argument(Name = "memory.read")]
-        public bool EnableRead = true;
-        [Argument(Name = "memory.write")]
-        public bool EnableWrite = true;
-        [Argument(Name = "memory.persistent")]
-        public bool Persistent = false;
-        [Argument(Name = "memory.persistent.path")]
-        public string PersistentPath = "./config/memory/states/default.bin";
-        [Argument(Name = "memory.size")]
-        public uint Size = 0xFFFF;
-        [Argument(Name = "memory.start")]
-        public uint Start = 0;
-
-        static MemorySettings()
-        {
-            Settings.RegisterDefaultLoader(
-                                           new JSONSettingsLoader(),
-                                           "./config/memory/default.json",
-                                           new MemorySettings()
-                                          );
-        }
-
-        public static MemorySettings Create()
-        {
-            return Settings.GetSettings < MemorySettings >();
-        }
-        
-    }
-    
-    public class MemoryPersistentPathUnsetEvent:WarningEvent
-    {
-
-        private const string EVENT_KEY = "memory-path-not-set";
-        public MemoryPersistentPathUnsetEvent() : base( "The Memory has the 'Persistent' flag set to true but the PersistentPath is not set.", EVENT_KEY)
-        {
-        }
-
-    }
-
     public class Memory : Peripheral
     {
 

@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using VisCPU.HL.Modules.Data;
+using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.HL.Modules.Resolvers;
 
-using VisCPU.HL.Modules;
-
-namespace VisCPU.Console.Core.Subsystems
+namespace VisCPU.Console.Core.Subsystems.Modules
 {
 
     public class ModuleRestoreSubSystem : ConsoleSubsystem

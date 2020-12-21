@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using VisCPU.HL.Modules.Data;
+using VisCPU.HL.Modules.ModuleManagers;
 
-using VisCPU.HL.Modules;
-
-namespace VisCPU.Console.Core.Subsystems
+namespace VisCPU.Console.Core.Subsystems.Modules
 {
 
     public class ModulePackSubSystem : ConsoleSubsystem

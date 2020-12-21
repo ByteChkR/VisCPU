@@ -4,9 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
-
 using Newtonsoft.Json;
-
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
@@ -16,7 +14,7 @@ using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
 
-namespace VisCPU.Console.Core.Subsystems
+namespace VisCPU.Console.Core.Settings
 {
 
     public class BuilderSettings
@@ -79,7 +77,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static BuilderSettings Create()
         {
-            return Settings.GetSettings < BuilderSettings >();
+            return Utility.Settings.Settings.GetSettings < BuilderSettings >();
         }
 
         #endregion
@@ -89,7 +87,7 @@ namespace VisCPU.Console.Core.Subsystems
         static BuilderSettings()
         {
             
-            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
+            Utility.Settings.Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
                                                  AppDomain.CurrentDomain.BaseDirectory,
                                                  "config/build.json"
                                                 ), new BuilderSettings() );
@@ -131,7 +129,7 @@ namespace VisCPU.Console.Core.Subsystems
                                          ) +
                              ".vbin";
 
-            if ( Settings.GetSettings < LinkerSettings >().ExportLinkerInfo )
+            if ( Utility.Settings.Settings.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
                 comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }

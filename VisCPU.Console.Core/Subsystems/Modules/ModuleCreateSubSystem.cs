@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using VisCPU.HL.Modules.ModuleManagers;
 
-using VisCPU.HL.Modules;
-
-namespace VisCPU.Console.Core.Subsystems
+namespace VisCPU.Console.Core.Subsystems.Modules
 {
 
     public class ModuleCreateSubSystem : ConsoleSubsystem

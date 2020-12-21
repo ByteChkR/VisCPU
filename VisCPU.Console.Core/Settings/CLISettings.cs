@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 
-namespace VisCPU.Console.Core
+namespace VisCPU.Console.Core.Settings
 {
 
     public class CLISettings
@@ -21,7 +20,7 @@ namespace VisCPU.Console.Core
 
         public static CLISettings Create()
         {
-            return Settings.GetSettings < CLISettings >();
+            return Utility.Settings.Settings.GetSettings < CLISettings >();
         }
 
         #endregion
@@ -30,7 +29,7 @@ namespace VisCPU.Console.Core
 
         static CLISettings()
         {
-            Settings.RegisterDefaultLoader(
+            Utility.Settings.Settings.RegisterDefaultLoader(
                                            new JSONSettingsLoader(),
                                            Path.Combine(
                                                         AppDomain.CurrentDomain.BaseDirectory,

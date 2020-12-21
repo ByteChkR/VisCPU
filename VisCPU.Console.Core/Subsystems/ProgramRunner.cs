@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Memory;

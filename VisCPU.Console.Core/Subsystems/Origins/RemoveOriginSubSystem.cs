@@ -5,16 +5,14 @@ using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
 {
-    public class AddOriginSubSystem : ConsoleSubsystem
+    public class RemoveOriginSubSystem : ConsoleSubsystem
     {
 
         public override void Run(IEnumerable<string> args)
         {
             OriginSettings s = Settings.GetSettings<OriginSettings>();
-            string[] a = args.ToArray();
-            string name = a[0];
-            string url = a[1];
-            s.origins.Add(name, url);
+            string name = args.First();
+            s.origins.Remove(name);
             Settings.SaveSettings(s);
         }
 

@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using VisCPU.Console.Core.Settings;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
 {
-    public class AddOriginSubSystem : ConsoleSubsystem
+    public class ListOriginSubSystem : ConsoleSubsystem
     {
 
         public override void Run(IEnumerable<string> args)
         {
             OriginSettings s = Settings.GetSettings<OriginSettings>();
-            string[] a = args.ToArray();
-            string name = a[0];
-            string url = a[1];
-            s.origins.Add(name, url);
-            Settings.SaveSettings(s);
+
+            foreach (KeyValuePair<string, string> keyValuePair in s.origins)
+            {
+                Log($"{keyValuePair.Key} : {keyValuePair.Value}");
+            }
         }
 
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using VisCPU.Compiler.Linking;
+using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Memory;

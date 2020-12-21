@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using VisCPU.HL.Modules;
+using VisCPU.HL.Modules.Data;
+using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
