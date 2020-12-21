@@ -13,7 +13,7 @@ namespace VisCPU.Utility.Settings.Events
         #region Public
 
         public SettingsLoaderNotFoundEvent( Type targetType, bool canContinue = false ) : base(
-             $"Could not find Settings Loader for Type: '{targetType.FullName}'",
+             $"Could not find SettingsSystem Loader for Type: '{targetType.FullName}'",
              EVENT_KEY,
              canContinue
             )

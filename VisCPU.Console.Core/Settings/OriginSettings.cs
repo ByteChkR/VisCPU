@@ -10,17 +10,17 @@ namespace VisCPU.Console.Core.Settings
     {
         static OriginSettings()
         {
-            Utility.Settings.Settings.RegisterDefaultLoader(new JSONSettingsLoader(), Path.Combine(
+            Utility.Settings.SettingsSystem.RegisterDefaultLoader(new JSONSettingsLoader(), Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
                 "config/origins.json"
             ), new OriginSettings());
         }
         public Dictionary<string, string> origins = new Dictionary<string, string>
         {
-            { "local", Utility.Settings.Settings.GetDefaultFile < OriginSettings >() }
+            { "local", Utility.Settings.SettingsSystem.GetDefaultFile < OriginSettings >() }
         };
 
-        public static OriginSettings Create() => Utility.Settings.Settings.GetSettings < OriginSettings >();
+        public static OriginSettings Create() => Utility.Settings.SettingsSystem.GetSettings < OriginSettings >();
 
     }
 }

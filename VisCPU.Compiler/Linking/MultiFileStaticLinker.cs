@@ -21,7 +21,7 @@ namespace VisCPU.Compiler.Linking
         {
             Dictionary < FileReference, LinkerTarget > tree = DiscoverCompilationTree( target );
 
-            return ProcessOrdered( target, tree, !Settings.GetSettings < LinkerSettings >().NoHiddenItems );
+            return ProcessOrdered( target, tree, !SettingsSystem.GetSettings < LinkerSettings >().NoHiddenItems );
         }
 
         #endregion

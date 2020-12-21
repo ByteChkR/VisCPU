@@ -58,7 +58,7 @@ namespace VisCPU.Tests.Utils
                                          ) +
                              ".vbin";
 
-            if ( Settings.GetSettings < LinkerSettings >().ExportLinkerInfo )
+            if ( SettingsSystem.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
                 comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }

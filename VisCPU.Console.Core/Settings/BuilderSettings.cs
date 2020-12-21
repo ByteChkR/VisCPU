@@ -77,7 +77,7 @@ namespace VisCPU.Console.Core.Settings
 
         public static BuilderSettings Create()
         {
-            return Utility.Settings.Settings.GetSettings < BuilderSettings >();
+            return Utility.Settings.SettingsSystem.GetSettings < BuilderSettings >();
         }
 
         #endregion
@@ -87,7 +87,7 @@ namespace VisCPU.Console.Core.Settings
         static BuilderSettings()
         {
             
-            Utility.Settings.Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
+            Utility.Settings.SettingsSystem.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
                                                  AppDomain.CurrentDomain.BaseDirectory,
                                                  "config/build.json"
                                                 ), new BuilderSettings() );
@@ -129,7 +129,7 @@ namespace VisCPU.Console.Core.Settings
                                          ) +
                              ".vbin";
 
-            if ( Utility.Settings.Settings.GetSettings < LinkerSettings >().ExportLinkerInfo )
+            if ( Utility.Settings.SettingsSystem.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
                 comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }

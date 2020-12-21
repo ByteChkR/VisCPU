@@ -10,10 +10,10 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public override void Run(IEnumerable<string> args)
         {
-            OriginSettings s = Settings.GetSettings<OriginSettings>();
+            OriginSettings s = SettingsSystem.GetSettings<OriginSettings>();
             string name = args.First();
             s.origins.Remove(name);
-            Settings.SaveSettings(s);
+            SettingsSystem.SaveSettings(s);
         }
 
     }

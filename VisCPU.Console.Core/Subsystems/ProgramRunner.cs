@@ -39,12 +39,12 @@ namespace VisCPU.Console.Core.Subsystems
                                        mbs
                                       );
 
-            Settings.SaveSettings( settings );
-            Settings.SaveSettings( cins );
-            Settings.SaveSettings( couts );
-            Settings.SaveSettings(hls);
-            Settings.SaveSettings(ms);
-            Settings.SaveSettings(mbs);
+            SettingsSystem.SaveSettings( settings );
+            SettingsSystem.SaveSettings( cins );
+            SettingsSystem.SaveSettings( couts );
+            SettingsSystem.SaveSettings(hls);
+            SettingsSystem.SaveSettings(ms);
+            SettingsSystem.SaveSettings(mbs);
 
             if ( settings.InputFiles == null )
             {

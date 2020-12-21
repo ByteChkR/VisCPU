@@ -23,7 +23,7 @@ namespace VisCPU.HL.Modules.Resolvers
 
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config/module"));
 
-                Settings.RegisterDefaultLoader(
+                SettingsSystem.RegisterDefaultLoader(
                     new JSONSettingsLoader(),
                     Path.Combine(
                         AppDomain.CurrentDomain.BaseDirectory,
@@ -31,7 +31,7 @@ namespace VisCPU.HL.Modules.Resolvers
                     ),
                     new ModuleResolverSettings()
                 );
-                ResolverSettings = Settings.GetSettings<ModuleResolverSettings>();
+                ResolverSettings = SettingsSystem.GetSettings<ModuleResolverSettings>();
                 Manager = new LocalModuleManager(ResolverSettings.LocalModuleRoot);
             }
         }

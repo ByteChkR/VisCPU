@@ -18,7 +18,7 @@ namespace VisCPU.Compiler.Linking
 
         public static LinkerSettings Create()
         {
-            return Settings.GetSettings < LinkerSettings >();
+            return SettingsSystem.GetSettings < LinkerSettings >();
         }
 
         #endregion
@@ -27,7 +27,7 @@ namespace VisCPU.Compiler.Linking
 
         static LinkerSettings()
         {
-            Settings.RegisterDefaultLoader( new JSONSettingsLoader(), "config/linker.json", new LinkerSettings() );
+            SettingsSystem.RegisterDefaultLoader( new JSONSettingsLoader(), "config/linker.json", new LinkerSettings() );
         }
 
         #endregion

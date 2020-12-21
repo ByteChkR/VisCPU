@@ -20,7 +20,7 @@ namespace VisCPU.Console.Core.Settings
 
         public static CLISettings Create()
         {
-            return Utility.Settings.Settings.GetSettings < CLISettings >();
+            return Utility.Settings.SettingsSystem.GetSettings < CLISettings >();
         }
 
         #endregion
@@ -29,7 +29,7 @@ namespace VisCPU.Console.Core.Settings
 
         static CLISettings()
         {
-            Utility.Settings.Settings.RegisterDefaultLoader(
+            Utility.Settings.SettingsSystem.RegisterDefaultLoader(
                                            new JSONSettingsLoader(),
                                            Path.Combine(
                                                         AppDomain.CurrentDomain.BaseDirectory,

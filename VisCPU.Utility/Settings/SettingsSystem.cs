@@ -9,7 +9,7 @@ using VisCPU.Utility.Settings.Events;
 namespace VisCPU.Utility.Settings
 {
 
-    public static class Settings
+    public static class SettingsSystem
     {
 
         private struct SettingsEntry

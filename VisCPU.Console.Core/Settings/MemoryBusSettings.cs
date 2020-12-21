@@ -12,17 +12,17 @@ namespace VisCPU.Console.Core.Settings
 
         static MemoryBusSettings()
         {
-            Utility.Settings.Settings.RegisterDefaultLoader(new JSONSettingsLoader(), "./config/memory_bus.json", new MemoryBusSettings());
+            Utility.Settings.SettingsSystem.RegisterDefaultLoader(new JSONSettingsLoader(), "./config/memory_bus.json", new MemoryBusSettings());
         }
 
-        public static MemoryBusSettings Create() => Utility.Settings.Settings.GetSettings<MemoryBusSettings>();
+        public static MemoryBusSettings Create() => Utility.Settings.SettingsSystem.GetSettings<MemoryBusSettings>();
 
         public MemoryBus CreateBus(params Peripheral[] additionalPeripherals)
         {
             return new MemoryBus(
                 MemoryDevices.Select(
                     x => new Memory(
-                        Utility.Settings.Settings.GetSettings < MemorySettings >(
+                        Utility.Settings.SettingsSystem.GetSettings < MemorySettings >(
                             x
                         )
                     )

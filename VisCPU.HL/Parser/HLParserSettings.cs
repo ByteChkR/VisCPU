@@ -5,7 +5,7 @@ namespace VisCPU.HL.Parser
 {
 
     /// <summary>
-    ///     XL Parser Settings and Symbol Mappings
+    ///     XL Parser SettingsSystem and Symbol Mappings
     /// </summary>
     public class HLParserSettings
     {

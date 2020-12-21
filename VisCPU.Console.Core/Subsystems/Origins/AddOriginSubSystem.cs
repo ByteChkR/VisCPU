@@ -10,12 +10,12 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public override void Run(IEnumerable<string> args)
         {
-            OriginSettings s = Settings.GetSettings<OriginSettings>();
+            OriginSettings s = SettingsSystem.GetSettings<OriginSettings>();
             string[] a = args.ToArray();
             string name = a[0];
             string url = a[1];
             s.origins.Add(name, url);
-            Settings.SaveSettings(s);
+            SettingsSystem.SaveSettings(s);
         }
 
     }

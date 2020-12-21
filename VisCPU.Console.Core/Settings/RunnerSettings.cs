@@ -67,7 +67,7 @@ namespace VisCPU.Console.Core.Settings
 
         public static RunnerSettings Create()
         {
-            return Utility.Settings.Settings.GetSettings < RunnerSettings >();
+            return Utility.Settings.SettingsSystem.GetSettings < RunnerSettings >();
         }
 
         #endregion
@@ -76,7 +76,7 @@ namespace VisCPU.Console.Core.Settings
 
         static RunnerSettings()
         {
-            Utility.Settings.Settings.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
+            Utility.Settings.SettingsSystem.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
                                                  AppDomain.CurrentDomain.BaseDirectory,
                                                  "config/runner.json"
                                                 ), new RunnerSettings() );

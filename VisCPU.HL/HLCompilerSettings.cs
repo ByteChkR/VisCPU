@@ -17,7 +17,7 @@ namespace VisCPU.HL
 
         public static HLCompilerSettings Create()
         {
-            return Settings.GetSettings < HLCompilerSettings >();
+            return SettingsSystem.GetSettings < HLCompilerSettings >();
         }
 
         #endregion
@@ -26,7 +26,7 @@ namespace VisCPU.HL
 
         static HLCompilerSettings()
         {
-            Settings.RegisterDefaultLoader(
+            SettingsSystem.RegisterDefaultLoader(
                                            new JSONSettingsLoader(),
                                            "config/hl-compiler.json",
                                            new HLCompilerSettings()

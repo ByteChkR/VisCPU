@@ -31,8 +31,8 @@ namespace VisCPU.Console.Core.Subsystems
                                        ls
                                       );
 
-            Settings.SaveSettings( ls );
-            Settings.SaveSettings( settings );
+            SettingsSystem.SaveSettings( ls );
+            SettingsSystem.SaveSettings( settings );
 
             if ( settings.InputFiles == null )
             {

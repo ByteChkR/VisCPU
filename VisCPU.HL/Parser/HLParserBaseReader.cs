@@ -21,7 +21,7 @@ namespace VisCPU.HL.Parser
         private readonly string input;
 
         /// <summary>
-        ///     XL Settings
+        ///     XL SettingsSystem
         /// </summary>
         private readonly HLParserSettings settings;
 
@@ -40,7 +40,7 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Public Constructor
         /// </summary>
-        /// <param name="settings">XL Settings</param>
+        /// <param name="settings">XL SettingsSystem</param>
         /// <param name="input">Source</param>
         public HLParserBaseReader( HLParserSettings settings, string input )
         {

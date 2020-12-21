@@ -15,7 +15,7 @@ namespace VisCPU.Peripherals.Console
 
         public ConsoleOutInterface()
         {
-            settings = Settings.GetSettings < ConsoleOutInterfaceSettings >();
+            settings = SettingsSystem.GetSettings < ConsoleOutInterfaceSettings >();
         }
 
         public override bool CanRead( uint address )

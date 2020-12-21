@@ -9,7 +9,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public override void Run(IEnumerable<string> args)
         {
-            OriginSettings s = Settings.GetSettings<OriginSettings>();
+            OriginSettings s = SettingsSystem.GetSettings<OriginSettings>();
 
             foreach (KeyValuePair<string, string> keyValuePair in s.origins)
             {

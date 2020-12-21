@@ -21,7 +21,7 @@ namespace VisCPU.Peripherals.Memory
 
         static MemorySettings()
         {
-            Settings.RegisterDefaultLoader(
+            SettingsSystem.RegisterDefaultLoader(
                 new JSONSettingsLoader(),
                 "./config/memory/default.json",
                 new MemorySettings()
@@ -30,7 +30,7 @@ namespace VisCPU.Peripherals.Memory
 
         public static MemorySettings Create()
         {
-            return Settings.GetSettings < MemorySettings >();
+            return SettingsSystem.GetSettings < MemorySettings >();
         }
         
     }

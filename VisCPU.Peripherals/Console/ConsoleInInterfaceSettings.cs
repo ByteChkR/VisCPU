@@ -19,7 +19,7 @@ namespace VisCPU.Peripherals.Console
 
         public static ConsoleInInterfaceSettings Create()
         {
-            return Settings.GetSettings < ConsoleInInterfaceSettings >();
+            return SettingsSystem.GetSettings < ConsoleInInterfaceSettings >();
         }
 
         #endregion
@@ -28,7 +28,7 @@ namespace VisCPU.Peripherals.Console
 
         static ConsoleInInterfaceSettings()
         {
-            Settings.RegisterDefaultLoader(
+            SettingsSystem.RegisterDefaultLoader(
                                            new JSONSettingsLoader(),
                                            "./config/console/in.json",
                                            new ConsoleInInterfaceSettings()
