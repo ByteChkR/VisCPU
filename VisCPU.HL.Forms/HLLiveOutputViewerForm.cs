@@ -21,6 +21,7 @@ namespace VisCPU.HL.Forms
         private const string CONSOLE_RUN_DEFAULT_ARGS =
             "[build;run] -linker:export -build:i {0} -run:i {0} -build:steps HL-expr bin -build:clean false";
         private const string CONSOLE_CREATE_PROJECT_ARGS = "project create";
+        private const string CONSOLE_CLEAN_PROJECT_ARGS = "project clean";
         private const string CONSOLE_ADD_DEP_PROJECT_ARGS = "project add";
         private const string CONSOLE_PACK_PROJECT_ARGS = "project pack";
         private const string CONSOLE_RESTORE_PROJECT_ARGS = "project restore";
@@ -115,38 +116,7 @@ namespace VisCPU.HL.Forms
 
         private void CleanProjectFolder()
         {
-            if (Directory.Exists(Path.Combine(m_SourceFolder, "build")))
-            {
-                Directory.Delete(Path.Combine(m_SourceFolder, "build"), true);
-            }
-
-
-            IEnumerable<string> sourceFiles = Directory.GetFiles(m_SourceFolder, "*.*", SearchOption.AllDirectories)
-                .Select(Path.GetFullPath);
-
-            foreach (string sourceFile in sourceFiles)
-            {
-                if (Path.GetExtension(sourceFile) == ".vhl" || Path.GetExtension(sourceFile) == ".json")
-                {
-                    continue;
-                }
-
-
-                WriteConsoleOut("Deleting File: " + sourceFile);
-                File.Delete(sourceFile);
-            }
-
-            ModuleTarget t = ModuleManager.LoadModuleTarget(Path.Combine(m_SourceFolder, "project.json"));
-
-            foreach (ModuleDependency moduleDependency in t.Dependencies)
-            {
-                WriteConsoleOut("Deleting Dependency: " + moduleDependency.ModuleName);
-                if (Directory.Exists(Path.Combine(m_SourceFolder, moduleDependency.ModuleName)))
-                {
-                    Directory.Delete(Path.Combine(m_SourceFolder, moduleDependency.ModuleName), true);
-                }
-            }
-
+            RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_CLEAN_PROJECT_ARGS, m_SourceFolder).Start();
         }
 
         private void clearProjectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
