@@ -35,6 +35,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         private readonly Dictionary<string, ConsoleSubsystem> subsystems =
             new Dictionary<string, ConsoleSubsystem>
             {
+                {"clean", new ModuleCleanSubSystem()},
                 {"create", new ModuleCreateSubSystem()},
                 {"pack", new ModulePackSubSystem()},
                 {"restore", new ModuleRestoreSubSystem()},

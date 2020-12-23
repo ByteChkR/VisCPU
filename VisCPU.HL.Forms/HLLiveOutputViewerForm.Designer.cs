@@ -71,7 +71,7 @@ namespace VisCPU.HL.Forms
             // 
             this.tcCodeOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcCodeOut.Location = new System.Drawing.Point(0, 0);
-            this.tcCodeOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tcCodeOut.Margin = new System.Windows.Forms.Padding(4);
             this.tcCodeOut.Name = "tcCodeOut";
             this.tcCodeOut.SelectedIndex = 0;
             this.tcCodeOut.Size = new System.Drawing.Size(580, 315);
@@ -81,7 +81,7 @@ namespace VisCPU.HL.Forms
             // 
             this.tcCodeIn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcCodeIn.Location = new System.Drawing.Point(0, 0);
-            this.tcCodeIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tcCodeIn.Margin = new System.Windows.Forms.Padding(4);
             this.tcCodeIn.Name = "tcCodeIn";
             this.tcCodeIn.SelectedIndex = 0;
             this.tcCodeIn.Size = new System.Drawing.Size(637, 315);
@@ -93,7 +93,7 @@ namespace VisCPU.HL.Forms
             this.panelConsole.Controls.Add(this.panelConsoleIn);
             this.panelConsole.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelConsole.Location = new System.Drawing.Point(0, 315);
-            this.panelConsole.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelConsole.Margin = new System.Windows.Forms.Padding(4);
             this.panelConsole.Name = "panelConsole";
             this.panelConsole.Size = new System.Drawing.Size(1217, 287);
             this.panelConsole.TabIndex = 4;
@@ -104,7 +104,7 @@ namespace VisCPU.HL.Forms
             this.rtbConsoleOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbConsoleOut.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.rtbConsoleOut.Location = new System.Drawing.Point(0, 0);
-            this.rtbConsoleOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rtbConsoleOut.Margin = new System.Windows.Forms.Padding(4);
             this.rtbConsoleOut.Name = "rtbConsoleOut";
             this.rtbConsoleOut.ReadOnly = true;
             this.rtbConsoleOut.Size = new System.Drawing.Size(1217, 224);
@@ -118,7 +118,7 @@ namespace VisCPU.HL.Forms
             this.panelConsoleIn.Controls.Add(this.btnSendInput);
             this.panelConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelConsoleIn.Location = new System.Drawing.Point(0, 224);
-            this.panelConsoleIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelConsoleIn.Margin = new System.Windows.Forms.Padding(4);
             this.panelConsoleIn.Name = "panelConsoleIn";
             this.panelConsoleIn.Size = new System.Drawing.Size(1217, 63);
             this.panelConsoleIn.TabIndex = 1;
@@ -282,7 +282,7 @@ namespace VisCPU.HL.Forms
             this.tbConsoleIn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbConsoleIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbConsoleIn.Location = new System.Drawing.Point(0, 0);
-            this.tbConsoleIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbConsoleIn.Margin = new System.Windows.Forms.Padding(4);
             this.tbConsoleIn.Name = "tbConsoleIn";
             this.tbConsoleIn.Size = new System.Drawing.Size(1117, 33);
             this.tbConsoleIn.TabIndex = 2;
@@ -291,7 +291,7 @@ namespace VisCPU.HL.Forms
             // 
             this.btnSendInput.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnSendInput.Location = new System.Drawing.Point(1117, 0);
-            this.btnSendInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSendInput.Margin = new System.Windows.Forms.Padding(4);
             this.btnSendInput.Name = "btnSendInput";
             this.btnSendInput.Size = new System.Drawing.Size(100, 63);
             this.btnSendInput.TabIndex = 1;
@@ -304,7 +304,7 @@ namespace VisCPU.HL.Forms
             this.panelRight.Controls.Add(this.tcCodeOut);
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
             this.panelRight.Location = new System.Drawing.Point(637, 0);
-            this.panelRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelRight.Margin = new System.Windows.Forms.Padding(4);
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(580, 315);
             this.panelRight.TabIndex = 5;
@@ -314,7 +314,7 @@ namespace VisCPU.HL.Forms
             this.panelLeft.Controls.Add(this.tcCodeIn);
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
-            this.panelLeft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelLeft.Margin = new System.Windows.Forms.Padding(4);
             this.panelLeft.Name = "panelLeft";
             this.panelLeft.Size = new System.Drawing.Size(637, 315);
             this.panelLeft.TabIndex = 6;
@@ -331,7 +331,7 @@ namespace VisCPU.HL.Forms
             this.Controls.Add(this.panelLeft);
             this.Controls.Add(this.panelRight);
             this.Controls.Add(this.panelConsole);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1127, 542);
             this.Name = "HLLiveOutputViewerForm";
             this.Text = "HL Live Output Viewer";
