@@ -5,42 +5,35 @@ using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Settings
 {
-
     public class CLISettings
     {
+        [Argument(Name = "cli:loop")] public bool Continuous = false;
 
-        [Argument( Name = "continuous" )]
-        [Argument( Name = "loop" )]
-        public bool Continuous = false;
-
-        [Argument( Name = "waitOnExit" )]
-        public bool WaitOnExit = false;
-
-        #region Public
-
-        public static CLISettings Create()
-        {
-            return Utility.Settings.SettingsSystem.GetSettings < CLISettings >();
-        }
-
-        #endregion
+        [Argument(Name = "cli:waitOnExit")] public bool WaitOnExit = false;
 
         #region Private
 
         static CLISettings()
         {
-            Utility.Settings.SettingsSystem.RegisterDefaultLoader(
-                                           new JSONSettingsLoader(),
-                                           Path.Combine(
-                                                        AppDomain.CurrentDomain.BaseDirectory,
-                                                        "config/console.json"
-                                                       ),
-                                           new CLISettings()
-                                          );
+            SettingsSystem.RegisterDefaultLoader(
+                new JSONSettingsLoader(),
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "config/console.json"
+                ),
+                new CLISettings()
+            );
         }
 
         #endregion
 
-    }
+        #region Public
 
+        public static CLISettings Create()
+        {
+            return SettingsSystem.GetSettings<CLISettings>();
+        }
+
+        #endregion
+    }
 }

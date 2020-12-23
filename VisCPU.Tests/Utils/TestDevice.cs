@@ -3,38 +3,36 @@ using System.Text;
 
 namespace VisCPU.Tests.Utils
 {
-
     public class TestDevice : Peripheral
     {
-
         private const uint TEST_BEGIN = 0xFFFF2000;
         private const uint TEST_FAIL = 0xFFFF2001;
         private const uint TEST_PASS = 0xFFFF2002;
         private const uint TEST_DEVICE_PRESENT = 0xFFFF2003;
+        private readonly StringBuilder textBuilder = new StringBuilder();
         private uint CurrentCommand;
 
         private string CurrentTest;
-        private readonly StringBuilder textBuilder = new StringBuilder();
 
-        public event Action < string > OnPass;
+        public event Action<string> OnPass;
 
-        public event Action < string, string > OnFail;
+        public event Action<string, string> OnFail;
 
         #region Public
 
-        public override bool CanRead( uint address )
+        public override bool CanRead(uint address)
         {
             return address == TEST_DEVICE_PRESENT;
         }
 
-        public override bool CanWrite( uint address )
+        public override bool CanWrite(uint address)
         {
             return address == TEST_BEGIN || address == TEST_FAIL || address == TEST_PASS;
         }
 
-        public override uint ReadData( uint address )
+        public override uint ReadData(uint address)
         {
-            if ( address == TEST_DEVICE_PRESENT )
+            if (address == TEST_DEVICE_PRESENT)
             {
                 return 1;
             }
@@ -42,14 +40,14 @@ namespace VisCPU.Tests.Utils
             throw new NotImplementedException();
         }
 
-        public override void WriteData( uint address, uint data )
+        public override void WriteData(uint address, uint data)
         {
-            if ( CurrentCommand != 0 && CurrentCommand != address )
+            if (CurrentCommand != 0 && CurrentCommand != address)
             {
-                throw new Exception( $"Finish Command {CurrentCommand} before starting {address} command" );
+                throw new Exception($"Finish Command {CurrentCommand} before starting {address} command");
             }
 
-            if ( address == TEST_PASS && data != 0 )
+            if (address == TEST_PASS && data != 0)
             {
                 PassTest();
 
@@ -60,11 +58,11 @@ namespace VisCPU.Tests.Utils
 
             bool runCommand = false;
 
-            if ( CurrentCommand != 0 )
+            if (CurrentCommand != 0)
             {
-                if ( data != 0 )
+                if (data != 0)
                 {
-                    textBuilder.Append( ( char ) data );
+                    textBuilder.Append((char) data);
                 }
                 else
                 {
@@ -72,9 +70,9 @@ namespace VisCPU.Tests.Utils
                 }
             }
 
-            if ( runCommand )
+            if (runCommand)
             {
-                switch ( address )
+                switch (address)
                 {
                     case TEST_BEGIN:
                         BeginTest();
@@ -98,9 +96,9 @@ namespace VisCPU.Tests.Utils
 
         private void BeginTest()
         {
-            if ( CurrentTest != null )
+            if (CurrentTest != null)
             {
-                throw new Exception( $"Finish test {CurrentTest} before starting test {textBuilder}" );
+                throw new Exception($"Finish test {CurrentTest} before starting test {textBuilder}");
             }
 
             CurrentTest = textBuilder.ToString();
@@ -113,17 +111,15 @@ namespace VisCPU.Tests.Utils
             CurrentTest = null;
             CurrentCommand = 0;
             textBuilder.Clear();
-            OnFail?.Invoke( testName, desc );
+            OnFail?.Invoke(testName, desc);
         }
 
         private void PassTest()
         {
-            OnPass?.Invoke( CurrentTest );
+            OnPass?.Invoke(CurrentTest);
             CurrentTest = null;
         }
 
         #endregion
-
     }
-
 }

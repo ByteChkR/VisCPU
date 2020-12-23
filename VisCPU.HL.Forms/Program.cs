@@ -3,10 +3,8 @@ using System.Windows.Forms;
 
 namespace VisCPU.HL.Forms
 {
-
     internal static class Program
     {
-
         #region Private
 
         /// <summary>
@@ -16,15 +14,13 @@ namespace VisCPU.HL.Forms
         private static void Main(string[] args)
         {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault( false );
+            Application.SetCompatibleTextRenderingDefault(false);
 
             HLLiveOutputViewerForm frm =
-                args.Length == 0 ? new HLLiveOutputViewerForm() : new HLLiveOutputViewerForm( args[0] );
-            Application.Run( frm );
+                args.Length == 0 ? new HLLiveOutputViewerForm() : new HLLiveOutputViewerForm(args[0]);
+            Application.Run(frm);
         }
 
         #endregion
-
     }
-
 }

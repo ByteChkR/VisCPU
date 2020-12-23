@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking.Events;
 using VisCPU.Utility;
@@ -11,53 +10,51 @@ using VisCPU.Utility.Settings;
 
 namespace VisCPU.Compiler.Linking
 {
-
     public class MultiFileStaticLinker : Linker
     {
-
         #region Public
 
-        public override LinkerResult Link( LinkerTarget target, Compilation compilation )
+        public override LinkerResult Link(LinkerTarget target, Compilation compilation)
         {
-            Dictionary < FileReference, LinkerTarget > tree = DiscoverCompilationTree( target );
+            Dictionary<FileReference, LinkerTarget> tree = DiscoverCompilationTree(target);
 
-            return ProcessOrdered( target, tree, !SettingsSystem.GetSettings < LinkerSettings >().NoHiddenItems );
+            return ProcessOrdered(target, tree, !SettingsSystem.GetSettings<LinkerSettings>().NoHiddenItems);
         }
 
         #endregion
 
         #region Private
 
-        private Dictionary < FileReference, LinkerTarget > DiscoverCompilationTree( LinkerTarget root )
+        private Dictionary<FileReference, LinkerTarget> DiscoverCompilationTree(LinkerTarget root)
         {
-            Dictionary < FileReference, LinkerTarget > allLinkerTargets =
-                new Dictionary < FileReference, LinkerTarget >();
+            Dictionary<FileReference, LinkerTarget> allLinkerTargets =
+                new Dictionary<FileReference, LinkerTarget>();
 
-            RecursiveDiscoverCompilationTree( root, allLinkerTargets );
+            RecursiveDiscoverCompilationTree(root, allLinkerTargets);
 
             return allLinkerTargets;
         }
 
         private void JoinDefinitions(
-            IDictionary < string, AddressItem > dst,
-            IDictionary < string, AddressItem > src,
-            bool enableHide )
+            IDictionary<string, AddressItem> dst,
+            IDictionary<string, AddressItem> src,
+            bool enableHide)
         {
             int hiddenItems = 0;
             int exportedItems = 0;
             int duplicatedItems = 0;
 
-            foreach ( KeyValuePair < string, AddressItem > fileCompilationConstant in src )
+            foreach (KeyValuePair<string, AddressItem> fileCompilationConstant in src)
             {
-                if ( enableHide && fileCompilationConstant.Value.Hide )
+                if (enableHide && fileCompilationConstant.Value.Hide)
                 {
                     hiddenItems++;
                 }
-                else if ( dst.ContainsKey( fileCompilationConstant.Key ) )
+                else if (dst.ContainsKey(fileCompilationConstant.Key))
                 {
-                    EventManager < WarningEvent >.SendEvent(
-                                                            new DuplicateLinkerItemEvent( fileCompilationConstant.Key )
-                                                           );
+                    EventManager<WarningEvent>.SendEvent(
+                        new DuplicateLinkerItemEvent(fileCompilationConstant.Key)
+                    );
 
                     duplicatedItems++;
                 }
@@ -70,87 +67,84 @@ namespace VisCPU.Compiler.Linking
 
             Log(
                 $"Hidden Items: {hiddenItems}"
-               );
+            );
 
             Log(
                 $"Duplicated Items: {duplicatedItems}"
-               );
+            );
 
             Log(
                 $"Exported Items: {exportedItems}"
-               );
+            );
         }
 
-        private void PerformLinking( LinkerResult result, List < LinkerTarget > references, bool enableHide )
+        private void PerformLinking(LinkerResult result, List<LinkerTarget> references, bool enableHide)
         {
             //Join the Targets
-            foreach ( LinkerTarget linkerTarget in references )
+            foreach (LinkerTarget linkerTarget in references)
             {
-                JoinDefinitions( result.Constants, linkerTarget.FileCompilation.Constants, enableHide );
+                JoinDefinitions(result.Constants, linkerTarget.FileCompilation.Constants, enableHide);
 
                 JoinDefinitions(
-                                result.DataSectionHeader,
-                                linkerTarget.FileCompilation.DataSectionHeader.ApplyOffset(
-                                     ( uint ) result.DataSection.Count
-                                    ),
-                                enableHide
-                               );
+                    result.DataSectionHeader,
+                    linkerTarget.FileCompilation.DataSectionHeader.ApplyOffset(
+                        (uint) result.DataSection.Count
+                    ),
+                    enableHide
+                );
 
-                (int, int) k = ( result.LinkedBinary.Count, linkerTarget.FileCompilation.Tokens.Count );
+                (int, int) k = (result.LinkedBinary.Count, linkerTarget.FileCompilation.Tokens.Count);
 
                 result.HiddenDataSectionItems[k] =
-                    SelectHidden( linkerTarget.FileCompilation.DataSectionHeader.ToArray() ).
-                        ApplyOffset( ( uint ) result.DataSection.Count ).
-                        ToDictionary( x => x.Key, x => x.Value );
+                    SelectHidden(linkerTarget.FileCompilation.DataSectionHeader.ToArray())
+                        .ApplyOffset((uint) result.DataSection.Count).ToDictionary(x => x.Key, x => x.Value);
 
                 result.HiddenLabelItems[k] =
-                    SelectHidden( linkerTarget.FileCompilation.Labels.ToArray() ).
-                        ApplyOffset(
-                                    ( uint ) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE
-                                   ).
-                        ToDictionary( x => x.Key, x => x.Value );
+                    SelectHidden(linkerTarget.FileCompilation.Labels.ToArray()).ApplyOffset(
+                        (uint) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE
+                    ).ToDictionary(x => x.Key, x => x.Value);
 
-                result.HiddenConstantItems[k] = SelectHidden( linkerTarget.FileCompilation.Constants.ToArray() );
+                result.HiddenConstantItems[k] = SelectHidden(linkerTarget.FileCompilation.Constants.ToArray());
 
-                result.DataSection.AddRange( linkerTarget.FileCompilation.DataSection );
+                result.DataSection.AddRange(linkerTarget.FileCompilation.DataSection);
 
                 JoinDefinitions(
-                                result.Labels,
-                                linkerTarget.FileCompilation.Labels.ApplyOffset(
-                                                                                ( uint ) result.LinkedBinary.Count *
-                                                                                CPUSettings.INSTRUCTION_SIZE
-                                                                               ),
-                                enableHide
-                               );
+                    result.Labels,
+                    linkerTarget.FileCompilation.Labels.ApplyOffset(
+                        (uint) result.LinkedBinary.Count *
+                        CPUSettings.INSTRUCTION_SIZE
+                    ),
+                    enableHide
+                );
 
-                result.LinkedBinary.AddRange( linkerTarget.FileCompilation.Tokens );
+                result.LinkedBinary.AddRange(linkerTarget.FileCompilation.Tokens);
             }
         }
 
         private LinkerResult ProcessOrdered(
             LinkerTarget root,
-            Dictionary < FileReference, LinkerTarget > mapping,
-            bool enableHide )
+            Dictionary<FileReference, LinkerTarget> mapping,
+            bool enableHide)
         {
-            Stack < FileReference > todo =
-                new Stack < FileReference >( mapping.Keys.Where( x => x.File != root.FileCompilation.Reference.File ) );
+            Stack<FileReference> todo =
+                new Stack<FileReference>(mapping.Keys.Where(x => x.File != root.FileCompilation.Reference.File));
 
             LinkerResult result = new LinkerResult(
-                                                   mapping.Values.ToArray(),
-                                                   new Dictionary < string, AddressItem >(),
-                                                   new Dictionary < string, AddressItem >(),
-                                                   new Dictionary < string, AddressItem >(),
-                                                   new List < AToken[] >(),
-                                                   new uint[0]
-                                                  );
+                mapping.Values.ToArray(),
+                new Dictionary<string, AddressItem>(),
+                new Dictionary<string, AddressItem>(),
+                new Dictionary<string, AddressItem>(),
+                new List<AToken[]>(),
+                new uint[0]
+            );
 
-            PerformLinking( result, new List < LinkerTarget > { root }, enableHide );
+            PerformLinking(result, new List<LinkerTarget> {root}, enableHide);
 
-            while ( todo.Count != 0 )
+            while (todo.Count != 0)
             {
                 FileReference nextFile = todo.Pop();
                 LinkerTarget fileTarget = mapping[nextFile];
-                PerformLinking( result, new List < LinkerTarget > { fileTarget }, enableHide );
+                PerformLinking(result, new List<LinkerTarget> {fileTarget}, enableHide);
             }
 
             return result;
@@ -158,45 +152,43 @@ namespace VisCPU.Compiler.Linking
 
         private void RecursiveDiscoverCompilationTree(
             LinkerTarget root,
-            Dictionary < FileReference, LinkerTarget > targets )
+            Dictionary<FileReference, LinkerTarget> targets)
         {
-            if ( root.FileCompilation.FileReferences.Count != 0 )
+            if (root.FileCompilation.FileReferences.Count != 0)
             {
-                foreach ( FileReference reference in root.FileCompilation.FileReferences )
+                foreach (FileReference reference in root.FileCompilation.FileReferences)
                 {
-                    if ( targets.ContainsKey( reference ) )
+                    if (targets.ContainsKey(reference))
                     {
-                        Log( $"File: {reference.File} was already referenced." );
+                        Log($"File: {reference.File} was already referenced.");
 
                         continue;
                     }
 
-                    if ( File.Exists( reference.File ) )
+                    if (File.Exists(reference.File))
                     {
-                        FileCompilation fc = new FileCompilation( reference );
+                        FileCompilation fc = new FileCompilation(reference);
 
-                        LinkerTarget t = new LinkerTarget( fc, fc.Reference.LinkerArguments );
+                        LinkerTarget t = new LinkerTarget(fc, fc.Reference.LinkerArguments);
                         targets[reference] = t;
-                        RecursiveDiscoverCompilationTree( t, targets );
+                        RecursiveDiscoverCompilationTree(t, targets);
                     }
                     else
                     {
-                        LinkerInfo info = LinkerInfo.Load( reference.File );
-                        FileCompilation fc = new FileCompilation( info );
-                        LinkerTarget t = new LinkerTarget( fc, new object[0] );
+                        LinkerInfo info = LinkerInfo.Load(reference.File);
+                        FileCompilation fc = new FileCompilation(info);
+                        LinkerTarget t = new LinkerTarget(fc, new object[0]);
                         targets[reference] = t;
                     }
                 }
             }
         }
 
-        private Dictionary < string, AddressItem > SelectHidden( KeyValuePair < string, AddressItem >[] items )
+        private Dictionary<string, AddressItem> SelectHidden(KeyValuePair<string, AddressItem>[] items)
         {
-            return items.Where( x => x.Value.Hide ).ToDictionary( x => x.Key, x => x.Value );
+            return items.Where(x => x.Value.Hide).ToDictionary(x => x.Key, x => x.Value);
         }
 
         #endregion
-
     }
-
 }

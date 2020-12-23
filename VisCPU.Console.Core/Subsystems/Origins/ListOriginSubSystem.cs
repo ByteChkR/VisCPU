@@ -6,7 +6,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 {
     public class ListOriginSubSystem : ConsoleSubsystem
     {
-
         public override void Run(IEnumerable<string> args)
         {
             OriginSettings s = SettingsSystem.GetSettings<OriginSettings>();
@@ -16,6 +15,5 @@ namespace VisCPU.Console.Core.Subsystems.Origins
                 Log($"{keyValuePair.Key} : {keyValuePair.Value}");
             }
         }
-
     }
 }

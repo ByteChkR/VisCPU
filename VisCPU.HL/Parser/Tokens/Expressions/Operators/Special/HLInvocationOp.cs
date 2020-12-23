@@ -3,13 +3,11 @@ using System.Linq;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
-
     /// <summary>
     ///     Invocation () Operator Implementation
     /// </summary>
     public class HLInvocationOp : HLExpression
     {
-
         /// <summary>
         ///     Left side Expression
         /// </summary>
@@ -33,7 +31,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="context">XL Context</param>
         /// <param name="left">Left Side Expression</param>
         /// <param name="parameterList">Parameter list</param>
-        public HLInvocationOp( HLExpression left, HLExpression[] parameterList ) : base( left.SourceIndex )
+        public HLInvocationOp(HLExpression left, HLExpression[] parameterList) : base(left.SourceIndex)
         {
             Left = left;
             ParameterList = parameterList;
@@ -43,21 +41,21 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List<IHLToken> GetChildren()
         {
-            return ParameterList.Cast < IHLToken >().Concat( new[] { Left } ).ToList();
+            return ParameterList.Cast<IHLToken>().Concat(new[] {Left}).ToList();
         }
 
         public override string ToString()
         {
             string ret = $"{Left}(";
 
-            for ( int i = 0; i < ParameterList.Length; i++ )
+            for (int i = 0; i < ParameterList.Length; i++)
             {
                 HLExpression hlExpression = ParameterList[i];
                 ret += hlExpression;
 
-                if ( i != ParameterList.Length - 1 )
+                if (i != ParameterList.Length - 1)
                 {
                     ret += ",";
                 }
@@ -69,7 +67,5 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
-
 }

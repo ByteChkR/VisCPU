@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using VisCPU.HL.Modules;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.Events;
@@ -17,57 +14,34 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.Forms
 {
-
     public partial class HLLiveOutputViewerForm : Form
     {
-
-        private readonly ConcurrentQueue<Action> taskQueue = new ConcurrentQueue<Action>();
-        private Task taskProcessor = null;
-        private const string CONSOLE_BUILD_DEFAULT_ARGS = "[build] -export -i {0} -steps HL-expr bin -clean false";
-        private const string CONSOLE_RUN_DEFAULT_ARGS = "[build;run] -export -i {0} -steps HL-expr bin -clean false";
+        private const string CONSOLE_BUILD_DEFAULT_ARGS =
+            "[build] -linker:export -build:i {0} -build:steps HL-expr bin -build:clean false";
+        private const string CONSOLE_RUN_DEFAULT_ARGS =
+            "[build;run] -linker:export -build:i {0} -run:i {0} -build:steps HL-expr bin -build:clean false";
         private const string CONSOLE_CREATE_PROJECT_ARGS = "project create";
         private const string CONSOLE_ADD_DEP_PROJECT_ARGS = "project add";
         private const string CONSOLE_PACK_PROJECT_ARGS = "project pack";
         private const string CONSOLE_RESTORE_PROJECT_ARGS = "project restore";
         private const string CONSOLE_PUBLISH_PROJECT_ARGS = "project [restore;pack;publish]";
+        private readonly ConcurrentQueue<Action> EnableIOQueue = new ConcurrentQueue<Action>();
 
 
         private readonly Dictionary<string, RichTextBox> m_CodeInPages = new Dictionary<string, RichTextBox>();
         private readonly Dictionary<string, RichTextBox> m_CodeOutPages = new Dictionary<string, RichTextBox>();
-        private bool m_IsBuilding;
+
+        private readonly ConcurrentQueue<Action> taskQueue = new ConcurrentQueue<Action>();
+        private readonly ConcurrentQueue<Action> UIThreadQueue = new ConcurrentQueue<Action>();
         private TextWriter m_ConsoleIn;
         private Process m_ConsoleProcess;
-        private string m_SourceFolder = null;
 
         private bool m_EnableIO = true;
-        private readonly ConcurrentQueue<Action> EnableIOQueue = new ConcurrentQueue<Action>();
-        private readonly ConcurrentQueue<Action> UIThreadQueue = new ConcurrentQueue<Action>();
-
-        private readonly object m_StartLock = new object();
-        private bool m_StartFlag = false;
-
-        private static string ConsoleBinConfigPath => Path.Combine(Application.StartupPath, "runtime_path.txt");
-
-        private string ConsoleRuntimePath =>
-            Path.Combine(Application.StartupPath, File.ReadAllText(ConsoleBinConfigPath));
-
-        private static string ConsoleRunArgConfigPath => Path.Combine(Application.StartupPath, "runtime_args.txt");
-
-        private static string ConsoleBuildArgConfigPath =>
-            Path.Combine(Application.StartupPath, "runtime_build_args.txt");
-
-        private static string LastWorkingDirConfig => Path.Combine(Application.StartupPath, "last_working_dir.txt");
-
-        private string EntryVhlFile => Path.Combine(m_SourceFolder, "src");
-
-        private string EntryFileName => EntryVhlFile + ".vhl";
-
-        private string BuildArgs => File.ReadAllText(ConsoleBuildArgConfigPath);
-
-        private string RunArgs => File.ReadAllText(ConsoleRunArgConfigPath);
+        private bool m_IsBuilding;
+        private string m_SourceFolder;
+        private Task taskProcessor;
 
         #region Public
-
 
         public HLLiveOutputViewerForm(string file = null)
         {
@@ -108,13 +82,99 @@ namespace VisCPU.HL.Forms
 
             SizeChanged += HLLiveOutputViewerForm_SizeChanged;
             Closing += (a, b) =>
-                       {
-                           if (m_ConsoleProcess != null && !m_ConsoleProcess.HasExited)
-                               m_ConsoleProcess.Kill();
-                       };
+            {
+                if (m_ConsoleProcess != null && !m_ConsoleProcess.HasExited)
+                {
+                    m_ConsoleProcess.Kill();
+                }
+            };
         }
 
         #endregion
+
+
+        private static string ConsoleBinConfigPath => Path.Combine(Application.StartupPath, "runtime_path.txt");
+
+        private string ConsoleRuntimePath =>
+            Path.Combine(Application.StartupPath, File.ReadAllText(ConsoleBinConfigPath));
+
+        private static string ConsoleRunArgConfigPath => Path.Combine(Application.StartupPath, "runtime_args.txt");
+
+        private static string ConsoleBuildArgConfigPath =>
+            Path.Combine(Application.StartupPath, "runtime_build_args.txt");
+
+        private static string LastWorkingDirConfig => Path.Combine(Application.StartupPath, "last_working_dir.txt");
+
+        private string EntryVhlFile => Path.Combine(m_SourceFolder, "src");
+
+        private string EntryFileName => EntryVhlFile + ".vhl";
+
+        private string BuildArgs => File.ReadAllText(ConsoleBuildArgConfigPath);
+
+        private string RunArgs => File.ReadAllText(ConsoleRunArgConfigPath);
+
+        private void CleanProjectFolder()
+        {
+            if (Directory.Exists(Path.Combine(m_SourceFolder, "build")))
+            {
+                Directory.Delete(Path.Combine(m_SourceFolder, "build"), true);
+            }
+
+
+            IEnumerable<string> sourceFiles = Directory.GetFiles(m_SourceFolder, "*.*", SearchOption.AllDirectories)
+                .Select(Path.GetFullPath);
+
+            foreach (string sourceFile in sourceFiles)
+            {
+                if (Path.GetExtension(sourceFile) == ".vhl" || Path.GetExtension(sourceFile) == ".json")
+                {
+                    continue;
+                }
+
+
+                WriteConsoleOut("Deleting File: " + sourceFile);
+                File.Delete(sourceFile);
+            }
+
+            ModuleTarget t = ModuleManager.LoadModuleTarget(Path.Combine(m_SourceFolder, "project.json"));
+
+            foreach (ModuleDependency moduleDependency in t.Dependencies)
+            {
+                WriteConsoleOut("Deleting Dependency: " + moduleDependency.ModuleName);
+                if (Directory.Exists(Path.Combine(m_SourceFolder, moduleDependency.ModuleName)))
+                {
+                    Directory.Delete(Path.Combine(m_SourceFolder, moduleDependency.ModuleName), true);
+                }
+            }
+
+        }
+
+        private void clearProjectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CleanProjectFolder();
+        }
+
+        private void addDependencyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_ADD_DEP_PROJECT_ARGS, m_SourceFolder);
+        }
+
+        private void buildModuleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CleanProjectFolder();
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_PACK_PROJECT_ARGS, m_SourceFolder);
+        }
+
+        private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
+        }
+
+        private void publishToLocalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CleanProjectFolder();
+            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_PUBLISH_PROJECT_ARGS, m_SourceFolder);
+        }
 
         #region Private
 
@@ -131,26 +191,27 @@ namespace VisCPU.HL.Forms
 
                 if (File.Exists(ConsoleRuntimePath))
                 {
-                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
+                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS,
+                        m_SourceFolder);
                     p.Start();
                     p.WaitForExit();
                     RunConsoleProcess(
-                                      ConsoleRuntimePath,
-                                      string.Format(RunArgs, GetEntryPath())
-                                     );
+                        ConsoleRuntimePath,
+                        string.Format(RunArgs, GetEntryPath())
+                    );
                 }
                 else
                 {
                     MessageBox.Show(
-                                    $"No Console Runtime Set. File {ConsoleRuntimePath} does not exist"
-                                   );
+                        $"No Console Runtime Set. File {ConsoleRuntimePath} does not exist"
+                    );
                 }
             }
             else
             {
                 MessageBox.Show(
-                                $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
-                               );
+                    $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
+                );
             }
         }
 
@@ -161,26 +222,27 @@ namespace VisCPU.HL.Forms
 
                 if (File.Exists(ConsoleRuntimePath))
                 {
-                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
+                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS,
+                        m_SourceFolder);
                     p.Start();
                     p.WaitForExit();
                     RunConsoleProcess(
-                                      ConsoleRuntimePath,
-                                      string.Format(BuildArgs, GetEntryPath())
-                                     );
+                        ConsoleRuntimePath,
+                        string.Format(BuildArgs, GetEntryPath())
+                    );
                 }
                 else
                 {
                     MessageBox.Show(
-                                    $"No Console Runtime Set. File {ConsoleRuntimePath} does not exist"
-                                   );
+                        $"No Console Runtime Set. File {ConsoleRuntimePath} does not exist"
+                    );
                 }
             }
             else
             {
                 MessageBox.Show(
-                                $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
-                               );
+                    $"No Console Runtime Set. Create {ConsoleBinConfigPath} with path to Console"
+                );
             }
         }
 
@@ -236,16 +298,16 @@ namespace VisCPU.HL.Forms
             tbIn.AcceptsTab = true;
 
             tbIn.TextChanged += (sender, args) =>
-                                {
-                                    if (m_EnableIO)
-                                    {
-                                        UpdateIO(name, tbIn);
-                                    }
-                                    else
-                                    {
-                                        EnableIOQueue.Enqueue(() => UpdateIO(name, tbIn));
-                                    }
-                                };
+            {
+                if (m_EnableIO)
+                {
+                    UpdateIO(name, tbIn);
+                }
+                else
+                {
+                    EnableIOQueue.Enqueue(() => UpdateIO(name, tbIn));
+                }
+            };
 
             tbIn.KeyUp += ProcessKeyUpEvent;
             tcCodeIn.TabPages.Add(pIn);
@@ -319,25 +381,25 @@ namespace VisCPU.HL.Forms
             RunEditorInternalHLBuild(arg1);
 
             UIThreadQueue.Enqueue(
-                                  () =>
-                                  {
-                                      Uri u = new Uri(
-                                                      Path.Combine(
-                                                                   Path.GetDirectoryName(arg1),
-                                                                   Path.GetFileNameWithoutExtension(arg1)
-                                                                  ),
-                                                      UriKind.Absolute
-                                                     );
+                () =>
+                {
+                    Uri u = new Uri(
+                        Path.Combine(
+                            Path.GetDirectoryName(arg1),
+                            Path.GetFileNameWithoutExtension(arg1)
+                        ),
+                        UriKind.Absolute
+                    );
 
-                                      Uri u1 = new Uri(
-                                                       Path.GetFullPath(m_SourceFolder),
-                                                       UriKind.Absolute
-                                                      );
+                    Uri u1 = new Uri(
+                        Path.GetFullPath(m_SourceFolder),
+                        UriKind.Absolute
+                    );
 
-                                      Uri ret = u1.MakeRelativeUri(u);
-                                      GetPage(ret.OriginalString);
-                                  }
-                                 );
+                    Uri ret = u1.MakeRelativeUri(u);
+                    GetPage(ret.OriginalString);
+                }
+            );
         }
 
         private void OpenFolder(string file)
@@ -353,7 +415,8 @@ namespace VisCPU.HL.Forms
 
                 if (!File.Exists(Path.Combine(m_SourceFolder, "project.json")))
                 {
-                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_CREATE_PROJECT_ARGS, m_SourceFolder);
+                    Process p = RunConsoleProcessHidden(ConsoleRuntimePath, CONSOLE_CREATE_PROJECT_ARGS,
+                        m_SourceFolder);
                     p.Start();
                     p.WaitForExit();
                 }
@@ -443,27 +506,29 @@ namespace VisCPU.HL.Forms
         private void RefreshEditor()
         {
             EnqueueTask(
-                        () =>
-                        {
-                            RunEditorInternalHLBuild(GetEntryPath());
-                            ProcessUIThreadQueue();
-                            UpdateInputPages();
-                            UpdateOutputPages();
-                            WriteConsoleOut("");
-                            WriteConsoleOut("Updated Pages");
-                        }
-                       );
+                () =>
+                {
+                    RunEditorInternalHLBuild(GetEntryPath());
+                    ProcessUIThreadQueue();
+                    UpdateInputPages();
+                    UpdateOutputPages();
+                    WriteConsoleOut("");
+                    WriteConsoleOut("Updated Pages");
+                }
+            );
         }
 
         private Process RunConsoleProcessHidden(string path, string args, string workingDir = null)
         {
-            ProcessStartInfo psi = new ProcessStartInfo(path, args);
-            psi.WorkingDirectory = workingDir ?? Path.GetDirectoryName(path);
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = false;
-            psi.RedirectStandardOutput = true;
-            psi.RedirectStandardError = true;
-            psi.RedirectStandardInput = true;
+            ProcessStartInfo psi = new ProcessStartInfo(path, args)
+            {
+                WorkingDirectory = workingDir ?? Path.GetDirectoryName(path),
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true
+            };
 
             Process p = new Process
             {
@@ -503,9 +568,9 @@ namespace VisCPU.HL.Forms
                 string file = File.ReadAllText(src);
 
                 string newFile = Path.Combine(
-                                              Path.GetDirectoryName(Path.GetFullPath(src)),
-                                              Path.GetFileNameWithoutExtension(src)
-                                             ) +
+                                     Path.GetDirectoryName(Path.GetFullPath(src)),
+                                     Path.GetFileNameWithoutExtension(src)
+                                 ) +
                                  ".vasm";
 
                 HLCompilation c = p.Parse(file, Path.GetDirectoryName(Path.GetFullPath(src)));
@@ -513,14 +578,14 @@ namespace VisCPU.HL.Forms
                 SetStatus("Updating Pages " + src, 0.75f);
 
                 File.WriteAllText(
-                                  newFile,
-                                  c.Parse()
-                                 );
+                    newFile,
+                    c.Parse()
+                );
 
                 HLCompilation.ResetCounter();
                 UpdateOutputPages();
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
 
@@ -529,7 +594,7 @@ namespace VisCPU.HL.Forms
 
         private void SetStatus(string taskDesc, float process)
         {
-            tsProgress.Value = (int)(process * 100);
+            tsProgress.Value = (int) (process * 100);
             tslPercentage.Text = $"{Math.Round(process * 100, 1)}%";
             tslCurrentTask.Text = $"Task: {taskDesc}";
             Application.DoEvents();
@@ -538,7 +603,6 @@ namespace VisCPU.HL.Forms
         private void Startup()
         {
             RunEditorInternalHLBuild(GetEntryPath());
-            m_StartFlag = false;
             ProcessUIThreadQueue();
         }
 
@@ -678,66 +742,5 @@ namespace VisCPU.HL.Forms
         }
 
         #endregion
-
-        private void CleanProjectFolder()
-        {
-            if (Directory.Exists(Path.Combine(m_SourceFolder, "build")))
-                Directory.Delete(Path.Combine(m_SourceFolder, "build"), true);
-
-
-            IEnumerable<string> sourceFiles = Directory.
-                                              GetFiles(m_SourceFolder, "*.*", SearchOption.AllDirectories).
-                                              Select(Path.GetFullPath);
-
-            foreach (string sourceFile in sourceFiles)
-            {
-                if (Path.GetExtension(sourceFile) == ".vhl" || Path.GetExtension(sourceFile) == ".json")
-                {
-                    continue;
-                }
-
-
-                WriteConsoleOut("Deleting File: " + sourceFile);
-                File.Delete(sourceFile);
-            }
-
-            ModuleTarget t = ModuleManager.LoadModuleTarget(Path.Combine(m_SourceFolder, "project.json"));
-
-            foreach (ModuleDependency moduleDependency in t.Dependencies)
-            {
-                WriteConsoleOut("Deleting Dependency: " + moduleDependency.ModuleName);
-                if (Directory.Exists(Path.Combine(m_SourceFolder, moduleDependency.ModuleName)))
-                    Directory.Delete(Path.Combine(m_SourceFolder, moduleDependency.ModuleName), true);
-            }
-
-        }
-
-        private void clearProjectDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CleanProjectFolder();
-        }
-
-        private void addDependencyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_ADD_DEP_PROJECT_ARGS, m_SourceFolder);
-        }
-
-        private void buildModuleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CleanProjectFolder();
-            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_PACK_PROJECT_ARGS, m_SourceFolder);
-        }
-
-        private void restoreToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_RESTORE_PROJECT_ARGS, m_SourceFolder);
-        }
-
-        private void publishToLocalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            CleanProjectFolder();
-            RunConsoleProcess(ConsoleRuntimePath, CONSOLE_PUBLISH_PROJECT_ARGS, m_SourceFolder);
-        }
     }
-
 }

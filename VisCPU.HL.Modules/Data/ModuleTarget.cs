@@ -10,13 +10,13 @@ namespace VisCPU.HL.Modules.Data
     [Serializable]
     public struct ModuleTarget
     {
-        [JsonIgnore, XmlIgnore]
-        public ModuleManager Manager;
+        [JsonIgnore] [XmlIgnore] public ModuleManager Manager;
         public string ModuleName;
         public string ModuleVersion;
         public List<ModuleDependency> Dependencies;
 
-        public ModuleTarget(ModuleManager manager, string moduleName, string moduleVersion, ModuleDependency[] dependencies)
+        public ModuleTarget(ModuleManager manager, string moduleName, string moduleVersion,
+            ModuleDependency[] dependencies)
         {
             ModuleName = moduleName;
             ModuleVersion = moduleVersion;

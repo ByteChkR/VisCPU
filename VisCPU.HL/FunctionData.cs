@@ -2,18 +2,16 @@
 
 namespace VisCPU.HL
 {
-
     public class FunctionData : IExternalData
     {
+        private readonly Func<string[]> functionCompiler;
+
+        private readonly string name;
+        private string[] compiledOutput;
 
         public bool HasReturnValue;
         public int ParameterCount;
         public bool Public;
-
-        private readonly Func < string[] > functionCompiler;
-        private string[] compiledOutput;
-
-        private readonly string name;
 
         public ExternalDataType DataType => ExternalDataType.FUNCTION;
 
@@ -22,9 +20,9 @@ namespace VisCPU.HL
         public FunctionData(
             string name,
             bool isPublic,
-            Func < string[] > funcCompiler,
+            Func<string[]> funcCompiler,
             int parameterCount,
-            bool hasReturnValue )
+            bool hasReturnValue)
         {
             this.name = name;
             Public = isPublic;
@@ -36,7 +34,7 @@ namespace VisCPU.HL
 
         public string[] GetCompiledOutput()
         {
-            if ( compiledOutput == null )
+            if (compiledOutput == null)
             {
                 compiledOutput = functionCompiler();
             }
@@ -55,7 +53,5 @@ namespace VisCPU.HL
         }
 
         #endregion
-
     }
-
 }

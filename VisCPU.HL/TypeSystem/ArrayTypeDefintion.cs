@@ -2,10 +2,10 @@
 {
     public class ArrayTypeDefintion : HLTypeDefinition
     {
-
         public readonly HLTypeDefinition ElementType;
         public readonly uint Size;
-        public ArrayTypeDefintion( HLTypeDefinition elementType, uint size) : base( elementType.Name+"[]" )
+
+        public ArrayTypeDefintion(HLTypeDefinition elementType, uint size) : base(elementType.Name + "[]")
         {
             Size = size;
             ElementType = elementType;
@@ -15,6 +15,5 @@
         {
             return ElementType.GetSize() * Size;
         }
-
     }
 }

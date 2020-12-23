@@ -7,16 +7,13 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 {
     public class OriginSubSystem : ConsoleSubsystem
     {
-
-        
-
         private readonly Dictionary<string, ConsoleSubsystem> subsystems =
             new Dictionary<string, ConsoleSubsystem>
             {
-                { "add", new AddOriginSubSystem() },
-                { "remove", new RemoveOriginSubSystem() },
-                { "refresh", new RefreshOriginSubSystem() },
-                { "list", new ListOriginSubSystem() },
+                {"add", new AddOriginSubSystem()},
+                {"remove", new RemoveOriginSubSystem()},
+                {"refresh", new RefreshOriginSubSystem()},
+                {"list", new ListOriginSubSystem()}
             };
 
         public override void Run(IEnumerable<string> args)
@@ -25,6 +22,5 @@ namespace VisCPU.Console.Core.Subsystems.Origins
             ArgumentSyntaxParser.Parse(args.ToArray(), s);
             VisConsole.RunConsole(s, args.ToArray(), subsystems);
         }
-
     }
 }

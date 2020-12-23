@@ -2,13 +2,11 @@
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
-
     /// <summary>
     ///     Member Access . Operator Implementation
     /// </summary>
     public class HLMemberAccessOp : HLExpression
     {
-
         /// <summary>
         ///     Left Side expression
         /// </summary>
@@ -27,9 +25,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="context">XL Context</param>
         /// <param name="left">Left Side Expression</param>
         /// <param name="memberName"></param>
-        public HLMemberAccessOp( HLExpression left, string memberName ) : base(
-                                                                               left.SourceIndex
-                                                                              )
+        public HLMemberAccessOp(HLExpression left, string memberName) : base(
+            left.SourceIndex
+        )
         {
             Left = left;
             MemberName = memberName;
@@ -39,9 +37,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List<IHLToken> GetChildren()
         {
-            return new List < IHLToken > { Left };
+            return new List<IHLToken> {Left};
         }
 
         public override string ToString()
@@ -52,7 +50,5 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
-
 }

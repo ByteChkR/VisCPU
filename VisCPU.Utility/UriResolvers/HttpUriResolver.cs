@@ -4,16 +4,15 @@ using System.Net;
 
 namespace VisCPU.Utility.UriResolvers
 {
-
     public class HttpUriResolver : UriResolver
     {
+        private readonly WebClient client = new WebClient();
 
         private readonly string tempPath;
-        private readonly WebClient client = new WebClient();
 
         #region Public
 
-        public HttpUriResolver( string tempPath )
+        public HttpUriResolver(string tempPath)
         {
             this.tempPath = tempPath;
         }
@@ -22,9 +21,9 @@ namespace VisCPU.Utility.UriResolvers
 
         #region Protected
 
-        protected override bool CanResolve( string uri )
+        protected override bool CanResolve(string uri)
         {
-            if ( Uri.TryCreate( uri, UriKind.Absolute, out Uri u ) )
+            if (Uri.TryCreate(uri, UriKind.Absolute, out Uri u))
             {
                 return u.Scheme == "http" || u.Scheme == "https";
             }
@@ -32,25 +31,23 @@ namespace VisCPU.Utility.UriResolvers
             return false;
         }
 
-        protected override string GetFilePath( string uri )
+        protected override string GetFilePath(string uri)
         {
-            string name = Path.GetFileName( uri );
+            string name = Path.GetFileName(uri);
 
-            return Path.Combine( tempPath, name );
+            return Path.Combine(tempPath, name);
         }
 
-        protected override string Resolve( string uri )
+        protected override string Resolve(string uri)
         {
-            string dst = GetFilePath( uri );
-            Directory.CreateDirectory( tempPath );
-            Log( $"Resolving File: {uri} => {dst}" );
-            client.DownloadFile( uri, dst );
+            string dst = GetFilePath(uri);
+            Directory.CreateDirectory(tempPath);
+            Log($"Resolving File: {uri} => {dst}");
+            client.DownloadFile(uri, dst);
 
             return dst;
         }
 
         #endregion
-
     }
-
 }

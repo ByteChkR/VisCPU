@@ -71,18 +71,20 @@ namespace VisCPU.HL.Forms
             // 
             this.tcCodeOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcCodeOut.Location = new System.Drawing.Point(0, 0);
+            this.tcCodeOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tcCodeOut.Name = "tcCodeOut";
             this.tcCodeOut.SelectedIndex = 0;
-            this.tcCodeOut.Size = new System.Drawing.Size(435, 256);
+            this.tcCodeOut.Size = new System.Drawing.Size(580, 315);
             this.tcCodeOut.TabIndex = 1;
             // 
             // tcCodeIn
             // 
             this.tcCodeIn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcCodeIn.Location = new System.Drawing.Point(0, 0);
+            this.tcCodeIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tcCodeIn.Name = "tcCodeIn";
             this.tcCodeIn.SelectedIndex = 0;
-            this.tcCodeIn.Size = new System.Drawing.Size(478, 256);
+            this.tcCodeIn.Size = new System.Drawing.Size(637, 315);
             this.tcCodeIn.TabIndex = 0;
             // 
             // panelConsole
@@ -90,9 +92,10 @@ namespace VisCPU.HL.Forms
             this.panelConsole.Controls.Add(this.rtbConsoleOut);
             this.panelConsole.Controls.Add(this.panelConsoleIn);
             this.panelConsole.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelConsole.Location = new System.Drawing.Point(0, 256);
+            this.panelConsole.Location = new System.Drawing.Point(0, 315);
+            this.panelConsole.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelConsole.Name = "panelConsole";
-            this.panelConsole.Size = new System.Drawing.Size(913, 233);
+            this.panelConsole.Size = new System.Drawing.Size(1217, 287);
             this.panelConsole.TabIndex = 4;
             // 
             // rtbConsoleOut
@@ -101,9 +104,10 @@ namespace VisCPU.HL.Forms
             this.rtbConsoleOut.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbConsoleOut.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.rtbConsoleOut.Location = new System.Drawing.Point(0, 0);
+            this.rtbConsoleOut.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.rtbConsoleOut.Name = "rtbConsoleOut";
             this.rtbConsoleOut.ReadOnly = true;
-            this.rtbConsoleOut.Size = new System.Drawing.Size(913, 182);
+            this.rtbConsoleOut.Size = new System.Drawing.Size(1217, 224);
             this.rtbConsoleOut.TabIndex = 2;
             this.rtbConsoleOut.Text = "";
             // 
@@ -113,21 +117,24 @@ namespace VisCPU.HL.Forms
             this.panelConsoleIn.Controls.Add(this.tbConsoleIn);
             this.panelConsoleIn.Controls.Add(this.btnSendInput);
             this.panelConsoleIn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelConsoleIn.Location = new System.Drawing.Point(0, 182);
+            this.panelConsoleIn.Location = new System.Drawing.Point(0, 224);
+            this.panelConsoleIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelConsoleIn.Name = "panelConsoleIn";
-            this.panelConsoleIn.Size = new System.Drawing.Size(913, 51);
+            this.panelConsoleIn.Size = new System.Drawing.Size(1217, 63);
             this.panelConsoleIn.TabIndex = 1;
             // 
             // statusStrip
             // 
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsiEditorOptions,
             this.tslPercentage,
             this.tsProgress,
             this.tslCurrentTask});
-            this.statusStrip.Location = new System.Drawing.Point(0, 29);
+            this.statusStrip.Location = new System.Drawing.Point(0, 33);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(838, 22);
+            this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip.Size = new System.Drawing.Size(1117, 30);
             this.statusStrip.TabIndex = 3;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -144,35 +151,35 @@ namespace VisCPU.HL.Forms
             this.modulesToolStripMenuItem});
             this.tsiEditorOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsiEditorOptions.Name = "tsiEditorOptions";
-            this.tsiEditorOptions.Size = new System.Drawing.Size(96, 20);
+            this.tsiEditorOptions.Size = new System.Drawing.Size(119, 28);
             this.tsiEditorOptions.Text = "Editor Options";
             this.tsiEditorOptions.ToolTipText = "Editor Options";
             // 
             // tsiTerminateRuntime
             // 
             this.tsiTerminateRuntime.Name = "tsiTerminateRuntime";
-            this.tsiTerminateRuntime.Size = new System.Drawing.Size(217, 22);
+            this.tsiTerminateRuntime.Size = new System.Drawing.Size(270, 26);
             this.tsiTerminateRuntime.Text = "Terminate Runtime Process";
             this.tsiTerminateRuntime.Click += new System.EventHandler(this.tsiTerminateRuntime_Click);
             // 
             // tsiRefresh
             // 
             this.tsiRefresh.Name = "tsiRefresh";
-            this.tsiRefresh.Size = new System.Drawing.Size(217, 22);
+            this.tsiRefresh.Size = new System.Drawing.Size(270, 26);
             this.tsiRefresh.Text = "Refresh";
             this.tsiRefresh.Click += new System.EventHandler(this.tsiRefresh_Click);
             // 
             // tsiRun
             // 
             this.tsiRun.Name = "tsiRun";
-            this.tsiRun.Size = new System.Drawing.Size(217, 22);
+            this.tsiRun.Size = new System.Drawing.Size(270, 26);
             this.tsiRun.Text = "Run";
             this.tsiRun.Click += new System.EventHandler(this.tsiRun_Click);
             // 
             // tsiBuild
             // 
             this.tsiBuild.Name = "tsiBuild";
-            this.tsiBuild.Size = new System.Drawing.Size(217, 22);
+            this.tsiBuild.Size = new System.Drawing.Size(270, 26);
             this.tsiBuild.Text = "Build";
             this.tsiBuild.Click += new System.EventHandler(this.tsiBuild_Click);
             // 
@@ -183,34 +190,34 @@ namespace VisCPU.HL.Forms
             this.tsiOpenBuildArgPath,
             this.tsiOpenRunArgPath});
             this.tsiConfig.Name = "tsiConfig";
-            this.tsiConfig.Size = new System.Drawing.Size(217, 22);
+            this.tsiConfig.Size = new System.Drawing.Size(270, 26);
             this.tsiConfig.Text = "Configuration";
             // 
             // tsiOpenRuntimePath
             // 
             this.tsiOpenRuntimePath.Name = "tsiOpenRuntimePath";
-            this.tsiOpenRuntimePath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenRuntimePath.Size = new System.Drawing.Size(284, 26);
             this.tsiOpenRuntimePath.Text = "Open Runtime Path Config";
             this.tsiOpenRuntimePath.Click += new System.EventHandler(this.tsiOpenRuntimePath_Click);
             // 
             // tsiOpenBuildArgPath
             // 
             this.tsiOpenBuildArgPath.Name = "tsiOpenBuildArgPath";
-            this.tsiOpenBuildArgPath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenBuildArgPath.Size = new System.Drawing.Size(284, 26);
             this.tsiOpenBuildArgPath.Text = "Open Build Argument Config";
             this.tsiOpenBuildArgPath.Click += new System.EventHandler(this.tsiOpenBuildArgPath_Click);
             // 
             // tsiOpenRunArgPath
             // 
             this.tsiOpenRunArgPath.Name = "tsiOpenRunArgPath";
-            this.tsiOpenRunArgPath.Size = new System.Drawing.Size(229, 22);
+            this.tsiOpenRunArgPath.Size = new System.Drawing.Size(284, 26);
             this.tsiOpenRunArgPath.Text = "Open Run Argument Config";
             this.tsiOpenRunArgPath.Click += new System.EventHandler(this.tsiOpenRunArgPath_Click);
             // 
             // clearProjectDirectoryToolStripMenuItem
             // 
             this.clearProjectDirectoryToolStripMenuItem.Name = "clearProjectDirectoryToolStripMenuItem";
-            this.clearProjectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.clearProjectDirectoryToolStripMenuItem.Size = new System.Drawing.Size(270, 26);
             this.clearProjectDirectoryToolStripMenuItem.Text = "Clear Project Directory";
             this.clearProjectDirectoryToolStripMenuItem.Click += new System.EventHandler(this.clearProjectDirectoryToolStripMenuItem_Click);
             // 
@@ -222,52 +229,52 @@ namespace VisCPU.HL.Forms
             this.restoreToolStripMenuItem,
             this.publishToLocalToolStripMenuItem});
             this.modulesToolStripMenuItem.Name = "modulesToolStripMenuItem";
-            this.modulesToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.modulesToolStripMenuItem.Size = new System.Drawing.Size(270, 26);
             this.modulesToolStripMenuItem.Text = "Modules";
             // 
             // addDependencyToolStripMenuItem
             // 
             this.addDependencyToolStripMenuItem.Name = "addDependencyToolStripMenuItem";
-            this.addDependencyToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.addDependencyToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.addDependencyToolStripMenuItem.Text = "Add Dependency";
             this.addDependencyToolStripMenuItem.Click += new System.EventHandler(this.addDependencyToolStripMenuItem_Click);
             // 
             // buildModuleToolStripMenuItem
             // 
             this.buildModuleToolStripMenuItem.Name = "buildModuleToolStripMenuItem";
-            this.buildModuleToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.buildModuleToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.buildModuleToolStripMenuItem.Text = "Build Module";
             this.buildModuleToolStripMenuItem.Click += new System.EventHandler(this.buildModuleToolStripMenuItem_Click);
             // 
             // restoreToolStripMenuItem
             // 
             this.restoreToolStripMenuItem.Name = "restoreToolStripMenuItem";
-            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.restoreToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.restoreToolStripMenuItem.Text = "Restore";
             this.restoreToolStripMenuItem.Click += new System.EventHandler(this.restoreToolStripMenuItem_Click);
             // 
             // publishToLocalToolStripMenuItem
             // 
             this.publishToLocalToolStripMenuItem.Name = "publishToLocalToolStripMenuItem";
-            this.publishToLocalToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.publishToLocalToolStripMenuItem.Size = new System.Drawing.Size(207, 26);
             this.publishToLocalToolStripMenuItem.Text = "Publish to Local";
             this.publishToLocalToolStripMenuItem.Click += new System.EventHandler(this.publishToLocalToolStripMenuItem_Click);
             // 
             // tslPercentage
             // 
             this.tslPercentage.Name = "tslPercentage";
-            this.tslPercentage.Size = new System.Drawing.Size(35, 17);
+            this.tslPercentage.Size = new System.Drawing.Size(45, 24);
             this.tslPercentage.Text = "100%";
             // 
             // tsProgress
             // 
             this.tsProgress.Name = "tsProgress";
-            this.tsProgress.Size = new System.Drawing.Size(100, 16);
+            this.tsProgress.Size = new System.Drawing.Size(133, 22);
             // 
             // tslCurrentTask
             // 
             this.tslCurrentTask.Name = "tslCurrentTask";
-            this.tslCurrentTask.Size = new System.Drawing.Size(62, 17);
+            this.tslCurrentTask.Size = new System.Drawing.Size(76, 24);
             this.tslCurrentTask.Text = "Task: none";
             // 
             // tbConsoleIn
@@ -275,16 +282,18 @@ namespace VisCPU.HL.Forms
             this.tbConsoleIn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbConsoleIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbConsoleIn.Location = new System.Drawing.Point(0, 0);
+            this.tbConsoleIn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tbConsoleIn.Name = "tbConsoleIn";
-            this.tbConsoleIn.Size = new System.Drawing.Size(838, 28);
+            this.tbConsoleIn.Size = new System.Drawing.Size(1117, 33);
             this.tbConsoleIn.TabIndex = 2;
             // 
             // btnSendInput
             // 
             this.btnSendInput.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnSendInput.Location = new System.Drawing.Point(838, 0);
+            this.btnSendInput.Location = new System.Drawing.Point(1117, 0);
+            this.btnSendInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSendInput.Name = "btnSendInput";
-            this.btnSendInput.Size = new System.Drawing.Size(75, 51);
+            this.btnSendInput.Size = new System.Drawing.Size(100, 63);
             this.btnSendInput.TabIndex = 1;
             this.btnSendInput.Text = "Send";
             this.btnSendInput.UseVisualStyleBackColor = true;
@@ -294,9 +303,10 @@ namespace VisCPU.HL.Forms
             // 
             this.panelRight.Controls.Add(this.tcCodeOut);
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelRight.Location = new System.Drawing.Point(478, 0);
+            this.panelRight.Location = new System.Drawing.Point(637, 0);
+            this.panelRight.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(435, 256);
+            this.panelRight.Size = new System.Drawing.Size(580, 315);
             this.panelRight.TabIndex = 5;
             // 
             // panelLeft
@@ -304,8 +314,9 @@ namespace VisCPU.HL.Forms
             this.panelLeft.Controls.Add(this.tcCodeIn);
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
+            this.panelLeft.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelLeft.Name = "panelLeft";
-            this.panelLeft.Size = new System.Drawing.Size(478, 256);
+            this.panelLeft.Size = new System.Drawing.Size(637, 315);
             this.panelLeft.TabIndex = 6;
             // 
             // fbdSelectDir
@@ -314,13 +325,14 @@ namespace VisCPU.HL.Forms
             // 
             // HLLiveOutputViewerForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(913, 489);
+            this.ClientSize = new System.Drawing.Size(1217, 602);
             this.Controls.Add(this.panelLeft);
             this.Controls.Add(this.panelRight);
             this.Controls.Add(this.panelConsole);
-            this.MinimumSize = new System.Drawing.Size(850, 449);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(1127, 542);
             this.Name = "HLLiveOutputViewerForm";
             this.Text = "HL Live Output Viewer";
             this.Load += new System.EventHandler(this.HLLiveOutputViewerForm_Load);

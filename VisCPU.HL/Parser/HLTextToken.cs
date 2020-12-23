@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.HL.Parser.Tokens;
 
 /// <summary>
@@ -7,13 +6,11 @@ using VisCPU.HL.Parser.Tokens;
 /// </summary>
 namespace VisCPU.HL.Parser
 {
-
     /// <summary>
     ///     Represents a Token that contains a Sequence of Characters
     /// </summary>
     public class HLTextToken : IHLToken
     {
-
         /// <summary>
         ///     The Token Value
         /// </summary>
@@ -37,7 +34,7 @@ namespace VisCPU.HL.Parser
         /// <param name="type">Token Type</param>
         /// <param name="value">Token Value</param>
         /// <param name="startIndex">Start index in the source stream</param>
-        public HLTextToken( HLTokenType type, string value, int startIndex )
+        public HLTextToken(HLTokenType type, string value, int startIndex)
         {
             Type = type;
             Value = value;
@@ -48,9 +45,9 @@ namespace VisCPU.HL.Parser
         ///     Returns all Children of this token
         /// </summary>
         /// <returns>Child Tokens</returns>
-        public List < IHLToken > GetChildren()
+        public List<IHLToken> GetChildren()
         {
-            return new List < IHLToken >();
+            return new List<IHLToken>();
         }
 
         /// <summary>
@@ -63,7 +60,5 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
-
 }

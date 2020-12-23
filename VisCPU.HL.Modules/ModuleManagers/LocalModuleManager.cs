@@ -11,9 +11,10 @@ namespace VisCPU.HL.Modules.ModuleManagers
 {
     public class LocalModuleManager : ModuleManager
     {
-
         private readonly List<ModulePackage> packageList;
-        public LocalModuleManager(string moduleRoot) : base(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, moduleRoot))
+
+        public LocalModuleManager(string moduleRoot) : base(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+            moduleRoot))
         {
             Directory.CreateDirectory(ModuleRoot.OriginalString);
             string modListPath = Path.Combine(
@@ -27,9 +28,8 @@ namespace VisCPU.HL.Modules.ModuleManagers
             }
 
             packageList =
-                JsonConvert.DeserializeObject < List < ModulePackage > >(
-                    File.ReadAllText( modListPath )
-
+                JsonConvert.DeserializeObject<List<ModulePackage>>(
+                    File.ReadAllText(modListPath)
                 );
             packageList.ForEach(x => x.Manager = this);
         }
@@ -53,6 +53,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
             return Path.Combine(GetTargetDataPath(target), MODULE_DATA);
         }
+
         public override string GetTargetInfoUri(ModulePackage package, string moduleVersion)
         {
             return Path.Combine(GetModulePackagePath(package), moduleVersion, MODULE_TARGET);
@@ -62,6 +63,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
             return Path.Combine(ModuleRoot.OriginalString, MODULE_PATH, target.ModuleName, target.ModuleVersion);
         }
+
         public override string GetModulePackagePath(ModulePackage package)
         {
             return Path.Combine(ModuleRoot.OriginalString, MODULE_PATH, package.ModuleName);
@@ -70,27 +72,27 @@ namespace VisCPU.HL.Modules.ModuleManagers
         public override void AddPackage(ModuleTarget target, string moduleDataPath)
         {
             ModulePackage package;
-            
-            
-            if (! HasPackage( target.ModuleName ) )
+
+
+            if (!HasPackage(target.ModuleName))
             {
-                package = new ModulePackage( this, target.ModuleName, new string[0] );
+                package = new ModulePackage(this, target.ModuleName, new string[0]);
                 packageList.Add(package);
             }
             else
             {
-                package = GetPackage( target.ModuleName );
+                package = GetPackage(target.ModuleName);
             }
-            
+
             if (package.HasTarget(target.ModuleVersion))
             {
                 throw new AccessViolationException("Can not Overwrite Existing Version");
             }
             package.ModuleVersions.Add(target.ModuleVersion);
-            string data = GetTargetDataPath( target );
+            string data = GetTargetDataPath(target);
             Directory.CreateDirectory(data);
             File.Copy(moduleDataPath, GetTargetDataUri(target));
-            SaveModuleTarget( target, GetTargetInfoUri( package, target.ModuleVersion ) );
+            SaveModuleTarget(target, GetTargetInfoUri(package, target.ModuleVersion));
             SavePackageList();
         }
 
@@ -147,11 +149,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             string dataPath = GetTargetDataPath(t);
 
             if (Directory.Exists(dataPath))
+            {
                 Directory.Delete(dataPath, true);
+            }
 
             p.ModuleVersions.RemoveAll(x => x == moduleVersion);
             SavePackageList();
         }
-
     }
 }

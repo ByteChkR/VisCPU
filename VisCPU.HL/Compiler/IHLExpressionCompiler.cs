@@ -2,12 +2,8 @@
 
 namespace VisCPU.HL.Compiler
 {
-
     internal interface IHLExpressionCompiler
     {
-
-        ExpressionTarget Parse( HLCompilation compilation, HLExpression expr, ExpressionTarget outputTarget );
-
+        ExpressionTarget Parse(HLCompilation compilation, HLExpression expr, ExpressionTarget outputTarget);
     }
-
 }

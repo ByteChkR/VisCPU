@@ -2,11 +2,9 @@
 
 namespace VisCPU.Utility.Logging
 {
-
     [Flags]
     public enum LoggerSystems
     {
-
         EventSystem = 1,
         MemoryBus = 2,
         AssemblyGenerator = 4,
@@ -39,7 +37,5 @@ namespace VisCPU.Utility.Logging
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
         Default = UriResolver | Console | HL_Compiler | FileCompilation | Linker
-
     }
-
 }

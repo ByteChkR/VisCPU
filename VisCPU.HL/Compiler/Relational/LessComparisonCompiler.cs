@@ -2,10 +2,8 @@
 
 namespace VisCPU.HL.Compiler.Relational
 {
-
-    public class LessComparisonCompiler : HLExpressionCompiler < HLBinaryOp >
+    public class LessComparisonCompiler : HLExpressionCompiler<HLBinaryOp>
     {
-
         protected override bool NeedsOutput => true;
 
         #region Public
@@ -13,35 +11,32 @@ namespace VisCPU.HL.Compiler.Relational
         public override ExpressionTarget ParseExpression(
             HLCompilation compilation,
             HLBinaryOp expr,
-            ExpressionTarget outputTarget )
+            ExpressionTarget outputTarget)
         {
             ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
-                                                  MakeAddress( compilation );
+                expr.Left
+            ).MakeAddress(compilation);
 
             string rtName = compilation.GetTempVar();
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right,
-                                                         new ExpressionTarget( rtName, true, compilation.TypeSystem.GetType("var"))
-                                                        );
+                expr.Right,
+                new ExpressionTarget(rtName, true, compilation.TypeSystem.GetType("var"))
+            );
 
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
-            string label = compilation.GetUniqueName( "bexpr_lt" );
-            compilation.ProgramCode.Add( $"BGE {target.ResultAddress} {rTarget.ResultAddress} {label}" );
-            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
-            compilation.ProgramCode.Add( $".{label} linker:hide" );
-            compilation.ReleaseTempVar( rtName );
-            compilation.ReleaseTempVar( target.ResultAddress );
+            string label = compilation.GetUniqueName("bexpr_lt");
+            compilation.ProgramCode.Add($"BGE {target.ResultAddress} {rTarget.ResultAddress} {label}");
+            compilation.ProgramCode.Add($"LOAD {outputTarget.ResultAddress} 1");
+            compilation.ProgramCode.Add($".{label} linker:hide");
+            compilation.ReleaseTempVar(rtName);
+            compilation.ReleaseTempVar(target.ResultAddress);
 
             return outputTarget;
         }
 
         #endregion
-
     }
-
 }

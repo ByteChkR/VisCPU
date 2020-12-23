@@ -2,13 +2,11 @@
 
 namespace VisCPU.HL.Parser.Tokens.Combined
 {
-
     /// <summary>
     ///     Implements a Variable(Property) Definition Token
     /// </summary>
     public class VariableDefinitionToken : CombinedToken
     {
-
         /// <summary>
         ///     Initializer Expression
         /// </summary>
@@ -47,11 +45,11 @@ namespace VisCPU.HL.Parser.Tokens.Combined
             IHLToken[] modifiers,
             IHLToken[] subtokens,
             HLExpression initializerExpression,
-            IHLToken size = null ) : base(
-                                          HLTokenType.OpVariableDefinition,
-                                          subtokens,
-                                          typeName.SourceIndex
-                                         )
+            IHLToken size = null) : base(
+            HLTokenType.OpVariableDefinition,
+            subtokens,
+            typeName.SourceIndex
+        )
         {
             Modifiers = modifiers;
             Name = name;
@@ -66,11 +64,9 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         public override string ToString()
         {
-            return $"{Unpack( Modifiers )} {TypeName} {Name}";
+            return $"{Unpack(Modifiers)} {TypeName} {Name}";
         }
 
         #endregion
-
     }
-
 }

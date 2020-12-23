@@ -1,23 +1,21 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.TypeSystem
 {
-
-    public abstract class HLMemberDefinition: IHLTypeSystemInstance
+    public abstract class HLMemberDefinition : IHLTypeSystemInstance
     {
-        public string Name { get; }
-
-        public abstract uint GetSize();
-
-        protected HLMemberDefinition( string name )
+        protected HLMemberDefinition(string name)
         {
             Name = name;
         }
 
-        public List < IHLToken > GetChildren()
+        public string Name { get; }
+
+        public abstract uint GetSize();
+
+        public List<IHLToken> GetChildren()
         {
             return null;
         }
@@ -25,7 +23,5 @@ namespace VisCPU.HL.TypeSystem
         public int SourceIndex { get; }
 
         public abstract HLTokenType Type { get; }
-
     }
-
 }

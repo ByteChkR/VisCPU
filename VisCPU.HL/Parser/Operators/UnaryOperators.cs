@@ -3,13 +3,11 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Parser.Operators
 {
-
     /// <summary>
     ///     Implements Unary Operators
     /// </summary>
     public class UnaryOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -23,7 +21,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
         {
             return
                 parser.CurrentToken.Type == HLTokenType.OpBang &&
@@ -38,17 +36,15 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
         {
             HLTokenType type = parser.CurrentToken.Type;
-            parser.Eat( type );
-            HLExpression token = new HLUnaryOp( parser.ParseExpr( 0 ), type );
+            parser.Eat(type);
+            HLExpression token = new HLUnaryOp(parser.ParseExpr(0), type);
 
             return token;
         }
 
         #endregion
-
     }
-
 }

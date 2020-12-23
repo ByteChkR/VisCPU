@@ -1,9 +1,7 @@
 ﻿namespace VisCPU.Instructions
 {
-
     public class NoOpInstruction : BaseInstruction
     {
-
         public override uint Cycles => 1;
 
         public override string Key => "NOP";
@@ -14,13 +12,11 @@
 
         #region Public
 
-        public override void Process( CPU cpu )
+        public override void Process(CPU cpu)
         {
-            Log( cpu, "No Operation" );
+            Log(cpu, "No Operation");
         }
 
         #endregion
-
     }
-
 }

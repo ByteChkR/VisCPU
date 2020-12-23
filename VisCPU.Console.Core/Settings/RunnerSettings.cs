@@ -12,34 +12,23 @@ namespace VisCPU.Console.Core.Settings
 {
     public class RunnerSettings
     {
+        [Argument(Name = "run:cpu.interrupt")] public uint CpuIntAddr = 0x00000000;
 
-        [Argument( Name = "cpu.interrupt" )]
-        public uint CpuIntAddr = 0x00000000;
+        [Argument(Name = "run:cpu.reset")] public uint CpuResetAddr = 0x00000000;
 
-        [Argument( Name = "cpu.reset" )]
-        public uint CpuResetAddr = 0x00000000;
+        [Argument(Name = "run:input")] [Argument(Name = "run:i")] [XmlIgnore] [JsonIgnore]
+        private readonly string[] inputFiles = null;
 
-        [XmlIgnore]
-        [JsonIgnore]
-        public Dictionary < string, Func < string, string > > PreRunMap =
-            new Dictionary < string, Func < string, string > >
+        [Argument(Name = "run:input-dirs")] [Argument(Name = "run:if")] [XmlIgnore] [JsonIgnore]
+        private readonly string[] inputFolders = null;
+
+        [XmlIgnore] [JsonIgnore] public Dictionary<string, Func<string, string>> PreRunMap =
+            new Dictionary<string, Func<string, string>>
             {
-                { ".z", UnCompressFile },
-                { ".vasm", FindBinary },
-                { ".vhl", FindBinary }
+                {".z", UnCompressFile},
+                {".vasm", FindBinary},
+                {".vhl", FindBinary}
             };
-
-        [Argument( Name = "input-files" )]
-        [Argument( Name = "i" )]
-        [XmlIgnore]
-        [JsonIgnore]
-        private string[] inputFiles;
-
-        [Argument( Name = "input-folders" )]
-        [Argument( Name = "if" )]
-        [XmlIgnore]
-        [JsonIgnore]
-        private string[] inputFolders;
 
         [XmlIgnore]
         [JsonIgnore]
@@ -47,16 +36,16 @@ namespace VisCPU.Console.Core.Settings
         {
             get
             {
-                List < string > ret = new List < string >();
+                List<string> ret = new List<string>();
 
-                if ( inputFolders != null )
+                if (inputFolders != null)
                 {
-                    ret.AddRange( inputFolders.SelectMany( x => Directory.GetFiles( x, "*.txt" ) ) );
+                    ret.AddRange(inputFolders.SelectMany(x => Directory.GetFiles(x, "*.txt")));
                 }
 
-                if ( inputFiles != null )
+                if (inputFiles != null)
                 {
-                    ret.AddRange( inputFiles );
+                    ret.AddRange(inputFiles);
                 }
 
                 return ret.ToArray();
@@ -67,7 +56,7 @@ namespace VisCPU.Console.Core.Settings
 
         public static RunnerSettings Create()
         {
-            return Utility.Settings.SettingsSystem.GetSettings < RunnerSettings >();
+            return SettingsSystem.GetSettings<RunnerSettings>();
         }
 
         #endregion
@@ -76,24 +65,24 @@ namespace VisCPU.Console.Core.Settings
 
         static RunnerSettings()
         {
-            Utility.Settings.SettingsSystem.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
-                                                 AppDomain.CurrentDomain.BaseDirectory,
-                                                 "config/runner.json"
-                                                ), new RunnerSettings() );
+            SettingsSystem.RegisterDefaultLoader(new JSONSettingsLoader(), Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "config/runner.json"
+            ), new RunnerSettings());
         }
 
-        private static string FindBinary( string arg )
+        private static string FindBinary(string arg)
         {
-            string name = Path.Combine( Path.GetDirectoryName( arg ), Path.GetFileNameWithoutExtension( arg ) );
+            string name = Path.Combine(Path.GetDirectoryName(arg), Path.GetFileNameWithoutExtension(arg));
             string rawBin = name + ".vbin";
             string compBin = name + ".vbin.z";
 
-            if ( File.Exists( rawBin ) )
+            if (File.Exists(rawBin))
             {
                 return rawBin;
             }
 
-            if ( File.Exists( compBin ) )
+            if (File.Exists(compBin))
             {
                 return compBin;
             }
@@ -101,17 +90,17 @@ namespace VisCPU.Console.Core.Settings
             return null;
         }
 
-        private static string UnCompressFile( string originalfile )
+        private static string UnCompressFile(string originalfile)
         {
-            string newFile = originalfile.Remove( originalfile.Length - 2, 2 );
+            string newFile = originalfile.Remove(originalfile.Length - 2, 2);
 
-            using ( Stream input = File.OpenRead( originalfile ) )
+            using (Stream input = File.OpenRead(originalfile))
             {
-                using ( Stream output = File.Create( newFile ) )
+                using (Stream output = File.Create(newFile))
                 {
-                    using ( Stream s = new GZipStream( input, CompressionMode.Decompress ) )
+                    using (Stream s = new GZipStream(input, CompressionMode.Decompress))
                     {
-                        s.CopyTo( output );
+                        s.CopyTo(output);
                     }
                 }
             }
@@ -120,7 +109,5 @@ namespace VisCPU.Console.Core.Settings
         }
 
         #endregion
-
     }
-
 }

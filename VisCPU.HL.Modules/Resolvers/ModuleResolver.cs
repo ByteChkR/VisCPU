@@ -8,9 +8,9 @@ namespace VisCPU.HL.Modules.Resolvers
 {
     public static class ModuleResolver
     {
-
         public static ModuleResolverSettings ResolverSettings;
         public static ModuleManager Manager;
+
         static ModuleResolver()
         {
             Initialize();
@@ -39,8 +39,8 @@ namespace VisCPU.HL.Modules.Resolvers
 
         public static ModuleTarget Resolve(ModuleDependency dependency)
         {
-            return Manager.GetPackage(dependency.ModuleName).
-                GetInstallTarget(dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion);
+            return Manager.GetPackage(dependency.ModuleName)
+                .GetInstallTarget(dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion);
         }
     }
 }

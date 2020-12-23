@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using VisCPU.HL.Events;
 using VisCPU.Utility.Events;
@@ -9,42 +8,46 @@ namespace VisCPU.HL.TypeSystem
 {
     public class HLTypeSystem
     {
+        private readonly List<HLTypeDefinition> DefinedTypes = new List<HLTypeDefinition>();
+
         public HLTypeSystem()
         {
-            AddItem( new VarTypeDefinition() );
+            AddItem(new VarTypeDefinition());
         }
-        private readonly List < HLTypeDefinition > DefinedTypes = new List < HLTypeDefinition >();
 
-        public HLTypeDefinition GetType( string name ) => DefinedTypes.First( x => x.Name == name );
+        public HLTypeDefinition GetType(string name)
+        {
+            return DefinedTypes.First(x => x.Name == name);
+        }
 
-        public HLTypeDefinition GetOrAdd( string name ) =>
-            DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name );
-        
+        public HLTypeDefinition GetOrAdd(string name)
+        {
+            return DefinedTypes.FirstOrDefault(x => x.Name == name) ?? CreateEmptyType(name);
+        }
+
         private void AddItem(HLTypeDefinition def)
         {
             DefinedTypes.Add(def);
         }
 
-        public bool HasType( string name )
+        public bool HasType(string name)
         {
-            return DefinedTypes.Any( x => x.Name == name);
+            return DefinedTypes.Any(x => x.Name == name);
         }
-        
-        public HLTypeDefinition CreateEmptyType( string name)
+
+        public HLTypeDefinition CreateEmptyType(string name)
         {
-            if ( DefinedTypes.Any( x => x.Name == name ) )
+            if (DefinedTypes.Any(x => x.Name == name))
             {
-                EventManager < ErrorEvent >.SendEvent( new HLTypeRedefinitionEvent( name ) );
+                EventManager<ErrorEvent>.SendEvent(new HLTypeRedefinitionEvent(name));
 
                 return null;
             }
             HLTypeDefinition def = new HLTypeDefinition(name);
 
-            AddItem( def );
+            AddItem(def);
 
             return def;
         }
-
     }
-
 }

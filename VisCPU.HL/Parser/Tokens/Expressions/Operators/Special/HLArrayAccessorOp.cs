@@ -6,13 +6,11 @@ using System.Linq;
 /// </summary>
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
-
     /// <summary>
     ///     Array Accessor Operator Implementation
     /// </summary>
     public class HLArrayAccessorOp : HLExpression
     {
-
         /// <summary>
         ///     Left Side (the array)
         /// </summary>
@@ -36,7 +34,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="context">XL Context</param>
         /// <param name="list">Left Side Array</param>
         /// <param name="parameterList">Array Accessor Parameters</param>
-        public HLArrayAccessorOp( HLExpression list, List < HLExpression > parameterList ) : base( list.SourceIndex )
+        public HLArrayAccessorOp(HLExpression list, List<HLExpression> parameterList) : base(list.SourceIndex)
         {
             Left = list;
             ParameterList = parameterList.ToArray();
@@ -46,13 +44,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List<IHLToken> GetChildren()
         {
-            return ParameterList.Cast < IHLToken >().Concat( new[] { Left } ).ToList();
+            return ParameterList.Cast<IHLToken>().Concat(new[] {Left}).ToList();
         }
 
         #endregion
-
     }
-
 }

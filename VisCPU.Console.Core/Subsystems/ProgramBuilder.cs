@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
-using VisCPU.HL.Modules;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -12,66 +10,60 @@ using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems
 {
-
     public class ProgramBuilder : ConsoleSubsystem
     {
-
-        private readonly List < uint > ignored = new List < uint >();
-
         #region Public
 
-        public override void Run( IEnumerable < string > args )
+        public override void Run(IEnumerable<string> args)
         {
             BuilderSettings settings = BuilderSettings.Create();
-            
+
             LinkerSettings ls = LinkerSettings.Create();
             ArgumentSyntaxParser.Parse(
-                                       args.ToArray(),
-                                       settings,
-                                       ls
-                                      );
+                args.ToArray(),
+                settings,
+                ls
+            );
 
-            SettingsSystem.SaveSettings( ls );
-            SettingsSystem.SaveSettings( settings );
+            SettingsSystem.SaveSettings(ls);
+            SettingsSystem.SaveSettings(settings);
 
-            if ( settings.InputFiles == null )
+            if (settings.InputFiles == null)
             {
                 return;
             }
 
-            foreach ( string f in settings.InputFiles )
+            foreach (string f in settings.InputFiles)
             {
-                string original = Path.GetFullPath( f );
+                string original = Path.GetFullPath(f);
                 string file = original;
 
-                if ( !File.Exists( file ) )
+                if (!File.Exists(file))
                 {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FileNotFoundEvent( Path.GetFullPath( file ), true )
-                                                         );
+                    EventManager<ErrorEvent>.SendEvent(
+                        new FileNotFoundEvent(Path.GetFullPath(file), true)
+                    );
 
                     continue;
                 }
 
-                foreach ( ( string stepName, BuildSteps step ) in settings.BuildSteps )
+                foreach ((string stepName, BuildSteps step) in settings.BuildSteps)
                 {
-                    string newFile = step( file );
+                    string newFile = step(file);
 
-                    if ( settings.CleanBuildOutput && file != original )
+                    if (settings.CleanBuildOutput && file != original)
                     {
-                        File.Delete( file );
+                        File.Delete(file);
                     }
 
-                    Log( $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'" );
+                    Log($"Running Build Step '{stepName}' File: '{file}' => '{newFile}'");
                     file = newFile;
                 }
 
-                Log( $"Steps Completed! File: '{original}' => '{file}'" );
+                Log($"Steps Completed! File: '{original}' => '{file}'");
             }
         }
 
         #endregion
-
     }
-
 }

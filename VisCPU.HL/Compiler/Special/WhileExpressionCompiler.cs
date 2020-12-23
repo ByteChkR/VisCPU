@@ -3,34 +3,32 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 
 namespace VisCPU.HL.Compiler.Special
 {
-
-    public class WhileExpressionCompiler : HLExpressionCompiler < HLWhileOp >
+    public class WhileExpressionCompiler : HLExpressionCompiler<HLWhileOp>
     {
-
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLWhileOp expr )
+        public override ExpressionTarget ParseExpression(HLCompilation compilation, HLWhileOp expr)
         {
-            string startLabel = compilation.GetUniqueName( "while_start" );
-            string endLabel = compilation.GetUniqueName( "while_end" );
+            string startLabel = compilation.GetUniqueName("while_start");
+            string endLabel = compilation.GetUniqueName("while_end");
 
-            compilation.ProgramCode.Add( $".{startLabel} linker:hide" );
+            compilation.ProgramCode.Add($".{startLabel} linker:hide");
             string tname = compilation.GetTempVar();
-            ExpressionTarget target = new ExpressionTarget( tname, true, compilation.TypeSystem.GetType("var"));
-            compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} 0x00" );
-            compilation.Parse( expr.Condition, target );
+            ExpressionTarget target = new ExpressionTarget(tname, true, compilation.TypeSystem.GetType("var"));
+            compilation.ProgramCode.Add($"LOAD {target.ResultAddress} 0x00");
+            compilation.Parse(expr.Condition, target);
 
-            compilation.ProgramCode.Add( $"BEZ {target.ResultAddress} {endLabel}" );
+            compilation.ProgramCode.Add($"BEZ {target.ResultAddress} {endLabel}");
 
-            foreach ( HLExpression hlExpression in expr.Block )
+            foreach (HLExpression hlExpression in expr.Block)
             {
-                compilation.Parse( hlExpression );
+                compilation.Parse(hlExpression);
             }
 
-            compilation.ProgramCode.Add( $"JMP {startLabel}" );
-            compilation.ProgramCode.Add( $".{endLabel} linker:hide" );
+            compilation.ProgramCode.Add($"JMP {startLabel}");
+            compilation.ProgramCode.Add($".{endLabel} linker:hide");
 
-            compilation.ReleaseTempVar( target.ResultAddress );
+            compilation.ReleaseTempVar(target.ResultAddress);
 
             //.while_start
             //LOAD tmp_condition_var 0x00
@@ -43,7 +41,5 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
-
 }

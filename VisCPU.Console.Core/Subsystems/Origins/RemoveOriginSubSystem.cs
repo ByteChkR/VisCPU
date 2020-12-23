@@ -7,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 {
     public class RemoveOriginSubSystem : ConsoleSubsystem
     {
-
         public override void Run(IEnumerable<string> args)
         {
             OriginSettings s = SettingsSystem.GetSettings<OriginSettings>();
@@ -15,6 +14,5 @@ namespace VisCPU.Console.Core.Subsystems.Origins
             s.origins.Remove(name);
             SettingsSystem.SaveSettings(s);
         }
-
     }
 }

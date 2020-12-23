@@ -2,10 +2,8 @@
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
 {
-
     public class HLFuncDefOperand : HLVarOperand
     {
-
         public readonly HLExpression[] Block;
 
         /// <summary>
@@ -25,7 +23,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="value">Variable Value</param>
-        public HLFuncDefOperand( FunctionDefinitionToken value, HLExpression[] block ) : base( value.SourceIndex )
+        public HLFuncDefOperand(FunctionDefinitionToken value, HLExpression[] block) : base(value.SourceIndex)
         {
             this.value = value;
             Block = block;
@@ -37,7 +35,5 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         }
 
         #endregion
-
     }
-
 }

@@ -3,13 +3,11 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Parser.Operators
 {
-
     /// <summary>
     ///     Implements XOR Operator
     /// </summary>
     public class BitXOrOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -23,7 +21,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
         {
             return parser.CurrentToken.Type == HLTokenType.OpCap &&
                    parser.Reader.PeekNext().Type != HLTokenType.OpEquality;
@@ -35,19 +33,17 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
         {
-            parser.Eat( HLTokenType.OpCap );
+            parser.Eat(HLTokenType.OpCap);
 
             return new HLBinaryOp(
-                                  currentNode,
-                                  HLTokenType.OpCap,
-                                  parser.ParseExpr( 0 )
-                                 );
+                currentNode,
+                HLTokenType.OpCap,
+                parser.ParseExpr(0)
+            );
         }
 
         #endregion
-
     }
-
 }

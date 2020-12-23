@@ -16,40 +16,29 @@ using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Settings
 {
-
     public class BuilderSettings
     {
-
-        public static readonly Dictionary < string, BuildSteps > AllBuildSteps =
-            new Dictionary < string, BuildSteps >
+        public static readonly Dictionary<string, BuildSteps> AllBuildSteps =
+            new Dictionary<string, BuildSteps>
             {
-                { "HL-expr", CreateExpressionBuildStep },
-                { "bin", CreateBinary },
-                { "compress", CompressFile }
+                {"HL-expr", CreateExpressionBuildStep},
+                {"bin", CreateBinary},
+                {"compress", CompressFile}
             };
 
-        [Argument( Name = "clean" )]
-        public bool CleanBuildOutput = true;
+        [Argument(Name = "build:steps")] public readonly string[] buildSteps = {"bin"};
 
-        [Argument( Name = "build-steps" )]
-        [Argument( Name = "steps" )]
-        public readonly string[] buildSteps = { "bin" };
+        [Argument(Name = "build:clean")] public bool CleanBuildOutput = true;
 
-        [Argument( Name = "input-files" )]
-        [Argument( Name = "i" )]
-        [XmlIgnore]
-        [JsonIgnore]
+        [Argument(Name = "build:input")] [Argument(Name = "build:i")] [XmlIgnore] [JsonIgnore]
         public string[] inputFiles;
 
-        [Argument( Name = "input-folders" )]
-        [Argument( Name = "if" )]
-        [XmlIgnore]
-        [JsonIgnore]
+        [Argument(Name = "build:input-dirs")] [Argument(Name = "build:if")] [XmlIgnore] [JsonIgnore]
         public string[] inputFolders;
 
         [XmlIgnore]
         [JsonIgnore]
-        public IEnumerable < (string, BuildSteps) > BuildSteps => buildSteps.Select( x => ( x, AllBuildSteps[x] ) );
+        public IEnumerable<(string, BuildSteps)> BuildSteps => buildSteps.Select(x => (x, AllBuildSteps[x]));
 
         [XmlIgnore]
         [JsonIgnore]
@@ -57,16 +46,16 @@ namespace VisCPU.Console.Core.Settings
         {
             get
             {
-                List < string > ret = new List < string >();
+                List<string> ret = new List<string>();
 
-                if ( inputFolders != null )
+                if (inputFolders != null)
                 {
-                    ret.AddRange( inputFolders.SelectMany( x => Directory.GetFiles( x, "*.vasm" ) ) );
+                    ret.AddRange(inputFolders.SelectMany(x => Directory.GetFiles(x, "*.vasm")));
                 }
 
-                if ( inputFiles != null )
+                if (inputFiles != null)
                 {
-                    ret.AddRange( inputFiles );
+                    ret.AddRange(inputFiles);
                 }
 
                 return ret.ToArray();
@@ -77,7 +66,7 @@ namespace VisCPU.Console.Core.Settings
 
         public static BuilderSettings Create()
         {
-            return Utility.Settings.SettingsSystem.GetSettings < BuilderSettings >();
+            return SettingsSystem.GetSettings<BuilderSettings>();
         }
 
         #endregion
@@ -86,24 +75,24 @@ namespace VisCPU.Console.Core.Settings
 
         static BuilderSettings()
         {
-            
-            Utility.Settings.SettingsSystem.RegisterDefaultLoader( new JSONSettingsLoader(), Path.Combine(
-                                                 AppDomain.CurrentDomain.BaseDirectory,
-                                                 "config/build.json"
-                                                ), new BuilderSettings() );
+
+            SettingsSystem.RegisterDefaultLoader(new JSONSettingsLoader(), Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "config/build.json"
+            ), new BuilderSettings());
         }
 
-        private static string CompressFile( string originalfile )
+        private static string CompressFile(string originalfile)
         {
             string newFile = originalfile + ".z";
 
-            using ( Stream input = File.OpenRead( originalfile ) )
+            using (Stream input = File.OpenRead(originalfile))
             {
-                using ( Stream output = File.Create( newFile ) )
+                using (Stream output = File.Create(newFile))
                 {
-                    using ( Stream s = new GZipStream( output, CompressionLevel.Optimal ) )
+                    using (Stream s = new GZipStream(output, CompressionLevel.Optimal))
                     {
-                        input.CopyTo( s );
+                        input.CopyTo(s);
                     }
                 }
             }
@@ -111,62 +100,60 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateBinary( string originalFile )
+        private static string CreateBinary(string originalFile)
         {
-            if ( Path.GetExtension( originalFile ) != ".vasm" )
+            if (Path.GetExtension(originalFile) != ".vasm")
             {
-                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( originalFile, true ) );
+                EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(originalFile, true));
 
                 return originalFile;
             }
 
-            Compilation comp = new Compilation( new MultiFileStaticLinker(), new DefaultAssemblyGenerator() );
-            comp.Compile( originalFile );
+            Compilation comp = new Compilation(new MultiFileStaticLinker(), new DefaultAssemblyGenerator());
+            comp.Compile(originalFile);
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
-                                          Path.GetFileNameWithoutExtension( originalFile )
-                                         ) +
+                                 Path.GetDirectoryName(Path.GetFullPath(originalFile)),
+                                 Path.GetFileNameWithoutExtension(originalFile)
+                             ) +
                              ".vbin";
 
-            if ( Utility.Settings.SettingsSystem.GetSettings < LinkerSettings >().ExportLinkerInfo )
+            if (SettingsSystem.GetSettings<LinkerSettings>().ExportLinkerInfo)
             {
-                comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
+                comp.LinkerInfo.Save(newFile, LinkerInfo.LinkerInfoFormat.Text);
             }
 
-            File.WriteAllBytes( newFile, comp.ByteCode.ToArray() );
+            File.WriteAllBytes(newFile, comp.ByteCode.ToArray());
 
             return newFile;
         }
 
-        private static string CreateExpressionBuildStep( string originalFile )
+        private static string CreateExpressionBuildStep(string originalFile)
         {
-            if ( Path.GetExtension( originalFile ) != ".vhl" )
+            if (Path.GetExtension(originalFile) != ".vhl")
             {
-                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( originalFile, true ) );
+                EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(originalFile, true));
 
                 return originalFile;
             }
 
             ExpressionParser p = new ExpressionParser();
-            string file = File.ReadAllText( originalFile );
+            string file = File.ReadAllText(originalFile);
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
-                                          Path.GetFileNameWithoutExtension( originalFile )
-                                         ) +
+                                 Path.GetDirectoryName(Path.GetFullPath(originalFile)),
+                                 Path.GetFileNameWithoutExtension(originalFile)
+                             ) +
                              ".vasm";
 
             File.WriteAllText(
-                              newFile,
-                              p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( originalFile ) ) ).Parse()
-                             );
+                newFile,
+                p.Parse(file, Path.GetDirectoryName(Path.GetFullPath(originalFile))).Parse()
+            );
 
             return newFile;
         }
 
         #endregion
-
     }
-
 }

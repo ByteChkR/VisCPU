@@ -8,24 +8,6 @@ namespace VisCPU.HL.Modules.ModuleManagers
 {
     public abstract class ModuleManager
     {
-
-        public static void CreateModuleTarget(string targetFile)
-        {
-            File.WriteAllText(
-                targetFile,
-                JsonConvert.SerializeObject(new ModuleTarget(null, "NewModule", "0.1", new ModuleDependency[0]), Formatting.Indented)
-            );
-        }
-
-        public static ModuleTarget LoadModuleTarget(string targetFile)
-        {
-            return JsonConvert.DeserializeObject<ModuleTarget>(File.ReadAllText(targetFile));
-        }
-        public static void SaveModuleTarget(ModuleTarget target, string targetFile)
-        {
-            File.WriteAllText(targetFile, JsonConvert.SerializeObject(target, Formatting.Indented));
-        }
-
         public const string MODULE_LIST = "index.json";
         public const string MODULE_DATA = "module.zip";
         public const string MODULE_TARGET = "module.json";
@@ -35,6 +17,25 @@ namespace VisCPU.HL.Modules.ModuleManagers
         protected ModuleManager(string moduleRoot)
         {
             ModuleRoot = new Uri(moduleRoot, UriKind.Absolute);
+        }
+
+        public static void CreateModuleTarget(string targetFile)
+        {
+            File.WriteAllText(
+                targetFile,
+                JsonConvert.SerializeObject(new ModuleTarget(null, "NewModule", "0.1", new ModuleDependency[0]),
+                    Formatting.Indented)
+            );
+        }
+
+        public static ModuleTarget LoadModuleTarget(string targetFile)
+        {
+            return JsonConvert.DeserializeObject<ModuleTarget>(File.ReadAllText(targetFile));
+        }
+
+        public static void SaveModuleTarget(ModuleTarget target, string targetFile)
+        {
+            File.WriteAllText(targetFile, JsonConvert.SerializeObject(target, Formatting.Indented));
         }
 
         public abstract IEnumerable<ModulePackage> GetPackages();
@@ -61,6 +62,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
             throw new NotSupportedException($"'{this}' does not support Removing Packages");
         }
+
         public virtual void RemoveTarget(string moduleName, string moduleVersion)
         {
             throw new NotSupportedException($"'{this}' does not support Removing Targets");

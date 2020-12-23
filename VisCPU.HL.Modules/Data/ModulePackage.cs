@@ -11,12 +11,15 @@ namespace VisCPU.HL.Modules.Data
     [Serializable]
     public class ModulePackage
     {
+        [JsonIgnore] [XmlIgnore] public ModuleManager Manager;
 
         public string ModuleName;
         public List<string> ModuleVersions;
-        [JsonIgnore, XmlIgnore]
-        public ModuleManager Manager;
-        public ModulePackage() { }
+
+        public ModulePackage()
+        {
+        }
+
         public ModulePackage(ModuleManager manager, string moduleName, string[] moduleVersions)
         {
             ModuleName = moduleName;
@@ -42,6 +45,5 @@ namespace VisCPU.HL.Modules.Data
                 File.ReadAllText(Manager.GetTargetInfoUri(this, ModuleVersions.Last()))
             );
         }
-
     }
 }

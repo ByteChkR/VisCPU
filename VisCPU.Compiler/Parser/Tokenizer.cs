@@ -1,52 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using VisCPU.Compiler.Parser.Tokens;
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Compiler.Parser
 {
-
     public class Tokenizer : VisBase
     {
-
         private readonly string originalText;
         private int position;
 
         protected override LoggerSystems SubSystem => LoggerSystems.Parser;
 
-        private char Current => Peek( 0 );
+        private char Current => Peek(0);
 
         #region Public
 
-        public static List < AToken[] > Tokenize( string text )
+        public static List<AToken[]> Tokenize(string text)
         {
-            Tokenizer reader = new Tokenizer( text );
-            List < AToken > tokens = new List < AToken > { new NewLineToken( text, 0, -1 ) };
+            Tokenizer reader = new Tokenizer(text);
+            List<AToken> tokens = new List<AToken> {new NewLineToken(text, 0, -1)};
 
-            while ( reader.Current != '\0' )
+            while (reader.Current != '\0')
             {
                 AToken current = reader.Advance();
 
-                if ( current is EOFToken )
+                if (current is EOFToken)
                 {
                     break;
                 }
 
-                tokens.Add( current );
+                tokens.Add(current);
             }
 
-            List < AToken[] > asmInstructions = new List < AToken[] >();
-            List < AToken > asmInstruction = new List < AToken >();
+            List<AToken[]> asmInstructions = new List<AToken[]>();
+            List<AToken> asmInstruction = new List<AToken>();
 
-            for ( int i = 0; i < tokens.Count; i++ )
+            for (int i = 0; i < tokens.Count; i++)
             {
-                if ( tokens[i] is NewLineToken )
+                if (tokens[i] is NewLineToken)
                 {
-                    if ( asmInstruction.Count != 0 )
+                    if (asmInstruction.Count != 0)
                     {
-                        asmInstructions.Add( asmInstruction.ToArray() );
+                        asmInstructions.Add(asmInstruction.ToArray());
                     }
 
                     asmInstruction.Clear();
@@ -54,12 +51,12 @@ namespace VisCPU.Compiler.Parser
                     continue;
                 }
 
-                asmInstruction.Add( tokens[i] );
+                asmInstruction.Add(tokens[i]);
             }
 
-            if ( asmInstruction.Count != 0 )
+            if (asmInstruction.Count != 0)
             {
-                asmInstructions.Add( asmInstruction.ToArray() );
+                asmInstructions.Add(asmInstruction.ToArray());
             }
 
             asmInstruction.Clear();
@@ -71,110 +68,110 @@ namespace VisCPU.Compiler.Parser
 
         #region Private
 
-        private Tokenizer( string text )
+        private Tokenizer(string text)
         {
             originalText = text;
         }
 
         private AToken Advance()
         {
-            if ( Current == '\0' )
+            if (Current == '\0')
             {
-                return new EOFToken( originalText, position, 0 );
+                return new EOFToken(originalText, position, 0);
             }
 
-            ReadUntil( BeginningOfWord );
+            ReadUntil(BeginningOfWord);
 
-            if ( Current == ';' )
+            if (Current == ';')
             {
-                ReadUntil( EndOfSingleLineComment );
+                ReadUntil(EndOfSingleLineComment);
 
                 return Advance();
             }
 
             int start = position;
 
-            if ( Current == '"' )
+            if (Current == '"')
             {
                 char sepItem = Current;
                 position++;
-                int len = ReadUntil( x => x == sepItem );
+                int len = ReadUntil(x => x == sepItem);
                 position++;
 
-                return new StringToken( originalText, start, len + 2 );
+                return new StringToken(originalText, start, len + 2);
             }
 
-            if ( Current == ':' )
+            if (Current == ':')
             {
-                int len = ReadUntil( EndOfWord );
+                int len = ReadUntil(EndOfWord);
 
-                return new WordToken( originalText, start, len ).Resolve();
+                return new WordToken(originalText, start, len).Resolve();
             }
 
-            if ( Current == '\n' )
+            if (Current == '\n')
             {
                 int size = 1;
                 position += size;
 
-                return new NewLineToken( originalText, start, size );
+                return new NewLineToken(originalText, start, size);
             }
 
-            if ( Current == '\r' )
+            if (Current == '\r')
             {
                 int size = 1;
 
-                if ( Peek( 1 ) == '\n' )
+                if (Peek(1) == '\n')
                 {
                     size++;
                 }
 
                 position += size;
 
-                return new NewLineToken( originalText, start, size );
+                return new NewLineToken(originalText, start, size);
             }
 
-            if ( Current == '\'' )
+            if (Current == '\'')
             {
                 char sepItem = Current;
                 start++;
                 position++;
-                int len = ReadUntil( x => x == sepItem );
+                int len = ReadUntil(x => x == sepItem);
                 position++;
 
-                return new CharToken( originalText, start, len );
+                return new CharToken(originalText, start, len);
             }
 
-            if ( char.IsDigit( Current ) )
+            if (char.IsDigit(Current))
             {
                 char f = Current;
-                char s = Peek( 1 );
-                int len = ReadUntil( EndOfWord );
+                char s = Peek(1);
+                int len = ReadUntil(EndOfWord);
 
-                if ( f == '0' && s == 'x' )
+                if (f == '0' && s == 'x')
                 {
-                    return new HexToken( originalText, start, len );
+                    return new HexToken(originalText, start, len);
                 }
 
-                return new DecToken( originalText, start, len );
+                return new DecToken(originalText, start, len);
             }
             else
             {
-                int len = ReadUntil( EndOfWord );
+                int len = ReadUntil(EndOfWord);
 
-                return new WordToken( originalText, start, len ).Resolve();
+                return new WordToken(originalText, start, len).Resolve();
             }
         }
 
-        private bool BeginningOfConstantInstruction( char input )
+        private bool BeginningOfConstantInstruction(char input)
         {
             return input == ':';
         }
 
-        private bool BeginningOfWord( char input )
+        private bool BeginningOfWord(char input)
         {
-            return char.IsLetterOrDigit( input ) ||
+            return char.IsLetterOrDigit(input) ||
                    input == '_' ||
-                   BeginningOfConstantInstruction( input ) ||
+                   BeginningOfConstantInstruction(input) ||
                    input == '\n' ||
                    input == '\r' ||
                    input == ':' ||
@@ -184,31 +181,31 @@ namespace VisCPU.Compiler.Parser
                    input == '\'';
         }
 
-        private bool EndOfSingleLineComment( char input )
+        private bool EndOfSingleLineComment(char input)
         {
             return input == '\n' || input == '\r';
         }
 
-        private bool EndOfWord( char input )
+        private bool EndOfWord(char input)
         {
-            return IsWhiteSpace( input ) || input == ';' || input == '\n' || input == '\r';
+            return IsWhiteSpace(input) || input == ';' || input == '\n' || input == '\r';
         }
 
-        private bool IsWhiteSpace( char input )
+        private bool IsWhiteSpace(char input)
         {
             return input == '\t' || input == ' ';
         }
 
-        private char Peek( int offset )
+        private char Peek(int offset)
         {
             return position + offset < originalText.Length ? originalText[position + offset] : '\0';
         }
 
-        private int ReadUntil( Func < char, bool > func )
+        private int ReadUntil(Func<char, bool> func)
         {
             int start = position;
 
-            while ( Current != '\0' && !func( Current ) )
+            while (Current != '\0' && !func(Current))
             {
                 position++;
             }
@@ -217,7 +214,5 @@ namespace VisCPU.Compiler.Parser
         }
 
         #endregion
-
     }
-
 }

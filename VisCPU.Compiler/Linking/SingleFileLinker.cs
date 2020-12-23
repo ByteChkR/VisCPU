@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking.Events;
 using VisCPU.Utility.Events;
@@ -7,33 +6,29 @@ using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Linking
 {
-
     public class SingleFileLinker : Linker
     {
-
         #region Public
 
-        public override LinkerResult Link( LinkerTarget target, Compilation compilation )
+        public override LinkerResult Link(LinkerTarget target, Compilation compilation)
         {
-            if ( target.FileCompilation.FileReferences.Count != 0 )
+            if (target.FileCompilation.FileReferences.Count != 0)
             {
-                EventManager < ErrorEvent >.SendEvent( new FileReferencesUnsupportedEvent() );
+                EventManager<ErrorEvent>.SendEvent(new FileReferencesUnsupportedEvent());
             }
 
             LinkerResult ret = new LinkerResult(
-                                                new[] { target },
-                                                target.FileCompilation.Constants,
-                                                target.FileCompilation.Labels,
-                                                target.FileCompilation.DataSectionHeader,
-                                                target.FileCompilation.Tokens.ToList(),
-                                                target.FileCompilation.DataSection.ToArray()
-                                               );
+                new[] {target},
+                target.FileCompilation.Constants,
+                target.FileCompilation.Labels,
+                target.FileCompilation.DataSectionHeader,
+                target.FileCompilation.Tokens.ToList(),
+                target.FileCompilation.DataSection.ToArray()
+            );
 
             return ret;
         }
 
         #endregion
-
     }
-
 }

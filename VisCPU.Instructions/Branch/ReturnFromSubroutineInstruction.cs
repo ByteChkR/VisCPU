@@ -2,10 +2,8 @@
 
 namespace VisCPU.Instructions.Branch
 {
-
     public class ReturnFromSubroutineInstruction : BranchInstruction
     {
-
         public override uint Cycles => 1;
 
         public override uint InstructionSize => 4;
@@ -16,15 +14,13 @@ namespace VisCPU.Instructions.Branch
 
         #region Public
 
-        public override void Process( CPU cpu )
+        public override void Process(CPU cpu)
         {
             cpu.PopState();
 
-            Log( cpu, "Returning from Subroutine." );
+            Log(cpu, "Returning from Subroutine.");
         }
 
         #endregion
-
     }
-
 }

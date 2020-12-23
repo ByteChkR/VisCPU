@@ -1,15 +1,24 @@
 ﻿namespace VisCPU.Utility
 {
-
     public abstract class AToken
     {
-
         public readonly int Length;
         public readonly string OriginalText;
 
         #region Unity Event Functions
 
         public readonly int Start;
+
+        #endregion
+
+        #region Protected
+
+        protected AToken(string originalText, int start, int length)
+        {
+            OriginalText = originalText;
+            Start = start;
+            Length = length;
+        }
 
         #endregion
 
@@ -23,18 +32,5 @@
         }
 
         #endregion
-
-        #region Protected
-
-        protected AToken( string originalText, int start, int length )
-        {
-            OriginalText = originalText;
-            Start = start;
-            Length = length;
-        }
-
-        #endregion
-
     }
-
 }

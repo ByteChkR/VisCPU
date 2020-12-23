@@ -1,6 +1,4 @@
 ﻿using System.IO;
-
-using VisCPU.Peripherals.Console;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -9,31 +7,33 @@ namespace VisCPU.Peripherals.Memory
 {
     public class Memory : Peripheral
     {
-
-        private MemorySettings settings;
-
-        public readonly uint[] InternalMemory;
         private readonly string fullPersistentPath;
 
-        public uint EndAddress => settings.Start + ( uint ) InternalMemory.Length;
+        public readonly uint[] InternalMemory;
+
+        private readonly MemorySettings settings;
+
+        public uint EndAddress => settings.Start + (uint) InternalMemory.Length;
 
         #region Public
 
-        public Memory() :this(MemorySettings.Create()) { }
-        
+        public Memory() : this(MemorySettings.Create())
+        {
+        }
+
         public Memory(MemorySettings settings)
         {
             this.settings = settings;
 
-            if ( settings.Persistent && !string.IsNullOrEmpty(settings.PersistentPath))
+            if (settings.Persistent && !string.IsNullOrEmpty(settings.PersistentPath))
             {
                 fullPersistentPath = Path.GetFullPath(settings.PersistentPath);
-                Directory.CreateDirectory( Path.GetDirectoryName( fullPersistentPath ) );
-                if ( File.Exists( settings.PersistentPath ) )
+                Directory.CreateDirectory(Path.GetDirectoryName(fullPersistentPath));
+                if (File.Exists(settings.PersistentPath))
                 {
-                    InternalMemory = File.ReadAllBytes( settings.PersistentPath ).ToUInt();
+                    InternalMemory = File.ReadAllBytes(settings.PersistentPath).ToUInt();
 
-                    if ( InternalMemory.Length != settings.Size )
+                    if (InternalMemory.Length != settings.Size)
                     {
                         EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(settings.PersistentPath, true));
                         //Persistent File not correct size.
@@ -41,7 +41,7 @@ namespace VisCPU.Peripherals.Memory
                 }
                 else
                 {
-                    EventManager <ErrorEvent>.SendEvent(new FileNotFoundEvent(settings.PersistentPath, true));
+                    EventManager<ErrorEvent>.SendEvent(new FileNotFoundEvent(settings.PersistentPath, true));
                     InternalMemory = new uint[settings.Size];
                     //File does not exist
                 }
@@ -59,30 +59,30 @@ namespace VisCPU.Peripherals.Memory
 
         public override void Shutdown()
         {
-            if ( settings.Persistent && fullPersistentPath != null )
+            if (settings.Persistent && fullPersistentPath != null)
             {
-                File.WriteAllBytes( fullPersistentPath, InternalMemory.ToBytes() );
+                File.WriteAllBytes(fullPersistentPath, InternalMemory.ToBytes());
             }
         }
 
-        public override bool CanRead( uint address )
+        public override bool CanRead(uint address)
         {
             return settings.EnableRead && address < EndAddress && address >= settings.Start;
         }
 
-        public override bool CanWrite( uint address )
+        public override bool CanWrite(uint address)
         {
             return settings.EnableWrite && address < EndAddress && address >= settings.Start;
         }
 
-        public override void Dump( Stream str )
+        public override void Dump(Stream str)
         {
-            str.Write( InternalMemory.ToBytes(), 0, InternalMemory.Length * sizeof( uint ) );
+            str.Write(InternalMemory.ToBytes(), 0, InternalMemory.Length * sizeof(uint));
         }
 
-        public override uint ReadData( uint address )
+        public override uint ReadData(uint address)
         {
-            if ( CanWrite( address ) )
+            if (CanWrite(address))
             {
                 return InternalMemory[address - settings.Start];
             }
@@ -90,18 +90,14 @@ namespace VisCPU.Peripherals.Memory
             return 0;
         }
 
-        public override void WriteData( uint address, uint data )
+        public override void WriteData(uint address, uint data)
         {
-            if ( CanWrite( address ) )
+            if (CanWrite(address))
             {
                 InternalMemory[address - settings.Start] = data;
             }
         }
-        
-        
 
         #endregion
-
     }
-
 }

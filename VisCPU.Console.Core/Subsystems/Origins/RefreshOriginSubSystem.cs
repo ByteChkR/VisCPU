@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using VisCPU.Console.Core.Settings;
-using VisCPU.HL.Modules;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.HL.Modules.Resolvers;
@@ -11,7 +10,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 {
     public class RefreshOriginSubSystem : ConsoleSubsystem
     {
-
         public override void Run(IEnumerable<string> args)
         {
             OriginSettings s = SettingsSystem.GetSettings<OriginSettings>();
@@ -53,6 +51,5 @@ namespace VisCPU.Console.Core.Subsystems.Origins
                 throw new Exception($"Scheme '{url.Scheme}' is not supported");
             }
         }
-
     }
 }

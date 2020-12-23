@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings.Events;
 
 namespace VisCPU.Utility.Settings
 {
-
     public static class SettingsSystem
     {
+        private static readonly Dictionary<Type, SettingsEntry> defaultLoaderMap =
+            new Dictionary<Type, SettingsEntry>();
+
+        public static bool EnableIO { get; set; } = true;
 
         private struct SettingsEntry
         {
-
             public readonly string DefaultFile;
             public object CachedObject;
             public readonly SettingsLoader FileLoader;
@@ -26,13 +27,7 @@ namespace VisCPU.Utility.Settings
                 Directory.CreateDirectory(Path.GetDirectoryName(DefaultFile));
                 FileLoader = loader;
             }
-
         }
-
-        private static readonly Dictionary<Type, SettingsEntry> defaultLoaderMap =
-            new Dictionary<Type, SettingsEntry>();
-
-        public static bool EnableIO { get; set; } = true;
 
         #region Public
 
@@ -59,24 +54,26 @@ namespace VisCPU.Utility.Settings
         public static string GetDefaultFile<T>()
         {
             if (DefaultExists<T>())
+            {
                 return defaultLoaderMap[typeof(T)].DefaultFile;
+            }
 
             return null;
         }
 
         public static T GetSettings<T>()
         {
-            return (T)GetSettings(typeof(T));
+            return (T) GetSettings(typeof(T));
         }
 
         public static T GetSettings<T>(string file)
         {
-            return (T)GetSettings(typeof(T), file);
+            return (T) GetSettings(typeof(T), file);
         }
 
         public static T GetSettings<T>(SettingsLoader loader, string file)
         {
-            return (T)GetSettings(loader, typeof(T), file);
+            return (T) GetSettings(loader, typeof(T), file);
         }
 
         public static object GetSettings(Type t)
@@ -145,7 +142,9 @@ namespace VisCPU.Utility.Settings
         {
             defaultLoaderMap[t] = new SettingsEntry(defaultFile, loader);
             if (!DefaultFileExists(t))
+            {
                 SaveSettings(loader, defaultValues, defaultFile);
+            }
         }
 
         public static void SaveSettings(object o)
@@ -179,7 +178,5 @@ namespace VisCPU.Utility.Settings
         }
 
         #endregion
-
     }
-
 }

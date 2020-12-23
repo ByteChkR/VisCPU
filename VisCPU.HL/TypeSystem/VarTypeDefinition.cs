@@ -2,15 +2,13 @@
 {
     public class VarTypeDefinition : HLTypeDefinition
     {
+        public VarTypeDefinition() : base("var")
+        {
+        }
 
         public override uint GetSize()
         {
             return 1;
         }
-
-        public VarTypeDefinition() : base( "var" )
-        {
-        }
-
     }
 }

@@ -2,10 +2,8 @@
 
 namespace VisCPU.HL.Compiler
 {
-
     public readonly struct ExpressionTarget
     {
-
         public readonly string ResultAddress;
         public readonly bool IsAddress;
         public readonly bool IsPointer;
@@ -19,11 +17,11 @@ namespace VisCPU.HL.Compiler
             TypeDefinition = def;
         }
 
-        public ExpressionTarget Cast( HLTypeDefinition newType )
+        public ExpressionTarget Cast(HLTypeDefinition newType)
         {
-            return new ExpressionTarget( ResultAddress, IsAddress, newType, IsPointer );
+            return new ExpressionTarget(ResultAddress, IsAddress, newType, IsPointer);
         }
-        
+
         public ExpressionTarget MakeAddress(HLCompilation c)
         {
             if (IsAddress)
@@ -60,7 +58,5 @@ namespace VisCPU.HL.Compiler
 
             return target;
         }
-
     }
-
 }

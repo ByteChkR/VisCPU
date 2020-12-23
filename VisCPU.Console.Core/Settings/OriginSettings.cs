@@ -8,19 +8,22 @@ namespace VisCPU.Console.Core.Settings
     [Serializable]
     public class OriginSettings
     {
+        public Dictionary<string, string> origins = new Dictionary<string, string>
+        {
+            {"local", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config/module/local")}
+        };
+
         static OriginSettings()
         {
-            Utility.Settings.SettingsSystem.RegisterDefaultLoader(new JSONSettingsLoader(), Path.Combine(
+            SettingsSystem.RegisterDefaultLoader(new JSONSettingsLoader(), Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
                 "config/origins.json"
             ), new OriginSettings());
         }
-        public Dictionary<string, string> origins = new Dictionary<string, string>
+
+        public static OriginSettings Create()
         {
-            { "local", Utility.Settings.SettingsSystem.GetDefaultFile < OriginSettings >() }
-        };
-
-        public static OriginSettings Create() => Utility.Settings.SettingsSystem.GetSettings < OriginSettings >();
-
+            return SettingsSystem.GetSettings<OriginSettings>();
+        }
     }
 }

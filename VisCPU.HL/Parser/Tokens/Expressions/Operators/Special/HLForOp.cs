@@ -3,13 +3,11 @@ using System.Linq;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
-
     /// <summary>
     ///     For Operator Implementation
     /// </summary>
     public class HLForOp : HLExpression
     {
-
         /// <summary>
         ///     Continue Condition
         /// </summary>
@@ -19,11 +17,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     The Expression Body
         /// </summary>
         private readonly HLExpression[] ExprBody;
-
-        /// <summary>
-        ///     Expression Body
-        /// </summary>
-        private readonly HLTokenType OperationType = HLTokenType.OpFor;
 
         /// <summary>
         ///     Variable Declaration
@@ -51,7 +44,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             HLExpression condition,
             HLExpression vInc,
             HLExpression[] exprBody,
-            int sourceIdx ) : base( sourceIdx )
+            int sourceIdx) : base(sourceIdx)
         {
             Condition = condition;
             VDecl = vDecl;
@@ -63,19 +56,16 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List<IHLToken> GetChildren()
         {
-            return new List < IHLToken >
-                   {
-                       VDecl,
-                       Condition,
-                       VInc
-                   }.Concat( ExprBody ).
-                     ToList();
+            return new List<IHLToken>
+            {
+                VDecl,
+                Condition,
+                VInc
+            }.Concat(ExprBody).ToList();
         }
 
         #endregion
-
     }
-
 }

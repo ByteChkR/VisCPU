@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions;
@@ -10,196 +9,197 @@ using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.HL.Compiler
 {
-
-    public class InvocationExpressionCompiler : HLExpressionCompiler < HLInvocationOp >
+    public class InvocationExpressionCompiler : HLExpressionCompiler<HLInvocationOp>
     {
-
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLInvocationOp expr )
+        public override ExpressionTarget ParseExpression(HLCompilation compilation, HLInvocationOp expr)
         {
             string target = expr.Left.ToString();
 
-            if ( target == "ptr_of" )
+            if (target == "ptr_of")
             {
 
-                ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
-                
+                ExpressionTarget et = compilation.Parse(expr.ParameterList.First());
+
                 string v = compilation.GetTempVar();
                 compilation.ProgramCode.Add(
-                                            $"LOAD {v} {et.ResultAddress}"
-                                           );
+                    $"LOAD {v} {et.ResultAddress}"
+                );
 
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType("var"));
+                return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
             }
 
-            if ( target == "static_cast" )
+            if (target == "static_cast")
             {
                 if (expr.ParameterList.Length != 2)
                 {
                     EventManager<ErrorEvent>.SendEvent(
-                                                       new FunctionArgumentMismatchEvent(
-                                                            "Invalid Arguments. Expected static_cast(variable, type)"
-                                                           )
-                                                      );
+                        new FunctionArgumentMismatchEvent(
+                            "Invalid Arguments. Expected static_cast(variable, type)"
+                        )
+                    );
                 }
-                return compilation.Parse( expr.ParameterList[0] ).Cast(compilation.TypeSystem.GetType(expr.ParameterList[1].ToString()));
+                return compilation.Parse(expr.ParameterList[0])
+                    .Cast(compilation.TypeSystem.GetType(expr.ParameterList[1].ToString()));
 
             }
 
-            if ( target == "offset_of" )
+            if (target == "offset_of")
             {
                 if (expr.ParameterList.Length != 2)
                 {
                     EventManager<ErrorEvent>.SendEvent(
-                                                       new FunctionArgumentMismatchEvent(
-                                                            "Invalid Arguments. Expected offset_of(type, member)"
-                                                           )
-                                                      );
+                        new FunctionArgumentMismatchEvent(
+                            "Invalid Arguments. Expected offset_of(type, member)"
+                        )
+                    );
                 }
 
-                HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString());
+                HLTypeDefinition type = compilation.TypeSystem.GetType(expr.ParameterList[0].ToString());
                 string v = compilation.GetTempVar();
-                uint off = type.GetOffset( expr.ParameterList[1].ToString() );
+                uint off = type.GetOffset(expr.ParameterList[1].ToString());
                 compilation.ProgramCode.Add(
-                                            $"LOAD {v} {off}"
-                                           );
+                    $"LOAD {v} {off}"
+                );
 
                 return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
 
             }
 
-            if ( target == "size_of" )
+            if (target == "size_of")
             {
-                if ( expr.ParameterList.Length != 1 )
+                if (expr.ParameterList.Length != 1)
                 {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               "Invalid Arguments. Expected size_of(variable)"
-                                                              )
-                                                         );
+                    EventManager<ErrorEvent>.SendEvent(
+                        new FunctionArgumentMismatchEvent(
+                            "Invalid Arguments. Expected size_of(variable)"
+                        )
+                    );
                 }
 
                 string v = compilation.GetTempVar();
 
-                if ( compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
+                if (compilation.ContainsVariable(expr.ParameterList[0].ToString()))
                 {
                     compilation.ProgramCode.Add(
-                                                $"LOAD {v} {compilation.GetVariable(expr.ParameterList[0].ToString()).Size}"
-                                               );
+                        $"LOAD {v} {compilation.GetVariable(expr.ParameterList[0].ToString()).Size}"
+                    );
 
                     return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
                 }
-                else if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
+                if (compilation.TypeSystem.HasType(expr.ParameterList[0].ToString()))
                 {
                     compilation.ProgramCode.Add(
-                                                $"LOAD {v} {compilation.TypeSystem.GetType(expr.ParameterList[0].ToString()).GetSize()}"
-                                               );
+                        $"LOAD {v} {compilation.TypeSystem.GetType(expr.ParameterList[0].ToString()).GetSize()}"
+                    );
 
                     return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
                 }
                 EventManager<ErrorEvent>.SendEvent(
-                                                   new HLVariableNotFoundEvent(
-                                                                               expr.ParameterList[0].ToString(),
-                                                                               false
-                                                                              )
-                                                  );
+                    new HLVariableNotFoundEvent(
+                        expr.ParameterList[0].ToString(),
+                        false
+                    )
+                );
 
                 return new ExpressionTarget();
             }
 
-            if ( target == "string" )
+            if (target == "string")
             {
-                if ( expr.ParameterList.Length != 2 )
+                if (expr.ParameterList.Length != 2)
                 {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               "Invalid Arguments. Expected string(varname, string value)"
-                                                              )
-                                                         );
+                    EventManager<ErrorEvent>.SendEvent(
+                        new FunctionArgumentMismatchEvent(
+                            "Invalid Arguments. Expected string(varname, string value)"
+                        )
+                    );
                 }
 
                 string varName = expr.ParameterList[0].ToString();
 
-                string content = expr.ParameterList[1].
-                                      GetChildren().
-                                      Select( x => x.ToString() ).
-                                      Aggregate( ( input, elem ) => input + ' ' + elem );
+                string content = expr.ParameterList[1].GetChildren().Select(x => x.ToString())
+                    .Aggregate((input, elem) => input + ' ' + elem);
 
-                compilation.CreateVariable( varName, content, compilation.TypeSystem.GetType("var") );
+                compilation.CreateVariable(varName, content, compilation.TypeSystem.GetType("var"));
 
-                return new ExpressionTarget( compilation.GetFinalName( varName ), true , compilation.TypeSystem.GetType("var"));
+                return new ExpressionTarget(compilation.GetFinalName(varName), true,
+                    compilation.TypeSystem.GetType("var"));
             }
 
-            if ( target == "val_of" )
+            if (target == "val_of")
             {
                 string v = compilation.GetTempVar();
-                ExpressionTarget t = compilation.Parse( expr.ParameterList.First() );
+                ExpressionTarget t = compilation.Parse(expr.ParameterList.First());
                 compilation.ProgramCode.Add(
-                                            $"DREF {t.ResultAddress} {v}"
-                                           );
+                    $"DREF {t.ResultAddress} {v}"
+                );
 
-                return new ExpressionTarget( v, true, t.TypeDefinition);
+                return new ExpressionTarget(v, true, t.TypeDefinition);
             }
 
-            bool isInternalFunc = compilation.FunctionMap.ContainsKey( target );
+            bool isInternalFunc = compilation.FunctionMap.ContainsKey(target);
 
             IExternalData externalSymbol =
                 compilation.ExternalSymbols.FirstOrDefault(
-                                                           x => x.GetName() == target &&
-                                                                x.DataType == ExternalDataType.FUNCTION
-                                                          );
+                    x => x.GetName() == target &&
+                         x.DataType == ExternalDataType.FUNCTION
+                );
 
-            if ( isInternalFunc || externalSymbol != null )
+            if (isInternalFunc || externalSymbol != null)
             {
                 int targetLength = isInternalFunc
-                                       ? compilation.FunctionMap[target].ParameterCount
-                                       : ( ( FunctionData ) externalSymbol ).ParameterCount;
+                    ? compilation.FunctionMap[target].ParameterCount
+                    : ((FunctionData) externalSymbol).ParameterCount;
 
-                if ( expr.ParameterList.Length != targetLength )
+                if (expr.ParameterList.Length != targetLength)
                 {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
-                                                              )
-                                                         );
+                    EventManager<ErrorEvent>.SendEvent(
+                        new FunctionArgumentMismatchEvent(
+                            $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
+                        )
+                    );
                 }
 
-                foreach ( HLExpression parameter in expr.ParameterList )
+                foreach (HLExpression parameter in expr.ParameterList)
                 {
-                    ExpressionTarget arg = compilation.Parse( parameter ).MakeAddress( compilation );
+                    ExpressionTarget arg = compilation.Parse(parameter).MakeAddress(compilation);
 
-                    if(arg.TypeDefinition.Name == "var")
-                    compilation.ProgramCode.Add(
-                                                $"PUSH {arg.ResultAddress}; Push Param {parameter}"
-                                               );
+                    if (arg.TypeDefinition.Name == "var")
+                    {
+                        compilation.ProgramCode.Add(
+                            $"PUSH {arg.ResultAddress}; Push Param {parameter}"
+                        );
+                    }
                     else
                     {
                         string v = compilation.GetTempVar();
                         compilation.ProgramCode.Add(
-                                                    $"LOAD {v} {arg.ResultAddress}; Push Param {parameter}"
-                                                   );
+                            $"LOAD {v} {arg.ResultAddress}; Push Param {parameter}"
+                        );
                         compilation.ProgramCode.Add(
-                                                    $"PUSH {v}; Push Param {parameter}"
-                                                   );
+                            $"PUSH {v}; Push Param {parameter}"
+                        );
                         compilation.ReleaseTempVar(v);
                     }
 
-                    compilation.ReleaseTempVar( arg.ResultAddress );
+                    compilation.ReleaseTempVar(arg.ResultAddress);
                 }
 
-                compilation.ProgramCode.Add( $"JSR {target}" );
+                compilation.ProgramCode.Add($"JSR {target}");
 
-                if ( isInternalFunc && compilation.FunctionMap[target].HasReturnValue ||
-                     !isInternalFunc && ( ( FunctionData ) externalSymbol ).HasReturnValue )
+                if (isInternalFunc && compilation.FunctionMap[target].HasReturnValue ||
+                    !isInternalFunc && ((FunctionData) externalSymbol).HasReturnValue)
                 {
-                    ExpressionTarget tempReturn = new ExpressionTarget( compilation.GetTempVar(), true, compilation.TypeSystem.GetType("var") );
+                    ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar(), true,
+                        compilation.TypeSystem.GetType("var"));
 
                     compilation.ProgramCode.Add(
-                                                $"; Write back return value to '{tempReturn.ResultAddress}'"
-                                               );
+                        $"; Write back return value to '{tempReturn.ResultAddress}'"
+                    );
 
-                    compilation.ProgramCode.Add( $"POP {tempReturn.ResultAddress}" );
+                    compilation.ProgramCode.Add($"POP {tempReturn.ResultAddress}");
 
                     return tempReturn;
                 }
@@ -207,39 +207,37 @@ namespace VisCPU.HL.Compiler
                 return new ExpressionTarget();
             }
 
-            if ( compilation.ContainsVariable( target ) ||
-                 compilation.ConstValTypes.ContainsKey( target ) )
+            if (compilation.ContainsVariable(target) ||
+                compilation.ConstValTypes.ContainsKey(target))
             {
-                foreach ( HLExpression parameter in expr.ParameterList )
+                foreach (HLExpression parameter in expr.ParameterList)
                 {
-                    ExpressionTarget tt = compilation.Parse( parameter );
+                    ExpressionTarget tt = compilation.Parse(parameter);
 
                     compilation.ProgramCode.Add(
-                                                $"PUSH {tt.ResultAddress}; Push Param {parameter}"
-                                               );
+                        $"PUSH {tt.ResultAddress}; Push Param {parameter}"
+                    );
 
-                    compilation.ReleaseTempVar( tt.ResultAddress );
+                    compilation.ReleaseTempVar(tt.ResultAddress);
                 }
 
-                if ( compilation.ContainsVariable( target ) )
+                if (compilation.ContainsVariable(target))
                 {
-                    compilation.ProgramCode.Add( $"JSREF {compilation.GetFinalName( target )}" );
+                    compilation.ProgramCode.Add($"JSREF {compilation.GetFinalName(target)}");
                 }
                 else
                 {
-                    compilation.ProgramCode.Add( $"JSREF {target}" );
+                    compilation.ProgramCode.Add($"JSREF {target}");
                 }
 
                 return new ExpressionTarget();
             }
 
-            EventManager < ErrorEvent >.SendEvent( new FunctionNotFoundEvent( target ) );
+            EventManager<ErrorEvent>.SendEvent(new FunctionNotFoundEvent(target));
 
             return new ExpressionTarget();
         }
 
         #endregion
-
     }
-
 }
