@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
@@ -10,12 +11,25 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems
 {
+    
     public class HelpSubSystem : ConsoleSubsystem
     {
+        private ConsoleSystem owner = null;
+        public HelpSubSystem(ConsoleSystem owner)
+        {
+            this.owner = owner;
+        }
+
         #region Public
 
         public override void Run(IEnumerable<string> arguments)
         {
+            if (owner != null)
+            {
+                Log(VisConsole.ListSubsystems(owner.SubSystems, new StringBuilder()).ToString());
+            }
+            
+            
             WriteSubsystem("CLI", CLISettings.Create());
             WriteSubsystem("build", BuilderSettings.Create());
 
@@ -43,7 +57,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         private void WriteSubsystem(string subName, object settings)
         {
-            System.Console.WriteLine($"Subsystem: {subName}");
+            System.Console.WriteLine($"Arguments: {subName}");
 
             IEnumerable<string> args = ArgumentSyntaxParser.GetArgNames(settings);
 
@@ -55,7 +69,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         private void WriteSettings(string subName, object settings)
         {
-            System.Console.WriteLine($"Settings: {subName}");
+            System.Console.WriteLine($"Arguments: {subName}");
 
             IEnumerable<string> args = ArgumentSyntaxParser.GetArgNames(settings);
 

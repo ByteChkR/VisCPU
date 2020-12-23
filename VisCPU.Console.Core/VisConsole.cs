@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.Modules;
@@ -12,14 +14,27 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core
 {
-    public static class VisConsole
+    public abstract class ConsoleSystem : ConsoleSubsystem
     {
-        private static readonly Dictionary<string, ConsoleSubsystem> subSystems =
+        public abstract Dictionary<string, ConsoleSubsystem> SubSystems { get; }
+
+        public override void Run(IEnumerable<string> args)
+        {
+            CLISettings s = CLISettings.Create();
+            OriginSettings os = OriginSettings.Create();
+            ArgumentSyntaxParser.Parse(args.ToArray(), s);
+            Dictionary<string, ConsoleSubsystem> ss = SubSystems;
+            ss["help"] = new HelpSubSystem(this);
+            VisConsole.RunConsole(s, args.ToArray(), ss);
+        }
+    }
+    public class VisConsole :ConsoleSystem
+    {
+        public override Dictionary<string, ConsoleSubsystem> SubSystems =>
             new Dictionary<string, ConsoleSubsystem>
             {
                 {"run", new ProgramRunner()},
                 {"build", new ProgramBuilder()},
-                {"help", new HelpSubSystem()},
                 {"project", new ModuleSubSystem()},
                 {"origin", new OriginSubSystem()}
             };
@@ -28,14 +43,21 @@ namespace VisCPU.Console.Core
 
         public static void RunConsole(string[] args)
         {
-            Main(args);
+            VisConsole vs = new VisConsole();
+            vs.Run(args);
         }
 
         #endregion
 
         #region Private
 
+        [STAThread]
         private static void Main(string[] args)
+        {
+            RunConsole(args);
+        }
+
+        private void Run(string[] args)
         {
             if (args.Length < 1)
             {
@@ -48,10 +70,25 @@ namespace VisCPU.Console.Core
             EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += (x, y) => System.Console.WriteLine($"[{x}] {y}");
             ArgumentSyntaxParser.Parse(args, s, Logger.Settings);
-
-            RunConsole(s, args, subSystems);
+            Run(args as IEnumerable<string>);
         }
-
+        
+        public static StringBuilder ListSubsystems(Dictionary<string, ConsoleSubsystem> ss, StringBuilder sb, int indentation = 0)
+        {
+            sb.Append('\t', indentation);
+            sb.AppendLine("Sub Systems:");
+            foreach (KeyValuePair<string, ConsoleSubsystem> consoleSubsystem in ss)
+            {
+                sb.Append('\t', indentation+1);
+                sb.AppendLine(consoleSubsystem.Key);
+                if (consoleSubsystem.Value is ConsoleSystem cs)
+                {
+                    ListSubsystems(cs.SubSystems, sb, indentation + 1);
+                }
+            }
+            return sb;
+        }
+        
         internal static void RunConsole(CLISettings settings, string[] args,
             Dictionary<string, ConsoleSubsystem> subsystems)
         {

@@ -5,9 +5,9 @@ using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
 {
-    public class OriginSubSystem : ConsoleSubsystem
+    public class OriginSubSystem : ConsoleSystem
     {
-        private readonly Dictionary<string, ConsoleSubsystem> subsystems =
+        public override Dictionary<string, ConsoleSubsystem> SubSystems =>
             new Dictionary<string, ConsoleSubsystem>
             {
                 {"add", new AddOriginSubSystem()},
@@ -15,12 +15,5 @@ namespace VisCPU.Console.Core.Subsystems.Origins
                 {"refresh", new RefreshOriginSubSystem()},
                 {"list", new ListOriginSubSystem()}
             };
-
-        public override void Run(IEnumerable<string> args)
-        {
-            CLISettings s = CLISettings.Create();
-            ArgumentSyntaxParser.Parse(args.ToArray(), s);
-            VisConsole.RunConsole(s, args.ToArray(), subsystems);
-        }
     }
 }

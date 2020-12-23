@@ -30,9 +30,9 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         }
     }
 
-    public class ModuleSubSystem : ConsoleSubsystem
+    public class ModuleSubSystem : ConsoleSystem
     {
-        private readonly Dictionary<string, ConsoleSubsystem> subsystems =
+        public override Dictionary<string, ConsoleSubsystem> SubSystems =>
             new Dictionary<string, ConsoleSubsystem>
             {
                 {"clean", new ModuleCleanSubSystem()},
@@ -43,13 +43,5 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                 {"add", new ModuleAddDependencySubSystem()},
                 {"list", new ListLocalPackagesSubSystem()}
             };
-
-        public override void Run(IEnumerable<string> args)
-        {
-            CLISettings s = CLISettings.Create();
-            OriginSettings os = OriginSettings.Create();
-            ArgumentSyntaxParser.Parse(args.ToArray(), s);
-            VisConsole.RunConsole(s, args.ToArray(), subsystems);
-        }
     }
 }
