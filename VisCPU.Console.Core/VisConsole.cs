@@ -13,21 +13,6 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core
 {
-    public abstract class ConsoleSystem : ConsoleSubsystem
-    {
-        public abstract Dictionary<string, ConsoleSubsystem> SubSystems { get; }
-
-        public override void Run(IEnumerable<string> args)
-        {
-            CLISettings s = CLISettings.Create();
-            OriginSettings os = OriginSettings.Create();
-            ArgumentSyntaxParser.Parse(args.ToArray(), s);
-            Dictionary<string, ConsoleSubsystem> ss = SubSystems;
-            ss["help"] = new HelpSubSystem(this);
-            VisConsole.RunConsole(s, args.ToArray(), ss);
-        }
-    }
-
     public class VisConsole : ConsoleSystem
     {
         public override Dictionary<string, ConsoleSubsystem> SubSystems =>
