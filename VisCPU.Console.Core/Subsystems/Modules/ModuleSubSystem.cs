@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
-using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Console.Core.Subsystems.Modules
 {

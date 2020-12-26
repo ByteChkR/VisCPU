@@ -10,7 +10,8 @@ namespace VisCPU.Console.Core.Settings
     public class MemoryBusSettings
     {
         [Argument(Name = "memory-bus:devices")]
-        public string[] MemoryDevices = { Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "./config/memory/default.json")};
+        public string[] MemoryDevices =
+            {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "./config/memory/default.json")};
 
         static MemoryBusSettings()
         {

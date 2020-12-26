@@ -12,15 +12,14 @@ namespace VisCPU.Console.Core.Settings
 {
     public class RunnerSettings
     {
-        [Argument(Name = "run:cpu.interrupt")] public uint CpuIntAddr = 0x00000000;
-
-        [Argument(Name = "run:cpu.reset")] public uint CpuResetAddr = 0x00000000;
-
         [Argument(Name = "run:input")] [Argument(Name = "run:i")] [XmlIgnore] [JsonIgnore]
         private readonly string[] inputFiles = null;
 
         [Argument(Name = "run:input-dirs")] [Argument(Name = "run:if")] [XmlIgnore] [JsonIgnore]
         private readonly string[] inputFolders = null;
+        [Argument(Name = "run:cpu.interrupt")] public uint CpuIntAddr = 0x00000000;
+
+        [Argument(Name = "run:cpu.reset")] public uint CpuResetAddr = 0x00000000;
 
         [XmlIgnore] [JsonIgnore] public Dictionary<string, Func<string, string>> PreRunMap =
             new Dictionary<string, Func<string, string>>

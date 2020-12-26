@@ -11,10 +11,10 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems
 {
-    
     public class HelpSubSystem : ConsoleSubsystem
     {
-        private ConsoleSystem owner = null;
+        private readonly ConsoleSystem owner;
+
         public HelpSubSystem(ConsoleSystem owner)
         {
             this.owner = owner;
@@ -28,8 +28,8 @@ namespace VisCPU.Console.Core.Subsystems
             {
                 Log(VisConsole.ListSubsystems(owner.SubSystems, new StringBuilder()).ToString());
             }
-            
-            
+
+
             WriteSubsystem("CLI", CLISettings.Create());
             WriteSubsystem("build", BuilderSettings.Create());
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
@@ -28,7 +27,8 @@ namespace VisCPU.Console.Core
             VisConsole.RunConsole(s, args.ToArray(), ss);
         }
     }
-    public class VisConsole :ConsoleSystem
+
+    public class VisConsole : ConsoleSystem
     {
         public override Dictionary<string, ConsoleSubsystem> SubSystems =>
             new Dictionary<string, ConsoleSubsystem>
@@ -72,14 +72,15 @@ namespace VisCPU.Console.Core
             ArgumentSyntaxParser.Parse(args, s, Logger.Settings);
             Run(args as IEnumerable<string>);
         }
-        
-        public static StringBuilder ListSubsystems(Dictionary<string, ConsoleSubsystem> ss, StringBuilder sb, int indentation = 0)
+
+        public static StringBuilder ListSubsystems(Dictionary<string, ConsoleSubsystem> ss, StringBuilder sb,
+            int indentation = 0)
         {
             sb.Append('\t', indentation);
             sb.AppendLine("Sub Systems:");
             foreach (KeyValuePair<string, ConsoleSubsystem> consoleSubsystem in ss)
             {
-                sb.Append('\t', indentation+1);
+                sb.Append('\t', indentation + 1);
                 sb.AppendLine(consoleSubsystem.Key);
                 if (consoleSubsystem.Value is ConsoleSystem cs)
                 {
@@ -88,7 +89,7 @@ namespace VisCPU.Console.Core
             }
             return sb;
         }
-        
+
         internal static void RunConsole(CLISettings settings, string[] args,
             Dictionary<string, ConsoleSubsystem> subsystems)
         {
