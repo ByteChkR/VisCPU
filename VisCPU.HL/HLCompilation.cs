@@ -790,10 +790,10 @@ namespace VisCPU.HL
 
                     string name = Path.GetFullPath(
                         includedFile.StartsWith(Directory)
-                            ? includedFile.Remove(includedFile.Length - 3, 3)
+                            ? includedFile.Remove(includedFile.Length - 4, 4)
                             : Directory +
                               "/" +
-                              includedFile.Remove(includedFile.Length - 3, 3)
+                              includedFile.Remove(includedFile.Length - 4, 4)
                     );
 
                     string newInclude = Path.GetFullPath(name + ".vasm");
