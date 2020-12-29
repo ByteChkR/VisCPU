@@ -102,8 +102,6 @@ namespace VisCPU.Console.Core
                     subsystem.Run(args.Skip(1));
                 }
 
-                System.Console.WriteLine();
-                System.Console.WriteLine("Process Stopped.");
 
                 if (settings.Continuous)
                 {
