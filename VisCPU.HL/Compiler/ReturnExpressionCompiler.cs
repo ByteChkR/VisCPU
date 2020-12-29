@@ -16,6 +16,12 @@ namespace VisCPU.HL.Compiler
 
                 compilation.ProgramCode.Add($"PUSH {pt.ResultAddress}");
             }
+            else
+            {
+                string v = compilation.GetTempVar();
+                compilation.ProgramCode.Add($"LOAD {v} 0");
+                compilation.ProgramCode.Add($"PUSH {v}");
+            }
 
             compilation.ProgramCode.Add("RET");
 

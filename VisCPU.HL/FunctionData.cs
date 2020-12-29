@@ -9,7 +9,7 @@ namespace VisCPU.HL
         private readonly string name;
         private string[] compiledOutput;
 
-        public bool HasReturnValue;
+        //public bool HasReturnValue;
         public int ParameterCount;
         public bool Public;
 
@@ -29,7 +29,7 @@ namespace VisCPU.HL
             functionCompiler = funcCompiler;
             compiledOutput = null;
             ParameterCount = parameterCount;
-            HasReturnValue = hasReturnValue;
+            //HasReturnValue = hasReturnValue;
         }
 
         public string[] GetCompiledOutput()

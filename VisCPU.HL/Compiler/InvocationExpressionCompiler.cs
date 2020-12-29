@@ -151,7 +151,7 @@ namespace VisCPU.HL.Compiler
             {
                 int targetLength = isInternalFunc
                     ? compilation.FunctionMap[target].ParameterCount
-                    : ((FunctionData) externalSymbol).ParameterCount;
+                    : ((FunctionData)externalSymbol).ParameterCount;
 
                 if (expr.ParameterList.Length != targetLength)
                 {
@@ -189,22 +189,17 @@ namespace VisCPU.HL.Compiler
 
                 compilation.ProgramCode.Add($"JSR {target}");
 
-                if (isInternalFunc && compilation.FunctionMap[target].HasReturnValue ||
-                    !isInternalFunc && ((FunctionData) externalSymbol).HasReturnValue)
-                {
-                    ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar(), true,
-                        compilation.TypeSystem.GetType("var"));
 
-                    compilation.ProgramCode.Add(
-                        $"; Write back return value to '{tempReturn.ResultAddress}'"
-                    );
+                ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar(), true,
+                    compilation.TypeSystem.GetType("var"));
 
-                    compilation.ProgramCode.Add($"POP {tempReturn.ResultAddress}");
+                compilation.ProgramCode.Add(
+                    $"; Write back return value to '{tempReturn.ResultAddress}'"
+                );
 
-                    return tempReturn;
-                }
+                compilation.ProgramCode.Add($"POP {tempReturn.ResultAddress}");
 
-                return new ExpressionTarget();
+                return tempReturn;
             }
 
             if (compilation.ContainsVariable(target) ||
@@ -230,7 +225,12 @@ namespace VisCPU.HL.Compiler
                     compilation.ProgramCode.Add($"JSREF {target}");
                 }
 
-                return new ExpressionTarget();
+                ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar(), true,
+                    compilation.TypeSystem.GetType("var"));
+                compilation.ProgramCode.Add($"POP {tempReturn.ResultAddress}");
+
+
+                return tempReturn;
             }
 
             EventManager<ErrorEvent>.SendEvent(new FunctionNotFoundEvent(target));
