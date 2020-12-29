@@ -12,15 +12,10 @@ namespace VisCPU.Utility.UriResolvers
 
         private static UriResolver GetResolver(string tempPath, string uri)
         {
-            List<UriResolver> resolvers = new List<UriResolver> {new HttpUriResolver(tempPath)};
+            List<UriResolver> resolvers = new List<UriResolver> {new HttpUriResolver(tempPath), new FileUriResolver()};
             UriResolver r = resolvers.FirstOrDefault(x => x.CanResolve(uri));
 
-            if (r != null)
-            {
-                return r;
-            }
-
-            return null;
+            return r;
         }
 
         #endregion
@@ -31,22 +26,14 @@ namespace VisCPU.Utility.UriResolvers
         {
             UriResolver r = GetResolver(tempPath, uri);
 
-            if (r != null)
-            {
-                return r.GetFilePath(uri);
-            }
-
-            return null;
+            return r?.GetFilePath(uri);
         }
 
-        public static void Resolve(string tempPath, string uri)
+        public static string Resolve(string tempPath, string uri)
         {
             UriResolver r = GetResolver(tempPath, uri);
 
-            if (r != null)
-            {
-                r.Resolve(uri);
-            }
+            return r?.Resolve(uri);
         }
 
         #endregion

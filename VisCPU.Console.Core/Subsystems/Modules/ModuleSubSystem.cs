@@ -13,6 +13,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                 {"restore", new ModuleRestoreSubSystem()},
                 {"publish", new ModulePublishLocalSubSystem()},
                 {"add", new ModuleAddDependencySubSystem()},
+                {"update", new ModuleUpdateLocalSubSystem()},
                 {"list", new ListLocalPackagesSubSystem()}
             };
     }

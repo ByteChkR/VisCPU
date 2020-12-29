@@ -476,7 +476,7 @@ namespace VisCPU.HL
                     if (tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HLTokenType.OpStringLiteral)
                     {
                         string c = UriResolver.GetFilePath(Directory, tokens[i + 2].ToString());
-                        UriResolver.Resolve(Directory, tokens[i + 2].ToString());
+                        //UriResolver.Resolve(Directory, tokens[i + 2].ToString());
                         IncludedFiles.Add(c ?? tokens[i + 2].ToString());
                         tokens.RemoveRange(i, 3);
                     }
@@ -790,10 +790,10 @@ namespace VisCPU.HL
 
                     string name = Path.GetFullPath(
                         includedFile.StartsWith(Directory)
-                            ? includedFile.Remove(includedFile.Length - 3, 3)
+                            ? includedFile.Remove(includedFile.Length - 4, 4)
                             : Directory +
                               "/" +
-                              includedFile.Remove(includedFile.Length - 3, 3)
+                              includedFile.Remove(includedFile.Length - 4, 4)
                     );
 
                     string newInclude = Path.GetFullPath(name + ".vasm");

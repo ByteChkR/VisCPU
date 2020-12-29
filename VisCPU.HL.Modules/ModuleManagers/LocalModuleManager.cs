@@ -98,6 +98,10 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override void Get(ModuleTarget target, string targetDir)
         {
+            if (Directory.Exists(targetDir))
+            {
+                Directory.Delete(targetDir, true);
+            }
             string dataPath = GetTargetDataUri(target);
             ZipFile.ExtractToDirectory(dataPath, targetDir);
 
