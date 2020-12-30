@@ -17,6 +17,9 @@ namespace VisCPU.Peripherals.Console
         [Argument(Name = "console:out.pin.write.char")]
         public uint WriteOutputAddress = 0xFFFF1001;
 
+        [Argument(Name = "console:out.pin.clear")]
+        public uint InterfaceClearPin = 0xFFFF1005;
+
         #region Private
 
         static ConsoleOutInterfaceSettings()

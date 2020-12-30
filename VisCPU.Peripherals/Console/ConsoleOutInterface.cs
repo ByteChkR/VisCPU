@@ -23,7 +23,7 @@ namespace VisCPU.Peripherals.Console
 
         public override bool CanWrite(uint address)
         {
-            return address == settings.WriteOutputAddress || settings.WriteNumOutputAddress == address;
+            return address == settings.WriteOutputAddress || settings.WriteNumOutputAddress == address || settings.InterfaceClearPin==address;
         }
 
         public override uint ReadData(uint address)
@@ -42,7 +42,11 @@ namespace VisCPU.Peripherals.Console
         {
             if (CanWrite(address))
             {
-                if (settings.WriteNumOutputAddress == address)
+                if (settings.InterfaceClearPin == address)
+                {
+                    System.Console.Clear();
+                }
+                else if (settings.WriteNumOutputAddress == address)
                 {
                     System.Console.Write(data.ToString());
                 }
