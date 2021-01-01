@@ -49,6 +49,8 @@ namespace VisCPU.Peripherals.HostFS
     {
         private HostFileSystemSettings settings;
         private StringBuilder sbPath = new StringBuilder();
+        private FileInfo currentFile = null;
+        private FileStream currentFileStream = null;
 
         public HostFileSystem(HostFileSystemSettings settings)
         {
@@ -79,6 +81,23 @@ namespace VisCPU.Peripherals.HostFS
                     return 0;
                 return (uint)fi.Length;
             }
+            if (address == settings.PinData)
+            {
+                if (currentFile == null)
+                {
+                    currentFile = new FileInfo(GetPath(sbPath.ToString()));
+                    currentFileStream = currentFile.OpenRead();
+                }
+                if (currentFileStream.Length <= currentFileStream.Position)
+                {
+                    currentFileStream.Close();
+                    currentFileStream = null;
+                    currentFile = null;
+                    return 0;
+                }
+                return (uint) currentFileStream.ReadByte();
+
+            }
             return 0;
         }
 
@@ -93,7 +112,7 @@ namespace VisCPU.Peripherals.HostFS
             {
                 sbPath.Clear();
             }
-            else if (address == settings.PinPath)
+            else if (address == settings.PinPath && data != 0)
             {
                 sbPath.Append((char)data);
             }
