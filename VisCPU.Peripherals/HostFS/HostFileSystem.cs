@@ -2,21 +2,24 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Peripherals.HostFS
 {
     public class HostFileSystemSettings
     {
-        public string RootPath;
-        public uint PinStatus;
-        public uint PinSize;
-        public uint PinOpen;
-        public uint PinClose;
-        public uint PinReset;
-        public uint PinPath;
-        public uint PinData;
+        public string RootPath = AppDomain.CurrentDomain.BaseDirectory;
+        public uint PinStatus=0xFFFF3000;
+        public uint PinSize = 0xFFFF3001;
+        public uint PinOpen = 0xFFFF3002;
+        public uint PinClose = 0xFFFF3003;
+        public uint PinPath = 0xFFFF3004;
+        public uint PinReset = 0xFFFF3005;
+        public uint PinData = 0xFFFF3006;
 
+        [XmlIgnore, JsonIgnore]
         public uint[] Pins => new[] { PinStatus, PinSize, PinOpen, PinClose, PinReset, PinPath, PinData };
 
 
