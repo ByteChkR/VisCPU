@@ -5,6 +5,7 @@ using System.Linq;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.HostFS;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
@@ -26,6 +27,7 @@ namespace VisCPU.Console.Core.Subsystems
             HLCompilerSettings hls = HLCompilerSettings.Create();
             MemorySettings ms = MemorySettings.Create();
             MemoryBusSettings mbs = MemoryBusSettings.Create();
+            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
 
             ArgumentSyntaxParser.Parse(
                 args.ToArray(),
@@ -43,6 +45,7 @@ namespace VisCPU.Console.Core.Subsystems
             SettingsSystem.SaveSettings(hls);
             SettingsSystem.SaveSettings(ms);
             SettingsSystem.SaveSettings(mbs);
+            SettingsSystem.SaveSettings(hfs);
 
             if (settings.InputFiles == null)
             {
@@ -70,7 +73,9 @@ namespace VisCPU.Console.Core.Subsystems
                 ConsoleOutInterface cout =
                     new ConsoleOutInterface();
 
-                MemoryBus bus = mbs.CreateBus(cout, cin);
+                HostFileSystem hostFS = new HostFileSystem();
+
+                MemoryBus bus = mbs.CreateBus(cout, cin, hostFS);
 
 
                 CPU cpu = new CPU(bus, settings.CpuResetAddr, settings.CpuIntAddr);
