@@ -5,6 +5,7 @@ using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.HostFS;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
@@ -42,6 +43,7 @@ namespace VisCPU.Console.Core.Subsystems
             WriteSettings("console-out", ConsoleOutInterfaceSettings.Create());
             WriteSettings("memory", MemorySettings.Create());
             WriteSettings("memory-bus", MemoryBusSettings.Create());
+            WriteSettings("hostfs", HostFileSystemSettings.Create());
 
             System.Console.WriteLine("-log Subsystems: ");
             string[] names = Enum.GetNames(typeof(LoggerSystems));
