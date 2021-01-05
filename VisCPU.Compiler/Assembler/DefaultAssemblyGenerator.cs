@@ -21,6 +21,11 @@ namespace VisCPU.Compiler.Assembler
 
             AssemblyGeneratorSettings settings = AssemblyGeneratorSettings.Create();
 
+            if ( settings.GlobalOffset != 0 )
+            {
+                instrBytes.AddRange( BitConverter.GetBytes( settings.GlobalOffset ) );
+            }
+
             if ( !settings.TrimOffset )
                 instrBytes.AddRange( Enumerable.Repeat( (byte)0, ( int ) settings.GlobalOffset * CPUSettings.INSTRUCTION_SIZE ) );
             Dictionary<string, AddressItem> consts =
