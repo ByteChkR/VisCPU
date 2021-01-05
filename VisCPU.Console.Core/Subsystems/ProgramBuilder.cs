@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.Utility.ArgumentParser;
@@ -17,16 +19,19 @@ namespace VisCPU.Console.Core.Subsystems
         public override void Run(IEnumerable<string> args)
         {
             BuilderSettings settings = BuilderSettings.Create();
+            AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
 
             LinkerSettings ls = LinkerSettings.Create();
             ArgumentSyntaxParser.Parse(
                 args.ToArray(),
                 settings,
+                asettings,
                 ls
             );
 
             SettingsSystem.SaveSettings(ls);
             SettingsSystem.SaveSettings(settings);
+            SettingsSystem.SaveSettings(asettings);
 
             if (settings.InputFiles == null)
             {

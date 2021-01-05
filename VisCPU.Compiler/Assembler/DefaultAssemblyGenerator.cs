@@ -19,12 +19,23 @@ namespace VisCPU.Compiler.Assembler
         {
             List<byte> instrBytes = new List<byte>();
 
-            FileCompilation.ApplyToAllTokens(result.LinkedBinary, result.Constants); //Apply global constants
+            AssemblyGeneratorSettings settings = AssemblyGeneratorSettings.Create();
 
-            FileCompilation.ApplyToAllTokens(result.LinkedBinary, result.Labels);
+            if ( !settings.TrimOffset )
+                instrBytes.AddRange( Enumerable.Repeat( (byte)0, ( int ) settings.GlobalOffset * CPUSettings.INSTRUCTION_SIZE ) );
+            Dictionary<string, AddressItem> consts =
+                result.Constants.ApplyOffset(settings.GlobalOffset)
+                      .ToDictionary(x => x.Key, x => x.Value);
+            Dictionary<string, AddressItem> labels =
+                result.Labels.ApplyOffset(settings.GlobalOffset)
+                      .ToDictionary(x => x.Key, x => x.Value);
+
+            FileCompilation.ApplyToAllTokens(result.LinkedBinary, consts); //Apply global constants
+
+            FileCompilation.ApplyToAllTokens(result.LinkedBinary, labels);
 
             Dictionary<string, AddressItem> ds =
-                result.DataSectionHeader.ApplyOffset((uint) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE)
+                result.DataSectionHeader.ApplyOffset(settings.GlobalOffset + (uint) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE)
                     .ToDictionary(x => x.Key, x => x.Value);
 
             FileCompilation.ApplyToAllTokens(result.LinkedBinary, ds);
@@ -43,9 +54,12 @@ namespace VisCPU.Compiler.Assembler
             foreach (KeyValuePair<(int, int), Dictionary<string, AddressItem>> resultHiddenAddressItem in result
                 .HiddenLabelItems)
             {
+                Dictionary<string, AddressItem> hiddenLabels =
+                    resultHiddenAddressItem.Value.ApplyOffset(settings.GlobalOffset)
+                                           .ToDictionary(x => x.Key, x => x.Value);
                 FileCompilation.ApplyToTokens(
                     result.LinkedBinary,
-                    resultHiddenAddressItem.Value,
+                    hiddenLabels,
                     resultHiddenAddressItem.Key.Item1,
                     resultHiddenAddressItem.Key.Item2
                 ); //Apply global constants
@@ -55,8 +69,8 @@ namespace VisCPU.Compiler.Assembler
                 .HiddenDataSectionItems)
             {
                 Dictionary<string, AddressItem> hds = resultHiddenAddressItem.Value.ApplyOffset(
-                    (uint) result.LinkedBinary.Count *
-                    CPUSettings.INSTRUCTION_SIZE
+                     settings.GlobalOffset+(uint) result.LinkedBinary.Count *
+                                                 CPUSettings.INSTRUCTION_SIZE
                 ).ToDictionary(
                     x => x.Key,
                     x => x.Value

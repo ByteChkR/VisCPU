@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
+using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
@@ -36,6 +38,7 @@ namespace VisCPU.Console.Core.Subsystems
 
             WriteSettings("linker", LinkerSettings.Create());
             WriteSettings("compiler", HLCompilerSettings.Create());
+            WriteSettings("assembler", AssemblyGeneratorSettings.Create());
 
             WriteSubsystem("run", RunnerSettings.Create());
 
