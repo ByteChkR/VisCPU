@@ -26,7 +26,10 @@ namespace VisCPU.Compiler.Assembler
 
             if ( settings.GlobalOffset != 0 )
             {
-                instrBytes.AddRange( BitConverter.GetBytes( settings.GlobalOffset ) );
+                instrBytes.AddRange( new byte[sizeof( uint )] );
+                instrBytes.AddRange(BitConverter.GetBytes((uint)1));
+                instrBytes.AddRange(BitConverter.GetBytes(settings.GlobalOffset));
+                instrBytes.AddRange(new byte[sizeof(uint)]);
             }
 
             if ( !settings.TrimOffset )
