@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.Utility.Logging;
+
 namespace VisCPU.Console.Core.Subsystems.Modules
 {
     public class ModuleSubSystem : ConsoleSystem
     {
+        protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
         public override Dictionary<string, ConsoleSubsystem> SubSystems =>
             new Dictionary<string, ConsoleSubsystem>
             {

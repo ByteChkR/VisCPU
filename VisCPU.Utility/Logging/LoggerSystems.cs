@@ -25,6 +25,7 @@ namespace VisCPU.Utility.Logging
         MemoryInstructions = 65536,
         UriResolver = 131072,
         HL_Importer = 262144,
+        ModuleSystem = 524288,
 
         AllInstructions = MathInstructions |
                           LogicInstructions |
@@ -38,6 +39,6 @@ namespace VisCPU.Utility.Logging
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console | HL_Importer | Peripherals
+        Default = UriResolver | Console | Peripherals | ModuleSystem
     }
 }

@@ -4,11 +4,13 @@ using System.IO;
 using System.Linq;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Modules
 {
     public class ModuleCleanSubSystem : ConsoleSubsystem
     {
+        protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
         public override void Run(IEnumerable<string> args)
         {
             string projectRoot = args.Any() ? Path.GetFullPath(args.First()) : Directory.GetCurrentDirectory();
@@ -19,6 +21,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             }
             if (Directory.Exists(Path.Combine(projectRoot, "build")))
             {
+                Log("Deleting Project Build Directory");
                 Directory.Delete(Path.Combine(projectRoot, "build"), true);
             }
 
@@ -26,6 +29,8 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             IEnumerable<string> sourceFiles = Directory.GetFiles(projectRoot, "*.*", SearchOption.AllDirectories)
                 .Select(Path.GetFullPath);
 
+
+            int fcount = 0;
             foreach (string sourceFile in sourceFiles)
             {
                 if (Path.GetExtension(sourceFile) == ".vhl" || Path.GetExtension(sourceFile) == ".json")
@@ -33,10 +38,11 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                     continue;
                 }
 
-
-                Log("Deleting File: " + sourceFile);
+                fcount++;
                 File.Delete(sourceFile);
             }
+
+            Log("Deleted Files: " + fcount);
 
             ModuleTarget t = ModuleManager.LoadModuleTarget(Path.Combine(projectRoot, "project.json"));
 

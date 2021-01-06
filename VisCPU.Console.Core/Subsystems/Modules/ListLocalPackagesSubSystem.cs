@@ -2,11 +2,15 @@
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Modules
 {
     public class ListLocalPackagesSubSystem : ConsoleSubsystem
     {
+
+        protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
+
         public override void Run(IEnumerable<string> args)
         {
             OriginSettings s = OriginSettings.Create();
