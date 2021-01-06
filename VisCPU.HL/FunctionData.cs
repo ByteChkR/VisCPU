@@ -1,7 +1,35 @@
 ﻿using System;
 
+using VisCPU.Utility;
+
 namespace VisCPU.HL
 {
+    public class LinkedData : IExternalData
+    {
+
+        public ExternalDataType DataType => ExternalDataType.FUNCTION;
+
+        private string Name;
+        public readonly AddressItem Info;
+
+        public LinkedData( string name, AddressItem info )
+        {
+            Name = name;
+            Info = info;
+        }
+
+        public string GetFinalName()
+        {
+            return Name;
+        }
+
+        public string GetName()
+        {
+            return Name;
+        }
+
+    }
+
     public class FunctionData : IExternalData
     {
         private readonly Func<string[]> functionCompiler;

@@ -35,16 +35,7 @@ namespace VisCPU.Compiler.Linking
         public Dictionary<string, AddressItem> Labels;
         public Dictionary<string, AddressItem> DataSectionHeader;
 
-        public static LinkerInfo CreateFromResult(LinkerResult result)
-        {
-            return new LinkerInfo
-            {
-                Constants = result.Constants,
-                DataSectionHeader = result.DataSectionHeader,
-                Labels = result.Labels,
-                Source = result.LinkedBinary.FirstOrDefault()?.FirstOrDefault()?.OriginalText
-            };
-        }
+        
 
         public static LinkerInfo CreateEmpty()
         {
@@ -165,7 +156,7 @@ namespace VisCPU.Compiler.Linking
                     }
                 }
 
-                info.Constants = DeserializeBlock(text.GetRange(constStart, i));
+                info.Constants = DeserializeBlock(text.GetRange(constStart, i - constStart));
             }
 
             if (labelStart >= dataStart)
@@ -180,7 +171,7 @@ namespace VisCPU.Compiler.Linking
                     }
                 }
 
-                info.Labels = DeserializeBlock(text.GetRange(labelStart, i));
+                info.Labels = DeserializeBlock(text.GetRange(labelStart, i - labelStart));
             }
 
             if (dataSectionStart >= dataStart)
@@ -195,7 +186,7 @@ namespace VisCPU.Compiler.Linking
                     }
                 }
 
-                info.DataSectionHeader = DeserializeBlock(text.GetRange(dataSectionStart, i));
+                info.DataSectionHeader = DeserializeBlock(text.GetRange(dataSectionStart, i - dataSectionStart));
             }
 
             return info;
@@ -209,11 +200,11 @@ namespace VisCPU.Compiler.Linking
             {
                 string[] kvp = line.Split(':');
 
-                ret[kvp[0]] = new AddressItem
-                {
-                    Address = uint.Parse(kvp[1].Remove(0, 2), NumberStyles.HexNumber),
-                    LinkerArguments = new object[0]
-                };
+                ret[kvp[0].Trim()] = new AddressItem
+                                     {
+                                         Address = uint.Parse(kvp[1].Trim().Remove(0, 2), NumberStyles.HexNumber),
+                                         LinkerArguments = new object[0]
+                                     };
             }
 
             return ret;

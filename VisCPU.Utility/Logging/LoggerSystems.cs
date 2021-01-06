@@ -5,6 +5,7 @@ namespace VisCPU.Utility.Logging
     [Flags]
     public enum LoggerSystems
     {
+        All = -1,
         EventSystem = 1,
         MemoryBus = 2,
         AssemblyGenerator = 4,
@@ -23,6 +24,7 @@ namespace VisCPU.Utility.Logging
         BranchInstructions = 32768,
         MemoryInstructions = 65536,
         UriResolver = 131072,
+        HL_Importer = 262144,
 
         AllInstructions = MathInstructions |
                           LogicInstructions |
@@ -32,10 +34,10 @@ namespace VisCPU.Utility.Logging
                           BranchInstructions |
                           MemoryInstructions,
 
-        HL = HL_Parser | HL_Compiler,
+        HL = HL_Parser | HL_Compiler | HL_Importer,
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console | HL_Compiler | FileCompilation | Linker
+        Default = UriResolver | Console | FileCompilation | Linker | HL
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Utility;
@@ -33,10 +35,20 @@ namespace VisCPU.Compiler.Compiler
 
             LinkerResult linkResult = linker.Link(linkTarget, this);
 
-            LinkerInfo = LinkerInfo.CreateFromResult(linkResult);
+            LinkerInfo = CreateFromResult(linkResult);
             LinkerResult = linkResult;
 
             ByteCode = assemblyGenerator.Assemble(linkResult);
+        }
+        public static LinkerInfo CreateFromResult(LinkerResult result)
+        {
+            return new LinkerInfo
+                   {
+                       Constants = result.Constants,
+                       DataSectionHeader = result.DataSectionHeader,
+                       Labels = result.Labels,
+                       Source = result.LinkedBinary.FirstOrDefault()?.FirstOrDefault()?.OriginalText
+                   };
         }
 
         #endregion

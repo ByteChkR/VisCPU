@@ -20,6 +20,12 @@ namespace VisCPU
 
         #region Public
 
+        public Instruction[] GetInstructions() => instructions.ToArray();
+        public Instruction[] GetInstructions( string key )
+        {
+            return instructions.Where(x => x.Key == key).ToArray();
+        }
+
         public Instruction GetInstruction(string key, int arguments)
         {
             Instruction ret = instructions.FirstOrDefault(x => x.Key == key && x.ArgumentCount == arguments);

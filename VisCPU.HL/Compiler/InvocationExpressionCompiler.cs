@@ -147,11 +147,14 @@ namespace VisCPU.HL.Compiler
                          x.DataType == ExternalDataType.FUNCTION
                 );
 
+
             if (isInternalFunc || externalSymbol != null)
             {
+                string funcEmit = externalSymbol is LinkedData l ? l.Info.Address.ToString() : target;
                 int targetLength = isInternalFunc
-                    ? compilation.FunctionMap[target].ParameterCount
-                    : ((FunctionData)externalSymbol).ParameterCount;
+                                       ? compilation.FunctionMap[target].ParameterCount
+                                       : ( externalSymbol as FunctionData )?.ParameterCount ??
+                                         expr.ParameterList.Length;
 
                 if (expr.ParameterList.Length != targetLength)
                 {
@@ -187,7 +190,7 @@ namespace VisCPU.HL.Compiler
                     compilation.ReleaseTempVar(arg.ResultAddress);
                 }
 
-                compilation.ProgramCode.Add($"JSR {target}");
+                compilation.ProgramCode.Add($"JSR {funcEmit}");
 
 
                 ExpressionTarget tempReturn = new ExpressionTarget(compilation.GetTempVar(), true,

@@ -10,6 +10,7 @@ using VisCPU.HL.Compiler.Math;
 using VisCPU.HL.Compiler.Relational;
 using VisCPU.HL.Compiler.Special;
 using VisCPU.HL.Events;
+using VisCPU.HL.Importer;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;
@@ -38,6 +39,7 @@ namespace VisCPU.HL
         internal readonly Dictionary<string, FunctionData> FunctionMap = new Dictionary<string, FunctionData>();
 
         private readonly List<string> IncludedFiles = new List<string>();
+        private readonly List<string> ImportedItems = new List<string>();
 
         internal readonly string OriginalText;
         private readonly HLCompilation parent;
@@ -335,6 +337,7 @@ namespace VisCPU.HL
             List<IHLToken> tokens = br.ReadToEnd();
             ParseOneLineStrings(tokens);
             RemoveComments(tokens);
+            ParseImports(tokens);
             ParseIncludes(tokens);
             ParseReservedKeys(tokens, hlpS);
             tokens = tokens.Where(x => x.Type != HLTokenType.OpNewLine).ToList();
@@ -344,7 +347,7 @@ namespace VisCPU.HL
             ParseTypeDefinitions(TypeSystem, hlpS, tokens);
 
             HLExpressionParser p = HLExpressionParser.Create(new HLExpressionReader(tokens));
-
+            ProcessImports();
             ParseDependencies();
 
             return Parse(p.Parse(), printHead, appendAfterProg);
@@ -401,7 +404,7 @@ namespace VisCPU.HL
                         continue;
                     }
 
-                    List<IHLToken> argPart = new List<IHLToken> {bClose};
+                    List<IHLToken> argPart = new List<IHLToken> { bClose };
                     IHLToken[] args = HLParsingTools.ReadUntil(tokens, i - 2, -1, HLTokenType.OpBracketOpen);
                     argPart.AddRange(args);
 
@@ -432,7 +435,7 @@ namespace VisCPU.HL
                         typeName = HLParsingTools.ReadOneOfAny(
                             tokens,
                             funcIdx - 1,
-                            new[] {HLTokenType.OpWord, HLTokenType.OpTypeVoid}
+                            new[] { HLTokenType.OpWord, HLTokenType.OpTypeVoid }
                         );
 
                         int modStart = funcIdx - 1 - 1;
@@ -478,6 +481,51 @@ namespace VisCPU.HL
                         string c = UriResolver.GetFilePath(Directory, tokens[i + 2].ToString());
                         //UriResolver.Resolve(Directory, tokens[i + 2].ToString());
                         IncludedFiles.Add(c ?? tokens[i + 2].ToString());
+                        tokens.RemoveRange(i, 3);
+                    }
+                }
+            }
+        }
+
+
+        private void ProcessImports()
+        {
+            for (int i = 0; i < ImportedItems.Count; i++)
+            {
+                IImporter imp = ImporterSystem.Get(ImportedItems[i]);
+                bool error = true;
+                if (imp is IFileImporter fimp)
+                {
+                    error = false;
+                    IncludedFiles.Add(fimp.ProcessImport(ImportedItems[i]));
+                }
+                if (imp is IDataImporter dimp)
+                {
+                    error = false;
+                    IExternalData[] data = dimp.ProcessImport(ImportedItems[i]);
+
+                    ExternalSymbols.AddRange(data);
+                }
+                if (imp == null)
+                {
+                    throw new Exception($"Can not Find Importer for Item: '{ImportedItems[i]}'");
+                }
+                if (error)
+                {
+                    throw new Exception($"Invalid Importer Type: '{imp.GetType()}'");
+                }
+            }
+        }
+
+        public void ParseImports(List<IHLToken> tokens)
+        {
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                if (tokens[i].Type == HLTokenType.OpNumSign && tokens.Count > i + 2)
+                {
+                    if (tokens[i + 1].ToString() == "import" && tokens[i + 2].Type == HLTokenType.OpStringLiteral)
+                    {
+                        ImportedItems.Add(tokens[i + 2].ToString());
                         tokens.RemoveRange(i, 3);
                     }
                 }
@@ -690,7 +738,7 @@ namespace VisCPU.HL
                         varName,
                         typeName,
                         new IHLToken[0],
-                        new[] {typeName, varName},
+                        new[] { typeName, varName },
                         null
                     )
                 );
@@ -770,6 +818,7 @@ namespace VisCPU.HL
 
             return parent.GetPrefix() + scopeID + "_";
         }
+
 
         private void ParseDependencies()
         {

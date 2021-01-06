@@ -5,6 +5,8 @@ using System.Linq;
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
+using VisCPU.HL.Importer;
+using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -32,6 +34,8 @@ namespace VisCPU.Console.Core.Subsystems
             SettingsSystem.SaveSettings(ls);
             SettingsSystem.SaveSettings(settings);
             SettingsSystem.SaveSettings(asettings);
+
+            ImporterSystem.Add( new InstructionDataImporter( new DefaultSet() ) , new LinkerImporter());
 
             if (settings.InputFiles == null)
             {
