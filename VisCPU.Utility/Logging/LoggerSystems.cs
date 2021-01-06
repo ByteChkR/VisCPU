@@ -38,6 +38,6 @@ namespace VisCPU.Utility.Logging
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console | FileCompilation | Linker | HL
+        Default = UriResolver | Console | HL_Importer | Peripherals
     }
 }
