@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using VisCPU.HL.Modules.Data;
@@ -11,6 +12,11 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         public override void Run(IEnumerable<string> args)
         {
             string projectRoot = args.Any() ? Path.GetFullPath(args.First()) : Directory.GetCurrentDirectory();
+
+            if ( !File.Exists( Path.Combine( projectRoot, "project.json" ) ) )
+            {
+                throw new Exception( $"The folder '{projectRoot}' does not contain a 'project.json' file." );
+            }
             if (Directory.Exists(Path.Combine(projectRoot, "build")))
             {
                 Directory.Delete(Path.Combine(projectRoot, "build"), true);

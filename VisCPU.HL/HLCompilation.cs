@@ -478,8 +478,7 @@ namespace VisCPU.HL
                 {
                     if (tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HLTokenType.OpStringLiteral)
                     {
-                        string c = UriResolver.GetFilePath(Directory, tokens[i + 2].ToString());
-                        //UriResolver.Resolve(Directory, tokens[i + 2].ToString());
+                        string c = UriResolver.GetFilePath( Directory, tokens[i + 2].ToString() );
                         IncludedFiles.Add(c ?? tokens[i + 2].ToString());
                         tokens.RemoveRange(i, 3);
                     }
@@ -563,21 +562,11 @@ namespace VisCPU.HL
 
                     string ConcatContent()
                     {
-                        StringBuilder sb = new StringBuilder();
-                        bool lastWasWord = false;
-
-                        foreach (IHLToken token in content)
-                        {
-                            if (lastWasWord && token.Type == HLTokenType.OpWord)
-                            {
-                                sb.Append(" ");
-                            }
-
-                            sb.Append(token);
-                            lastWasWord = token.Type == HLTokenType.OpWord;
-                        }
-
-                        return sb.ToString();
+                        return OriginalText.Substring(
+                                                      content.First().SourceIndex,
+                                                      tokens[i + 1 + content.Count].SourceIndex -
+                                                      content.First().SourceIndex
+                                                     );
                     }
 
                     IHLToken newToken = new HLTextToken(
