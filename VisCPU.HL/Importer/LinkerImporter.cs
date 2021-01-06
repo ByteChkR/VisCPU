@@ -47,7 +47,7 @@ namespace VisCPU.HL.Importer
             }
             else
             {
-                throw new Exception( $"Offset was not specified and file '{Path.GetFullPath(cmd)}' does not exist." );
+                throw new Exception( $"Offset was not specified and file '{cmd}({Path.GetFullPath(cmd)})' does not exist." );
             }
             LinkerInfo info = LinkerInfo.Load( cmd );
 
