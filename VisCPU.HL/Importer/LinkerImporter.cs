@@ -18,7 +18,7 @@ namespace VisCPU.HL.Importer
 
         public IExternalData[] ProcessImport( string input )
         {
-            int tagLen = "link".Length;
+            int tagLen = "link".Length+1;
 
             if (input.Length < tagLen)
             {
