@@ -12,14 +12,22 @@ namespace VisCPU.HL.Importer
 
         protected override LoggerSystems SubSystem => LoggerSystems.HL_Importer;
 
-        protected string CacheDirectory => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache");
+        protected string CacheDirectory => Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "cache" );
+
+        #region Public
+
+        public abstract bool CanImport( string input );
+
+        #endregion
+
+        #region Protected
 
         protected AImporter()
         {
-            Directory.CreateDirectory(CacheDirectory);
+            Directory.CreateDirectory( CacheDirectory );
         }
 
-        public abstract bool CanImport(string input);
+        #endregion
 
     }
 

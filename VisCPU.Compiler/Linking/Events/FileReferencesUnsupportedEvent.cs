@@ -1,21 +1,25 @@
-﻿using VisCPU.Utility.Events;
+﻿using VisCPU.Utility;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Linking.Events
 {
+
     public class FileReferencesUnsupportedEvent : ErrorEvent
     {
-        private const string EVENT_KEY = "lnk-file-ref-unsupported";
 
         #region Public
 
         public FileReferencesUnsupportedEvent() : base(
-            "Single file linker does not support file references.",
-            EVENT_KEY,
-            false
-        )
+                                                       "Single file linker does not support file references.",
+                                                       ErrorEventKeys.LINKER_FILE_REFERENCES_UNSUPPORTED,
+                                                       false
+                                                      )
         {
         }
 
         #endregion
+
     }
+
 }

@@ -3,11 +3,13 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements LessThan/GreaterThan Operators
     /// </summary>
     public class RelationOperators : HLExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -21,7 +23,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpLessThan ||
                    parser.CurrentToken.Type == HLTokenType.OpGreaterThan;
@@ -33,44 +35,44 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             HLTokenType type = parser.CurrentToken.Type;
-            parser.Eat(parser.CurrentToken.Type);
+            parser.Eat( parser.CurrentToken.Type );
             HLExpression node = null;
 
-            if (type == HLTokenType.OpLessThan)
+            if ( type == HLTokenType.OpLessThan )
             {
-                if (parser.CurrentToken.Type == HLTokenType.OpEquality)
+                if ( parser.CurrentToken.Type == HLTokenType.OpEquality )
                 {
-                    parser.Eat(HLTokenType.OpEquality);
+                    parser.Eat( HLTokenType.OpEquality );
 
                     node = new HLBinaryOp(
-                        currentNode,
-                        HLTokenType.OpLessOrEqual,
-                        parser.ParseExpr(0)
-                    );
+                                          currentNode,
+                                          HLTokenType.OpLessOrEqual,
+                                          parser.ParseExpr( 0 )
+                                         );
                 }
                 else
                 {
-                    node = new HLBinaryOp(currentNode, type, parser.ParseExpr(0));
+                    node = new HLBinaryOp( currentNode, type, parser.ParseExpr( 0 ) );
                 }
             }
-            else if (type == HLTokenType.OpGreaterThan)
+            else if ( type == HLTokenType.OpGreaterThan )
             {
-                if (parser.CurrentToken.Type == HLTokenType.OpEquality)
+                if ( parser.CurrentToken.Type == HLTokenType.OpEquality )
                 {
-                    parser.Eat(HLTokenType.OpEquality);
+                    parser.Eat( HLTokenType.OpEquality );
 
                     node = new HLBinaryOp(
-                        currentNode,
-                        HLTokenType.OpGreaterOrEqual,
-                        parser.ParseExpr(0)
-                    );
+                                          currentNode,
+                                          HLTokenType.OpGreaterOrEqual,
+                                          parser.ParseExpr( 0 )
+                                         );
                 }
                 else
                 {
-                    node = new HLBinaryOp(currentNode, type, parser.ParseExpr(0));
+                    node = new HLBinaryOp( currentNode, type, parser.ParseExpr( 0 ) );
                 }
             }
 
@@ -78,5 +80,7 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
+
     }
+
 }

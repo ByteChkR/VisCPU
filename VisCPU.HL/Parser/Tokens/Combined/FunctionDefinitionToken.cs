@@ -1,7 +1,9 @@
 ﻿namespace VisCPU.HL.Parser.Tokens.Combined
 {
+
     public class FunctionDefinitionToken : CombinedToken
     {
+
         public readonly IHLToken[] Arguments;
         public readonly IHLToken[] Block;
 
@@ -17,11 +19,11 @@
             IHLToken[] args,
             IHLToken[] mods,
             IHLToken[] subtokens,
-            int start) : base(
-            HLTokenType.OpFunctionDefinition,
-            subtokens,
-            start
-        )
+            int start ) : base(
+                               HLTokenType.OpFunctionDefinition,
+                               subtokens,
+                               start
+                              )
         {
             FunctionName = name;
             FunctionReturnType = retType;
@@ -31,5 +33,7 @@
         }
 
         #endregion
+
     }
+
 }

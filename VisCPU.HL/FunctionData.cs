@@ -1,45 +1,18 @@
 ﻿using System;
 
-using VisCPU.Utility;
-
 namespace VisCPU.HL
 {
-    public class LinkedData : IExternalData
-    {
-
-        public ExternalDataType DataType => ExternalDataType.FUNCTION;
-
-        private string Name;
-        public readonly AddressItem Info;
-
-        public LinkedData( string name, AddressItem info )
-        {
-            Name = name;
-            Info = info;
-        }
-
-        public string GetFinalName()
-        {
-            return Name;
-        }
-
-        public string GetName()
-        {
-            return Name;
-        }
-
-    }
 
     public class FunctionData : IExternalData
     {
-        private readonly Func<string[]> functionCompiler;
-
-        private readonly string name;
-        private string[] compiledOutput;
 
         //public bool HasReturnValue;
         public int ParameterCount;
         public bool Public;
+        private readonly Func < string[] > functionCompiler;
+
+        private readonly string name;
+        private string[] compiledOutput;
 
         public ExternalDataType DataType => ExternalDataType.FUNCTION;
 
@@ -48,21 +21,22 @@ namespace VisCPU.HL
         public FunctionData(
             string name,
             bool isPublic,
-            Func<string[]> funcCompiler,
+            Func < string[] > funcCompiler,
             int parameterCount,
-            bool hasReturnValue)
+            bool hasReturnValue )
         {
             this.name = name;
             Public = isPublic;
             functionCompiler = funcCompiler;
             compiledOutput = null;
             ParameterCount = parameterCount;
+
             //HasReturnValue = hasReturnValue;
         }
 
         public string[] GetCompiledOutput()
         {
-            if (compiledOutput == null)
+            if ( compiledOutput == null )
             {
                 compiledOutput = functionCompiler();
             }
@@ -81,5 +55,7 @@ namespace VisCPU.HL
         }
 
         #endregion
+
     }
+
 }

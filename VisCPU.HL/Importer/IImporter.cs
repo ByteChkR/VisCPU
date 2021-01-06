@@ -4,7 +4,7 @@
     public interface IImporter
     {
 
-        bool CanImport(string input);
+        bool CanImport( string input );
 
     }
 

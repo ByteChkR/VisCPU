@@ -3,15 +3,17 @@ using System.Linq;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
+
     /// <summary>
     ///     If/Else Operator Implementation
     /// </summary>
     public class HLIfOp : HLExpression
     {
+
         /// <summary>
         ///     Condition Map
         /// </summary>
-        public readonly List<(HLExpression, HLExpression[])> ConditionMap;
+        public readonly List < (HLExpression, HLExpression[]) > ConditionMap;
 
         /// <summary>
         ///     Else Branch Block
@@ -35,9 +37,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="conditionMap">Condition Map</param>
         /// <param name="elseBranch">Else Branch Block</param>
         public HLIfOp(
-            List<(HLExpression, HLExpression[])> conditionMap,
+            List < (HLExpression, HLExpression[]) > conditionMap,
             HLExpression[] elseBranch,
-            int sourceIdx) : base(sourceIdx)
+            int sourceIdx ) : base( sourceIdx )
         {
             ConditionMap = conditionMap;
             ElseBranch = elseBranch;
@@ -47,11 +49,16 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List<IHLToken> GetChildren()
+        public override List < IHLToken > GetChildren()
         {
-            return ConditionMap.SelectMany(x => x.Item2.Concat(x.Item2)).Concat(ElseBranch).Cast<IHLToken>().ToList();
+            return ConditionMap.SelectMany( x => x.Item2.Concat( x.Item2 ) ).
+                                Concat( ElseBranch ).
+                                Cast < IHLToken >().
+                                ToList();
         }
 
         #endregion
+
     }
+
 }

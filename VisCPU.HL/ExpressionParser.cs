@@ -1,11 +1,14 @@
 ﻿using System;
+
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL
 {
+
     public class ExpressionParser : VisBase
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.HL_Parser;
 
         #region Public
@@ -16,18 +19,18 @@ namespace VisCPU.HL
             string cmd = null;
             string file = "";
 
-            while (true)
+            while ( true )
             {
                 cmd = Console.ReadLine();
 
-                if (cmd == "exit")
+                if ( cmd == "exit" )
                 {
                     return;
                 }
 
-                if (cmd == "EOF")
+                if ( cmd == "EOF" )
                 {
-                    p.Parse(file, "./");
+                    p.Parse( file, "./" );
                     file = "";
                 }
                 else
@@ -37,13 +40,15 @@ namespace VisCPU.HL
             }
         }
 
-        public HLCompilation Parse(string expr, string dir)
+        public HLCompilation Parse( string expr, string dir )
         {
-            HLCompilation c = new HLCompilation(expr, dir);
+            HLCompilation c = new HLCompilation( expr, dir );
 
             return c;
         }
 
         #endregion
+
     }
+
 }

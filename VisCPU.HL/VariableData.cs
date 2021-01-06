@@ -2,8 +2,10 @@
 
 namespace VisCPU.HL
 {
+
     public struct VariableData : IExternalData
     {
+
         public ExternalDataType DataType => ExternalDataType.VARIABLE;
 
         public string GetName()
@@ -24,7 +26,7 @@ namespace VisCPU.HL
 
         public readonly string InitContent;
 
-        public VariableData(string name, string finalName, uint dataSize, HLTypeDefinition tdef)
+        public VariableData( string name, string finalName, uint dataSize, HLTypeDefinition tdef )
         {
             InitContent = null;
             Size = dataSize;
@@ -33,13 +35,15 @@ namespace VisCPU.HL
             TypeDefinition = tdef;
         }
 
-        public VariableData(string name, string finalName, string content, HLTypeDefinition tdef)
+        public VariableData( string name, string finalName, string content, HLTypeDefinition tdef )
         {
             this.name = name;
             this.finalName = finalName;
-            Size = (uint) (content?.Length ?? 1);
+            Size = ( uint ) ( content?.Length ?? 1 );
             InitContent = content;
             TypeDefinition = tdef;
         }
+
     }
+
 }

@@ -2,11 +2,13 @@
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
 {
+
     /// <summary>
     ///     Implements a Variable Operand that is also a Variable Definition
     /// </summary>
     public class HLVarDefOperand : HLVarOperand
     {
+
         /// <summary>
         ///     The Definition Token
         /// </summary>
@@ -24,7 +26,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="value">Variable Value</param>
-        public HLVarDefOperand(VariableDefinitionToken value) : base(value.SourceIndex)
+        public HLVarDefOperand( VariableDefinitionToken value ) : base( value.SourceIndex )
         {
             this.value = value;
         }
@@ -35,5 +37,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         }
 
         #endregion
+
     }
+
 }

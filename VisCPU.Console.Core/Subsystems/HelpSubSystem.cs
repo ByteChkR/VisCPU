@@ -14,74 +14,80 @@ using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems
 {
+
     public class HelpSubSystem : ConsoleSubsystem
     {
+
         private readonly ConsoleSystem owner;
 
-        public HelpSubSystem(ConsoleSystem owner)
+        #region Public
+
+        public HelpSubSystem( ConsoleSystem owner )
         {
             this.owner = owner;
         }
 
-        #region Public
-
-        public override void Run(IEnumerable<string> arguments)
+        public override void Run( IEnumerable < string > arguments )
         {
-            if (owner != null)
+            if ( owner != null )
             {
-                Log(VisConsole.ListSubsystems(owner.SubSystems, new StringBuilder()).ToString());
+                Log( VisConsole.ListSubsystems( owner.SubSystems, new StringBuilder() ).ToString() );
             }
 
+            WriteSubsystem( "CLI", CLISettings.Create() );
+            WriteSubsystem( "build", BuilderSettings.Create() );
 
-            WriteSubsystem("CLI", CLISettings.Create());
-            WriteSubsystem("build", BuilderSettings.Create());
+            WriteSettings( "linker", LinkerSettings.Create() );
+            WriteSettings( "compiler", HLCompilerSettings.Create() );
+            WriteSettings( "assembler", AssemblyGeneratorSettings.Create() );
 
-            WriteSettings("linker", LinkerSettings.Create());
-            WriteSettings("compiler", HLCompilerSettings.Create());
-            WriteSettings("assembler", AssemblyGeneratorSettings.Create());
+            WriteSubsystem( "run", RunnerSettings.Create() );
 
-            WriteSubsystem("run", RunnerSettings.Create());
+            WriteSettings( "console-in", ConsoleInInterfaceSettings.Create() );
+            WriteSettings( "console-out", ConsoleOutInterfaceSettings.Create() );
+            WriteSettings( "memory", MemorySettings.Create() );
+            WriteSettings( "memory-bus", MemoryBusSettings.Create() );
+            WriteSettings( "hostfs", HostFileSystemSettings.Create() );
 
-            WriteSettings("console-in", ConsoleInInterfaceSettings.Create());
-            WriteSettings("console-out", ConsoleOutInterfaceSettings.Create());
-            WriteSettings("memory", MemorySettings.Create());
-            WriteSettings("memory-bus", MemoryBusSettings.Create());
-            WriteSettings("hostfs", HostFileSystemSettings.Create());
+            System.Console.WriteLine( "-log Subsystems: " );
+            string[] names = Enum.GetNames( typeof( LoggerSystems ) );
 
-            System.Console.WriteLine("-log Subsystems: ");
-            string[] names = Enum.GetNames(typeof(LoggerSystems));
-
-            foreach (string name in names)
+            foreach ( string name in names )
             {
-                System.Console.WriteLine("\t" + name);
+                System.Console.WriteLine( "\t" + name );
             }
         }
 
         #endregion
 
+        #region Private
 
-        private void WriteSubsystem(string subName, object settings)
+        private void WriteSettings( string subName, object settings )
         {
-            System.Console.WriteLine($"Arguments: {subName}");
+            System.Console.WriteLine( $"Arguments: {subName}" );
 
-            IEnumerable<string> args = ArgumentSyntaxParser.GetArgNames(settings);
+            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( settings );
 
-            foreach (string s1 in args)
+            foreach ( string s1 in args )
             {
-                System.Console.WriteLine("\tArg Name: " + s1);
+                System.Console.WriteLine( "\tArg Name: " + s1 );
             }
         }
 
-        private void WriteSettings(string subName, object settings)
+        private void WriteSubsystem( string subName, object settings )
         {
-            System.Console.WriteLine($"Arguments: {subName}");
+            System.Console.WriteLine( $"Arguments: {subName}" );
 
-            IEnumerable<string> args = ArgumentSyntaxParser.GetArgNames(settings);
+            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( settings );
 
-            foreach (string s1 in args)
+            foreach ( string s1 in args )
             {
-                System.Console.WriteLine("\tArg Name: " + s1);
+                System.Console.WriteLine( "\tArg Name: " + s1 );
             }
         }
+
+        #endregion
+
     }
+
 }

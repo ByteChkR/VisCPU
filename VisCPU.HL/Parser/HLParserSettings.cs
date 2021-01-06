@@ -3,11 +3,13 @@ using System.Linq;
 
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     XL Parser SettingsSystem and Symbol Mappings
     /// </summary>
     public class HLParserSettings
     {
+
         private readonly string AbstractModifier = "abstract";
         private readonly string AsKey = "as";
         private readonly string BaseKey = "base";
@@ -72,104 +74,106 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Reserved Key Map
         /// </summary>
-        public Dictionary<string, HLTokenType> ReservedKeys =>
-            new Dictionary<string, HLTokenType>
+        public Dictionary < string, HLTokenType > ReservedKeys =>
+            new Dictionary < string, HLTokenType >
             {
-                {IfKey, HLTokenType.OpIf},
-                {ElseKey, HLTokenType.OpElse},
-                {ForEachKey, HLTokenType.OpForEach},
-                {ForKey, HLTokenType.OpFor},
-                {InKey, HLTokenType.OpIn},
-                {IsKey, HLTokenType.OpIs},
-                {AsKey, HLTokenType.OpAs},
-                {DoKey, HLTokenType.OpDo},
-                {WhileKey, HLTokenType.OpWhile},
-                {SwitchKey, HLTokenType.OpSwitch},
-                {TryKey, HLTokenType.OpTry},
-                {CatchKey, HLTokenType.OpCatch},
-                {FinallyKey, HLTokenType.OpFinally},
-                {UsingKey, HLTokenType.OpUsing},
-                {NamespaceKey, HLTokenType.OpNamespace},
-                {ClassKey, HLTokenType.OpClass},
-                {ContinueKey, HLTokenType.OpContinue},
-                {BreakKey, HLTokenType.OpBreak},
-                {NewKey, HLTokenType.OpNew},
-                {BaseKey, HLTokenType.OpBase},
-                {ThisKey, HLTokenType.OpThis},
-                {PublicModifier, HLTokenType.OpPublicMod},
-                {PrivateModifier, HLTokenType.OpPrivateMod},
-                {ProtectedModifier, HLTokenType.OpProtectedMod},
-                {VirtualModifier, HLTokenType.OpVirtualMod},
-                {AbstractModifier, HLTokenType.OpAbstractMod},
-                {OverrideModifier, HLTokenType.OpOverrideMod},
-                {StaticModifier, HLTokenType.OpStaticMod},
-                {ReturnKey, HLTokenType.OpReturn},
-                {VoidKey, HLTokenType.OpTypeVoid},
-                {OperatorKey, HLTokenType.OpOperatorImpl}
+                { IfKey, HLTokenType.OpIf },
+                { ElseKey, HLTokenType.OpElse },
+                { ForEachKey, HLTokenType.OpForEach },
+                { ForKey, HLTokenType.OpFor },
+                { InKey, HLTokenType.OpIn },
+                { IsKey, HLTokenType.OpIs },
+                { AsKey, HLTokenType.OpAs },
+                { DoKey, HLTokenType.OpDo },
+                { WhileKey, HLTokenType.OpWhile },
+                { SwitchKey, HLTokenType.OpSwitch },
+                { TryKey, HLTokenType.OpTry },
+                { CatchKey, HLTokenType.OpCatch },
+                { FinallyKey, HLTokenType.OpFinally },
+                { UsingKey, HLTokenType.OpUsing },
+                { NamespaceKey, HLTokenType.OpNamespace },
+                { ClassKey, HLTokenType.OpClass },
+                { ContinueKey, HLTokenType.OpContinue },
+                { BreakKey, HLTokenType.OpBreak },
+                { NewKey, HLTokenType.OpNew },
+                { BaseKey, HLTokenType.OpBase },
+                { ThisKey, HLTokenType.OpThis },
+                { PublicModifier, HLTokenType.OpPublicMod },
+                { PrivateModifier, HLTokenType.OpPrivateMod },
+                { ProtectedModifier, HLTokenType.OpProtectedMod },
+                { VirtualModifier, HLTokenType.OpVirtualMod },
+                { AbstractModifier, HLTokenType.OpAbstractMod },
+                { OverrideModifier, HLTokenType.OpOverrideMod },
+                { StaticModifier, HLTokenType.OpStaticMod },
+                { ReturnKey, HLTokenType.OpReturn },
+                { VoidKey, HLTokenType.OpTypeVoid },
+                { OperatorKey, HLTokenType.OpOperatorImpl }
             };
 
         /// <summary>
         ///     Valid Member Modifiers.
         /// </summary>
-        public Dictionary<string, HLTokenType> MemberModifiers =>
-            new Dictionary<string, HLTokenType>
+        public Dictionary < string, HLTokenType > MemberModifiers =>
+            new Dictionary < string, HLTokenType >
             {
-                {PublicModifier, HLTokenType.OpPublicMod},
-                {PrivateModifier, HLTokenType.OpPrivateMod}
+                { PublicModifier, HLTokenType.OpPublicMod },
+                { PrivateModifier, HLTokenType.OpPrivateMod }
             };
 
         /// <summary>
         ///     Valid Class Modifiers
         /// </summary>
-        public Dictionary<string, HLTokenType> ClassModifiers =>
-            new Dictionary<string, HLTokenType>
+        public Dictionary < string, HLTokenType > ClassModifiers =>
+            new Dictionary < string, HLTokenType >
             {
-                {PublicModifier, HLTokenType.OpPublicMod},
-                {PrivateModifier, HLTokenType.OpPrivateMod},
-                {ProtectedModifier, HLTokenType.OpProtectedMod},
-                {AbstractModifier, HLTokenType.OpAbstractMod},
-                {StaticModifier, HLTokenType.OpStaticMod}
+                { PublicModifier, HLTokenType.OpPublicMod },
+                { PrivateModifier, HLTokenType.OpPrivateMod },
+                { ProtectedModifier, HLTokenType.OpProtectedMod },
+                { AbstractModifier, HLTokenType.OpAbstractMod },
+                { StaticModifier, HLTokenType.OpStaticMod }
             };
 
         /// <summary>
         ///     Reverse Reserved Symbols (XLangToken - char)
         /// </summary>
-        public Dictionary<HLTokenType, char> ReverseReservedSymbols =>
-            ReservedSymbols.ToDictionary(pair => pair.Value, pair => pair.Key);
+        public Dictionary < HLTokenType, char > ReverseReservedSymbols =>
+            ReservedSymbols.ToDictionary( pair => pair.Value, pair => pair.Key );
 
         /// <summary>
         ///     Reserved Symbols (char -  XLangToken)
         /// </summary>
-        public Dictionary<char, HLTokenType> ReservedSymbols =>
-            new Dictionary<char, HLTokenType>
+        public Dictionary < char, HLTokenType > ReservedSymbols =>
+            new Dictionary < char, HLTokenType >
             {
-                {OperatorNumSign, HLTokenType.OpNumSign},
-                {OperatorBackSlash, HLTokenType.OpBackSlash},
-                {OperatorSingleQuote, HLTokenType.OpSingleQuote},
-                {OperatorDoubleQuote, HLTokenType.OpDoubleQuote},
-                {OperatorBlockOpen, HLTokenType.OpBlockBracketOpen},
-                {OperatorBlockClose, HLTokenType.OpBlockBracketClose},
-                {OperatorBracketsOpen, HLTokenType.OpBracketOpen},
-                {OperatorBracketsClose, HLTokenType.OpBracketClose},
-                {OperatorIndexAccessorOpen, HLTokenType.OpIndexerBracketOpen},
-                {OperatorIndexAccessorClose, HLTokenType.OpIndexerBracketClose},
-                {OperatorAsterisk, HLTokenType.OpAsterisk},
-                {OperatorFwdSlash, HLTokenType.OpFwdSlash},
-                {OperatorSemicolon, HLTokenType.OpSemicolon},
-                {OperatorComma, HLTokenType.OpComma},
-                {OperatorColon, HLTokenType.OpColon},
-                {OperatorDot, HLTokenType.OpDot},
-                {OperatorPlus, HLTokenType.OpPlus},
-                {OperatorMinus, HLTokenType.OpMinus},
-                {OperatorPercent, HLTokenType.OpPercent},
-                {OperatorEquality, HLTokenType.OpEquality},
-                {OperatorAnd, HLTokenType.OpAnd},
-                {OperatorPipe, HLTokenType.OpPipe},
-                {OperatorCap, HLTokenType.OpCap},
-                {OperatorBang, HLTokenType.OpBang},
-                {OperatorLessThan, HLTokenType.OpLessThan},
-                {OperatorGreaterThan, HLTokenType.OpGreaterThan},
-                {OperatorTilde, HLTokenType.OpTilde}
+                { OperatorNumSign, HLTokenType.OpNumSign },
+                { OperatorBackSlash, HLTokenType.OpBackSlash },
+                { OperatorSingleQuote, HLTokenType.OpSingleQuote },
+                { OperatorDoubleQuote, HLTokenType.OpDoubleQuote },
+                { OperatorBlockOpen, HLTokenType.OpBlockBracketOpen },
+                { OperatorBlockClose, HLTokenType.OpBlockBracketClose },
+                { OperatorBracketsOpen, HLTokenType.OpBracketOpen },
+                { OperatorBracketsClose, HLTokenType.OpBracketClose },
+                { OperatorIndexAccessorOpen, HLTokenType.OpIndexerBracketOpen },
+                { OperatorIndexAccessorClose, HLTokenType.OpIndexerBracketClose },
+                { OperatorAsterisk, HLTokenType.OpAsterisk },
+                { OperatorFwdSlash, HLTokenType.OpFwdSlash },
+                { OperatorSemicolon, HLTokenType.OpSemicolon },
+                { OperatorComma, HLTokenType.OpComma },
+                { OperatorColon, HLTokenType.OpColon },
+                { OperatorDot, HLTokenType.OpDot },
+                { OperatorPlus, HLTokenType.OpPlus },
+                { OperatorMinus, HLTokenType.OpMinus },
+                { OperatorPercent, HLTokenType.OpPercent },
+                { OperatorEquality, HLTokenType.OpEquality },
+                { OperatorAnd, HLTokenType.OpAnd },
+                { OperatorPipe, HLTokenType.OpPipe },
+                { OperatorCap, HLTokenType.OpCap },
+                { OperatorBang, HLTokenType.OpBang },
+                { OperatorLessThan, HLTokenType.OpLessThan },
+                { OperatorGreaterThan, HLTokenType.OpGreaterThan },
+                { OperatorTilde, HLTokenType.OpTilde }
             };
+
     }
+
 }

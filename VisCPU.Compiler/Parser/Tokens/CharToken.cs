@@ -1,27 +1,30 @@
 ﻿using System.Text.RegularExpressions;
+
 using VisCPU.Compiler.Parser.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
+
     public class CharToken : ValueToken
     {
+
         public override uint Value
         {
             get
             {
                 string val = GetValue();
 
-                if (char.TryParse(
-                    Regex.Unescape(val),
-                    out char chr
-                ))
+                if ( char.TryParse(
+                                   Regex.Unescape( val ),
+                                   out char chr
+                                  ) )
                 {
                     return chr;
                 }
 
-                EventManager<ErrorEvent>.SendEvent(new InvalidCharValueEvent(val, Start));
+                EventManager < ErrorEvent >.SendEvent( new InvalidCharValueEvent( val, Start ) );
 
                 return 0;
             }
@@ -29,7 +32,7 @@ namespace VisCPU.Compiler.Parser.Tokens
 
         #region Public
 
-        public CharToken(string originalText, int start, int length) : base(originalText, start, length)
+        public CharToken( string originalText, int start, int length ) : base( originalText, start, length )
         {
         }
 
@@ -39,5 +42,7 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
+
     }
+
 }

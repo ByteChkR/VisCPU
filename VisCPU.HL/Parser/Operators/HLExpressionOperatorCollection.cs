@@ -1,18 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     A Collection of Expression Operators
     /// </summary>
     public class HLExpressionOperatorCollection
     {
+
+        /// <summary>
+        ///     Precedence Bucket
+        /// </summary>
+        private struct PrecedenceBucket
+        {
+
+            /// <summary>
+            ///     Operators in this Precedence Bucket
+            /// </summary>
+            public readonly List < HLExpressionOperator > bucket;
+
+            /// <summary>
+            ///     Public Constructor
+            /// </summary>
+            /// <param name="operators">Operators</param>
+            public PrecedenceBucket( List < HLExpressionOperator > operators )
+            {
+                bucket = operators;
+            }
+
+        }
+
         /// <summary>
         ///     Operators Sorted by Precedence
         /// </summary>
-        private readonly Dictionary<int, PrecedenceBucket> buckets = new Dictionary<int, PrecedenceBucket>();
+        private readonly Dictionary < int, PrecedenceBucket > buckets = new Dictionary < int, PrecedenceBucket >();
 
         /// <summary>
         ///     The Highest Operator precedence
@@ -24,49 +47,24 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         public int Lowest => buckets.Keys.Min();
 
-        /// <summary>
-        ///     Precedence Bucket
-        /// </summary>
-        private struct PrecedenceBucket : IEquatable<PrecedenceBucket>
-        {
-            /// <summary>
-            ///     Operators in this Precedence Bucket
-            /// </summary>
-            public readonly List<HLExpressionOperator> bucket;
-
-            /// <summary>
-            ///     Public Constructor
-            /// </summary>
-            /// <param name="operators">Operators</param>
-            public PrecedenceBucket(List<HLExpressionOperator> operators)
-            {
-                bucket = operators;
-            }
-
-            public bool Equals(PrecedenceBucket other)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         #region Public
 
         /// <summary>
         ///     Public Constructor
         /// </summary>
         /// <param name="operators">Operators</param>
-        public HLExpressionOperatorCollection(HLExpressionOperator[] operators)
+        public HLExpressionOperatorCollection( HLExpressionOperator[] operators )
         {
-            foreach (HLExpressionOperator xLangExpressionOperator in operators)
+            foreach ( HLExpressionOperator xLangExpressionOperator in operators )
             {
-                if (buckets.ContainsKey(xLangExpressionOperator.PrecedenceLevel))
+                if ( buckets.ContainsKey( xLangExpressionOperator.PrecedenceLevel ) )
                 {
-                    buckets[xLangExpressionOperator.PrecedenceLevel].bucket.Add(xLangExpressionOperator);
+                    buckets[xLangExpressionOperator.PrecedenceLevel].bucket.Add( xLangExpressionOperator );
                 }
                 else
                 {
                     buckets[xLangExpressionOperator.PrecedenceLevel] =
-                        new PrecedenceBucket(new List<HLExpressionOperator> {xLangExpressionOperator});
+                        new PrecedenceBucket( new List < HLExpressionOperator > { xLangExpressionOperator } );
                 }
             }
         }
@@ -76,7 +74,7 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         /// <param name="level">Precedence Level</param>
         /// <returns></returns>
-        public List<HLExpressionOperator> GetLevel(int level)
+        public List < HLExpressionOperator > GetLevel( int level )
         {
             return buckets[level].bucket;
         }
@@ -86,11 +84,13 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         /// <param name="level">Precedence Level</param>
         /// <returns></returns>
-        public bool HasLevel(int level)
+        public bool HasLevel( int level )
         {
-            return buckets.ContainsKey(level);
+            return buckets.ContainsKey( level );
         }
 
         #endregion
+
     }
+
 }

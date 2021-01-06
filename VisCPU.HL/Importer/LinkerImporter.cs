@@ -2,8 +2,10 @@
 using System.IO;
 using System.Linq;
 
-using VisCPU.Compiler.Linking;
+using VisCPU.HL.Importer.Events;
 using VisCPU.Utility;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.HL.Importer
 {
@@ -11,50 +13,60 @@ namespace VisCPU.HL.Importer
     public class LinkerImporter : AImporter, IDataImporter
     {
 
+        #region Public
+
         public override bool CanImport( string input )
         {
-            return input.StartsWith("link");
+            return input.StartsWith( "link" );
         }
 
         public IExternalData[] ProcessImport( string input )
         {
-            int tagLen = "link".Length+1;
+            int tagLen = "link".Length + 1;
 
-            if (input.Length < tagLen)
+            if ( input.Length < tagLen )
             {
-                throw new Exception("Invalid link command");
+                EventManager < ErrorEvent >.SendEvent( new InvalidLinkImporterArgumentsEvent( input ) );
+
+                return new IExternalData[0];
             }
-            string cmd = input.Remove(0, tagLen);
+
+            string cmd = input.Remove( 0, tagLen );
             uint offset = 0;
-            if(File.Exists(cmd))
+
+            if ( File.Exists( cmd ) )
             {
-                Log("Reading Offset from Binary: " + cmd);
+                Log( "Reading Offset from Binary: " + cmd );
                 byte[] buf = new byte[sizeof( uint )];
+
                 using ( FileStream fs = File.OpenRead( cmd ) )
                 {
-                    fs.Read(buf, 0, buf.Length);
+                    fs.Read( buf, 0, buf.Length );
                 }
 
                 offset = BitConverter.ToUInt32( buf, 0 );
                 Log( "Detected Offset: " + offset );
             }
-            else if (cmd.StartsWith("-"))
+            else if ( cmd.StartsWith( "-" ) )
             {
-                int end = cmd.IndexOf(' ', 1);
-                offset = uint.Parse(cmd.Substring(1, end - 1));
-                Log("Parsed Offset: " + cmd);
-                cmd = cmd.Substring(end + 1);
+                int end = cmd.IndexOf( ' ', 1 );
+                offset = uint.Parse( cmd.Substring( 1, end - 1 ) );
+                Log( "Parsed Offset: " + cmd );
+                cmd = cmd.Substring( end + 1 );
             }
             else
             {
-                throw new Exception( $"Offset was not specified and file '{cmd}({Path.GetFullPath(cmd)})' does not exist." );
+                EventManager < ErrorEvent >.SendEvent( new LinkImporterOffsetNotSpecifiedEvent( cmd ) );
             }
+
             LinkerInfo info = LinkerInfo.Load( cmd );
 
             return info.Labels.ApplyOffset( offset ).
                         Select( x => ( IExternalData ) new LinkedData( x.Key, x.Value ) ).
                         ToArray();
         }
+
+        #endregion
 
     }
 

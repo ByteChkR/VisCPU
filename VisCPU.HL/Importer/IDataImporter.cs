@@ -4,7 +4,7 @@
     public interface IDataImporter : IImporter
     {
 
-        IExternalData[] ProcessImport(string input);
+        IExternalData[] ProcessImport( string input );
 
     }
 

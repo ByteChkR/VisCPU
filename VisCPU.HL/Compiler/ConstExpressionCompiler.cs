@@ -2,16 +2,18 @@
 
 namespace VisCPU.HL.Compiler
 {
-    public class ConstExpressionCompiler : HLExpressionCompiler<HLValueOperand>
+
+    public class ConstExpressionCompiler : HLExpressionCompiler < HLValueOperand >
     {
+
         protected override bool AllImplementations => true;
 
         #region Public
 
-        public override ExpressionTarget ParseExpression(HLCompilation compilation, HLValueOperand expr)
+        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLValueOperand expr )
         {
             ExpressionTarget tmp =
-                new ExpressionTarget(expr.Value.ToString(), false, compilation.TypeSystem.GetType("var"));
+                new ExpressionTarget( expr.Value.ToString(), false, compilation.TypeSystem.GetType( "var" ) );
 
             return tmp;
         }
@@ -19,13 +21,15 @@ namespace VisCPU.HL.Compiler
         public override ExpressionTarget ParseExpression(
             HLCompilation compilation,
             HLValueOperand expr,
-            ExpressionTarget outputTarget)
+            ExpressionTarget outputTarget )
         {
-            compilation.ProgramCode.Add($"LOAD {outputTarget.ResultAddress} {expr.Value}");
+            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} {expr.Value}" );
 
             return outputTarget;
         }
 
         #endregion
+
     }
+
 }

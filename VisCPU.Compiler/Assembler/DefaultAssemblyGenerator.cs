@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.Compiler.Assembler.Events;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
@@ -11,13 +12,15 @@ using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Assembler
 {
+
     public class DefaultAssemblyGenerator : AssemblyGenerator
     {
+
         #region Public
 
-        public override List<byte> Assemble(LinkerResult result)
+        public override List < byte > Assemble( LinkerResult result )
         {
-            List<byte> instrBytes = new List<byte>();
+            List < byte > instrBytes = new List < byte >();
 
             AssemblyGeneratorSettings settings = AssemblyGeneratorSettings.Create();
 
@@ -27,111 +30,127 @@ namespace VisCPU.Compiler.Assembler
             }
 
             if ( !settings.TrimOffset )
-                instrBytes.AddRange( Enumerable.Repeat( (byte)0, ( int ) settings.GlobalOffset * CPUSettings.INSTRUCTION_SIZE ) );
-            Dictionary<string, AddressItem> consts =
-                result.Constants.ApplyOffset(settings.GlobalOffset)
-                      .ToDictionary(x => x.Key, x => x.Value);
-            Dictionary<string, AddressItem> labels =
-                result.Labels.ApplyOffset(settings.GlobalOffset)
-                      .ToDictionary(x => x.Key, x => x.Value);
-
-            FileCompilation.ApplyToAllTokens(result.LinkedBinary, consts); //Apply global constants
-
-            FileCompilation.ApplyToAllTokens(result.LinkedBinary, labels);
-
-            Dictionary<string, AddressItem> ds =
-                result.DataSectionHeader.ApplyOffset(settings.GlobalOffset + (uint) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE)
-                    .ToDictionary(x => x.Key, x => x.Value);
-
-            FileCompilation.ApplyToAllTokens(result.LinkedBinary, ds);
-
-            foreach (KeyValuePair<(int, int), Dictionary<string, AddressItem>> resultHiddenAddressItem in result
-                .HiddenConstantItems)
             {
-                FileCompilation.ApplyToTokens(
-                    result.LinkedBinary,
-                    resultHiddenAddressItem.Value,
-                    resultHiddenAddressItem.Key.Item1,
-                    resultHiddenAddressItem.Key.Item2
-                ); //Apply global constants
+                instrBytes.AddRange(
+                                    Enumerable.Repeat(
+                                                      ( byte ) 0,
+                                                      ( int ) settings.GlobalOffset * CPUSettings.INSTRUCTION_SIZE
+                                                     )
+                                   );
             }
 
-            foreach (KeyValuePair<(int, int), Dictionary<string, AddressItem>> resultHiddenAddressItem in result
-                .HiddenLabelItems)
+            Dictionary < string, AddressItem > consts =
+                result.Constants.ApplyOffset( settings.GlobalOffset ).ToDictionary( x => x.Key, x => x.Value );
+
+            Dictionary < string, AddressItem > labels =
+                result.Labels.ApplyOffset( settings.GlobalOffset ).ToDictionary( x => x.Key, x => x.Value );
+
+            FileCompilation.ApplyToAllTokens( result.LinkedBinary, consts ); //Apply global constants
+
+            FileCompilation.ApplyToAllTokens( result.LinkedBinary, labels );
+
+            Dictionary < string, AddressItem > ds =
+                result.DataSectionHeader.
+                       ApplyOffset(
+                                   settings.GlobalOffset +
+                                   ( uint ) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE
+                                  ).
+                       ToDictionary( x => x.Key, x => x.Value );
+
+            FileCompilation.ApplyToAllTokens( result.LinkedBinary, ds );
+
+            foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
+                HiddenConstantItems )
             {
-                Dictionary<string, AddressItem> hiddenLabels =
-                    resultHiddenAddressItem.Value.ApplyOffset(settings.GlobalOffset)
-                                           .ToDictionary(x => x.Key, x => x.Value);
                 FileCompilation.ApplyToTokens(
-                    result.LinkedBinary,
-                    hiddenLabels,
-                    resultHiddenAddressItem.Key.Item1,
-                    resultHiddenAddressItem.Key.Item2
-                ); //Apply global constants
+                                              result.LinkedBinary,
+                                              resultHiddenAddressItem.Value,
+                                              resultHiddenAddressItem.Key.Item1,
+                                              resultHiddenAddressItem.Key.Item2
+                                             ); //Apply global constants
             }
 
-            foreach (KeyValuePair<(int, int), Dictionary<string, AddressItem>> resultHiddenAddressItem in result
-                .HiddenDataSectionItems)
+            foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
+                HiddenLabelItems )
             {
-                Dictionary<string, AddressItem> hds = resultHiddenAddressItem.Value.ApplyOffset(
-                     settings.GlobalOffset+(uint) result.LinkedBinary.Count *
-                                                 CPUSettings.INSTRUCTION_SIZE
-                ).ToDictionary(
-                    x => x.Key,
-                    x => x.Value
-                );
+                Dictionary < string, AddressItem > hiddenLabels =
+                    resultHiddenAddressItem.Value.ApplyOffset( settings.GlobalOffset ).
+                                            ToDictionary( x => x.Key, x => x.Value );
 
                 FileCompilation.ApplyToTokens(
-                    result.LinkedBinary,
-                    hds,
-                    resultHiddenAddressItem.Key.Item1,
-                    resultHiddenAddressItem.Key.Item2
-                ); //Apply global constants
+                                              result.LinkedBinary,
+                                              hiddenLabels,
+                                              resultHiddenAddressItem.Key.Item1,
+                                              resultHiddenAddressItem.Key.Item2
+                                             ); //Apply global constants
             }
 
-            for (int i = 0; i < result.LinkedBinary.Count; i++)
+            foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
+                HiddenDataSectionItems )
             {
-                List<byte> bytes = new List<byte>();
+                Dictionary < string, AddressItem > hds = resultHiddenAddressItem.Value.ApplyOffset(
+                         settings.GlobalOffset +
+                         ( uint ) result.LinkedBinary.Count *
+                         CPUSettings.INSTRUCTION_SIZE
+                        ).
+                    ToDictionary(
+                                 x => x.Key,
+                                 x => x.Value
+                                );
+
+                FileCompilation.ApplyToTokens(
+                                              result.LinkedBinary,
+                                              hds,
+                                              resultHiddenAddressItem.Key.Item1,
+                                              resultHiddenAddressItem.Key.Item2
+                                             ); //Apply global constants
+            }
+
+            for ( int i = 0; i < result.LinkedBinary.Count; i++ )
+            {
+                List < byte > bytes = new List < byte >();
                 AToken instr = result.LinkedBinary[i][0];
-                IEnumerable<AToken> args = result.LinkedBinary[i].Skip(1);
+                IEnumerable < AToken > args = result.LinkedBinary[i].Skip( 1 );
 
                 uint opCode =
                     CPUSettings.InstructionSet.GetInstruction(
-                        CPUSettings.InstructionSet.GetInstruction(
-                            instr.GetValue(),
-                            result.LinkedBinary[i].Length - 1
-                        )
-                    );
+                                                              CPUSettings.InstructionSet.GetInstruction(
+                                                                   instr.GetValue(),
+                                                                   result.LinkedBinary[i].Length - 1
+                                                                  )
+                                                             );
 
-                bytes.AddRange(BitConverter.GetBytes(opCode));
+                bytes.AddRange( BitConverter.GetBytes( opCode ) );
 
-                foreach (AToken aToken in args)
+                foreach ( AToken aToken in args )
                 {
-                    if (aToken is ValueToken vToken)
+                    if ( aToken is ValueToken vToken )
                     {
-                        bytes.AddRange(BitConverter.GetBytes(vToken.Value));
+                        bytes.AddRange( BitConverter.GetBytes( vToken.Value ) );
                     }
                     else
                     {
-                        EventManager<ErrorEvent>.SendEvent(new TokenRecognitionFailureEvent(aToken.GetValue()));
+                        EventManager < ErrorEvent >.SendEvent( new TokenRecognitionFailureEvent( aToken.GetValue() ) );
                     }
                 }
 
-                if (bytes.Count > CPUSettings.BYTE_SIZE)
+                if ( bytes.Count > CPUSettings.BYTE_SIZE )
                 {
-                    EventManager<ErrorEvent>.SendEvent(new InvalidArgumentCountEvent(i));
+                    EventManager < ErrorEvent >.SendEvent( new InvalidArgumentCountEvent( i ) );
                 }
 
-                bytes.AddRange(Enumerable.Repeat((byte) 0, CPUSettings.BYTE_SIZE - bytes.Count));
+                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, CPUSettings.BYTE_SIZE - bytes.Count ) );
 
-                instrBytes.AddRange(bytes);
+                instrBytes.AddRange( bytes );
             }
 
-            instrBytes.AddRange(result.DataSection.SelectMany(BitConverter.GetBytes));
+            instrBytes.AddRange( result.DataSection.SelectMany( BitConverter.GetBytes ) );
 
             return instrBytes;
         }
 
         #endregion
+
     }
+
 }

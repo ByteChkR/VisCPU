@@ -1,13 +1,16 @@
 ﻿using System;
+
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.Compiler
 {
-    public abstract class HLExpressionCompiler<T> : VisBase, IHLExpressionCompiler
+
+    public abstract class HLExpressionCompiler < T > : VisBase, IHLExpressionCompiler
         where T : HLExpression
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.HL_Compiler;
 
         protected virtual bool NeedsOutput { get; }
@@ -19,12 +22,12 @@ namespace VisCPU.HL.Compiler
         public virtual ExpressionTarget ParseExpression(
             HLCompilation compilation,
             T expr,
-            ExpressionTarget outputTarget)
+            ExpressionTarget outputTarget )
         {
             throw new NotImplementedException();
         }
 
-        public virtual ExpressionTarget ParseExpression(HLCompilation compilation, T expr)
+        public virtual ExpressionTarget ParseExpression( HLCompilation compilation, T expr )
         {
             throw new NotImplementedException();
         }
@@ -36,37 +39,42 @@ namespace VisCPU.HL.Compiler
         private ExpressionTarget InnerParseExpression(
             HLCompilation compilation,
             T expr,
-            ExpressionTarget outputTarget)
+            ExpressionTarget outputTarget )
         {
-            if (NeedsOutput)
+            if ( NeedsOutput )
             {
                 ExpressionTarget target = outputTarget;
 
-                if (outputTarget.ResultAddress == null || !outputTarget.IsAddress)
+                if ( outputTarget.ResultAddress == null || !outputTarget.IsAddress )
                 {
-                    target = new ExpressionTarget(compilation.GetTempVar(), true,
-                        compilation.TypeSystem.GetType("var"));
+                    target = new ExpressionTarget(
+                                                  compilation.GetTempVar(),
+                                                  true,
+                                                  compilation.TypeSystem.GetType( "var" )
+                                                 );
                 }
 
-                return ParseExpression(compilation, expr, target);
+                return ParseExpression( compilation, expr, target );
             }
 
-            if (AllImplementations && outputTarget.ResultAddress != null)
+            if ( AllImplementations && outputTarget.ResultAddress != null )
             {
-                return ParseExpression(compilation, expr, outputTarget);
+                return ParseExpression( compilation, expr, outputTarget );
             }
 
-            return ParseExpression(compilation, expr);
+            return ParseExpression( compilation, expr );
         }
 
         ExpressionTarget IHLExpressionCompiler.Parse(
             HLCompilation compilation,
             HLExpression expr,
-            ExpressionTarget outputTarget)
+            ExpressionTarget outputTarget )
         {
-            return InnerParseExpression(compilation, (T) expr, outputTarget);
+            return InnerParseExpression( compilation, ( T ) expr, outputTarget );
         }
 
         #endregion
+
     }
+
 }

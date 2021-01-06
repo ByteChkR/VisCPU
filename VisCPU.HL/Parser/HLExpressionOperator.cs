@@ -2,11 +2,13 @@
 
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     Abstract XLangExpressionOperator
     /// </summary>
     public abstract class HLExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operator
         /// </summary>
@@ -20,7 +22,7 @@ namespace VisCPU.HL.Parser
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public abstract bool CanCreate(HLExpressionParser parser, HLExpression currentNode);
+        public abstract bool CanCreate( HLExpressionParser parser, HLExpression currentNode );
 
         /// <summary>
         ///     Creates an implemented expression
@@ -28,8 +30,10 @@ namespace VisCPU.HL.Parser
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public abstract HLExpression Create(HLExpressionParser parser, HLExpression currentNode);
+        public abstract HLExpression Create( HLExpressionParser parser, HLExpression currentNode );
 
         #endregion
+
     }
+
 }

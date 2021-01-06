@@ -7,15 +7,17 @@ using System.Text;
 /// </summary>
 namespace VisCPU.HL.Parser.Tokens.Combined
 {
+
     /// <summary>
     ///     Represents a Token that is constructed from its child tokens
     /// </summary>
     public abstract class CombinedToken : IHLToken
     {
+
         /// <summary>
         ///     The Child Tokens
         /// </summary>
-        public readonly List<IHLToken> SubTokens;
+        public readonly List < IHLToken > SubTokens;
 
         /// <summary>
         ///     Start index in the source
@@ -33,7 +35,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         ///     Returns the Child Tokens
         /// </summary>
         /// <returns></returns>
-        public List<IHLToken> GetChildren()
+        public List < IHLToken > GetChildren()
         {
             return SubTokens;
         }
@@ -44,7 +46,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         public string GetValue()
         {
-            return Unpack(SubTokens.ToArray());
+            return Unpack( SubTokens.ToArray() );
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <param name="type">Token Type</param>
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="start">Start index in the source</param>
-        protected CombinedToken(HLTokenType type, IHLToken[] subtokens, int start)
+        protected CombinedToken( HLTokenType type, IHLToken[] subtokens, int start )
         {
             SubTokens = subtokens.ToList();
             SourceIndex = start;
@@ -78,18 +80,20 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        protected static string Unpack(IHLToken[] t)
+        protected static string Unpack( IHLToken[] t )
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (IHLToken token in t)
+            foreach ( IHLToken token in t )
             {
-                sb.Append(token);
+                sb.Append( token );
             }
 
             return sb.ToString();
         }
 
         #endregion
+
     }
+
 }

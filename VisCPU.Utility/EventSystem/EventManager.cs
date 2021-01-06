@@ -1,58 +1,66 @@
 ﻿using System;
+
 using VisCPU.Utility.Events;
 
 namespace VisCPU.Utility.EventSystem
 {
+
     public static class EventManager
     {
-        public static event Action<Event> OnEventReceive;
+
+        public static event Action < Event > OnEventReceive;
 
         #region Public
 
         public static void RegisterDefaultHandlers()
         {
-            EventManager<ErrorEvent>.OnEventReceive += EventManagerOnErrorEventReceive;
-            EventManager<WarningEvent>.OnEventReceive += EventManagerOnWarningEventReceive;
+            EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
+            EventManager < WarningEvent >.OnEventReceive += EventManagerOnWarningEventReceive;
         }
 
-        public static void SendEvent(Event eventItem)
+        public static void SendEvent( Event eventItem )
         {
-            OnEventReceive?.Invoke(eventItem);
+            OnEventReceive?.Invoke( eventItem );
         }
 
         #endregion
 
         #region Private
 
-        private static void EventManagerOnErrorEventReceive(ErrorEvent obj)
+        private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
         {
-            if (obj.CanContinue)
+            if ( obj.CanContinue )
             {
                 return;
             }
-            throw new Exception($"[{obj.EventKey}] {obj.Message}");
+
+            throw new Exception( $"[{obj.EventKey}] {obj.Message}" );
         }
 
-        private static void EventManagerOnWarningEventReceive(WarningEvent obj)
+        private static void EventManagerOnWarningEventReceive( WarningEvent obj )
         {
-            Console.WriteLine($"[{obj.EventKey}] {obj.Message}");
+            Console.WriteLine( $"[{obj.EventKey}] {obj.Message}" );
         }
 
         #endregion
+
     }
 
-    public static class EventManager<T> where T : Event
+    public static class EventManager < T > where T : Event
     {
-        public static event Action<T> OnEventReceive;
+
+        public static event Action < T > OnEventReceive;
 
         #region Public
 
-        public static void SendEvent(T eventItem)
+        public static void SendEvent( T eventItem )
         {
-            OnEventReceive?.Invoke(eventItem);
-            EventManager.SendEvent(eventItem);
+            OnEventReceive?.Invoke( eventItem );
+            EventManager.SendEvent( eventItem );
         }
 
         #endregion
+
     }
+
 }

@@ -2,11 +2,13 @@
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
+
     /// <summary>
     ///     Return Operator Implementation
     /// </summary>
     public class HLReturnOp : HLExpression
     {
+
         /// <summary>
         ///     Right side expression (return value)
         /// </summary>
@@ -21,7 +23,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="right">Right side Expression</param>
-        public HLReturnOp(HLExpression right, int sourceIdx) : base(sourceIdx)
+        public HLReturnOp( HLExpression right, int sourceIdx ) : base( sourceIdx )
         {
             Right = right;
         }
@@ -30,9 +32,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List<IHLToken> GetChildren()
+        public override List < IHLToken > GetChildren()
         {
-            return new List<IHLToken> {Right};
+            return new List < IHLToken > { Right };
         }
 
         public override string ToString()
@@ -41,5 +43,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
+
     }
+
 }

@@ -1,17 +1,25 @@
-﻿using VisCPU.Utility.Events;
+﻿using VisCPU.Utility;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Compiler.Events
 {
+
     public class InvalidConstantDefinitionEvent : ErrorEvent
     {
-        private const string EVENT_KEY = "invalid-const-def";
 
         #region Public
 
-        public InvalidConstantDefinitionEvent(string message) : base(message, EVENT_KEY, false)
+        public InvalidConstantDefinitionEvent( string message ) : base(
+                                                                       message,
+                                                                       ErrorEventKeys.VASM_INVALID_CONSTANT_DEFINITION,
+                                                                       false
+                                                                      )
         {
         }
 
         #endregion
+
     }
+
 }

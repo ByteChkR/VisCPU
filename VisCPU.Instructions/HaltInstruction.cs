@@ -1,7 +1,9 @@
 ﻿namespace VisCPU.Instructions
 {
+
     public class HaltInstruction : BaseInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "HLT";
@@ -12,12 +14,14 @@
 
         #region Public
 
-        public override void Process(CPU cpu)
+        public override void Process( CPU cpu )
         {
-            Log(cpu, "Set Halt Flag");
-            cpu.Set(CPU.Flags.HALT);
+            Log( cpu, "Set Halt Flag" );
+            cpu.Set( CPU.Flags.HALT );
         }
 
         #endregion
+
     }
+
 }

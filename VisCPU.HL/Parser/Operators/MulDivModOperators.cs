@@ -3,11 +3,13 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements Multiply/Divide Operators
     /// </summary>
     public class MulDivModOperators : HLExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -21,7 +23,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
                    parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
@@ -34,17 +36,19 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             HLTokenType type = parser.CurrentToken.Type;
-            parser.Eat(parser.CurrentToken.Type);
+            parser.Eat( parser.CurrentToken.Type );
 
             HLExpression token =
-                new HLBinaryOp(currentNode, type, parser.ParseExpr(0));
+                new HLBinaryOp( currentNode, type, parser.ParseExpr( 0 ) );
 
             return token;
         }
 
         #endregion
+
     }
+
 }

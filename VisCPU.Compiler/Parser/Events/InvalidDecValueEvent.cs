@@ -1,21 +1,25 @@
-﻿using VisCPU.Utility.Events;
+﻿using VisCPU.Utility;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Parser.Events
 {
+
     public class InvalidDecValueEvent : ErrorEvent
     {
-        private const string EVENT_KEY = "invalid-dec-value";
 
         #region Public
 
-        public InvalidDecValueEvent(string value, int start) : base(
-            $"Invalid decimal Value: '{value}' at line {start}",
-            EVENT_KEY,
-            false
-        )
+        public InvalidDecValueEvent( string value, int start ) : base(
+                                                                      $"Invalid decimal Value: '{value}' at line {start}",
+                                                                      ErrorEventKeys.VASM_PARSER_INVALID_NUMBER_VALUE,
+                                                                      false
+                                                                     )
         {
         }
 
         #endregion
+
     }
+
 }

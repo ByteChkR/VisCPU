@@ -1,21 +1,25 @@
-﻿using VisCPU.Utility.Events;
+﻿using VisCPU.Utility;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Events
 {
+
     public class DuplicateConstVarDefinitionEvent : ErrorEvent
     {
-        private const string EVENT_KEY = "var-duplicate-def";
 
         #region Public
 
-        public DuplicateConstVarDefinitionEvent(string varName) : base(
-            $"Duplicate Definition of: {varName}",
-            EVENT_KEY,
-            false
-        )
+        public DuplicateConstVarDefinitionEvent( string varName ) : base(
+                                                                         $"Duplicate Definition of: {varName}",
+                                                                         ErrorEventKeys.HL_CONST_VAR_DUPLICATE_DEF,
+                                                                         false
+                                                                        )
         {
         }
 
         #endregion
+
     }
+
 }

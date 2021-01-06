@@ -2,8 +2,10 @@
 
 namespace VisCPU.Instructions.Memory
 {
+
     public class DeReferenceInstruction : MemoryInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "DREF";
@@ -14,20 +16,22 @@ namespace VisCPU.Instructions.Memory
 
         #region Public
 
-        public override void Process(CPU cpu)
+        public override void Process( CPU cpu )
         {
-            uint addressSrcPtr = cpu.DecodeArgument(0);
-            uint addressSrc = cpu.MemoryBus.Read(cpu.MemoryBus.Read(addressSrcPtr)); // Dereference
-            uint addressDst = cpu.DecodeArgument(1);
+            uint addressSrcPtr = cpu.DecodeArgument( 0 );
+            uint addressSrc = cpu.MemoryBus.Read( cpu.MemoryBus.Read( addressSrcPtr ) ); // Dereference
+            uint addressDst = cpu.DecodeArgument( 1 );
 
             Log(
                 cpu,
-                $"0x{Convert.ToString(addressSrcPtr, 16)}(0x{Convert.ToString(addressSrc, 16)}) => 0x{Convert.ToString(addressDst, 16)}"
-            );
+                $"0x{Convert.ToString( addressSrcPtr, 16 )}(0x{Convert.ToString( addressSrc, 16 )}) => 0x{Convert.ToString( addressDst, 16 )}"
+               );
 
-            cpu.MemoryBus.Write(addressDst, addressSrc); //Write back Result
+            cpu.MemoryBus.Write( addressDst, addressSrc ); //Write back Result
         }
 
         #endregion
+
     }
+
 }

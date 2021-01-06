@@ -9,8 +9,4 @@
     <ProjectReference Include="..\VisCPU\VisCPU.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Importer\" />
-  </ItemGroup>
-
 </Project>

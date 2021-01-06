@@ -4,20 +4,22 @@ using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
+
     public class DecToken : ValueToken
     {
+
         public override uint Value
         {
             get
             {
                 string val = GetValue();
 
-                if (uint.TryParse(val, out uint hexVal))
+                if ( uint.TryParse( val, out uint hexVal ) )
                 {
                     return hexVal;
                 }
 
-                EventManager<ErrorEvent>.SendEvent(new InvalidDecValueEvent(val, Start));
+                EventManager < ErrorEvent >.SendEvent( new InvalidDecValueEvent( val, Start ) );
 
                 return 0;
             }
@@ -25,7 +27,7 @@ namespace VisCPU.Compiler.Parser.Tokens
 
         #region Public
 
-        public DecToken(string originalText, int start, int length) : base(originalText, start, length)
+        public DecToken( string originalText, int start, int length ) : base( originalText, start, length )
         {
         }
 
@@ -35,5 +37,7 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
+
     }
+
 }

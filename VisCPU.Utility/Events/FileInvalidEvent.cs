@@ -1,19 +1,23 @@
-﻿namespace VisCPU.Utility.Events
+﻿using VisCPU.Utility.EventSystem;
+
+namespace VisCPU.Utility.Events
 {
+
     public class FileInvalidEvent : ErrorEvent
     {
-        private const string EVENT_KEY = "file-invalid";
 
         #region Public
 
-        public FileInvalidEvent(string file, bool canContinue) : base(
-            $"The file '{file}' is invalid.",
-            EVENT_KEY,
-            canContinue
-        )
+        public FileInvalidEvent( string file, bool canContinue ) : base(
+                                                                        $"The file '{file}' is invalid.",
+                                                                        ErrorEventKeys.GENERIC_FILE_INVALID,
+                                                                        canContinue
+                                                                       )
         {
         }
 
         #endregion
+
     }
+
 }

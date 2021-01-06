@@ -4,11 +4,13 @@
 
 namespace VisCPU.HL.Parser
 {
+
     /// <summary>
     ///     Token Type Enum containing all tokens used inside XL
     /// </summary>
     public enum HLTokenType
     {
+
         Any,
         Unknown,
         OpNone,
@@ -112,5 +114,7 @@ namespace VisCPU.HL.Parser
 
         //End Of File
         EOF
+
     }
+
 }

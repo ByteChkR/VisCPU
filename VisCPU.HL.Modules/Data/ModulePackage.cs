@@ -3,47 +3,66 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+
 using Newtonsoft.Json;
+
 using VisCPU.HL.Modules.ModuleManagers;
 
 namespace VisCPU.HL.Modules.Data
 {
+
     [Serializable]
     public class ModulePackage
     {
-        [JsonIgnore] [XmlIgnore] public ModuleManager Manager;
+
+        [JsonIgnore]
+        [XmlIgnore]
+        public ModuleManager Manager;
 
         public string ModuleName;
-        public List<string> ModuleVersions;
+        public List < string > ModuleVersions;
+
+        #region Public
 
         public ModulePackage()
         {
         }
 
-        public ModulePackage(ModuleManager manager, string moduleName, string[] moduleVersions)
+        public ModulePackage( ModuleManager manager, string moduleName, string[] moduleVersions )
         {
             ModuleName = moduleName;
             ModuleVersions = moduleVersions.ToList();
             Manager = manager;
         }
 
-        public bool HasTarget(string version)
+        public ModuleTarget GetInstallTarget( string version = null )
         {
-            return ModuleVersions.Any(x => x == version);
+            if ( version != null )
+            {
+                string infoPath = Manager.GetTargetInfoUri( this, version );
+
+                return JsonConvert.DeserializeObject < ModuleTarget >(
+                                                                      File.ReadAllText( infoPath )
+                                                                     );
+            }
+
+            return JsonConvert.DeserializeObject < ModuleTarget >(
+                                                                  File.ReadAllText(
+                                                                       Manager.GetTargetInfoUri(
+                                                                            this,
+                                                                            ModuleVersions.Last()
+                                                                           )
+                                                                      )
+                                                                 );
         }
 
-        public ModuleTarget GetInstallTarget(string version = null)
+        public bool HasTarget( string version )
         {
-            if (version != null)
-            {
-                string infoPath = Manager.GetTargetInfoUri(this, version);
-                return JsonConvert.DeserializeObject<ModuleTarget>(
-                    File.ReadAllText(infoPath)
-                );
-            }
-            return JsonConvert.DeserializeObject<ModuleTarget>(
-                File.ReadAllText(Manager.GetTargetInfoUri(this, ModuleVersions.Last()))
-            );
+            return ModuleVersions.Any( x => x == version );
         }
+
+        #endregion
+
     }
+
 }

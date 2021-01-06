@@ -2,14 +2,16 @@
 
 namespace VisCPU.HL.Compiler
 {
+
     public readonly struct ExpressionTarget
     {
+
         public readonly string ResultAddress;
         public readonly bool IsAddress;
         public readonly bool IsPointer;
         public readonly HLTypeDefinition TypeDefinition;
 
-        public ExpressionTarget(string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer = false)
+        public ExpressionTarget( string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer = false )
         {
             ResultAddress = resultAddress;
             IsAddress = isAddress;
@@ -17,46 +19,48 @@ namespace VisCPU.HL.Compiler
             TypeDefinition = def;
         }
 
-        public ExpressionTarget Cast(HLTypeDefinition newType)
+        public ExpressionTarget Cast( HLTypeDefinition newType )
         {
-            return new ExpressionTarget(ResultAddress, IsAddress, newType, IsPointer);
+            return new ExpressionTarget( ResultAddress, IsAddress, newType, IsPointer );
         }
 
-        public ExpressionTarget MakeAddress(HLCompilation c)
+        public ExpressionTarget MakeAddress( HLCompilation c )
         {
-            if (IsAddress)
+            if ( IsAddress )
             {
                 return this;
             }
 
-            ExpressionTarget tmpVal = new ExpressionTarget(c.GetTempVar(), true, TypeDefinition, IsPointer);
-            c.ProgramCode.Add($"LOAD {tmpVal.ResultAddress} {ResultAddress}");
+            ExpressionTarget tmpVal = new ExpressionTarget( c.GetTempVar(), true, TypeDefinition, IsPointer );
+            c.ProgramCode.Add( $"LOAD {tmpVal.ResultAddress} {ResultAddress}" );
 
             return tmpVal;
         }
 
-        public ExpressionTarget LoadIfNotNull(HLCompilation compilation, ExpressionTarget target)
+        public ExpressionTarget LoadIfNotNull( HLCompilation compilation, ExpressionTarget target )
         {
-            if (target.ResultAddress == null)
+            if ( target.ResultAddress == null )
             {
                 return this;
             }
 
-            compilation.ProgramCode.Add($"LOAD {target.ResultAddress} {ResultAddress}");
+            compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} {ResultAddress}" );
 
             return target;
         }
 
-        public ExpressionTarget CopyIfNotNull(HLCompilation compilation, ExpressionTarget target)
+        public ExpressionTarget CopyIfNotNull( HLCompilation compilation, ExpressionTarget target )
         {
-            if (target.ResultAddress == null)
+            if ( target.ResultAddress == null )
             {
                 return this;
             }
 
-            compilation.ProgramCode.Add($"COPY {ResultAddress} {target.ResultAddress}");
+            compilation.ProgramCode.Add( $"COPY {ResultAddress} {target.ResultAddress}" );
 
             return target;
         }
+
     }
+
 }

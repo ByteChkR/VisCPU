@@ -1,21 +1,25 @@
-﻿using VisCPU.Utility.Events;
+﻿using VisCPU.Utility;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.HL.Events
 {
+
     public class HLVariableNotFoundEvent : ErrorEvent
     {
-        private const string EVENT_KEY = "hl-var-not-found";
 
         #region Public
 
-        public HLVariableNotFoundEvent(string varName, bool canContinue) : base(
-            $"Can not find variable: {varName}",
-            EVENT_KEY,
-            canContinue
-        )
+        public HLVariableNotFoundEvent( string varName, bool canContinue ) : base(
+             $"Can not find variable: {varName}",
+             ErrorEventKeys.HL_VARIABLE_NOT_FOUND,
+             canContinue
+            )
         {
         }
 
         #endregion
+
     }
+
 }

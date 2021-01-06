@@ -5,11 +5,13 @@
 /// </summary>
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
 {
+
     /// <summary>
     ///     Implements Binary Operators
     /// </summary>
     public class HLBinaryOp : HLExpression
     {
+
         /// <summary>
         ///     Left side of the Expression
         /// </summary>
@@ -39,7 +41,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         public HLBinaryOp(
             HLExpression left,
             HLTokenType operationType,
-            HLExpression right) : base(left.SourceIndex)
+            HLExpression right ) : base( left.SourceIndex )
         {
             Left = left;
             OperationType = operationType;
@@ -50,13 +52,13 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List<IHLToken> GetChildren()
+        public override List < IHLToken > GetChildren()
         {
-            return new List<IHLToken>
-            {
-                Left,
-                Right
-            };
+            return new List < IHLToken >
+                   {
+                       Left,
+                       Right
+                   };
         }
 
         public override string ToString()
@@ -65,5 +67,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         }
 
         #endregion
+
     }
+
 }

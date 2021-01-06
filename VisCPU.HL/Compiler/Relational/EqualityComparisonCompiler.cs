@@ -2,8 +2,10 @@
 
 namespace VisCPU.HL.Compiler.Relational
 {
-    public class EqualityComparisonCompiler : HLExpressionCompiler<HLBinaryOp>
+
+    public class EqualityComparisonCompiler : HLExpressionCompiler < HLBinaryOp >
     {
+
         protected override bool NeedsOutput => true;
 
         #region Public
@@ -11,41 +13,53 @@ namespace VisCPU.HL.Compiler.Relational
         public override ExpressionTarget ParseExpression(
             HLCompilation compilation,
             HLBinaryOp expr,
-            ExpressionTarget outputTarget)
+            ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                expr.Left
-            ).MakeAddress(compilation);
+                                                        expr.Left
+                                                       ).
+                                                  MakeAddress( compilation );
 
             string rtName = compilation.GetTempVar();
 
             ExpressionTarget rTarget = compilation.Parse(
-                expr.Right,
-                new ExpressionTarget(rtName, true, compilation.TypeSystem.GetType("var"))
-            );
+                                                         expr.Right,
+                                                         new ExpressionTarget(
+                                                                              rtName,
+                                                                              true,
+                                                                              compilation.TypeSystem.GetType( "var" )
+                                                                             )
+                                                        );
 
-            if (target.IsPointer)
+            if ( target.IsPointer )
             {
-                ExpressionTarget tmp = new ExpressionTarget(compilation.GetTempVar(), true,
-                    compilation.TypeSystem.GetType("var"));
+                ExpressionTarget tmp = new ExpressionTarget(
+                                                            compilation.GetTempVar(),
+                                                            true,
+                                                            compilation.TypeSystem.GetType( "var" )
+                                                           );
 
                 compilation.ProgramCode.Add(
-                    $"DREF {target.ResultAddress} {tmp.ResultAddress} ; Dereference Array Pointer (Equality Comparison)"
-                );
+                                            $"DREF {target.ResultAddress} {tmp.ResultAddress} ; Dereference Array Pointer (Equality Comparison)"
+                                           );
 
-                compilation.ReleaseTempVar(target.ResultAddress);
+                compilation.ReleaseTempVar( target.ResultAddress );
                 target = tmp;
             }
-            if (rTarget.IsPointer)
+
+            if ( rTarget.IsPointer )
             {
-                ExpressionTarget tmp = new ExpressionTarget(compilation.GetTempVar(), true,
-                    compilation.TypeSystem.GetType("var"));
+                ExpressionTarget tmp = new ExpressionTarget(
+                                                            compilation.GetTempVar(),
+                                                            true,
+                                                            compilation.TypeSystem.GetType( "var" )
+                                                           );
 
                 compilation.ProgramCode.Add(
-                    $"DREF {rTarget.ResultAddress} {tmp.ResultAddress} ; Dereference Array Pointer (Equality Comparison)"
-                );
+                                            $"DREF {rTarget.ResultAddress} {tmp.ResultAddress} ; Dereference Array Pointer (Equality Comparison)"
+                                           );
 
-                compilation.ReleaseTempVar(rTarget.ResultAddress);
+                compilation.ReleaseTempVar( rTarget.ResultAddress );
                 rTarget = tmp;
             }
 
@@ -53,17 +67,19 @@ namespace VisCPU.HL.Compiler.Relational
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
 
-            string label = compilation.GetUniqueName("bexpr_eq");
-            compilation.ProgramCode.Add($"LOAD {outputTarget.ResultAddress} 0");
-            compilation.ProgramCode.Add($"BNE {target.ResultAddress} {rTarget.ResultAddress} {label}");
-            compilation.ProgramCode.Add($"LOAD {outputTarget.ResultAddress} 1");
-            compilation.ProgramCode.Add($".{label} linker:hide");
-            compilation.ReleaseTempVar(rtName);
-            compilation.ReleaseTempVar(target.ResultAddress);
+            string label = compilation.GetUniqueName( "bexpr_eq" );
+            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 0" );
+            compilation.ProgramCode.Add( $"BNE {target.ResultAddress} {rTarget.ResultAddress} {label}" );
+            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
+            compilation.ProgramCode.Add( $".{label} linker:hide" );
+            compilation.ReleaseTempVar( rtName );
+            compilation.ReleaseTempVar( target.ResultAddress );
 
             return outputTarget;
         }
 
         #endregion
+
     }
+
 }

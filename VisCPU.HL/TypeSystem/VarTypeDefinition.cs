@@ -1,8 +1,12 @@
 ﻿namespace VisCPU.HL.TypeSystem
 {
+
     public class VarTypeDefinition : HLTypeDefinition
     {
-        public VarTypeDefinition() : base("var")
+
+        #region Public
+
+        public VarTypeDefinition() : base( "var" )
         {
         }
 
@@ -10,5 +14,9 @@
         {
             return 1;
         }
+
+        #endregion
+
     }
+
 }

@@ -5,22 +5,12 @@
 /// </summary>
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
 {
+
     /// <summary>
     ///     Implements a Variable Operand
     /// </summary>
     public class HLVarOperand : HLExpression
     {
-        #region Protected
-
-        /// <summary>
-        ///     Protected Constructor
-        /// </summary>
-        /// <param name="context">XL Context</param>
-        protected HLVarOperand(int sourceIdx) : base(sourceIdx)
-        {
-        }
-
-        #endregion
 
         /// <summary>
         ///     The Token Value
@@ -34,7 +24,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="value">Variable Value</param>
-        public HLVarOperand(IHLToken value, int sourceIdx) : base(sourceIdx)
+        public HLVarOperand( IHLToken value, int sourceIdx ) : base( sourceIdx )
         {
             Value = value;
         }
@@ -43,9 +33,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         ///     Returns all Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List<IHLToken> GetChildren()
+        public override List < IHLToken > GetChildren()
         {
-            return new List<IHLToken> {Value};
+            return new List < IHLToken > { Value };
         }
 
         public override string ToString()
@@ -54,5 +44,19 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         }
 
         #endregion
+
+        #region Protected
+
+        /// <summary>
+        ///     Protected Constructor
+        /// </summary>
+        /// <param name="context">XL Context</param>
+        protected HLVarOperand( int sourceIdx ) : base( sourceIdx )
+        {
+        }
+
+        #endregion
+
     }
+
 }

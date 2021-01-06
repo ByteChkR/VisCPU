@@ -1,7 +1,9 @@
 ﻿namespace VisCPU.Instructions.Stack
 {
+
     public class PeekInstruction : StackInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "PEEK";
@@ -12,15 +14,17 @@
 
         #region Public
 
-        public override void Process(CPU cpu)
+        public override void Process( CPU cpu )
         {
-            uint addr = cpu.DecodeArgument(0);
+            uint addr = cpu.DecodeArgument( 0 );
 
             uint val = cpu.Peek();
-            Log(cpu, $"Peeking Value: {val}");
-            cpu.MemoryBus.Write(addr, val);
+            Log( cpu, $"Peeking Value: {val}" );
+            cpu.MemoryBus.Write( addr, val );
         }
 
         #endregion
+
     }
+
 }

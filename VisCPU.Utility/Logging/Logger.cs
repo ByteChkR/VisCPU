@@ -2,24 +2,28 @@
 
 namespace VisCPU.Utility.Logging
 {
+
     public static class Logger
     {
+
         public static readonly LoggerSettings Settings = new LoggerSettings();
 
-        public static event Action<LoggerSystems, string> OnLogReceive;
+        public static event Action < LoggerSystems, string > OnLogReceive;
 
         #region Public
 
-        internal static void LogMessage(LoggerSystems subsystem, string message)
+        internal static void LogMessage( LoggerSystems subsystem, string message )
         {
-            if (!Settings.EnableAll && (Settings.EnabledSystems & subsystem) == 0)
+            if ( !Settings.EnableAll && ( Settings.EnabledSystems & subsystem ) == 0 )
             {
                 return;
             }
 
-            OnLogReceive?.Invoke(subsystem, message);
+            OnLogReceive?.Invoke( subsystem, message );
         }
 
         #endregion
+
     }
+
 }

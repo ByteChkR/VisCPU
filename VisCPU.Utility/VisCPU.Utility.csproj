@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>VisCPU.Utility</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <Folder Include="Logging\" />
-    <Folder Include="EventSystem\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,36 +2,49 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
+
 using VisCPU.Utility;
 
 namespace VisCPU
 {
+
     public class CPU
     {
+
         [Flags]
         public enum Flags
         {
+
             NONE = 0,
             BREAK = 1,
             INTERRUPT = 2,
             HALT = 4
+
         }
-
-        private readonly Stack<CPUState> cpuStack = new Stack<CPUState>();
-
-        private readonly uint intAddress;
 
         public readonly MemoryBus MemoryBus;
 
+        private struct CPUState
+        {
+
+            public Flags flags;
+            public uint pc;
+
+        }
+
+        private readonly Stack < CPUState > cpuStack = new Stack < CPUState >();
+
+        private readonly uint intAddress;
+
         private readonly uint resetAddress;
-        private readonly Stack<uint> stack = new Stack<uint>();
+        private readonly Stack < uint > stack = new Stack < uint >();
         private uint remainingCycles;
 
         public uint ProgramCounter { get; private set; }
 
         public Flags ProcessorFlags { get; private set; }
 
-        public event Action<CPU> OnBreak;
+        public event Action < CPU > OnBreak;
 
         #region Unity Event Functions
 
@@ -44,39 +57,9 @@ namespace VisCPU
 
         #endregion
 
-        #region Private
-
-        private void Dump()
-        {
-            FileStream fs = File.Create(".\\crash.dump.info");
-            TextWriter tw = new IndentedTextWriter(new StreamWriter(fs));
-            List<CPUState> states = new List<CPUState>(cpuStack);
-            tw.WriteLine("Stack:");
-
-            for (int i = 0; i < states.Count; i++)
-            {
-                CPUState cpuState = states[i];
-                tw.WriteLine("Stack Pos: " + i + " PC: " + cpuState.pc.ToHexString() + " FLAGS: " + cpuState.flags);
-            }
-
-            tw.WriteLine();
-
-            tw.Close();
-            fs.Close();
-            MemoryBus.Dump();
-        }
-
-        #endregion
-
-        private struct CPUState
-        {
-            public Flags flags;
-            public uint pc;
-        }
-
         #region Public
 
-        public CPU(MemoryBus bus, uint resetAddress, uint interruptAddress)
+        public CPU( MemoryBus bus, uint resetAddress, uint interruptAddress )
         {
             MemoryBus = bus;
             intAddress = interruptAddress;
@@ -85,61 +68,61 @@ namespace VisCPU
 
         public bool Cycle()
         {
-            if (remainingCycles != 0)
+            if ( remainingCycles != 0 )
             {
                 remainingCycles--;
 
                 return false;
             }
 
-            if (HasSet(Flags.BREAK | Flags.HALT))
+            if ( HasSet( Flags.BREAK | Flags.HALT ) )
             {
                 remainingCycles = 0;
 
                 return true;
             }
 
-            if (HasSet(Flags.INTERRUPT))
+            if ( HasSet( Flags.INTERRUPT ) )
             {
-                PushState(intAddress, ProcessorFlags & ~Flags.INTERRUPT);
+                PushState( intAddress, ProcessorFlags & ~Flags.INTERRUPT );
                 remainingCycles = 0;
 
                 return true;
             }
 
-            uint op = MemoryBus.Read(ProgramCounter);
+            uint op = MemoryBus.Read( ProgramCounter );
 
-            Instruction instruction = CPUSettings.InstructionSet.GetInstruction(op);
+            Instruction instruction = CPUSettings.InstructionSet.GetInstruction( op );
 
-            if (instruction == null && CPUSettings.DumpOnCrash)
+            if ( instruction == null && CPUSettings.DumpOnCrash )
             {
                 Dump();
             }
 
             remainingCycles = instruction.Cycles;
-            instruction.Process(this);
+            instruction.Process( this );
             ProgramCounter += instruction.InstructionSize;
 
             return remainingCycles == 0;
         }
 
-        public uint DecodeArgument(int argNum)
+        public uint DecodeArgument( int argNum )
         {
-            return MemoryBus.Read(ProgramCounter + (uint) argNum + 1);
+            return MemoryBus.Read( ProgramCounter + ( uint ) argNum + 1 );
         }
 
-        public bool HasSet(Flags flag)
+        public bool HasSet( Flags flag )
         {
-            return (ProcessorFlags & flag) != 0;
+            return ( ProcessorFlags & flag ) != 0;
         }
 
-        public void LoadBinary(uint[] bios, uint start = 0)
+        public void LoadBinary( uint[] bios, uint start = 0 )
         {
             ProgramCounter = start;
 
-            for (uint i = start; i < start + bios.Length; i++)
+            for ( uint i = start; i < start + bios.Length; i++ )
             {
-                MemoryBus.Write(i, bios[i]);
+                MemoryBus.Write( i, bios[i] );
             }
         }
 
@@ -155,7 +138,7 @@ namespace VisCPU
 
         public void PopState()
         {
-            if (cpuStack.Count != 0)
+            if ( cpuStack.Count != 0 )
             {
                 CPUState state = cpuStack.Pop();
                 ProgramCounter = state.pc;
@@ -163,20 +146,20 @@ namespace VisCPU
             }
         }
 
-        public void Push(uint value)
+        public void Push( uint value )
         {
-            stack.Push(value);
+            stack.Push( value );
         }
 
-        public void PushState(uint pc, Flags flags = Flags.NONE)
+        public void PushState( uint pc, Flags flags = Flags.NONE )
         {
             cpuStack.Push(
-                new CPUState
-                {
-                    pc = ProgramCounter,
-                    flags = ProcessorFlags
-                }
-            );
+                          new CPUState
+                          {
+                              pc = ProgramCounter,
+                              flags = ProcessorFlags
+                          }
+                         );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -184,19 +167,19 @@ namespace VisCPU
 
         public void Run()
         {
-            while (!HasSet(Flags.HALT))
+            while ( !HasSet( Flags.HALT ) )
             {
                 Cycle();
 
-                if (HasSet(Flags.BREAK))
+                if ( HasSet( Flags.BREAK ) )
                 {
-                    if (OnBreak == null)
+                    if ( OnBreak == null )
                     {
-                        UnSet(Flags.BREAK);
+                        UnSet( Flags.BREAK );
                     }
                     else
                     {
-                        OnBreak(this);
+                        OnBreak( this );
                     }
                 }
             }
@@ -204,12 +187,12 @@ namespace VisCPU
             MemoryBus.Shutdown();
         }
 
-        public void Set(Flags flag)
+        public void Set( Flags flag )
         {
             ProcessorFlags |= flag;
         }
 
-        public void SetState(uint pc, Flags flags = Flags.NONE)
+        public void SetState( uint pc, Flags flags = Flags.NONE )
         {
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -219,7 +202,7 @@ namespace VisCPU
         {
             int cycles = 0;
 
-            while (!Cycle())
+            while ( !Cycle() )
             {
                 cycles++;
             }
@@ -227,11 +210,37 @@ namespace VisCPU
             return cycles;
         }
 
-        public void UnSet(Flags flag)
+        public void UnSet( Flags flag )
         {
             ProcessorFlags &= ~flag;
         }
 
         #endregion
+
+        #region Private
+
+        private void Dump()
+        {
+            FileStream fs = File.Create( ".\\crash.dump.info" );
+            TextWriter tw = new IndentedTextWriter( new StreamWriter( fs ) );
+            List < CPUState > states = new List < CPUState >( cpuStack );
+            tw.WriteLine( "Stack:" );
+
+            for ( int i = 0; i < states.Count; i++ )
+            {
+                CPUState cpuState = states[i];
+                tw.WriteLine( "Stack Pos: " + i + " PC: " + cpuState.pc.ToHexString() + " FLAGS: " + cpuState.flags );
+            }
+
+            tw.WriteLine();
+
+            tw.Close();
+            fs.Close();
+            MemoryBus.Dump();
+        }
+
+        #endregion
+
     }
+
 }

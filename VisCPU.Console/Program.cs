@@ -2,15 +2,19 @@
 
 namespace VisCPU.Console
 {
+
     public static class Program
     {
+
         #region Private
 
-        private static void Main(string[] args)
+        private static void Main( string[] args )
         {
-            VisConsole.RunConsole(args);
+            VisConsole.RunConsole( args );
         }
 
         #endregion
+
     }
+
 }

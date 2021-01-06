@@ -1,15 +1,19 @@
-﻿using System;
+﻿using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.HL.Parser.Operators
 {
+
     /// <summary>
     ///     Implements Assignment by Sum and Difference
     /// </summary>
     public class AssignmentByOperators : HLExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -23,16 +27,16 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
-            return (parser.CurrentToken.Type == HLTokenType.OpPlus ||
-                    parser.CurrentToken.Type == HLTokenType.OpMinus ||
-                    parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
-                    parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
-                    parser.CurrentToken.Type == HLTokenType.OpPercent ||
-                    parser.CurrentToken.Type == HLTokenType.OpAnd ||
-                    parser.CurrentToken.Type == HLTokenType.OpPipe ||
-                    parser.CurrentToken.Type == HLTokenType.OpCap) &&
+            return ( parser.CurrentToken.Type == HLTokenType.OpPlus ||
+                     parser.CurrentToken.Type == HLTokenType.OpMinus ||
+                     parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
+                     parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
+                     parser.CurrentToken.Type == HLTokenType.OpPercent ||
+                     parser.CurrentToken.Type == HLTokenType.OpAnd ||
+                     parser.CurrentToken.Type == HLTokenType.OpPipe ||
+                     parser.CurrentToken.Type == HLTokenType.OpCap ) &&
                    parser.Reader.PeekNext().Type == HLTokenType.OpEquality;
         }
 
@@ -42,12 +46,12 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             IHLToken token = parser.CurrentToken;
             HLTokenType tt;
 
-            switch (parser.CurrentToken.Type)
+            switch ( parser.CurrentToken.Type )
             {
                 case HLTokenType.OpPlus:
                     tt = HLTokenType.OpSumAssign;
@@ -90,15 +94,26 @@ namespace VisCPU.HL.Parser.Operators
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    EventManager < ErrorEvent >.SendEvent(
+                                                          new HLTokenReadEvent(
+                                                                               HLTokenType.Any,
+                                                                               parser.CurrentToken.Type
+                                                                              )
+                                                         );
+
+                    tt = HLTokenType.Unknown;
+
+                    break;
             }
 
-            parser.Eat(token.Type);
-            parser.Eat(HLTokenType.OpEquality);
+            parser.Eat( token.Type );
+            parser.Eat( HLTokenType.OpEquality );
 
-            return new HLBinaryOp(currentNode, tt, parser.ParseExpr(0));
+            return new HLBinaryOp( currentNode, tt, parser.ParseExpr( 0 ) );
         }
 
         #endregion
+
     }
+
 }

@@ -1,7 +1,9 @@
 ﻿namespace VisCPU.Instructions
 {
+
     public class BreakInstruction : BaseInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "BRK";
@@ -12,12 +14,14 @@
 
         #region Public
 
-        public override void Process(CPU cpu)
+        public override void Process( CPU cpu )
         {
-            Log(cpu, "Set Break Flag");
-            cpu.Set(CPU.Flags.BREAK);
+            Log( cpu, "Set Break Flag" );
+            cpu.Set( CPU.Flags.BREAK );
         }
 
         #endregion
+
     }
+
 }
