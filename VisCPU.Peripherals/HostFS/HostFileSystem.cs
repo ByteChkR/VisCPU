@@ -171,15 +171,18 @@ namespace VisCPU.Peripherals.HostFS
                     case HostFileSystemCommands.HFS_CHANGE_DIR:
                         string dir = GetPath(sbPath.ToString());
                         Directory.SetCurrentDirectory(dir);
+                        sbPath.Clear();
                         break;
                     case HostFileSystemCommands.HFS_MAKE_DIR:
                         string newDir = GetPath(sbPath.ToString());
                         Directory.CreateDirectory(newDir);
+                        sbPath.Clear();
                         break;
                     case HostFileSystemCommands.HFS_FILE_DELETE:
-                        if ( !settings.EnableDeleteFiles )
-                            break;
                         string targetFile = GetPath(sbPath.ToString());
+                        sbPath.Clear();
+                        if (!settings.EnableDeleteFiles)
+                            break;
                         File.Delete(targetFile);
                         break;
                     default:
