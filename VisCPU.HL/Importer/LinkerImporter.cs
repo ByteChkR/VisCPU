@@ -37,14 +37,14 @@ namespace VisCPU.HL.Importer
             if ( File.Exists( cmd ) )
             {
                 Log( "Reading Offset from Binary: " + cmd );
-                byte[] buf = new byte[sizeof( uint )];
+                byte[] buf = new byte[sizeof( uint )*4];
 
                 using ( FileStream fs = File.OpenRead( cmd ) )
                 {
                     fs.Read( buf, 0, buf.Length );
                 }
 
-                offset = BitConverter.ToUInt32( buf, 0 );
+                offset = BitConverter.ToUInt32( buf, sizeof( uint ) * 2 );
                 Log( "Detected Offset: " + offset );
             }
             else if ( cmd.StartsWith( "-" ) )

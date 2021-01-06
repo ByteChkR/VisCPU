@@ -23,24 +23,17 @@ namespace VisCPU.Compiler.Assembler
             List < byte > instrBytes = new List < byte >();
 
             AssemblyGeneratorSettings settings = AssemblyGeneratorSettings.Create();
+            
 
             if ( settings.GlobalOffset != 0 )
             {
-                instrBytes.AddRange( new byte[sizeof( uint )] );
+                instrBytes.AddRange(BitConverter.GetBytes((uint)0));
                 instrBytes.AddRange(BitConverter.GetBytes((uint)1));
                 instrBytes.AddRange(BitConverter.GetBytes(settings.GlobalOffset));
-                instrBytes.AddRange(new byte[sizeof(uint)]);
+                instrBytes.AddRange(BitConverter.GetBytes((uint)0 ));
             }
 
-            if ( !settings.TrimOffset )
-            {
-                instrBytes.AddRange(
-                                    Enumerable.Repeat(
-                                                      ( byte ) 0,
-                                                      ( int ) settings.GlobalOffset * CPUSettings.INSTRUCTION_SIZE
-                                                     )
-                                   );
-            }
+            
 
             Dictionary < string, AddressItem > consts =
                 result.Constants.ApplyOffset( settings.GlobalOffset ).ToDictionary( x => x.Key, x => x.Value );

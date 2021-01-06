@@ -13,9 +13,6 @@ namespace VisCPU.Compiler.Assembler
         [Argument( Name = "assembler:offset.global" )]
         public uint GlobalOffset;
 
-        [Argument( Name = "assembler:offset.trim" )]
-        public bool TrimOffset;
-
         #region Public
 
         public static AssemblyGeneratorSettings Create()
