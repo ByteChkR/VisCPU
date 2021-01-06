@@ -159,7 +159,7 @@ namespace VisCPU.HL.Importer
                     data.Add(
                              new FunctionData(
                                               $"I{instruction.ArgumentCount}_{instruction.Key}",
-                                              true,
+                                              false,
                                               null,
                                               ( int ) instruction.ArgumentCount,
                                               true

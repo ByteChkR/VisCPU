@@ -10,8 +10,10 @@ namespace VisCPU.Peripherals.HostFS
     public class HostFileSystemSettings
     {
 
-        [Argument( Name = "hostfs:root.use" )]
+        [Argument(Name = "hostfs:root.use")]
         public bool UseRootPath;
+        [Argument(Name = "hostfs:delete.enable")]
+        public bool EnableDeleteFiles;
 
         [Argument( Name = "hostfs:root" )]
         public string RootPath = AppDomain.CurrentDomain.BaseDirectory;

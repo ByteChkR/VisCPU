@@ -167,12 +167,23 @@ namespace VisCPU.Peripherals.HostFS
                         currentFile = new FileInfo( p );
                         sbPath.Clear();
                         readFileSize = true;
-
                         break;
-
+                    case HostFileSystemCommands.HFS_CHANGE_DIR:
+                        string dir = GetPath(sbPath.ToString());
+                        Directory.SetCurrentDirectory(dir);
+                        break;
+                    case HostFileSystemCommands.HFS_MAKE_DIR:
+                        string newDir = GetPath(sbPath.ToString());
+                        Directory.CreateDirectory(newDir);
+                        break;
+                    case HostFileSystemCommands.HFS_FILE_DELETE:
+                        if ( !settings.EnableDeleteFiles )
+                            break;
+                        string targetFile = GetPath(sbPath.ToString());
+                        File.Delete(targetFile);
+                        break;
                     default:
                         EventManager < ErrorEvent >.SendEvent( new InvalidHFSCommandEvent( cmd ) );
-
                         break;
                 }
             }
