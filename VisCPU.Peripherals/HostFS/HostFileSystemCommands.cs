@@ -15,6 +15,7 @@
         HFS_FILE_DELETE = 0x08,
         HFS_GET_FILES_NUM = 0x09,
         HFS_GET_FILES = 0x0A,
+        HFS_FILE_EXIST = 0x0B,
 
 
     }

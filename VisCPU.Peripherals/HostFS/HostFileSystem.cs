@@ -18,6 +18,7 @@ namespace VisCPU.Peripherals.HostFS
         private FileInfo currentFile = null;
         private FileStream currentFileStream = null;
         private bool readFileSize = false;
+        private bool readFileExists = false;
 
         #region Public
 
@@ -54,11 +55,17 @@ namespace VisCPU.Peripherals.HostFS
 
             if ( address == settings.PinData )
             {
-                if ( readFileSize )
+                if (readFileSize)
                 {
                     readFileSize = false;
 
-                    return ( uint ) currentFile.Length / sizeof( uint );
+                    return (uint)currentFile.Length / sizeof(uint);
+                }
+                if (readFileExists)
+                {
+                    readFileExists = false;
+
+                    return (uint)(currentFile.Exists ? 1 : 0);
                 }
 
                 if ( currentFileStream.Length <= currentFileStream.Position )
@@ -163,10 +170,16 @@ namespace VisCPU.Peripherals.HostFS
                         break;
 
                     case HostFileSystemCommands.HFS_FILE_SIZE:
-                        string p = GetPath( sbPath.ToString() );
-                        currentFile = new FileInfo( p );
+                        string p = GetPath(sbPath.ToString());
+                        currentFile = new FileInfo(p);
                         sbPath.Clear();
                         readFileSize = true;
+                        break;
+                    case HostFileSystemCommands.HFS_FILE_EXIST:
+                        string testFile = GetPath(sbPath.ToString());
+                        currentFile = new FileInfo(testFile);
+                        sbPath.Clear();
+                        readFileExists = true;
                         break;
                     case HostFileSystemCommands.HFS_CHANGE_DIR:
                         string dir = GetPath(sbPath.ToString());
