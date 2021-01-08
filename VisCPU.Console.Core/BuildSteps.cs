@@ -1,6 +1,6 @@
 ﻿namespace VisCPU.Console.Core
 {
 
-    public delegate string BuildSteps( string originalFile, string lastStepFile);
+    public delegate string BuildSteps( string originalFile, string lastStepFile );
 
 }

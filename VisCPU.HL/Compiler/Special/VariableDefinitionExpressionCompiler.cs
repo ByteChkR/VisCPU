@@ -36,7 +36,7 @@ namespace VisCPU.HL.Compiler.Special
                 return new ExpressionTarget( asmVarName, true, compilation.TypeSystem.GetType( "var" ) );
             }
 
-            if (expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE)
+            if ( expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE )
             {
                 string asmVarName = expr.value.Name.ToString();
 
@@ -47,6 +47,7 @@ namespace VisCPU.HL.Compiler.Special
 
                 HLTypeDefinition vdef = TypeSystem.GetType( HLCompilation.VAL_TYPE );
                 uint arrSize = expr.value.Size?.ToString().ParseUInt() ?? 1;
+
                 compilation.CreateVariable(
                                            asmVarName,
                                            arrSize,

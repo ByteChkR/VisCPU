@@ -17,7 +17,6 @@
         HFS_GET_FILES = 0x0A,
         HFS_FILE_EXIST = 0x0B,
 
-
     }
 
 }

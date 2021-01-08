@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Compiler.Compiler.Events;
-using VisCPU.Compiler.Linking;
 using VisCPU.Compiler.Parser;
 using VisCPU.Compiler.Parser.Tokens;
 using VisCPU.Utility;

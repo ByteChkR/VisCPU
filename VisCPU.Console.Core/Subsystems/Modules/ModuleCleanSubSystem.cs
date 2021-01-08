@@ -40,12 +40,12 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             foreach ( string sourceFile in sourceFiles )
             {
                 string ext = Path.GetExtension( sourceFile );
-                if ( ext == ".vbin" || ext == ".vbin.z" || ext == ".linkertext")
+
+                if ( ext == ".vbin" || ext == ".vbin.z" || ext == ".linkertext" )
                 {
                     fcount++;
-                    File.Delete(sourceFile);
+                    File.Delete( sourceFile );
                 }
-
             }
 
             Log( "Deleted Files: " + fcount );

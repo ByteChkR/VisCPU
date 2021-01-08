@@ -1,6 +1,5 @@
 ﻿using System;
 
-using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 

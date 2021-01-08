@@ -55,17 +55,18 @@ namespace VisCPU.Peripherals.HostFS
 
             if ( address == settings.PinData )
             {
-                if (readFileSize)
+                if ( readFileSize )
                 {
                     readFileSize = false;
 
-                    return (uint)currentFile.Length / sizeof(uint);
+                    return ( uint ) currentFile.Length / sizeof( uint );
                 }
-                if (readFileExists)
+
+                if ( readFileExists )
                 {
                     readFileExists = false;
 
-                    return (uint)(currentFile.Exists ? 1 : 0);
+                    return ( uint ) ( currentFile.Exists ? 1 : 0 );
                 }
 
                 if ( currentFileStream.Length <= currentFileStream.Position )
@@ -170,36 +171,51 @@ namespace VisCPU.Peripherals.HostFS
                         break;
 
                     case HostFileSystemCommands.HFS_FILE_SIZE:
-                        string p = GetPath(sbPath.ToString());
-                        currentFile = new FileInfo(p);
+                        string p = GetPath( sbPath.ToString() );
+                        currentFile = new FileInfo( p );
                         sbPath.Clear();
                         readFileSize = true;
+
                         break;
+
                     case HostFileSystemCommands.HFS_FILE_EXIST:
-                        string testFile = GetPath(sbPath.ToString());
-                        currentFile = new FileInfo(testFile);
+                        string testFile = GetPath( sbPath.ToString() );
+                        currentFile = new FileInfo( testFile );
                         sbPath.Clear();
                         readFileExists = true;
+
                         break;
+
                     case HostFileSystemCommands.HFS_CHANGE_DIR:
-                        string dir = GetPath(sbPath.ToString());
-                        Directory.SetCurrentDirectory(dir);
+                        string dir = GetPath( sbPath.ToString() );
+                        Directory.SetCurrentDirectory( dir );
                         sbPath.Clear();
+
                         break;
+
                     case HostFileSystemCommands.HFS_MAKE_DIR:
-                        string newDir = GetPath(sbPath.ToString());
-                        Directory.CreateDirectory(newDir);
+                        string newDir = GetPath( sbPath.ToString() );
+                        Directory.CreateDirectory( newDir );
                         sbPath.Clear();
+
                         break;
+
                     case HostFileSystemCommands.HFS_FILE_DELETE:
-                        string targetFile = GetPath(sbPath.ToString());
+                        string targetFile = GetPath( sbPath.ToString() );
                         sbPath.Clear();
-                        if (!settings.EnableDeleteFiles)
+
+                        if ( !settings.EnableDeleteFiles )
+                        {
                             break;
-                        File.Delete(targetFile);
+                        }
+
+                        File.Delete( targetFile );
+
                         break;
+
                     default:
                         EventManager < ErrorEvent >.SendEvent( new InvalidHFSCommandEvent( cmd ) );
+
                         break;
                 }
             }

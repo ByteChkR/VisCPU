@@ -98,7 +98,7 @@ namespace VisCPU.Console.Core.Settings
                                                 );
         }
 
-        private static string CompressFile(string originalFile, string lastStepFile )
+        private static string CompressFile( string originalFile, string lastStepFile )
         {
             string newFile = lastStepFile + ".z";
 
@@ -116,7 +116,7 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateBinary(string originalFile, string lastStepFile )
+        private static string CreateBinary( string originalFile, string lastStepFile )
         {
             if ( Path.GetExtension( lastStepFile ) != ".vasm" )
             {
@@ -129,8 +129,8 @@ namespace VisCPU.Console.Core.Settings
             comp.Compile( lastStepFile );
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName( Path.GetFullPath(originalFile) ),
-                                          Path.GetFileNameWithoutExtension(originalFile)
+                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
+                                          Path.GetFileNameWithoutExtension( originalFile )
                                          ) +
                              ".vbin";
 
@@ -144,7 +144,7 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateExpressionBuildStep(  string originalFile , string lastStepFile)
+        private static string CreateExpressionBuildStep( string originalFile, string lastStepFile )
         {
             if ( Path.GetExtension( lastStepFile ) != ".vhl" )
             {
@@ -161,7 +161,10 @@ namespace VisCPU.Console.Core.Settings
                                                    new HLBuildDataStore()
                                                   );
 
-            string newFile = ds.GetStorePath("HL2VASM", Path.GetFileNameWithoutExtension(Path.GetFullPath(lastStepFile)));
+            string newFile = ds.GetStorePath(
+                                             "HL2VASM",
+                                             Path.GetFileNameWithoutExtension( Path.GetFullPath( lastStepFile ) )
+                                            );
 
             File.WriteAllText(
                               newFile,

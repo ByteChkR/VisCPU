@@ -19,7 +19,6 @@ namespace VisCPU.HL
             string cmd = null;
             string file = "";
 
-
             while ( true )
             {
                 cmd = Console.ReadLine();
@@ -31,8 +30,8 @@ namespace VisCPU.HL
 
                 if ( cmd == "EOF" )
                 {
-                    BuildDataStore ds = new BuildDataStore("./", new HLBuildDataStore());
-                    p.Parse( file, "./" , ds);
+                    BuildDataStore ds = new BuildDataStore( "./", new HLBuildDataStore() );
+                    p.Parse( file, "./", ds );
                     file = "";
                 }
                 else

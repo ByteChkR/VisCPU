@@ -1,5 +1,4 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions;
-using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 

@@ -37,7 +37,7 @@ namespace VisCPU.HL.Importer
             if ( File.Exists( cmd ) )
             {
                 Log( "Reading Offset from Binary: " + cmd );
-                byte[] buf = new byte[sizeof( uint )*4];
+                byte[] buf = new byte[sizeof( uint ) * 4];
 
                 using ( FileStream fs = File.OpenRead( cmd ) )
                 {
