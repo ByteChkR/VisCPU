@@ -61,7 +61,7 @@ namespace VisCPU.Console.Core.Subsystems
 
                 foreach ( ( string stepName, BuildSteps step ) in settings.BuildSteps )
                 {
-                    string newFile = step( file );
+                    string newFile = step( original, file );
 
                     if ( settings.CleanBuildOutput && file != original )
                     {

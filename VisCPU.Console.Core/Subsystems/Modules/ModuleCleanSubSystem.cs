@@ -39,13 +39,13 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
             foreach ( string sourceFile in sourceFiles )
             {
-                if ( Path.GetExtension( sourceFile ) == ".vhl" || Path.GetExtension( sourceFile ) == ".json" )
+                string ext = Path.GetExtension( sourceFile );
+                if ( ext == ".vbin" || ext == ".vbin.z" || ext == ".linkertext")
                 {
-                    continue;
+                    fcount++;
+                    File.Delete(sourceFile);
                 }
 
-                fcount++;
-                File.Delete( sourceFile );
             }
 
             Log( "Deleted Files: " + fcount );

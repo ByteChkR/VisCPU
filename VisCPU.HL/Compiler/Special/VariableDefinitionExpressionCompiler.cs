@@ -36,7 +36,7 @@ namespace VisCPU.HL.Compiler.Special
                 return new ExpressionTarget( asmVarName, true, compilation.TypeSystem.GetType( "var" ) );
             }
 
-            if ( expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE )
+            if (expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE)
             {
                 string asmVarName = expr.value.Name.ToString();
 

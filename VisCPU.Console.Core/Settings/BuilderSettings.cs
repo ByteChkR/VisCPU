@@ -98,11 +98,11 @@ namespace VisCPU.Console.Core.Settings
                                                 );
         }
 
-        private static string CompressFile( string originalfile )
+        private static string CompressFile(string originalFile, string lastStepFile )
         {
-            string newFile = originalfile + ".z";
+            string newFile = lastStepFile + ".z";
 
-            using ( Stream input = File.OpenRead( originalfile ) )
+            using ( Stream input = File.OpenRead( lastStepFile ) )
             {
                 using ( Stream output = File.Create( newFile ) )
                 {
@@ -116,21 +116,21 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateBinary( string originalFile )
+        private static string CreateBinary(string originalFile, string lastStepFile )
         {
-            if ( Path.GetExtension( originalFile ) != ".vasm" )
+            if ( Path.GetExtension( lastStepFile ) != ".vasm" )
             {
-                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( originalFile, true ) );
+                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( lastStepFile, true ) );
 
-                return originalFile;
+                return lastStepFile;
             }
 
             Compilation comp = new Compilation( new MultiFileStaticLinker(), new DefaultAssemblyGenerator() );
-            comp.Compile( originalFile );
+            comp.Compile( lastStepFile );
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
-                                          Path.GetFileNameWithoutExtension( originalFile )
+                                          Path.GetDirectoryName( Path.GetFullPath(originalFile) ),
+                                          Path.GetFileNameWithoutExtension(originalFile)
                                          ) +
                              ".vbin";
 
@@ -144,27 +144,28 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateExpressionBuildStep( string originalFile )
+        private static string CreateExpressionBuildStep(  string originalFile , string lastStepFile)
         {
-            if ( Path.GetExtension( originalFile ) != ".vhl" )
+            if ( Path.GetExtension( lastStepFile ) != ".vhl" )
             {
-                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( originalFile, true ) );
+                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( lastStepFile, true ) );
 
-                return originalFile;
+                return lastStepFile;
             }
 
             ExpressionParser p = new ExpressionParser();
-            string file = File.ReadAllText( originalFile );
+            string file = File.ReadAllText( lastStepFile );
 
-            string newFile = Path.Combine(
-                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
-                                          Path.GetFileNameWithoutExtension( originalFile )
-                                         ) +
-                             ".vasm";
+            BuildDataStore ds = new BuildDataStore(
+                                                   Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ),
+                                                   new HLBuildDataStore()
+                                                  );
+
+            string newFile = ds.GetStorePath("HL2VASM", Path.GetFileNameWithoutExtension(Path.GetFullPath(lastStepFile)));
 
             File.WriteAllText(
                               newFile,
-                              p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( originalFile ) ) ).Parse()
+                              p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ), ds ).Parse()
                              );
 
             return newFile;

@@ -557,7 +557,11 @@ namespace VisCPU.HL.Forms
                                              ) +
                                  ".vasm";
 
-                HLCompilation c = p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( src ) ) );
+                BuildDataStore ds = new BuildDataStore(
+                                                       Path.GetDirectoryName( Path.GetFullPath( src ) ),
+                                                       new HLBuildDataStore()
+                                                      );
+                HLCompilation c = p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( src ) ), ds );
                 c.OnCompiledIncludedScript += OnFileCompiled;
                 SetStatus( "Updating Pages " + src, 0.75f );
 

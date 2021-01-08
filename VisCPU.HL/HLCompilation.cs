@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 using VisCPU.HL.Compiler;
@@ -63,10 +64,16 @@ namespace VisCPU.HL
 
         protected override LoggerSystems SubSystem => LoggerSystems.HL_Compiler;
 
+        private BuildDataStore dataStore;
+
         #region Public
 
-        public HLCompilation( string originalText, string directory )
+        public HLCompilation(string originalText, string directory):this(originalText, directory, new BuildDataStore(directory, new HLBuildDataStore()))
+        { }
+
+        public HLCompilation( string originalText, string directory, BuildDataStore dataStore )
         {
+            this.dataStore = dataStore;
             OriginalText = originalText;
             Directory = directory;
             InitializeTypeMap( TypeSystem );
@@ -74,6 +81,7 @@ namespace VisCPU.HL
 
         public HLCompilation( HLCompilation parent, string id )
         {
+            dataStore = parent.dataStore;
             scopeID = id;
             OriginalText = parent.OriginalText;
             Directory = parent.Directory;
@@ -668,7 +676,9 @@ namespace VisCPU.HL
         {
             if ( unusedTempVars.Count != 0 )
             {
-                return VariableMap[unusedTempVars.Dequeue()];
+                string oldName = unusedTempVars.Dequeue();
+                ProgramCode.Add( $"LOAD {oldName} 0x00 ;Temp Var House-keeping" );
+                return VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
@@ -711,9 +721,9 @@ namespace VisCPU.HL
                                                          includedFile.Remove( includedFile.Length - 4, 4 )
                                                   );
 
-                    string newInclude = Path.GetFullPath( name + ".vasm" );
+                    string newInclude = dataStore.GetStorePath("HL2VASM", name);
                     string file = Path.GetFullPath( name + ".vhl" );
-                    HLCompilation comp = exP.Parse( File.ReadAllText( file ), Path.GetDirectoryName( file ) );
+                    HLCompilation comp = exP.Parse( File.ReadAllText( file ), Path.GetDirectoryName( file ), dataStore );
                     File.WriteAllText( newInclude, comp.Parse() );
                     ExternalSymbols.AddRange( comp.FunctionMap.Values.Where( x => x.Public ) );
                     ExternalSymbols.AddRange( comp.ExternalSymbols );
@@ -894,6 +904,57 @@ namespace VisCPU.HL
 
         #endregion
 
+    }
+
+    public interface IBuildDataStoreType
+    {
+        string TypeName { get; }
+        void Initialize(string rootDir);
+        string GetStoreDirectory( string rootDir, string file );
+
+    }
+
+    public class HLBuildDataStore:IBuildDataStoreType
+    {
+
+        public string TypeName => "HL2VASM";
+
+        public void Initialize(string rootDir)
+        {
+            if (Directory.Exists(Path.Combine(rootDir, TypeName)))
+                Directory.Delete(Path.Combine(rootDir, TypeName), true);
+
+            Directory.CreateDirectory( Path.Combine( rootDir, TypeName ) );
+        }
+
+        public string GetStoreDirectory( string rootDir, string file )
+        {
+            return Path.Combine(Directory.CreateDirectory(Path.Combine(rootDir, TypeName)).FullName, $"{(uint)Path.GetDirectoryName(file).GetHashCode()}_{Path.GetFileName(file)}.vasm");
+        }
+
+    }
+
+    public class BuildDataStore
+    {
+
+        private string RootDir;
+        private IBuildDataStoreType[] Types;
+
+        public BuildDataStore( string rootDir, params IBuildDataStoreType[] types )
+        {
+            Types = types;
+            RootDir = Directory.CreateDirectory( Path.Combine( rootDir, "build" ) ).FullName;
+
+            foreach ( IBuildDataStoreType buildDataStoreType in Types )
+            {
+                buildDataStoreType.Initialize(RootDir);
+            }
+        }
+
+        public string GetStorePath(string storeType , string file )
+        {
+            return Types.First(x => x.TypeName == storeType).GetStoreDirectory(RootDir, file);
+        }
     }
 
 }

@@ -20,9 +20,9 @@ namespace VisCPU.HL.Compiler
         {
             string target = expr.Left.ToString();
 
-            if ( target == "ptr_of" )
+            if (target == "ptr_of")
             {
-                ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
+                ExpressionTarget et = compilation.Parse(expr.ParameterList.First());
 
                 string v = compilation.GetTempVar();
 
@@ -30,7 +30,7 @@ namespace VisCPU.HL.Compiler
                                             $"LOAD {v} {et.ResultAddress}"
                                            );
 
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
+                return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
             }
 
             if ( target == "static_cast" )
