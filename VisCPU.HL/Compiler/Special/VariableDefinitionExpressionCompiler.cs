@@ -45,10 +45,12 @@ namespace VisCPU.HL.Compiler.Special
                     EventManager < ErrorEvent >.SendEvent( new DuplicateVarDefinitionEvent( asmVarName ) );
                 }
 
+                HLTypeDefinition vdef = TypeSystem.GetType( HLCompilation.VAL_TYPE );
+                uint arrSize = expr.value.Size?.ToString().ParseUInt() ?? 1;
                 compilation.CreateVariable(
                                            asmVarName,
-                                           expr.value.Size?.ToString().ParseUInt() ?? 1,
-                                           TypeSystem.GetType( HLCompilation.VAL_TYPE )
+                                           arrSize,
+                                           vdef
                                           );
 
                 return new ExpressionTarget(

@@ -23,7 +23,7 @@ namespace VisCPU.Peripherals.Memory
         public string PersistentPath = "./config/memory/states/default.bin";
 
         [Argument( Name = "memory:size" )]
-        public uint Size = 0xFFFF;
+        public uint Size = 262144;
 
         #region Unity Event Functions
 

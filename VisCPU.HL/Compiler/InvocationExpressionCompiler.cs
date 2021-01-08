@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Http.Headers;
 
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Events;
@@ -31,6 +32,23 @@ namespace VisCPU.HL.Compiler
                                            );
 
                 return new ExpressionTarget(v, true, compilation.TypeSystem.GetType("var"));
+            }
+
+            if (target == "ptr_write")
+            {
+                ExpressionTarget et = compilation.Parse(expr.ParameterList.First());
+                ExpressionTarget value = compilation.Parse(expr.ParameterList[1]);
+                string vptr = compilation.GetTempVar();
+                compilation.ProgramCode.Add(
+                                            $"LOAD {vptr} {value.ResultAddress}"
+                                           );
+                compilation.ProgramCode.Add(
+                                            $"CREF {vptr} {et.ResultAddress}"
+                                           );
+
+                compilation.ReleaseTempVar( vptr );
+
+                return new ExpressionTarget();
             }
 
             if ( target == "static_cast" )
@@ -180,7 +198,7 @@ namespace VisCPU.HL.Compiler
                 {
                     ExpressionTarget arg = compilation.Parse( parameter ).MakeAddress( compilation );
 
-                    if ( arg.TypeDefinition.Name == "var" )
+                    if ( arg.TypeDefinition.Name == "var" || arg.TypeDefinition.Name == "var[]")
                     {
                         compilation.ProgramCode.Add(
                                                     $"PUSH {arg.ResultAddress}; Push Param {parameter}"

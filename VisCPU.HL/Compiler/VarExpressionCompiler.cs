@@ -36,11 +36,12 @@ namespace VisCPU.HL.Compiler
                 VariableData v = compilation.GetVariable( expr.Value.ToString() );
                 varAddr = v.GetFinalName();
 
+                bool ptr = v.Size/v.TypeDefinition.GetSize() != 1;
                 return new ExpressionTarget(
                                             varAddr,
                                             true,
                                             v.TypeDefinition,
-                                            v.Size / v.TypeDefinition.GetSize() != 1
+                                            ptr
                                            ).CopyIfNotNull( compilation, outputTarget );
             }
 

@@ -1,4 +1,6 @@
-﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+﻿using System;
+
+using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.Compiler
