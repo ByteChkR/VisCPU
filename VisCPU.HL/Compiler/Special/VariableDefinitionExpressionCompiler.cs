@@ -22,19 +22,20 @@ namespace VisCPU.HL.Compiler.Special
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLVarDefOperand expr )
         {
-            if ( expr.value.TypeName.ToString() == HLCompilation.CONST_VAL_TYPE )
+            if (expr.value.TypeName.ToString() == HLCompilation.CONST_VAL_TYPE)
             {
                 string asmVarName = expr.value.Name.ToString();
 
-                if ( compilation.ConstValTypes.ContainsKey( asmVarName ) )
+                if (compilation.ConstValTypes.ContainsKey(asmVarName))
                 {
-                    EventManager < ErrorEvent >.SendEvent( new DuplicateConstVarDefinitionEvent( asmVarName ) );
+                    EventManager<ErrorEvent>.SendEvent(new DuplicateConstVarDefinitionEvent(asmVarName));
                 }
 
-                compilation.ConstValTypes.Add( asmVarName, null );
+                compilation.ConstValTypes.Add(asmVarName, null);
 
-                return new ExpressionTarget( asmVarName, true, compilation.TypeSystem.GetType( "var" ) );
+                return new ExpressionTarget(asmVarName, true, compilation.TypeSystem.GetType("var"));
             }
+
 
             if ( expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE )
             {
@@ -48,6 +49,9 @@ namespace VisCPU.HL.Compiler.Special
                 HLTypeDefinition vdef = TypeSystem.GetType( HLCompilation.VAL_TYPE );
                 uint arrSize = expr.value.Size?.ToString().ParseUInt() ?? 1;
 
+                if ( arrSize != 1 )
+                    vdef = new ArrayTypeDefintion( vdef, arrSize );
+
                 compilation.CreateVariable(
                                            asmVarName,
                                            arrSize,
@@ -57,7 +61,7 @@ namespace VisCPU.HL.Compiler.Special
                 return new ExpressionTarget(
                                             compilation.GetFinalName( asmVarName ),
                                             true,
-                                            compilation.TypeSystem.GetType( "var" )
+                                            vdef
                                            );
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Dynamic;
+using System.Linq;
 
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Compiler.Memory;
@@ -200,24 +201,28 @@ namespace VisCPU.HL.Compiler
 
                 foreach ( HLExpression parameter in expr.ParameterList )
                 {
-                    ExpressionTarget arg = compilation.Parse( parameter ).MakeAddress( compilation );
+                    ExpressionTarget arg = compilation.Parse( parameter, new ExpressionTarget(
+                                                                   compilation.GetTempVar( 0 ),
+                                                                   true,
+                                                                   compilation.TypeSystem.GetType( "var" )
+                                                                  ));
+                    compilation.ProgramCode.Add(
+                                                $"PUSH {arg.ResultAddress}; Push Param {parameter}"
+                                               );
+                    //if ( arg.TypeDefinition.Name == "var" || arg.TypeDefinition.Name == "var[]" )
+                    //{
+                        
+                    //}
+                    //else
+                    //{
+                    //    string v = compilation.GetTempVarLoad(arg.ResultAddress);
 
-                    if ( arg.TypeDefinition.Name == "var" || arg.TypeDefinition.Name == "var[]" )
-                    {
-                        compilation.ProgramCode.Add(
-                                                    $"PUSH {arg.ResultAddress}; Push Param {parameter}"
-                                                   );
-                    }
-                    else
-                    {
-                        string v = compilation.GetTempVarLoad(arg.ResultAddress);
+                    //    compilation.ProgramCode.Add(
+                    //                                $"PUSH {v}; Push Param {parameter}"
+                    //                               );
 
-                        compilation.ProgramCode.Add(
-                                                    $"PUSH {v}; Push Param {parameter}"
-                                                   );
-
-                        compilation.ReleaseTempVar( v );
-                    }
+                    //    compilation.ReleaseTempVar( v );
+                    //}
 
                     compilation.ReleaseTempVar( arg.ResultAddress );
                 }
