@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace VisCPU.Utility
+namespace VisCPU.Utility.IO
 {
 
     public class BuildDataStore

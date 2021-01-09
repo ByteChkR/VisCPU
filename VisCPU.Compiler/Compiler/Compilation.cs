@@ -3,7 +3,7 @@ using System.Linq;
 
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
-using VisCPU.Utility;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Compiler
 {

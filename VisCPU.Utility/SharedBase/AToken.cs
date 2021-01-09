@@ -1,4 +1,4 @@
-﻿namespace VisCPU.Utility
+﻿namespace VisCPU.Utility.SharedBase
 {
 
     public abstract class AToken

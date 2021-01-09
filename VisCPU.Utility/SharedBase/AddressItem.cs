@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace VisCPU.Utility
+namespace VisCPU.Utility.SharedBase
 {
 
     public struct AddressItem

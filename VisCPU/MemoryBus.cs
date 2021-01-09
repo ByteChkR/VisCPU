@@ -7,6 +7,7 @@ using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU
 {

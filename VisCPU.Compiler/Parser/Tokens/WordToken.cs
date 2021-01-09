@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-using VisCPU.Utility;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {

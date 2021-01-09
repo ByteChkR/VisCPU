@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 
 using VisCPU.Compiler.Compiler;
+using VisCPU.Compiler.Linking;
 using VisCPU.Compiler.Linking.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
-namespace VisCPU.Compiler.Linking
+namespace VisCPU.Compiler.Implementations
 {
 
     public class SingleFileLinker : Linker

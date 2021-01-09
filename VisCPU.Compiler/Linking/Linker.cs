@@ -1,6 +1,6 @@
 ﻿using VisCPU.Compiler.Compiler;
-using VisCPU.Utility;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Linking
 {

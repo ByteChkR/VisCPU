@@ -1,4 +1,4 @@
-﻿namespace VisCPU.HL
+﻿namespace VisCPU.HL.DataTypes
 {
 
     public interface IExternalData

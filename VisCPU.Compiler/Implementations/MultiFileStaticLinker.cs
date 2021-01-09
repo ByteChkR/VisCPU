@@ -3,13 +3,15 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Compiler.Compiler;
+using VisCPU.Compiler.Linking;
 using VisCPU.Compiler.Linking.Events;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.SharedBase;
 
-namespace VisCPU.Compiler.Linking
+namespace VisCPU.Compiler.Implementations
 {
 
     public class MultiFileStaticLinker : Linker

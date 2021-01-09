@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Assembler.Events;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
@@ -9,8 +10,9 @@ using VisCPU.Compiler.Parser.Tokens;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
-namespace VisCPU.Compiler.Assembler
+namespace VisCPU.Compiler.Implementations
 {
 
     public class DefaultAssemblyGenerator : AssemblyGenerator

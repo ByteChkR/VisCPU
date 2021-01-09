@@ -1,14 +1,14 @@
 using System.IO;
 using System.Linq;
 
-using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
+using VisCPU.Compiler.Implementations;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Memory;
-using VisCPU.Utility;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Tests.Utils
 {

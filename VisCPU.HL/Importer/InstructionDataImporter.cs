@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;

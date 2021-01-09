@@ -6,9 +6,9 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.IO;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.Forms

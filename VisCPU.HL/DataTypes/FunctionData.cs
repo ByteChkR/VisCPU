@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VisCPU.HL
+namespace VisCPU.HL.DataTypes
 {
 
     public class FunctionData : IExternalData

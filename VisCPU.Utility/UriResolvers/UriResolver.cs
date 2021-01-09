@@ -2,6 +2,7 @@
 using System.Linq;
 
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Utility.UriResolvers
 {

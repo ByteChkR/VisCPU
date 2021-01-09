@@ -1,8 +1,8 @@
 ﻿using System;
 
 using VisCPU.HL.Parser.Tokens.Expressions;
-using VisCPU.Utility;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler
 {

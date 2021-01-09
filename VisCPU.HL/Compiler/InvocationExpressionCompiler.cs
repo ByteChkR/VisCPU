@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;

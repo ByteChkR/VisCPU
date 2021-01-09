@@ -2,10 +2,12 @@
 using System.IO;
 using System.Linq;
 
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Importer
 {

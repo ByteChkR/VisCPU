@@ -1,6 +1,6 @@
 ﻿using VisCPU.Utility.Logging;
 
-namespace VisCPU.Utility
+namespace VisCPU.Utility.SharedBase
 {
 
     public abstract class VisBase

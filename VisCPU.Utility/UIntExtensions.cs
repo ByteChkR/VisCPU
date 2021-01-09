@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
+using VisCPU.Utility.SharedBase;
+
 namespace VisCPU.Utility
 {
 

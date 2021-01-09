@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 
 using VisCPU.Compiler.Parser.Tokens;
-using VisCPU.Utility;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Parser
 {

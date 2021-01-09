@@ -1,6 +1,6 @@
 ﻿using VisCPU.HL.TypeSystem;
 
-namespace VisCPU.HL
+namespace VisCPU.HL.DataTypes
 {
 
     public struct VariableData : IExternalData

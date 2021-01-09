@@ -10,6 +10,7 @@ using VisCPU.HL.Compiler.Logic;
 using VisCPU.HL.Compiler.Math;
 using VisCPU.HL.Compiler.Relational;
 using VisCPU.HL.Compiler.Special;
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Importer;
 using VisCPU.HL.Importer.Events;
@@ -25,7 +26,9 @@ using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.IO;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 using VisCPU.Utility.UriResolvers;
 
 namespace VisCPU.HL

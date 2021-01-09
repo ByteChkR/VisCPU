@@ -1,4 +1,4 @@
-﻿namespace VisCPU.Utility
+﻿namespace VisCPU.Utility.SharedBase
 {
 
     public readonly struct FileReference

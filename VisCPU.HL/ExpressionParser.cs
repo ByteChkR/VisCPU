@@ -1,7 +1,8 @@
 ﻿using System;
 
-using VisCPU.Utility;
+using VisCPU.Utility.IO;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL
 {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;

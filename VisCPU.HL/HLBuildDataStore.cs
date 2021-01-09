@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-using VisCPU.Utility;
+using VisCPU.Utility.IO;
 
 namespace VisCPU.HL
 {

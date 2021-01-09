@@ -1,6 +1,6 @@
-﻿using VisCPU.Utility;
+﻿using VisCPU.Utility.SharedBase;
 
-namespace VisCPU.HL
+namespace VisCPU.HL.DataTypes
 {
 
     public class LinkedData : IExternalData

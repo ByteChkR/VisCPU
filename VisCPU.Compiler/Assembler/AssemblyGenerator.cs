@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
 using VisCPU.Compiler.Linking;
-using VisCPU.Utility;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Assembler
 {
