@@ -422,6 +422,7 @@ namespace VisCPU.HL
                                     { HLTokenType.OpUnaryDecrement, new DecrementExpressionCompiler() },
                                     { HLTokenType.OpReference, new ReferenceExpressionCompiler() },
                                     { HLTokenType.OpDeReference, new DereferenceExpressionCompiler() },
+                                    { HLTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },
                                 }
                                )
                           },

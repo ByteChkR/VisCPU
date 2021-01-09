@@ -49,7 +49,7 @@ namespace VisCPU.HL.Compiler
             return target;
         }
 
-        public ExpressionTarget CopyIfNotNull( HLCompilation compilation, ExpressionTarget target )
+        public ExpressionTarget CopyIfNotNull( HLCompilation compilation, ExpressionTarget target, bool releaseSource = false )
         {
             if ( target.ResultAddress == null )
             {
@@ -57,6 +57,7 @@ namespace VisCPU.HL.Compiler
             }
 
             compilation.ProgramCode.Add( $"COPY {ResultAddress} {target.ResultAddress}" );
+            compilation.ReleaseTempVar( ResultAddress );
 
             return target;
         }
