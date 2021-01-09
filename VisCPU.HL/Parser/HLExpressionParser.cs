@@ -82,6 +82,7 @@ namespace VisCPU.HL.Parser
                 new PlusMinusOperators(),
                 new RelationOperators(),
                 new UnaryOperators(),
+                new BitShiftOperators(),
                 new AssignmentPlusMinusOperators(),
                 new AssignmentByOperators()
             };

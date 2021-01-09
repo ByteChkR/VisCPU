@@ -19,26 +19,25 @@ namespace VisCPU.HL.Compiler.Relational
                                                         expr.Left
                                                        ).
                                                   MakeAddress( compilation );
-
-            string rtName = compilation.GetTempVar();
+            
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              rtName,
+                                                                              compilation.GetTempVar(),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
                                                         );
 
-            compilation.ReleaseTempVar( rtName );
-            compilation.ReleaseTempVar( target.ResultAddress );
 
             string label = compilation.GetUniqueName( "bexpr_le" );
             compilation.ProgramCode.Add( $"BGT {target.ResultAddress} {rTarget.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
             compilation.ProgramCode.Add( $".{label} linker:hide" );
 
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(target.ResultAddress);
             return outputTarget;
         }
 

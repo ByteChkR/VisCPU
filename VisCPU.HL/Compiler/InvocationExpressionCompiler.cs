@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions;
@@ -24,14 +25,20 @@ namespace VisCPU.HL.Compiler
             if ( target == "ptr_of" )
             {
                 ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
+                
 
-                string v = compilation.GetTempVar();
+                ExpressionTarget ret = ReferenceExpressionCompiler.Emit(
+                                                                        compilation,
+                                                                        et,
+                                                                        new ExpressionTarget(
+                                                                             compilation.GetTempVar(),
+                                                                             true,
+                                                                             compilation.TypeSystem.GetType( "var" )
+                                                                            )
+                                                                       );
 
-                compilation.ProgramCode.Add(
-                                            $"LOAD {v} {et.ResultAddress}"
-                                           );
-
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
+                compilation.ReleaseTempVar( et.ResultAddress );
+                return ret;
             }
 
             if ( target == "ptr_write" )
@@ -160,14 +167,21 @@ namespace VisCPU.HL.Compiler
 
             if ( target == "val_of" )
             {
-                string v = compilation.GetTempVar();
+
                 ExpressionTarget t = compilation.Parse( expr.ParameterList.First() );
 
-                compilation.ProgramCode.Add(
-                                            $"DREF {t.ResultAddress} {v}"
-                                           );
+                ExpressionTarget ret = ReferenceExpressionCompiler.Emit(
+                                                                        compilation,
+                                                                        t,
+                                                                        new ExpressionTarget(
+                                                                             compilation.GetTempVar(),
+                                                                             true,
+                                                                             compilation.TypeSystem.GetType( "var" )
+                                                                            )
+                                                                       );
 
-                return new ExpressionTarget( v, true, t.TypeDefinition );
+                compilation.ReleaseTempVar( t.ResultAddress );
+                return ret;
             }
 
             bool isInternalFunc = compilation.FunctionMap.ContainsKey( target );

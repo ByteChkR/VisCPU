@@ -14,24 +14,25 @@ namespace VisCPU.HL.Compiler
             HLMemberAccessOp expr,
             ExpressionTarget outputTarget )
         {
-            string tmpVar = compilation.GetTempVar();
+            string tmpVar;
             string tmpOff = compilation.GetTempVar();
             ExpressionTarget lType = compilation.Parse( expr.Left );
             uint off = lType.TypeDefinition.GetOffset( expr.MemberName );
 
-            if ( !lType.IsPointer )
+            if ( lType.IsPointer )
             {
-                compilation.ProgramCode.Add( $"LOAD {tmpVar} {lType.ResultAddress}" );
+                tmpVar = lType.ResultAddress;
             }
             else
             {
-                compilation.ReleaseTempVar( tmpVar );
-                tmpVar = lType.ResultAddress;
+                tmpVar = compilation.GetTempVar();
+                compilation.ProgramCode.Add($"LOAD {tmpVar} {lType.ResultAddress}");
             }
 
             compilation.ProgramCode.Add( $"LOAD {tmpOff} {off}" );
             compilation.ProgramCode.Add( $"ADD {tmpVar} {tmpOff}" );
 
+            compilation.ReleaseTempVar(tmpOff);
             if ( outputTarget.ResultAddress != null )
             {
                 compilation.ProgramCode.Add( $"DREF {tmpVar} {outputTarget.ResultAddress}" );

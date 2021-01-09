@@ -16,12 +16,11 @@ namespace VisCPU.HL.Compiler.Bitwise
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
-            string rtName = compilation.GetTempVar();
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              rtName,
+                                                                              compilation.GetTempVar(),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
@@ -33,15 +32,7 @@ namespace VisCPU.HL.Compiler.Bitwise
                                             $"OR {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
 
-                compilation.ReleaseTempVar( rtName );
-            }
-            else if ( rTarget.ResultAddress == outputTarget.ResultAddress )
-            {
-                compilation.ProgramCode.Add(
-                                            $"OR {rTarget.ResultAddress} {target.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
-
-                return rTarget;
+                compilation.ReleaseTempVar( rTarget.ResultAddress );
             }
             else
             {
@@ -49,7 +40,7 @@ namespace VisCPU.HL.Compiler.Bitwise
                                             $"OR {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
 
-                compilation.ReleaseTempVar( rtName );
+                compilation.ReleaseTempVar( rTarget.ResultAddress );
                 compilation.ReleaseTempVar( target.ResultAddress );
 
                 return outputTarget;

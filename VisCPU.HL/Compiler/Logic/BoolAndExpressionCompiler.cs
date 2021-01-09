@@ -18,13 +18,12 @@ namespace VisCPU.HL.Compiler.Logic
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left
                                                        );
-
-            string rtName = compilation.GetTempVar();
+            
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              rtName,
+                                                                              compilation.GetTempVar(),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
@@ -38,7 +37,7 @@ namespace VisCPU.HL.Compiler.Logic
             compilation.ProgramCode.Add( $"BEZ {rTarget.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
             compilation.ProgramCode.Add( $".{label} linker:hide" );
-            compilation.ReleaseTempVar( rtName );
+            compilation.ReleaseTempVar( rTarget.ResultAddress );
             compilation.ReleaseTempVar( target.ResultAddress );
 
             return outputTarget;

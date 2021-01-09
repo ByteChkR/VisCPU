@@ -28,11 +28,27 @@ namespace VisCPU.HL.Parser
         /// <returns>Parsed Expression</returns>
         public HLExpression CreateValue( HLExpressionParser parser )
         {
-            if ( parser.CurrentToken.Type == HLTokenType.OpBang || parser.CurrentToken.Type == HLTokenType.OpTilde )
+            if (parser.CurrentToken.Type == HLTokenType.OpBang || parser.CurrentToken.Type == HLTokenType.OpTilde)
             {
                 HLTokenType t = parser.CurrentToken.Type;
-                parser.Eat( t );
-                HLExpression token = new HLUnaryOp( CreateValue( parser ), t );
+                parser.Eat(t);
+                HLExpression token = new HLUnaryOp(CreateValue(parser), t);
+
+                return token;
+            }
+            if (parser.CurrentToken.Type == HLTokenType.OpAnd)
+            {
+                HLTokenType t = parser.CurrentToken.Type;
+                parser.Eat(t);
+                HLExpression token = new HLUnaryOp(CreateValue(parser), HLTokenType.OpReference);
+
+                return token;
+            }
+            if (parser.CurrentToken.Type == HLTokenType.OpAsterisk)
+            {
+                HLTokenType t = parser.CurrentToken.Type;
+                parser.Eat(t);
+                HLExpression token = new HLUnaryOp(CreateValue(parser), HLTokenType.OpDeReference);
 
                 return token;
             }

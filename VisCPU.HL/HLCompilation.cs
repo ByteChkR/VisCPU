@@ -8,6 +8,7 @@ using VisCPU.HL.Compiler;
 using VisCPU.HL.Compiler.Bitwise;
 using VisCPU.HL.Compiler.Logic;
 using VisCPU.HL.Compiler.Math;
+using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.Compiler.Relational;
 using VisCPU.HL.Compiler.Special;
 using VisCPU.HL.DataTypes;
@@ -173,6 +174,8 @@ namespace VisCPU.HL
 
             ParseFunctionToken( tokens, hlpS );
             ParseTypeDefinitions( TypeSystem, hlpS, tokens );
+
+
 
             HLExpressionParser p = HLExpressionParser.Create( new HLExpressionReader( tokens ) );
             ProcessImports();
@@ -414,7 +417,11 @@ namespace VisCPU.HL
                                 new Dictionary < HLTokenType,
                                     HLExpressionCompiler < HLUnaryOp > >
                                 {
-                                    { HLTokenType.OpBang, new BoolNotExpressionCompiler() }
+                                    { HLTokenType.OpBang, new BoolNotExpressionCompiler() },
+                                    { HLTokenType.OpUnaryIncrement, new IncrementExpressionCompiler() },
+                                    { HLTokenType.OpUnaryDecrement, new DecrementExpressionCompiler() },
+                                    { HLTokenType.OpReference, new ReferenceExpressionCompiler() },
+                                    { HLTokenType.OpDeReference, new DereferenceExpressionCompiler() },
                                 }
                                )
                           },
@@ -483,6 +490,14 @@ namespace VisCPU.HL
                                                    {
                                                        HLTokenType.OpFunctionDefinition, new
                                                            MultiplyExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftLeft, new
+                                                           BitShiftLeftExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftRight, new
+                                                           BitShiftRightExpressionCompiler()
                                                    }
                                                }
                                               )

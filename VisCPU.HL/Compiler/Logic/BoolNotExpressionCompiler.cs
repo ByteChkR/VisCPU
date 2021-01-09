@@ -15,12 +15,10 @@ namespace VisCPU.HL.Compiler.Logic
             HLUnaryOp expr,
             ExpressionTarget outputTarget )
         {
-            string tName = compilation.GetTempVar();
-
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left,
                                                         new ExpressionTarget(
-                                                                             tName,
+                                                                             compilation.GetTempVar(),
                                                                              true,
                                                                              compilation.TypeSystem.GetType( "var" )
                                                                             )
@@ -37,7 +35,7 @@ namespace VisCPU.HL.Compiler.Logic
             compilation.ProgramCode.Add( $".{labelF} linker:hide" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 0" );
             compilation.ProgramCode.Add( $".{label} linker:hide" );
-            compilation.ReleaseTempVar( tName );
+            compilation.ReleaseTempVar( target.ResultAddress );
 
             return outputTarget;
         }

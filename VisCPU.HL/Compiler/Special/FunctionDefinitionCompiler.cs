@@ -46,6 +46,8 @@ namespace VisCPU.HL.Compiler.Special
                                          );
                      }
 
+                     parsedVal.Add( "RET ; Compiler Safeguard." );
+
                      return parsedVal.ToArray();
                  },
                  expr.value.Arguments.Length,

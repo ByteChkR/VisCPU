@@ -16,12 +16,11 @@ namespace VisCPU.HL.Compiler.Math
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse( expr.Left, outputTarget );
-            string tmp = compilation.GetTempVar();
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              tmp,
+                                                                              compilation.GetTempVar(),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
@@ -33,18 +32,9 @@ namespace VisCPU.HL.Compiler.Math
                                             $"ADD {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
 
-                compilation.ReleaseTempVar( tmp );
+                compilation.ReleaseTempVar( rTarget.ResultAddress );
 
                 return target;
-            }
-
-            if ( rTarget.ResultAddress == outputTarget.ResultAddress )
-            {
-                compilation.ProgramCode.Add(
-                                            $"ADD {rTarget.ResultAddress} {target.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
-
-                return rTarget; //should never happen?
             }
 
             if ( target.IsPointer )
@@ -63,7 +53,8 @@ namespace VisCPU.HL.Compiler.Math
                                             $"ADD {et.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
 
-                compilation.ReleaseTempVar( tmp );
+                compilation.ReleaseTempVar(et.ResultAddress);
+                compilation.ReleaseTempVar(rTarget.ResultAddress);
                 compilation.ReleaseTempVar( target.ResultAddress );
 
                 return outputTarget;
@@ -73,7 +64,8 @@ namespace VisCPU.HL.Compiler.Math
                                         $"ADD {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                        );
 
-            compilation.ReleaseTempVar( tmp );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(target.ResultAddress);
 
             return outputTarget;
         }

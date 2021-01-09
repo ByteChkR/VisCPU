@@ -101,6 +101,8 @@ namespace VisCPU.HL.Parser
 
         OpUnaryIncrement,
         OpUnaryDecrement,
+        OpDeReference,
+        OpReference,
         OpSumAssign,
         OpDifAssign,
         OpProdAssign,
@@ -109,6 +111,9 @@ namespace VisCPU.HL.Parser
         OpOrAssign,
         OpXOrAssign,
         OpAndAssign,
+        OpShiftLeft,
+        OpShiftRight,
+
 
         OpNumSign,
 

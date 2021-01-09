@@ -14,7 +14,6 @@ namespace VisCPU.HL.Compiler.Special
             string endLabel = compilation.GetUniqueName( "if_end" );
             string elseLabel = compilation.GetUniqueName( "if_else" );
             string blockLabels = compilation.GetUniqueName( "if_b{0}" );
-            string iftempVar = compilation.GetTempVar();
 
             for ( int i = 0; i < expr.ConditionMap.Count; i++ )
             {
@@ -28,11 +27,11 @@ namespace VisCPU.HL.Compiler.Special
                 {
                     compilation.ProgramCode.Add( "; Start IF" );
                 }
-
+                
                 ExpressionTarget exprTarget = compilation.Parse(
                                                                 expr.ConditionMap[i].Item1,
                                                                 new ExpressionTarget(
-                                                                     iftempVar,
+                                                                     compilation.GetTempVar(),
                                                                      true,
                                                                      compilation.TypeSystem.GetType( "var" )
                                                                     )
@@ -57,6 +56,7 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 compilation.ProgramCode.Add( $"JMP {endLabel}" );
+                compilation.ReleaseTempVar(exprTarget.ResultAddress);
             }
 
             if ( expr.ElseBranch != null )
@@ -70,7 +70,6 @@ namespace VisCPU.HL.Compiler.Special
             }
 
             compilation.ProgramCode.Add( $".{endLabel} linker:hide" );
-            compilation.ReleaseTempVar( iftempVar );
 
             return new ExpressionTarget();
         }

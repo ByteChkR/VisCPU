@@ -3,7 +3,7 @@
 namespace VisCPU.HL.Compiler.Bitwise
 {
 
-    public class BitwiseAndExpressionCompiler : HLExpressionCompiler<HLBinaryOp>
+    public class BitShiftRightExpressionCompiler : HLExpressionCompiler<HLBinaryOp>
     {
 
         protected override bool NeedsOutput => true;
@@ -29,7 +29,7 @@ namespace VisCPU.HL.Compiler.Bitwise
             if (target.ResultAddress == outputTarget.ResultAddress)
             {
                 compilation.ProgramCode.Add(
-                                            $"AND {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
+                                            $"SHR {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                            );
 
                 compilation.ReleaseTempVar(rTarget.ResultAddress);
@@ -38,7 +38,7 @@ namespace VisCPU.HL.Compiler.Bitwise
             }
 
             compilation.ProgramCode.Add(
-                                        $"AND {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
+                                        $"SHR {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
                                        );
 
             compilation.ReleaseTempVar(rTarget.ResultAddress);

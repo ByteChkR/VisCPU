@@ -5,15 +5,15 @@ namespace VisCPU.HL.Parser.Operators
 {
 
     /// <summary>
-    ///     Implements Unary Operators
+    ///     Implements Logical AND Operator
     /// </summary>
-    public class UnaryOperators : HLExpressionOperator
+    public class BitShiftOperators : HLExpressionOperator
     {
 
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
-        public override int PrecedenceLevel => 3;
+        public override int PrecedenceLevel => 7;
 
         #region Public
 
@@ -25,11 +25,10 @@ namespace VisCPU.HL.Parser.Operators
         /// <returns>True if this Expression operator can create an expression</returns>
         public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
         {
-            return
-                parser.CurrentToken.Type == HLTokenType.OpBang &&
-                parser.Reader.PeekNext().Type != HLTokenType.OpEquality ||
-                parser.CurrentToken.Type == HLTokenType.OpTilde &&
-                parser.Reader.PeekNext().Type != HLTokenType.OpEquality;
+            return parser.CurrentToken.Type == HLTokenType.OpLessThan &&
+                   parser.Reader.PeekNext().Type == HLTokenType.OpLessThan || 
+                   parser.CurrentToken.Type == HLTokenType.OpGreaterThan &&
+                   parser.Reader.PeekNext().Type == HLTokenType.OpGreaterThan;
         }
 
         /// <summary>
@@ -42,10 +41,21 @@ namespace VisCPU.HL.Parser.Operators
         {
             HLTokenType type = parser.CurrentToken.Type;
             parser.Eat(type);
+            parser.Eat(type);
 
-            HLExpression token = new HLUnaryOp(parser.ParseExpr(0), type);
-
-            return token;
+            if ( type == HLTokenType.OpLessThan )
+            {
+                type = HLTokenType.OpShiftLeft;
+            }
+            else if (type == HLTokenType.OpGreaterThan)
+            {
+                type = HLTokenType.OpShiftRight;
+            }
+            return new HLBinaryOp(
+                                  currentNode,
+                                  type,
+                                  parser.ParseExpr(0)
+                                 );
         }
 
         #endregion

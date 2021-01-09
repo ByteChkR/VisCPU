@@ -16,16 +16,13 @@ namespace VisCPU.HL.Compiler
             HLArrayAccessorOp expr,
             ExpressionTarget outputTarget )
         {
-            string tmpPtrName = compilation.GetTempVar();
             ExpressionTarget tempPtrVar = compilation.Parse( expr.Left );
-            ExpressionTarget tempPtr = new ExpressionTarget( tmpPtrName, true, tempPtrVar.TypeDefinition, true );
-
-            string pnName = compilation.GetTempVar();
+            ExpressionTarget tempPtr = new ExpressionTarget(compilation.GetTempVar(), true, tempPtrVar.TypeDefinition, true );
 
             ExpressionTarget pn = compilation.Parse(
                                                     expr.ParameterList[0],
                                                     new ExpressionTarget(
-                                                                         pnName,
+                                                                         compilation.GetTempVar(),
                                                                          true,
                                                                          compilation.TypeSystem.GetType( "var" )
                                                                         )
@@ -53,11 +50,15 @@ namespace VisCPU.HL.Compiler
                                             $"DREF {tempPtr.ResultAddress} {outputTarget.ResultAddress} ; Dereference Array Pointer"
                                            );
 
-                compilation.ReleaseTempVar( tmpPtrName );
+                compilation.ReleaseTempVar(tempPtr.ResultAddress);
+                compilation.ReleaseTempVar(tempPtrVar.ResultAddress);
+                compilation.ReleaseTempVar(pn.ResultAddress);
 
                 return outputTarget;
             }
-
+            
+            compilation.ReleaseTempVar(tempPtrVar.ResultAddress);
+            compilation.ReleaseTempVar(pn.ResultAddress);
             return tempPtr;
         }
 

@@ -25,12 +25,11 @@ namespace VisCPU.HL.Compiler
             }
             else
             {
-                string rtName = compilation.GetTempVar();
 
                 ExpressionTarget rTarget = compilation.Parse(
                                                              expr.Right,
                                                              new ExpressionTarget(
-                                                                  rtName,
+                                                                  compilation.GetTempVar(),
                                                                   true,
                                                                   compilation.TypeSystem.GetType( "var" )
                                                                  )
@@ -105,7 +104,7 @@ namespace VisCPU.HL.Compiler
                     }
                 }
 
-                compilation.ReleaseTempVar( rtName );
+                compilation.ReleaseTempVar(rTarget.ResultAddress);
                 compilation.ProgramCode.AddRange( lines );
 
                 return target;
