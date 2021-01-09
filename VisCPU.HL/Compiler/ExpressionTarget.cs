@@ -31,8 +31,7 @@ namespace VisCPU.HL.Compiler
                 return this;
             }
 
-            ExpressionTarget tmpVal = new ExpressionTarget( c.GetTempVar(), true, TypeDefinition, IsPointer );
-            c.ProgramCode.Add( $"LOAD {tmpVal.ResultAddress} {ResultAddress}" );
+            ExpressionTarget tmpVal = new ExpressionTarget( c.GetTempVarLoad(ResultAddress), true, TypeDefinition, IsPointer );
 
             return tmpVal;
         }

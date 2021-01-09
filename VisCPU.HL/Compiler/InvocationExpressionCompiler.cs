@@ -31,7 +31,7 @@ namespace VisCPU.HL.Compiler
                                                                         compilation,
                                                                         et,
                                                                         new ExpressionTarget(
-                                                                             compilation.GetTempVar(),
+                                                                             compilation.GetTempVar(0),
                                                                              true,
                                                                              compilation.TypeSystem.GetType( "var" )
                                                                             )
@@ -45,12 +45,8 @@ namespace VisCPU.HL.Compiler
             {
                 ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
                 ExpressionTarget value = compilation.Parse( expr.ParameterList[1] );
-                string vptr = compilation.GetTempVar();
-
-                compilation.ProgramCode.Add(
-                                            $"LOAD {vptr} {value.ResultAddress}"
-                                           );
-
+                string vptr = compilation.GetTempVarLoad(value.ResultAddress);
+                
                 compilation.ProgramCode.Add(
                                             $"CREF {vptr} {et.ResultAddress}"
                                            );
@@ -87,12 +83,9 @@ namespace VisCPU.HL.Compiler
                 }
 
                 HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
-                string v = compilation.GetTempVar();
-                uint off = type.GetOffset( expr.ParameterList[1].ToString() );
-
-                compilation.ProgramCode.Add(
-                                            $"LOAD {v} {off}"
-                                           );
+                uint off = type.GetOffset(expr.ParameterList[1].ToString());
+                string v = compilation.GetTempVar(off);
+                
 
                 return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
             }
@@ -108,22 +101,17 @@ namespace VisCPU.HL.Compiler
                                                          );
                 }
 
-                string v = compilation.GetTempVar();
 
                 if ( compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
                 {
-                    compilation.ProgramCode.Add(
-                                                $"LOAD {v} {compilation.GetVariable( expr.ParameterList[0].ToString() ).Size}"
-                                               );
+                    string v = compilation.GetTempVar(compilation.GetVariable(expr.ParameterList[0].ToString()).Size);
 
                     return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
                 }
 
                 if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
                 {
-                    compilation.ProgramCode.Add(
-                                                $"LOAD {v} {compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() ).GetSize()}"
-                                               );
+                    string v = compilation.GetTempVar(compilation.TypeSystem.GetType(expr.ParameterList[0].ToString()).GetSize());
 
                     return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
                 }
@@ -174,7 +162,7 @@ namespace VisCPU.HL.Compiler
                                                                         compilation,
                                                                         t,
                                                                         new ExpressionTarget(
-                                                                             compilation.GetTempVar(),
+                                                                             compilation.GetTempVar(0),
                                                                              true,
                                                                              compilation.TypeSystem.GetType( "var" )
                                                                             )
@@ -222,11 +210,7 @@ namespace VisCPU.HL.Compiler
                     }
                     else
                     {
-                        string v = compilation.GetTempVar();
-
-                        compilation.ProgramCode.Add(
-                                                    $"LOAD {v} {arg.ResultAddress}; Push Param {parameter}"
-                                                   );
+                        string v = compilation.GetTempVarLoad(arg.ResultAddress);
 
                         compilation.ProgramCode.Add(
                                                     $"PUSH {v}; Push Param {parameter}"
@@ -241,7 +225,7 @@ namespace VisCPU.HL.Compiler
                 compilation.ProgramCode.Add( $"JSR {funcEmit}" );
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVar(),
+                                                                   compilation.GetTempVar(0),
                                                                    true,
                                                                    compilation.TypeSystem.GetType( "var" )
                                                                   );
@@ -279,7 +263,7 @@ namespace VisCPU.HL.Compiler
                 }
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVar(),
+                                                                   compilation.GetTempVar(0),
                                                                    true,
                                                                    compilation.TypeSystem.GetType( "var" )
                                                                   );

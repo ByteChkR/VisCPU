@@ -18,12 +18,14 @@ namespace VisCPU.HL.Compiler
                                                   MakeAddress( compilation );
 
                 compilation.ProgramCode.Add( $"PUSH {pt.ResultAddress}" );
+
+                compilation.ReleaseTempVar(pt.ResultAddress);
             }
             else
             {
-                string v = compilation.GetTempVar();
-                compilation.ProgramCode.Add( $"LOAD {v} 0" );
+                string v = compilation.GetTempVar(0);
                 compilation.ProgramCode.Add( $"PUSH {v}" );
+                compilation.ReleaseTempVar(v);
             }
 
             compilation.ProgramCode.Add( "RET" );

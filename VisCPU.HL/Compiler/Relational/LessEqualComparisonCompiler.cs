@@ -24,7 +24,7 @@ namespace VisCPU.HL.Compiler.Relational
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              compilation.GetTempVar(),
+                                                                              compilation.GetTempVar(0),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
@@ -32,6 +32,7 @@ namespace VisCPU.HL.Compiler.Relational
 
 
             string label = compilation.GetUniqueName( "bexpr_le" );
+            compilation.ProgramCode.Add($"LOAD {outputTarget.ResultAddress} 0");
             compilation.ProgramCode.Add( $"BGT {target.ResultAddress} {rTarget.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
             compilation.ProgramCode.Add( $".{label} linker:hide" );

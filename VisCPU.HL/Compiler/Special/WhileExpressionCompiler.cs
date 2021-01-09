@@ -15,8 +15,7 @@ namespace VisCPU.HL.Compiler.Special
             string endLabel = compilation.GetUniqueName( "while_end" );
 
             compilation.ProgramCode.Add( $".{startLabel} linker:hide" );
-            ExpressionTarget target = new ExpressionTarget(compilation.GetTempVar(), true, compilation.TypeSystem.GetType( "var" ) );
-            compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} 0x00" );
+            ExpressionTarget target = new ExpressionTarget(compilation.GetTempVar(0), true, compilation.TypeSystem.GetType( "var" ) );
             compilation.Parse( expr.Condition, target );
 
             compilation.ProgramCode.Add( $"BEZ {target.ResultAddress} {endLabel}" );

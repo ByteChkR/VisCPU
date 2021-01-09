@@ -385,13 +385,35 @@ namespace VisCPU.HL
             }
         }
 
-        internal string GetTempVar()
+        internal string GetTempVar(uint initValue)
         {
-            VariableData tmp = GetFreeTempVar();
-            usedTempVars.Add( tmp.GetName() );
+            VariableData tmp = GetFreeTempVar(initValue);
+            usedTempVars.Add(tmp.GetName());
 
             return tmp.GetName();
         }
+        internal string GetTempVarLoad(string initValue)
+        {
+            VariableData tmp = GetFreeTempVarLoad(initValue);
+            usedTempVars.Add(tmp.GetName());
+
+            return tmp.GetName();
+        }
+        internal string GetTempVarDref(string initValue)
+        {
+            VariableData tmp = GetFreeTempVarDref(initValue);
+            usedTempVars.Add(tmp.GetName());
+
+            return tmp.GetName();
+        }
+        internal string GetTempVarCopy(string initValue)
+        {
+            VariableData tmp = GetFreeTempVarCopy(initValue);
+            usedTempVars.Add(tmp.GetName());
+
+            return tmp.GetName();
+        }
+
 
         internal string GetUniqueName( string prefix = null )
         {
@@ -551,7 +573,7 @@ namespace VisCPU.HL
         {
             foreach ( HLExpression hlExpression in block )
             {
-                Parse( hlExpression );
+                ReleaseTempVar(Parse(hlExpression).ResultAddress);
             }
 
             StringBuilder sb = new StringBuilder();
@@ -739,19 +761,70 @@ namespace VisCPU.HL
             }
         }
 
-        private VariableData GetFreeTempVar()
+        private VariableData GetFreeTempVarCopy(string initValue)
         {
-            if ( unusedTempVars.Count != 0 )
+            if (unusedTempVars.Count != 0)
             {
                 string oldName = unusedTempVars.Dequeue();
-                ProgramCode.Add( $"LOAD {oldName} 0x00 ;Temp Var House-keeping" );
+                ProgramCode.Add($"COPY {initValue} {oldName} ;Temp Var House-keeping");
 
                 return VariableMap[oldName];
             }
 
-            string name = GetUniqueName( "tmp" );
+            string name = GetUniqueName("tmp");
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ) );
+            ProgramCode.Add($"COPY {initValue} {name} ;Temp Var House-keeping");
+            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
+        }
+        private VariableData GetFreeTempVarLoad(string initValue)
+        {
+            if (unusedTempVars.Count != 0)
+            {
+                string oldName = unusedTempVars.Dequeue();
+                ProgramCode.Add($"LOAD {oldName} {initValue} ;Temp Var House-keeping");
+
+                return VariableMap[oldName];
+            }
+
+            string name = GetUniqueName("tmp");
+
+            ProgramCode.Add($"LOAD {name} {initValue} ;Temp Var House-keeping");
+            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
+        }
+        private VariableData GetFreeTempVarDref(string initValue)
+        {
+            if (unusedTempVars.Count != 0)
+            {
+                string oldName = unusedTempVars.Dequeue();
+                ProgramCode.Add($"DREF {initValue} {oldName} ;Temp Var House-keeping");
+
+                return VariableMap[oldName];
+            }
+
+            string name = GetUniqueName("tmp");
+
+            ProgramCode.Add($"DREF {initValue} {name} ;Temp Var House-keeping");
+            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
+        }
+
+        private VariableData GetFreeTempVar(uint initValue)
+        {
+            if (unusedTempVars.Count != 0)
+            {
+                string oldName = unusedTempVars.Dequeue();
+                if (initValue != 0)
+                    ProgramCode.Add($"LOAD {oldName} {initValue} ;Temp Var House-keeping");
+
+                return VariableMap[oldName];
+            }
+
+            string name = GetUniqueName("tmp");
+
+            if (initValue != 0)
+            {
+                ProgramCode.Add($"LOAD {name} {initValue} ;Temp Var House-keeping");
+            }
+            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
         }
 
         private string GetPrefix()

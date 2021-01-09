@@ -15,9 +15,9 @@ namespace VisCPU.HL.Compiler
             ExpressionTarget outputTarget )
         {
             string tmpVar;
-            string tmpOff = compilation.GetTempVar();
             ExpressionTarget lType = compilation.Parse( expr.Left );
             uint off = lType.TypeDefinition.GetOffset( expr.MemberName );
+            string tmpOff = compilation.GetTempVar(off);
 
             if ( lType.IsPointer )
             {
@@ -25,11 +25,9 @@ namespace VisCPU.HL.Compiler
             }
             else
             {
-                tmpVar = compilation.GetTempVar();
-                compilation.ProgramCode.Add($"LOAD {tmpVar} {lType.ResultAddress}");
+                tmpVar = compilation.GetTempVarLoad(lType.ResultAddress);
             }
-
-            compilation.ProgramCode.Add( $"LOAD {tmpOff} {off}" );
+            
             compilation.ProgramCode.Add( $"ADD {tmpVar} {tmpOff}" );
 
             compilation.ReleaseTempVar(tmpOff);

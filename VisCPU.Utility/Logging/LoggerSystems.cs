@@ -28,6 +28,7 @@ namespace VisCPU.Utility.Logging
         UriResolver = 131072,
         HL_Importer = 262144,
         ModuleSystem = 524288,
+        Emit = 1048576,
 
         AllInstructions = MathInstructions |
                           LogicInstructions |

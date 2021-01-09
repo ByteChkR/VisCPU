@@ -20,7 +20,7 @@ namespace VisCPU.HL.Compiler.Math
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              compilation.GetTempVar(),
+                                                                              compilation.GetTempVar(0),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
@@ -40,14 +40,10 @@ namespace VisCPU.HL.Compiler.Math
             if ( target.IsPointer )
             {
                 ExpressionTarget et = new ExpressionTarget(
-                                                           compilation.GetTempVar(),
+                                                           compilation.GetTempVarDref(target.ResultAddress),
                                                            true,
                                                            compilation.TypeSystem.GetType( "var" )
                                                           );
-
-                compilation.ProgramCode.Add(
-                                            $"DREF {target.ResultAddress} {et.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
 
                 compilation.ProgramCode.Add(
                                             $"ADD {et.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"

@@ -18,7 +18,7 @@ namespace VisCPU.HL.Compiler.Logic
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left,
                                                         new ExpressionTarget(
-                                                                             compilation.GetTempVar(),
+                                                                             compilation.GetTempVar(0),
                                                                              true,
                                                                              compilation.TypeSystem.GetType( "var" )
                                                                             )

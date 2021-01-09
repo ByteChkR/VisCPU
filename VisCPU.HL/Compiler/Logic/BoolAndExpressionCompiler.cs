@@ -23,7 +23,7 @@ namespace VisCPU.HL.Compiler.Logic
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              compilation.GetTempVar(),
+                                                                              compilation.GetTempVar(0),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )

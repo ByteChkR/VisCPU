@@ -18,18 +18,13 @@ namespace VisCPU.HL.Compiler.Bitwise
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left,
                                                         new ExpressionTarget(
-                                                                             compilation.GetTempVar(),
+                                                                             compilation.GetTempVar(0),
                                                                              true,
                                                                              compilation.TypeSystem.GetType("var")
                                                                             )
                                                        );
-
-            //BNE target rTarget if_b0_fail
-            //LOAD possibleTarget 0x1; True Value
-            //.if_b0_fail
-            string tmp = compilation.GetTempVar();
-
-            compilation.ProgramCode.Add($"LOAD {tmp} 0xFFFFFFFF");
+            
+            string tmp = compilation.GetTempVar(~(uint)0);
             compilation.ProgramCode.Add($"XOR {target} {tmp}");
 
             return target.CopyIfNotNull(compilation, outputTarget, true);

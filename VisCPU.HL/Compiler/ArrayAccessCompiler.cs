@@ -17,19 +17,18 @@ namespace VisCPU.HL.Compiler
             ExpressionTarget outputTarget )
         {
             ExpressionTarget tempPtrVar = compilation.Parse( expr.Left );
-            ExpressionTarget tempPtr = new ExpressionTarget(compilation.GetTempVar(), true, tempPtrVar.TypeDefinition, true );
+            ExpressionTarget tempPtr = new ExpressionTarget(compilation.GetTempVar(0), true, tempPtrVar.TypeDefinition, true );
 
             ExpressionTarget pn = compilation.Parse(
                                                     expr.ParameterList[0],
                                                     new ExpressionTarget(
-                                                                         compilation.GetTempVar(),
+                                                                         compilation.GetTempVar(0),
                                                                          true,
                                                                          compilation.TypeSystem.GetType( "var" )
                                                                         )
                                                    );
 
-            string tmpSName = compilation.GetTempVar();
-            compilation.ProgramCode.Add( $"LOAD {tmpSName} {tempPtr.TypeDefinition.GetSize()}" );
+            string tmpSName = compilation.GetTempVar(tempPtrVar.TypeDefinition.GetSize());
             compilation.ProgramCode.Add( $"MUL {pn.ResultAddress} {tmpSName}" );
             compilation.ReleaseTempVar( tmpSName );
 

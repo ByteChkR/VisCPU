@@ -29,7 +29,7 @@ namespace VisCPU.HL.Compiler
                 ExpressionTarget rTarget = compilation.Parse(
                                                              expr.Right,
                                                              new ExpressionTarget(
-                                                                  compilation.GetTempVar(),
+                                                                  compilation.GetTempVar(0),
                                                                   true,
                                                                   compilation.TypeSystem.GetType( "var" )
                                                                  )
@@ -51,14 +51,10 @@ namespace VisCPU.HL.Compiler
                     else
                     {
                         ExpressionTarget tmpTarget = new ExpressionTarget(
-                                                                          compilation.GetTempVar(),
+                                                                          compilation.GetTempVarLoad(rTarget.ResultAddress),
                                                                           true,
                                                                           compilation.TypeSystem.GetType( "var" )
                                                                          );
-
-                        lines.Add(
-                                  $"LOAD {tmpTarget.ResultAddress} {rTarget.ResultAddress} ; Load Pointer for assignment"
-                                 );
 
                         lines.Add(
                                   $"CREF {tmpTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
@@ -72,14 +68,10 @@ namespace VisCPU.HL.Compiler
                     if ( rTarget.IsPointer )
                     {
                         ExpressionTarget tmpTarget = new ExpressionTarget(
-                                                                          compilation.GetTempVar(),
+                                                                          compilation.GetTempVarLoad(target.ResultAddress),
                                                                           true,
                                                                           compilation.TypeSystem.GetType( "var" )
                                                                          );
-
-                        lines.Add(
-                                  $"LOAD {tmpTarget.ResultAddress} {target.ResultAddress} ; Load Pointer for assignment"
-                                 );
 
                         lines.Add(
                                   $"CREF {rTarget.ResultAddress} {tmpTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
