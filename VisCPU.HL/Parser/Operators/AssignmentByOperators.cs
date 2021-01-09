@@ -37,7 +37,9 @@ namespace VisCPU.HL.Parser.Operators
                      parser.CurrentToken.Type == HLTokenType.OpAnd ||
                      parser.CurrentToken.Type == HLTokenType.OpPipe ||
                      parser.CurrentToken.Type == HLTokenType.OpCap ) &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpEquality;
+                   parser.Reader.PeekNext().Type == HLTokenType.OpEquality ||
+                   parser.CurrentToken.Type == HLTokenType.OpLessThan && parser.Reader.PeekNext().Type == HLTokenType.OpLessThan && parser.Reader.PeekNext(2).Type == HLTokenType.OpLessThan ||
+                   parser.CurrentToken.Type == HLTokenType.OpGreaterThan && parser.Reader.PeekNext().Type == HLTokenType.OpGreaterThan && parser.Reader.PeekNext(2).Type == HLTokenType.OpLessThan;
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace VisCPU.HL.Parser.Operators
         public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             IHLToken token = parser.CurrentToken;
+
             HLTokenType tt;
 
             switch ( parser.CurrentToken.Type )
@@ -90,7 +93,14 @@ namespace VisCPU.HL.Parser.Operators
 
                 case HLTokenType.OpCap:
                     tt = HLTokenType.OpXOrAssign;
-
+                    break;
+                case HLTokenType.OpGreaterThan:
+                    tt = HLTokenType.OpShiftRightAssign;
+                    parser.Eat(token.Type);
+                    break;
+                case HLTokenType.OpLessThan:
+                    tt = HLTokenType.OpShiftLeftAssign;
+                    parser.Eat(token.Type);
                     break;
 
                 default:

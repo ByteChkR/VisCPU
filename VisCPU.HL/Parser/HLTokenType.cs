@@ -113,6 +113,8 @@ namespace VisCPU.HL.Parser
         OpAndAssign,
         OpShiftLeft,
         OpShiftRight,
+        OpShiftLeftAssign,
+        OpShiftRightAssign,
 
 
         OpNumSign,

@@ -8,6 +8,7 @@ using VisCPU.HL.Compiler;
 using VisCPU.HL.Compiler.Bitwise;
 using VisCPU.HL.Compiler.Logic;
 using VisCPU.HL.Compiler.Math;
+using VisCPU.HL.Compiler.Math.Assignments;
 using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.Compiler.Relational;
 using VisCPU.HL.Compiler.Special;
@@ -499,6 +500,46 @@ namespace VisCPU.HL
                                                    {
                                                        HLTokenType.OpShiftRight, new
                                                            BitShiftRightExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpSumAssign, new
+                                                           AddAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpDifAssign, new
+                                                           SubAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpProdAssign, new
+                                                           MulAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpQuotAssign, new
+                                                           DivAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpRemAssign, new
+                                                           ModAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpOrAssign, new
+                                                           OrAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpAndAssign, new
+                                                           AndAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpXOrAssign, new
+                                                           XOrAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftLeftAssign, new
+                                                           ShiftLeftAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftRightAssign, new
+                                                           ShiftRightAssignExpressionCompiler()
                                                    }
                                                }
                                               )
