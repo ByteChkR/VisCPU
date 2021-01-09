@@ -16,7 +16,12 @@ namespace VisCPU.HL.Compiler.Math.Assignments
             ExpressionTarget target = compilation.Parse(expr.Left);
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
+                                                         expr.Right,
+                                                         new ExpressionTarget(
+                                                                              compilation.GetTempVar(),
+                                                                              true,
+                                                                              compilation.TypeSystem.GetType("var")
+                                                                             )
                                                         );
 
 

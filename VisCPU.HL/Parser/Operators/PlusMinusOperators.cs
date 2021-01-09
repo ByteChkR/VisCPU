@@ -26,9 +26,11 @@ namespace VisCPU.HL.Parser.Operators
         public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpPlus &&
-                   parser.Reader.PeekNext().Type != HLTokenType.OpPlus ||
+                   parser.Reader.PeekNext().Type != HLTokenType.OpPlus &&
+                   parser.Reader.PeekNext().Type != HLTokenType.OpEquality ||
                    parser.CurrentToken.Type == HLTokenType.OpMinus &&
-                   parser.Reader.PeekNext().Type != HLTokenType.OpMinus;
+                   parser.Reader.PeekNext().Type != HLTokenType.OpMinus &&
+                   parser.Reader.PeekNext().Type != HLTokenType.OpEquality;
         }
 
         /// <summary>

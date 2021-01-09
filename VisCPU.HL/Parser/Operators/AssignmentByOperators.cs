@@ -29,14 +29,14 @@ namespace VisCPU.HL.Parser.Operators
         /// <returns>True if this Expression operator can create an expression</returns>
         public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
-            return ( parser.CurrentToken.Type == HLTokenType.OpPlus ||
-                     parser.CurrentToken.Type == HLTokenType.OpMinus ||
-                     parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
-                     parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
-                     parser.CurrentToken.Type == HLTokenType.OpPercent ||
-                     parser.CurrentToken.Type == HLTokenType.OpAnd ||
-                     parser.CurrentToken.Type == HLTokenType.OpPipe ||
-                     parser.CurrentToken.Type == HLTokenType.OpCap ) &&
+            return (parser.CurrentToken.Type == HLTokenType.OpPlus ||
+                    parser.CurrentToken.Type == HLTokenType.OpMinus ||
+                    parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
+                    parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
+                    parser.CurrentToken.Type == HLTokenType.OpPercent ||
+                    parser.CurrentToken.Type == HLTokenType.OpAnd ||
+                    parser.CurrentToken.Type == HLTokenType.OpPipe ||
+                    parser.CurrentToken.Type == HLTokenType.OpCap) &&
                    parser.Reader.PeekNext().Type == HLTokenType.OpEquality ||
                    parser.CurrentToken.Type == HLTokenType.OpLessThan && parser.Reader.PeekNext().Type == HLTokenType.OpLessThan && parser.Reader.PeekNext(2).Type == HLTokenType.OpLessThan ||
                    parser.CurrentToken.Type == HLTokenType.OpGreaterThan && parser.Reader.PeekNext().Type == HLTokenType.OpGreaterThan && parser.Reader.PeekNext(2).Type == HLTokenType.OpLessThan;

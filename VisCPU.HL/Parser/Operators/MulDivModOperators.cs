@@ -25,9 +25,10 @@ namespace VisCPU.HL.Parser.Operators
         /// <returns>True if this Expression operator can create an expression</returns>
         public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
-                   parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
-                   parser.CurrentToken.Type == HLTokenType.OpPercent;
+            return ( parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
+                     parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
+                     parser.CurrentToken.Type == HLTokenType.OpPercent ) &&
+                   parser.Reader.PeekNext().Type != HLTokenType.OpEquality;
         }
 
         /// <summary>
