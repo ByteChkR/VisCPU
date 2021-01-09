@@ -812,8 +812,7 @@ namespace VisCPU.HL
             if (unusedTempVars.Count != 0)
             {
                 string oldName = unusedTempVars.Dequeue();
-                if (initValue != 0)
-                    ProgramCode.Add($"LOAD {oldName} {initValue} ;Temp Var House-keeping");
+                ProgramCode.Add($"LOAD {oldName} {initValue} ;Temp Var House-keeping");
 
                 return VariableMap[oldName];
             }

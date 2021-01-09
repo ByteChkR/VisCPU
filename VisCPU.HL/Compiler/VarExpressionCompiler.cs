@@ -41,7 +41,8 @@ namespace VisCPU.HL.Compiler
                 return new ExpressionTarget(
                                             varAddr,
                                             true,
-                                            v.TypeDefinition
+                                            v.TypeDefinition,
+                                            v.TypeDefinition.GetSize() != v.Size
                                            ).CopyIfNotNull( compilation, outputTarget );
             }
 

@@ -24,6 +24,11 @@ namespace VisCPU.HL.Compiler
             return new ExpressionTarget( ResultAddress, IsAddress, newType, IsPointer );
         }
 
+        public ExpressionTarget Reinterpret( bool isAddress, bool isPointer )
+        {
+            return new ExpressionTarget( ResultAddress, isAddress, TypeDefinition, isPointer );
+        }
+
         public ExpressionTarget MakeAddress( HLCompilation c )
         {
             if ( IsAddress )

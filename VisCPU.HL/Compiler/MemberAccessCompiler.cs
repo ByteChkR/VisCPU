@@ -36,7 +36,7 @@ namespace VisCPU.HL.Compiler
                 compilation.ProgramCode.Add( $"DREF {tmpVar} {outputTarget.ResultAddress}" );
                 compilation.ReleaseTempVar( tmpVar );
 
-                return outputTarget;
+                return outputTarget.Reinterpret(true, true);
             }
 
             HLMemberDefinition mdef = lType.TypeDefinition.GetMember( expr.MemberName );
