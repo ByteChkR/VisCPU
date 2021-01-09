@@ -42,21 +42,6 @@ namespace VisCPU.HL.Compiler
                 return ret;
             }
 
-            if ( target == "ptr_write" )
-            {
-                ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
-                ExpressionTarget value = compilation.Parse( expr.ParameterList[1] );
-                string vptr = compilation.GetTempVarLoad(value.ResultAddress);
-                
-                compilation.ProgramCode.Add(
-                                            $"CREF {vptr} {et.ResultAddress}"
-                                           );
-
-                compilation.ReleaseTempVar( vptr );
-
-                return new ExpressionTarget();
-            }
-
             if ( target == "static_cast" )
             {
                 if ( expr.ParameterList.Length != 2 )
