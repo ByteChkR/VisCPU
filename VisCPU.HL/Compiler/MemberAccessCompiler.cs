@@ -9,6 +9,8 @@ namespace VisCPU.HL.Compiler
 
         #region Public
 
+        protected override bool AllImplementations => true;
+
         public override ExpressionTarget ParseExpression(
             HLCompilation compilation,
             HLMemberAccessOp expr,
@@ -21,7 +23,7 @@ namespace VisCPU.HL.Compiler
 
             if ( lType.IsPointer )
             {
-                tmpVar = lType.ResultAddress;
+                tmpVar = compilation.GetTempVarCopy(lType.ResultAddress);
             }
             else
             {
@@ -36,7 +38,7 @@ namespace VisCPU.HL.Compiler
                 compilation.ProgramCode.Add( $"DREF {tmpVar} {outputTarget.ResultAddress}" );
                 compilation.ReleaseTempVar( tmpVar );
 
-                return outputTarget.Reinterpret(true, true);
+                return outputTarget;
             }
 
             HLMemberDefinition mdef = lType.TypeDefinition.GetMember( expr.MemberName );

@@ -14,7 +14,7 @@ namespace VisCPU.HL.Compiler.Memory
                                         $"DREF {target.ResultAddress} {outputTarget.ResultAddress}; Dereference"
                                        );
 
-            return outputTarget;
+            return outputTarget.Cast(target.TypeDefinition);
         }
 
         public override ExpressionTarget ParseExpression(HLCompilation compilation, HLUnaryOp expr, ExpressionTarget outputTarget)
@@ -34,7 +34,7 @@ namespace VisCPU.HL.Compiler.Memory
                                         $"LOAD {outputTarget.ResultAddress} {target.ResultAddress}; Reference"
                                        );
 
-            return outputTarget;
+            return outputTarget.Cast(target.TypeDefinition);
         }
 
         public override ExpressionTarget ParseExpression(HLCompilation compilation, HLUnaryOp expr, ExpressionTarget outputTarget)
