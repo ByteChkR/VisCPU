@@ -1,4 +1,6 @@
-﻿namespace VisCPU
+﻿using VisCPU.Instructions;
+
+namespace VisCPU
 {
 
     public static class CPUSettings

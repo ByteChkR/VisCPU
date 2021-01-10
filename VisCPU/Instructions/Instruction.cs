@@ -2,7 +2,7 @@
 
 using VisCPU.Utility.SharedBase;
 
-namespace VisCPU
+namespace VisCPU.Instructions
 {
 
     public abstract class Instruction : VisBase

@@ -18,12 +18,11 @@ namespace VisCPU.HL.Compiler.Logic
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left
                                                        );
-            
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              compilation.GetTempVar(0),
+                                                                              compilation.GetTempVar( 0 ),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )
@@ -33,6 +32,7 @@ namespace VisCPU.HL.Compiler.Logic
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
             string label = compilation.GetUniqueName( "bexpr_and" );
+            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 0" );
             compilation.ProgramCode.Add( $"BEZ {target.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"BEZ {rTarget.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );

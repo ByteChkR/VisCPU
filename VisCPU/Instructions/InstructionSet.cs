@@ -5,7 +5,7 @@ using VisCPU.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
-namespace VisCPU
+namespace VisCPU.Instructions
 {
 
     public abstract class InstructionSet

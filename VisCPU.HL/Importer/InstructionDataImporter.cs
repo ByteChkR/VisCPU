@@ -5,6 +5,7 @@ using System.Text;
 
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
+using VisCPU.Instructions;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 

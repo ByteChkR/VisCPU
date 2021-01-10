@@ -27,11 +27,11 @@ namespace VisCPU.HL.Compiler.Special
                 {
                     compilation.ProgramCode.Add( "; Start IF" );
                 }
-                
+
                 ExpressionTarget exprTarget = compilation.Parse(
                                                                 expr.ConditionMap[i].Item1,
                                                                 new ExpressionTarget(
-                                                                     compilation.GetTempVar(0),
+                                                                     compilation.GetTempVar( 0 ),
                                                                      true,
                                                                      compilation.TypeSystem.GetType( "var" )
                                                                     )
@@ -56,7 +56,7 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 compilation.ProgramCode.Add( $"JMP {endLabel}" );
-                compilation.ReleaseTempVar(exprTarget.ResultAddress);
+                compilation.ReleaseTempVar( exprTarget.ResultAddress );
             }
 
             if ( expr.ElseBranch != null )

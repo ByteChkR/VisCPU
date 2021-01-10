@@ -5,13 +5,17 @@ using System.Linq;
 using System.Text;
 
 using VisCPU.HL.Compiler;
-using VisCPU.HL.Compiler.Bitwise;
 using VisCPU.HL.Compiler.Logic;
-using VisCPU.HL.Compiler.Math;
 using VisCPU.HL.Compiler.Math.Assignments;
+using VisCPU.HL.Compiler.Math.Atomic;
+using VisCPU.HL.Compiler.Math.Bitwise;
+using VisCPU.HL.Compiler.Math.Bitwise.Assignments;
+using VisCPU.HL.Compiler.Math.Full;
 using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.Compiler.Relational;
 using VisCPU.HL.Compiler.Special;
+using VisCPU.HL.Compiler.Types;
+using VisCPU.HL.Compiler.Variables;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Importer;
@@ -175,8 +179,6 @@ namespace VisCPU.HL
 
             ParseFunctionToken( tokens, hlpS );
             ParseTypeDefinitions( TypeSystem, hlpS, tokens );
-
-
 
             HLExpressionParser p = HLExpressionParser.Create( new HLExpressionReader( tokens ) );
             ProcessImports();
@@ -385,35 +387,37 @@ namespace VisCPU.HL
             }
         }
 
-        internal string GetTempVar(uint initValue)
+        internal string GetTempVar( uint initValue )
         {
-            VariableData tmp = GetFreeTempVar(initValue);
-            usedTempVars.Add(tmp.GetName());
-
-            return tmp.GetName();
-        }
-        internal string GetTempVarLoad(string initValue)
-        {
-            VariableData tmp = GetFreeTempVarLoad(initValue);
-            usedTempVars.Add(tmp.GetName());
-
-            return tmp.GetName();
-        }
-        internal string GetTempVarDref(string initValue)
-        {
-            VariableData tmp = GetFreeTempVarDref(initValue);
-            usedTempVars.Add(tmp.GetName());
-
-            return tmp.GetName();
-        }
-        internal string GetTempVarCopy(string initValue)
-        {
-            VariableData tmp = GetFreeTempVarCopy(initValue);
-            usedTempVars.Add(tmp.GetName());
+            VariableData tmp = GetFreeTempVar( initValue );
+            usedTempVars.Add( tmp.GetName() );
 
             return tmp.GetName();
         }
 
+        internal string GetTempVarCopy( string initValue )
+        {
+            VariableData tmp = GetFreeTempVarCopy( initValue );
+            usedTempVars.Add( tmp.GetName() );
+
+            return tmp.GetName();
+        }
+
+        internal string GetTempVarDref( string initValue )
+        {
+            VariableData tmp = GetFreeTempVarDref( initValue );
+            usedTempVars.Add( tmp.GetName() );
+
+            return tmp.GetName();
+        }
+
+        internal string GetTempVarLoad( string initValue )
+        {
+            VariableData tmp = GetFreeTempVarLoad( initValue );
+            usedTempVars.Add( tmp.GetName() );
+
+            return tmp.GetName();
+        }
 
         internal string GetUniqueName( string prefix = null )
         {
@@ -460,15 +464,15 @@ namespace VisCPU.HL
                                                    { HLTokenType.OpPlus, new AddExpressionCompiler() },
                                                    {
                                                        HLTokenType.OpMinus, new
-                                                           SubtractExpressionCompiler()
+                                                           SubExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpAsterisk, new
-                                                           MultiplyExpressionCompiler()
+                                                           MulExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpComparison, new
-                                                           EqualityComparisonCompiler()
+                                                           EqualityExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpLogicalOr, new
@@ -488,32 +492,28 @@ namespace VisCPU.HL
                                                    },
                                                    {
                                                        HLTokenType.OpPercent, new
-                                                           ModuloExpressionCompiler()
+                                                           ModExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpFwdSlash, new
-                                                           DivideExpressionCompiler()
+                                                           DivExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpCap, new
                                                            BitwiseXOrExpressionCompiler()
                                                    },
-                                                   { HLTokenType.OpLessThan, new LessComparisonCompiler() },
+                                                   { HLTokenType.OpLessThan, new LessThanExpressionCompiler() },
                                                    {
                                                        HLTokenType.OpGreaterThan, new
-                                                           GreaterComparisonCompiler()
+                                                           GreaterThanExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpLessOrEqual, new
-                                                           LessEqualComparisonCompiler()
+                                                           LessEqualExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpGreaterOrEqual, new
-                                                           GreaterEqualComparisonCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpFunctionDefinition, new
-                                                           MultiplyExpressionCompiler()
+                                                           GreaterEqualExpressionCompiler()
                                                    },
                                                    {
                                                        HLTokenType.OpShiftLeft, new
@@ -573,7 +573,7 @@ namespace VisCPU.HL
         {
             foreach ( HLExpression hlExpression in block )
             {
-                ReleaseTempVar(Parse(hlExpression).ResultAddress);
+                ReleaseTempVar( Parse( hlExpression ).ResultAddress );
             }
 
             StringBuilder sb = new StringBuilder();
@@ -761,69 +761,75 @@ namespace VisCPU.HL
             }
         }
 
-        private VariableData GetFreeTempVarCopy(string initValue)
+        private VariableData GetFreeTempVar( uint initValue )
         {
-            if (unusedTempVars.Count != 0)
+            if ( unusedTempVars.Count != 0 )
             {
                 string oldName = unusedTempVars.Dequeue();
-                ProgramCode.Add($"COPY {initValue} {oldName} ;Temp Var House-keeping");
+                ProgramCode.Add( $"LOAD {oldName} {initValue} ;Temp Var House-keeping" );
 
                 return VariableMap[oldName];
             }
 
-            string name = GetUniqueName("tmp");
+            string name = GetUniqueName( "tmp" );
 
-            ProgramCode.Add($"COPY {initValue} {name} ;Temp Var House-keeping");
-            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
-        }
-        private VariableData GetFreeTempVarLoad(string initValue)
-        {
-            if (unusedTempVars.Count != 0)
+            if ( initValue != 0 )
             {
-                string oldName = unusedTempVars.Dequeue();
-                ProgramCode.Add($"LOAD {oldName} {initValue} ;Temp Var House-keeping");
-
-                return VariableMap[oldName];
+                ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
             }
 
-            string name = GetUniqueName("tmp");
-
-            ProgramCode.Add($"LOAD {name} {initValue} ;Temp Var House-keeping");
-            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
-        }
-        private VariableData GetFreeTempVarDref(string initValue)
-        {
-            if (unusedTempVars.Count != 0)
-            {
-                string oldName = unusedTempVars.Dequeue();
-                ProgramCode.Add($"DREF {initValue} {oldName} ;Temp Var House-keeping");
-
-                return VariableMap[oldName];
-            }
-
-            string name = GetUniqueName("tmp");
-
-            ProgramCode.Add($"DREF {initValue} {name} ;Temp Var House-keeping");
-            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ) );
         }
 
-        private VariableData GetFreeTempVar(uint initValue)
+        private VariableData GetFreeTempVarCopy( string initValue )
         {
-            if (unusedTempVars.Count != 0)
+            if ( unusedTempVars.Count != 0 )
             {
                 string oldName = unusedTempVars.Dequeue();
-                ProgramCode.Add($"LOAD {oldName} {initValue} ;Temp Var House-keeping");
+                ProgramCode.Add( $"COPY {initValue} {oldName} ;Temp Var House-keeping" );
 
                 return VariableMap[oldName];
             }
 
-            string name = GetUniqueName("tmp");
+            string name = GetUniqueName( "tmp" );
 
-            if (initValue != 0)
+            ProgramCode.Add( $"COPY {initValue} {name} ;Temp Var House-keeping" );
+
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ) );
+        }
+
+        private VariableData GetFreeTempVarDref( string initValue )
+        {
+            if ( unusedTempVars.Count != 0 )
             {
-                ProgramCode.Add($"LOAD {name} {initValue} ;Temp Var House-keeping");
+                string oldName = unusedTempVars.Dequeue();
+                ProgramCode.Add( $"DREF {initValue} {oldName} ;Temp Var House-keeping" );
+
+                return VariableMap[oldName];
             }
-            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"));
+
+            string name = GetUniqueName( "tmp" );
+
+            ProgramCode.Add( $"DREF {initValue} {name} ;Temp Var House-keeping" );
+
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ) );
+        }
+
+        private VariableData GetFreeTempVarLoad( string initValue )
+        {
+            if ( unusedTempVars.Count != 0 )
+            {
+                string oldName = unusedTempVars.Dequeue();
+                ProgramCode.Add( $"LOAD {oldName} {initValue} ;Temp Var House-keeping" );
+
+                return VariableMap[oldName];
+            }
+
+            string name = GetUniqueName( "tmp" );
+
+            ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
+
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ) );
         }
 
         private string GetPrefix()

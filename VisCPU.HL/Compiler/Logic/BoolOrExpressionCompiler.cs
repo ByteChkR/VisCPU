@@ -18,12 +18,11 @@ namespace VisCPU.HL.Compiler.Logic
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left
                                                        );
-            
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right,
                                                          new ExpressionTarget(
-                                                                              compilation.GetTempVar(0),
+                                                                              compilation.GetTempVar( 0 ),
                                                                               true,
                                                                               compilation.TypeSystem.GetType( "var" )
                                                                              )

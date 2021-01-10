@@ -116,7 +116,6 @@ namespace VisCPU.HL.Parser
         OpShiftLeftAssign,
         OpShiftRightAssign,
 
-
         OpNumSign,
 
         //End Of File

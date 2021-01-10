@@ -23,10 +23,10 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate(HLExpressionParser parser, HLExpression currentNode)
+        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
         {
             return parser.CurrentToken.Type == HLTokenType.OpLessThan &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpLessThan || 
+                   parser.Reader.PeekNext().Type == HLTokenType.OpLessThan ||
                    parser.CurrentToken.Type == HLTokenType.OpGreaterThan &&
                    parser.Reader.PeekNext().Type == HLTokenType.OpGreaterThan;
         }
@@ -37,24 +37,25 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create(HLExpressionParser parser, HLExpression currentNode)
+        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             HLTokenType type = parser.CurrentToken.Type;
-            parser.Eat(type);
-            parser.Eat(type);
+            parser.Eat( type );
+            parser.Eat( type );
 
             if ( type == HLTokenType.OpLessThan )
             {
                 type = HLTokenType.OpShiftLeft;
             }
-            else if (type == HLTokenType.OpGreaterThan)
+            else if ( type == HLTokenType.OpGreaterThan )
             {
                 type = HLTokenType.OpShiftRight;
             }
+
             return new HLBinaryOp(
                                   currentNode,
                                   type,
-                                  parser.ParseExpr(0)
+                                  parser.ParseExpr( 0 )
                                  );
         }
 

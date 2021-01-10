@@ -6,7 +6,7 @@
 
         #region Public
 
-        public VarTypeDefinition() : base("var")
+        public VarTypeDefinition() : base( "var" )
         {
         }
 
@@ -18,7 +18,5 @@
         #endregion
 
     }
-
-
 
 }

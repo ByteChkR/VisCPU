@@ -1,4 +1,5 @@
-﻿using VisCPU.Utility.Events;
+﻿using VisCPU.Instructions;
+using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
 namespace VisCPU.Events

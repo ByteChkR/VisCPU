@@ -36,7 +36,12 @@ namespace VisCPU.HL.Compiler
                 return this;
             }
 
-            ExpressionTarget tmpVal = new ExpressionTarget( c.GetTempVarLoad(ResultAddress), true, TypeDefinition, IsPointer );
+            ExpressionTarget tmpVal = new ExpressionTarget(
+                                                           c.GetTempVarLoad( ResultAddress ),
+                                                           true,
+                                                           TypeDefinition,
+                                                           IsPointer
+                                                          );
 
             return tmpVal;
         }
@@ -53,7 +58,10 @@ namespace VisCPU.HL.Compiler
             return target;
         }
 
-        public ExpressionTarget CopyIfNotNull( HLCompilation compilation, ExpressionTarget target, bool releaseSource = false )
+        public ExpressionTarget CopyIfNotNull(
+            HLCompilation compilation,
+            ExpressionTarget target,
+            bool releaseSource = false )
         {
             if ( target.ResultAddress == null )
             {
