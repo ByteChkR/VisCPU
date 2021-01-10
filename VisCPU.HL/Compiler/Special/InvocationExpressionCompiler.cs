@@ -1,12 +1,9 @@
 ﻿using System.Linq;
 
 using VisCPU.HL.Compiler.Events;
-using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.DataTypes;
-using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
-using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
@@ -15,150 +12,17 @@ namespace VisCPU.HL.Compiler.Special
 
     public class InvocationExpressionCompiler : HLExpressionCompiler < HLInvocationOp >
     {
+        private readonly CompiletimeFunctionCompilerCollection ctFuncCollection = new CompiletimeFunctionCompilerCollection();
 
         #region Public
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLInvocationOp expr )
         {
             string target = expr.Left.ToString();
-
-            if ( target == "ptr_of" )
+            
+            if ( ctFuncCollection.IsCompiletimeFunction( target ) )
             {
-                ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
-
-                ExpressionTarget ret = ReferenceExpressionCompiler.Emit(
-                                                                        compilation,
-                                                                        et,
-                                                                        new ExpressionTarget(
-                                                                             compilation.GetTempVar( 0 ),
-                                                                             true,
-                                                                             compilation.TypeSystem.GetType( "var" )
-                                                                            )
-                                                                       );
-
-                compilation.ReleaseTempVar( et.ResultAddress );
-
-                return ret;
-            }
-
-            if ( target == "static_cast" )
-            {
-                if ( expr.ParameterList.Length != 2 )
-                {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               "Invalid Arguments. Expected static_cast(variable, type)"
-                                                              )
-                                                         );
-                }
-
-                return compilation.Parse( expr.ParameterList[0] ).
-                                   Cast( compilation.TypeSystem.GetType( expr.ParameterList[1].ToString() ) );
-            }
-
-            if ( target == "offset_of" )
-            {
-                if ( expr.ParameterList.Length != 2 )
-                {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               "Invalid Arguments. Expected offset_of(type, member)"
-                                                              )
-                                                         );
-                }
-
-                HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
-                uint off = type.GetOffset( expr.ParameterList[1].ToString() );
-                string v = compilation.GetTempVar( off );
-
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
-            }
-
-            if ( target == "size_of" )
-            {
-                if ( expr.ParameterList.Length != 1 )
-                {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               "Invalid Arguments. Expected size_of(variable)"
-                                                              )
-                                                         );
-                }
-
-                if ( compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
-                {
-                    string v = compilation.GetTempVar(
-                                                      compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
-                                                     );
-
-                    return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
-                }
-
-                if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
-                {
-                    string v = compilation.GetTempVar(
-                                                      compilation.TypeSystem.
-                                                                  GetType( expr.ParameterList[0].ToString() ).
-                                                                  GetSize()
-                                                     );
-
-                    return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
-                }
-
-                EventManager < ErrorEvent >.SendEvent(
-                                                      new HLVariableNotFoundEvent(
-                                                           expr.ParameterList[0].ToString(),
-                                                           false
-                                                          )
-                                                     );
-
-                return new ExpressionTarget();
-            }
-
-            if ( target == "string" )
-            {
-                if ( expr.ParameterList.Length != 2 )
-                {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               "Invalid Arguments. Expected string(varname, string value)"
-                                                              )
-                                                         );
-                }
-
-                string varName = expr.ParameterList[0].ToString();
-
-                string content = expr.ParameterList[1].
-                                      GetChildren().
-                                      Select( x => x.ToString() ).
-                                      Aggregate( ( input, elem ) => input + ' ' + elem );
-
-                compilation.CreateVariable( varName, content, compilation.TypeSystem.GetType( "var" ) );
-
-                return new ExpressionTarget(
-                                            compilation.GetFinalName( varName ),
-                                            true,
-                                            compilation.TypeSystem.GetType( "var" )
-                                           );
-            }
-
-            if ( target == "val_of" )
-            {
-                ExpressionTarget t = compilation.Parse( expr.ParameterList.First() );
-
-                ExpressionTarget ret = ReferenceExpressionCompiler.Emit(
-                                                                        compilation,
-                                                                        t,
-                                                                        new ExpressionTarget(
-                                                                             compilation.GetTempVar( 0 ),
-                                                                             true,
-                                                                             compilation.TypeSystem.GetType( "var" )
-                                                                            )
-                                                                       );
-
-                compilation.ReleaseTempVar( t.ResultAddress );
-
-                return ret;
+                return ctFuncCollection.Compile( target, compilation, expr );
             }
 
             bool isInternalFunc = compilation.FunctionMap.ContainsKey( target );
@@ -201,21 +65,6 @@ namespace VisCPU.HL.Compiler.Special
                     compilation.ProgramCode.Add(
                                                 $"PUSH {arg.ResultAddress}; Push Param {parameter}"
                                                );
-
-                    //if ( arg.TypeDefinition.Name == "var" || arg.TypeDefinition.Name == "var[]" )
-                    //{
-
-                    //}
-                    //else
-                    //{
-                    //    string v = compilation.GetTempVarLoad(arg.ResultAddress);
-
-                    //    compilation.ProgramCode.Add(
-                    //                                $"PUSH {v}; Push Param {parameter}"
-                    //                               );
-
-                    //    compilation.ReleaseTempVar( v );
-                    //}
 
                     compilation.ReleaseTempVar( arg.ResultAddress );
                 }

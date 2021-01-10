@@ -40,6 +40,161 @@ using VisCPU.Utility.UriResolvers;
 namespace VisCPU.HL
 {
 
+    public class HLCompilerCollection
+    {
+        private Dictionary<Type, IHLExpressionCompiler> TypeMap;
+
+        public HLCompilerCollection(HLTypeSystem ts)
+        {
+            TypeMap = new Dictionary<Type, IHLExpressionCompiler>
+                      {
+                          { typeof( HLMemberAccessOp ), new MemberAccessCompiler() },
+                          { typeof( HLVarDefOperand ), new VariableDefinitionExpressionCompiler( ts ) },
+                          { typeof( HLArrayAccessorOp ), new ArrayAccessCompiler() },
+                          { typeof( HLVarOperand ), new VarExpressionCompiler() },
+                          { typeof( HLValueOperand ), new ConstExpressionCompiler() },
+                          { typeof( HLInvocationOp ), new InvocationExpressionCompiler() },
+                          { typeof( HLFuncDefOperand ), new FunctionDefinitionCompiler() },
+                          { typeof( HLIfOp ), new IfBlockCompiler() },
+                          { typeof( HLReturnOp ), new ReturnExpressionCompiler() },
+                          { typeof( HLWhileOp ), new WhileExpressionCompiler() },
+                          {
+                              typeof( HLUnaryOp ), new OperatorCompilerCollection < HLUnaryOp
+                              >(
+                                new Dictionary < HLTokenType,
+                                    HLExpressionCompiler < HLUnaryOp > >
+                                {
+                                    { HLTokenType.OpBang, new BoolNotExpressionCompiler() },
+                                    { HLTokenType.OpUnaryIncrement, new IncrementExpressionCompiler() },
+                                    { HLTokenType.OpUnaryDecrement, new DecrementExpressionCompiler() },
+                                    { HLTokenType.OpReference, new ReferenceExpressionCompiler() },
+                                    { HLTokenType.OpDeReference, new DereferenceExpressionCompiler() },
+                                    { HLTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },
+                                }
+                               )
+                          },
+                          {
+                              typeof( HLBinaryOp ), new OperatorCompilerCollection <
+                                  HLBinaryOp >(
+                                               new Dictionary < HLTokenType,
+                                                   HLExpressionCompiler < HLBinaryOp
+                                                   > >
+                                               {
+                                                   { HLTokenType.OpEquality, new EqualExpressionCompiler() },
+                                                   { HLTokenType.OpPlus, new AddExpressionCompiler() },
+                                                   {
+                                                       HLTokenType.OpMinus, new
+                                                           SubExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpAsterisk, new
+                                                           MulExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpComparison, new
+                                                           EqualityExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpLogicalOr, new
+                                                           BoolOrExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpLogicalAnd, new
+                                                           BoolAndExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpPipe, new
+                                                           BitwiseOrExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpAnd, new
+                                                           BitwiseAndExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpPercent, new
+                                                           ModExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpFwdSlash, new
+                                                           DivExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpCap, new
+                                                           BitwiseXOrExpressionCompiler()
+                                                   },
+                                                   { HLTokenType.OpLessThan, new LessThanExpressionCompiler() },
+                                                   {
+                                                       HLTokenType.OpGreaterThan, new
+                                                           GreaterThanExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpLessOrEqual, new
+                                                           LessEqualExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpGreaterOrEqual, new
+                                                           GreaterEqualExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftLeft, new
+                                                           BitShiftLeftExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftRight, new
+                                                           BitShiftRightExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpSumAssign, new
+                                                           AddAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpDifAssign, new
+                                                           SubAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpProdAssign, new
+                                                           MulAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpQuotAssign, new
+                                                           DivAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpRemAssign, new
+                                                           ModAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpOrAssign, new
+                                                           OrAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpAndAssign, new
+                                                           AndAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpXOrAssign, new
+                                                           XOrAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftLeftAssign, new
+                                                           ShiftLeftAssignExpressionCompiler()
+                                                   },
+                                                   {
+                                                       HLTokenType.OpShiftRightAssign, new
+                                                           ShiftRightAssignExpressionCompiler()
+                                                   }
+                                               }
+                                              )
+                          }
+                      };
+        }
+
+        public bool ContainsCompiler(Type t) => TypeMap.ContainsKey(t);
+
+        internal IHLExpressionCompiler Get( Type t ) => TypeMap[t];
+
+    }
+
     public class HLCompilation : VisBase
     {
 
@@ -53,7 +208,7 @@ namespace VisCPU.HL
         internal readonly string OriginalText;
         internal readonly List < string > ProgramCode = new List < string >();
 
-        internal Dictionary < Type, IHLExpressionCompiler > TypeMap;
+        internal HLCompilerCollection TypeMap;
 
         private static uint counter;
         private readonly string Directory;
@@ -92,7 +247,7 @@ namespace VisCPU.HL
             this.dataStore = dataStore;
             OriginalText = originalText;
             Directory = directory;
-            InitializeTypeMap( TypeSystem );
+            TypeMap = new HLCompilerCollection(TypeSystem);
         }
 
         public HLCompilation( HLCompilation parent, string id )
@@ -108,7 +263,7 @@ namespace VisCPU.HL
             IncludedFiles = new List < string >( parent.IncludedFiles );
             TypeSystem = parent.TypeSystem;
             this.parent = parent;
-            InitializeTypeMap( TypeSystem );
+            TypeMap = new HLCompilerCollection(TypeSystem);
         }
 
         public static void ResetCounter()
@@ -424,156 +579,15 @@ namespace VisCPU.HL
             return ( prefix == null ? "" : prefix + "_" ) + counter++;
         }
 
-        internal void InitializeTypeMap( HLTypeSystem ts )
-        {
-            TypeMap = new Dictionary < Type, IHLExpressionCompiler >
-                      {
-                          { typeof( HLMemberAccessOp ), new MemberAccessCompiler() },
-                          { typeof( HLVarDefOperand ), new VariableDefinitionExpressionCompiler( ts ) },
-                          { typeof( HLArrayAccessorOp ), new ArrayAccessCompiler() },
-                          { typeof( HLVarOperand ), new VarExpressionCompiler() },
-                          { typeof( HLValueOperand ), new ConstExpressionCompiler() },
-                          { typeof( HLInvocationOp ), new InvocationExpressionCompiler() },
-                          { typeof( HLFuncDefOperand ), new FunctionDefinitionCompiler() },
-                          { typeof( HLIfOp ), new IfBlockCompiler() },
-                          { typeof( HLReturnOp ), new ReturnExpressionCompiler() },
-                          { typeof( HLWhileOp ), new WhileExpressionCompiler() },
-                          {
-                              typeof( HLUnaryOp ), new OperatorCompilerCollection < HLUnaryOp
-                              >(
-                                new Dictionary < HLTokenType,
-                                    HLExpressionCompiler < HLUnaryOp > >
-                                {
-                                    { HLTokenType.OpBang, new BoolNotExpressionCompiler() },
-                                    { HLTokenType.OpUnaryIncrement, new IncrementExpressionCompiler() },
-                                    { HLTokenType.OpUnaryDecrement, new DecrementExpressionCompiler() },
-                                    { HLTokenType.OpReference, new ReferenceExpressionCompiler() },
-                                    { HLTokenType.OpDeReference, new DereferenceExpressionCompiler() },
-                                    { HLTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },
-                                }
-                               )
-                          },
-                          {
-                              typeof( HLBinaryOp ), new OperatorCompilerCollection <
-                                  HLBinaryOp >(
-                                               new Dictionary < HLTokenType,
-                                                   HLExpressionCompiler < HLBinaryOp
-                                                   > >
-                                               {
-                                                   { HLTokenType.OpEquality, new EqualExpressionCompiler() },
-                                                   { HLTokenType.OpPlus, new AddExpressionCompiler() },
-                                                   {
-                                                       HLTokenType.OpMinus, new
-                                                           SubExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpAsterisk, new
-                                                           MulExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpComparison, new
-                                                           EqualityExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpLogicalOr, new
-                                                           BoolOrExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpLogicalAnd, new
-                                                           BoolAndExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpPipe, new
-                                                           BitwiseOrExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpAnd, new
-                                                           BitwiseAndExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpPercent, new
-                                                           ModExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpFwdSlash, new
-                                                           DivExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpCap, new
-                                                           BitwiseXOrExpressionCompiler()
-                                                   },
-                                                   { HLTokenType.OpLessThan, new LessThanExpressionCompiler() },
-                                                   {
-                                                       HLTokenType.OpGreaterThan, new
-                                                           GreaterThanExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpLessOrEqual, new
-                                                           LessEqualExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpGreaterOrEqual, new
-                                                           GreaterEqualExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftLeft, new
-                                                           BitShiftLeftExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftRight, new
-                                                           BitShiftRightExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpSumAssign, new
-                                                           AddAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpDifAssign, new
-                                                           SubAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpProdAssign, new
-                                                           MulAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpQuotAssign, new
-                                                           DivAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpRemAssign, new
-                                                           ModAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpOrAssign, new
-                                                           OrAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpAndAssign, new
-                                                           AndAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpXOrAssign, new
-                                                           XOrAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftLeftAssign, new
-                                                           ShiftLeftAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftRightAssign, new
-                                                           ShiftRightAssignExpressionCompiler()
-                                                   }
-                                               }
-                                              )
-                          }
-                      };
-        }
+        
 
         internal string Parse( HLExpression[] block, bool printHead = true, string appendAfterProg = "HLT" )
         {
+            
             foreach ( HLExpression hlExpression in block )
             {
-                ReleaseTempVar( Parse( hlExpression ).ResultAddress );
+                ExpressionTarget c= Parse( hlExpression, new ExpressionTarget());
+                ReleaseTempVar(c.ResultAddress);
             }
 
             StringBuilder sb = new StringBuilder();
@@ -656,13 +670,13 @@ namespace VisCPU.HL
             return ParsedText = sb.ToString();
         }
 
-        internal ExpressionTarget Parse( HLExpression expr, ExpressionTarget outputTarget = default )
+        internal ExpressionTarget Parse( HLExpression expr, ExpressionTarget outputTarget = default)
         {
             Type t = expr.GetType();
 
-            if ( TypeMap.ContainsKey( t ) )
+            if ( TypeMap.ContainsCompiler( t ) )
             {
-                return TypeMap[t].Parse( this, expr, outputTarget );
+                return TypeMap.Get(t).Parse( this, expr, outputTarget );
             }
 
             EventManager < ErrorEvent >.SendEvent( new ExpressionCompilerNotFoundEvent( expr ) );
