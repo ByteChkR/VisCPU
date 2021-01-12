@@ -2,6 +2,7 @@
 using System.Linq;
 
 using VisCPU.Console.Core.Settings;
+using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -14,9 +15,9 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public override void Run( IEnumerable < string > args )
         {
-            OriginSettings s = SettingsSystem.GetSettings < OriginSettings >();
+            ModuleResolverSettings s = ModuleResolverSettings.Create();
             string name = args.First();
-            s.origins.Remove( name );
+            s.ModuleOrigins.Remove( name );
             SettingsSystem.SaveSettings( s );
         }
 

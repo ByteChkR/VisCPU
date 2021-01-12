@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using VisCPU.HL.Modules.Data;
@@ -12,34 +13,60 @@ namespace VisCPU.HL.Modules.Resolvers
     {
 
         public static ModuleResolverSettings ResolverSettings;
-        public static ModuleManager Manager;
+
+        private static Dictionary<string, ModuleManager> Managers;
+        //public static ModuleManager Manager;
 
         #region Public
 
+        public static IEnumerable<KeyValuePair<string, ModuleManager>> GetManagers() => Managers;
+
         public static void Initialize()
         {
-            if ( ResolverSettings == null && Manager == null )
+            if (ResolverSettings == null && Managers == null)
             {
-                Directory.CreateDirectory( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config/module" ) );
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config/module"));
 
-                SettingsSystem.RegisterDefaultLoader(
-                                                     new JSONSettingsLoader(),
-                                                     Path.Combine(
-                                                                  AppDomain.CurrentDomain.BaseDirectory,
-                                                                  "config/module/module_resolver.json"
-                                                                 ),
-                                                     new ModuleResolverSettings()
-                                                    );
+                
 
-                ResolverSettings = SettingsSystem.GetSettings < ModuleResolverSettings >();
-                Manager = new LocalModuleManager( ResolverSettings.LocalModuleRoot );
+                ResolverSettings = ModuleResolverSettings.Create();
+                Managers = new Dictionary<string, ModuleManager>();
+
+                foreach (KeyValuePair<string, string> origin in ResolverSettings.ModuleOrigins)
+                {
+                    if (Uri.TryCreate(origin.Value, UriKind.Absolute, out Uri u))
+                    {
+                        if (u.Scheme == "http" || u.Scheme == "https")
+                            Managers.Add(origin.Key, new HttpModuleManager(origin.Key, u.OriginalString));
+                        else if (u.Scheme == "dev")
+                        {
+                            Managers.Add(origin.Key, new TCPUploadModuleManager(u.OriginalString));
+                        }
+                        else
+                        {
+                            Managers.Add(origin.Key, new LocalModuleManager(origin.Value));
+                        }
+                    }
+                    else
+                    {
+                        Managers.Add(origin.Key, new LocalModuleManager(origin.Value));
+                    }
+                }
+
             }
         }
 
-        public static ModuleTarget Resolve( ModuleDependency dependency )
+        public static ModuleManager GetManager(string name) => Managers[name];
+
+        public static ModuleTarget Resolve(string repository, ModuleDependency dependency)
         {
-            return Manager.GetPackage( dependency.ModuleName ).
-                           GetInstallTarget( dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion );
+            return Managers[repository].GetPackage(dependency.ModuleName).
+                                        GetInstallTarget(dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion);
+        }
+        public static ModuleTarget Resolve(ModuleManager manager, ModuleDependency dependency)
+        {
+            return manager.GetPackage(dependency.ModuleName).
+                                        GetInstallTarget(dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion);
         }
 
         #endregion

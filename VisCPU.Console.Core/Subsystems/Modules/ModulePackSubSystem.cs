@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Modules
@@ -13,10 +15,101 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
     public class ModulePackSubSystem : ConsoleSubsystem
     {
+        public Version ChangeVersion(Version version, string changeStr)
+        {
+            string[] subVersions = changeStr.Split('.');
+            int[] wrapValues = { ushort.MaxValue, 9, 99, ushort.MaxValue };
+            int[] versions = { version.Major, version.Minor, version.Build, version.Revision };
+            for (int i = 4 - 1; i >= 0; i--)
+            {
+                string current = subVersions[i];
+                if (current.StartsWith("("))
+                {
+                    if (i == 0)
+                    {
+                        continue; //Can not wrap the last digit
+                    }
+
+                    int j = 0;
+                    for (; j < current.Length; j++)
+                    {
+                        if (current[j] == ')')
+                        {
+                            break;
+                        }
+                    }
+
+                    if (j == current.Length)
+                    {
+                        Log($"Can not parse version ID: {i}({current})");
+                        continue; //Broken. No number left. better ignore
+                    }
+
+                    string max = current.Substring(1, j - 1);
+                    if (int.TryParse(max, out int newMax))
+                    {
+                        wrapValues[i] = newMax;
+                    }
+
+                    current = current.Remove(0, j + 1);
+                }
+
+                if (i != 0) //Check if we wrapped
+                {
+                    if (versions[i] >= wrapValues[i])
+                    {
+                        versions[i] = 0;
+                        versions[i - 1]++;
+                    }
+                }
+
+                if (current == "+")
+                {
+                    versions[i]++;
+                }
+                else if (current == "-" && versions[i] != 0)
+                {
+                    versions[i]--;
+                }
+                else if (current.ToLower(CultureInfo.InvariantCulture) == "x")
+                {
+                }
+                else if (current.StartsWith("{") && current.EndsWith("}"))
+                {
+                    string format = current.Remove(current.Length - 1, 1).Remove(0, 1);
+
+                    string value = DateTime.Now.ToString(format);
+
+                    if (long.TryParse(value, out long newValue))
+                    {
+                        versions[i] = (int)(newValue % ushort.MaxValue);
+                    }
+                    else
+                    {
+                        Log("Can not Parse: " + value + " to INT");
+                    }
+                }
+                else if (int.TryParse(current, out int v))
+                {
+                    versions[i] = v;
+                }
+            }
+
+            return new Version(versions[0], versions[1] < 0 ? 0 : versions[1], versions[2] < 0 ? 0 : versions[2], versions[3] < 0 ? 0 : versions[3]);
+        }
+
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
+
+        private class PackOptions
+        {
+            [Argument(Name="version")]
+            public string VersionString = "X.X.X.+";
+
+
+        }
 
         public override void Run( IEnumerable < string > args )
         {
@@ -37,12 +130,11 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
             Version v = Version.Parse( t.ModuleVersion );
 
-            t.ModuleVersion = new Version(
-                                          v.Major < 0 ? 0 : v.Major,
-                                          v.Minor < 0 ? 0 : v.Minor + 1,
-                                          v.Build < 0 ? 0 : v.Build,
-                                          v.Revision < 0 ? 0 : v.Revision
-                                         ).ToString();
+            PackOptions po = new PackOptions();
+            ArgumentSyntaxParser.Parse( a, po );
+
+
+            t.ModuleVersion = ChangeVersion(v, po.VersionString).ToString();
 
             string temp = Path.Combine(
                                        Path.GetDirectoryName( Directory.GetCurrentDirectory() ),

@@ -3,6 +3,7 @@
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Modules
@@ -17,14 +18,12 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         public override void Run( IEnumerable < string > args )
         {
-            OriginSettings s = OriginSettings.Create();
 
-            foreach ( KeyValuePair < string, string > keyValuePair in s.origins )
+            foreach ( KeyValuePair < string, ModuleManager > keyValuePair in ModuleResolver.GetManagers() )
             {
-                LocalModuleManager lm = new LocalModuleManager( keyValuePair.Value );
-                Log( $"{keyValuePair.Key} : {keyValuePair.Value}" );
+                Log( $"{keyValuePair.Key} : {keyValuePair.Value.ModuleRoot}" );
 
-                foreach ( ModulePackage modulePackage in lm.GetPackages() )
+                foreach ( ModulePackage modulePackage in keyValuePair.Value.GetPackages() )
                 {
                     Log( $"\t{modulePackage.ModuleName}" );
 

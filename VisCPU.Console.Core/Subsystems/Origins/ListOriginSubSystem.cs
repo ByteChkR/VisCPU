@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using VisCPU.Console.Core.Settings;
+using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -13,9 +14,9 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public override void Run( IEnumerable < string > args )
         {
-            OriginSettings s = SettingsSystem.GetSettings < OriginSettings >();
+            ModuleResolverSettings s = ModuleResolverSettings.Create();
 
-            foreach ( KeyValuePair < string, string > keyValuePair in s.origins )
+            foreach ( KeyValuePair < string, string > keyValuePair in s.ModuleOrigins )
             {
                 Log( $"{keyValuePair.Key} : {keyValuePair.Value}" );
             }

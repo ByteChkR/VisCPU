@@ -80,7 +80,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             Directory.CreateDirectory( data );
             File.Copy( moduleDataPath, GetTargetDataUri( target ) );
             SaveModuleTarget( target, GetTargetInfoUri( package, target.ModuleVersion ) );
-            SavePackageList();
+            SavePackageList(packageList);
         }
 
         public override void Get( ModuleTarget target, string targetDir )
@@ -96,7 +96,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             foreach ( ModuleDependency targetDependency in target.Dependencies )
             {
                 Get(
-                    ModuleResolver.Resolve( targetDependency ),
+                    ModuleResolver.Resolve(this, targetDependency ),
                     Path.Combine( targetDir, targetDependency.ModuleName )
                    );
             }
@@ -142,7 +142,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             ModulePackage p = GetPackage( moduleName );
             Directory.Delete( GetModulePackagePath( p ), true );
             packageList.Remove( p );
-            SavePackageList();
+            SavePackageList(packageList);
         }
 
         public override void RemoveTarget( string moduleName, string moduleVersion )
@@ -157,7 +157,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             }
 
             p.ModuleVersions.RemoveAll( x => x == moduleVersion );
-            SavePackageList();
+            SavePackageList(packageList);
         }
 
         public override void Restore( ModuleTarget target, string rootDir )
@@ -165,7 +165,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             foreach ( ModuleDependency targetDependency in target.Dependencies )
             {
                 Get(
-                    ModuleResolver.Resolve( targetDependency ),
+                    ModuleResolver.Resolve(this, targetDependency ),
                     Path.Combine( rootDir, targetDependency.ModuleName )
                    );
             }
@@ -174,19 +174,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         #endregion
 
         #region Private
-
-        private void SavePackageList()
-        {
-            string modListPath = Path.Combine(
-                                              ModuleRoot.OriginalString,
-                                              MODULE_LIST
-                                             );
-
-            File.WriteAllText(
-                              modListPath,
-                              JsonConvert.SerializeObject( packageList, Formatting.Indented )
-                             );
-        }
+        
 
         #endregion
 

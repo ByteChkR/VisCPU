@@ -18,7 +18,6 @@ namespace VisCPU.Console.Core
         public override void Run( IEnumerable < string > args )
         {
             CLISettings s = CLISettings.Create();
-            OriginSettings os = OriginSettings.Create();
             ArgumentSyntaxParser.Parse( args.ToArray(), s );
             Dictionary < string, ConsoleSubsystem > ss = SubSystems;
             ss["help"] = new HelpSubSystem( this );

@@ -7,12 +7,15 @@ using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Modules
 {
 
-    public class ModuleUpdateLocalSubSystem : ConsoleSubsystem
+    public class ModulePublishLocalSubSystem : ConsoleSubsystem
     {
+
+        protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
 
@@ -20,8 +23,10 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         {
             string[] a = args.ToArray();
 
-            string root = a.Length != 0
-                              ? Path.GetFullPath( a[0] )
+            string repo = a[0];
+
+            string root = a.Length > 1
+                              ? Path.GetFullPath( a[1] )
                               : Directory.GetCurrentDirectory();
 
             string src = Path.Combine( root, "build", "module.json" );
@@ -35,7 +40,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
             ModuleTarget t = ModuleManager.LoadModuleTarget( src );
 
-            ModuleResolver.Manager.AddPackage(
+            ModuleResolver.GetManager(repo).AddPackage(
                                               t,
                                               Path.Combine( root, "build", "module.zip" )
                                              );
