@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 
@@ -16,7 +18,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
 
         public override void Run(IEnumerable<string> args)
         {
-            UploadServer server = new UploadServer( ModuleResolver.GetManager(args.First()), "cache/upload_server" );
+            UploadServer server = new UploadServer( ModuleResolver.GetManager(args.First()), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache/upload_server"));
             Thread t = new Thread( server.ServerLoop );
             t.Start();
 
