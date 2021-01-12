@@ -16,7 +16,7 @@
 
         public override void Process( CPU cpu )
         {
-            Log( cpu, "No Operation" );
+            Log( "No Operation" );
         }
 
         #endregion

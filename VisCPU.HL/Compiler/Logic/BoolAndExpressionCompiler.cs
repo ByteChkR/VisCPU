@@ -17,16 +17,11 @@ namespace VisCPU.HL.Compiler.Logic
         {
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left
-                                                       );
+                                                       ).MakeAddress(compilation);
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right,
-                                                         new ExpressionTarget(
-                                                                              compilation.GetTempVar( 0 ),
-                                                                              true,
-                                                                              compilation.TypeSystem.GetType( "var" )
-                                                                             )
-                                                        );
+                                                         expr.Right
+                                                        ).MakeAddress(compilation);
 
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value

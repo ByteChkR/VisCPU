@@ -23,11 +23,7 @@ namespace VisCPU.Instructions.Math
             uint a = cpu.MemoryBus.Read( addressA ); //Read Value From RAM
 
             uint result = a + 1; //Calculate Value
-
-            Log(
-                cpu,
-                $"0x{Convert.ToString( addressA, 16 )}({Convert.ToString( a, 16 )}) + (1) = 0x{Convert.ToString( addressA, 16 )}({Convert.ToString( result, 16 )})"
-               );
+            
 
             cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }

@@ -248,7 +248,7 @@ namespace VisCPU.Compiler.Compiler
                                                             )
                                                );
 
-                    Log( $"Including file: {content.GetValue()}" );
+                    Log( "Including file: {0}", content.GetValue());
                     FileReferences.Add( new FileReference( c, linkerArgs ) );
                     Tokens.RemoveAt( i );
                 }

@@ -24,11 +24,7 @@ namespace VisCPU.Instructions.Memory
             uint addressDst = cpu.MemoryBus.Read( arg1 );
 
             uint result = cpu.MemoryBus.Read( addressSrc );
-
-            Log(
-                cpu,
-                $"0x{Convert.ToString( addressSrc, 16 )}({Convert.ToString( result, 16 )}) => 0x{Convert.ToString( addressDst, 16 )}"
-               );
+            
 
             cpu.MemoryBus.Write( addressDst, result ); //Write back Result
         }

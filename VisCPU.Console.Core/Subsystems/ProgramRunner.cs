@@ -5,6 +5,7 @@ using System.Linq;
 
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
+using VisCPU.Peripherals.Benchmarking;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.HostFS;
 using VisCPU.Peripherals.Memory;
@@ -77,8 +78,9 @@ namespace VisCPU.Console.Core.Subsystems
                     new ConsoleOutInterface();
 
                 HostFileSystem hostFS = new HostFileSystem();
+                BenchmarkDevice benchDev = new BenchmarkDevice();
 
-                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS );
+                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS, benchDev);
 
                 CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );

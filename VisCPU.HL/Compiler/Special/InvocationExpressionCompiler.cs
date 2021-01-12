@@ -54,13 +54,8 @@ namespace VisCPU.HL.Compiler.Special
                 foreach ( HLExpression parameter in expr.ParameterList )
                 {
                     ExpressionTarget arg = compilation.Parse(
-                                                             parameter,
-                                                             new ExpressionTarget(
-                                                                  compilation.GetTempVar( 0 ),
-                                                                  true,
-                                                                  compilation.TypeSystem.GetType( "var" )
-                                                                 )
-                                                            );
+                                                             parameter
+                                                            ).MakeAddress(compilation);
 
                     compilation.ProgramCode.Add(
                                                 $"PUSH {arg.ResultAddress}; Push Param {parameter}"

@@ -19,7 +19,6 @@
             uint addr = cpu.DecodeArgument( 0 );
 
             uint val = cpu.Peek();
-            Log( cpu, $"Peeking Value: {val}" );
             cpu.MemoryBus.Write( addr, val );
         }
 

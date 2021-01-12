@@ -82,12 +82,7 @@ namespace VisCPU.Peripherals.Memory
 
         public override uint ReadData( uint address )
         {
-            if ( CanWrite( address ) )
-            {
-                return InternalMemory[address - settings.Start];
-            }
-
-            return 0;
+            return InternalMemory[address - settings.Start];
         }
 
         public override void Shutdown()
@@ -100,10 +95,7 @@ namespace VisCPU.Peripherals.Memory
 
         public override void WriteData( uint address, uint data )
         {
-            if ( CanWrite( address ) )
-            {
-                InternalMemory[address - settings.Start] = data;
-            }
+            InternalMemory[address - settings.Start] = data;
         }
 
         #endregion

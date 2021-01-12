@@ -17,13 +17,8 @@ namespace VisCPU.HL.Compiler.Math
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right,
-                                                         new ExpressionTarget(
-                                                                              compilation.GetTempVar( 0 ),
-                                                                              true,
-                                                                              compilation.TypeSystem.GetType( "var" )
-                                                                             )
-                                                        );
+                                                         expr.Right
+                                                        ).MakeAddress(compilation);
 
             compilation.ProgramCode.Add(
                                         $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"

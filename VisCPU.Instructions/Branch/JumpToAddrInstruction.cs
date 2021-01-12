@@ -21,9 +21,7 @@ namespace VisCPU.Instructions.Branch
         public override void Process( CPU cpu )
         {
             uint address = cpu.MemoryBus.Read( cpu.DecodeArgument( 0 ) );
-
-            Log( cpu, $"PC: 0x{Convert.ToString( address, 16 )}" );
-
+            
             cpu.SetState( address - InstructionSize );
         }
 

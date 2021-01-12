@@ -19,7 +19,6 @@
             uint addr = cpu.DecodeArgument( 0 );
 
             uint val = cpu.Pop();
-            Log( cpu, $"Popping Value: {val}" );
             cpu.MemoryBus.Write( addr, val );
         }
 

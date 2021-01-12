@@ -21,11 +21,7 @@ namespace VisCPU.Instructions.Memory
             uint addressSrcPtr = cpu.DecodeArgument( 0 );
             uint addressSrc = cpu.MemoryBus.Read( cpu.MemoryBus.Read( addressSrcPtr ) ); // Dereference
             uint addressDst = cpu.DecodeArgument( 1 );
-
-            Log(
-                cpu,
-                $"0x{Convert.ToString( addressSrcPtr, 16 )}(0x{Convert.ToString( addressSrc, 16 )}) => 0x{Convert.ToString( addressDst, 16 )}"
-               );
+            
 
             cpu.MemoryBus.Write( addressDst, addressSrc ); //Write back Result
         }

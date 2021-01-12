@@ -14,8 +14,14 @@ namespace VisCPU.Utility.EventSystem
 
         public static void RegisterDefaultHandlers()
         {
+            OnEventReceive += EventManagerOnEventReceive;
             EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
             EventManager < WarningEvent >.OnEventReceive += EventManagerOnWarningEventReceive;
+        }
+
+        private static void EventManagerOnEventReceive( Event obj )
+        {
+            Console.WriteLine($"[{obj.EventKey}] {obj}");
         }
 
         public static void SendEvent( Event eventItem )

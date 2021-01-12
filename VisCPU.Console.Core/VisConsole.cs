@@ -24,7 +24,8 @@ namespace VisCPU.Console.Core
                 { "run", new ProgramRunner() },
                 { "build", new ProgramBuilder() },
                 { "project", new ModuleSubSystem() },
-                { "origin", new OriginSubSystem() }
+                { "origin", new OriginSubSystem() },
+                { "reset", new ConsoleReset() }
             };
 
         #region Public

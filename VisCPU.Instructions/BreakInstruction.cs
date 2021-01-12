@@ -16,7 +16,6 @@
 
         public override void Process( CPU cpu )
         {
-            Log( cpu, "Set Break Flag" );
             cpu.Set( CPU.Flags.BREAK );
         }
 

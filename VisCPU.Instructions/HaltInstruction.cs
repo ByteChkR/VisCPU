@@ -16,7 +16,6 @@
 
         public override void Process( CPU cpu )
         {
-            Log( cpu, "Set Halt Flag" );
             cpu.Set( CPU.Flags.HALT );
         }
 

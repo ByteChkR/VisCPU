@@ -27,11 +27,6 @@ namespace VisCPU.Instructions.Bitwise
 
             uint result = a | b; //Calculate Value
 
-            Log(
-                cpu,
-                $"0x{Convert.ToString( addressA, 16 )}({Convert.ToString( a, 16 )}) | 0x{Convert.ToString( addressB, 16 )}({Convert.ToString( b, 16 )}) = 0x{Convert.ToString( addressA, 16 )}({Convert.ToString( result, 16 )})"
-               );
-
             cpu.MemoryBus.Write( addressResult, result ); //Write back Result
         }
 

@@ -22,8 +22,7 @@ namespace VisCPU.Instructions.Branch.Conditional
             uint address = cpu.DecodeArgument( 1 );
 
             bool jmp = a != 0;
-
-            Log( cpu, $"{a} != 0? Branch to 0x{Convert.ToUInt32( address )}: {jmp}" );
+            
 
             if ( jmp )
             {

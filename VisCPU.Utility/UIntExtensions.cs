@@ -8,6 +8,22 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.Utility
 {
 
+    public struct UIntHexNumberString
+    {
+
+        public uint Value;
+
+        public UIntHexNumberString( uint val )
+        {
+            Value = val;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToHexString();
+        }
+
+    }
     public static class UIntExtensions
     {
 
@@ -34,6 +50,7 @@ namespace VisCPU.Utility
         {
             return data.SelectMany( BitConverter.GetBytes ).ToArray();
         }
+
 
         public static string ToHexString( this uint val )
         {

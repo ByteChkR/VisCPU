@@ -18,22 +18,12 @@ namespace VisCPU.Instructions
 
         #region Public
 
-        public abstract void Process( CPU cpu );
-
-        public override void Log( string message )
-        {
-            base.Log( $"[{Key}] " + message );
-        }
+        public abstract void Process(CPU cpu);
 
         #endregion
 
         #region Protected
-
-        protected void Log( CPU cpu, string mesg )
-        {
-            Log( $"[0x{Convert.ToString( cpu.ProgramCounter, 16 )}]: {mesg}" );
-        }
-
+        
         #endregion
 
     }

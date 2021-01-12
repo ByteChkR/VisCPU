@@ -10,9 +10,9 @@ namespace VisCPU.Utility.SharedBase
 
         #region Public
 
-        public virtual void Log( string message )
+        public virtual void Log( string format, params  object[]args)
         {
-            Logger.LogMessage( SubSystem, message );
+            Logger.LogMessage( SubSystem, format, args );
         }
 
         #endregion

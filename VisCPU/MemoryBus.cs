@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 using VisCPU.Events;
 using VisCPU.Utility;
@@ -55,13 +56,16 @@ namespace VisCPU
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint Read( uint address )
         {
             uint receivers = 0;
             uint data = 0;
 
-            foreach ( Peripheral peripheral in peripherals.Where( x => x.CanRead( address ) ) )
+            foreach ( Peripheral peripheral in peripherals )
             {
+                if ( !peripheral.CanRead( address ) )
+                    continue;
                 if ( receivers == 0 )
                 {
                     data = peripheral.ReadData( address );
@@ -79,8 +83,6 @@ namespace VisCPU
                 EventManager < WarningEvent >.SendEvent( new MultipleReceiverWriteEvent( address ) );
             }
 
-            Log( $"R ADDR: 0x{address.ToHexString()} VAL: 0x{data.ToHexString()}" );
-
             return data;
         }
 
@@ -89,12 +91,15 @@ namespace VisCPU
             peripherals.ForEach( x => x.Shutdown() );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write( uint address, uint data )
         {
             bool hasReceiver = false;
 
-            foreach ( Peripheral peripheral in peripherals.Where( x => x.CanWrite( address ) ) )
+            foreach ( Peripheral peripheral in peripherals)
             {
+                if(!peripheral.CanWrite(address))continue;
+
                 hasReceiver = true;
                 peripheral.WriteData( address, data );
             }
@@ -103,8 +108,6 @@ namespace VisCPU
             {
                 EventManager < WarningEvent >.SendEvent( new WriteToUnmappedAddressEvent( address, data ) );
             }
-
-            Log( $"W ADDR: {address.ToHexString()} VAL: {data.ToHexString()}" );
         }
 
         #endregion

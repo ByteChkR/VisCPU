@@ -18,13 +18,8 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right,
-                                                         new ExpressionTarget(
-                                                                              compilation.GetTempVar( 0 ),
-                                                                              true,
-                                                                              compilation.TypeSystem.GetType( "var" )
-                                                                             )
-                                                        );
+                                                         expr.Right
+                                                        ).MakeAddress(compilation);
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
             {

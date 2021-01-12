@@ -18,8 +18,7 @@
         {
             uint addr = cpu.DecodeArgument( 0 );
             uint val = cpu.MemoryBus.Read( addr );
-
-            Log( cpu, $"Pushing Value: {val}" );
+            
             cpu.Push( val );
         }
 

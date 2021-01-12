@@ -2,6 +2,7 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 using VisCPU.Instructions;
 using VisCPU.Utility;
@@ -67,6 +68,7 @@ namespace VisCPU
             this.resetAddress = resetAddress;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Cycle()
         {
             if ( remainingCycles != 0 )
@@ -100,18 +102,20 @@ namespace VisCPU
                 Dump();
             }
 
-            remainingCycles = instruction.Cycles;
+            remainingCycles = instruction.Cycles - 1;
             instruction.Process( this );
             ProgramCounter += instruction.InstructionSize;
 
             return remainingCycles == 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint DecodeArgument( int argNum )
         {
             return MemoryBus.Read( ProgramCounter + ( uint ) argNum + 1 );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasSet( Flags flag )
         {
             return ( ProcessorFlags & flag ) != 0;
@@ -127,16 +131,19 @@ namespace VisCPU
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint Peek()
         {
             return stack.Peek();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public uint Pop()
         {
             return stack.Pop();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void PopState()
         {
             if ( cpuStack.Count != 0 )
@@ -147,11 +154,13 @@ namespace VisCPU
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Push( uint value )
         {
             stack.Push( value );
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void PushState( uint pc, Flags flags = Flags.NONE )
         {
             cpuStack.Push(
@@ -188,11 +197,13 @@ namespace VisCPU
             MemoryBus.Shutdown();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Set( Flags flag )
         {
             ProcessorFlags |= flag;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetState( uint pc, Flags flags = Flags.NONE )
         {
             ProcessorFlags = flags;
@@ -211,6 +222,7 @@ namespace VisCPU
             return cycles;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void UnSet( Flags flag )
         {
             ProcessorFlags &= ~flag;

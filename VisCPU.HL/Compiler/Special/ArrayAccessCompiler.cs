@@ -26,13 +26,8 @@ namespace VisCPU.HL.Compiler.Special
                                                            );
 
             ExpressionTarget pn = compilation.Parse(
-                                                    expr.ParameterList[0],
-                                                    new ExpressionTarget(
-                                                                         compilation.GetTempVar( 0 ),
-                                                                         true,
-                                                                         compilation.TypeSystem.GetType( "var" )
-                                                                        )
-                                                   );
+                                                    expr.ParameterList[0]
+                                                   ).MakeAddress(compilation);
 
             //if ( tempPtrVar.IsPointer && !( tempPtrVar.TypeDefinition is ArrayTypeDefintion ) )
             //{

@@ -25,11 +25,7 @@ namespace VisCPU.Instructions.Math.Self
             uint b = cpu.MemoryBus.Read( addressB ); //Read Value From RAM
 
             uint result = ( uint ) ( ( int ) a >> ( int ) b ); //Calculate Value
-
-            Log(
-                cpu,
-                $"0x{Convert.ToString( addressA, 16 )}({Convert.ToString( a, 16 )}) >> 0x{Convert.ToString( addressB, 16 )}({Convert.ToString( b, 16 )}) = 0x{Convert.ToString( addressA, 16 )}({Convert.ToString( result, 16 )})"
-               );
+            
 
             cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }

@@ -20,11 +20,7 @@ namespace VisCPU.Instructions.Memory
         {
             uint address = cpu.DecodeArgument( 0 );
             uint value = cpu.DecodeArgument( 1 );
-
-            Log(
-                cpu,
-                $"0x{Convert.ToString( address, 16 )} => 0x{Convert.ToString( value, 16 )}"
-               );
+            
 
             cpu.MemoryBus.Write( address, value ); //Write back Result
         }

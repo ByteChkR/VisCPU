@@ -22,8 +22,7 @@ namespace VisCPU.Instructions.Branch
         {
             uint a = cpu.DecodeArgument( 0 );
             uint address = cpu.MemoryBus.Read( a );
-
-            Log( cpu, $"PC: 0x{Convert.ToString( address, 16 )}" );
+            
 
             cpu.PushState( address - InstructionSize );
         }

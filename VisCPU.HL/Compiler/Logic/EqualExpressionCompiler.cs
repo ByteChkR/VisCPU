@@ -12,7 +12,7 @@ namespace VisCPU.HL.Compiler.Logic
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLBinaryOp expr )
         {
-            ExpressionTarget target = compilation.Parse( expr.Left );
+            ExpressionTarget target = compilation.Parse( expr.Left ).MakeAddress(compilation);
 
             if ( compilation.ConstValTypes.ContainsKey( target.ResultAddress ) &&
                  compilation.ConstValTypes[target.ResultAddress] == null )
@@ -26,13 +26,8 @@ namespace VisCPU.HL.Compiler.Logic
             else
             {
                 ExpressionTarget rTarget = compilation.Parse(
-                                                             expr.Right,
-                                                             new ExpressionTarget(
-                                                                  compilation.GetTempVar( 0 ),
-                                                                  true,
-                                                                  compilation.TypeSystem.GetType( "var" )
-                                                                 )
-                                                            );
+                                                             expr.Right
+                                                            ).MakeAddress(compilation);
 
                 List < string > lines = new List < string >();
 
