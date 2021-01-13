@@ -52,18 +52,24 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
             string modListPath = GetPackageListPath();
 
-            return JsonConvert.DeserializeObject<List<ModulePackage>>(
-                                                                      File.ReadAllText(modListPath)
-                                                                     );
+            List<ModulePackage> ret = JsonConvert.DeserializeObject<List<ModulePackage>>(
+                 File.ReadAllText(modListPath)
+                );
+
+            ret.ForEach(x => x.Manager = this);
+            return ret;
         }
 
         protected List<ModulePackage> LoadPackageList(string root)
         {
             string modListPath = GetPackageListPath(root);
 
-            return JsonConvert.DeserializeObject<List<ModulePackage>>(
-                                                                      File.ReadAllText(modListPath)
-                                                                     );
+            List < ModulePackage > ret = JsonConvert.DeserializeObject < List < ModulePackage > >(
+                 File.ReadAllText( modListPath )
+                );
+
+            ret.ForEach( x => x.Manager = this );
+            return ret;
         }
 
         protected void SavePackageList(List<ModulePackage> packageList)
@@ -111,6 +117,10 @@ namespace VisCPU.HL.Modules.ModuleManagers
         public abstract IEnumerable<ModulePackage> GetPackages();
 
         public abstract string GetTargetDataPath(ModuleTarget target);
+        public static string GetTargetDataPath(string root, string moduleName, string moduleVersion)
+        {
+            return Path.Combine(root, MODULE_PATH, moduleName, moduleVersion);
+        }
 
         public abstract string GetTargetDataUri(ModuleTarget target);
 
@@ -183,20 +193,54 @@ namespace VisCPU.HL.Modules.ModuleManagers
                 wc.DownloadFile(new Uri(repoIndex), localIndex);
             }
 
-            return LoadPackageList(LocalTempCache);
+            List <ModulePackage> packages= LoadPackageList(LocalTempCache);
+            SaveInfo( packages );
+            return packages;
         }
 
-        private void Fetch(ModuleTarget target, string targetPath)
+        private void SaveInfo(List <ModulePackage> packages)
+        {
+            foreach ( ModulePackage modulePackage in packages )
+            {
+                foreach ( string modulePackageModuleVersion in modulePackage.ModuleVersions )
+                {
+                    string infoLocal = GetTargetInfoUri(modulePackage, modulePackageModuleVersion);
+                    string infoRemote = GetRemoteTargetInfoUri(modulePackage, modulePackageModuleVersion);
+                    if (File.Exists(infoLocal))continue;
+
+
+                    string dir = GetTargetDataPath(
+                                                   LocalTempCache,
+                                                   modulePackage.ModuleName,
+                                                   modulePackageModuleVersion
+                                                  );
+                    Directory.CreateDirectory(
+                                              dir
+                                             );
+                    using (WebClient wc = new WebClient())
+                    {
+                        Log("Downloading Info: {0}", infoRemote);
+                        wc.DownloadFile(new Uri(infoRemote), infoLocal);
+                    }
+
+                }
+            }
+            
+        }
+
+        private void FetchData(ModuleTarget target)
         {
             string dataUri = GetRemoteTargetDataUri(target);
-            string infoUri = GetRemoteTargetInfoUri(target);
+            string dataLocal = GetTargetDataUri(target);
 
+            if ( File.Exists( dataLocal ) )
+                return;
+
+            Directory.CreateDirectory( GetTargetDataPath( target ) );
             using (WebClient wc = new WebClient())
             {
-                Log("Downloading Info: {0}", infoUri);
-                wc.DownloadFile(new Uri(dataUri), Path.Combine(targetPath, MODULE_TARGET));
                 Log("Downloading Module: {0}", dataUri);
-                wc.DownloadFile(new Uri(infoUri), Path.Combine(targetPath, MODULE_DATA));
+                wc.DownloadFile(new Uri(dataUri), dataLocal);
             }
         }
 
@@ -211,7 +255,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
             if (!File.Exists(dataPath))
             {
-                Fetch(target, dataPath);
+                FetchData(target);
             }
 
             ZipFile.ExtractToDirectory(dataPath, targetDir);
@@ -268,9 +312,11 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine(GetRemoteModulePackagePath(target), target.ModuleVersion, MODULE_TARGET);
         }
 
+        
+
         public override string GetTargetDataPath(ModuleTarget target)
         {
-            return Path.Combine(LocalTempCache, MODULE_PATH, target.ModuleName, target.ModuleVersion);
+            return GetTargetDataPath(LocalTempCache, target.ModuleName, target.ModuleVersion);
         }
 
         public override string GetTargetDataUri(ModuleTarget target)
