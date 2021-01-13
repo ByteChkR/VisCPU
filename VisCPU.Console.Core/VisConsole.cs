@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -133,7 +134,20 @@ namespace VisCPU.Console.Core
             EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse( args, s, Logger.Settings );
-            Run( args as IEnumerable < string > );
+
+            Run(
+                args.Concat(
+                            s.Configs.SelectMany(
+                                                 x => File.Exists( x )
+                                                          ? File.ReadAllText( x ).
+                                                                 Split(
+                                                                       new[] { '\n', '\r', ' ' },
+                                                                       StringSplitOptions.RemoveEmptyEntries
+                                                                      )
+                                                          : new string[0]
+                                                )
+                           )
+               );
         }
 
         #endregion

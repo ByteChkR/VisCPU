@@ -17,50 +17,52 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         #region Public
 
-        public override void Run( IEnumerable < string > args )
+        public static void Clean( string projectRoot )
         {
-            string projectRoot = args.Any() ? Path.GetFullPath( args.First() ) : Directory.GetCurrentDirectory();
-
-            if ( !File.Exists( Path.Combine( projectRoot, "project.json" ) ) )
+            if (!File.Exists(Path.Combine(projectRoot, "project.json")))
             {
-                throw new Exception( $"The folder '{projectRoot}' does not contain a 'project.json' file." );
+                throw new Exception($"The folder '{projectRoot}' does not contain a 'project.json' file.");
             }
 
-            if ( Directory.Exists( Path.Combine( projectRoot, "build" ) ) )
+            if (Directory.Exists(Path.Combine(projectRoot, "build")))
             {
-                Log( "Deleting Project Build Directory" );
-                Directory.Delete( Path.Combine( projectRoot, "build" ), true );
+                Directory.Delete(Path.Combine(projectRoot, "build"), true);
             }
 
-            IEnumerable < string > sourceFiles = Directory.GetFiles( projectRoot, "*.*", SearchOption.AllDirectories ).
-                                                           Select( Path.GetFullPath );
+            IEnumerable<string> sourceFiles = Directory.GetFiles(projectRoot, "*.*", SearchOption.AllDirectories).
+                                                        Select(Path.GetFullPath);
 
             int fcount = 0;
 
-            foreach ( string sourceFile in sourceFiles )
+            foreach (string sourceFile in sourceFiles)
             {
-                string ext = Path.GetExtension( sourceFile );
+                string ext = Path.GetExtension(sourceFile);
 
-                if ( ext == ".vbin" || ext == ".vbin.z" || ext == ".linkertext" )
+                if (ext == ".vbin" || ext == ".vbin.z" || ext == ".linkertext")
                 {
                     fcount++;
-                    File.Delete( sourceFile );
+                    File.Delete(sourceFile);
                 }
             }
+            
 
-            Log( "Deleted Files: " + fcount );
+            ModuleTarget t = ModuleManager.LoadModuleTarget(Path.Combine(projectRoot, "project.json"));
 
-            ModuleTarget t = ModuleManager.LoadModuleTarget( Path.Combine( projectRoot, "project.json" ) );
-
-            foreach ( ModuleDependency moduleDependency in t.Dependencies )
+            foreach (ModuleDependency moduleDependency in t.Dependencies)
             {
-                Log( "Deleting Dependency: " + moduleDependency.ModuleName );
 
-                if ( Directory.Exists( Path.Combine( projectRoot, moduleDependency.ModuleName ) ) )
+                if (Directory.Exists(Path.Combine(projectRoot, moduleDependency.ModuleName)))
                 {
-                    Directory.Delete( Path.Combine( projectRoot, moduleDependency.ModuleName ), true );
+                    Directory.Delete(Path.Combine(projectRoot, moduleDependency.ModuleName), true);
                 }
             }
+        }
+
+        public override void Run( IEnumerable < string > args )
+        {
+            string projectRoot = args.Any() ? Path.GetFullPath( args.First() ) : Directory.GetCurrentDirectory();
+            Clean( projectRoot );
+
         }
 
         #endregion

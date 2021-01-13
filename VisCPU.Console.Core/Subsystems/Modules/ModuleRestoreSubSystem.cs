@@ -27,6 +27,8 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                               ? Path.GetFullPath(a[1])
                               : Directory.GetCurrentDirectory();
 
+            ModuleCleanSubSystem.Clean(root);
+
             string src = Path.Combine( root, "project.json" );
 
             ModuleTarget t =

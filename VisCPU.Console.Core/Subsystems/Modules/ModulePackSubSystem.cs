@@ -15,7 +15,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
     public class ModulePackSubSystem : ConsoleSubsystem
     {
-        public Version ChangeVersion(Version version, string changeStr)
+        public static Version ChangeVersion(Version version, string changeStr)
         {
             string[] subVersions = changeStr.Split('.');
             int[] wrapValues = { ushort.MaxValue, 9, 99, ushort.MaxValue };
@@ -41,7 +41,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
                     if (j == current.Length)
                     {
-                        Log($"Can not parse version ID: {i}({current})");
                         continue; //Broken. No number left. better ignore
                     }
 
@@ -84,10 +83,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                     {
                         versions[i] = (int)(newValue % ushort.MaxValue);
                     }
-                    else
-                    {
-                        Log("Can not Parse: " + value + " to INT");
-                    }
                 }
                 else if (int.TryParse(current, out int v))
                 {
@@ -111,64 +106,66 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         }
 
-        public override void Run( IEnumerable < string > args )
+        public static void Pack( IEnumerable < string > args )
         {
             string[] a = args.ToArray();
 
             string src = a.Length != 0
-                             ? Path.Combine( Path.GetFullPath( a[0] ), "project.json" )
-                             : Path.Combine( Directory.GetCurrentDirectory(), "project.json" );
+                             ? Path.Combine(Path.GetFullPath(a[0]), "project.json")
+                             : Path.Combine(Directory.GetCurrentDirectory(), "project.json");
 
-            string outDir = Path.Combine( Path.GetDirectoryName( src ), "build" );
+            string outDir = Path.Combine(Path.GetDirectoryName(src), "build");
 
-            if ( Directory.Exists( outDir ) )
-            {
-                Directory.Delete( outDir, true );
-            }
+            ModuleCleanSubSystem.Clean(Path.GetDirectoryName(src));
 
-            ModuleTarget t = ModuleManager.LoadModuleTarget( src );
+            ModuleTarget t = ModuleManager.LoadModuleTarget(src);
 
-            Version v = Version.Parse( t.ModuleVersion );
+            Version v = Version.Parse(t.ModuleVersion);
 
             PackOptions po = new PackOptions();
-            ArgumentSyntaxParser.Parse( a, po );
+            ArgumentSyntaxParser.Parse(a, po);
 
 
             t.ModuleVersion = ChangeVersion(v, po.VersionString).ToString();
 
             string temp = Path.Combine(
-                                       Path.GetDirectoryName( Directory.GetCurrentDirectory() ),
+                                       Path.GetDirectoryName(Directory.GetCurrentDirectory()),
                                        "temp_" + t.ModuleName
                                       );
 
-            Directory.CreateDirectory( temp );
+            Directory.CreateDirectory(temp);
 
-            CopyTo( Path.GetDirectoryName( src ), temp );
+            CopyTo(Path.GetDirectoryName(src), temp);
 
-            File.Delete( Path.Combine( temp, "project.json" ) );
+            File.Delete(Path.Combine(temp, "project.json"));
 
-            foreach ( ModuleDependency moduleDependency in t.Dependencies )
+            foreach (ModuleDependency moduleDependency in t.Dependencies)
             {
-                string p = Path.Combine( temp, moduleDependency.ModuleName );
+                string p = Path.Combine(temp, moduleDependency.ModuleName);
 
-                if ( Directory.Exists( p ) )
+                if (Directory.Exists(p))
                 {
-                    Directory.Delete( p, true );
+                    Directory.Delete(p, true);
                 }
             }
 
-            Directory.CreateDirectory( outDir );
-            ZipFile.CreateFromDirectory( temp, Path.Combine( outDir, "module.zip" ) );
-            Directory.Delete( temp, true );
-            ModuleManager.SaveModuleTarget( t, Path.Combine( outDir, "module.json" ) );
-            ModuleManager.SaveModuleTarget( t, src );
+            Directory.CreateDirectory(outDir);
+            ZipFile.CreateFromDirectory(temp, Path.Combine(outDir, "module.zip"));
+            Directory.Delete(temp, true);
+            ModuleManager.SaveModuleTarget(t, Path.Combine(outDir, "module.json"));
+            ModuleManager.SaveModuleTarget(t, src);
+        }
+
+        public override void Run( IEnumerable < string > args )
+        {
+            Pack( args );
         }
 
         #endregion
 
         #region Private
 
-        private void CopyTo( string src, string dst )
+        private static void CopyTo( string src, string dst )
         {
             foreach ( string dirPath in Directory.GetDirectories(
                                                                  src,
