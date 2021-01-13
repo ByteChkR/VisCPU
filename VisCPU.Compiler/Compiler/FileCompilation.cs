@@ -122,12 +122,11 @@ namespace VisCPU.Compiler.Compiler
 
                     WordToken tFile = Tokens[i][2] as WordToken;
 
-                    if ( Tokens[i][2] is StringToken str )
-                    {
-                        tFile = str.Content;
-                    }
 
-                    string file = Path.Combine( Path.GetDirectoryName( Reference.File ), tFile.GetValue() );
+                    string file = Path.Combine(
+                                               Path.GetDirectoryName( Reference.File ),
+                                               Tokens[i][2] is StringToken str ? str.GetContent() : tFile.GetValue()
+                                              );
 
                     if ( !File.Exists( file ) )
                     {
@@ -175,7 +174,7 @@ namespace VisCPU.Compiler.Compiler
 
                     if ( Tokens[i][2] is StringToken str )
                     {
-                        DataSection.AddRange( str.Content.GetValue().ToCharArray().Select( x => ( uint ) x ) );
+                        DataSection.AddRange( str.GetContent().ToCharArray().Select( x => ( uint ) x ) );
                     }
                     else if ( Tokens[i][2] is ValueToken val )
                     {
@@ -208,14 +207,14 @@ namespace VisCPU.Compiler.Compiler
             {
                 AToken item = aToken;
 
-                if ( item is StringToken lst )
-                {
-                    item = lst.Content;
-                }
 
                 if ( item is ValueToken vT )
                 {
                     ret.Add( vT.Value );
+                }
+                else if (item is StringToken lst)
+                {
+                    ret.Add(lst.GetContent());
                 }
                 else
                 {
@@ -234,9 +233,14 @@ namespace VisCPU.Compiler.Compiler
                 {
                     WordToken content = Tokens[i][1] as WordToken;
 
+                    string cstr;
                     if ( content is StringToken st )
                     {
-                        content = st.Content;
+                        cstr = st.GetContent();
+                    }
+                    else
+                    {
+                        cstr = content.GetValue();
                     }
 
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 2 ) );
@@ -244,11 +248,11 @@ namespace VisCPU.Compiler.Compiler
                     string c = Path.GetFullPath(
                                                 Path.Combine(
                                                              Path.GetDirectoryName( Reference.File ),
-                                                             content.GetValue()
+                                                             cstr
                                                             )
                                                );
 
-                    Log( "Including file: {0}", content.GetValue());
+                    Log( "Including file: {0}", cstr);
                     FileReferences.Add( new FileReference( c, linkerArgs ) );
                     Tokens.RemoveAt( i );
                 }

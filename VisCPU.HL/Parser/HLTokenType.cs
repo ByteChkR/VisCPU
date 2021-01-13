@@ -80,6 +80,7 @@ namespace VisCPU.HL.Parser
         OpAbstractMod,
         OpOverrideMod,
         OpStaticMod,
+        OpConstMod,
 
         OpComment,
 
@@ -89,6 +90,7 @@ namespace VisCPU.HL.Parser
         OpFunctionDefinition,
         OpExpression,
         OpStringLiteral,
+        OpCharLiteral,
         OpStatement,
         OpTypeVoid,
         OpBlockToken,

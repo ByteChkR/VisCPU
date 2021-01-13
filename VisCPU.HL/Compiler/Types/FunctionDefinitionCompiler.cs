@@ -32,7 +32,7 @@ namespace VisCPU.HL.Compiler.Types
                      {
                          VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
                          string key = vdef.Name.ToString();
-                         fComp.CreateVariable( key, 1, compilation.TypeSystem.GetType( vdef.TypeName.ToString() ) );
+                         fComp.CreateVariable( key, 1, compilation.TypeSystem.GetType( vdef.TypeName.ToString() ), false );
                      }
 
                      List < string > parsedVal =

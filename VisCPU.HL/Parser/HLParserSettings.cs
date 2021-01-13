@@ -63,6 +63,7 @@ namespace VisCPU.HL.Parser
         private readonly string PublicModifier = "public";
         private readonly string ReturnKey = "return";
         private readonly string StaticModifier = "static";
+        private readonly string ConstModifier = "const";
         private readonly string SwitchKey = "switch";
         private readonly string ThisKey = "this";
         private readonly string TryKey = "try";
@@ -105,6 +106,7 @@ namespace VisCPU.HL.Parser
                 { AbstractModifier, HLTokenType.OpAbstractMod },
                 { OverrideModifier, HLTokenType.OpOverrideMod },
                 { StaticModifier, HLTokenType.OpStaticMod },
+                { ConstModifier, HLTokenType.OpConstMod },
                 { ReturnKey, HLTokenType.OpReturn },
                 { VoidKey, HLTokenType.OpTypeVoid },
                 { OperatorKey, HLTokenType.OpOperatorImpl }
@@ -116,6 +118,7 @@ namespace VisCPU.HL.Parser
         public Dictionary < string, HLTokenType > MemberModifiers =>
             new Dictionary < string, HLTokenType >
             {
+                { ConstModifier, HLTokenType.OpConstMod },
                 { PublicModifier, HLTokenType.OpPublicMod },
                 { PrivateModifier, HLTokenType.OpPrivateMod }
             };

@@ -12,7 +12,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <summary>
         ///     Initializer Expression
         /// </summary>
-        public readonly HLExpression InitializerExpression;
+        public readonly IHLToken[] InitializerExpression;
 
         /// <summary>
         ///     Variable Modifiers
@@ -46,7 +46,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
             IHLToken typeName,
             IHLToken[] modifiers,
             IHLToken[] subtokens,
-            HLExpression initializerExpression,
+            IHLToken[] initializerExpression,
             IHLToken size = null ) : base(
                                           HLTokenType.OpVariableDefinition,
                                           subtokens,

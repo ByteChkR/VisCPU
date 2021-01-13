@@ -14,6 +14,8 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         public readonly VariableDefinitionToken value;
 
+        public readonly HLExpression[] Initializer;
+
         /// <summary>
         ///     The Variable Value
         /// </summary>
@@ -26,8 +28,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="value">Variable Value</param>
-        public HLVarDefOperand( VariableDefinitionToken value ) : base( value.SourceIndex )
+        public HLVarDefOperand( VariableDefinitionToken value, HLExpression[] initializer ) : base( value.SourceIndex )
         {
+            Initializer = initializer;
             this.value = value;
         }
 

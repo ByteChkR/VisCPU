@@ -31,7 +31,7 @@ namespace VisCPU.HL.Compiler.Special
                                   Select(x => x.ToString()).
                                   Aggregate((input, elem) => input + ' ' + elem);
 
-            compilation.CreateVariable(varName, content, compilation.TypeSystem.GetType("var"));
+            compilation.CreateVariable(varName, content, compilation.TypeSystem.GetType("var"), false);
 
             return new ExpressionTarget(
                                         compilation.GetFinalName(varName),

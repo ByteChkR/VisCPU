@@ -135,43 +135,58 @@ namespace VisCPU.HL.Parser
                 HLExpression token = null;
                 parser.Eat( parser.CurrentToken.Type );
 
-                if ( parser.CurrentToken.Type == HLTokenType.OpWord )
-                {
-                    IHLToken name = parser.CurrentToken;
-                    parser.Eat( parser.CurrentToken.Type );
-                    IHLToken num = null;
+                //if ( parser.CurrentToken.Type == HLTokenType.OpWord )
+                //{
+                //    IHLToken name = parser.CurrentToken;
+                //    parser.Eat( parser.CurrentToken.Type );
+                //    IHLToken num = null;
 
-                    if ( parser.CurrentToken.Type == HLTokenType.OpIndexerBracketOpen )
-                    {
-                        parser.Eat( parser.CurrentToken.Type );
-                        num = parser.CurrentToken;
-                        parser.Eat( HLTokenType.OpNumber );
-                        parser.Eat( HLTokenType.OpIndexerBracketClose );
-                    }
+                //    if ( parser.CurrentToken.Type == HLTokenType.OpIndexerBracketOpen )
+                //    {
+                //        parser.Eat( parser.CurrentToken.Type );
+                //        num = parser.CurrentToken;
+                //        parser.Eat( HLTokenType.OpNumber );
+                //        parser.Eat( HLTokenType.OpIndexerBracketClose );
+                //    }
 
-                    token = new HLVarDefOperand(
-                                                new VariableDefinitionToken(
-                                                                            name,
-                                                                            item,
-                                                                            new IHLToken[0],
-                                                                            new IHLToken[0],
-                                                                            null,
-                                                                            num
-                                                                           )
-                                               );
-                }
-                else
-                {
-                    token = new HLVarOperand( item, item.SourceIndex );
-                }
+                //    token = new HLVarDefOperand(
+                //                                new VariableDefinitionToken(
+                //                                                            name,
+                //                                                            item,
+                //                                                            new IHLToken[0],
+                //                                                            new IHLToken[0],
+                //                                                            null,
+                //                                                            num
+                //                                                           )
+                //                               );
+                //}
+                //else
+                //{
+                token = new HLVarOperand( item, item.SourceIndex );
+
+                //}
 
                 return token;
             }
 
             if ( parser.CurrentToken.Type == HLTokenType.OpVariableDefinition )
             {
-                HLExpression token =
-                    new HLVarDefOperand( ( VariableDefinitionToken ) parser.CurrentToken );
+                VariableDefinitionToken vd = ( VariableDefinitionToken ) parser.CurrentToken;
+                HLVarDefOperand token;
+
+                if ( vd.InitializerExpression != null && vd.InitializerExpression.Length != 0 )
+                {
+                    HLExpressionParser p =
+                        HLExpressionParser.Create( new HLExpressionReader( vd.InitializerExpression.ToList() ) );
+
+                    token =
+                        new HLVarDefOperand( vd, p.Parse() );
+                }
+                else
+                {
+                    token =
+                        new HLVarDefOperand( vd, new HLExpression[0] );
+                }
 
                 parser.Eat( HLTokenType.OpVariableDefinition );
 
@@ -194,7 +209,8 @@ namespace VisCPU.HL.Parser
             }
 
             if ( parser.CurrentToken.Type == HLTokenType.OpNumber ||
-                 parser.CurrentToken.Type == HLTokenType.OpStringLiteral )
+                 parser.CurrentToken.Type == HLTokenType.OpStringLiteral ||
+                 parser.CurrentToken.Type == HLTokenType.OpCharLiteral )
             {
                 HLExpression token = new HLValueOperand( parser.CurrentToken );
                 parser.Eat( parser.CurrentToken.Type );

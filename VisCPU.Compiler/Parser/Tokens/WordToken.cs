@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 
 using VisCPU.Utility.SharedBase;
 
@@ -16,7 +17,7 @@ namespace VisCPU.Compiler.Parser.Tokens
 
         public override string GetValue()
         {
-            return OriginalText.Substring( Start, Length );
+            return  OriginalText.Substring( Start, Length ) ;
         }
 
         public AToken Resolve()

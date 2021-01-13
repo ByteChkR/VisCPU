@@ -49,7 +49,7 @@ namespace VisCPU.HL.Compiler
 
         public ExpressionTarget LoadIfNotNull(HLCompilation compilation, ExpressionTarget target)
         {
-            if (target.ResultAddress == null)
+            if (target.ResultAddress == null || target.ResultAddress == ResultAddress)
             {
                 return this;
             }
@@ -64,7 +64,7 @@ namespace VisCPU.HL.Compiler
             ExpressionTarget target,
             bool releaseSource = false)
         {
-            if (target.ResultAddress == null)
+            if (target.ResultAddress == null || target.ResultAddress == ResultAddress)
             {
                 return this;
             }

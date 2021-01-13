@@ -1,4 +1,8 @@
-﻿using VisCPU.Events;
+﻿using System.Linq;
+
+using VisCPU.Events;
+using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
@@ -22,7 +26,7 @@ namespace VisCPU.HL.Compiler.Variables
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLVarDefOperand expr )
         {
-            if ( expr.value.TypeName.ToString() == HLCompilation.CONST_VAL_TYPE )
+            if ( expr.value.Modifiers.Any(x=>x.Type == HLTokenType.OpConstMod ))
             {
                 string asmVarName = expr.value.Name.ToString();
 
@@ -30,10 +34,10 @@ namespace VisCPU.HL.Compiler.Variables
                 {
                     EventManager < ErrorEvent >.SendEvent( new DuplicateConstVarDefinitionEvent( asmVarName ) );
                 }
+                
+                compilation.ConstValTypes.Add( asmVarName, expr.value.InitializerExpression.FirstOrDefault()?.ToString() );
 
-                compilation.ConstValTypes.Add( asmVarName, null );
-
-                return new ExpressionTarget( asmVarName, true, compilation.TypeSystem.GetType( "var" ) );
+                return new ExpressionTarget( asmVarName, true, compilation.TypeSystem.GetType( expr.value.TypeName.ToString() ) );
             }
 
             if ( expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE )
@@ -56,20 +60,35 @@ namespace VisCPU.HL.Compiler.Variables
                 compilation.CreateVariable(
                                            asmVarName,
                                            arrSize,
-                                           vdef
+                                           vdef,
+                                           expr.value.Modifiers.Any(x=>x.Type == HLTokenType.OpPublicMod)
                                           );
 
-                return new ExpressionTarget(
+                
+
+                ExpressionTarget dvar= new ExpressionTarget(
                                             compilation.GetFinalName( asmVarName ),
                                             true,
                                             vdef
                                            );
+
+                HLExpression init = expr.Initializer.FirstOrDefault();
+                if(init != null)
+                return compilation.Parse( init, dvar ).CopyIfNotNull(compilation, dvar, true);
+
+                return dvar;
             }
 
             HLTypeDefinition type = TypeSystem.GetType( expr.value.TypeName.ToString() );
             uint size = expr.value.Size?.ToString().ParseUInt() ?? 1;
             bool isArray = expr.value.Size != null;
-            compilation.CreateVariable( expr.value.Name.ToString(), type.GetSize() * size, type );
+
+            compilation.CreateVariable(
+                                       expr.value.Name.ToString(),
+                                       type.GetSize() * size,
+                                       type,
+                                       expr.value.Modifiers.Any( x => x.Type == HLTokenType.OpPublicMod )
+                                      );
 
             return new ExpressionTarget( compilation.GetFinalName( expr.value.Name.ToString() ), true, type, isArray );
         }
