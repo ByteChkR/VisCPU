@@ -22,11 +22,21 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         #region Public
 
+        private static string Parse( string moduleRoot )
+        {
+            if ( Uri.TryCreate( moduleRoot, UriKind.Absolute, out Uri u ) )
+            {
+                return moduleRoot;
+            }
+
+            return Path.Combine(
+                                AppDomain.CurrentDomain.BaseDirectory,
+                                moduleRoot
+                               );
+        }
+
         public LocalModuleManager( string moduleRoot ) : base(
-                                                              Path.Combine(
-                                                                           AppDomain.CurrentDomain.BaseDirectory,
-                                                                           moduleRoot
-                                                                          )
+                                                              Parse(moduleRoot)
                                                              )
         {
             Directory.CreateDirectory( ModuleRoot.OriginalString );
