@@ -19,7 +19,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins
             string[] a = args.ToArray();
             string name = a[0];
             string url = a[1];
-            s.ModuleOrigins.Add(name, url);
+            s.ModuleOrigins[name] = url;
             SettingsSystem.SaveSettings(s);
         }
 

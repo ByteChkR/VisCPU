@@ -53,8 +53,17 @@ namespace VisCPU.HL.Modules.ModuleManagers
             string modListPath = GetPackageListPath();
 
             return JsonConvert.DeserializeObject<List<ModulePackage>>(
-                                                                            File.ReadAllText(modListPath)
-                                                                           );
+                                                                      File.ReadAllText(modListPath)
+                                                                     );
+        }
+
+        protected List<ModulePackage> LoadPackageList(string root)
+        {
+            string modListPath = GetPackageListPath(root);
+
+            return JsonConvert.DeserializeObject<List<ModulePackage>>(
+                                                                      File.ReadAllText(modListPath)
+                                                                     );
         }
 
         protected void SavePackageList(List<ModulePackage> packageList)
@@ -157,6 +166,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
             RepoName = repoName;
             LocalTempCache = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config", "module", RepoName);
+            Directory.CreateDirectory( LocalTempCache );
         }
 
         private List<ModulePackage> GetPackageList()
@@ -170,10 +180,10 @@ namespace VisCPU.HL.Modules.ModuleManagers
             using (WebClient wc = new WebClient())
             {
                 Log("Downloading Index: {0}", repoIndex);
-                wc.DownloadFileAsync(new Uri(repoIndex), localIndex);
+                wc.DownloadFile(new Uri(repoIndex), localIndex);
             }
 
-            return LoadPackageList();
+            return LoadPackageList(LocalTempCache);
         }
 
         private void Fetch(ModuleTarget target, string targetPath)
@@ -184,9 +194,9 @@ namespace VisCPU.HL.Modules.ModuleManagers
             using (WebClient wc = new WebClient())
             {
                 Log("Downloading Info: {0}", infoUri);
-                wc.DownloadFileAsync(new Uri(dataUri), Path.Combine(targetPath, MODULE_TARGET));
+                wc.DownloadFile(new Uri(dataUri), Path.Combine(targetPath, MODULE_TARGET));
                 Log("Downloading Module: {0}", dataUri);
-                wc.DownloadFileAsync(new Uri(infoUri), Path.Combine(targetPath, MODULE_DATA));
+                wc.DownloadFile(new Uri(infoUri), Path.Combine(targetPath, MODULE_DATA));
             }
         }
 
