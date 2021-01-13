@@ -119,6 +119,7 @@ namespace VisCPU.HL.Parser
             new Dictionary < string, HLTokenType >
             {
                 { ConstModifier, HLTokenType.OpConstMod },
+                { StaticModifier, HLTokenType.OpStaticMod },
                 { PublicModifier, HLTokenType.OpPublicMod },
                 { PrivateModifier, HLTokenType.OpPrivateMod }
             };

@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.TypeSystem
 {
@@ -17,7 +18,7 @@ namespace VisCPU.HL.TypeSystem
         public HLFunctionDefinition(
             string name,
             HLTypeDefinition returnType,
-            HLTypeDefinition[] parameters ) : base( name )
+            HLTypeDefinition[] parameters, IHLToken[] mods) : base( name, mods )
         {
             ReturnType = returnType;
             ParameterTypes = parameters;

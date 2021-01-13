@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.TypeSystem
 {
@@ -12,7 +13,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public HLPropertyDefinition( string name, HLTypeDefinition type ) : base( name )
+        public HLPropertyDefinition( string name, HLTypeDefinition type, IHLToken[] mods ) : base( name , mods)
         {
             PropertyType = type;
         }

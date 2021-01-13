@@ -31,7 +31,7 @@ namespace VisCPU.HL
     {
 
         public readonly HLTypeSystem TypeSystem = new HLTypeSystem();
-        internal const string CONST_VAL_TYPE = "const_var";
+        internal const string STRING_TYPE = "string";
         internal const string VAL_TYPE = "var";
         internal readonly Dictionary < string, string > ConstValTypes = new Dictionary < string, string >();
         internal readonly List < IExternalData > ExternalSymbols = new List < IExternalData >();
@@ -922,7 +922,12 @@ namespace VisCPU.HL
                                                    );
                     }
 
-                    HLPropertyDefinition pdef = new HLPropertyDefinition( t.value.Name.ToString(), tt );
+                    HLPropertyDefinition pdef = new HLPropertyDefinition(
+                                                                         t.value.Name.ToString(),
+                                                                         tt,
+                                                                         t.value.Modifiers
+                                                                        );
+
 
                     tdef.AddMember( pdef );
                 }

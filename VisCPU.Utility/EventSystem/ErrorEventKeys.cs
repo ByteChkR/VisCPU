@@ -5,8 +5,10 @@
     {
 
         public const string HL_CONST_VAR_DUPLICATE_DEF = "hl-const-var-duplicate-definition";
+        public const string HL_COMPILER_DYNAMIC_VARIABLES_NOT_SUPPORTED = "hl-compiler-dynamic-variables-not-supported";
         public const string HL_VAR_DUPLICATE_DEF = "hl-var-duplicate-definition";
         public const string HL_MEMBER_DUPLICATE_DEF = "hl-member-duplicate-definition";
+        public const string HL_INVALID_MEMBER_MODIFIERS = "hl-invalid-member-modifiers";
         public const string HL_MEMBER_NOT_FOUND = "hl-member-not-found";
         public const string HL_TYPE_DUPLICATE_DEF = "hl-type-duplicate-definition";
         public const string HL_FUNCTION_ARGUMENT_MISMATCH = "hl-function-argument-mismatch";

@@ -46,9 +46,15 @@ namespace VisCPU.HL.TypeSystem
             return Members.Cast < IHLToken >().ToList();
         }
 
-        public HLMemberDefinition GetMember( string memberName )
+
+        public HLMemberDefinition GetPrivateOrPublicMember(string memberName)
         {
-            return Members.First( x => x.Name == memberName );
+            return Members.First(x => x.Name == memberName);
+        }
+
+        public HLMemberDefinition GetPublicMember( string memberName )
+        {
+            return Members.First( x => x.IsPublic && x.Name == memberName );
         }
 
         public uint GetOffset( string name )

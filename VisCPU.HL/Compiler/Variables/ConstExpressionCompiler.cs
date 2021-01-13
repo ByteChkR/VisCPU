@@ -27,6 +27,7 @@ namespace VisCPU.HL.Compiler.Variables
             ExpressionTarget outputTarget )
         {
             string value = expr.Value.Type == HLTokenType.OpCharLiteral ? $"'{expr.Value}'" : expr.Value.ToString();
+
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} {value}" );
 
             return outputTarget;

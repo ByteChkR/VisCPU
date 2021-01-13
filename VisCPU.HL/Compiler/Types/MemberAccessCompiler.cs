@@ -42,7 +42,7 @@ namespace VisCPU.HL.Compiler.Types
                 return outputTarget;
             }
 
-            HLMemberDefinition mdef = lType.TypeDefinition.GetMember( expr.MemberName );
+            HLMemberDefinition mdef = lType.TypeDefinition.GetPublicMember( expr.MemberName );
 
             if ( mdef is HLPropertyDefinition pdef )
             {
