@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Runtime.CompilerServices;
 
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
@@ -33,7 +32,6 @@ namespace VisCPU
         public virtual void Dump( Stream str )
         {
         }
-        
 
         public virtual void Shutdown()
         {

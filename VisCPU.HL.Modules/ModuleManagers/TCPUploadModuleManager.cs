@@ -1,0 +1,91 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Sockets;
+using System.Text;
+
+using Newtonsoft.Json;
+
+using VisCPU.HL.Modules.Data;
+
+namespace VisCPU.HL.Modules.ModuleManagers
+{
+
+    public class TCPUploadModuleManager : ModuleManager
+    {
+
+        #region Public
+
+        public TCPUploadModuleManager( string moduleRoot ) : base( moduleRoot )
+        {
+        }
+
+        public override void AddPackage( ModuleTarget target, string moduleDataPath )
+        {
+            TcpClient client = new TcpClient( ModuleRoot.Host, ModuleRoot.Port );
+
+            byte[] mod = Encoding.UTF8.GetBytes( JsonConvert.SerializeObject( target ) );
+            client.GetStream().Write( BitConverter.GetBytes( mod.Length ), 0, sizeof( int ) );
+            client.GetStream().Write( mod, 0, mod.Length );
+            FileInfo info = new FileInfo( moduleDataPath );
+            client.GetStream().Write( BitConverter.GetBytes( ( int ) info.Length ), 0, sizeof( int ) );
+            Stream fs = info.OpenRead();
+            fs.CopyTo( client.GetStream() );
+            fs.Close();
+            byte[] response = new byte[sizeof( int )];
+            client.GetStream().Read( response, 0, response.Length );
+            int responseLen = BitConverter.ToInt32( response, 0 );
+            response = new byte[responseLen];
+            client.GetStream().Read( response, 0, response.Length );
+            client.Close();
+            Log( "Response: {0}", Encoding.UTF8.GetString( response ) );
+        }
+
+        public override void Get( ModuleTarget target, string targetDir )
+        {
+        }
+
+        public override string GetModulePackagePath( ModulePackage package )
+        {
+            return null;
+        }
+
+        public override ModulePackage GetPackage( string name )
+        {
+            return null;
+        }
+
+        public override IEnumerable < ModulePackage > GetPackages()
+        {
+            yield break;
+        }
+
+        public override string GetTargetDataPath( ModuleTarget target )
+        {
+            return null;
+        }
+
+        public override string GetTargetDataUri( ModuleTarget target )
+        {
+            return null;
+        }
+
+        public override string GetTargetInfoUri( ModulePackage package, string moduleVersion )
+        {
+            return null;
+        }
+
+        public override bool HasPackage( string name )
+        {
+            return false;
+        }
+
+        public override void Restore( ModuleTarget target, string rootDir )
+        {
+        }
+
+        #endregion
+
+    }
+
+}

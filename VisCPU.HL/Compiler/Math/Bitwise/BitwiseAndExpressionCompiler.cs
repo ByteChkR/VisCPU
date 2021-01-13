@@ -19,7 +19,8 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right
-                                                        ).MakeAddress(compilation);
+                                                        ).
+                                                   MakeAddress( compilation );
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
             {

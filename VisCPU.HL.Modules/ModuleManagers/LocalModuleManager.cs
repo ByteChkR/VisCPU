@@ -22,21 +22,8 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         #region Public
 
-        private static string Parse( string moduleRoot )
-        {
-            if ( Uri.TryCreate( moduleRoot, UriKind.Absolute, out Uri u ) )
-            {
-                return moduleRoot;
-            }
-
-            return Path.Combine(
-                                AppDomain.CurrentDomain.BaseDirectory,
-                                moduleRoot
-                               );
-        }
-
         public LocalModuleManager( string moduleRoot ) : base(
-                                                              Parse(moduleRoot)
+                                                              Parse( moduleRoot )
                                                              )
         {
             Directory.CreateDirectory( ModuleRoot.OriginalString );
@@ -90,7 +77,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             Directory.CreateDirectory( data );
             File.Copy( moduleDataPath, GetTargetDataUri( target ) );
             SaveModuleTarget( target, GetTargetInfoUri( package, target.ModuleVersion ) );
-            SavePackageList(packageList);
+            SavePackageList( packageList );
         }
 
         public override void Get( ModuleTarget target, string targetDir )
@@ -106,7 +93,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             foreach ( ModuleDependency targetDependency in target.Dependencies )
             {
                 Get(
-                    ModuleResolver.Resolve(this, targetDependency ),
+                    ModuleResolver.Resolve( this, targetDependency ),
                     Path.Combine( targetDir, targetDependency.ModuleName )
                    );
             }
@@ -152,7 +139,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             ModulePackage p = GetPackage( moduleName );
             Directory.Delete( GetModulePackagePath( p ), true );
             packageList.Remove( p );
-            SavePackageList(packageList);
+            SavePackageList( packageList );
         }
 
         public override void RemoveTarget( string moduleName, string moduleVersion )
@@ -167,7 +154,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             }
 
             p.ModuleVersions.RemoveAll( x => x == moduleVersion );
-            SavePackageList(packageList);
+            SavePackageList( packageList );
         }
 
         public override void Restore( ModuleTarget target, string rootDir )
@@ -175,7 +162,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             foreach ( ModuleDependency targetDependency in target.Dependencies )
             {
                 Get(
-                    ModuleResolver.Resolve(this, targetDependency ),
+                    ModuleResolver.Resolve( this, targetDependency ),
                     Path.Combine( rootDir, targetDependency.ModuleName )
                    );
             }
@@ -184,7 +171,19 @@ namespace VisCPU.HL.Modules.ModuleManagers
         #endregion
 
         #region Private
-        
+
+        private static string Parse( string moduleRoot )
+        {
+            if ( Uri.TryCreate( moduleRoot, UriKind.Absolute, out Uri u ) )
+            {
+                return moduleRoot;
+            }
+
+            return Path.Combine(
+                                AppDomain.CurrentDomain.BaseDirectory,
+                                moduleRoot
+                               );
+        }
 
         #endregion
 

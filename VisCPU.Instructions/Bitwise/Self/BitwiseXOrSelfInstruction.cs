@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Bitwise.Self
+﻿namespace VisCPU.Instructions.Bitwise.Self
 {
 
     public class BitwiseXOrSelfInstruction : BitwiseInstruction
@@ -25,7 +23,7 @@ namespace VisCPU.Instructions.Bitwise.Self
             uint b = cpu.MemoryBus.Read( addressB ); //Read Value From RAM
 
             uint result = a ^ b; //Calculate Value
-            
+
             cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }
 

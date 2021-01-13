@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Branch.Conditional
+﻿namespace VisCPU.Instructions.Branch.Conditional
 {
 
     public class BranchIfLess : BranchInstruction
@@ -23,7 +21,7 @@ namespace VisCPU.Instructions.Branch.Conditional
             uint address = cpu.DecodeArgument( 2 );
 
             bool jmp = a < b;
-            
+
             if ( jmp )
             {
                 cpu.SetState( address - InstructionSize );

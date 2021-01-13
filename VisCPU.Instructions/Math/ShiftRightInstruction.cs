@@ -1,6 +1,4 @@
-﻿using System;
-
-using VisCPU.Instructions.Math.Self;
+﻿using VisCPU.Instructions.Math.Self;
 
 namespace VisCPU.Instructions.Math
 {
@@ -28,7 +26,6 @@ namespace VisCPU.Instructions.Math
             uint b = cpu.MemoryBus.Read( addressB ); //Read Value From RAM
 
             uint result = ( uint ) ( ( int ) a >> ( int ) b ); //Calculate Value
-            
 
             cpu.MemoryBus.Write( addressResult, result ); //Write back Result
         }

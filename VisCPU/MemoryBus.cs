@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 using VisCPU.Events;
-using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
@@ -56,7 +55,7 @@ namespace VisCPU
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public uint Read( uint address )
         {
             uint receivers = 0;
@@ -65,7 +64,10 @@ namespace VisCPU
             foreach ( Peripheral peripheral in peripherals )
             {
                 if ( !peripheral.CanRead( address ) )
+                {
                     continue;
+                }
+
                 if ( receivers == 0 )
                 {
                     data = peripheral.ReadData( address );
@@ -91,14 +93,17 @@ namespace VisCPU
             peripherals.ForEach( x => x.Shutdown() );
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void Write( uint address, uint data )
         {
             bool hasReceiver = false;
 
-            foreach ( Peripheral peripheral in peripherals)
+            foreach ( Peripheral peripheral in peripherals )
             {
-                if(!peripheral.CanWrite(address))continue;
+                if ( !peripheral.CanWrite( address ) )
+                {
+                    continue;
+                }
 
                 hasReceiver = true;
                 peripheral.WriteData( address, data );

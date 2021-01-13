@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Memory
+﻿namespace VisCPU.Instructions.Memory
 {
 
     public class DeReferenceInstruction : MemoryInstruction
@@ -21,7 +19,6 @@ namespace VisCPU.Instructions.Memory
             uint addressSrcPtr = cpu.DecodeArgument( 0 );
             uint addressSrc = cpu.MemoryBus.Read( cpu.MemoryBus.Read( addressSrcPtr ) ); // Dereference
             uint addressDst = cpu.DecodeArgument( 1 );
-            
 
             cpu.MemoryBus.Write( addressDst, addressSrc ); //Write back Result
         }

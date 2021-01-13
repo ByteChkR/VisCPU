@@ -21,20 +21,20 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         {
             string[] a = args.ToArray();
 
-            string repo = a.Length != 0? a[0]: "local";
+            string repo = a.Length != 0 ? a[0] : "local";
 
             string root = a.Length > 1
-                              ? Path.GetFullPath(a[1])
+                              ? Path.GetFullPath( a[1] )
                               : Directory.GetCurrentDirectory();
 
-            ModuleCleanSubSystem.Clean(root);
+            ModuleCleanSubSystem.Clean( root );
 
             string src = Path.Combine( root, "project.json" );
 
             ModuleTarget t =
                 ModuleManager.LoadModuleTarget( src );
 
-            ModuleResolver.GetManager(repo).Restore( t, root );
+            ModuleResolver.GetManager( repo ).Restore( t, root );
         }
 
         #endregion

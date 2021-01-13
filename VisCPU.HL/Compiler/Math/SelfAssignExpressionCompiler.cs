@@ -18,7 +18,8 @@ namespace VisCPU.HL.Compiler.Math
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right
-                                                        ).MakeAddress(compilation);
+                                                        ).
+                                                   MakeAddress( compilation );
 
             compilation.ProgramCode.Add(
                                         $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"

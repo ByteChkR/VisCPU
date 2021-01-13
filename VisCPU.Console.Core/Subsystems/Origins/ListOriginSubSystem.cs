@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using VisCPU.Console.Core.Settings;
 using VisCPU.HL.Modules.Resolvers;
-using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
 {

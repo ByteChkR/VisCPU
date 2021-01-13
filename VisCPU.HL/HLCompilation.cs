@@ -5,17 +5,6 @@ using System.Linq;
 using System.Text;
 
 using VisCPU.HL.Compiler;
-using VisCPU.HL.Compiler.Logic;
-using VisCPU.HL.Compiler.Math.Assignments;
-using VisCPU.HL.Compiler.Math.Atomic;
-using VisCPU.HL.Compiler.Math.Bitwise;
-using VisCPU.HL.Compiler.Math.Bitwise.Assignments;
-using VisCPU.HL.Compiler.Math.Full;
-using VisCPU.HL.Compiler.Memory;
-using VisCPU.HL.Compiler.Relational;
-using VisCPU.HL.Compiler.Special;
-using VisCPU.HL.Compiler.Types;
-using VisCPU.HL.Compiler.Variables;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Importer;
@@ -26,8 +15,6 @@ using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
-using VisCPU.HL.Parser.Tokens.Expressions.Operators;
-using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
@@ -39,161 +26,6 @@ using VisCPU.Utility.UriResolvers;
 
 namespace VisCPU.HL
 {
-
-    public class HLCompilerCollection
-    {
-        private Dictionary<Type, IHLExpressionCompiler> TypeMap;
-
-        public HLCompilerCollection(HLTypeSystem ts)
-        {
-            TypeMap = new Dictionary<Type, IHLExpressionCompiler>
-                      {
-                          { typeof( HLMemberAccessOp ), new MemberAccessCompiler() },
-                          { typeof( HLVarDefOperand ), new VariableDefinitionExpressionCompiler( ts ) },
-                          { typeof( HLArrayAccessorOp ), new ArrayAccessCompiler() },
-                          { typeof( HLVarOperand ), new VarExpressionCompiler() },
-                          { typeof( HLValueOperand ), new ConstExpressionCompiler() },
-                          { typeof( HLInvocationOp ), new InvocationExpressionCompiler() },
-                          { typeof( HLFuncDefOperand ), new FunctionDefinitionCompiler() },
-                          { typeof( HLIfOp ), new IfBlockCompiler() },
-                          { typeof( HLReturnOp ), new ReturnExpressionCompiler() },
-                          { typeof( HLWhileOp ), new WhileExpressionCompiler() },
-                          {
-                              typeof( HLUnaryOp ), new OperatorCompilerCollection < HLUnaryOp
-                              >(
-                                new Dictionary < HLTokenType,
-                                    HLExpressionCompiler < HLUnaryOp > >
-                                {
-                                    { HLTokenType.OpBang, new BoolNotExpressionCompiler() },
-                                    { HLTokenType.OpUnaryIncrement, new IncrementExpressionCompiler() },
-                                    { HLTokenType.OpUnaryDecrement, new DecrementExpressionCompiler() },
-                                    { HLTokenType.OpReference, new ReferenceExpressionCompiler() },
-                                    { HLTokenType.OpDeReference, new DereferenceExpressionCompiler() },
-                                    { HLTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },
-                                }
-                               )
-                          },
-                          {
-                              typeof( HLBinaryOp ), new OperatorCompilerCollection <
-                                  HLBinaryOp >(
-                                               new Dictionary < HLTokenType,
-                                                   HLExpressionCompiler < HLBinaryOp
-                                                   > >
-                                               {
-                                                   { HLTokenType.OpEquality, new EqualExpressionCompiler() },
-                                                   { HLTokenType.OpPlus, new AddExpressionCompiler() },
-                                                   {
-                                                       HLTokenType.OpMinus, new
-                                                           SubExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpAsterisk, new
-                                                           MulExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpComparison, new
-                                                           EqualityExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpLogicalOr, new
-                                                           BoolOrExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpLogicalAnd, new
-                                                           BoolAndExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpPipe, new
-                                                           BitwiseOrExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpAnd, new
-                                                           BitwiseAndExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpPercent, new
-                                                           ModExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpFwdSlash, new
-                                                           DivExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpCap, new
-                                                           BitwiseXOrExpressionCompiler()
-                                                   },
-                                                   { HLTokenType.OpLessThan, new LessThanExpressionCompiler() },
-                                                   {
-                                                       HLTokenType.OpGreaterThan, new
-                                                           GreaterThanExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpLessOrEqual, new
-                                                           LessEqualExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpGreaterOrEqual, new
-                                                           GreaterEqualExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftLeft, new
-                                                           BitShiftLeftExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftRight, new
-                                                           BitShiftRightExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpSumAssign, new
-                                                           AddAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpDifAssign, new
-                                                           SubAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpProdAssign, new
-                                                           MulAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpQuotAssign, new
-                                                           DivAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpRemAssign, new
-                                                           ModAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpOrAssign, new
-                                                           OrAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpAndAssign, new
-                                                           AndAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpXOrAssign, new
-                                                           XOrAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftLeftAssign, new
-                                                           ShiftLeftAssignExpressionCompiler()
-                                                   },
-                                                   {
-                                                       HLTokenType.OpShiftRightAssign, new
-                                                           ShiftRightAssignExpressionCompiler()
-                                                   }
-                                               }
-                                              )
-                          }
-                      };
-        }
-
-        public bool ContainsCompiler(Type t) => TypeMap.ContainsKey(t);
-
-        internal IHLExpressionCompiler Get( Type t ) => TypeMap[t];
-
-    }
 
     public class HLCompilation : VisBase
     {
@@ -247,7 +79,7 @@ namespace VisCPU.HL
             this.dataStore = dataStore;
             OriginalText = originalText;
             Directory = directory;
-            TypeMap = new HLCompilerCollection(TypeSystem);
+            TypeMap = new HLCompilerCollection( TypeSystem );
         }
 
         public HLCompilation( HLCompilation parent, string id )
@@ -263,7 +95,7 @@ namespace VisCPU.HL
             IncludedFiles = new List < string >( parent.IncludedFiles );
             TypeSystem = parent.TypeSystem;
             this.parent = parent;
-            TypeMap = new HLCompilerCollection(TypeSystem);
+            TypeMap = new HLCompilerCollection( TypeSystem );
         }
 
         public static void ResetCounter()
@@ -283,12 +115,13 @@ namespace VisCPU.HL
 
         public void CreateVariable( string name, uint size, HLTypeDefinition tdef, bool isVisible )
         {
-            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size, tdef, isVisible);
+            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size, tdef, isVisible );
         }
 
-        public void CreateVariable( string name, string content, HLTypeDefinition tdef, bool isVisible)
+        public void CreateVariable( string name, string content, HLTypeDefinition tdef, bool isVisible )
         {
-            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), content, tdef, isVisible);
+            VariableMap[GetFinalName( name )] =
+                new VariableData( name, GetFinalName( name ), content, tdef, isVisible );
         }
 
         public string GetFinalName( string name )
@@ -379,25 +212,75 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseFunctionToken(List<IHLToken> tokens, HLParserSettings settings)
+        public void ParseCharTokens( List < IHLToken > tokens )
         {
-            for (int i = 0; i < tokens.Count; i++)
+            for ( int i = 0; i < tokens.Count; i++ )
             {
-                if (tokens[i].Type == HLTokenType.OpBlockToken)
+                if ( i < tokens.Count - 1 &&
+                     tokens[i].Type == HLTokenType.OpSingleQuote )
                 {
-                    if (!HLParsingTools.ReadOneOrNone(
+                    int idx = tokens.FindIndex( i + 1, t => t.Type == HLTokenType.OpNewLine );
+                    int endQuote = tokens.FindIndex( i + 1, t => t.Type == HLTokenType.OpSingleQuote );
+
+                    if ( idx == -1 )
+                    {
+                        idx = tokens.Count - 1;
+                    }
+
+                    if ( endQuote == -1 || endQuote > idx )
+                    {
+                        EventManager < ErrorEvent >.SendEvent(
+                                                              new HLTokenReadEvent(
+                                                                   HLTokenType.OpSingleQuote,
+                                                                   HLTokenType.OpNewLine
+                                                                  )
+                                                             );
+
+                        return;
+                    }
+
+                    List < IHLToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
+
+                    string ConcatContent()
+                    {
+                        return OriginalText.Substring(
+                                                      content.First().SourceIndex,
+                                                      tokens[i + 1 + content.Count].SourceIndex -
+                                                      content.First().SourceIndex
+                                                     );
+                    }
+
+                    IHLToken newToken = new HLTextToken(
+                                                        HLTokenType.OpCharLiteral,
+                                                        ConcatContent(),
+                                                        tokens[i].SourceIndex
+                                                       );
+
+                    tokens.RemoveRange( i, endQuote - i + 1 );
+                    tokens.Insert( i, newToken );
+                }
+            }
+        }
+
+        public void ParseFunctionToken( List < IHLToken > tokens, HLParserSettings settings )
+        {
+            for ( int i = 0; i < tokens.Count; i++ )
+            {
+                if ( tokens[i].Type == HLTokenType.OpBlockToken )
+                {
+                    if ( !HLParsingTools.ReadOneOrNone(
                                                        tokens,
                                                        i - 1,
                                                        HLTokenType.OpBracketClose,
                                                        out IHLToken bClose
-                                                      ))
+                                                      ) )
                     {
                         continue;
                     }
 
-                    List<IHLToken> argPart = new List<IHLToken> { bClose };
-                    IHLToken[] args = HLParsingTools.ReadUntil(tokens, i - 2, -1, HLTokenType.OpBracketOpen);
-                    argPart.AddRange(args);
+                    List < IHLToken > argPart = new List < IHLToken > { bClose };
+                    IHLToken[] args = HLParsingTools.ReadUntil( tokens, i - 2, -1, HLTokenType.OpBracketOpen );
+                    argPart.AddRange( args );
 
                     IHLToken argOpenBracket = HLParsingTools.ReadOne(
                                                                      tokens,
@@ -405,23 +288,23 @@ namespace VisCPU.HL
                                                                      HLTokenType.OpBracketOpen
                                                                     );
 
-                    argPart.Add(argOpenBracket);
+                    argPart.Add( argOpenBracket );
                     argPart.Reverse();
 
                     int funcIdx = i - 3 - args.Length;
 
-                    if (tokens[funcIdx].Type != HLTokenType.OpWord)
+                    if ( tokens[funcIdx].Type != HLTokenType.OpWord )
                     {
                         continue;
                     }
 
-                    IHLToken funcName = HLParsingTools.ReadOne(tokens, funcIdx, HLTokenType.OpWord);
+                    IHLToken funcName = HLParsingTools.ReadOne( tokens, funcIdx, HLTokenType.OpWord );
 
                     IHLToken typeName = null;
 
-                    if (funcIdx > 0 &&
-                         (tokens[funcIdx - 1].Type == HLTokenType.OpWord ||
-                           tokens[funcIdx - 1].Type == HLTokenType.OpTypeVoid))
+                    if ( funcIdx > 0 &&
+                         ( tokens[funcIdx - 1].Type == HLTokenType.OpWord ||
+                           tokens[funcIdx - 1].Type == HLTokenType.OpTypeVoid ) )
                     {
                         typeName = HLParsingTools.ReadOneOfAny(
                                                                tokens,
@@ -443,14 +326,14 @@ namespace VisCPU.HL
                         int start = modStart - mods.Length + 1;
                         int end = i;
                         IHLToken block = tokens[i];
-                        tokens.RemoveRange(start, end - start + 1);
+                        tokens.RemoveRange( start, end - start + 1 );
 
                         tokens.Insert(
                                       start,
                                       new FunctionDefinitionToken(
                                                                   funcName,
                                                                   typeName,
-                                                                  ParseArgumentList(args.Reverse().ToList()),
+                                                                  ParseArgumentList( args.Reverse().ToList() ),
                                                                   mods,
                                                                   block.GetChildren().ToArray(),
                                                                   start
@@ -459,86 +342,6 @@ namespace VisCPU.HL
 
                         i = start;
                     }
-                }
-            }
-        }
-
-        public void ParseVarDefToken(List<IHLToken> tokens, HLParserSettings settings)
-        {
-            for ( int i = 0; i < tokens.Count; i++ )
-            {
-                if ( tokens[i].Type == HLTokenType.OpWord || settings.MemberModifiers.ContainsValue(tokens[i].Type) )
-                {
-                    List < IHLToken > line = HLParsingTools.ReadUntilAny(
-                                                                      tokens,
-                                                                      i,
-                                                                      1,
-                                                                     new[] { HLTokenType.OpSemicolon , HLTokenType.EOF, HLTokenType.OpBlockBracketOpen, HLTokenType.OpBlockBracketClose}
-                                                                     ).
-                                                            ToList();
-
-                    IHLToken[] mods =
-                        HLParsingTools.ReadNoneOrManyOf( line, 0, 1, settings.MemberModifiers.Values.ToArray() );
-
-                    
-
-                    if ( !HLParsingTools.ReadOneOrNone( line, mods.Length, HLTokenType.OpWord, out IHLToken type ) ||
-                         !HLParsingTools.ReadOneOrNone(line, mods.Length + 1, HLTokenType.OpWord, out IHLToken name))
-                    {
-                        i += line.Count;
-                        continue;
-                    }
-                    IHLToken num = null;
-
-                    if ( line.Count == mods.Length + 2 )
-                    {
-                        tokens.RemoveRange( i, line.Count + 1 );
-                        if (mods.All(x => x.Type != HLTokenType.OpPublicMod) && mods.All(x => x.Type != HLTokenType.OpPrivateMod))
-                        {
-                            mods = mods.Append(new HLTextToken(HLTokenType.OpPrivateMod, "private", 0)).ToArray();
-                        }
-                        tokens.Insert( i, new VariableDefinitionToken( name, type, mods, line.ToArray(), null, null ) );
-
-                        continue;
-                    }
-
-                    if ( line[mods.Length + 2].Type == HLTokenType.OpIndexerBracketOpen )
-                    {
-                        num = HLParsingTools.ReadAny( line, mods.Length + 3 );
-                        HLParsingTools.ReadOne( line, mods.Length + 4, HLTokenType.OpIndexerBracketClose );
-                        tokens.RemoveRange( i, line.Count + 1 );
-                        if (mods.All(x => x.Type != HLTokenType.OpPublicMod) && mods.All(x => x.Type != HLTokenType.OpPrivateMod))
-                        {
-                            mods = mods.Append(new HLTextToken(HLTokenType.OpPrivateMod, "private", 0)).ToArray();
-                        }
-                        tokens.Insert( i, new VariableDefinitionToken( name, type, mods, line.ToArray(), null, num ) );
-
-                        continue;
-                    }
-
-                    if ( line[mods.Length + 2].Type == HLTokenType.OpEquality )
-                    {
-                        tokens.RemoveRange(i, line.Count + 1);
-                        IHLToken[] init = line.Skip( mods.Length + 3 ).ToArray();
-                        if (mods.All(x => x.Type != HLTokenType.OpPublicMod) && mods.All(x => x.Type != HLTokenType.OpPrivateMod))
-                        {
-                            mods = mods.Append(new HLTextToken(HLTokenType.OpPrivateMod, "private", 0)).ToArray();
-                        }
-                        tokens.Insert(
-                                      i,
-                                      new VariableDefinitionToken(
-                                                                  name,
-                                                                  type,
-                                                                  mods,
-                                                                  line.ToArray(),
-                                                                  init,
-                                                                  null
-                                                                 )
-                                     );
-                        continue;
-                    }
-
-                    i += line.Count;
                 }
             }
         }
@@ -574,24 +377,24 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseOneLineStrings(List<IHLToken> tokens)
+        public void ParseOneLineStrings( List < IHLToken > tokens )
         {
-            for (int i = 0; i < tokens.Count; i++)
+            for ( int i = 0; i < tokens.Count; i++ )
             {
-                if (i < tokens.Count - 1 &&
-                     tokens[i].Type == HLTokenType.OpDoubleQuote)
+                if ( i < tokens.Count - 1 &&
+                     tokens[i].Type == HLTokenType.OpDoubleQuote )
                 {
-                    int idx = tokens.FindIndex(i + 1, t => t.Type == HLTokenType.OpNewLine);
-                    int endQuote = tokens.FindIndex(i + 1, t => t.Type == HLTokenType.OpDoubleQuote);
+                    int idx = tokens.FindIndex( i + 1, t => t.Type == HLTokenType.OpNewLine );
+                    int endQuote = tokens.FindIndex( i + 1, t => t.Type == HLTokenType.OpDoubleQuote );
 
-                    if (idx == -1)
+                    if ( idx == -1 )
                     {
                         idx = tokens.Count - 1;
                     }
 
-                    if (endQuote == -1 || endQuote > idx)
+                    if ( endQuote == -1 || endQuote > idx )
                     {
-                        EventManager<ErrorEvent>.SendEvent(
+                        EventManager < ErrorEvent >.SendEvent(
                                                               new HLTokenReadEvent(
                                                                    HLTokenType.OpDoubleQuote,
                                                                    HLTokenType.OpNewLine
@@ -601,7 +404,7 @@ namespace VisCPU.HL
                         return;
                     }
 
-                    List<IHLToken> content = tokens.GetRange(i + 1, endQuote - i - 1);
+                    List < IHLToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                     string ConcatContent()
                     {
@@ -618,58 +421,104 @@ namespace VisCPU.HL
                                                         tokens[i].SourceIndex
                                                        );
 
-                    tokens.RemoveRange(i, endQuote - i + 1);
-                    tokens.Insert(i, newToken);
+                    tokens.RemoveRange( i, endQuote - i + 1 );
+                    tokens.Insert( i, newToken );
                 }
             }
         }
 
-        public void ParseCharTokens(List<IHLToken> tokens)
+        public void ParseVarDefToken( List < IHLToken > tokens, HLParserSettings settings )
         {
-            for (int i = 0; i < tokens.Count; i++)
+            for ( int i = 0; i < tokens.Count; i++ )
             {
-                if (i < tokens.Count - 1 &&
-                     tokens[i].Type == HLTokenType.OpSingleQuote)
+                if ( tokens[i].Type == HLTokenType.OpWord || settings.MemberModifiers.ContainsValue( tokens[i].Type ) )
                 {
-                    int idx = tokens.FindIndex(i + 1, t => t.Type == HLTokenType.OpNewLine);
-                    int endQuote = tokens.FindIndex(i + 1, t => t.Type == HLTokenType.OpSingleQuote);
+                    List < IHLToken > line = HLParsingTools.ReadUntilAny(
+                                                                         tokens,
+                                                                         i,
+                                                                         1,
+                                                                         new[]
+                                                                         {
+                                                                             HLTokenType.OpSemicolon,
+                                                                             HLTokenType.EOF,
+                                                                             HLTokenType.OpBlockBracketOpen,
+                                                                             HLTokenType.OpBlockBracketClose
+                                                                         }
+                                                                        ).
+                                                            ToList();
 
-                    if (idx == -1)
+                    IHLToken[] mods =
+                        HLParsingTools.ReadNoneOrManyOf( line, 0, 1, settings.MemberModifiers.Values.ToArray() );
+
+                    if ( !HLParsingTools.ReadOneOrNone( line, mods.Length, HLTokenType.OpWord, out IHLToken type ) ||
+                         !HLParsingTools.ReadOneOrNone( line, mods.Length + 1, HLTokenType.OpWord, out IHLToken name ) )
                     {
-                        idx = tokens.Count - 1;
+                        i += line.Count;
+
+                        continue;
                     }
 
-                    if (endQuote == -1 || endQuote > idx)
-                    {
-                        EventManager<ErrorEvent>.SendEvent(
-                                                              new HLTokenReadEvent(
-                                                                   HLTokenType.OpSingleQuote,
-                                                                   HLTokenType.OpNewLine
-                                                                  )
-                                                             );
+                    IHLToken num = null;
 
-                        return;
+                    if ( line.Count == mods.Length + 2 )
+                    {
+                        tokens.RemoveRange( i, line.Count + 1 );
+
+                        if ( mods.All( x => x.Type != HLTokenType.OpPublicMod ) &&
+                             mods.All( x => x.Type != HLTokenType.OpPrivateMod ) )
+                        {
+                            mods = mods.Append( new HLTextToken( HLTokenType.OpPrivateMod, "private", 0 ) ).ToArray();
+                        }
+
+                        tokens.Insert( i, new VariableDefinitionToken( name, type, mods, line.ToArray(), null, null ) );
+
+                        continue;
                     }
 
-                    List<IHLToken> content = tokens.GetRange(i + 1, endQuote - i - 1);
-
-                    string ConcatContent()
+                    if ( line[mods.Length + 2].Type == HLTokenType.OpIndexerBracketOpen )
                     {
-                        return OriginalText.Substring(
-                                                      content.First().SourceIndex,
-                                                      tokens[i + 1 + content.Count].SourceIndex -
-                                                      content.First().SourceIndex
-                                                     );
+                        num = HLParsingTools.ReadAny( line, mods.Length + 3 );
+                        HLParsingTools.ReadOne( line, mods.Length + 4, HLTokenType.OpIndexerBracketClose );
+                        tokens.RemoveRange( i, line.Count + 1 );
+
+                        if ( mods.All( x => x.Type != HLTokenType.OpPublicMod ) &&
+                             mods.All( x => x.Type != HLTokenType.OpPrivateMod ) )
+                        {
+                            mods = mods.Append( new HLTextToken( HLTokenType.OpPrivateMod, "private", 0 ) ).ToArray();
+                        }
+
+                        tokens.Insert( i, new VariableDefinitionToken( name, type, mods, line.ToArray(), null, num ) );
+
+                        continue;
                     }
 
-                    IHLToken newToken = new HLTextToken(
-                                                        HLTokenType.OpCharLiteral,
-                                                        ConcatContent(),
-                                                        tokens[i].SourceIndex
-                                                       );
+                    if ( line[mods.Length + 2].Type == HLTokenType.OpEquality )
+                    {
+                        tokens.RemoveRange( i, line.Count + 1 );
+                        IHLToken[] init = line.Skip( mods.Length + 3 ).ToArray();
 
-                    tokens.RemoveRange(i, endQuote - i + 1);
-                    tokens.Insert(i, newToken);
+                        if ( mods.All( x => x.Type != HLTokenType.OpPublicMod ) &&
+                             mods.All( x => x.Type != HLTokenType.OpPrivateMod ) )
+                        {
+                            mods = mods.Append( new HLTextToken( HLTokenType.OpPrivateMod, "private", 0 ) ).ToArray();
+                        }
+
+                        tokens.Insert(
+                                      i,
+                                      new VariableDefinitionToken(
+                                                                  name,
+                                                                  type,
+                                                                  mods,
+                                                                  line.ToArray(),
+                                                                  init,
+                                                                  null
+                                                                 )
+                                     );
+
+                        continue;
+                    }
+
+                    i += line.Count;
                 }
             }
         }
@@ -711,15 +560,12 @@ namespace VisCPU.HL
             return ( prefix == null ? "" : prefix + "_" ) + counter++;
         }
 
-        
-
         internal string Parse( HLExpression[] block, bool printHead = true, string appendAfterProg = "HLT" )
         {
-            
             foreach ( HLExpression hlExpression in block )
             {
-                ExpressionTarget c= Parse( hlExpression, new ExpressionTarget());
-                ReleaseTempVar(c.ResultAddress);
+                ExpressionTarget c = Parse( hlExpression, new ExpressionTarget() );
+                ReleaseTempVar( c.ResultAddress );
             }
 
             StringBuilder sb = new StringBuilder();
@@ -772,7 +618,7 @@ namespace VisCPU.HL
                     else
                     {
                         sb.AppendLine(
-                                      $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {( keyValuePair.Value.IsVisible ? "": "linker:hide" )}"
+                                      $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {( keyValuePair.Value.IsVisible ? "" : "linker:hide" )}"
                                      );
                     }
                 }
@@ -802,13 +648,13 @@ namespace VisCPU.HL
             return ParsedText = sb.ToString();
         }
 
-        internal ExpressionTarget Parse( HLExpression expr, ExpressionTarget outputTarget = default)
+        internal ExpressionTarget Parse( HLExpression expr, ExpressionTarget outputTarget = default )
         {
             Type t = expr.GetType();
 
             if ( TypeMap.ContainsCompiler( t ) )
             {
-                return TypeMap.Get(t).Parse( this, expr, outputTarget );
+                return TypeMap.Get( t ).Parse( this, expr, outputTarget );
             }
 
             EventManager < ErrorEvent >.SendEvent( new ExpressionCompilerNotFoundEvent( expr ) );
@@ -941,7 +787,7 @@ namespace VisCPU.HL
 
             ProgramCode.Add( $"COPY {initValue} {name} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false);
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private VariableData GetFreeTempVarDref( string initValue )
@@ -958,7 +804,7 @@ namespace VisCPU.HL
 
             ProgramCode.Add( $"DREF {initValue} {name} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false);
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private VariableData GetFreeTempVarLoad( string initValue )
@@ -975,7 +821,7 @@ namespace VisCPU.HL
 
             ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false);
+            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private string GetPrefix()

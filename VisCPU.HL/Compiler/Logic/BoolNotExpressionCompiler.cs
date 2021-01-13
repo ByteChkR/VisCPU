@@ -17,7 +17,8 @@ namespace VisCPU.HL.Compiler.Logic
         {
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left
-                                                       ).MakeAddress(compilation);
+                                                       ).
+                                                  MakeAddress( compilation );
 
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value
@@ -31,7 +32,7 @@ namespace VisCPU.HL.Compiler.Logic
 
             return outputTarget;
         }
-        
+
         #endregion
 
     }

@@ -19,7 +19,6 @@ namespace VisCPU.Instructions.Branch
         public override void Process( CPU cpu )
         {
             cpu.PopState();
-            
         }
 
         #endregion

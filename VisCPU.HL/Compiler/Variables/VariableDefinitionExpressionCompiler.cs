@@ -26,7 +26,7 @@ namespace VisCPU.HL.Compiler.Variables
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLVarDefOperand expr )
         {
-            if ( expr.value.Modifiers.Any(x=>x.Type == HLTokenType.OpConstMod ))
+            if ( expr.value.Modifiers.Any( x => x.Type == HLTokenType.OpConstMod ) )
             {
                 string asmVarName = expr.value.Name.ToString();
 
@@ -34,10 +34,17 @@ namespace VisCPU.HL.Compiler.Variables
                 {
                     EventManager < ErrorEvent >.SendEvent( new DuplicateConstVarDefinitionEvent( asmVarName ) );
                 }
-                
-                compilation.ConstValTypes.Add( asmVarName, expr.value.InitializerExpression.FirstOrDefault()?.ToString() );
 
-                return new ExpressionTarget( asmVarName, true, compilation.TypeSystem.GetType( expr.value.TypeName.ToString() ) );
+                compilation.ConstValTypes.Add(
+                                              asmVarName,
+                                              expr.value.InitializerExpression.FirstOrDefault()?.ToString()
+                                             );
+
+                return new ExpressionTarget(
+                                            asmVarName,
+                                            true,
+                                            compilation.TypeSystem.GetType( expr.value.TypeName.ToString() )
+                                           );
             }
 
             if ( expr.value.TypeName.ToString() == HLCompilation.VAL_TYPE )
@@ -61,20 +68,21 @@ namespace VisCPU.HL.Compiler.Variables
                                            asmVarName,
                                            arrSize,
                                            vdef,
-                                           expr.value.Modifiers.Any(x=>x.Type == HLTokenType.OpPublicMod)
+                                           expr.value.Modifiers.Any( x => x.Type == HLTokenType.OpPublicMod )
                                           );
 
-                
-
-                ExpressionTarget dvar= new ExpressionTarget(
-                                            compilation.GetFinalName( asmVarName ),
-                                            true,
-                                            vdef
-                                           );
+                ExpressionTarget dvar = new ExpressionTarget(
+                                                             compilation.GetFinalName( asmVarName ),
+                                                             true,
+                                                             vdef
+                                                            );
 
                 HLExpression init = expr.Initializer.FirstOrDefault();
-                if(init != null)
-                return compilation.Parse( init, dvar ).CopyIfNotNull(compilation, dvar, true);
+
+                if ( init != null )
+                {
+                    return compilation.Parse( init, dvar ).CopyIfNotNull( compilation, dvar, true );
+                }
 
                 return dvar;
             }

@@ -1,6 +1,4 @@
-﻿using System;
-
-using VisCPU.Instructions.Branch.Conditional;
+﻿using VisCPU.Instructions.Branch.Conditional;
 
 namespace VisCPU.Instructions.Branch
 {
@@ -21,7 +19,7 @@ namespace VisCPU.Instructions.Branch
         public override void Process( CPU cpu )
         {
             uint address = cpu.MemoryBus.Read( cpu.DecodeArgument( 0 ) );
-            
+
             cpu.SetState( address - InstructionSize );
         }
 

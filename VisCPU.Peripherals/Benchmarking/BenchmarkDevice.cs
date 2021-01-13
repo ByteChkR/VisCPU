@@ -1,25 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Logging;
 
 namespace VisCPU.Peripherals.Benchmarking
 {
+
     public class BenchmarkDevice : Peripheral
     {
 
         public class BenchmarkResultEvent : Event
         {
 
-            public override string EventKey => "benchmark-run-result";
-
             private string Name;
             private TimeSpan Time;
-            public BenchmarkResultEvent(string name, TimeSpan time)
+
+            public override string EventKey => "benchmark-run-result";
+
+            #region Public
+
+            public BenchmarkResultEvent( string name, TimeSpan time )
             {
                 Name = name;
                 Time = time;
@@ -29,6 +31,8 @@ namespace VisCPU.Peripherals.Benchmarking
             {
                 return $"{Name}: {Time.Milliseconds} ms";
             }
+
+            #endregion
 
         }
 
@@ -43,19 +47,19 @@ namespace VisCPU.Peripherals.Benchmarking
 
         #region Public
 
-        public override bool CanRead(uint address)
+        public override bool CanRead( uint address )
         {
             return address == DEVICE_PRESENT;
         }
 
-        public override bool CanWrite(uint address)
+        public override bool CanWrite( uint address )
         {
             return address == RUN_SET_NAME || address == RUN_CLEAR_NAME || address == RUN_END || address == RUN_BEGIN;
         }
 
-        public override uint ReadData(uint address)
+        public override uint ReadData( uint address )
         {
-            if (address == DEVICE_PRESENT)
+            if ( address == DEVICE_PRESENT )
             {
                 return 1;
             }
@@ -63,27 +67,27 @@ namespace VisCPU.Peripherals.Benchmarking
             throw new NotImplementedException();
         }
 
-        public override void WriteData(uint address, uint data)
+        public override void WriteData( uint address, uint data )
         {
-            if (address == RUN_SET_NAME)
+            if ( address == RUN_SET_NAME )
             {
-                benchmarkName.Append((char)data);
+                benchmarkName.Append( ( char ) data );
             }
-            else if (address == RUN_END)
+            else if ( address == RUN_END )
             {
                 StopTimer();
             }
-            else if (address == RUN_BEGIN)
+            else if ( address == RUN_BEGIN )
             {
                 BeginTimer();
             }
-            else if (address == RUN_CLEAR_NAME)
+            else if ( address == RUN_CLEAR_NAME )
             {
                 benchmarkName.Clear();
             }
             else
             {
-                throw new Exception("Invalid use of Benchmark Device");
+                throw new Exception( "Invalid use of Benchmark Device" );
             }
         }
 
@@ -93,28 +97,34 @@ namespace VisCPU.Peripherals.Benchmarking
 
         private void BeginTimer()
         {
-            if (stopWatch.IsRunning)
-                throw new Exception("Benchmark Run Already Running, Finish the Benchmark to start the next one");
+            if ( stopWatch.IsRunning )
+            {
+                throw new Exception( "Benchmark Run Already Running, Finish the Benchmark to start the next one" );
+            }
 
             stopWatch.Restart();
-        }
-
-        private void StopTimer()
-        {
-            if (!stopWatch.IsRunning)
-                throw new Exception("No Benchmark Run running.");
-
-            stopWatch.Stop();
-            PrintResult();
         }
 
         private void PrintResult()
         {
             EventManager.SendEvent( new BenchmarkResultEvent( benchmarkName.ToString(), stopWatch.Elapsed ) );
+
             //Log($"Benchmark {benchmarkName}: {stopWatch.ElapsedMilliseconds} ms");
+        }
+
+        private void StopTimer()
+        {
+            if ( !stopWatch.IsRunning )
+            {
+                throw new Exception( "No Benchmark Run running." );
+            }
+
+            stopWatch.Stop();
+            PrintResult();
         }
 
         #endregion
 
     }
+
 }

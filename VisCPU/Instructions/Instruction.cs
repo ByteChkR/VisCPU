@@ -1,6 +1,4 @@
-﻿using System;
-
-using VisCPU.Utility.SharedBase;
+﻿using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Instructions
 {
@@ -18,12 +16,8 @@ namespace VisCPU.Instructions
 
         #region Public
 
-        public abstract void Process(CPU cpu);
+        public abstract void Process( CPU cpu );
 
-        #endregion
-
-        #region Protected
-        
         #endregion
 
     }

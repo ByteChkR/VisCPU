@@ -16,7 +16,7 @@ namespace VisCPU.HL.Compiler.Variables
             string value = expr.Value.Type == HLTokenType.OpCharLiteral ? $"'{expr.Value}'" : expr.Value.ToString();
 
             ExpressionTarget tmp =
-                new ExpressionTarget(value, false, compilation.TypeSystem.GetType( "var" ) );
+                new ExpressionTarget( value, false, compilation.TypeSystem.GetType( "var" ) );
 
             return tmp;
         }

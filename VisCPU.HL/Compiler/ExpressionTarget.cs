@@ -1,18 +1,17 @@
-﻿using VisCPU.HL.Compiler.Relational;
-using VisCPU.HL.TypeSystem;
+﻿using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.Compiler
 {
 
     public readonly struct ExpressionTarget
     {
+
         public readonly string ResultAddress;
         public readonly bool IsAddress;
         public readonly bool IsPointer;
         public readonly HLTypeDefinition TypeDefinition;
-        
 
-        public ExpressionTarget(string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer = false)
+        public ExpressionTarget( string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer = false )
         {
             ResultAddress = resultAddress;
             IsAddress = isAddress;
@@ -20,25 +19,25 @@ namespace VisCPU.HL.Compiler
             TypeDefinition = def;
         }
 
-        public ExpressionTarget Cast(HLTypeDefinition newType)
+        public ExpressionTarget Cast( HLTypeDefinition newType )
         {
-            return new ExpressionTarget( ResultAddress, IsAddress, newType, IsPointer);
+            return new ExpressionTarget( ResultAddress, IsAddress, newType, IsPointer );
         }
 
-        public ExpressionTarget Reinterpret(bool isAddress, bool isPointer)
+        public ExpressionTarget Reinterpret( bool isAddress, bool isPointer )
         {
-            return new ExpressionTarget( ResultAddress, isAddress, TypeDefinition, isPointer);
+            return new ExpressionTarget( ResultAddress, isAddress, TypeDefinition, isPointer );
         }
 
-        public ExpressionTarget MakeAddress(HLCompilation c)
+        public ExpressionTarget MakeAddress( HLCompilation c )
         {
-            if (IsAddress)
+            if ( IsAddress )
             {
                 return this;
             }
 
             ExpressionTarget tmpVal = new ExpressionTarget(
-                                                           c.GetTempVarLoad(ResultAddress),
+                                                           c.GetTempVarLoad( ResultAddress ),
                                                            true,
                                                            TypeDefinition,
                                                            IsPointer
@@ -47,14 +46,14 @@ namespace VisCPU.HL.Compiler
             return tmpVal;
         }
 
-        public ExpressionTarget LoadIfNotNull(HLCompilation compilation, ExpressionTarget target)
+        public ExpressionTarget LoadIfNotNull( HLCompilation compilation, ExpressionTarget target )
         {
-            if (target.ResultAddress == null || target.ResultAddress == ResultAddress)
+            if ( target.ResultAddress == null || target.ResultAddress == ResultAddress )
             {
                 return this;
             }
 
-            compilation.ProgramCode.Add($"LOAD {target.ResultAddress} {ResultAddress}");
+            compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} {ResultAddress}" );
 
             return target;
         }
@@ -62,15 +61,15 @@ namespace VisCPU.HL.Compiler
         public ExpressionTarget CopyIfNotNull(
             HLCompilation compilation,
             ExpressionTarget target,
-            bool releaseSource = false)
+            bool releaseSource = false )
         {
-            if (target.ResultAddress == null || target.ResultAddress == ResultAddress)
+            if ( target.ResultAddress == null || target.ResultAddress == ResultAddress )
             {
                 return this;
             }
 
-            compilation.ProgramCode.Add($"COPY {ResultAddress} {target.ResultAddress}");
-            compilation.ReleaseTempVar(ResultAddress);
+            compilation.ProgramCode.Add( $"COPY {ResultAddress} {target.ResultAddress}" );
+            compilation.ReleaseTempVar( ResultAddress );
 
             return target;
         }

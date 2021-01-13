@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Branch.Conditional
+﻿namespace VisCPU.Instructions.Branch.Conditional
 {
 
     public class BranchIfNotZero : BranchInstruction
@@ -22,7 +20,6 @@ namespace VisCPU.Instructions.Branch.Conditional
             uint address = cpu.DecodeArgument( 1 );
 
             bool jmp = a != 0;
-            
 
             if ( jmp )
             {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Math.Self
+﻿namespace VisCPU.Instructions.Math.Self
 {
 
     public class MulSelfInstruction : MathInstruction
@@ -25,7 +23,6 @@ namespace VisCPU.Instructions.Math.Self
             uint b = cpu.MemoryBus.Read( addressB ); //Read Value From RAM
 
             uint result = a * b; //Calculate Value
-            
 
             cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }

@@ -37,7 +37,7 @@ namespace VisCPU.HL.DataTypes
             IsVisible = isVisible;
         }
 
-        public VariableData( string name, string finalName, string content, HLTypeDefinition tdef, bool isVisible)
+        public VariableData( string name, string finalName, string content, HLTypeDefinition tdef, bool isVisible )
         {
             this.name = name;
             this.finalName = finalName;

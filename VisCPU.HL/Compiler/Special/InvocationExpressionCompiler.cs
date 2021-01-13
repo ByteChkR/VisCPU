@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.Compiler.Special.Compiletime;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
@@ -12,14 +13,16 @@ namespace VisCPU.HL.Compiler.Special
 
     public class InvocationExpressionCompiler : HLExpressionCompiler < HLInvocationOp >
     {
-        private readonly CompiletimeFunctionCompilerCollection ctFuncCollection = new CompiletimeFunctionCompilerCollection();
+
+        private readonly CompiletimeFunctionCompilerCollection ctFuncCollection =
+            new CompiletimeFunctionCompilerCollection();
 
         #region Public
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLInvocationOp expr )
         {
             string target = expr.Left.ToString();
-            
+
             if ( ctFuncCollection.IsCompiletimeFunction( target ) )
             {
                 return ctFuncCollection.Compile( target, compilation, expr );
@@ -55,7 +58,8 @@ namespace VisCPU.HL.Compiler.Special
                 {
                     ExpressionTarget arg = compilation.Parse(
                                                              parameter
-                                                            ).MakeAddress(compilation);
+                                                            ).
+                                                       MakeAddress( compilation );
 
                     compilation.ProgramCode.Add(
                                                 $"PUSH {arg.ResultAddress}; Push Param {parameter}"

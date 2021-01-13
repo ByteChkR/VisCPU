@@ -16,7 +16,7 @@ namespace VisCPU.HL.Compiler.Special
 
             compilation.ProgramCode.Add( $".{startLabel} linker:hide" );
 
-            ExpressionTarget target = compilation.Parse( expr.Condition ).MakeAddress(compilation);
+            ExpressionTarget target = compilation.Parse( expr.Condition ).MakeAddress( compilation );
 
             compilation.ProgramCode.Add( $"BEZ {target.ResultAddress} {endLabel}" );
 

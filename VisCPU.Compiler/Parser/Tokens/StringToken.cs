@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace VisCPU.Compiler.Parser.Tokens
+﻿namespace VisCPU.Compiler.Parser.Tokens
 {
 
     public class StringToken : WordToken

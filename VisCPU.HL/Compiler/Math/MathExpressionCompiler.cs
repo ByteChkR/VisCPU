@@ -21,7 +21,8 @@ namespace VisCPU.HL.Compiler.Math
 
             ExpressionTarget rTarget = compilation.Parse(
                                                          expr.Right
-                                                        ).MakeAddress(compilation);
+                                                        ).
+                                                   MakeAddress( compilation );
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
             {

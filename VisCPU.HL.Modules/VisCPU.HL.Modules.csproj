@@ -12,8 +12,4 @@
     <ProjectReference Include="..\VisCPU.Utility\VisCPU.Utility.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UploadService\" />
-  </ItemGroup>
-
 </Project>

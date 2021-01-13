@@ -19,7 +19,7 @@ namespace VisCPU.Utility.Logging
                 return;
             }
 
-            OnLogReceive?.Invoke( subsystem, string.Format(format, args));
+            OnLogReceive?.Invoke( subsystem, string.Format( format, args ) );
         }
 
         #endregion

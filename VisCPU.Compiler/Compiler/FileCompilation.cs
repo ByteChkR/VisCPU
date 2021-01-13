@@ -122,7 +122,6 @@ namespace VisCPU.Compiler.Compiler
 
                     WordToken tFile = Tokens[i][2] as WordToken;
 
-
                     string file = Path.Combine(
                                                Path.GetDirectoryName( Reference.File ),
                                                Tokens[i][2] is StringToken str ? str.GetContent() : tFile.GetValue()
@@ -207,14 +206,13 @@ namespace VisCPU.Compiler.Compiler
             {
                 AToken item = aToken;
 
-
                 if ( item is ValueToken vT )
                 {
                     ret.Add( vT.Value );
                 }
-                else if (item is StringToken lst)
+                else if ( item is StringToken lst )
                 {
-                    ret.Add(lst.GetContent());
+                    ret.Add( lst.GetContent() );
                 }
                 else
                 {
@@ -234,6 +232,7 @@ namespace VisCPU.Compiler.Compiler
                     WordToken content = Tokens[i][1] as WordToken;
 
                     string cstr;
+
                     if ( content is StringToken st )
                     {
                         cstr = st.GetContent();
@@ -252,7 +251,7 @@ namespace VisCPU.Compiler.Compiler
                                                             )
                                                );
 
-                    Log( "Including file: {0}", cstr);
+                    Log( "Including file: {0}", cstr );
                     FileReferences.Add( new FileReference( c, linkerArgs ) );
                     Tokens.RemoveAt( i );
                 }

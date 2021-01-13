@@ -80,7 +80,7 @@ namespace VisCPU.Console.Core.Subsystems
                 HostFileSystem hostFS = new HostFileSystem();
                 BenchmarkDevice benchDev = new BenchmarkDevice();
 
-                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS, benchDev);
+                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS, benchDev );
 
                 CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );

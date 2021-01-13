@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Bitwise
+﻿namespace VisCPU.Instructions.Bitwise
 {
 
     public class BitwiseOrInstruction : BitwiseInstruction

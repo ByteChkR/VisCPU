@@ -17,7 +17,8 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
         {
             ExpressionTarget target = compilation.Parse(
                                                         expr.Left
-                                                       ).MakeAddress(compilation);
+                                                       ).
+                                                  MakeAddress( compilation );
 
             string tmp = compilation.GetTempVar( ~( uint ) 0 );
             compilation.ProgramCode.Add( $"XOR {target} {tmp}" );

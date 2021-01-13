@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisCPU.HL.Forms", "VisCPU.H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.Console.Core", "VisCPU.Console.Core\VisCPU.Console.Core.csproj", "{09EBACAB-1814-4BE5-A7B2-C1CE9932D055}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisCPU.HL.Modules", "VisCPU.HL.Modules\VisCPU.HL.Modules.csproj", "{6038B035-9338-46BC-946E-F7E20291B31B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.HL.Modules", "VisCPU.HL.Modules\VisCPU.HL.Modules.csproj", "{6038B035-9338-46BC-946E-F7E20291B31B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

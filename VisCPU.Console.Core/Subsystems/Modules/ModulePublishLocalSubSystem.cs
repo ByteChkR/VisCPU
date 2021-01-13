@@ -32,7 +32,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             string src = Path.Combine( root, "build", "module.json" );
 
             Log( "Packing '{0}'", src );
-            ModulePackSubSystem.Pack( args.Skip(1) );
+            ModulePackSubSystem.Pack( args.Skip( 1 ) );
 
             if ( !File.Exists( src ) )
             {
@@ -41,13 +41,14 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                 return;
             }
 
-            Log("Publishing '{0}'", src);
+            Log( "Publishing '{0}'", src );
             ModuleTarget t = ModuleManager.LoadModuleTarget( src );
 
-            ModuleResolver.GetManager(repo).AddPackage(
-                                              t,
-                                              Path.Combine( root, "build", "module.zip" )
-                                             );
+            ModuleResolver.GetManager( repo ).
+                           AddPackage(
+                                      t,
+                                      Path.Combine( root, "build", "module.zip" )
+                                     );
         }
 
         #endregion

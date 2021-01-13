@@ -30,7 +30,8 @@ namespace VisCPU.HL.Compiler.Special
 
                 ExpressionTarget exprTarget = compilation.Parse(
                                                                 expr.ConditionMap[i].Item1
-                                                               ).MakeAddress(compilation);
+                                                               ).
+                                                          MakeAddress( compilation );
 
                 string nextLabel;
 

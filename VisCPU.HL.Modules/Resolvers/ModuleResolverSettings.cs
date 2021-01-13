@@ -11,17 +11,17 @@ namespace VisCPU.HL.Modules.Resolvers
     public class ModuleResolverSettings
     {
 
-        [Argument(Name = "module.origins")]
-        public Dictionary<string, string> ModuleOrigins = new Dictionary<string, string>
-                                                            {
-                                                                {"local", "config/module/local"  }
-                                                            };
+        [Argument( Name = "module.origins" )]
+        public Dictionary < string, string > ModuleOrigins = new Dictionary < string, string >
+                                                             {
+                                                                 { "local", "config/module/local" }
+                                                             };
 
         #region Public
 
         public static ModuleResolverSettings Create()
         {
-            return SettingsSystem.GetSettings<ModuleResolverSettings>();
+            return SettingsSystem.GetSettings < ModuleResolverSettings >();
         }
 
         #endregion
@@ -41,6 +41,7 @@ namespace VisCPU.HL.Modules.Resolvers
         }
 
         #endregion
+
     }
 
 }

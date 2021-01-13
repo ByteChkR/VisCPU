@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Bitwise
+﻿namespace VisCPU.Instructions.Bitwise
 {
 
     public class BitwiseAndInstruction : BitwiseInstruction
@@ -26,7 +24,6 @@ namespace VisCPU.Instructions.Bitwise
             uint b = cpu.MemoryBus.Read( addressB ); //Read Value From RAM
 
             uint result = a & b; //Calculate Value
-            
 
             cpu.MemoryBus.Write( addressResult, result ); //Write back Result
         }

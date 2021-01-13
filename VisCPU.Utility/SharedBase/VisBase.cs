@@ -10,7 +10,7 @@ namespace VisCPU.Utility.SharedBase
 
         #region Public
 
-        public virtual void Log( string format, params  object[]args)
+        public virtual void Log( string format, params object[] args )
         {
             Logger.LogMessage( SubSystem, format, args );
         }

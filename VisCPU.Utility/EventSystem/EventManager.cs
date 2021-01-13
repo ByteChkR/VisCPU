@@ -19,11 +19,6 @@ namespace VisCPU.Utility.EventSystem
             EventManager < WarningEvent >.OnEventReceive += EventManagerOnWarningEventReceive;
         }
 
-        private static void EventManagerOnEventReceive( Event obj )
-        {
-            Console.WriteLine($"[{obj.EventKey}] {obj}");
-        }
-
         public static void SendEvent( Event eventItem )
         {
             OnEventReceive?.Invoke( eventItem );
@@ -41,6 +36,11 @@ namespace VisCPU.Utility.EventSystem
             }
 
             throw new Exception( $"[{obj.EventKey}] {obj.Message}" );
+        }
+
+        private static void EventManagerOnEventReceive( Event obj )
+        {
+            Console.WriteLine( $"[{obj.EventKey}] {obj}" );
         }
 
         private static void EventManagerOnWarningEventReceive( WarningEvent obj )

@@ -18,7 +18,7 @@
         {
             uint addr = cpu.DecodeArgument( 0 );
             uint val = cpu.MemoryBus.Read( addr );
-            
+
             cpu.Push( val );
         }
 

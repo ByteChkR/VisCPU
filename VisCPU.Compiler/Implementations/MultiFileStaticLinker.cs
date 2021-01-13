@@ -71,15 +71,18 @@ namespace VisCPU.Compiler.Implementations
             }
 
             Log(
-                "Hidden Items: {0}", hiddenItems
+                "Hidden Items: {0}",
+                hiddenItems
                );
 
             Log(
-                "Duplicated Items: {0}", duplicatedItems
+                "Duplicated Items: {0}",
+                duplicatedItems
                );
 
             Log(
-                "Exported Items: {0}", exportedItems
+                "Exported Items: {0}",
+                exportedItems
                );
         }
 

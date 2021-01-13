@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using VisCPU.Console.Core.Settings;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.HL.Modules.Resolvers;
@@ -18,7 +17,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         public override void Run( IEnumerable < string > args )
         {
-
             foreach ( KeyValuePair < string, ModuleManager > keyValuePair in ModuleResolver.GetManagers() )
             {
                 Log( $"{keyValuePair.Key} : {keyValuePair.Value.ModuleRoot}" );

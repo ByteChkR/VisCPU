@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VisCPU.Instructions.Memory
+﻿namespace VisCPU.Instructions.Memory
 {
 
     public class LoadInstruction : MemoryInstruction
@@ -20,7 +18,6 @@ namespace VisCPU.Instructions.Memory
         {
             uint address = cpu.DecodeArgument( 0 );
             uint value = cpu.DecodeArgument( 1 );
-            
 
             cpu.MemoryBus.Write( address, value ); //Write back Result
         }
