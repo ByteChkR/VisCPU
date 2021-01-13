@@ -109,6 +109,11 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public abstract bool HasPackage(string name);
 
+        public bool HasTarget( ModuleTarget target )
+        {
+            return HasPackage( target.ModuleName ) && GetPackage( target.ModuleName ).HasTarget( target.ModuleVersion );
+        }
+
         public abstract void Restore(ModuleTarget target, string rootDir);
 
         public virtual void AddPackage(ModuleTarget target, string moduleDataPath)

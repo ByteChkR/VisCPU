@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -10,26 +12,28 @@ using Newtonsoft.Json;
 
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.Utility.Logging;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Modules.UploadService
 {
 
-    public class UploadServer
+    public class TCPModuleManagerServer : VisBase
     {
 
         private bool stopServer = false;
-        private string TempStagingDirectory;
-        private ModuleManager Manager;
+        public readonly string TempStagingDirectory;
+        public readonly ModuleManager Manager;
         private TcpListener Listener;
-        public UploadServer( ModuleManager manager, string tempStagingDirectory)
+        public TCPModuleManagerServer( ModuleManager manager, int port, string tempStagingDirectory)
         {
             Manager = manager;
-            Listener = TcpListener.Create(21212);
+            Listener = TcpListener.Create(port);
             TempStagingDirectory = tempStagingDirectory;
             Directory.CreateDirectory( TempStagingDirectory );
         }
 
-        private string GetTempFile()
+        public string GetTempFile()
         {
             return Path.Combine(TempStagingDirectory, Path.GetRandomFileName());
         }
@@ -38,8 +42,6 @@ namespace VisCPU.HL.Modules.UploadService
         {
             stopServer = true;
         }
-
-        
 
         public void ServerLoop()
         {
@@ -107,7 +109,9 @@ namespace VisCPU.HL.Modules.UploadService
 
             Directory.Delete( TempStagingDirectory, true );
         }
-        
+
+        protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
+
     }
 
 }
