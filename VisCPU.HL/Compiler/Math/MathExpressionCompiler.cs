@@ -17,23 +17,20 @@ namespace VisCPU.HL.Compiler.Math
             HLBinaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse( expr.Left, outputTarget );
+            ExpressionTarget target = compilation.Parse( expr.Left ).MakeAddress( compilation );
 
-            ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
-                                                   MakeAddress( compilation );
+            ExpressionTarget rTarget = compilation.Parse( expr.Right ).MakeAddress( compilation );
 
-            if ( target.ResultAddress == outputTarget.ResultAddress )
-            {
-                compilation.ProgramCode.Add(
-                                            $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
+            //if ( target.ResultAddress == outputTarget.ResultAddress )
+            //{
+            //    compilation.ProgramCode.Add(
+            //                                $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
+            //                               );
 
-                compilation.ReleaseTempVar( rTarget.ResultAddress );
+            //    compilation.ReleaseTempVar( rTarget.ResultAddress );
 
-                return target;
-            }
+            //    return target;
+            //}
 
             if ( target.IsPointer )
             {

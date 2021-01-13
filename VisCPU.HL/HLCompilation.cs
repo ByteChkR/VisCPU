@@ -21,6 +21,7 @@ using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.IO;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 using VisCPU.Utility.UriResolvers;
 
@@ -30,6 +31,7 @@ namespace VisCPU.HL
     public class HLCompilation : VisBase
     {
 
+        private readonly HLCompilerSettings Settings = SettingsSystem.GetSettings < HLCompilerSettings >();
         public readonly HLTypeSystem TypeSystem = new HLTypeSystem();
         internal const string STRING_TYPE = "string";
         internal const string VAL_TYPE = "var";
@@ -523,10 +525,18 @@ namespace VisCPU.HL
             }
         }
 
-        internal string GetTempVar( uint initValue )
+        internal string GetTempVar(uint initValue)
         {
-            VariableData tmp = GetFreeTempVar( initValue );
-            usedTempVars.Add( tmp.GetName() );
+            VariableData tmp = GetFreeTempVar(initValue);
+            usedTempVars.Add(tmp.GetName());
+
+            return tmp.GetName();
+        }
+
+        internal string GetTempVarPop()
+        {
+            VariableData tmp = GetFreeTempVarPop();
+            usedTempVars.Add(tmp.GetName());
 
             return tmp.GetName();
         }
@@ -664,7 +674,7 @@ namespace VisCPU.HL
 
         internal void ReleaseTempVar( string varName )
         {
-            if ( usedTempVars.Contains( varName ) )
+            if (Settings.OptimizeTempVarUsage && usedTempVars.Contains( varName ) )
             {
                 usedTempVars.Remove( varName );
                 unusedTempVars.Enqueue( varName );
@@ -771,6 +781,23 @@ namespace VisCPU.HL
             }
 
             return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+        }
+
+        private VariableData GetFreeTempVarPop()
+        {
+            if (unusedTempVars.Count != 0)
+            {
+                string oldName = unusedTempVars.Dequeue();
+                ProgramCode.Add($"POP {oldName} ;Temp Var House-keeping");
+
+                return VariableMap[oldName];
+            }
+
+            string name = GetUniqueName("tmp");
+
+            ProgramCode.Add($"POP {name} ;Temp Var House-keeping");
+
+            return VariableMap[name] = new VariableData(name, name, 1, TypeSystem.GetOrAdd("var"), false);
         }
 
         private VariableData GetFreeTempVarCopy( string initValue )

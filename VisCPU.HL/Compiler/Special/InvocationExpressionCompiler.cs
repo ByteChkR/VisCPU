@@ -71,16 +71,10 @@ namespace VisCPU.HL.Compiler.Special
                 compilation.ProgramCode.Add( $"JSR {funcEmit}" );
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVar( 0 ),
+                                                                   compilation.GetTempVarPop(),
                                                                    true,
-                                                                   compilation.TypeSystem.GetType( "var" )
+                                                                   compilation.TypeSystem.GetType("var")
                                                                   );
-
-                compilation.ProgramCode.Add(
-                                            $"; Write back return value to '{tempReturn.ResultAddress}'"
-                                           );
-
-                compilation.ProgramCode.Add( $"POP {tempReturn.ResultAddress}" );
 
                 return tempReturn;
             }
@@ -109,12 +103,10 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVar( 0 ),
+                                                                   compilation.GetTempVarPop(),
                                                                    true,
                                                                    compilation.TypeSystem.GetType( "var" )
                                                                   );
-
-                compilation.ProgramCode.Add( $"POP {tempReturn.ResultAddress}" );
 
                 return tempReturn;
             }

@@ -5,6 +5,7 @@ using System.Linq;
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
+using VisCPU.HL;
 using VisCPU.HL.Importer;
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
@@ -26,17 +27,20 @@ namespace VisCPU.Console.Core.Subsystems
             AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
 
             LinkerSettings ls = LinkerSettings.Create();
+            HLCompilerSettings hls = HLCompilerSettings.Create();
 
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
                                        settings,
                                        asettings,
-                                       ls
+                                       ls,
+                                       hls
                                       );
 
             SettingsSystem.SaveSettings( ls );
             SettingsSystem.SaveSettings( settings );
-            SettingsSystem.SaveSettings( asettings );
+            SettingsSystem.SaveSettings(asettings);
+            SettingsSystem.SaveSettings(hls);
 
             ImporterSystem.Add( new InstructionDataImporter( new DefaultSet() ), new LinkerImporter() );
 

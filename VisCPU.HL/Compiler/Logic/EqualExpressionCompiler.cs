@@ -5,28 +5,41 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 namespace VisCPU.HL.Compiler.Logic
 {
 
-    public class EqualExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
+    public class EqualExpressionCompiler : HLExpressionCompiler<HLBinaryOp>
     {
 
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLBinaryOp expr )
+        public override ExpressionTarget ParseExpression(HLCompilation compilation, HLBinaryOp expr)
         {
-            ExpressionTarget target = compilation.Parse( expr.Left ).MakeAddress( compilation );
+            ExpressionTarget target = compilation.Parse(expr.Left).MakeAddress(compilation);
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
-                                                   MakeAddress( compilation );
+                                                         expr.Right,
+                                                         !target.IsPointer ? target : default
+                                                        ).MakeAddress(compilation);
 
-            List < string > lines = new List < string >();
+            if ( rTarget.ResultAddress == target.ResultAddress )
+            {
+                return target;
+            }
+
+            if (!rTarget.IsAddress && !target.IsPointer)
+            {
+                compilation.ProgramCode.Add(
+                                            $"LOAD {target.ResultAddress} {rTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
+                                           );
+
+                return target;
+            }
+            List<string> lines = new List<string>();
 
             //lines.Add(
             //          $"COPY {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
             //         );
-            if ( target.IsPointer )
+            if (target.IsPointer)
             {
-                if ( rTarget.IsPointer )
+                if (rTarget.IsPointer)
                 {
                     lines.Add(
                               $"CREF {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
@@ -39,37 +52,37 @@ namespace VisCPU.HL.Compiler.Logic
                                                                            rTarget.ResultAddress
                                                                           ),
                                                                       true,
-                                                                      compilation.TypeSystem.GetType( "var" )
+                                                                      compilation.TypeSystem.GetType("var")
                                                                      );
 
                     lines.Add(
                               $"CREF {tmpTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
                              );
 
-                    compilation.ReleaseTempVar( tmpTarget.ResultAddress );
+                    compilation.ReleaseTempVar(tmpTarget.ResultAddress);
                 }
             }
             else
             {
-                if ( rTarget.IsPointer )
+                if (rTarget.IsPointer)
                 {
                     ExpressionTarget tmpTarget = new ExpressionTarget(
                                                                       compilation.GetTempVarLoad(
                                                                            target.ResultAddress
                                                                           ),
                                                                       true,
-                                                                      compilation.TypeSystem.GetType( "var" )
+                                                                      compilation.TypeSystem.GetType("var")
                                                                      );
 
                     lines.Add(
                               $"CREF {rTarget.ResultAddress} {tmpTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
                              );
 
-                    compilation.ReleaseTempVar( tmpTarget.ResultAddress );
+                    compilation.ReleaseTempVar(tmpTarget.ResultAddress);
                 }
-                else if ( rTarget.ResultAddress != target.ResultAddress )
+                else if (rTarget.ResultAddress != target.ResultAddress)
                 {
-                    if ( !rTarget.IsAddress )
+                    if (!rTarget.IsAddress)
                     {
                         lines.Add(
                                   $"LOAD {target.ResultAddress} {rTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
@@ -84,8 +97,8 @@ namespace VisCPU.HL.Compiler.Logic
                 }
             }
 
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
-            compilation.ProgramCode.AddRange( lines );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ProgramCode.AddRange(lines);
 
             return target;
         }

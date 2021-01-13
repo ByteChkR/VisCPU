@@ -12,7 +12,7 @@ namespace VisCPU.HL
     {
 
         [Argument( Name = "compiler:optimize-temp-vars" )]
-        public bool OptimizeTempVarUsage = false;
+        public bool OptimizeTempVarUsage = true;
 
         #region Public
 
