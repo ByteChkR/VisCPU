@@ -20,6 +20,21 @@ namespace VisCPU.Utility
             return input.ToDictionary( x => x.Key, x => x.Value.Offset( offset ) );
         }
 
+        public static bool TryParseHexUInt(this string val, out uint num)
+        {
+            if (val.Length < 3)
+            {
+                num = 0;
+                return false;
+            }
+
+            return uint.TryParse(val.Remove(0, 2), NumberStyles.HexNumber, new NumberFormatInfo(), out num);
+        }
+        public static bool TryParseUInt(this string val, out uint num)
+        {
+            return val.StartsWith( "0x" ) ? TryParseHexUInt( val, out num ) : uint.TryParse( val, out num );
+        }
+
         public static uint ParseHexUInt( this string val )
         {
             return uint.Parse( val.Remove( 0, 2 ), NumberStyles.HexNumber );

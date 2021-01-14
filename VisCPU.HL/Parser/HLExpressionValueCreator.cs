@@ -58,7 +58,7 @@ namespace VisCPU.HL.Parser
             if ( parser.CurrentToken.Type == HLTokenType.OpNew )
             {
                 parser.Eat( parser.CurrentToken.Type );
-                HLExpression token = new HLUnaryOp( parser.ParseExpr( 0 ), HLTokenType.OpNew );
+                HLExpression token = new HLUnaryOp( parser.ParseExpr( ), HLTokenType.OpNew );
 
                 return token;
             }
@@ -73,7 +73,7 @@ namespace VisCPU.HL.Parser
                     return new HLReturnOp( null, rt.SourceIndex );
                 }
 
-                return new HLReturnOp( parser.ParseExpr( 0 ), rt.SourceIndex );
+                return new HLReturnOp( parser.ParseExpr(  ), rt.SourceIndex );
             }
 
             if ( parser.CurrentToken.Type == HLTokenType.OpContinue )
@@ -110,7 +110,7 @@ namespace VisCPU.HL.Parser
             if ( parser.CurrentToken.Type == HLTokenType.OpBracketOpen )
             {
                 parser.Eat( HLTokenType.OpBracketOpen );
-                HLExpression token = parser.ParseExpr( 0 );
+                HLExpression token = parser.ParseExpr(  );
                 parser.Eat( HLTokenType.OpBracketClose );
 
                 return token;

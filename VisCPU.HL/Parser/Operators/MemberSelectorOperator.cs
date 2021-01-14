@@ -37,10 +37,8 @@ namespace VisCPU.HL.Parser.Operators
         public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             parser.Eat( HLTokenType.OpDot );
-            string name = parser.CurrentToken.ToString();
-            parser.Eat( parser.CurrentToken.Type );
 
-            return new HLMemberAccessOp( currentNode, name );
+            return new HLMemberAccessOp( currentNode, parser.ParseExpr(PrecedenceLevel) );
         }
 
         #endregion

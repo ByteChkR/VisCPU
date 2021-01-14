@@ -1,4 +1,7 @@
-﻿using VisCPU.HL.TypeSystem;
+﻿using System;
+
+using VisCPU.HL.TypeSystem;
+using VisCPU.Utility;
 
 namespace VisCPU.HL.Compiler
 {
@@ -17,6 +20,22 @@ namespace VisCPU.HL.Compiler
             IsAddress = isAddress;
             IsPointer = isPointer;
             TypeDefinition = def;
+        }
+
+        public uint StaticParse()
+        {
+            if ( ResultAddress.TryParseUInt( out uint hret ) )
+            {
+                return hret;
+            }
+
+            if(ResultAddress.StartsWith("'") && ResultAddress.EndsWith("'")&& char.TryParse(ResultAddress.Remove(ResultAddress.Length-1,1).Remove(0, 1), out char cret))
+
+            {
+                return cret;
+            }
+
+            throw new Exception( ResultAddress );
         }
 
         public ExpressionTarget Cast( HLTypeDefinition newType )
@@ -68,7 +87,14 @@ namespace VisCPU.HL.Compiler
                 return this;
             }
 
-            compilation.ProgramCode.Add( $"COPY {ResultAddress} {target.ResultAddress}" );
+            if ( !IsAddress )
+            {
+                compilation.ProgramCode.Add($"LOAD {target.ResultAddress} {ResultAddress}");
+            }
+            else
+            {
+                compilation.ProgramCode.Add($"COPY {ResultAddress} {target.ResultAddress}");
+            }
             compilation.ReleaseTempVar( ResultAddress );
 
             return target;

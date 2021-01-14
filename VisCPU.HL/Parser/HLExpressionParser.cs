@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using VisCPU.HL.Parser.Events;
@@ -30,7 +31,7 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Value Creator
         /// </summary>
-        private readonly HLExpressionValueCreator ValueCreator;
+        public readonly HLExpressionValueCreator ValueCreator;
 
         /// <summary>
         ///     The Current Token
@@ -127,7 +128,7 @@ namespace VisCPU.HL.Parser
                 return new HLExpression[0];
             }
 
-            List < HLExpression > ret = new List < HLExpression > { ParseExpr( OpCollection.Lowest ) };
+            List < HLExpression > ret = new List < HLExpression > { ParseExpr( OpCollection.Highest ) };
 
             while ( CurrentToken.Type != HLTokenType.EOF )
             {
@@ -141,7 +142,7 @@ namespace VisCPU.HL.Parser
                     break;
                 }
 
-                ret.Add( ParseExpr( OpCollection.Lowest ) );
+                ret.Add( ParseExpr( OpCollection.Highest ) );
             }
 
             return ret.ToArray();
@@ -152,8 +153,10 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="startAt">Operator Precedence</param>
         /// <returns>Expression at the Specified Index</returns>
-        public HLExpression ParseExpr( int startAt )
+        public HLExpression ParseExpr( int stopAt = -1 )
         {
+            if ( stopAt == -1 )
+                stopAt = OpCollection.Highest;
             HLExpression node = ValueCreator.CreateValue( this );
 
             if ( CurrentToken.Type == HLTokenType.OpSemicolon )
@@ -163,7 +166,8 @@ namespace VisCPU.HL.Parser
                 return node;
             }
 
-            for ( int i = startAt; i <= OpCollection.Highest; i++ )
+            int end = Math.Min( stopAt, OpCollection.Highest );
+            for ( int i = 0; i <= end; i++ )
             {
                 if ( !OpCollection.HasLevel( i ) )
                 {
@@ -171,14 +175,9 @@ namespace VisCPU.HL.Parser
                 }
 
                 List < HLExpressionOperator > ops = OpCollection.GetLevel( i );
-
-                HLExpressionOperator current = null;
-
-                while ( ( current = ops.FirstOrDefault( x => x.CanCreate( this, node ) ) ) != null )
-                {
-                    node = current.Create( this, node );
-                    i = startAt;
-                }
+                HLExpressionOperator current = ops.FirstOrDefault(x => x.CanCreate(this, node));
+                if(current != null)
+                node = current.Create(this, node);
             }
 
             return node;

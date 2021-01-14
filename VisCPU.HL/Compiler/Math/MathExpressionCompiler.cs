@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.HL.Compiler.Math
 {
@@ -17,20 +18,18 @@ namespace VisCPU.HL.Compiler.Math
             HLBinaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse( expr.Left ).MakeAddress( compilation );
+            ExpressionTarget target = compilation.Parse( expr.Left );
+            ExpressionTarget rTarget = compilation.Parse( expr.Right );
 
-            ExpressionTarget rTarget = compilation.Parse( expr.Right ).MakeAddress( compilation );
+            if ( SettingsSystem.GetSettings < HLCompilerSettings >().OptimizeConstExpressions &&
+                 !target.IsAddress &&
+                 !rTarget.IsAddress )
+            {
+                return ComputeStatic( compilation, target, rTarget );
+            }
 
-            //if ( target.ResultAddress == outputTarget.ResultAddress )
-            //{
-            //    compilation.ProgramCode.Add(
-            //                                $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-            //                               );
-
-            //    compilation.ReleaseTempVar( rTarget.ResultAddress );
-
-            //    return target;
-            //}
+            target = target.MakeAddress( compilation );
+            rTarget = rTarget.MakeAddress( compilation );
 
             if ( target.IsPointer )
             {
@@ -60,6 +59,15 @@ namespace VisCPU.HL.Compiler.Math
 
             return outputTarget;
         }
+
+        #endregion
+
+        #region Protected
+
+        protected abstract ExpressionTarget ComputeStatic(
+            HLCompilation compilation,
+            ExpressionTarget left,
+            ExpressionTarget right );
 
         #endregion
 

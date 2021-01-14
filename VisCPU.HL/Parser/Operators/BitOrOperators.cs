@@ -43,7 +43,7 @@ namespace VisCPU.HL.Parser.Operators
             return new HLBinaryOp(
                                   currentNode,
                                   HLTokenType.OpPipe,
-                                  parser.ParseExpr( 0 )
+                                  parser.ParseExpr(PrecedenceLevel)
                                  );
         }
 

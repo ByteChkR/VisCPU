@@ -18,7 +18,13 @@ namespace VisCPU.HL.Compiler.Types
         {
             string tmpVar;
             ExpressionTarget lType = compilation.Parse( expr.Left );
-            uint off = lType.TypeDefinition.GetOffset( expr.MemberName );
+
+            uint off = HLTypeDefinition.RecursiveGetOffset(
+                                                           lType.TypeDefinition,
+                                                           0,
+                                                           0,
+                                                           expr.MemberName.ToString().Split( '.' )
+                                                          );
             string tmpOff = compilation.GetTempVar( off );
 
             if ( lType.IsPointer )
@@ -42,7 +48,7 @@ namespace VisCPU.HL.Compiler.Types
                 return outputTarget;
             }
 
-            HLMemberDefinition mdef = lType.TypeDefinition.GetPublicMember( expr.MemberName );
+            HLMemberDefinition mdef = HLTypeDefinition.RecursiveGetPublicMember( lType.TypeDefinition,0, expr.MemberName.ToString().Split('.'));
 
             if ( mdef is HLPropertyDefinition pdef )
             {

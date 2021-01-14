@@ -26,7 +26,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             }
 
             HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
-            uint off = type.GetOffset( expr.ParameterList[1].ToString() );
+            uint off = type.GetOffset(expr.ParameterList[1].ToString());
             string v = compilation.GetTempVar( off );
 
             return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );

@@ -128,7 +128,7 @@ namespace VisCPU.HL.Parser.Operators
             parser.Eat( token.Type );
             parser.Eat( HLTokenType.OpEquality );
 
-            return new HLBinaryOp( currentNode, tt, parser.ParseExpr( 0 ) );
+            return new HLBinaryOp( currentNode, tt, parser.ParseExpr(PrecedenceLevel));
         }
 
         #endregion

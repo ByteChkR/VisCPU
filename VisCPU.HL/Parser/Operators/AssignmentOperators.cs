@@ -39,7 +39,7 @@ namespace VisCPU.HL.Parser.Operators
         {
             parser.Eat( HLTokenType.OpEquality );
 
-            return new HLBinaryOp( currentNode, HLTokenType.OpEquality, parser.ParseExpr( 0 ) );
+            return new HLBinaryOp( currentNode, HLTokenType.OpEquality, parser.ParseExpr(PrecedenceLevel) );
         }
 
         #endregion
