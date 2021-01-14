@@ -28,7 +28,7 @@ namespace VisCPU.HL.Compiler.Special
             ExpressionTarget pn = compilation.Parse(
                                                     expr.ParameterList[0],
                                                     new ExpressionTarget(
-                                                                         compilation.GetTempVar(0),
+                                                                         compilation.GetTempVar( 0 ),
                                                                          true,
                                                                          tempPtrVar.TypeDefinition,
                                                                          true

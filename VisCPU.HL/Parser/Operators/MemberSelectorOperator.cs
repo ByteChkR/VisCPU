@@ -38,7 +38,7 @@ namespace VisCPU.HL.Parser.Operators
         {
             parser.Eat( HLTokenType.OpDot );
 
-            return new HLMemberAccessOp( currentNode, parser.ParseExpr(PrecedenceLevel) );
+            return new HLMemberAccessOp( currentNode, parser.ParseExpr( PrecedenceLevel ) );
         }
 
         #endregion

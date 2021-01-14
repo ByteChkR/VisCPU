@@ -41,7 +41,8 @@ namespace VisCPU.HL.Compiler.Variables
                                             varAddr,
                                             true,
                                             v.TypeDefinition,
-                                            v.TypeDefinition.GetSize() != v.Size || v.TypeDefinition.Name != HLCompilation.VAL_TYPE
+                                            v.TypeDefinition.GetSize() != v.Size ||
+                                            v.TypeDefinition.Name != HLCompilation.VAL_TYPE
                                            ).CopyIfNotNull( compilation, outputTarget );
             }
 

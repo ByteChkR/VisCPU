@@ -6,10 +6,17 @@
 
         protected override string InstructionKey => "ADD";
 
-        protected override ExpressionTarget ComputeStatic(HLCompilation compilation, ExpressionTarget left, ExpressionTarget right)
+        #region Protected
+
+        protected override ExpressionTarget ComputeStatic(
+            HLCompilation compilation,
+            ExpressionTarget left,
+            ExpressionTarget right )
         {
-            return new ExpressionTarget($"{left.StaticParse() + right.StaticParse()}", false, left.TypeDefinition);
+            return new ExpressionTarget( $"{left.StaticParse() + right.StaticParse()}", false, left.TypeDefinition );
         }
+
+        #endregion
 
     }
 

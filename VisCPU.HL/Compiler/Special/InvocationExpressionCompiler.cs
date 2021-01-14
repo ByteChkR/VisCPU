@@ -73,7 +73,7 @@ namespace VisCPU.HL.Compiler.Special
                 ExpressionTarget tempReturn = new ExpressionTarget(
                                                                    compilation.GetTempVarPop(),
                                                                    true,
-                                                                   compilation.TypeSystem.GetType("var")
+                                                                   compilation.TypeSystem.GetType( "var" )
                                                                   );
 
                 return tempReturn;

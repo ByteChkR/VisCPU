@@ -29,7 +29,9 @@ namespace VisCPU.HL.Compiler
                 return hret;
             }
 
-            if(ResultAddress.StartsWith("'") && ResultAddress.EndsWith("'")&& char.TryParse(ResultAddress.Remove(ResultAddress.Length-1,1).Remove(0, 1), out char cret))
+            if ( ResultAddress.StartsWith( "'" ) &&
+                 ResultAddress.EndsWith( "'" ) &&
+                 char.TryParse( ResultAddress.Remove( ResultAddress.Length - 1, 1 ).Remove( 0, 1 ), out char cret ) )
 
             {
                 return cret;
@@ -89,12 +91,13 @@ namespace VisCPU.HL.Compiler
 
             if ( !IsAddress )
             {
-                compilation.ProgramCode.Add($"LOAD {target.ResultAddress} {ResultAddress}");
+                compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} {ResultAddress}" );
             }
             else
             {
-                compilation.ProgramCode.Add($"COPY {ResultAddress} {target.ResultAddress}");
+                compilation.ProgramCode.Add( $"COPY {ResultAddress} {target.ResultAddress}" );
             }
+
             compilation.ReleaseTempVar( ResultAddress );
 
             return target;

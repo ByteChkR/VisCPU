@@ -24,14 +24,14 @@ namespace VisCPU.HL.Parser
         public readonly HLExpressionReader Reader;
 
         /// <summary>
-        ///     Operator Collection
-        /// </summary>
-        private readonly HLExpressionOperatorCollection OpCollection;
-
-        /// <summary>
         ///     Value Creator
         /// </summary>
         public readonly HLExpressionValueCreator ValueCreator;
+
+        /// <summary>
+        ///     Operator Collection
+        /// </summary>
+        private readonly HLExpressionOperatorCollection OpCollection;
 
         /// <summary>
         ///     The Current Token
@@ -156,7 +156,10 @@ namespace VisCPU.HL.Parser
         public HLExpression ParseExpr( int stopAt = -1 )
         {
             if ( stopAt == -1 )
+            {
                 stopAt = OpCollection.Highest;
+            }
+
             HLExpression node = ValueCreator.CreateValue( this );
 
             if ( CurrentToken.Type == HLTokenType.OpSemicolon )
@@ -167,6 +170,7 @@ namespace VisCPU.HL.Parser
             }
 
             int end = Math.Min( stopAt, OpCollection.Highest );
+
             for ( int i = 0; i <= end; i++ )
             {
                 if ( !OpCollection.HasLevel( i ) )
@@ -175,9 +179,12 @@ namespace VisCPU.HL.Parser
                 }
 
                 List < HLExpressionOperator > ops = OpCollection.GetLevel( i );
-                HLExpressionOperator current = ops.FirstOrDefault(x => x.CanCreate(this, node));
-                if(current != null)
-                node = current.Create(this, node);
+                HLExpressionOperator current = ops.FirstOrDefault( x => x.CanCreate( this, node ) );
+
+                if ( current != null )
+                {
+                    node = current.Create( this, node );
+                }
             }
 
             return node;

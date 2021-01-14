@@ -18,7 +18,8 @@ namespace VisCPU.HL.TypeSystem
         public HLFunctionDefinition(
             string name,
             HLTypeDefinition returnType,
-            HLTypeDefinition[] parameters, IHLToken[] mods) : base( name, mods )
+            HLTypeDefinition[] parameters,
+            IHLToken[] mods ) : base( name, mods )
         {
             ReturnType = returnType;
             ParameterTypes = parameters;

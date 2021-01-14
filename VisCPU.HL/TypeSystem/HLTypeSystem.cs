@@ -17,8 +17,8 @@ namespace VisCPU.HL.TypeSystem
 
         public HLTypeSystem()
         {
-            AddItem(new VarTypeDefinition());
-            AddItem(new StringTypeDefinition());
+            AddItem( new VarTypeDefinition() );
+            AddItem( new StringTypeDefinition() );
         }
 
         public HLTypeDefinition CreateEmptyType( string name )

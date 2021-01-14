@@ -12,8 +12,18 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Run( IEnumerable < string > args )
         {
-            Directory.Delete( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config" ), true );
-            Directory.Delete( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "cache" ), true );
+            string configDir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config" );
+            string cacheDir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "cache" );
+
+            if ( Directory.Exists( configDir ) )
+            {
+                Directory.Delete( configDir, true );
+            }
+
+            if ( Directory.Exists( cacheDir ) )
+            {
+                Directory.Delete( cacheDir, true );
+            }
         }
 
         #endregion

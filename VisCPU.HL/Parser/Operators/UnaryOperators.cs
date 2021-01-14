@@ -43,7 +43,7 @@ namespace VisCPU.HL.Parser.Operators
             HLTokenType type = parser.CurrentToken.Type;
             parser.Eat( type );
 
-            HLExpression token = new HLUnaryOp( parser.ParseExpr(PrecedenceLevel), type );
+            HLExpression token = new HLUnaryOp( parser.ParseExpr( PrecedenceLevel ), type );
 
             return token;
         }

@@ -39,8 +39,8 @@ namespace VisCPU.Console.Core.Subsystems
 
             SettingsSystem.SaveSettings( ls );
             SettingsSystem.SaveSettings( settings );
-            SettingsSystem.SaveSettings(asettings);
-            SettingsSystem.SaveSettings(hls);
+            SettingsSystem.SaveSettings( asettings );
+            SettingsSystem.SaveSettings( hls );
 
             ImporterSystem.Add( new InstructionDataImporter( new DefaultSet() ), new LinkerImporter() );
 

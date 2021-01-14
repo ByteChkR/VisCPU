@@ -51,7 +51,7 @@ namespace VisCPU.HL.Parser.Operators
                 }
                 else
                 {
-                    parameterList.Add(parser.ParseExpr());
+                    parameterList.Add( parser.ParseExpr() );
                     comma = true;
                 }
             }

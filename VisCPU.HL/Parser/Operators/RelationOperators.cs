@@ -50,7 +50,7 @@ namespace VisCPU.HL.Parser.Operators
                     node = new HLBinaryOp(
                                           currentNode,
                                           HLTokenType.OpLessOrEqual,
-                                          parser.ParseExpr(PrecedenceLevel)
+                                          parser.ParseExpr( PrecedenceLevel )
                                          );
                 }
                 else
@@ -67,12 +67,12 @@ namespace VisCPU.HL.Parser.Operators
                     node = new HLBinaryOp(
                                           currentNode,
                                           HLTokenType.OpGreaterOrEqual,
-                                          parser.ParseExpr(PrecedenceLevel)
+                                          parser.ParseExpr( PrecedenceLevel )
                                          );
                 }
                 else
                 {
-                    node = new HLBinaryOp( currentNode, type, parser.ParseExpr(PrecedenceLevel));
+                    node = new HLBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
                 }
             }
 

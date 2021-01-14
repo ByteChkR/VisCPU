@@ -26,11 +26,11 @@ namespace VisCPU.HL.Parser
             IHLToken ft = parser.CurrentToken;
             parser.Eat( HLTokenType.OpFor );
             parser.Eat( HLTokenType.OpBracketOpen );
-            HLExpression vDecl = parser.ParseExpr(  );
+            HLExpression vDecl = parser.ParseExpr();
             parser.Eat( HLTokenType.OpSemicolon );
-            HLExpression condition = parser.ParseExpr(  );
+            HLExpression condition = parser.ParseExpr();
             parser.Eat( HLTokenType.OpSemicolon );
-            HLExpression vInc = parser.ParseExpr( );
+            HLExpression vInc = parser.ParseExpr();
             parser.Eat( HLTokenType.OpBracketClose );
 
             HLExpression token = null;
@@ -38,7 +38,7 @@ namespace VisCPU.HL.Parser
 
             if ( parser.CurrentToken.Type != HLTokenType.OpBlockToken )
             {
-                block = new List < HLExpression > { parser.ParseExpr( ) };
+                block = new List < HLExpression > { parser.ParseExpr() };
             }
             else
             {
@@ -96,7 +96,7 @@ namespace VisCPU.HL.Parser
             IHLToken wT = parser.CurrentToken;
             parser.Eat( HLTokenType.OpWhile );
             parser.Eat( HLTokenType.OpBracketOpen );
-            HLExpression condition = parser.ParseExpr( );
+            HLExpression condition = parser.ParseExpr();
             parser.Eat( HLTokenType.OpBracketClose );
 
             HLExpression token = null;
@@ -104,7 +104,7 @@ namespace VisCPU.HL.Parser
 
             if ( parser.CurrentToken.Type != HLTokenType.OpBlockToken )
             {
-                block = new List < HLExpression > { parser.ParseExpr(  ) };
+                block = new List < HLExpression > { parser.ParseExpr() };
             }
             else
             {
@@ -131,7 +131,7 @@ namespace VisCPU.HL.Parser
         {
             if ( parser.CurrentToken.Type != HLTokenType.OpBlockToken )
             {
-                HLExpression expr = parser.ParseExpr(  );
+                HLExpression expr = parser.ParseExpr();
                 parser.Eat( HLTokenType.OpSemicolon );
 
                 return new List < HLExpression > { expr };
@@ -152,7 +152,7 @@ namespace VisCPU.HL.Parser
         {
             parser.Eat( HLTokenType.OpIf );
             parser.Eat( HLTokenType.OpBracketOpen );
-            HLExpression condition = parser.ParseExpr( );
+            HLExpression condition = parser.ParseExpr();
             parser.Eat( HLTokenType.OpBracketClose );
 
             List < HLExpression > content = ReadIfBlockContent( parser );
