@@ -123,6 +123,7 @@ namespace VisCPU.HL.Modules.Resolvers
             debugRunJob.Arguments["run:input"] = "Program.vbin";
             debugRunJob.Arguments["run:cpu.interrupt"] = "0x00000000";
             debugRunJob.Arguments["run:cpu.reset"] = "0x00000000";
+            debugRunJob.Arguments["run:working-dir"] = "%PROJDIR%";
             debugRunJob.Arguments["memory-bus:devices"] = "%VISDIR%config/memory/default.json";
 
             debugRunJob.Arguments["memory:read"] = "true";
@@ -171,6 +172,7 @@ namespace VisCPU.HL.Modules.Resolvers
             runJob.Arguments["run:input"] = "Program.vbin";
             runJob.Arguments["run:cpu.interrupt"] = "0x00000000";
             runJob.Arguments["run:cpu.reset"] = "0x00000000";
+            runJob.Arguments["run:working-dir"] = "%PROJDIR%";
             runJob.Arguments["memory-bus:devices"] = "%VISDIR%config/memory/default.json";
 
             runJob.Arguments["memory:read"] = "true";

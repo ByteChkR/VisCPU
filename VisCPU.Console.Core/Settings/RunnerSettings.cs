@@ -32,6 +32,11 @@ namespace VisCPU.Console.Core.Settings
                 { ".vhl", FindBinary }
             };
 
+
+        [Argument(Name = "run:working-dir")]
+        [Argument(Name = "run:w-dir")]
+        public string WorkingDir = Path.GetFullPath("./");
+
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]
         [XmlIgnore]

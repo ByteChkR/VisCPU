@@ -70,6 +70,9 @@ namespace VisCPU.Console.Core.Subsystems
                 return;
             }
 
+            string origPath = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory( settings.WorkingDir );
+
             foreach (string f in settings.InputFiles)
             {
                 string file = Path.GetFullPath(f);
@@ -100,6 +103,7 @@ namespace VisCPU.Console.Core.Subsystems
                 cpu.LoadBinary(fileCode);
                 cpu.Run();
             }
+            Directory.SetCurrentDirectory(origPath);
         }
 
         public override void Run( IEnumerable < string > args )
@@ -135,6 +139,9 @@ namespace VisCPU.Console.Core.Subsystems
                 return;
             }
 
+            string origPath = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(settings.WorkingDir);
+
             foreach ( string f in settings.InputFiles )
             {
                 string file = Path.GetFullPath( f );
@@ -165,6 +172,7 @@ namespace VisCPU.Console.Core.Subsystems
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
+            Directory.SetCurrentDirectory(origPath);
         }
 
         #endregion
