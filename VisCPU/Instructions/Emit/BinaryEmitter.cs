@@ -52,7 +52,7 @@ namespace VisCPU.Instructions.Emit
                                                      );
             }
 
-            bytes.AddRange( Enumerable.Repeat( ( byte ) 0, CPUSettings.BYTE_SIZE - bytes.Count ) );
+            bytes.AddRange( Enumerable.Repeat( ( byte ) 0, (int)CPUSettings.BYTE_SIZE - bytes.Count ) );
 
             return bytes.ToArray();
         }

@@ -19,7 +19,7 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Input Token Stream
         /// </summary>
-        public readonly List < IHlToken > Tokens;
+        public List < IHlToken > Tokens { get; }
 
         /// <summary>
         ///     The Current Position inside the token Stream

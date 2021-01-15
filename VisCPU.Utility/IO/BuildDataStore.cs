@@ -7,8 +7,8 @@ namespace VisCPU.Utility.IO
     public class BuildDataStore
     {
 
-        private string m_RootDir;
-        private IBuildDataStoreType[] m_Types;
+        private readonly string m_RootDir;
+        private readonly IBuildDataStoreType[] m_Types;
 
         #region Public
 

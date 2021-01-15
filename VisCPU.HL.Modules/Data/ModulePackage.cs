@@ -36,7 +36,8 @@ namespace VisCPU.HL.Modules.Data
             Manager = manager;
         }
 
-        public ProjectConfig GetInstallTarget( string version = null )
+        public ProjectConfig GetInstallTarget() => GetInstallTarget( null );
+        public ProjectConfig GetInstallTarget( string version )
         {
             if ( version != null )
             {

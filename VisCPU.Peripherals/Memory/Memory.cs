@@ -11,7 +11,7 @@ namespace VisCPU.Peripherals.Memory
     public class Memory : Peripheral
     {
 
-        public readonly uint[] InternalMemory;
+        private readonly uint[] InternalMemory;
         private readonly string m_FullPersistentPath;
 
         private readonly MemorySettings m_Settings;

@@ -58,7 +58,7 @@ namespace VisCPU.HL
         private readonly Dictionary < string, VariableData > m_VariableMap = new Dictionary < string, VariableData >();
         private string m_ParsedText;
 
-        private BuildDataStore m_DataStore;
+        private readonly BuildDataStore m_DataStore;
 
         public event Action < string, string > OnCompiledIncludedScript;
 
@@ -413,10 +413,10 @@ namespace VisCPU.HL
                         return;
                     }
 
-                    List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                     string ConcatContent()
                     {
+                        List<IHlToken> content = tokens.GetRange(i + 1, endQuote - i - 1);
                         return OriginalText.Substring(
                                                       content.First().SourceIndex,
                                                       tokens[i + 1 + content.Count].SourceIndex -
@@ -1005,6 +1005,7 @@ namespace VisCPU.HL
                                                      ) )
                     {
                         baseClass = HLParsingTools.ReadOne( tokens, i + offset + 1, HLTokenType.OpWord );
+                        Log( "Found base class: {0}", baseClass );
                         offset += 2;
                     }
 

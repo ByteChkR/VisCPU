@@ -17,11 +17,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
     public abstract class ModuleManager : VisBase
     {
 
-        public const string MODULE_LIST = "index.json";
-        public const string MODULE_DATA = "module.zip";
-        public const string MODULE_TARGET = "module.json";
-        public const string MODULE_PATH = "modules";
-        public readonly Uri ModuleRoot;
+        public static readonly string MODULE_LIST = "index.json";
+        public static readonly string MODULE_DATA = "module.zip";
+        public static readonly string MODULE_TARGET = "module.json";
+        public static readonly string MODULE_PATH = "modules";
+
+        public Uri ModuleRoot { get; }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 

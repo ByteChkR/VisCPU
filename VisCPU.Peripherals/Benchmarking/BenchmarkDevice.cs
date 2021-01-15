@@ -14,7 +14,7 @@ namespace VisCPU.Peripherals.Benchmarking
         public class BenchmarkResultEvent : Event
         {
 
-            private string m_Name;
+            private readonly string m_Name;
             private TimeSpan m_Time;
 
             public override string EventKey => "benchmark-run-result";

@@ -10,9 +10,11 @@ namespace VisCPU.HL.TypeSystem
     public abstract class HLMemberDefinition : IHlTypeSystemInstance
     {
 
-        public readonly bool IsPublic;
-        public readonly bool IsStatic;
-        public readonly bool IsConstant;
+        public bool IsPublic { get; }
+
+        public bool IsStatic { get; }
+
+        public bool IsConstant { get; }
 
         public string Name { get; }
 

@@ -134,7 +134,7 @@ namespace VisCPU.Compiler.Implementations
                     EventManager < ErrorEvent >.SendEvent( new InvalidArgumentCountEvent( i ) );
                 }
 
-                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, CPUSettings.BYTE_SIZE - bytes.Count ) );
+                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, (int)CPUSettings.BYTE_SIZE - bytes.Count ) );
 
                 instrBytes.AddRange( bytes );
             }

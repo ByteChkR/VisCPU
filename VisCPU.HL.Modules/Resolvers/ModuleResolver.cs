@@ -12,7 +12,7 @@ namespace VisCPU.HL.Modules.Resolvers
     public static class ModuleResolver
     {
 
-        public static ModuleResolverSettings ResolverSettings;
+        public static ModuleResolverSettings ResolverSettings { get; set; }
 
         private static Dictionary < string, ModuleManager > s_Managers;
 
@@ -66,7 +66,9 @@ namespace VisCPU.HL.Modules.Resolvers
             }
         }
 
-        public static ProjectConfig Resolve( string name, string version = "ANY" )
+
+        public static ProjectConfig Resolve( string name ) => Resolve( name, "ANY" );
+        public static ProjectConfig Resolve( string name, string version )
         {
             return s_Managers.First( x => x.Value.HasPackage( name ) ).
                               Value.

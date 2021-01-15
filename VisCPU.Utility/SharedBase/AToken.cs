@@ -4,12 +4,13 @@
     public abstract class AToken
     {
 
-        public readonly int Length;
-        public readonly string OriginalText;
+        public int Length { get; }
+
+        public string OriginalText { get; }
 
         #region Unity Event Functions
 
-        public readonly int Start;
+        public int Start { get; }
 
         #endregion
 

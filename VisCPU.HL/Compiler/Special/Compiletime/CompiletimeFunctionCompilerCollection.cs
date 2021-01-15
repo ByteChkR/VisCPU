@@ -8,7 +8,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
     public class CompiletimeFunctionCompilerCollection
     {
 
-        private Dictionary < string, ICompiletimeFunctionCompiler > m_Compilers =
+        private readonly Dictionary < string, ICompiletimeFunctionCompiler > m_Compilers =
             new Dictionary < string, ICompiletimeFunctionCompiler >();
 
         #region Public

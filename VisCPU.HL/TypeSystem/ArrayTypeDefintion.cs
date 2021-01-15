@@ -4,8 +4,9 @@
     public class ArrayTypeDefintion : HLTypeDefinition
     {
 
-        public readonly HLTypeDefinition ElementType;
-        public readonly uint Size;
+        public HLTypeDefinition ElementType { get; }
+
+        public uint Size { get; }
 
         #region Public
 

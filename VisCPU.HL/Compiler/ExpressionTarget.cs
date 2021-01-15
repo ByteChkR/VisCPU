@@ -13,14 +13,18 @@ namespace VisCPU.HL.Compiler
         public readonly bool IsAddress;
         public readonly bool IsPointer;
         public readonly HLTypeDefinition TypeDefinition;
-
-        public ExpressionTarget( string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer = false )
+        public ExpressionTarget(string resultAddress, bool isAddress, HLTypeDefinition def) : this(resultAddress, isAddress, def, false)
+        {
+        }
+        public ExpressionTarget(string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer)
         {
             ResultAddress = resultAddress;
             IsAddress = isAddress;
             IsPointer = isPointer;
             TypeDefinition = def;
         }
+
+        
 
         public uint StaticParse()
         {

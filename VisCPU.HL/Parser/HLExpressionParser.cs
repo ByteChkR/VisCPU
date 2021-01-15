@@ -21,12 +21,12 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Token Reader
         /// </summary>
-        public readonly HLExpressionReader Reader;
+        public HLExpressionReader Reader { get; }
 
         /// <summary>
         ///     Value Creator
         /// </summary>
-        public readonly HLExpressionValueCreator ValueCreator;
+        public HLExpressionValueCreator ValueCreator { get; }
 
         /// <summary>
         ///     Operator Collection
@@ -148,12 +148,14 @@ namespace VisCPU.HL.Parser
             return ret.ToArray();
         }
 
+
+        public HLExpression ParseExpr() => ParseExpr( -1 );
         /// <summary>
         ///     Parses the Expression starting at the specified Operator Precedence
         /// </summary>
-        /// <param name="startAt">Operator Precedence</param>
+        /// <param name="stopAt">Operator Precedence</param>
         /// <returns>Expression at the Specified Index</returns>
-        public HLExpression ParseExpr( int stopAt = -1 )
+        public HLExpression ParseExpr( int stopAt )
         {
             if ( stopAt == -1 )
             {

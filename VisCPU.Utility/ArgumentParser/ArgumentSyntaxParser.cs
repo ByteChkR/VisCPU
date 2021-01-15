@@ -119,7 +119,7 @@ namespace VisCPU.Utility.ArgumentParser
                                                                      true
                                                                     )
                                                                ).
-                                                         Aggregate( ( a, x ) => a |= x )
+                                                         Aggregate( ( a, x ) => a | x )
                                                     )
                                       );
                             }

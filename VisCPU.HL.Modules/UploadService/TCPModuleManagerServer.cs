@@ -16,11 +16,11 @@ namespace VisCPU.HL.Modules.UploadService
     public class TCPModuleManagerServer : VisBase
     {
 
-        public readonly string TempStagingDirectory;
-        public readonly ModuleManager Manager;
+        private readonly string TempStagingDirectory;
+        private readonly ModuleManager Manager;
 
         private bool m_StopServer;
-        private TcpListener m_Listener;
+        private readonly TcpListener m_Listener;
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 

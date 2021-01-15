@@ -145,7 +145,8 @@ namespace VisCPU
             return ( ProcessorFlags & flag ) != 0;
         }
 
-        public void LoadBinary( uint[] bios, uint start = 0 )
+        public void LoadBinary( uint[] bios ) => LoadBinary( bios, 0 );
+        public void LoadBinary( uint[] bios, uint start )
         {
             ProgramCounter = start;
 

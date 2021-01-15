@@ -17,7 +17,9 @@ namespace VisCPU.HL.Modules.BuildSystem
             GenerateCommonJobs();
         }
 
-        public static ProjectConfig GenerateProjectConfig( string name = null, string version = null )
+        public static ProjectConfig GenerateProjectConfig() => GenerateProjectConfig(null, null);
+        public static ProjectConfig GenerateProjectConfig(string name) => GenerateProjectConfig(name, null);
+        public static ProjectConfig GenerateProjectConfig( string name, string version )
         {
             ProjectConfig config = new ProjectConfig();
 
