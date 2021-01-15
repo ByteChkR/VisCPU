@@ -10,6 +10,10 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         #region Public
 
+        public override void Help()
+        {
+        }
+
         public override void Run( IEnumerable < string > args )
         {
             ModuleResolverSettings s = ModuleResolverSettings.Create();
@@ -18,10 +22,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
             {
                 Log( $"{keyValuePair.Key} : {keyValuePair.Value}" );
             }
-        }
-
-        public override void Help()
-        {
         }
 
         #endregion

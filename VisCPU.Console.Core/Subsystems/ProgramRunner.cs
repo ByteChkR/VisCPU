@@ -22,22 +22,9 @@ namespace VisCPU.Console.Core.Subsystems
     public class ProgramRunner : ConsoleSubsystem
     {
 
-        public override void Help()
-        {
-            RunnerSettings settings = RunnerSettings.Create();
-            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
-            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
-            MemorySettings ms = MemorySettings.Create();
-            MemoryBusSettings mbs = MemoryBusSettings.Create();
-            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
-
-            HelpSubSystem.WriteSubsystem("vis run", settings, cins, couts, hls, ms, mbs, hfs);
-        }
-
         #region Public
 
-        public static void Run(Dictionary <string, string> args)
+        public static void Run( Dictionary < string, string > args )
         {
             RunnerSettings settings = RunnerSettings.Create();
             ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
@@ -57,15 +44,15 @@ namespace VisCPU.Console.Core.Subsystems
                                        mbs
                                       );
 
-            SettingsSystem.SaveSettings(settings);
-            SettingsSystem.SaveSettings(cins);
-            SettingsSystem.SaveSettings(couts);
-            SettingsSystem.SaveSettings(hls);
-            SettingsSystem.SaveSettings(ms);
-            SettingsSystem.SaveSettings(mbs);
-            SettingsSystem.SaveSettings(hfs);
+            SettingsSystem.SaveSettings( settings );
+            SettingsSystem.SaveSettings( cins );
+            SettingsSystem.SaveSettings( couts );
+            SettingsSystem.SaveSettings( hls );
+            SettingsSystem.SaveSettings( ms );
+            SettingsSystem.SaveSettings( mbs );
+            SettingsSystem.SaveSettings( hfs );
 
-            if (settings.InputFiles == null)
+            if ( settings.InputFiles == null )
             {
                 return;
             }
@@ -73,21 +60,21 @@ namespace VisCPU.Console.Core.Subsystems
             string origPath = Directory.GetCurrentDirectory();
             Directory.SetCurrentDirectory( settings.WorkingDir );
 
-            foreach (string f in settings.InputFiles)
+            foreach ( string f in settings.InputFiles )
             {
-                string file = Path.GetFullPath(f);
+                string file = Path.GetFullPath( f );
 
-                file = RunPreRunSteps(settings, file);
+                file = RunPreRunSteps( settings, file );
 
-                if (file == null || !File.Exists(file))
+                if ( file == null || !File.Exists( file ) )
                 {
-                    EventManager<ErrorEvent>.SendEvent(new FileNotFoundEvent(file, true));
+                    EventManager < ErrorEvent >.SendEvent( new FileNotFoundEvent( file, true ) );
 
                     continue;
                 }
 
-                Logger.LogMessage(LoggerSystems.Console,"Run File: '{0}'", file);
-                uint[] fileCode = File.ReadAllBytes(file).ToUInt();
+                Logger.LogMessage( LoggerSystems.Console, "Run File: '{0}'", file );
+                uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
 
                 ConsoleInInterface cin = new ConsoleInInterface();
 
@@ -97,13 +84,27 @@ namespace VisCPU.Console.Core.Subsystems
                 HostFileSystem hostFS = new HostFileSystem();
                 BenchmarkDevice benchDev = new BenchmarkDevice();
 
-                MemoryBus bus = mbs.CreateBus(cout, cin, hostFS, benchDev);
+                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS, benchDev );
 
-                CPU cpu = new CPU(bus, settings.CpuResetAddr, settings.CpuIntAddr);
-                cpu.LoadBinary(fileCode);
+                CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
+                cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
-            Directory.SetCurrentDirectory(origPath);
+
+            Directory.SetCurrentDirectory( origPath );
+        }
+
+        public override void Help()
+        {
+            RunnerSettings settings = RunnerSettings.Create();
+            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
+            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
+            HLCompilerSettings hls = HLCompilerSettings.Create();
+            MemorySettings ms = MemorySettings.Create();
+            MemoryBusSettings mbs = MemoryBusSettings.Create();
+            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
+
+            HelpSubSystem.WriteSubsystem( "vis run", settings, cins, couts, hls, ms, mbs, hfs );
         }
 
         public override void Run( IEnumerable < string > args )
@@ -140,7 +141,7 @@ namespace VisCPU.Console.Core.Subsystems
             }
 
             string origPath = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(settings.WorkingDir);
+            Directory.SetCurrentDirectory( settings.WorkingDir );
 
             foreach ( string f in settings.InputFiles )
             {
@@ -172,7 +173,8 @@ namespace VisCPU.Console.Core.Subsystems
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
-            Directory.SetCurrentDirectory(origPath);
+
+            Directory.SetCurrentDirectory( origPath );
         }
 
         #endregion

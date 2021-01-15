@@ -4,6 +4,7 @@ using System.IO;
 
 using Newtonsoft.Json;
 
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers.Events;
 using VisCPU.Utility.Events;
@@ -32,12 +33,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             File.WriteAllText(
                               targetFile,
                               JsonConvert.SerializeObject(
-                                                          new ProjectInfo(
-                                                                           null,
-                                                                           "NewModule",
-                                                                           "0.1",
-                                                                           new ProjectDependency[0]
-                                                                          ),
+                                                          new ProjectConfig(
+                                                                            null,
+                                                                            "NewModule",
+                                                                            "0.1",
+                                                                            new ProjectDependency[0]
+                                                                           ),
                                                           Formatting.Indented
                                                          )
                              );
@@ -48,17 +49,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine( root, MODULE_PATH, moduleName, moduleVersion );
         }
 
-        public static ProjectInfo LoadModuleTarget( string targetFile )
-        {
-            return JsonConvert.DeserializeObject < ProjectInfo >( File.ReadAllText( targetFile ) );
-        }
-
-        public static void SaveModuleTarget( ProjectInfo target, string targetFile )
-        {
-            File.WriteAllText( targetFile, JsonConvert.SerializeObject( target, Formatting.Indented ) );
-        }
-
-        public abstract void Get( ProjectInfo target, string targetDir );
+        public abstract void Get( ProjectConfig target, string targetDir );
 
         public abstract string GetModulePackagePath( ModulePackage package );
 
@@ -66,24 +57,25 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public abstract IEnumerable < ModulePackage > GetPackages();
 
-        public abstract string GetTargetDataPath( ProjectInfo target );
+        public abstract string GetTargetDataPath( ProjectConfig target );
 
-        public abstract string GetTargetDataUri( ProjectInfo target );
+        public abstract string GetTargetDataUri( ProjectConfig target );
 
         public abstract string GetTargetInfoUri( ModulePackage package, string moduleVersion );
 
         public abstract bool HasPackage( string name );
 
-        public abstract void Restore( ProjectInfo target, string rootDir );
+        public abstract void Restore( ProjectConfig target, string rootDir );
 
-        public virtual void AddPackage( ProjectInfo target, string moduleDataPath )
+        public virtual void AddPackage( ProjectConfig target, string moduleDataPath )
         {
             EventManager < ErrorEvent >.SendEvent( new ModuleManagerUnsupportedEvent( this, "Adding Packages" ) );
         }
 
-        public bool HasTarget( ProjectInfo target )
+        public bool HasTarget( ProjectConfig target )
         {
-            return HasPackage( target.ProjectName ) && GetPackage( target.ProjectName ).HasTarget( target.ProjectVersion );
+            return HasPackage( target.ProjectName ) &&
+                   GetPackage( target.ProjectName ).HasTarget( target.ProjectVersion );
         }
 
         public virtual void RemovePackage( string moduleName )

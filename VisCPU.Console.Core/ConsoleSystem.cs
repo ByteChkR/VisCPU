@@ -15,6 +15,14 @@ namespace VisCPU.Console.Core
 
         #region Public
 
+        public override void Help()
+        {
+            foreach ( KeyValuePair < string, ConsoleSubsystem > consoleSubsystem in SubSystems )
+            {
+                consoleSubsystem.Value.Help();
+            }
+        }
+
         public override void Run( IEnumerable < string > args )
         {
             CLISettings s = CLISettings.Create();
@@ -22,14 +30,6 @@ namespace VisCPU.Console.Core
             Dictionary < string, ConsoleSubsystem > ss = SubSystems;
             ss["help"] = new HelpSubSystem( this );
             VisConsole.RunConsole( s, args.ToArray(), ss );
-        }
-
-        public override void Help()
-        {
-            foreach (KeyValuePair<string, ConsoleSubsystem> consoleSubsystem in SubSystems)
-            {
-                consoleSubsystem.Value.Help();
-            }
         }
 
         #endregion

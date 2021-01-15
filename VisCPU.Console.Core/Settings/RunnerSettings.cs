@@ -32,12 +32,11 @@ namespace VisCPU.Console.Core.Settings
                 { ".vhl", FindBinary }
             };
 
-
-        [Argument(Name = "run:working-dir")]
-        [Argument(Name = "run:w-dir")]
+        [Argument( Name = "run:working-dir" )]
+        [Argument( Name = "run:w-dir" )]
         [XmlIgnore]
         [JsonIgnore]
-        public string WorkingDir = Path.GetFullPath("./");
+        public string WorkingDir = Path.GetFullPath( "./" );
 
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]

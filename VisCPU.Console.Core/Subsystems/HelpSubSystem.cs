@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-using VisCPU.Compiler.Assembler;
-using VisCPU.Compiler.Linking;
-using VisCPU.Console.Core.Settings;
-using VisCPU.HL;
-using VisCPU.Peripherals.Console;
-using VisCPU.Peripherals.HostFS;
-using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems
 {
@@ -27,30 +17,25 @@ namespace VisCPU.Console.Core.Subsystems
             this.owner = owner;
         }
 
-        public override void Run( IEnumerable < string > arguments )
+        public static void WriteSubsystem( string subName, params object[] settings )
         {
-            owner.Help();
+            System.Console.WriteLine( $"Arguments: {subName}" );
+
+            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( settings );
+
+            foreach ( string s1 in args )
+            {
+                System.Console.WriteLine( "\tArg Name: " + s1 );
+            }
         }
 
         public override void Help()
         {
         }
 
-        #endregion
-
-        #region Private
-        
-        
-        public static void WriteSubsystem(string subName, params object[] settings)
+        public override void Run( IEnumerable < string > arguments )
         {
-            System.Console.WriteLine($"Arguments: {subName}");
-
-            IEnumerable<string> args = ArgumentSyntaxParser.GetArgNames(settings);
-
-            foreach (string s1 in args)
-            {
-                System.Console.WriteLine("\tArg Name: " + s1);
-            }
+            owner.Help();
         }
 
         #endregion

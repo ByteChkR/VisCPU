@@ -6,6 +6,7 @@ using System.Linq;
 
 using Newtonsoft.Json;
 
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers.Events;
 using VisCPU.HL.Modules.Resolvers;
@@ -46,7 +47,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             packageList.ForEach( x => x.Manager = this );
         }
 
-        public override void AddPackage( ProjectInfo target, string moduleDataPath )
+        public override void AddPackage( ProjectConfig target, string moduleDataPath )
         {
             ModulePackage package;
 
@@ -63,25 +64,29 @@ namespace VisCPU.HL.Modules.ModuleManagers
             if ( package.HasTarget( target.ProjectVersion ) )
             {
                 EventManager < WarningEvent >.SendEvent(
-                                                      new ModuleVersionAlreadyExistsEvent(
-                                                           target.ProjectName,
-                                                           target.ProjectVersion
-                                                          )
-                                                     );
-                string dataDir = GetTargetDataPath(target);
-                if(Directory.Exists(dataDir))
-                Directory.Delete( dataDir, true );
+                                                        new ModuleVersionAlreadyExistsEvent(
+                                                             target.ProjectName,
+                                                             target.ProjectVersion
+                                                            )
+                                                       );
+
+                string dataDir = GetTargetDataPath( target );
+
+                if ( Directory.Exists( dataDir ) )
+                {
+                    Directory.Delete( dataDir, true );
+                }
             }
 
             package.ModuleVersions.Add( target.ProjectVersion );
             string data = GetTargetDataPath( target );
             Directory.CreateDirectory( data );
             File.Copy( moduleDataPath, GetTargetDataUri( target ) );
-            SaveModuleTarget( target, GetTargetInfoUri( package, target.ProjectVersion ) );
+            ProjectConfig.Save( GetTargetInfoUri( package, target.ProjectVersion ), target );
             SavePackageList( packageList );
         }
 
-        public override void Get( ProjectInfo target, string targetDir )
+        public override void Get( ProjectConfig target, string targetDir )
         {
             if ( Directory.Exists( targetDir ) )
             {
@@ -115,12 +120,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return packageList;
         }
 
-        public override string GetTargetDataPath( ProjectInfo target )
+        public override string GetTargetDataPath( ProjectConfig target )
         {
             return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ProjectName, target.ProjectVersion );
         }
 
-        public override string GetTargetDataUri( ProjectInfo target )
+        public override string GetTargetDataUri( ProjectConfig target )
         {
             return Path.Combine( GetTargetDataPath( target ), MODULE_DATA );
         }
@@ -146,7 +151,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         public override void RemoveTarget( string moduleName, string moduleVersion )
         {
             ModulePackage p = GetPackage( moduleName );
-            ProjectInfo t = p.GetInstallTarget( moduleVersion );
+            ProjectConfig t = p.GetInstallTarget( moduleVersion );
             string dataPath = GetTargetDataPath( t );
 
             if ( Directory.Exists( dataPath ) )
@@ -158,7 +163,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             SavePackageList( packageList );
         }
 
-        public override void Restore( ProjectInfo target, string rootDir )
+        public override void Restore( ProjectConfig target, string rootDir )
         {
             foreach ( ProjectDependency targetDependency in target.Dependencies )
             {

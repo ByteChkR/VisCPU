@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.Resolvers;
 
@@ -29,7 +30,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             Directory.CreateDirectory( LocalTempCache );
         }
 
-        public override void Get( ProjectInfo target, string targetDir )
+        public override void Get( ProjectConfig target, string targetDir )
         {
             if ( Directory.Exists( targetDir ) )
             {
@@ -69,12 +70,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return PackageList;
         }
 
-        public override string GetTargetDataPath( ProjectInfo target )
+        public override string GetTargetDataPath( ProjectConfig target )
         {
             return GetTargetDataPath( LocalTempCache, target.ProjectName, target.ProjectVersion );
         }
 
-        public override string GetTargetDataUri( ProjectInfo target )
+        public override string GetTargetDataUri( ProjectConfig target )
         {
             return Path.Combine( GetTargetDataPath( target ), MODULE_DATA );
         }
@@ -89,7 +90,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return PackageList.Any( x => x.ModuleName == name );
         }
 
-        public override void Restore( ProjectInfo target, string rootDir )
+        public override void Restore( ProjectConfig target, string rootDir )
         {
             foreach ( ProjectDependency targetDependency in target.Dependencies )
             {
@@ -104,7 +105,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         #region Private
 
-        private void FetchData( ProjectInfo target )
+        private void FetchData( ProjectConfig target )
         {
             string dataUri = GetRemoteTargetDataUri( target );
             string dataLocal = GetTargetDataUri( target );
@@ -150,17 +151,17 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ModuleName );
         }
 
-        private string GetRemoteModulePackagePath( ProjectInfo package )
+        private string GetRemoteModulePackagePath( ProjectConfig package )
         {
             return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ProjectName );
         }
 
-        private string GetRemoteTargetDataPath( ProjectInfo target )
+        private string GetRemoteTargetDataPath( ProjectConfig target )
         {
             return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ProjectName, target.ProjectVersion );
         }
 
-        private string GetRemoteTargetDataUri( ProjectInfo target )
+        private string GetRemoteTargetDataUri( ProjectConfig target )
         {
             return Path.Combine( GetRemoteTargetDataPath( target ), MODULE_DATA );
         }
@@ -170,7 +171,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine( GetRemoteModulePackagePath( package ), moduleVersion, MODULE_TARGET );
         }
 
-        private string GetRemoteTargetInfoUri( ProjectInfo target )
+        private string GetRemoteTargetInfoUri( ProjectConfig target )
         {
             return Path.Combine( GetRemoteModulePackagePath( target ), target.ProjectVersion, MODULE_TARGET );
         }

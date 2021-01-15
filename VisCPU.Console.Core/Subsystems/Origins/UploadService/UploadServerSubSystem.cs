@@ -19,6 +19,11 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
 
         #region Public
 
+        public override void Help()
+        {
+            HelpSubSystem.WriteSubsystem( "vis origin host <targetRepo>", this );
+        }
+
         public override void Run( IEnumerable < string > args )
         {
             ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), this );
@@ -49,11 +54,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
             }
 
             server.Stop();
-        }
-
-        public override void Help()
-        {
-            HelpSubSystem.WriteSubsystem( "vis origin host <targetRepo>", this );
         }
 
         #endregion

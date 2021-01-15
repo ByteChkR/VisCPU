@@ -22,7 +22,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         #region Public
 
-        public static void Build(Dictionary<string, string> args)
+        public static void Build( Dictionary < string, string > args )
         {
             BuilderSettings settings = BuilderSettings.Create();
             AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
@@ -37,13 +37,14 @@ namespace VisCPU.Console.Core.Subsystems
                                        hls
                                       );
 
-            SettingsSystem.SaveSettings(ls);
-            SettingsSystem.SaveSettings(settings);
-            SettingsSystem.SaveSettings(asettings);
-            SettingsSystem.SaveSettings(hls);
+            SettingsSystem.SaveSettings( ls );
+            SettingsSystem.SaveSettings( settings );
+            SettingsSystem.SaveSettings( asettings );
+            SettingsSystem.SaveSettings( hls );
             Build( settings );
         }
-        public static void Build(IEnumerable<string> args)
+
+        public static void Build( IEnumerable < string > args )
         {
             BuilderSettings settings = BuilderSettings.Create();
             AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
@@ -58,13 +59,12 @@ namespace VisCPU.Console.Core.Subsystems
                                        hls
                                       );
 
-            SettingsSystem.SaveSettings(ls);
-            SettingsSystem.SaveSettings(settings);
-            SettingsSystem.SaveSettings(asettings);
-            SettingsSystem.SaveSettings(hls);
+            SettingsSystem.SaveSettings( ls );
+            SettingsSystem.SaveSettings( settings );
+            SettingsSystem.SaveSettings( asettings );
+            SettingsSystem.SaveSettings( hls );
             Build( settings );
         }
-
 
         public override void Help()
         {
@@ -75,52 +75,57 @@ namespace VisCPU.Console.Core.Subsystems
             HelpSubSystem.WriteSubsystem( "vis build", settings, asettings, ls, hls );
         }
 
-        private static void Build(BuilderSettings settings)
+        public override void Run( IEnumerable < string > args )
         {
-            ImporterSystem.Add(new InstructionDataImporter(new DefaultSet()), new LinkerImporter());
+            Build( args );
+        }
 
-            if (settings.InputFiles == null)
+        #endregion
+
+        #region Private
+
+        private static void Build( BuilderSettings settings )
+        {
+            ImporterSystem.Add( new InstructionDataImporter( new DefaultSet() ), new LinkerImporter() );
+
+            if ( settings.InputFiles == null )
             {
                 return;
             }
 
-            foreach (string f in settings.InputFiles)
+            foreach ( string f in settings.InputFiles )
             {
-                string original = Path.GetFullPath(f);
+                string original = Path.GetFullPath( f );
                 string file = original;
 
-                if (!File.Exists(file))
+                if ( !File.Exists( file ) )
                 {
-                    EventManager<ErrorEvent>.SendEvent(
-                                                       new FileNotFoundEvent(Path.GetFullPath(file), true)
-                                                      );
+                    EventManager < ErrorEvent >.SendEvent(
+                                                          new FileNotFoundEvent( Path.GetFullPath( file ), true )
+                                                         );
 
                     continue;
                 }
 
-                foreach ((string stepName, BuildSteps step) in settings.BuildSteps)
+                foreach ( ( string stepName, BuildSteps step ) in settings.BuildSteps )
                 {
-                    string newFile = step(original, file);
+                    string newFile = step( original, file );
 
-                    if (settings.CleanBuildOutput && file != original)
+                    if ( settings.CleanBuildOutput && file != original )
                     {
-                        File.Delete(file);
+                        File.Delete( file );
                     }
 
-                   Logger.LogMessage(LoggerSystems.Console, $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'");
+                    Logger.LogMessage(
+                                      LoggerSystems.Console,
+                                      $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'"
+                                     );
+
                     file = newFile;
                 }
 
-                Logger.LogMessage(LoggerSystems.Console, $"Steps Completed! File: '{original}' => '{file}'");
+                Logger.LogMessage( LoggerSystems.Console, $"Steps Completed! File: '{original}' => '{file}'" );
             }
-        }
-
-
-        public override void Run(IEnumerable<string> args)
-        {
-            Build( args );
-
-
         }
 
         #endregion

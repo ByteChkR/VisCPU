@@ -5,13 +5,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 
-using VisCPU.HL.BuildSystem;
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
-using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 
-namespace VisCPU.Console.Core.Subsystems.Modules
+namespace VisCPU.Console.Core.Subsystems.Project
 {
 
     public class ProjectPackSubSystem : ConsoleSubsystem
@@ -28,16 +27,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
-
-        public static void WriteHelp()
-        {
-            HelpSubSystem.WriteSubsystem("vis project pack", new PackOptions());
-        }
-
-        public override void Help()
-        {
-            WriteHelp();
-        }
 
         public static Version ChangeVersion( Version version, string changeStr )
         {
@@ -126,20 +115,38 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                               );
         }
 
+        public static void CopyTo( string src, string dst )
+        {
+            foreach ( string dirPath in Directory.GetDirectories(
+                                                                 src,
+                                                                 "*",
+                                                                 SearchOption.AllDirectories
+                                                                ) )
+            {
+                Directory.CreateDirectory( dirPath.Replace( src, dst ) );
+            }
+
+            foreach ( string newPath in Directory.GetFiles(
+                                                           src,
+                                                           "*.*",
+                                                           SearchOption.AllDirectories
+                                                          ) )
+            {
+                File.Copy( newPath, newPath.Replace( src, dst ), true );
+            }
+        }
+
         public static void Pack( string projectRoot, PackOptions options )
         {
-
-            string src = Path.Combine( Path.GetFullPath( projectRoot ), "project.json");
-            ProjectCleanSubSystem.Clean(Path.GetDirectoryName(src));
-            Logger.LogMessage(LoggerSystems.ModuleSystem, "Packing '{0}'", src);
+            string src = Path.Combine( Path.GetFullPath( projectRoot ), "project.json" );
+            ProjectCleanSubSystem.Clean( Path.GetDirectoryName( src ) );
+            Logger.LogMessage( LoggerSystems.ModuleSystem, "Packing '{0}'", src );
 
             string outDir = Path.Combine( Path.GetDirectoryName( src ), "build" );
-
 
             ProjectConfig t = ProjectConfig.Load( src );
 
             Version v = Version.Parse( t.ProjectVersion );
-            
 
             t.ProjectVersion = ChangeVersion( v, options.VersionString ).ToString();
 
@@ -165,8 +172,18 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             Directory.CreateDirectory( outDir );
             ZipFile.CreateFromDirectory( temp, Path.Combine( outDir, "module.zip" ) );
             Directory.Delete( temp, true );
-            ModuleManager.SaveModuleTarget( t, Path.Combine( outDir, "module.json" ) );
+            ProjectConfig.Save( Path.Combine( outDir, "module.json" ), t );
             ProjectConfig.Save( src, t );
+        }
+
+        public static void WriteHelp()
+        {
+            HelpSubSystem.WriteSubsystem( "vis project pack", new PackOptions() );
+        }
+
+        public override void Help()
+        {
+            WriteHelp();
         }
 
         public override void Run( IEnumerable < string > args )
@@ -174,31 +191,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             PackOptions op = new PackOptions();
             ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), op );
             Pack( args.First(), op );
-        }
-
-        #endregion
-
-        #region Private
-
-        public static void CopyTo( string src, string dst )
-        {
-            foreach ( string dirPath in Directory.GetDirectories(
-                                                                 src,
-                                                                 "*",
-                                                                 SearchOption.AllDirectories
-                                                                ) )
-            {
-                Directory.CreateDirectory( dirPath.Replace( src, dst ) );
-            }
-
-            foreach ( string newPath in Directory.GetFiles(
-                                                           src,
-                                                           "*.*",
-                                                           SearchOption.AllDirectories
-                                                          ) )
-            {
-                File.Copy( newPath, newPath.Replace( src, dst ), true );
-            }
         }
 
         #endregion

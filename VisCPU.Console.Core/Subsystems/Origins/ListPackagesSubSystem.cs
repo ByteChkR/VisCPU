@@ -6,7 +6,7 @@ using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Logging;
 
-namespace VisCPU.Console.Core.Subsystems.Modules
+namespace VisCPU.Console.Core.Subsystems.Origins
 {
 
     public class ListPackagesSubSystem : ConsoleSubsystem
@@ -16,19 +16,26 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         #region Public
 
+        public override void Help()
+        {
+            Log( "vis origins packages <searchStr>" );
+        }
+
         public override void Run( IEnumerable < string > args )
         {
             string searchStr = args.FirstOrDefault();
+
             foreach ( KeyValuePair < string, ModuleManager > keyValuePair in ModuleResolver.GetManagers() )
             {
                 Log( $"{keyValuePair.Key} : {keyValuePair.Value.ModuleRoot}" );
 
                 foreach ( ModulePackage modulePackage in keyValuePair.Value.GetPackages() )
                 {
-                    if(searchStr != null && !modulePackage.ModuleName.StartsWith(searchStr))
+                    if ( searchStr != null && !modulePackage.ModuleName.StartsWith( searchStr ) )
                     {
                         continue;
                     }
+
                     Log( $"\t{modulePackage.ModuleName}" );
 
                     foreach ( string modulePackageModuleVersion in modulePackage.ModuleVersions )
@@ -39,10 +46,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             }
         }
 
-        public override void Help()
-        {
-            Log("vis origins packages <searchStr>");
-        }
         #endregion
 
     }

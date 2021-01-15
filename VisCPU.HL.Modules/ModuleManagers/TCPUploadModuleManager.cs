@@ -6,6 +6,7 @@ using System.Text;
 
 using Newtonsoft.Json;
 
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 
 namespace VisCPU.HL.Modules.ModuleManagers
@@ -20,7 +21,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
         }
 
-        public override void AddPackage( ProjectInfo target, string moduleDataPath )
+        public override void AddPackage( ProjectConfig target, string moduleDataPath )
         {
             TcpClient client = new TcpClient( ModuleRoot.Host, ModuleRoot.Port );
 
@@ -41,7 +42,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             Log( "Response: {0}", Encoding.UTF8.GetString( response ) );
         }
 
-        public override void Get( ProjectInfo target, string targetDir )
+        public override void Get( ProjectConfig target, string targetDir )
         {
         }
 
@@ -60,12 +61,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             yield break;
         }
 
-        public override string GetTargetDataPath( ProjectInfo target )
+        public override string GetTargetDataPath( ProjectConfig target )
         {
             return null;
         }
 
-        public override string GetTargetDataUri( ProjectInfo target )
+        public override string GetTargetDataUri( ProjectConfig target )
         {
             return null;
         }
@@ -80,7 +81,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return false;
         }
 
-        public override void Restore( ProjectInfo target, string rootDir )
+        public override void Restore( ProjectConfig target, string rootDir )
         {
         }
 

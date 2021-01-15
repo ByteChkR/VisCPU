@@ -3,7 +3,7 @@
 using VisCPU.Console.Core.Subsystems.BuildSystem;
 using VisCPU.Utility.Logging;
 
-namespace VisCPU.Console.Core.Subsystems.Modules
+namespace VisCPU.Console.Core.Subsystems.Project
 {
 
     public class ProjectSubSystem : ConsoleSystem
@@ -21,8 +21,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             };
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
-
-        
 
     }
 

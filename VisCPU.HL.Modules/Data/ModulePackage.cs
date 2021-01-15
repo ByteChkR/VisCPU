@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.ModuleManagers;
 
 namespace VisCPU.HL.Modules.Data
@@ -35,25 +36,25 @@ namespace VisCPU.HL.Modules.Data
             Manager = manager;
         }
 
-        public ProjectInfo GetInstallTarget( string version = null )
+        public ProjectConfig GetInstallTarget( string version = null )
         {
             if ( version != null )
             {
                 string infoPath = Manager.GetTargetInfoUri( this, version );
 
-                return JsonConvert.DeserializeObject < ProjectInfo >(
-                                                                      File.ReadAllText( infoPath )
-                                                                     );
+                return JsonConvert.DeserializeObject < ProjectConfig >(
+                                                                       File.ReadAllText( infoPath )
+                                                                      );
             }
 
-            return JsonConvert.DeserializeObject < ProjectInfo >(
-                                                                  File.ReadAllText(
-                                                                       Manager.GetTargetInfoUri(
-                                                                            this,
-                                                                            ModuleVersions.Last()
-                                                                           )
-                                                                      )
-                                                                 );
+            return JsonConvert.DeserializeObject < ProjectConfig >(
+                                                                   File.ReadAllText(
+                                                                        Manager.GetTargetInfoUri(
+                                                                             this,
+                                                                             ModuleVersions.Last()
+                                                                            )
+                                                                       )
+                                                                  );
         }
 
         public bool HasTarget( string version )

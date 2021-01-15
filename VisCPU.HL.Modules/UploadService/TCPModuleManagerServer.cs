@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.Logging;
@@ -82,7 +81,7 @@ namespace VisCPU.HL.Modules.UploadService
                     byte[] mod = new byte[moduleTargetLength];
                     client.GetStream().Read( mod, 0, mod.Length );
 
-                    ProjectInfo target = ModuleManager.LoadModuleTarget( Encoding.UTF8.GetString( mod ) );
+                    ProjectConfig target = ProjectConfig.Deserialize( Encoding.UTF8.GetString( mod ) );
 
                     client.GetStream().Read( modLen, 0, modLen.Length );
                     int dataLength = BitConverter.ToInt32( modLen, 0 );

@@ -13,8 +13,9 @@ namespace VisCPU.Console.Core
 
         #region Public
 
-        public abstract void Run( IEnumerable < string > args );
         public abstract void Help();
+
+        public abstract void Run( IEnumerable < string > args );
 
         #endregion
 

@@ -1,108 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
-using VisCPU.HL.Modules.Data;
+using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.Logging;
 
-namespace VisCPU.HL.BuildSystem
+namespace VisCPU.HL.Modules.Data
 {
 
-    public class BuildJob
+    public class ProjectConfig
     {
 
-        public string JobName;
-        public string BuildJobRunner;
-        public Dictionary < string, string > Arguments = new Dictionary < string, string >();
+        [JsonIgnore]
+        [XmlIgnore]
+        public ModuleManager Manager;
 
-        #region Public
-
-        public static BuildJob Deserialize( string data )
-        {
-            return JsonConvert.DeserializeObject < BuildJob >( data );
-        }
-
-        public static BuildJob Load( string path )
-        {
-            return Deserialize( File.ReadAllText( path ) );
-        }
-
-        public static void Save( string path, BuildJob config )
-        {
-            File.WriteAllText( path, Serialize( config ) );
-        }
-
-        public static string Serialize( BuildJob config )
-        {
-            return JsonConvert.SerializeObject(
-                                               config,
-                                               Formatting.Indented
-                                              );
-        }
-
-        #endregion
-
-    }
-
-    public class ProjectBuildTarget
-    {
-
-        public string TargetName;
-        public string[] DependsOn = new string[0];
-        public List < BuildJob > Jobs = new List < BuildJob >();
-
-        #region Public
-
-        public static ProjectBuildTarget Deserialize( string data )
-        {
-            return JsonConvert.DeserializeObject < ProjectBuildTarget >( data );
-        }
-
-        public static ProjectBuildTarget Load( string path )
-        {
-            return Deserialize( File.ReadAllText( path ) );
-        }
-
-        public static void Save( string path, ProjectBuildTarget config )
-        {
-            File.WriteAllText( path, Serialize( config ) );
-        }
-
-        public static string Serialize( ProjectBuildTarget config )
-        {
-            return JsonConvert.SerializeObject(
-                                               config,
-                                               Formatting.Indented
-                                              );
-        }
-
-        #endregion
-
-    }
-
-    public abstract class BuildJobRunner
-    {
-
-        public abstract string RunnerName { get; }
-
-        #region Public
-
-        public abstract void RunJob(
-            string projectRoot,
-            ProjectConfig project,
-            ProjectBuildTarget target,
-            BuildJob job );
-
-        #endregion
-
-    }
-
-    public class ProjectConfig : ProjectInfo
-    {
-
+        public string ProjectName = "MyProject";
+        public string ProjectVersion = "0.0.0.1";
+        public List < ProjectDependency > Dependencies = new List < ProjectDependency >();
         public string DefaultTarget = "Debug";
 
         public Dictionary < string, ProjectBuildTarget > BuildTargets = new Dictionary < string, ProjectBuildTarget >
@@ -134,8 +54,12 @@ namespace VisCPU.HL.BuildSystem
             ModuleManager manager,
             string projectName,
             string projectVersion,
-            ProjectDependency[] dependencies ) : base( manager, projectName, projectVersion, dependencies )
+            ProjectDependency[] dependencies )
         {
+            ProjectName = projectName;
+            ProjectVersion = projectVersion;
+            Manager = manager;
+            Dependencies = dependencies.ToList();
         }
 
         public ProjectConfig()
@@ -242,10 +166,10 @@ namespace VisCPU.HL.BuildSystem
                                                    {
                                                        { "VISDIR", AppDomain.CurrentDomain.BaseDirectory },
                                                        {
-                                                           "PROJDIR",
-                                                           rootDir.EndsWith( "\\" ) || rootDir.EndsWith( "/" )
-                                                               ? rootDir
-                                                               : rootDir + "/"
+                                                           "PROJDIR", rootDir.EndsWith( "\\" ) ||
+                                                                      rootDir.EndsWith( "/" )
+                                                                          ? rootDir
+                                                                          : rootDir + "/"
                                                        },
                                                        { "NAME", ProjectName },
                                                        { "VERSION", ProjectVersion },
@@ -270,10 +194,10 @@ namespace VisCPU.HL.BuildSystem
                                                    {
                                                        { "VISDIR", AppDomain.CurrentDomain.BaseDirectory },
                                                        {
-                                                           "PROJDIR",
-                                                           rootDir.EndsWith( "\\" ) || rootDir.EndsWith( "/" )
-                                                               ? rootDir
-                                                               : rootDir + "/"
+                                                           "PROJDIR", rootDir.EndsWith( "\\" ) ||
+                                                                      rootDir.EndsWith( "/" )
+                                                                          ? rootDir
+                                                                          : rootDir + "/"
                                                        },
                                                        { "NAME", ProjectName },
                                                        { "VERSION", ProjectVersion },

@@ -10,6 +10,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         #region Public
 
+        public override void Help()
+        {
+        }
+
         public override void Run( IEnumerable < string > args )
         {
             string configDir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config" );
@@ -24,10 +28,6 @@ namespace VisCPU.Console.Core.Subsystems
             {
                 Directory.Delete( cacheDir, true );
             }
-        }
-
-        public override void Help()
-        {
         }
 
         #endregion

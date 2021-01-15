@@ -12,21 +12,21 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         #region Public
 
-        public static void RemoveOrigin(string name)
+        public static void RemoveOrigin( string name )
         {
             ModuleResolverSettings s = ModuleResolverSettings.Create();
-            s.ModuleOrigins.Remove(name);
-            SettingsSystem.SaveSettings(s);
-        }
-
-        public override void Run( IEnumerable < string > args )
-        {
-            RemoveOrigin( args.First() );
+            s.ModuleOrigins.Remove( name );
+            SettingsSystem.SaveSettings( s );
         }
 
         public override void Help()
         {
             Log( "vis origin remove <name>" );
+        }
+
+        public override void Run( IEnumerable < string > args )
+        {
+            RemoveOrigin( args.First() );
         }
 
         #endregion
