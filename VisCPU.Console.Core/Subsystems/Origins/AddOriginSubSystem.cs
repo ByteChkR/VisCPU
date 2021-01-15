@@ -14,9 +14,8 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public static void AddOrigin(string name, string uri)
         {
-            ModuleResolverSettings s = ModuleResolverSettings.Create();
-            s.ModuleOrigins[name] = uri;
-            SettingsSystem.SaveSettings(s);
+            ModuleResolver.ResolverSettings.ModuleOrigins[name] = uri;
+            SettingsSystem.SaveSettings(ModuleResolver.ResolverSettings);
         }
 
 
