@@ -12,7 +12,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// <summary>
         ///     The Value
         /// </summary>
-        public readonly IHlToken Value;
+        public IHlToken Value { get; }
 
         #region Public
 

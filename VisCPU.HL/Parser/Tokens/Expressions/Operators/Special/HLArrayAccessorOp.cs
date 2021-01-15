@@ -16,12 +16,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Left Side (the array)
         /// </summary>
-        public readonly HLExpression Left;
+        public HLExpression Left { get; }
 
         /// <summary>
         ///     The Accessor Arguments
         /// </summary>
-        public readonly HLExpression[] ParameterList;
+        public HLExpression[] ParameterList { get; }
 
         /// <summary>
         ///     The Operator Token

@@ -10,24 +10,24 @@
         /// <summary>
         ///     Initializer Expression
         /// </summary>
-        public readonly IHlToken[] InitializerExpression;
+        public IHlToken[] InitializerExpression { get; }
 
         /// <summary>
         ///     Variable Modifiers
         /// </summary>
-        public readonly IHlToken[] Modifiers;
+        public IHlToken[] Modifiers { get; }
 
         /// <summary>
         ///     Variable Name
         /// </summary>
-        public readonly IHlToken Name;
+        public IHlToken Name { get; }
 
-        public readonly IHlToken Size;
+        public IHlToken Size { get; }
 
         /// <summary>
         ///     Variable Type Name
         /// </summary>
-        public readonly IHlToken TypeName;
+        public IHlToken TypeName { get; }
 
         #region Public
 

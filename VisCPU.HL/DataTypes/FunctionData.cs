@@ -6,8 +6,10 @@ namespace VisCPU.HL.DataTypes
     public class FunctionData : IExternalData
     {
 
-        public int ParameterCount;
-        public bool Public;
+        public int ParameterCount { get; }
+
+        public bool Public { get; }
+
         private readonly Func < string[] > m_FunctionCompiler;
 
         private readonly string m_Name;

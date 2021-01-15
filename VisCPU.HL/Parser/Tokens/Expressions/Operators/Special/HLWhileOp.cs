@@ -11,12 +11,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     public class HLWhileOp : HLExpression
     {
 
-        public readonly HLExpression[] Block;
+        public HLExpression[] Block { get; }
 
         /// <summary>
         ///     Continue Expression
         /// </summary>
-        public readonly HLExpression Condition;
+        public HLExpression Condition { get; }
 
         #region Public
 

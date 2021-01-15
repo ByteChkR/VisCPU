@@ -4,12 +4,15 @@
     public class FunctionDefinitionToken : CombinedToken
     {
 
-        public readonly IHlToken[] Arguments;
-        public readonly IHlToken[] Block;
+        public IHlToken[] Arguments { get; }
 
-        public readonly IHlToken FunctionName;
-        public readonly IHlToken FunctionReturnType;
-        public readonly IHlToken[] Mods;
+        public IHlToken[] Block { get; }
+
+        public IHlToken FunctionName { get; }
+
+        public IHlToken FunctionReturnType { get; }
+
+        public IHlToken[] Mods { get; }
 
         #region Public
 

@@ -7,7 +7,7 @@ namespace VisCPU.Utility.ArgumentParser
     public class ArgumentAttribute : Attribute
     {
 
-        public string Name;
+        public string Name { get; set; }
 
     }
 

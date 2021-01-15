@@ -15,17 +15,17 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// <summary>
         ///     Left side of the Expression
         /// </summary>
-        public readonly HLExpression Left;
+        public HLExpression Left { get; }
 
         /// <summary>
         ///     The Operation Type
         /// </summary>
-        public readonly HLTokenType OperationType;
+        public HLTokenType OperationType { get; }
 
         /// <summary>
         ///     Right side of the Expression
         /// </summary>
-        public readonly HLExpression Right;
+        public  HLExpression Right { get; }
 
         public override HLTokenType Type => OperationType;
 

@@ -84,7 +84,7 @@ namespace VisCPU.Utility.SharedBase
         private static LinkerInfo LoadXml( string file )
         {
             XmlSerializer xs = new XmlSerializer( typeof( LinkerInfo ) );
-            LinkerInfo li = CreateEmpty();
+            LinkerInfo li;
 
             using ( FileStream fs = File.Create( file ) )
             {

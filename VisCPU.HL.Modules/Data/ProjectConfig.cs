@@ -28,25 +28,26 @@ namespace VisCPU.HL.Modules.Data
 
         public string DefaultTarget { get; } = "Debug";
 
-        public Dictionary < string, ProjectBuildTarget > BuildTargets = new Dictionary < string, ProjectBuildTarget >
-                                                                        {
-                                                                            {
-                                                                                "Debug", new ProjectBuildTarget
-                                                                                    {
-                                                                                        TargetName = "Debug",
-                                                                                        Jobs = new List < BuildJob >
-                                                                                            {
-                                                                                                new BuildJob
-                                                                                                {
-                                                                                                    JobName =
-                                                                                                        "Clean Project Folder",
-                                                                                                    BuildJobRunner =
-                                                                                                        "clean"
-                                                                                                }
-                                                                                            }
-                                                                                    }
-                                                                            }
-                                                                        };
+        public Dictionary < string, ProjectBuildTarget > BuildTargets { get; } =
+            new Dictionary < string, ProjectBuildTarget >
+            {
+                {
+                    "Debug", new ProjectBuildTarget
+                             {
+                                 TargetName = "Debug",
+                                 Jobs = new List < BuildJob >
+                                        {
+                                            new BuildJob
+                                            {
+                                                JobName =
+                                                    "Clean Project Folder",
+                                                BuildJobRunner =
+                                                    "clean"
+                                            }
+                                        }
+                             }
+                }
+            };
 
         private static readonly Dictionary < string, BuildJobRunner > s_BuildJobRunners =
             new Dictionary < string, BuildJobRunner >();

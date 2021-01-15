@@ -22,9 +22,9 @@ namespace VisCPU.Console.Core.Settings
         [field: Argument( Name = "run:cpu.reset" )]
         public uint CpuResetAddr { get; set; }
 
-        [XmlIgnore]
-        [JsonIgnore]
-        public Dictionary < string, Func < string, string > > PreRunMap =
+        [field: XmlIgnore]
+        [field: JsonIgnore]
+        public Dictionary < string, Func < string, string > > PreRunMap { get; } =
             new Dictionary < string, Func < string, string > >
             {
                 { ".z", UnCompressFile },

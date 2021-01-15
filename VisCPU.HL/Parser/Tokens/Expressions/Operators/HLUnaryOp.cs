@@ -12,12 +12,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// <summary>
         ///     Left Side of the Expression
         /// </summary>
-        public readonly HLExpression Left;
+        public HLExpression Left { get; }
 
         /// <summary>
         ///     The Expression Type
         /// </summary>
-        public readonly HLTokenType OperationType;
+        public HLTokenType OperationType { get; }
 
         public override HLTokenType Type => OperationType;
 
@@ -46,7 +46,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
 
         public override string ToString()
         {
-            return Left + $"({OperationType})";
+            return Left + $"({Type})";
         }
 
         #endregion

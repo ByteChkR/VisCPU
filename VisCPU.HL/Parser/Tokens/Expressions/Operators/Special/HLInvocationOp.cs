@@ -14,12 +14,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Left side Expression
         /// </summary>
-        public readonly HLExpression Left;
+        public HLExpression Left { get; }
 
         /// <summary>
         ///     Invocation Arguments
         /// </summary>
-        public readonly HLExpression[] ParameterList;
+        public HLExpression[] ParameterList { get; }
 
         /// <summary>
         ///     Operation Type

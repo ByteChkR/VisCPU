@@ -13,17 +13,17 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Condition Map
         /// </summary>
-        public readonly List < (HLExpression, HLExpression[]) > ConditionMap;
+        public List < (HLExpression, HLExpression[]) > ConditionMap { get; }
 
         /// <summary>
         ///     Else Branch Block
         /// </summary>
-        public readonly HLExpression[] ElseBranch;
+        public HLExpression[] ElseBranch { get; }
 
         /// <summary>
         ///     Operation Type
         /// </summary>
-        public readonly HLTokenType OperationType = HLTokenType.OpIf;
+        public HLTokenType OperationType { get; } = HLTokenType.OpIf;
 
         public override HLTokenType Type => OperationType;
 

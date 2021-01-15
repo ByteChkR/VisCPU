@@ -12,9 +12,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// <summary>
         ///     The Definition Token
         /// </summary>
-        public readonly VariableDefinitionToken VariableDefinition;
+        public VariableDefinitionToken VariableDefinition { get; }
 
-        public readonly HLExpression[] Initializer;
+        public HLExpression[] Initializer { get; }
 
         /// <summary>
         ///     The Variable Value

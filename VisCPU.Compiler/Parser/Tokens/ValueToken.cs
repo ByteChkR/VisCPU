@@ -10,7 +10,7 @@ namespace VisCPU.Compiler.Parser.Tokens
 
         #region Public
 
-        public ValueToken( string originalText, int start, int length ) : base( originalText, start, length )
+        protected ValueToken( string originalText, int start, int length ) : base( originalText, start, length )
         {
         }
 

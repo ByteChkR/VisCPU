@@ -6,12 +6,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
     public class HLFuncDefOperand : HLVarOperand
     {
 
-        public readonly HLExpression[] Block;
+        public HLExpression[] Block { get; }
 
         /// <summary>
         ///     The Definition Token
         /// </summary>
-        public readonly FunctionDefinitionToken FunctionDefinition;
+        public FunctionDefinitionToken FunctionDefinition { get; }
 
         /// <summary>
         ///     The Variable Value

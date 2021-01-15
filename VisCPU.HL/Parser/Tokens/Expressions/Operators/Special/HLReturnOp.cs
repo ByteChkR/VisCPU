@@ -12,7 +12,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Right side expression (return value)
         /// </summary>
-        public readonly HLExpression Right;
+        public HLExpression Right { get; }
 
         public override HLTokenType Type => HLTokenType.OpReturn;
 

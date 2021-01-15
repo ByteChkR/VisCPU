@@ -25,7 +25,7 @@ namespace VisCPU.HL
     public class HLCompilerCollection
     {
 
-        private Dictionary < Type, IHlExpressionCompiler > m_TypeMap;
+        private readonly Dictionary < Type, IHlExpressionCompiler > m_TypeMap;
 
         #region Public
 

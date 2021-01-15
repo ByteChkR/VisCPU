@@ -12,12 +12,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Left Side expression
         /// </summary>
-        public readonly HLExpression Left;
+        public HLExpression Left { get; }
 
         /// <summary>
         ///     Name of the Member that is beeing accessed.
         /// </summary>
-        public readonly HLExpression MemberName;
+        public HLExpression MemberName { get; }
 
         #region Public
 

@@ -13,17 +13,17 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Continue Condition
         /// </summary>
-        private readonly HLExpression m_Condition;
+        public HLExpression Condition { get; }
 
         /// <summary>
         ///     The Expression Body
         /// </summary>
-        private readonly HLExpression[] m_ExprBody;
+        public HLExpression[] ExprBody { get; }
 
         /// <summary>
         ///     Variable Declaration
         /// </summary>
-        private readonly HLExpression m_VDecl;
+        public HLExpression VDecl { get; }
 
         /// <summary>
         ///     Variable Change Expression
@@ -48,10 +48,10 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             HLExpression[] exprBody,
             int sourceIdx ) : base( sourceIdx )
         {
-            m_Condition = condition;
-            m_VDecl = vDecl;
+            Condition = condition;
+            VDecl = vDecl;
             m_VInc = vInc;
-            m_ExprBody = exprBody;
+            ExprBody = exprBody;
         }
 
         /// <summary>
@@ -62,10 +62,10 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         {
             return new List < IHlToken >
                    {
-                       m_VDecl,
-                       m_Condition,
+                       VDecl,
+                       Condition,
                        m_VInc
-                   }.Concat( m_ExprBody ).
+                   }.Concat( ExprBody ).
                      ToList();
         }
 

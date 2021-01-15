@@ -17,7 +17,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <summary>
         ///     The Child Tokens
         /// </summary>
-        public readonly List < IHlToken > SubTokens;
+        public List < IHlToken > SubTokens { get; }
 
         /// <summary>
         ///     Start index in the source

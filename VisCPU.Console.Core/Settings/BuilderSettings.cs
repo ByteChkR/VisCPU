@@ -24,7 +24,7 @@ namespace VisCPU.Console.Core.Settings
     public class BuilderSettings
     {
 
-        public static readonly Dictionary < string, BuildSteps > s_AllBuildSteps =
+        private static readonly Dictionary < string, BuildSteps > s_AllBuildSteps =
             new Dictionary < string, BuildSteps >
             {
                 { "HL-expr", ( file, lastFile ) => CreateExpressionBuildStep( lastFile ) },
@@ -32,8 +32,8 @@ namespace VisCPU.Console.Core.Settings
                 { "compress", ( file, lastFile ) => CompressFile( lastFile ) }
             };
 
-        [Argument( Name = "build:steps" )]
-        public readonly string[] BuildSteps = { "bin" };
+        [field: Argument( Name = "build:steps" )]
+        public string[] Steps { get; set; } = { "bin" };
 
         [field: Argument( Name = "build:clean" )]
         public bool CleanBuildOutput { get; set; } = true;
@@ -53,7 +53,7 @@ namespace VisCPU.Console.Core.Settings
         [XmlIgnore]
         [JsonIgnore]
         public IEnumerable < (string, BuildSteps) > InstanceBuildSteps =>
-            BuildSteps.Select( x => ( x, s_AllBuildSteps[x] ) );
+            Steps.Select( x => ( x, s_AllBuildSteps[x] ) );
 
         [XmlIgnore]
         [JsonIgnore]
