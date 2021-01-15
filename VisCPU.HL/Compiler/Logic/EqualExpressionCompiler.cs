@@ -36,9 +36,6 @@ namespace VisCPU.HL.Compiler.Logic
 
             List < string > lines = new List < string >();
 
-            //lines.Add(
-            //          $"COPY {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-            //         );
             if ( target.IsPointer )
             {
                 if ( rTarget.IsPointer )

@@ -982,8 +982,6 @@ namespace VisCPU.HL
 
                 if ( tokens[i].Type == HLTokenType.OpClass )
                 {
-                    IHLToken classKey = tokens[i];
-
                     IHLToken name = HLParsingTools.ReadOne( tokens, i + 1, HLTokenType.OpWord );
 
                     IHLToken[] mods = HLParsingTools.ReadNoneOrManyOf(

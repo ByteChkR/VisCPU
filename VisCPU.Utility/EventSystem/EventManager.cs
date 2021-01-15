@@ -16,8 +16,6 @@ namespace VisCPU.Utility.EventSystem
         {
             OnEventReceive += EventManagerOnEventReceive;
             EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
-
-            //EventManager < WarningEvent >.OnEventReceive += EventManagerOnEventReceive;
         }
 
         public static void SendEvent( Event eventItem )

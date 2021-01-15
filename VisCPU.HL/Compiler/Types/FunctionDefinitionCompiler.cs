@@ -26,7 +26,7 @@ namespace VisCPU.HL.Compiler.Types
                  isPublic,
                  () =>
                  {
-                     //Log( $"Importing Function: {expr.value.FunctionName}" );
+                     Log( $"Importing Function: {expr.value.FunctionName}" );
 
                      foreach ( IHLToken valueArgument in expr.value.Arguments )
                      {

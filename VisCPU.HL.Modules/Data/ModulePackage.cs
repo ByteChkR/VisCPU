@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
-using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.ModuleManagers;
 
 namespace VisCPU.HL.Modules.Data

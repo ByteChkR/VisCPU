@@ -28,7 +28,7 @@ namespace VisCPU.HL.Modules.Data
         public Dictionary < string, ProjectBuildTarget > BuildTargets = new Dictionary < string, ProjectBuildTarget >
                                                                         {
                                                                             {
-                                                                                "Debug", new ProjectBuildTarget()
+                                                                                "Debug", new ProjectBuildTarget
                                                                                     {
                                                                                         TargetName = "Debug",
                                                                                         Jobs = new List < BuildJob >

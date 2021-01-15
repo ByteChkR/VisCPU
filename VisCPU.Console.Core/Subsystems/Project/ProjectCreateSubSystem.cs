@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.HL.Modules.BuildSystem;
-using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Project
@@ -32,8 +31,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
             Log( $"Writing Project Info: {path}" );
 
             CommonFiles.InitializeProjectFolder( path );
-
-            //ModuleManager.CreateModuleTarget( path );
         }
 
         #endregion

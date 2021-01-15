@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 
-using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;

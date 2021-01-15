@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.Logging;

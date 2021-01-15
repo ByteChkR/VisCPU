@@ -6,7 +6,6 @@ using System.Linq;
 
 using Newtonsoft.Json;
 
-using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers.Events;
 using VisCPU.HL.Modules.Resolvers;

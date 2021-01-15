@@ -132,39 +132,9 @@ namespace VisCPU.HL.Parser
             if ( parser.CurrentToken.Type == HLTokenType.OpWord )
             {
                 IHLToken item = parser.CurrentToken;
-                HLExpression token = null;
                 parser.Eat( parser.CurrentToken.Type );
 
-                //if ( parser.CurrentToken.Type == HLTokenType.OpWord )
-                //{
-                //    IHLToken name = parser.CurrentToken;
-                //    parser.Eat( parser.CurrentToken.Type );
-                //    IHLToken num = null;
-
-                //    if ( parser.CurrentToken.Type == HLTokenType.OpIndexerBracketOpen )
-                //    {
-                //        parser.Eat( parser.CurrentToken.Type );
-                //        num = parser.CurrentToken;
-                //        parser.Eat( HLTokenType.OpNumber );
-                //        parser.Eat( HLTokenType.OpIndexerBracketClose );
-                //    }
-
-                //    token = new HLVarDefOperand(
-                //                                new VariableDefinitionToken(
-                //                                                            name,
-                //                                                            item,
-                //                                                            new IHLToken[0],
-                //                                                            new IHLToken[0],
-                //                                                            null,
-                //                                                            num
-                //                                                           )
-                //                               );
-                //}
-                //else
-                //{
-                token = new HLVarOperand( item, item.SourceIndex );
-
-                //}
+                HLExpression token = new HLVarOperand( item, item.SourceIndex );
 
                 return token;
             }

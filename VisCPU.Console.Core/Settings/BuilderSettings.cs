@@ -27,9 +27,9 @@ namespace VisCPU.Console.Core.Settings
         public static readonly Dictionary < string, BuildSteps > AllBuildSteps =
             new Dictionary < string, BuildSteps >
             {
-                { "HL-expr", CreateExpressionBuildStep },
+                { "HL-expr", ( file, lastFile ) => CreateExpressionBuildStep( lastFile ) },
                 { "bin", CreateBinary },
-                { "compress", CompressFile }
+                { "compress", ( file, lastFile ) => CompressFile( lastFile ) }
             };
 
         [Argument( Name = "build:steps" )]
@@ -99,7 +99,7 @@ namespace VisCPU.Console.Core.Settings
                                                 );
         }
 
-        private static string CompressFile( string originalFile, string lastStepFile )
+        private static string CompressFile( string lastStepFile )
         {
             string newFile = lastStepFile + ".z";
 
@@ -145,7 +145,7 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateExpressionBuildStep( string originalFile, string lastStepFile )
+        private static string CreateExpressionBuildStep( string lastStepFile )
         {
             if ( Path.GetExtension( lastStepFile ) != ".vhl" )
             {

@@ -108,8 +108,6 @@ namespace VisCPU.Peripherals.Benchmarking
         private void PrintResult()
         {
             EventManager.SendEvent( new BenchmarkResultEvent( benchmarkName.ToString(), stopWatch.Elapsed ) );
-
-            //Log($"Benchmark {benchmarkName}: {stopWatch.ElapsedMilliseconds} ms");
         }
 
         private void StopTimer()

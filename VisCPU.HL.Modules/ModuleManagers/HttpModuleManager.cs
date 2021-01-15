@@ -5,7 +5,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 
-using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.Resolvers;
 

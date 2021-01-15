@@ -6,7 +6,6 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-using VisCPU.HL.Modules.BuildSystem;
 using VisCPU.HL.Modules.Data;
 
 namespace VisCPU.HL.Modules.ModuleManagers
