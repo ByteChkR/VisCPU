@@ -327,7 +327,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             ProjectBuildTarget target,
             BuildJob job)
         {
-            if (!job.Arguments.TryGetValue("repo", out string repo))
+            if (!job.Arguments.TryGetValue("origin", out string repo))
             {
                 repo = "local";
             }
@@ -352,10 +352,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             ProjectBuildTarget target,
             BuildJob job)
         {
-            if (!job.Arguments.TryGetValue("repo", out string repo))
-            {
-                repo = "local";
-            }
 
             ProjectPackSubSystem.PackOptions opts = new ProjectPackSubSystem.PackOptions();
             ProjectPublishSubSystem.PublishOptions pops = new ProjectPublishSubSystem.PublishOptions();
