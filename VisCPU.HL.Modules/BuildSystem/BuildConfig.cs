@@ -157,8 +157,6 @@ namespace VisCPU.HL.BuildSystem
             return JsonConvert.DeserializeObject < ProjectConfig >( data );
         }
 
-        
-
         public static ProjectConfig Load( string path )
         {
             return Deserialize( File.ReadAllText( path ) );
@@ -237,14 +235,18 @@ namespace VisCPU.HL.BuildSystem
         #endregion
 
         #region Private
-        
 
         private void ResolveBuildJobItems( string rootDir, ProjectBuildTarget buildTarget, BuildJob job )
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
                                                    {
                                                        { "VISDIR", AppDomain.CurrentDomain.BaseDirectory },
-                                                       { "PROJDIR", rootDir },
+                                                       {
+                                                           "PROJDIR",
+                                                           rootDir.EndsWith( "\\" ) || rootDir.EndsWith( "/" )
+                                                               ? rootDir
+                                                               : rootDir + "/"
+                                                       },
                                                        { "NAME", ProjectName },
                                                        { "VERSION", ProjectVersion },
                                                        { "TARGET", buildTarget.TargetName },

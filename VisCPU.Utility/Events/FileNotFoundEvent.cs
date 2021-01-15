@@ -16,6 +16,11 @@ namespace VisCPU.Utility.Events
         {
         }
 
+        public override string ToString()
+        {
+            return Message;
+        }
+
         #endregion
 
     }
