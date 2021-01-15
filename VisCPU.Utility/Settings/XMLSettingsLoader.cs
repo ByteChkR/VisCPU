@@ -9,7 +9,7 @@ namespace VisCPU.Utility.Settings
     public class XMLSettingsLoader : SettingsLoader
     {
 
-        private readonly Dictionary < Type, XmlSerializer > serializers = new Dictionary < Type, XmlSerializer >();
+        private readonly Dictionary < Type, XmlSerializer > m_Serializers = new Dictionary < Type, XmlSerializer >();
 
         #region Public
 
@@ -39,12 +39,12 @@ namespace VisCPU.Utility.Settings
 
         private XmlSerializer GetSerializer( Type t )
         {
-            if ( serializers.ContainsKey( t ) )
+            if ( m_Serializers.ContainsKey( t ) )
             {
-                return serializers[t];
+                return m_Serializers[t];
             }
 
-            return serializers[t] = new XmlSerializer( t );
+            return m_Serializers[t] = new XmlSerializer( t );
         }
 
         #endregion

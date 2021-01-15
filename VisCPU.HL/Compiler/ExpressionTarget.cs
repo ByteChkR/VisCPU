@@ -6,7 +6,7 @@ using VisCPU.Utility;
 namespace VisCPU.HL.Compiler
 {
 
-    public readonly struct ExpressionTarget
+    public readonly struct ExpressionTarget : IEquatable < ExpressionTarget >
     {
 
         public readonly string ResultAddress;
@@ -101,6 +101,32 @@ namespace VisCPU.HL.Compiler
             compilation.ReleaseTempVar( ResultAddress );
 
             return target;
+        }
+
+        public bool Equals( ExpressionTarget other )
+        {
+            return ResultAddress == other.ResultAddress &&
+                   IsAddress == other.IsAddress &&
+                   IsPointer == other.IsPointer &&
+                   Equals( TypeDefinition, other.TypeDefinition );
+        }
+
+        public override bool Equals( object obj )
+        {
+            return obj is ExpressionTarget other && Equals( other );
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = ResultAddress != null ? ResultAddress.GetHashCode() : 0;
+                hashCode = ( hashCode * 397 ) ^ IsAddress.GetHashCode();
+                hashCode = ( hashCode * 397 ) ^ IsPointer.GetHashCode();
+                hashCode = ( hashCode * 397 ) ^ ( TypeDefinition != null ? TypeDefinition.GetHashCode() : 0 );
+
+                return hashCode;
+            }
         }
 
     }

@@ -6,7 +6,7 @@ namespace VisCPU.Utility.Logging
     public static class Logger
     {
 
-        public static readonly LoggerSettings Settings = new LoggerSettings();
+        public static readonly LoggerSettings s_Settings = new LoggerSettings();
 
         public static event Action < LoggerSystems, string > OnLogReceive;
 
@@ -14,7 +14,7 @@ namespace VisCPU.Utility.Logging
 
         public static void LogMessage( LoggerSystems subsystem, string format, params object[] args )
         {
-            if ( !Settings.EnableAll && ( Settings.EnabledSystems & subsystem ) == 0 )
+            if ( !s_Settings.EnableAll && ( s_Settings.EnabledSystems & subsystem ) == 0 )
             {
                 return;
             }

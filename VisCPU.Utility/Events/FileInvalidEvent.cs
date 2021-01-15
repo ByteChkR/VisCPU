@@ -10,7 +10,7 @@ namespace VisCPU.Utility.Events
 
         public FileInvalidEvent( string file, bool canContinue ) : base(
                                                                         $"The file '{file}' is invalid.",
-                                                                        ErrorEventKeys.GENERIC_FILE_INVALID,
+                                                                        ErrorEventKeys.s_GenericFileInvalid,
                                                                         canContinue
                                                                        )
         {

@@ -49,11 +49,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List < IHlToken > GetChildren()
         {
             return ConditionMap.SelectMany( x => x.Item2.Concat( x.Item2 ) ).
                                 Concat( ElseBranch ).
-                                Cast < IHLToken >().
+                                Cast < IHlToken >().
                                 ToList();
         }
 

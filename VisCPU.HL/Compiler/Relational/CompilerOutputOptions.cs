@@ -4,9 +4,9 @@
     public enum CompilerOutputOptions
     {
 
-        ORIGINAL,   //Vars with temp var
-        READ_ONLY,  //Vars => no temp var
-        READ_WRITE, //Vars with temp var
+        Original,  //Vars with temp var
+        ReadOnly,  //Vars => no temp var
+        ReadWrite, //Vars with temp var
 
     }
 

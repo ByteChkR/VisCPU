@@ -12,7 +12,7 @@ namespace VisCPU.HL.TypeSystem.Events
 
         protected InvalidHLMemberModifiersEvent( HLTokenType a, HLTokenType b ) : base(
              $"Token '{a}' can not be used together with '{b}'",
-             ErrorEventKeys.HL_INVALID_MEMBER_MODIFIERS,
+             ErrorEventKeys.s_HlInvalidMemberModifiers,
              false
             )
         {

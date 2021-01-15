@@ -4,7 +4,7 @@ namespace VisCPU.HL.Modules.Data
 {
 
     [Serializable]
-    public struct ProjectDependency
+    public class ProjectDependency
     {
 
         public string ProjectName;

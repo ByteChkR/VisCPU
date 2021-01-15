@@ -218,7 +218,6 @@ namespace VisCPU.HL.Modules.BuildSystem
             mergeBuildJob.BuildJobRunner = "merged";
             mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_build.json";
             release.Jobs.Add( mergeBuildJob );
-            ;
 
             return release;
         }

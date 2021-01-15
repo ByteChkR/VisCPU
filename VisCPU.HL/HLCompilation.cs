@@ -43,26 +43,26 @@ namespace VisCPU.HL
 
         internal HLCompilerCollection TypeMap;
 
-        private static uint counter;
+        private static uint s_Counter;
 
-        private readonly HLCompilerSettings Settings = SettingsSystem.GetSettings < HLCompilerSettings >();
-        private readonly string Directory;
+        private readonly HLCompilerSettings m_Settings = SettingsSystem.GetSettings < HLCompilerSettings >();
+        private readonly string m_Directory;
 
-        private readonly List < string > IncludedFiles = new List < string >();
-        private readonly List < string > ImportedItems = new List < string >();
-        private readonly HLCompilation parent;
-        private readonly string scopeID = "_";
+        private readonly List < string > m_IncludedFiles = new List < string >();
+        private readonly List < string > m_ImportedItems = new List < string >();
+        private readonly HLCompilation m_Parent;
+        private readonly string m_ScopeId = "_";
 
-        private readonly Queue < string > unusedTempVars = new Queue < string >();
-        private readonly List < string > usedTempVars = new List < string >();
-        private readonly Dictionary < string, VariableData > VariableMap = new Dictionary < string, VariableData >();
-        private string ParsedText;
+        private readonly Queue < string > m_UnusedTempVars = new Queue < string >();
+        private readonly List < string > m_UsedTempVars = new List < string >();
+        private readonly Dictionary < string, VariableData > m_VariableMap = new Dictionary < string, VariableData >();
+        private string m_ParsedText;
 
-        private BuildDataStore dataStore;
+        private BuildDataStore m_DataStore;
 
         public event Action < string, string > OnCompiledIncludedScript;
 
-        protected override LoggerSystems SubSystem => LoggerSystems.HL_Compiler;
+        protected override LoggerSystems SubSystem => LoggerSystems.HlCompiler;
 
         #region Public
 
@@ -79,51 +79,57 @@ namespace VisCPU.HL
 
         public HLCompilation( string originalText, string directory, BuildDataStore dataStore )
         {
-            this.dataStore = dataStore;
+            m_DataStore = dataStore;
             OriginalText = originalText;
-            Directory = directory;
+            m_Directory = directory;
             TypeMap = new HLCompilerCollection( TypeSystem );
         }
 
         public HLCompilation( HLCompilation parent, string id )
         {
-            dataStore = parent.dataStore;
-            scopeID = id;
+            m_DataStore = parent.m_DataStore;
+            m_ScopeId = id;
             OriginalText = parent.OriginalText;
-            Directory = parent.Directory;
-            VariableMap = new Dictionary < string, VariableData >( parent.VariableMap );
+            m_Directory = parent.m_Directory;
+            m_VariableMap = new Dictionary < string, VariableData >( parent.m_VariableMap );
             ConstValTypes = new Dictionary < string, string >( parent.ConstValTypes );
             FunctionMap = new Dictionary < string, FunctionData >( parent.FunctionMap );
             ExternalSymbols = new List < IExternalData >( parent.ExternalSymbols );
-            IncludedFiles = new List < string >( parent.IncludedFiles );
+            m_IncludedFiles = new List < string >( parent.m_IncludedFiles );
             TypeSystem = parent.TypeSystem;
-            this.parent = parent;
+            m_Parent = parent;
             TypeMap = new HLCompilerCollection( TypeSystem );
         }
 
         public static void ResetCounter()
         {
-            counter = 0;
+            s_Counter = 0;
+        }
+
+        internal static string GetUniqueName( string prefix = null )
+        {
+            return ( prefix == null ? "" : prefix + "_" ) + s_Counter++;
         }
 
         public bool ContainsLocalVariable( string var )
         {
-            return VariableMap.ContainsKey( GetFinalName( var ) );
+            return m_VariableMap.ContainsKey( GetFinalName( var ) );
         }
 
         public bool ContainsVariable( string var )
         {
-            return VariableMap.ContainsKey( GetFinalName( var ) ) || parent != null && parent.ContainsVariable( var );
+            return m_VariableMap.ContainsKey( GetFinalName( var ) ) ||
+                   m_Parent != null && m_Parent.ContainsVariable( var );
         }
 
         public void CreateVariable( string name, uint size, HLTypeDefinition tdef, bool isVisible )
         {
-            VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size, tdef, isVisible );
+            m_VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size, tdef, isVisible );
         }
 
         public void CreateVariable( string name, string content, HLTypeDefinition tdef, bool isVisible )
         {
-            VariableMap[GetFinalName( name )] =
+            m_VariableMap[GetFinalName( name )] =
                 new VariableData( name, GetFinalName( name ), content, tdef, isVisible );
         }
 
@@ -134,32 +140,32 @@ namespace VisCPU.HL
 
         public VariableData GetVariable( string name )
         {
-            if ( VariableMap.ContainsKey( GetFinalName( name ) ) )
+            if ( m_VariableMap.ContainsKey( GetFinalName( name ) ) )
             {
-                return VariableMap[GetFinalName( name )];
+                return m_VariableMap[GetFinalName( name )];
             }
 
-            if ( parent == null )
+            if ( m_Parent == null )
             {
                 EventManager < ErrorEvent >.SendEvent( new HLVariableNotFoundEvent( name, false ) );
 
                 return new VariableData();
             }
 
-            return parent.GetVariable( name );
+            return m_Parent.GetVariable( name );
         }
 
         public string Parse( bool printHead = true, string appendAfterProg = "HLT" )
         {
-            if ( ParsedText != null )
+            if ( m_ParsedText != null )
             {
-                return ParsedText;
+                return m_ParsedText;
             }
 
             HLParserSettings hlpS = new HLParserSettings();
             HLParserBaseReader br = new HLParserBaseReader( hlpS, OriginalText );
 
-            List < IHLToken > tokens = br.ReadToEnd();
+            List < IHlToken > tokens = br.ReadToEnd();
             ParseOneLineStrings( tokens );
             ParseCharTokens( tokens );
             RemoveComments( tokens );
@@ -180,7 +186,7 @@ namespace VisCPU.HL
             return Parse( p.Parse(), printHead, appendAfterProg );
         }
 
-        public void ParseBlocks( List < IHLToken > tokens )
+        public void ParseBlocks( List < IHlToken > tokens )
         {
             for ( int i = tokens.Count - 1; i >= 0; i-- )
             {
@@ -206,7 +212,7 @@ namespace VisCPU.HL
                         }
                     }
 
-                    List < IHLToken > content = tokens.GetRange( start + 1, i - start - 1 ).ToList();
+                    List < IHlToken > content = tokens.GetRange( start + 1, i - start - 1 ).ToList();
                     tokens.RemoveRange( start, i - start + 1 );
                     ParseBlocks( content );
                     tokens.Insert( start, new BlockToken( content.ToArray(), start ) );
@@ -215,7 +221,7 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseCharTokens( List < IHLToken > tokens )
+        public void ParseCharTokens( List < IHlToken > tokens )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -242,7 +248,7 @@ namespace VisCPU.HL
                         return;
                     }
 
-                    List < IHLToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
+                    List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                     string ConcatContent()
                     {
@@ -253,7 +259,7 @@ namespace VisCPU.HL
                                                      );
                     }
 
-                    IHLToken newToken = new HLTextToken(
+                    IHlToken newToken = new HLTextToken(
                                                         HLTokenType.OpCharLiteral,
                                                         ConcatContent(),
                                                         tokens[i].SourceIndex
@@ -265,7 +271,7 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseFunctionToken( List < IHLToken > tokens, HLParserSettings settings )
+        public void ParseFunctionToken( List < IHlToken > tokens, HLParserSettings settings )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -275,17 +281,17 @@ namespace VisCPU.HL
                                                        tokens,
                                                        i - 1,
                                                        HLTokenType.OpBracketClose,
-                                                       out IHLToken bClose
+                                                       out IHlToken bClose
                                                       ) )
                     {
                         continue;
                     }
 
-                    List < IHLToken > argPart = new List < IHLToken > { bClose };
-                    IHLToken[] args = HLParsingTools.ReadUntil( tokens, i - 2, -1, HLTokenType.OpBracketOpen );
+                    List < IHlToken > argPart = new List < IHlToken > { bClose };
+                    IHlToken[] args = HLParsingTools.ReadUntil( tokens, i - 2, -1, HLTokenType.OpBracketOpen );
                     argPart.AddRange( args );
 
-                    IHLToken argOpenBracket = HLParsingTools.ReadOne(
+                    IHlToken argOpenBracket = HLParsingTools.ReadOne(
                                                                      tokens,
                                                                      i - 2 - args.Length,
                                                                      HLTokenType.OpBracketOpen
@@ -301,9 +307,9 @@ namespace VisCPU.HL
                         continue;
                     }
 
-                    IHLToken funcName = HLParsingTools.ReadOne( tokens, funcIdx, HLTokenType.OpWord );
+                    IHlToken funcName = HLParsingTools.ReadOne( tokens, funcIdx, HLTokenType.OpWord );
 
-                    IHLToken typeName = null;
+                    IHlToken typeName = null;
 
                     if ( funcIdx > 0 &&
                          ( tokens[funcIdx - 1].Type == HLTokenType.OpWord ||
@@ -317,7 +323,7 @@ namespace VisCPU.HL
 
                         int modStart = funcIdx - 1 - 1;
 
-                        IHLToken[] mods = HLParsingTools.ReadNoneOrManyOf(
+                        IHlToken[] mods = HLParsingTools.ReadNoneOrManyOf(
                                                                           tokens,
                                                                           modStart,
                                                                           -1,
@@ -328,7 +334,7 @@ namespace VisCPU.HL
 
                         int start = modStart - mods.Length + 1;
                         int end = i;
-                        IHLToken block = tokens[i];
+                        IHlToken block = tokens[i];
                         tokens.RemoveRange( start, end - start + 1 );
 
                         tokens.Insert(
@@ -349,7 +355,7 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseImports( List < IHLToken > tokens )
+        public void ParseImports( List < IHlToken > tokens )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -357,14 +363,14 @@ namespace VisCPU.HL
                 {
                     if ( tokens[i + 1].ToString() == "import" && tokens[i + 2].Type == HLTokenType.OpStringLiteral )
                     {
-                        ImportedItems.Add( tokens[i + 2].ToString() );
+                        m_ImportedItems.Add( tokens[i + 2].ToString() );
                         tokens.RemoveRange( i, 3 );
                     }
                 }
             }
         }
 
-        public void ParseIncludes( List < IHLToken > tokens )
+        public void ParseIncludes( List < IHlToken > tokens )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -372,15 +378,15 @@ namespace VisCPU.HL
                 {
                     if ( tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HLTokenType.OpStringLiteral )
                     {
-                        string c = UriResolver.GetFilePath( Directory, tokens[i + 2].ToString() );
-                        IncludedFiles.Add( c ?? tokens[i + 2].ToString() );
+                        string c = UriResolver.GetFilePath( m_Directory, tokens[i + 2].ToString() );
+                        m_IncludedFiles.Add( c ?? tokens[i + 2].ToString() );
                         tokens.RemoveRange( i, 3 );
                     }
                 }
             }
         }
 
-        public void ParseOneLineStrings( List < IHLToken > tokens )
+        public void ParseOneLineStrings( List < IHlToken > tokens )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -407,7 +413,7 @@ namespace VisCPU.HL
                         return;
                     }
 
-                    List < IHLToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
+                    List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                     string ConcatContent()
                     {
@@ -418,7 +424,7 @@ namespace VisCPU.HL
                                                      );
                     }
 
-                    IHLToken newToken = new HLTextToken(
+                    IHlToken newToken = new HLTextToken(
                                                         HLTokenType.OpStringLiteral,
                                                         ConcatContent(),
                                                         tokens[i].SourceIndex
@@ -430,38 +436,38 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseVarDefToken( List < IHLToken > tokens, HLParserSettings settings )
+        public void ParseVarDefToken( List < IHlToken > tokens, HLParserSettings settings )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
                 if ( tokens[i].Type == HLTokenType.OpWord || settings.MemberModifiers.ContainsValue( tokens[i].Type ) )
                 {
-                    List < IHLToken > line = HLParsingTools.ReadUntilAny(
+                    List < IHlToken > line = HLParsingTools.ReadUntilAny(
                                                                          tokens,
                                                                          i,
                                                                          1,
                                                                          new[]
                                                                          {
                                                                              HLTokenType.OpSemicolon,
-                                                                             HLTokenType.EOF,
+                                                                             HLTokenType.Eof,
                                                                              HLTokenType.OpBlockBracketOpen,
                                                                              HLTokenType.OpBlockBracketClose
                                                                          }
                                                                         ).
                                                             ToList();
 
-                    IHLToken[] mods =
+                    IHlToken[] mods =
                         HLParsingTools.ReadNoneOrManyOf( line, 0, 1, settings.MemberModifiers.Values.ToArray() );
 
-                    if ( !HLParsingTools.ReadOneOrNone( line, mods.Length, HLTokenType.OpWord, out IHLToken type ) ||
-                         !HLParsingTools.ReadOneOrNone( line, mods.Length + 1, HLTokenType.OpWord, out IHLToken name ) )
+                    if ( !HLParsingTools.ReadOneOrNone( line, mods.Length, HLTokenType.OpWord, out IHlToken type ) ||
+                         !HLParsingTools.ReadOneOrNone( line, mods.Length + 1, HLTokenType.OpWord, out IHlToken name ) )
                     {
                         i += line.Count;
 
                         continue;
                     }
 
-                    IHLToken num = null;
+                    IHlToken num = null;
 
                     if ( line.Count == mods.Length + 2 )
                     {
@@ -498,7 +504,7 @@ namespace VisCPU.HL
                     if ( line[mods.Length + 2].Type == HLTokenType.OpEquality )
                     {
                         tokens.RemoveRange( i, line.Count + 1 );
-                        IHLToken[] init = line.Skip( mods.Length + 3 ).ToArray();
+                        IHlToken[] init = line.Skip( mods.Length + 3 ).ToArray();
 
                         if ( mods.All( x => x.Type != HLTokenType.OpPublicMod ) &&
                              mods.All( x => x.Type != HLTokenType.OpPrivateMod ) )
@@ -529,7 +535,7 @@ namespace VisCPU.HL
         internal string GetTempVar( uint initValue )
         {
             VariableData tmp = GetFreeTempVar( initValue );
-            usedTempVars.Add( tmp.GetName() );
+            m_UsedTempVars.Add( tmp.GetName() );
 
             return tmp.GetName();
         }
@@ -537,7 +543,7 @@ namespace VisCPU.HL
         internal string GetTempVarCopy( string initValue )
         {
             VariableData tmp = GetFreeTempVarCopy( initValue );
-            usedTempVars.Add( tmp.GetName() );
+            m_UsedTempVars.Add( tmp.GetName() );
 
             return tmp.GetName();
         }
@@ -545,7 +551,7 @@ namespace VisCPU.HL
         internal string GetTempVarDref( string initValue )
         {
             VariableData tmp = GetFreeTempVarDref( initValue );
-            usedTempVars.Add( tmp.GetName() );
+            m_UsedTempVars.Add( tmp.GetName() );
 
             return tmp.GetName();
         }
@@ -553,7 +559,7 @@ namespace VisCPU.HL
         internal string GetTempVarLoad( string initValue )
         {
             VariableData tmp = GetFreeTempVarLoad( initValue );
-            usedTempVars.Add( tmp.GetName() );
+            m_UsedTempVars.Add( tmp.GetName() );
 
             return tmp.GetName();
         }
@@ -561,14 +567,9 @@ namespace VisCPU.HL
         internal string GetTempVarPop()
         {
             VariableData tmp = GetFreeTempVarPop();
-            usedTempVars.Add( tmp.GetName() );
+            m_UsedTempVars.Add( tmp.GetName() );
 
             return tmp.GetName();
-        }
-
-        internal string GetUniqueName( string prefix = null )
-        {
-            return ( prefix == null ? "" : prefix + "_" ) + counter++;
         }
 
         internal string Parse( HLExpression[] block, bool printHead = true, string appendAfterProg = "HLT" )
@@ -588,7 +589,7 @@ namespace VisCPU.HL
                 sb.AppendLine( "; ________________ Includes ________________" );
             }
 
-            foreach ( string includedFile in IncludedFiles )
+            foreach ( string includedFile in m_IncludedFiles )
             {
                 sb.AppendLine( $":include \"{includedFile}\"" );
             }
@@ -600,13 +601,13 @@ namespace VisCPU.HL
 
             foreach ( KeyValuePair < string, string > keyValuePair in ConstValTypes )
             {
-                if ( parent == null )
+                if ( m_Parent == null )
                 {
                     sb.AppendLine( $":const {keyValuePair.Key} {keyValuePair.Value} linker:hide" );
                 }
-                else if ( !parent.ConstValTypes.ContainsKey( keyValuePair.Key ) )
+                else if ( !m_Parent.ConstValTypes.ContainsKey( keyValuePair.Key ) )
                 {
-                    parent.ConstValTypes[keyValuePair.Key] = keyValuePair.Value;
+                    m_Parent.ConstValTypes[keyValuePair.Key] = keyValuePair.Value;
                 }
             }
 
@@ -616,9 +617,9 @@ namespace VisCPU.HL
                 sb.AppendLine( "; ________________ VARIABLE FIELDS ________________" );
             }
 
-            foreach ( KeyValuePair < string, VariableData > keyValuePair in VariableMap )
+            foreach ( KeyValuePair < string, VariableData > keyValuePair in m_VariableMap )
             {
-                if ( parent == null )
+                if ( m_Parent == null )
                 {
                     if ( keyValuePair.Value.InitContent != null )
                     {
@@ -633,9 +634,9 @@ namespace VisCPU.HL
                                      );
                     }
                 }
-                else if ( !parent.VariableMap.ContainsKey( keyValuePair.Key ) )
+                else if ( !m_Parent.m_VariableMap.ContainsKey( keyValuePair.Key ) )
                 {
-                    parent.VariableMap[keyValuePair.Key] = keyValuePair.Value;
+                    m_Parent.m_VariableMap[keyValuePair.Key] = keyValuePair.Value;
                 }
             }
 
@@ -656,7 +657,7 @@ namespace VisCPU.HL
 
             sb.Append( funcCode );
 
-            return ParsedText = sb.ToString();
+            return m_ParsedText = sb.ToString();
         }
 
         internal ExpressionTarget Parse( HLExpression expr, ExpressionTarget outputTarget = default )
@@ -675,10 +676,10 @@ namespace VisCPU.HL
 
         internal void ReleaseTempVar( string varName )
         {
-            if ( Settings.OptimizeTempVarUsage && usedTempVars.Contains( varName ) )
+            if ( m_Settings.OptimizeTempVarUsage && m_UsedTempVars.Contains( varName ) )
             {
-                usedTempVars.Remove( varName );
-                unusedTempVars.Enqueue( varName );
+                m_UsedTempVars.Remove( varName );
+                m_UnusedTempVars.Enqueue( varName );
             }
         }
 
@@ -686,31 +687,31 @@ namespace VisCPU.HL
 
         #region Private
 
-        private static IHLToken[] ParseArgumentList( List < IHLToken > tokens )
+        private static IHlToken[] ParseArgumentList( List < IHlToken > tokens )
         {
             HLExpressionReader reader = new HLExpressionReader( tokens );
 
-            IHLToken current = reader.GetNext();
+            IHlToken current = reader.GetNext();
             List < VariableDefinitionToken > ret = new List < VariableDefinitionToken >();
 
-            while ( current.Type != HLTokenType.EOF )
+            while ( current.Type != HLTokenType.Eof )
             {
-                IHLToken typeName = current;
+                IHlToken typeName = current;
                 Eat( HLTokenType.OpWord );
-                IHLToken varName = current;
+                IHlToken varName = current;
                 Eat( HLTokenType.OpWord );
 
                 ret.Add(
                         new VariableDefinitionToken(
                                                     varName,
                                                     typeName,
-                                                    new IHLToken[0],
+                                                    new IHlToken[0],
                                                     new[] { typeName, varName },
                                                     null
                                                    )
                        );
 
-                if ( current.Type == HLTokenType.EOF )
+                if ( current.Type == HLTokenType.Eof )
                 {
                     return ret.ToArray();
                 }
@@ -745,20 +746,20 @@ namespace VisCPU.HL
                     continue;
                 }
 
-                if ( parent == null )
+                if ( m_Parent == null )
                 {
                     sb.AppendLine( "." + keyValuePair.Key + ( keyValuePair.Value.Public ? "" : " linker:hide" ) );
                 }
 
                 foreach ( string s in keyValuePair.Value.GetCompiledOutput() )
                 {
-                    if ( parent == null )
+                    if ( m_Parent == null )
                     {
                         sb.AppendLine( s );
                     }
-                    else if ( !parent.FunctionMap.ContainsKey( keyValuePair.Key ) )
+                    else if ( !m_Parent.FunctionMap.ContainsKey( keyValuePair.Key ) )
                     {
-                        parent.FunctionMap[keyValuePair.Key] = keyValuePair.Value;
+                        m_Parent.FunctionMap[keyValuePair.Key] = keyValuePair.Value;
                     }
                 }
             }
@@ -766,12 +767,12 @@ namespace VisCPU.HL
 
         private VariableData GetFreeTempVar( uint initValue )
         {
-            if ( unusedTempVars.Count != 0 )
+            if ( m_UnusedTempVars.Count != 0 )
             {
-                string oldName = unusedTempVars.Dequeue();
+                string oldName = m_UnusedTempVars.Dequeue();
                 ProgramCode.Add( $"LOAD {oldName} {initValue} ;Temp Var House-keeping" );
 
-                return VariableMap[oldName];
+                return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
@@ -781,96 +782,96 @@ namespace VisCPU.HL
                 ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
             }
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private VariableData GetFreeTempVarCopy( string initValue )
         {
-            if ( unusedTempVars.Count != 0 )
+            if ( m_UnusedTempVars.Count != 0 )
             {
-                string oldName = unusedTempVars.Dequeue();
+                string oldName = m_UnusedTempVars.Dequeue();
                 ProgramCode.Add( $"COPY {initValue} {oldName} ;Temp Var House-keeping" );
 
-                return VariableMap[oldName];
+                return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
             ProgramCode.Add( $"COPY {initValue} {name} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private VariableData GetFreeTempVarDref( string initValue )
         {
-            if ( unusedTempVars.Count != 0 )
+            if ( m_UnusedTempVars.Count != 0 )
             {
-                string oldName = unusedTempVars.Dequeue();
+                string oldName = m_UnusedTempVars.Dequeue();
                 ProgramCode.Add( $"DREF {initValue} {oldName} ;Temp Var House-keeping" );
 
-                return VariableMap[oldName];
+                return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
             ProgramCode.Add( $"DREF {initValue} {name} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private VariableData GetFreeTempVarLoad( string initValue )
         {
-            if ( unusedTempVars.Count != 0 )
+            if ( m_UnusedTempVars.Count != 0 )
             {
-                string oldName = unusedTempVars.Dequeue();
+                string oldName = m_UnusedTempVars.Dequeue();
                 ProgramCode.Add( $"LOAD {oldName} {initValue} ;Temp Var House-keeping" );
 
-                return VariableMap[oldName];
+                return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
             ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private VariableData GetFreeTempVarPop()
         {
-            if ( unusedTempVars.Count != 0 )
+            if ( m_UnusedTempVars.Count != 0 )
             {
-                string oldName = unusedTempVars.Dequeue();
+                string oldName = m_UnusedTempVars.Dequeue();
                 ProgramCode.Add( $"POP {oldName} ;Temp Var House-keeping" );
 
-                return VariableMap[oldName];
+                return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
             ProgramCode.Add( $"POP {name} ;Temp Var House-keeping" );
 
-            return VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
 
         private string GetPrefix()
         {
-            if ( parent == null )
+            if ( m_Parent == null )
             {
-                return scopeID + "_";
+                return m_ScopeId + "_";
             }
 
-            return parent.GetPrefix() + scopeID + "_";
+            return m_Parent.GetPrefix() + m_ScopeId + "_";
         }
 
         private void ParseDependencies()
         {
             ExpressionParser exP = new ExpressionParser();
 
-            for ( int i = 0; i < IncludedFiles.Count; i++ )
+            for ( int i = 0; i < m_IncludedFiles.Count; i++ )
             {
-                string includedFile = IncludedFiles[i];
+                string includedFile = m_IncludedFiles[i];
 
-                if ( parent != null && parent.IncludedFiles.Contains( includedFile ) )
+                if ( m_Parent != null && m_Parent.m_IncludedFiles.Contains( includedFile ) )
                 {
                     continue;
                 }
@@ -880,20 +881,20 @@ namespace VisCPU.HL
                     Log( $"Importing File: {includedFile}" );
 
                     string name = Path.GetFullPath(
-                                                   includedFile.StartsWith( Directory )
+                                                   includedFile.StartsWith( m_Directory )
                                                        ? includedFile.Remove( includedFile.Length - 4, 4 )
-                                                       : Directory +
+                                                       : m_Directory +
                                                          "/" +
                                                          includedFile.Remove( includedFile.Length - 4, 4 )
                                                   );
 
-                    string newInclude = dataStore.GetStorePath( "HL2VASM", name );
+                    string newInclude = m_DataStore.GetStorePath( "HL2VASM", name );
                     string file = Path.GetFullPath( name + ".vhl" );
 
                     HLCompilation comp = exP.Parse(
                                                    File.ReadAllText( file ),
                                                    Path.GetDirectoryName( file ),
-                                                   dataStore
+                                                   m_DataStore
                                                   );
 
                     File.WriteAllText( newInclude, comp.Parse() );
@@ -903,19 +904,19 @@ namespace VisCPU.HL
                 }
 
                 OnCompiledIncludedScript?.Invoke(
-                                                 Path.GetFullPath( Directory + "/" + IncludedFiles[i] ),
+                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i] ),
                                                  includedFile
                                                 );
 
-                IncludedFiles[i] = includedFile;
+                m_IncludedFiles[i] = includedFile;
             }
         }
 
-        private void ParseReservedKeys( List < IHLToken > tokens, HLParserSettings settings )
+        private void ParseReservedKeys( List < IHlToken > tokens, HLParserSettings settings )
         {
             for ( int i = tokens.Count - 1; i >= 0; i-- )
             {
-                IHLToken token = tokens[i];
+                IHlToken token = tokens[i];
 
                 if ( token.Type == HLTokenType.OpWord && settings.ReservedKeys.ContainsKey( token.ToString() ) )
                 {
@@ -931,7 +932,7 @@ namespace VisCPU.HL
         private void ParseTypeDefinitionBody(
             HLTypeSystem ts,
             HLTypeDefinition tdef,
-            List < IHLToken > block )
+            List < IHlToken > block )
         {
             HLExpressionParser p = HLExpressionParser.Create( new HLExpressionReader( block ) );
             HLExpression[] exprs = p.Parse();
@@ -940,20 +941,20 @@ namespace VisCPU.HL
             {
                 if ( hlToken is HLVarDefOperand t )
                 {
-                    HLTypeDefinition tt = ts.GetOrAdd( t.value.TypeName.ToString() );
+                    HLTypeDefinition tt = ts.GetOrAdd( t.VariableDefinition.TypeName.ToString() );
 
-                    if ( t.value.Size != null )
+                    if ( t.VariableDefinition.Size != null )
                     {
                         tt = new ArrayTypeDefintion(
                                                     tt,
-                                                    t.value.Size.ToString().ParseUInt()
+                                                    t.VariableDefinition.Size.ToString().ParseUInt()
                                                    );
                     }
 
                     HLPropertyDefinition pdef = new HLPropertyDefinition(
-                                                                         t.value.Name.ToString(),
+                                                                         t.VariableDefinition.Name.ToString(),
                                                                          tt,
-                                                                         t.value.Modifiers
+                                                                         t.VariableDefinition.Modifiers
                                                                         );
 
                     tdef.AddMember( pdef );
@@ -970,7 +971,7 @@ namespace VisCPU.HL
             }
         }
 
-        private void ParseTypeDefinitions( HLTypeSystem ts, HLParserSettings settings, List < IHLToken > tokens )
+        private void ParseTypeDefinitions( HLTypeSystem ts, HLParserSettings settings, List < IHlToken > tokens )
         {
             for ( int i = tokens.Count - 1; i >= 0; i-- )
             {
@@ -982,9 +983,9 @@ namespace VisCPU.HL
 
                 if ( tokens[i].Type == HLTokenType.OpClass )
                 {
-                    IHLToken name = HLParsingTools.ReadOne( tokens, i + 1, HLTokenType.OpWord );
+                    IHlToken name = HLParsingTools.ReadOne( tokens, i + 1, HLTokenType.OpWord );
 
-                    IHLToken[] mods = HLParsingTools.ReadNoneOrManyOf(
+                    IHlToken[] mods = HLParsingTools.ReadNoneOrManyOf(
                                                                       tokens,
                                                                       i - 1,
                                                                       -1,
@@ -993,21 +994,21 @@ namespace VisCPU.HL
                                                      Reverse().
                                                      ToArray();
 
-                    IHLToken baseClass = null;
+                    IHlToken baseClass = null;
                     int offset = 2;
 
                     if ( HLParsingTools.ReadOneOrNone(
                                                       tokens,
                                                       i + offset,
                                                       HLTokenType.OpColon,
-                                                      out IHLToken inhColon
+                                                      out IHlToken inhColon
                                                      ) )
                     {
                         baseClass = HLParsingTools.ReadOne( tokens, i + offset + 1, HLTokenType.OpWord );
                         offset += 2;
                     }
 
-                    IHLToken block = HLParsingTools.ReadOne(
+                    IHlToken block = HLParsingTools.ReadOne(
                                                             tokens,
                                                             i + offset,
                                                             HLTokenType.OpBlockToken
@@ -1025,28 +1026,28 @@ namespace VisCPU.HL
 
         private void ProcessImports()
         {
-            for ( int i = 0; i < ImportedItems.Count; i++ )
+            for ( int i = 0; i < m_ImportedItems.Count; i++ )
             {
-                IImporter imp = ImporterSystem.Get( ImportedItems[i] );
+                IImporter imp = ImporterSystem.Get( m_ImportedItems[i] );
                 bool error = true;
 
                 if ( imp is IFileImporter fimp )
                 {
                     error = false;
-                    IncludedFiles.Add( fimp.ProcessImport( ImportedItems[i] ) );
+                    m_IncludedFiles.Add( fimp.ProcessImport( m_ImportedItems[i] ) );
                 }
 
                 if ( imp is IDataImporter dimp )
                 {
                     error = false;
-                    IExternalData[] data = dimp.ProcessImport( ImportedItems[i] );
+                    IExternalData[] data = dimp.ProcessImport( m_ImportedItems[i] );
 
                     ExternalSymbols.AddRange( data );
                 }
 
                 if ( imp == null )
                 {
-                    EventManager < ErrorEvent >.SendEvent( new ImporterNotFoundEvent( ImportedItems[i] ) );
+                    EventManager < ErrorEvent >.SendEvent( new ImporterNotFoundEvent( m_ImportedItems[i] ) );
                 }
 
                 if ( error )
@@ -1056,7 +1057,7 @@ namespace VisCPU.HL
             }
         }
 
-        private void RemoveComments( List < IHLToken > tokens )
+        private void RemoveComments( List < IHlToken > tokens )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {

@@ -3,7 +3,7 @@
 namespace VisCPU.HL.TypeSystem
 {
 
-    public interface IHLTypeSystemInstance : IHLToken
+    public interface IHlTypeSystemInstance : IHlToken
     {
 
         uint GetSize();

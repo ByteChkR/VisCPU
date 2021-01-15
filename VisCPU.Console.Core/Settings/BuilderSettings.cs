@@ -24,7 +24,7 @@ namespace VisCPU.Console.Core.Settings
     public class BuilderSettings
     {
 
-        public static readonly Dictionary < string, BuildSteps > AllBuildSteps =
+        public static readonly Dictionary < string, BuildSteps > s_AllBuildSteps =
             new Dictionary < string, BuildSteps >
             {
                 { "HL-expr", ( file, lastFile ) => CreateExpressionBuildStep( lastFile ) },
@@ -33,7 +33,7 @@ namespace VisCPU.Console.Core.Settings
             };
 
         [Argument( Name = "build:steps" )]
-        public readonly string[] buildSteps = { "bin" };
+        public readonly string[] BuildSteps = { "bin" };
 
         [Argument( Name = "build:clean" )]
         public bool CleanBuildOutput = true;
@@ -42,17 +42,18 @@ namespace VisCPU.Console.Core.Settings
         [Argument( Name = "build:i" )]
         [XmlIgnore]
         [JsonIgnore]
-        public string[] inputFiles;
+        public string[] EntryFiles;
 
         [Argument( Name = "build:input-dirs" )]
         [Argument( Name = "build:if" )]
         [XmlIgnore]
         [JsonIgnore]
-        public string[] inputFolders;
+        public string[] InputFolders;
 
         [XmlIgnore]
         [JsonIgnore]
-        public IEnumerable < (string, BuildSteps) > BuildSteps => buildSteps.Select( x => ( x, AllBuildSteps[x] ) );
+        public IEnumerable < (string, BuildSteps) > InstanceBuildSteps =>
+            BuildSteps.Select( x => ( x, s_AllBuildSteps[x] ) );
 
         [XmlIgnore]
         [JsonIgnore]
@@ -62,14 +63,15 @@ namespace VisCPU.Console.Core.Settings
             {
                 List < string > ret = new List < string >();
 
-                if ( inputFolders != null )
+                if ( InputFolders != null )
                 {
-                    ret.AddRange( inputFolders.SelectMany( x => Directory.GetFiles( x, "*.vasm" ) ) );
+                    ret.AddRange( InputFolders.SelectMany( x => Directory.GetFiles( x, "*.vasm" ) ) );
+                    ret.AddRange( InputFolders.SelectMany( x => Directory.GetFiles( x, "*.vhl" ) ) );
                 }
 
-                if ( inputFiles != null )
+                if ( EntryFiles != null )
                 {
-                    ret.AddRange( inputFiles );
+                    ret.AddRange( EntryFiles );
                 }
 
                 return ret.ToArray();

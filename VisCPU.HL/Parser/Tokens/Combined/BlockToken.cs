@@ -6,7 +6,7 @@
 
         #region Public
 
-        public BlockToken( IHLToken[] subtokens, int start ) : base( HLTokenType.OpBlockToken, subtokens, start )
+        public BlockToken( IHlToken[] subtokens, int start ) : base( HLTokenType.OpBlockToken, subtokens, start )
         {
         }
 

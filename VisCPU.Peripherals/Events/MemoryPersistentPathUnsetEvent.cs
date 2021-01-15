@@ -11,7 +11,7 @@ namespace VisCPU.Peripherals.Events
 
         public MemoryPersistentPathUnsetEvent() : base(
                                                        "The Memory has the 'Persistent' flag set to true but the PersistentPath is not set.",
-                                                       WarningEventKeys.PERIPHERAL_MEMORY_PATH_NOT_SET
+                                                       WarningEventKeys.s_PeripheralMemoryPathNotSet
                                                       )
         {
         }

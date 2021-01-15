@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Parser.Events
 
         public InvalidCharValueEvent( string value, int start ) : base(
                                                                        $"Invalid char Value: '{value}' at line {start}",
-                                                                       ErrorEventKeys.VASM_PARSER_INVALID_CHAR_VALUE,
+                                                                       ErrorEventKeys.s_VasmParserInvalidCharValue,
                                                                        false
                                                                       )
         {

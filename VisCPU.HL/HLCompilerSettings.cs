@@ -15,7 +15,7 @@ namespace VisCPU.HL
         public bool OptimizeTempVarUsage = true;
 
         [Argument( Name = "compiler:optimize-const-expr" )]
-        public bool OptimizeConstExpressions = false;
+        public bool OptimizeConstExpressions;
 
         #region Public
 

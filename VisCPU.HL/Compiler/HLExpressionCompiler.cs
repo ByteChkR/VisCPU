@@ -7,11 +7,11 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.HL.Compiler
 {
 
-    public abstract class HLExpressionCompiler < T > : VisBase, IHLExpressionCompiler
+    public abstract class HLExpressionCompiler < T > : VisBase, IHlExpressionCompiler
         where T : HLExpression
     {
 
-        protected override LoggerSystems SubSystem => LoggerSystems.HL_Compiler;
+        protected override LoggerSystems SubSystem => LoggerSystems.HlCompiler;
 
         protected virtual bool NeedsOutput { get; }
 
@@ -65,7 +65,7 @@ namespace VisCPU.HL.Compiler
             return ParseExpression( compilation, expr );
         }
 
-        ExpressionTarget IHLExpressionCompiler.Parse(
+        ExpressionTarget IHlExpressionCompiler.Parse(
             HLCompilation compilation,
             HLExpression expr,
             ExpressionTarget outputTarget )

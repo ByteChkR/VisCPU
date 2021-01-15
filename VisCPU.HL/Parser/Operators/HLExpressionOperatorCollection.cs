@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace VisCPU.HL.Parser.Operators
@@ -13,13 +14,13 @@ namespace VisCPU.HL.Parser.Operators
         /// <summary>
         ///     Precedence Bucket
         /// </summary>
-        private struct PrecedenceBucket
+        private readonly struct PrecedenceBucket : IEquatable < PrecedenceBucket >
         {
 
             /// <summary>
             ///     Operators in this Precedence Bucket
             /// </summary>
-            public readonly List < HLExpressionOperator > bucket;
+            public readonly List < HLExpressionOperator > Bucket;
 
             /// <summary>
             ///     Public Constructor
@@ -27,7 +28,22 @@ namespace VisCPU.HL.Parser.Operators
             /// <param name="operators">Operators</param>
             public PrecedenceBucket( List < HLExpressionOperator > operators )
             {
-                bucket = operators;
+                Bucket = operators;
+            }
+
+            public bool Equals( PrecedenceBucket other )
+            {
+                return Equals( Bucket, other.Bucket );
+            }
+
+            public override bool Equals( object obj )
+            {
+                return obj is PrecedenceBucket other && Equals( other );
+            }
+
+            public override int GetHashCode()
+            {
+                return Bucket != null ? Bucket.GetHashCode() : 0;
             }
 
         }
@@ -35,17 +51,17 @@ namespace VisCPU.HL.Parser.Operators
         /// <summary>
         ///     Operators Sorted by Precedence
         /// </summary>
-        private readonly Dictionary < int, PrecedenceBucket > buckets = new Dictionary < int, PrecedenceBucket >();
+        private readonly Dictionary < int, PrecedenceBucket > m_Buckets = new Dictionary < int, PrecedenceBucket >();
 
         /// <summary>
         ///     The Highest Operator precedence
         /// </summary>
-        public int Highest => buckets.Keys.Max();
+        public int Highest => m_Buckets.Keys.Max();
 
         /// <summary>
         ///     The Lowest Operator precedence
         /// </summary>
-        public int Lowest => buckets.Keys.Min();
+        public int Lowest => m_Buckets.Keys.Min();
 
         #region Public
 
@@ -57,13 +73,13 @@ namespace VisCPU.HL.Parser.Operators
         {
             foreach ( HLExpressionOperator xLangExpressionOperator in operators )
             {
-                if ( buckets.ContainsKey( xLangExpressionOperator.PrecedenceLevel ) )
+                if ( m_Buckets.ContainsKey( xLangExpressionOperator.PrecedenceLevel ) )
                 {
-                    buckets[xLangExpressionOperator.PrecedenceLevel].bucket.Add( xLangExpressionOperator );
+                    m_Buckets[xLangExpressionOperator.PrecedenceLevel].Bucket.Add( xLangExpressionOperator );
                 }
                 else
                 {
-                    buckets[xLangExpressionOperator.PrecedenceLevel] =
+                    m_Buckets[xLangExpressionOperator.PrecedenceLevel] =
                         new PrecedenceBucket( new List < HLExpressionOperator > { xLangExpressionOperator } );
                 }
             }
@@ -76,7 +92,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <returns></returns>
         public List < HLExpressionOperator > GetLevel( int level )
         {
-            return buckets[level].bucket;
+            return m_Buckets[level].Bucket;
         }
 
         /// <summary>
@@ -86,7 +102,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <returns></returns>
         public bool HasLevel( int level )
         {
-            return buckets.ContainsKey( level );
+            return m_Buckets.ContainsKey( level );
         }
 
         #endregion

@@ -22,17 +22,17 @@ namespace VisCPU.Tests
         [Test]
         [Order( 1 )]
         [TestCaseSource( nameof( GetTestExpressionInstructions ), new object[] { "tests/branches" } )]
-        public void CompileHL( string file )
+        public void CompileHl( string file )
         {
-            VHL2VASM( file );
+            Vhl2Vasm( file );
         }
 
         [Test]
         [Order( 2 )]
         [TestCaseSource( nameof( GetTestAssemblyInstructions ), new object[] { "tests/branches" } )]
-        public void CompileVASM( string file )
+        public void CompileVasm( string file )
         {
-            VASM2VBIN( file );
+            Vasm2Vbin( file );
         }
 
         [Test]

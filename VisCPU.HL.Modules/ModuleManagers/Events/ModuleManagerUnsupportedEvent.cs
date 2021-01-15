@@ -11,7 +11,7 @@ namespace VisCPU.HL.Modules.ModuleManagers.Events
 
         public ModuleManagerUnsupportedEvent( ModuleManager manager, string feature ) : base(
              $"'{manager}' does not support {feature}",
-             ErrorEventKeys.MODULE_MANAGER_UNSUPPORTED_FEATURE,
+             ErrorEventKeys.s_ModuleManagerUnsupportedFeature,
              false
             )
         {

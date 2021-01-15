@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Linking.Events
 
         public DuplicateLinkerItemEvent( string item ) : base(
                                                               $"The item '{item}' has a duplicated entry.",
-                                                              WarningEventKeys.LINKER_DUPLICATE_ITEM
+                                                              WarningEventKeys.s_LinkerDuplicateItem
                                                              )
         {
         }

@@ -11,7 +11,7 @@ namespace VisCPU.HL.Importer.Events
 
         public InvalidVasmBridgeArgumentsEvent( string args ) : base(
                                                                      $"Arguments Invalid: '{args}'",
-                                                                     ErrorEventKeys.VASM_BRIDGE_INVALID_ARGUMENTS,
+                                                                     ErrorEventKeys.s_VasmBridgeInvalidArguments,
                                                                      false
                                                                     )
         {

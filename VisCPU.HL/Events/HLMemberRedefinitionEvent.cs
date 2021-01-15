@@ -11,7 +11,7 @@ namespace VisCPU.HL.Events
 
         public HLMemberRedefinitionEvent( string memberName, string typeName ) : base(
              $"Duplicate definition of {memberName} in type {typeName}",
-             ErrorEventKeys.HL_MEMBER_DUPLICATE_DEF,
+             ErrorEventKeys.s_HlMemberDuplicateDef,
              true
             )
         {

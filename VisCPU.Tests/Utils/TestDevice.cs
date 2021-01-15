@@ -11,10 +11,10 @@ namespace VisCPU.Tests.Utils
         private const uint TEST_FAIL = 0xFFFF2001;
         private const uint TEST_PASS = 0xFFFF2002;
         private const uint TEST_DEVICE_PRESENT = 0xFFFF2003;
-        private readonly StringBuilder textBuilder = new StringBuilder();
-        private uint CurrentCommand;
+        private readonly StringBuilder m_TextBuilder = new StringBuilder();
+        private uint m_CurrentCommand;
 
-        private string CurrentTest;
+        private string m_CurrentTest;
 
         public event Action < string > OnPass;
 
@@ -44,9 +44,9 @@ namespace VisCPU.Tests.Utils
 
         public override void WriteData( uint address, uint data )
         {
-            if ( CurrentCommand != 0 && CurrentCommand != address )
+            if ( m_CurrentCommand != 0 && m_CurrentCommand != address )
             {
-                throw new Exception( $"Finish Command {CurrentCommand} before starting {address} command" );
+                throw new Exception( $"Finish Command {m_CurrentCommand} before starting {address} command" );
             }
 
             if ( address == TEST_PASS && data != 0 )
@@ -56,15 +56,15 @@ namespace VisCPU.Tests.Utils
                 return;
             }
 
-            CurrentCommand = address;
+            m_CurrentCommand = address;
 
             bool runCommand = false;
 
-            if ( CurrentCommand != 0 )
+            if ( m_CurrentCommand != 0 )
             {
                 if ( data != 0 )
                 {
-                    textBuilder.Append( ( char ) data );
+                    m_TextBuilder.Append( ( char ) data );
                 }
                 else
                 {
@@ -87,8 +87,8 @@ namespace VisCPU.Tests.Utils
                         break;
                 }
 
-                CurrentCommand = 0;
-                textBuilder.Clear();
+                m_CurrentCommand = 0;
+                m_TextBuilder.Clear();
             }
         }
 
@@ -98,28 +98,28 @@ namespace VisCPU.Tests.Utils
 
         private void BeginTest()
         {
-            if ( CurrentTest != null )
+            if ( m_CurrentTest != null )
             {
-                throw new Exception( $"Finish test {CurrentTest} before starting test {textBuilder}" );
+                throw new Exception( $"Finish test {m_CurrentTest} before starting test {m_TextBuilder}" );
             }
 
-            CurrentTest = textBuilder.ToString();
+            m_CurrentTest = m_TextBuilder.ToString();
         }
 
         private void FailTest()
         {
-            string testName = CurrentTest;
-            string desc = textBuilder.ToString();
-            CurrentTest = null;
-            CurrentCommand = 0;
-            textBuilder.Clear();
+            string testName = m_CurrentTest;
+            string desc = m_TextBuilder.ToString();
+            m_CurrentTest = null;
+            m_CurrentCommand = 0;
+            m_TextBuilder.Clear();
             OnFail?.Invoke( testName, desc );
         }
 
         private void PassTest()
         {
-            OnPass?.Invoke( CurrentTest );
-            CurrentTest = null;
+            OnPass?.Invoke( m_CurrentTest );
+            m_CurrentTest = null;
         }
 
         #endregion

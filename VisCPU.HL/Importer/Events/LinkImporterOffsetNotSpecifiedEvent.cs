@@ -13,7 +13,7 @@ namespace VisCPU.HL.Importer.Events
 
         public LinkImporterOffsetNotSpecifiedEvent( string file ) : base(
                                                                          $"Offset was not specified and file '{file}({Path.GetFullPath( file )})' does not exist.",
-                                                                         ErrorEventKeys.LINKER_IMPORTER_NO_OFFSET,
+                                                                         ErrorEventKeys.s_LinkerImporterNoOffset,
                                                                          false
                                                                         )
         {

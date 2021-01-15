@@ -12,19 +12,19 @@ namespace VisCPU.Peripherals.HostFS
     public class HostFileSystem : Peripheral
     {
 
-        private HostFileSystemStatus status = HostFileSystemStatus.HFS_STATUS_READY;
-        private HostFileSystemSettings settings;
-        private StringBuilder sbPath = new StringBuilder();
-        private FileInfo currentFile = null;
-        private FileStream currentFileStream = null;
-        private bool readFileSize = false;
-        private bool readFileExists = false;
+        private HostFileSystemStatus m_Status = HostFileSystemStatus.HfsStatusReady;
+        private HostFileSystemSettings m_Settings;
+        private StringBuilder m_SbPath = new StringBuilder();
+        private FileInfo m_CurrentFile;
+        private FileStream m_CurrentFileStream;
+        private bool m_ReadFileSize;
+        private bool m_ReadFileExists;
 
         #region Public
 
         public HostFileSystem( HostFileSystemSettings settings )
         {
-            this.settings = settings;
+            m_Settings = settings;
         }
 
         public HostFileSystem() : this( HostFileSystemSettings.Create() )
@@ -33,56 +33,56 @@ namespace VisCPU.Peripherals.HostFS
 
         public override bool CanRead( uint address )
         {
-            return address == settings.PinData || address == settings.PinPresent || address == settings.PinStatus;
+            return address == m_Settings.PinData || address == m_Settings.PinPresent || address == m_Settings.PinStatus;
         }
 
         public override bool CanWrite( uint address )
         {
-            return address == settings.PinCmd || address == settings.PinData;
+            return address == m_Settings.PinCmd || address == m_Settings.PinData;
         }
 
         public override uint ReadData( uint address )
         {
-            if ( address == settings.PinPresent )
+            if ( address == m_Settings.PinPresent )
             {
                 return 1;
             }
 
-            if ( address == settings.PinStatus )
+            if ( address == m_Settings.PinStatus )
             {
-                return ( uint ) status;
+                return ( uint ) m_Status;
             }
 
-            if ( address == settings.PinData )
+            if ( address == m_Settings.PinData )
             {
-                if ( readFileSize )
+                if ( m_ReadFileSize )
                 {
-                    readFileSize = false;
+                    m_ReadFileSize = false;
 
-                    return ( uint ) currentFile.Length / sizeof( uint );
+                    return ( uint ) m_CurrentFile.Length / sizeof( uint );
                 }
 
-                if ( readFileExists )
+                if ( m_ReadFileExists )
                 {
-                    readFileExists = false;
+                    m_ReadFileExists = false;
 
-                    return ( uint ) ( currentFile.Exists ? 1 : 0 );
+                    return ( uint ) ( m_CurrentFile.Exists ? 1 : 0 );
                 }
 
-                if ( currentFileStream.Length <= currentFileStream.Position )
+                if ( m_CurrentFileStream.Length <= m_CurrentFileStream.Position )
                 {
-                    status = HostFileSystemStatus.HFS_STATUS_READY;
-                    currentFileStream.Close();
-                    currentFileStream = null;
-                    currentFile = null;
+                    m_Status = HostFileSystemStatus.HfsStatusReady;
+                    m_CurrentFileStream.Close();
+                    m_CurrentFileStream = null;
+                    m_CurrentFile = null;
 
                     return 0;
                 }
 
-                if ( status == HostFileSystemStatus.HFS_STATUS_FILE_OPEN )
+                if ( m_Status == HostFileSystemStatus.HfsStatusFileOpen )
                 {
                     byte[] buf = new byte[sizeof( uint )];
-                    currentFileStream.Read( buf, 0, sizeof( uint ) );
+                    m_CurrentFileStream.Read( buf, 0, sizeof( uint ) );
 
                     return BitConverter.ToUInt32( buf, 0 );
                 }
@@ -93,37 +93,37 @@ namespace VisCPU.Peripherals.HostFS
 
         public override void WriteData( uint address, uint data )
         {
-            if ( address == settings.PinData )
+            if ( address == m_Settings.PinData )
             {
-                if ( status == HostFileSystemStatus.HFS_STATUS_FILE_OPEN )
+                if ( m_Status == HostFileSystemStatus.HfsStatusFileOpen )
                 {
-                    currentFileStream.Write( BitConverter.GetBytes( data ), 0, sizeof( uint ) );
+                    m_CurrentFileStream.Write( BitConverter.GetBytes( data ), 0, sizeof( uint ) );
                 }
-                else if ( status == HostFileSystemStatus.HFS_STATUS_READY )
+                else if ( m_Status == HostFileSystemStatus.HfsStatusReady )
                 {
                     char chr = ( char ) data;
-                    sbPath.Append( chr );
+                    m_SbPath.Append( chr );
                 }
             }
 
-            if ( address == settings.PinCmd )
+            if ( address == m_Settings.PinCmd )
             {
                 HostFileSystemCommands cmd = ( HostFileSystemCommands ) data;
 
                 switch ( cmd )
                 {
-                    case HostFileSystemCommands.HFS_DEVICE_RESET:
-                        status = HostFileSystemStatus.HFS_STATUS_READY;
-                        sbPath.Clear();
-                        currentFileStream?.Close();
-                        currentFileStream = null;
-                        currentFile = null;
+                    case HostFileSystemCommands.HfsDeviceReset:
+                        m_Status = HostFileSystemStatus.HfsStatusReady;
+                        m_SbPath.Clear();
+                        m_CurrentFileStream?.Close();
+                        m_CurrentFileStream = null;
+                        m_CurrentFile = null;
 
                         break;
 
-                    case HostFileSystemCommands.HFS_OPEN_READ:
-                        status = HostFileSystemStatus.HFS_STATUS_FILE_OPEN;
-                        string pathR = GetPath( sbPath.ToString() );
+                    case HostFileSystemCommands.HfsOpenRead:
+                        m_Status = HostFileSystemStatus.HfsStatusFileOpen;
+                        string pathR = GetPath( m_SbPath.ToString() );
                         Log( "Opening File(READ): " + pathR );
 
                         if ( !File.Exists( pathR ) )
@@ -132,79 +132,79 @@ namespace VisCPU.Peripherals.HostFS
                         }
                         else
                         {
-                            currentFileStream = File.OpenRead( pathR );
-                            currentFile = new FileInfo( pathR );
+                            m_CurrentFileStream = File.OpenRead( pathR );
+                            m_CurrentFile = new FileInfo( pathR );
                         }
 
-                        sbPath.Clear();
+                        m_SbPath.Clear();
 
                         break;
 
-                    case HostFileSystemCommands.HFS_OPEN_WRITE:
-                        status = HostFileSystemStatus.HFS_STATUS_FILE_OPEN;
-                        string pathW = GetPath( sbPath.ToString() );
+                    case HostFileSystemCommands.HfsOpenWrite:
+                        m_Status = HostFileSystemStatus.HfsStatusFileOpen;
+                        string pathW = GetPath( m_SbPath.ToString() );
                         Log( "Opening File(WRITE): " + pathW );
 
-                        if ( !File.Exists( sbPath.ToString() ) )
+                        if ( !File.Exists( m_SbPath.ToString() ) )
                         {
-                            currentFileStream = File.Create( pathW );
-                            currentFile = new FileInfo( pathW );
+                            m_CurrentFileStream = File.Create( pathW );
+                            m_CurrentFile = new FileInfo( pathW );
                         }
                         else
                         {
-                            currentFileStream = File.OpenWrite( pathW );
-                            currentFile = new FileInfo( pathW );
+                            m_CurrentFileStream = File.OpenWrite( pathW );
+                            m_CurrentFile = new FileInfo( pathW );
                         }
 
-                        sbPath.Clear();
+                        m_SbPath.Clear();
 
                         break;
 
-                    case HostFileSystemCommands.HFS_CLOSE:
-                        Log( "Closing File: " + currentFile.FullName );
-                        status = HostFileSystemStatus.HFS_STATUS_READY;
-                        sbPath.Clear();
-                        currentFileStream?.Close();
-                        currentFileStream = null;
-                        currentFile = null;
+                    case HostFileSystemCommands.HfsClose:
+                        Log( "Closing File: " + m_CurrentFile.FullName );
+                        m_Status = HostFileSystemStatus.HfsStatusReady;
+                        m_SbPath.Clear();
+                        m_CurrentFileStream?.Close();
+                        m_CurrentFileStream = null;
+                        m_CurrentFile = null;
 
                         break;
 
-                    case HostFileSystemCommands.HFS_FILE_SIZE:
-                        string p = GetPath( sbPath.ToString() );
-                        currentFile = new FileInfo( p );
-                        sbPath.Clear();
-                        readFileSize = true;
+                    case HostFileSystemCommands.HfsFileSize:
+                        string p = GetPath( m_SbPath.ToString() );
+                        m_CurrentFile = new FileInfo( p );
+                        m_SbPath.Clear();
+                        m_ReadFileSize = true;
 
                         break;
 
-                    case HostFileSystemCommands.HFS_FILE_EXIST:
-                        string testFile = GetPath( sbPath.ToString() );
-                        currentFile = new FileInfo( testFile );
-                        sbPath.Clear();
-                        readFileExists = true;
+                    case HostFileSystemCommands.HfsFileExist:
+                        string testFile = GetPath( m_SbPath.ToString() );
+                        m_CurrentFile = new FileInfo( testFile );
+                        m_SbPath.Clear();
+                        m_ReadFileExists = true;
 
                         break;
 
-                    case HostFileSystemCommands.HFS_CHANGE_DIR:
-                        string dir = GetPath( sbPath.ToString() );
+                    case HostFileSystemCommands.HfsChangeDir:
+                        string dir = GetPath( m_SbPath.ToString() );
                         Directory.SetCurrentDirectory( dir );
-                        sbPath.Clear();
+                        m_SbPath.Clear();
 
                         break;
 
-                    case HostFileSystemCommands.HFS_MAKE_DIR:
-                        string newDir = GetPath( sbPath.ToString() );
+                    case HostFileSystemCommands.HfsMakeDir:
+                        string newDir = GetPath( m_SbPath.ToString() );
                         Directory.CreateDirectory( newDir );
-                        sbPath.Clear();
+                        m_SbPath.Clear();
 
                         break;
 
-                    case HostFileSystemCommands.HFS_FILE_DELETE:
-                        string targetFile = GetPath( sbPath.ToString() );
-                        sbPath.Clear();
+                    case HostFileSystemCommands.HfsFileDelete:
+                        string targetFile = GetPath( m_SbPath.ToString() );
+                        m_SbPath.Clear();
 
-                        if ( !settings.EnableDeleteFiles )
+                        if ( !m_Settings.EnableDeleteFiles )
                         {
                             break;
                         }
@@ -227,9 +227,9 @@ namespace VisCPU.Peripherals.HostFS
 
         private string GetPath( string p )
         {
-            if ( settings.UseRootPath )
+            if ( m_Settings.UseRootPath )
             {
-                return Path.Combine( settings.RootPath, p );
+                return Path.Combine( m_Settings.RootPath, p );
             }
 
             return p;

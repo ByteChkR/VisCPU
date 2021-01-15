@@ -23,7 +23,7 @@ namespace VisCPU.HL.Parser
         /// <returns>Parsed Expression</returns>
         public static HLExpression ReadFor( HLExpressionParser parser )
         {
-            IHLToken ft = parser.CurrentToken;
+            IHlToken ft = parser.CurrentToken;
             parser.Eat( HLTokenType.OpFor );
             parser.Eat( HLTokenType.OpBracketOpen );
             HLExpression vDecl = parser.ParseExpr();
@@ -63,7 +63,7 @@ namespace VisCPU.HL.Parser
                 new List < (HLExpression, HLExpression[]) >();
 
             HLExpression[] elseBranch = null;
-            IHLToken it = parser.CurrentToken;
+            IHlToken it = parser.CurrentToken;
             conditions.Add( ReadIfStatement( parser ) );
 
             while ( parser.CurrentToken.Type == HLTokenType.OpElse )
@@ -93,7 +93,7 @@ namespace VisCPU.HL.Parser
         /// <returns>Parsed Expression</returns>
         public static HLExpression ReadWhile( HLExpressionParser parser )
         {
-            IHLToken wT = parser.CurrentToken;
+            IHlToken wT = parser.CurrentToken;
             parser.Eat( HLTokenType.OpWhile );
             parser.Eat( HLTokenType.OpBracketOpen );
             HLExpression condition = parser.ParseExpr();
@@ -137,7 +137,7 @@ namespace VisCPU.HL.Parser
                 return new List < HLExpression > { expr };
             }
 
-            IHLToken token = parser.CurrentToken;
+            IHlToken token = parser.CurrentToken;
             parser.Eat( HLTokenType.OpBlockToken );
 
             return HLExpressionParser.Create( new HLExpressionReader( token.GetChildren() ) ).Parse().ToList();

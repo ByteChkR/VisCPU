@@ -29,20 +29,20 @@ namespace VisCPU.HL.Forms
         private const string CONSOLE_PACK_PROJECT_ARGS = "project pack";
         private const string CONSOLE_RESTORE_PROJECT_ARGS = "project restore";
         private const string CONSOLE_PUBLISH_PROJECT_ARGS = "project [restore;pack;publish]";
-        private readonly ConcurrentQueue < Action > EnableIOQueue = new ConcurrentQueue < Action >();
+        private readonly ConcurrentQueue < Action > m_EnableIoQueue = new ConcurrentQueue < Action >();
 
         private readonly Dictionary < string, RichTextBox > m_CodeInPages = new Dictionary < string, RichTextBox >();
         private readonly Dictionary < string, RichTextBox > m_CodeOutPages = new Dictionary < string, RichTextBox >();
 
-        private readonly ConcurrentQueue < Action > taskQueue = new ConcurrentQueue < Action >();
-        private readonly ConcurrentQueue < Action > UIThreadQueue = new ConcurrentQueue < Action >();
+        private readonly ConcurrentQueue < Action > m_TaskQueue = new ConcurrentQueue < Action >();
+        private readonly ConcurrentQueue < Action > m_UiThreadQueue = new ConcurrentQueue < Action >();
         private TextWriter m_ConsoleIn;
         private Process m_ConsoleProcess;
 
-        private bool m_EnableIO = true;
+        private bool m_EnableIo = true;
         private bool m_IsBuilding;
         private string m_SourceFolder;
-        private Task taskProcessor;
+        private Task m_TaskProcessor;
 
         private static string ConsoleBinConfigPath => Path.Combine( Application.StartupPath, "runtime_path.txt" );
 
@@ -244,11 +244,11 @@ namespace VisCPU.HL.Forms
 
         private void EnqueueTask( Action t )
         {
-            taskQueue.Enqueue( t );
+            m_TaskQueue.Enqueue( t );
 
-            if ( taskProcessor == null )
+            if ( m_TaskProcessor == null )
             {
-                taskProcessor = Task.Run( ProcessTasks );
+                m_TaskProcessor = Task.Run( ProcessTasks );
             }
         }
 
@@ -268,13 +268,13 @@ namespace VisCPU.HL.Forms
 
             tbIn.TextChanged += ( sender, args ) =>
                                 {
-                                    if ( m_EnableIO )
+                                    if ( m_EnableIo )
                                     {
-                                        UpdateIO( name, tbIn );
+                                        UpdateIo( name, tbIn );
                                     }
                                     else
                                     {
-                                        EnableIOQueue.Enqueue( () => UpdateIO( name, tbIn ) );
+                                        m_EnableIoQueue.Enqueue( () => UpdateIo( name, tbIn ) );
                                     }
                                 };
 
@@ -345,30 +345,30 @@ namespace VisCPU.HL.Forms
             UpdateOutputPages();
         }
 
-        private void OnFileCompiled( string arg1, string arg2 )
+        private void OnFileCompiled( string arg1 )
         {
-            RunEditorInternalHLBuild( arg1 );
+            RunEditorInternalHlBuild( arg1 );
 
-            UIThreadQueue.Enqueue(
-                                  () =>
-                                  {
-                                      Uri u = new Uri(
-                                                      Path.Combine(
-                                                                   Path.GetDirectoryName( arg1 ),
-                                                                   Path.GetFileNameWithoutExtension( arg1 )
-                                                                  ),
-                                                      UriKind.Absolute
-                                                     );
+            m_UiThreadQueue.Enqueue(
+                                    () =>
+                                    {
+                                        Uri u = new Uri(
+                                                        Path.Combine(
+                                                                     Path.GetDirectoryName( arg1 ),
+                                                                     Path.GetFileNameWithoutExtension( arg1 )
+                                                                    ),
+                                                        UriKind.Absolute
+                                                       );
 
-                                      Uri u1 = new Uri(
-                                                       Path.GetFullPath( m_SourceFolder ),
-                                                       UriKind.Absolute
-                                                      );
+                                        Uri u1 = new Uri(
+                                                         Path.GetFullPath( m_SourceFolder ),
+                                                         UriKind.Absolute
+                                                        );
 
-                                      Uri ret = u1.MakeRelativeUri( u );
-                                      GetPage( ret.OriginalString );
-                                  }
-                                 );
+                                        Uri ret = u1.MakeRelativeUri( u );
+                                        GetPage( ret.OriginalString );
+                                    }
+                                   );
         }
 
         private void OpenFolder( string file )
@@ -422,9 +422,9 @@ namespace VisCPU.HL.Forms
             File.WriteAllText( LastWorkingDirConfig, m_SourceFolder );
         }
 
-        private void ProcessIOQueue()
+        private void ProcessIoQueue()
         {
-            foreach ( Action action in EnableIOQueue )
+            foreach ( Action action in m_EnableIoQueue )
             {
                 action();
             }
@@ -456,20 +456,20 @@ namespace VisCPU.HL.Forms
 
         private void ProcessTasks()
         {
-            while ( !taskQueue.IsEmpty )
+            while ( !m_TaskQueue.IsEmpty )
             {
-                if ( taskQueue.TryDequeue( out Action res ) )
+                if ( m_TaskQueue.TryDequeue( out Action res ) )
                 {
                     res();
                 }
             }
         }
 
-        private void ProcessUIThreadQueue()
+        private void ProcessUiThreadQueue()
         {
-            while ( !UIThreadQueue.IsEmpty )
+            while ( !m_UiThreadQueue.IsEmpty )
             {
-                if ( UIThreadQueue.TryDequeue( out Action res ) )
+                if ( m_UiThreadQueue.TryDequeue( out Action res ) )
                 {
                     res();
                 }
@@ -487,8 +487,8 @@ namespace VisCPU.HL.Forms
             EnqueueTask(
                         () =>
                         {
-                            RunEditorInternalHLBuild( GetEntryPath() );
-                            ProcessUIThreadQueue();
+                            RunEditorInternalHlBuild( GetEntryPath() );
+                            ProcessUiThreadQueue();
                             UpdateInputPages();
                             UpdateOutputPages();
                             WriteConsoleOut( "" );
@@ -544,7 +544,7 @@ namespace VisCPU.HL.Forms
             return p;
         }
 
-        private void RunEditorInternalHLBuild( string src )
+        private void RunEditorInternalHlBuild( string src )
         {
             try
             {
@@ -564,7 +564,7 @@ namespace VisCPU.HL.Forms
                                                       );
 
                 HLCompilation c = p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( src ) ), ds );
-                c.OnCompiledIncludedScript += OnFileCompiled;
+                c.OnCompiledIncludedScript += ( s, s1 ) => OnFileCompiled( s );
                 SetStatus( "Updating Pages " + src, 0.75f );
 
                 File.WriteAllText(
@@ -592,8 +592,8 @@ namespace VisCPU.HL.Forms
 
         private void Startup()
         {
-            RunEditorInternalHLBuild( GetEntryPath() );
-            ProcessUIThreadQueue();
+            RunEditorInternalHlBuild( GetEntryPath() );
+            ProcessUiThreadQueue();
         }
 
         private void TerminateRuntimeProcess()
@@ -655,22 +655,20 @@ namespace VisCPU.HL.Forms
 
         private void UpdateInputPages()
         {
-            m_EnableIO = false;
+            m_EnableIo = false;
 
             foreach ( KeyValuePair < string, RichTextBox > keyValuePair in m_CodeInPages )
             {
                 UpdatePage( keyValuePair.Key + ".vhl", keyValuePair.Value );
             }
 
-            m_EnableIO = true;
-            ProcessIOQueue();
+            m_EnableIo = true;
+            ProcessIoQueue();
         }
 
-        private void UpdateIO( string name, RichTextBox rtb )
+        private void UpdateIo( string name, RichTextBox rtb )
         {
             File.WriteAllText( name + ".vhl", rtb.Text );
-
-            //RunEditorInternalHLBuild( name + ".vhl" );
         }
 
         private void UpdateOutputPages()

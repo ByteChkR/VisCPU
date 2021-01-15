@@ -35,14 +35,6 @@ namespace VisCPU.HL.Compiler.Special
                                                                         )
                                                    );
 
-            //if ( tempPtrVar.IsPointer && !( tempPtrVar.TypeDefinition is ArrayTypeDefintion ) )
-            //{
-            //    compilation.ProgramCode.Add( $"LOAD {tempPtr.ResultAddress} {tempPtrVar.ResultAddress}" );
-            //}
-            //else
-            //{
-            //    compilation.ProgramCode.Add( $"COPY {tempPtrVar.ResultAddress} {tempPtr.ResultAddress}" );
-            //}
             if ( tempPtrVar.TypeDefinition is ArrayTypeDefintion adef )
             {
                 string tmpSName = compilation.GetTempVar( adef.ElementType.GetSize() );

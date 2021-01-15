@@ -11,9 +11,9 @@ namespace VisCPU.HL.Compiler.Special
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLIfOp expr )
         {
-            string endLabel = compilation.GetUniqueName( "if_end" );
-            string elseLabel = compilation.GetUniqueName( "if_else" );
-            string blockLabels = compilation.GetUniqueName( "if_b{0}" );
+            string endLabel = HLCompilation.GetUniqueName( "if_end" );
+            string elseLabel = HLCompilation.GetUniqueName( "if_else" );
+            string blockLabels = HLCompilation.GetUniqueName( "if_b{0}" );
 
             for ( int i = 0; i < expr.ConditionMap.Count; i++ )
             {

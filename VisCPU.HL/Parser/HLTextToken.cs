@@ -11,7 +11,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     Represents a Token that contains a Sequence of Characters
     /// </summary>
-    public class HLTextToken : IHLToken
+    public class HLTextToken : IHlToken
     {
 
         /// <summary>
@@ -48,9 +48,9 @@ namespace VisCPU.HL.Parser
         ///     Returns all Children of this token
         /// </summary>
         /// <returns>Child Tokens</returns>
-        public List < IHLToken > GetChildren()
+        public List < IHlToken > GetChildren()
         {
-            return new List < IHLToken >();
+            return new List < IHlToken >();
         }
 
         /// <summary>

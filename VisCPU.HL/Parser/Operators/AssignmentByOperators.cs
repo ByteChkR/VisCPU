@@ -54,7 +54,7 @@ namespace VisCPU.HL.Parser.Operators
         /// <returns></returns>
         public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
-            IHLToken token = parser.CurrentToken;
+            IHlToken token = parser.CurrentToken;
 
             HLTokenType tt;
 

@@ -14,7 +14,7 @@ namespace VisCPU.HL.Modules.Resolvers
 
         public static ModuleResolverSettings ResolverSettings;
 
-        private static Dictionary < string, ModuleManager > Managers;
+        private static Dictionary < string, ModuleManager > s_Managers;
 
         #region Public
 
@@ -24,40 +24,40 @@ namespace VisCPU.HL.Modules.Resolvers
             {
                 if ( u.Scheme == "http" || u.Scheme == "https" )
                 {
-                    Managers[name] = new HttpModuleManager( name, u.OriginalString );
+                    s_Managers[name] = new HttpModuleManager( name, u.OriginalString );
                 }
                 else if ( u.Scheme == "dev" )
                 {
-                    Managers[name] = new TCPUploadModuleManager( u.OriginalString );
+                    s_Managers[name] = new TCPUploadModuleManager( u.OriginalString );
                 }
                 else
                 {
-                    Managers[name] = new LocalModuleManager( url );
+                    s_Managers[name] = new LocalModuleManager( url );
                 }
             }
             else
             {
-                Managers[name] = new LocalModuleManager( url );
+                s_Managers[name] = new LocalModuleManager( url );
             }
         }
 
         public static ModuleManager GetManager( string name )
         {
-            return Managers[name];
+            return s_Managers[name];
         }
 
         public static IEnumerable < KeyValuePair < string, ModuleManager > > GetManagers()
         {
-            return Managers;
+            return s_Managers;
         }
 
         public static void Initialize()
         {
-            if ( ResolverSettings == null && Managers == null )
+            if ( ResolverSettings == null && s_Managers == null )
             {
                 Directory.CreateDirectory( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config/module" ) );
                 ResolverSettings = ModuleResolverSettings.Create();
-                Managers = new Dictionary < string, ModuleManager >();
+                s_Managers = new Dictionary < string, ModuleManager >();
 
                 foreach ( KeyValuePair < string, string > origin in ResolverSettings.ModuleOrigins )
                 {
@@ -68,15 +68,15 @@ namespace VisCPU.HL.Modules.Resolvers
 
         public static ProjectConfig Resolve( string name, string version = "ANY" )
         {
-            return Managers.First( x => x.Value.HasPackage( name ) ).
-                            Value.
-                            GetPackage( name ).
-                            GetInstallTarget( version == "ANY" ? null : version );
+            return s_Managers.First( x => x.Value.HasPackage( name ) ).
+                              Value.
+                              GetPackage( name ).
+                              GetInstallTarget( version == "ANY" ? null : version );
         }
 
         public static ProjectConfig Resolve( string repository, ProjectDependency dependency )
         {
-            return Managers[repository].
+            return s_Managers[repository].
                    GetPackage( dependency.ProjectName ).
                    GetInstallTarget( dependency.ProjectVersion == "ANY" ? null : dependency.ProjectVersion );
         }

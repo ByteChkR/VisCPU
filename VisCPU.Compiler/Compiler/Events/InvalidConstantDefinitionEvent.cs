@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Compiler.Events
 
         public InvalidConstantDefinitionEvent( string message ) : base(
                                                                        message,
-                                                                       ErrorEventKeys.VASM_INVALID_CONSTANT_DEFINITION,
+                                                                       ErrorEventKeys.s_VasmInvalidConstantDefinition,
                                                                        false
                                                                       )
         {

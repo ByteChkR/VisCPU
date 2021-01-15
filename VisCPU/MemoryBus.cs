@@ -15,7 +15,7 @@ namespace VisCPU
     public class MemoryBus : VisBase
     {
 
-        private readonly List < Peripheral > peripherals;
+        private readonly List < Peripheral > m_Peripherals;
 
         protected override LoggerSystems SubSystem => LoggerSystems.MemoryBus;
 
@@ -23,7 +23,7 @@ namespace VisCPU
 
         public void Reset()
         {
-            peripherals.ForEach( x => x.Reset() );
+            m_Peripherals.ForEach( x => x.Reset() );
         }
 
         #endregion
@@ -36,19 +36,19 @@ namespace VisCPU
 
         public MemoryBus( IEnumerable < Peripheral > peripherals )
         {
-            this.peripherals = peripherals.ToList();
+            m_Peripherals = peripherals.ToList();
         }
 
         public MemoryBus( params Peripheral[] peripherals )
         {
-            this.peripherals = peripherals.ToList();
+            m_Peripherals = peripherals.ToList();
         }
 
         public void Dump()
         {
-            for ( int i = 0; i < peripherals.Count; i++ )
+            for ( int i = 0; i < m_Peripherals.Count; i++ )
             {
-                Peripheral peripheral = peripherals[i];
+                Peripheral peripheral = m_Peripherals[i];
                 FileStream fs = File.Create( ".\\crash.per_" + i + ".dump" );
                 peripheral.Dump( fs );
                 fs.Close();
@@ -61,7 +61,7 @@ namespace VisCPU
             uint receivers = 0;
             uint data = 0;
 
-            foreach ( Peripheral peripheral in peripherals )
+            foreach ( Peripheral peripheral in m_Peripherals )
             {
                 if ( !peripheral.CanRead( address ) )
                 {
@@ -90,7 +90,7 @@ namespace VisCPU
 
         public void Shutdown()
         {
-            peripherals.ForEach( x => x.Shutdown() );
+            m_Peripherals.ForEach( x => x.Shutdown() );
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -98,7 +98,7 @@ namespace VisCPU
         {
             bool hasReceiver = false;
 
-            foreach ( Peripheral peripheral in peripherals )
+            foreach ( Peripheral peripheral in m_Peripherals )
             {
                 if ( !peripheral.CanWrite( address ) )
                 {

@@ -9,7 +9,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
     /// <summary>
     ///     Implements the base of any XLangExpression implementation
     /// </summary>
-    public abstract class HLExpression : IHLToken
+    public abstract class HLExpression : IHlToken
     {
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         ///     Returns the Child Tokens of this token
         /// </summary>
         /// <returns></returns>
-        public abstract List < IHLToken > GetChildren();
+        public abstract List < IHlToken > GetChildren();
 
         #endregion
 

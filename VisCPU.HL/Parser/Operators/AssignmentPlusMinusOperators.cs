@@ -43,7 +43,6 @@ namespace VisCPU.HL.Parser.Operators
                                  ? HLTokenType.OpUnaryIncrement
                                  : HLTokenType.OpUnaryDecrement;
 
-            HLTokenType type = parser.CurrentToken.Type;
             parser.Eat( parser.CurrentToken.Type );
             parser.Eat( parser.CurrentToken.Type );
 

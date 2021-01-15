@@ -48,7 +48,7 @@ namespace VisCPU.Tests.Utils
             MemorySettings.Create();
         }
 
-        protected void VASM2VBIN( string file )
+        protected void Vasm2Vbin( string file )
         {
             Compilation comp = new Compilation( new MultiFileStaticLinker(), new DefaultAssemblyGenerator() );
             comp.Compile( file );
@@ -67,7 +67,7 @@ namespace VisCPU.Tests.Utils
             File.WriteAllBytes( newFile, comp.ByteCode.ToArray() );
         }
 
-        protected void VHL2VASM( string file )
+        protected void Vhl2Vasm( string file )
         {
             string src = File.ReadAllText( file );
             HLCompilation c = new HLCompilation( src, Path.GetDirectoryName( file ) );

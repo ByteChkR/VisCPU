@@ -58,7 +58,7 @@ namespace VisCPU.HL.Compiler.Relational
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
-            string label = compilation.GetUniqueName( "rel_expr_comp" );
+            string label = HLCompilation.GetUniqueName( "rel_expr_comp" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
             compilation.ProgramCode.Add( $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 0" );

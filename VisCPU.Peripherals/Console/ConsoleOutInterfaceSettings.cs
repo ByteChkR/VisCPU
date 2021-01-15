@@ -11,17 +11,17 @@ namespace VisCPU.Peripherals.Console
     public class ConsoleOutInterfaceSettings
     {
 
-        [Argument( Name = "console:out.pin.read" )]
-        public uint InterfacePresentPin = 0xFFFF1000;
+        [field: Argument( Name = "console:out.pin.read" )]
+        public uint InterfacePresentPin { get; } = 0xFFFF1000;
 
-        [Argument( Name = "console:out.pin.write.num" )]
-        public uint WriteNumOutputAddress = 0xFFFF1002;
+        [field: Argument( Name = "console:out.pin.write.num" )]
+        public uint WriteNumOutputAddress { get; } = 0xFFFF1002;
 
-        [Argument( Name = "console:out.pin.write.char" )]
-        public uint WriteOutputAddress = 0xFFFF1001;
+        [field: Argument( Name = "console:out.pin.write.char" )]
+        public uint WriteOutputAddress { get; } = 0xFFFF1001;
 
-        [Argument( Name = "console:out.pin.clear" )]
-        public uint InterfaceClearPin = 0xFFFF1005;
+        [field: Argument( Name = "console:out.pin.clear" )]
+        public uint InterfaceClearPin { get; } = 0xFFFF1005;
 
         #region Public
 

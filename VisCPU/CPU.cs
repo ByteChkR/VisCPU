@@ -17,30 +17,54 @@ namespace VisCPU
         public enum Flags
         {
 
-            NONE = 0,
-            BREAK = 1,
-            INTERRUPT = 2,
-            HALT = 4
+            None = 0,
+            Break = 1,
+            Interrupt = 2,
+            Halt = 4
 
         }
 
         public readonly MemoryBus MemoryBus;
 
-        private struct CPUState
+        private readonly struct CPUState : IEquatable < CPUState >
         {
 
-            public Flags flags;
-            public uint pc;
+            public readonly Flags Flags;
+            public readonly uint Pc;
+
+            public CPUState( Flags flags, uint pc )
+            {
+                Flags = flags;
+                Pc = pc;
+            }
+
+            public bool Equals( CPUState other )
+            {
+                return Flags == other.Flags && Pc == other.Pc;
+            }
+
+            public override bool Equals( object obj )
+            {
+                return obj is CPUState other && Equals( other );
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ( ( int ) Flags * 397 ) ^ ( int ) Pc;
+                }
+            }
 
         }
 
-        private readonly Stack < CPUState > cpuStack = new Stack < CPUState >();
+        private readonly Stack < CPUState > m_CpuStack = new Stack < CPUState >();
 
-        private readonly uint intAddress;
+        private readonly uint m_IntAddress;
 
-        private readonly uint resetAddress;
-        private readonly Stack < uint > stack = new Stack < uint >();
-        private uint remainingCycles;
+        private readonly uint m_ResetAddress;
+        private readonly Stack < uint > m_Stack = new Stack < uint >();
+        private uint m_RemainingCycles;
 
         public uint ProgramCounter { get; private set; }
 
@@ -52,8 +76,8 @@ namespace VisCPU
 
         public void Reset()
         {
-            ProgramCounter = resetAddress;
-            cpuStack.Clear();
+            ProgramCounter = m_ResetAddress;
+            m_CpuStack.Clear();
             MemoryBus.Reset();
         }
 
@@ -64,31 +88,31 @@ namespace VisCPU
         public CPU( MemoryBus bus, uint resetAddress, uint interruptAddress )
         {
             MemoryBus = bus;
-            intAddress = interruptAddress;
-            this.resetAddress = resetAddress;
+            m_IntAddress = interruptAddress;
+            m_ResetAddress = resetAddress;
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public bool Cycle()
         {
-            if ( remainingCycles != 0 )
+            if ( m_RemainingCycles != 0 )
             {
-                remainingCycles--;
+                m_RemainingCycles--;
 
                 return false;
             }
 
-            if ( HasSet( Flags.BREAK | Flags.HALT ) )
+            if ( HasSet( Flags.Break | Flags.Halt ) )
             {
-                remainingCycles = 0;
+                m_RemainingCycles = 0;
 
                 return true;
             }
 
-            if ( HasSet( Flags.INTERRUPT ) )
+            if ( HasSet( Flags.Interrupt ) )
             {
-                PushState( intAddress, ProcessorFlags & ~Flags.INTERRUPT );
-                remainingCycles = 0;
+                PushState( m_IntAddress, ProcessorFlags & ~Flags.Interrupt );
+                m_RemainingCycles = 0;
 
                 return true;
             }
@@ -102,11 +126,11 @@ namespace VisCPU
                 Dump();
             }
 
-            remainingCycles = instruction.Cycles - 1;
+            m_RemainingCycles = instruction.Cycles - 1;
             instruction.Process( this );
             ProgramCounter += instruction.InstructionSize;
 
-            return remainingCycles == 0;
+            return m_RemainingCycles == 0;
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -134,42 +158,38 @@ namespace VisCPU
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public uint Peek()
         {
-            return stack.Peek();
+            return m_Stack.Peek();
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public uint Pop()
         {
-            return stack.Pop();
+            return m_Stack.Pop();
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void PopState()
         {
-            if ( cpuStack.Count != 0 )
+            if ( m_CpuStack.Count != 0 )
             {
-                CPUState state = cpuStack.Pop();
-                ProgramCounter = state.pc;
-                ProcessorFlags = state.flags;
+                CPUState state = m_CpuStack.Pop();
+                ProgramCounter = state.Pc;
+                ProcessorFlags = state.Flags;
             }
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void Push( uint value )
         {
-            stack.Push( value );
+            m_Stack.Push( value );
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
-        public void PushState( uint pc, Flags flags = Flags.NONE )
+        public void PushState( uint pc, Flags flags = Flags.None )
         {
-            cpuStack.Push(
-                          new CPUState
-                          {
-                              pc = ProgramCounter,
-                              flags = ProcessorFlags
-                          }
-                         );
+            m_CpuStack.Push(
+                            new CPUState( ProcessorFlags, ProgramCounter )
+                           );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -177,15 +197,15 @@ namespace VisCPU
 
         public void Run()
         {
-            while ( !HasSet( Flags.HALT ) )
+            while ( !HasSet( Flags.Halt ) )
             {
                 Cycle();
 
-                if ( HasSet( Flags.BREAK ) )
+                if ( HasSet( Flags.Break ) )
                 {
                     if ( OnBreak == null )
                     {
-                        UnSet( Flags.BREAK );
+                        UnSet( Flags.Break );
                     }
                     else
                     {
@@ -204,7 +224,7 @@ namespace VisCPU
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
-        public void SetState( uint pc, Flags flags = Flags.NONE )
+        public void SetState( uint pc, Flags flags = Flags.None )
         {
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -236,13 +256,13 @@ namespace VisCPU
         {
             FileStream fs = File.Create( ".\\crash.dump.info" );
             TextWriter tw = new IndentedTextWriter( new StreamWriter( fs ) );
-            List < CPUState > states = new List < CPUState >( cpuStack );
+            List < CPUState > states = new List < CPUState >( m_CpuStack );
             tw.WriteLine( "Stack:" );
 
             for ( int i = 0; i < states.Count; i++ )
             {
                 CPUState cpuState = states[i];
-                tw.WriteLine( "Stack Pos: " + i + " PC: " + cpuState.pc.ToHexString() + " FLAGS: " + cpuState.flags );
+                tw.WriteLine( "Stack Pos: " + i + " PC: " + cpuState.Pc.ToHexString() + " FLAGS: " + cpuState.Flags );
             }
 
             tw.WriteLine();

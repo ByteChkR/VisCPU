@@ -13,7 +13,7 @@ namespace VisCPU.HL.Compiler
         where T : HLExpression
     {
 
-        private readonly Dictionary < HLTokenType, HLExpressionCompiler < T > > OpCompilers =
+        private readonly Dictionary < HLTokenType, HLExpressionCompiler < T > > m_OpCompilers =
             new Dictionary < HLTokenType, HLExpressionCompiler < T > >();
 
         protected override bool AllImplementations => true;
@@ -22,7 +22,7 @@ namespace VisCPU.HL.Compiler
 
         public OperatorCompilerCollection( Dictionary < HLTokenType, HLExpressionCompiler < T > > opCompilers )
         {
-            OpCompilers = opCompilers;
+            m_OpCompilers = opCompilers;
         }
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, T expr )
@@ -35,14 +35,14 @@ namespace VisCPU.HL.Compiler
             T expr,
             ExpressionTarget outputTarget )
         {
-            if ( !OpCompilers.ContainsKey( expr.Type ) )
+            if ( !m_OpCompilers.ContainsKey( expr.Type ) )
             {
                 EventManager < ErrorEvent >.SendEvent( new ExpressionCompilerNotFoundEvent( expr ) );
 
                 return new ExpressionTarget();
             }
 
-            return ( OpCompilers[expr.Type] as IHLExpressionCompiler ).Parse( compilation, expr, outputTarget );
+            return ( m_OpCompilers[expr.Type] as IHlExpressionCompiler ).Parse( compilation, expr, outputTarget );
         }
 
         #endregion

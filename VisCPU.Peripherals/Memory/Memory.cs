@@ -12,11 +12,11 @@ namespace VisCPU.Peripherals.Memory
     {
 
         public readonly uint[] InternalMemory;
-        private readonly string fullPersistentPath;
+        private readonly string m_FullPersistentPath;
 
-        private readonly MemorySettings settings;
+        private readonly MemorySettings m_Settings;
 
-        public uint EndAddress => settings.Start + ( uint ) InternalMemory.Length;
+        public uint EndAddress => m_Settings.Start + ( uint ) InternalMemory.Length;
 
         #region Public
 
@@ -26,12 +26,12 @@ namespace VisCPU.Peripherals.Memory
 
         public Memory( MemorySettings settings )
         {
-            this.settings = settings;
+            m_Settings = settings;
 
             if ( settings.Persistent && !string.IsNullOrEmpty( settings.PersistentPath ) )
             {
-                fullPersistentPath = Path.GetFullPath( settings.PersistentPath );
-                Directory.CreateDirectory( Path.GetDirectoryName( fullPersistentPath ) );
+                m_FullPersistentPath = Path.GetFullPath( settings.PersistentPath );
+                Directory.CreateDirectory( Path.GetDirectoryName( m_FullPersistentPath ) );
 
                 if ( File.Exists( settings.PersistentPath ) )
                 {
@@ -67,12 +67,12 @@ namespace VisCPU.Peripherals.Memory
 
         public override bool CanRead( uint address )
         {
-            return settings.EnableRead && address < EndAddress && address >= settings.Start;
+            return m_Settings.EnableRead && address < EndAddress && address >= m_Settings.Start;
         }
 
         public override bool CanWrite( uint address )
         {
-            return settings.EnableWrite && address < EndAddress && address >= settings.Start;
+            return m_Settings.EnableWrite && address < EndAddress && address >= m_Settings.Start;
         }
 
         public override void Dump( Stream str )
@@ -82,20 +82,20 @@ namespace VisCPU.Peripherals.Memory
 
         public override uint ReadData( uint address )
         {
-            return InternalMemory[address - settings.Start];
+            return InternalMemory[address - m_Settings.Start];
         }
 
         public override void Shutdown()
         {
-            if ( settings.Persistent && fullPersistentPath != null )
+            if ( m_Settings.Persistent && m_FullPersistentPath != null )
             {
-                File.WriteAllBytes( fullPersistentPath, InternalMemory.ToBytes() );
+                File.WriteAllBytes( m_FullPersistentPath, InternalMemory.ToBytes() );
             }
         }
 
         public override void WriteData( uint address, uint data )
         {
-            InternalMemory[address - settings.Start] = data;
+            InternalMemory[address - m_Settings.Start] = data;
         }
 
         #endregion

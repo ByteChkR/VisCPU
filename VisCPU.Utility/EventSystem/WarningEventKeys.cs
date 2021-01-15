@@ -4,18 +4,18 @@
     public static class WarningEventKeys
     {
 
-        public const string MODULE_VERSION_EXISTS = "module-version-exists";
+        public static readonly string s_ModuleVersionExists = "module-version-exists";
 
-        public const string MEMORY_BUS_DEVICE_OVERLAP = "memory-bus-device-overlap";
-        public const string MEMORY_BUS_READ_UNMAPPED = "memory-bus-read-unmapped";
-        public const string MEMORY_BUS_WRITE_UNMAPPED = "memory-bus-write-unmapped";
+        public static readonly string s_MemoryBusDeviceOverlap = "memory-bus-device-overlap";
+        public static readonly string s_MemoryBusReadUnmapped = "memory-bus-read-unmapped";
+        public static readonly string s_MemoryBusWriteUnmapped = "memory-bus-write-unmapped";
 
-        public const string PERIPHERAL_INVALID_READ = "peripheral-invalid-read";
-        public const string PERIPHERAL_INVALID_WRITE = "peripheral-invalid-write";
+        public static readonly string s_PeripheralInvalidRead = "peripheral-invalid-read";
+        public static readonly string s_PeripheralInvalidWrite = "peripheral-invalid-write";
 
-        public const string PERIPHERAL_MEMORY_PATH_NOT_SET = "memory-path-not-set";
+        public static readonly string s_PeripheralMemoryPathNotSet = "memory-path-not-set";
 
-        public const string LINKER_DUPLICATE_ITEM = "linker-duplicate-item";
+        public static readonly string s_LinkerDuplicateItem = "linker-duplicate-item";
 
     }
 

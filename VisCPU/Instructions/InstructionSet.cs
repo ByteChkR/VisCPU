@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using VisCPU.Events;
@@ -11,15 +12,33 @@ namespace VisCPU.Instructions
     public abstract class InstructionSet
     {
 
-        public struct InstructionData
+        public struct InstructionData : IEquatable < InstructionData >
         {
 
-            public Instruction instruction;
+            public Instruction Instruction;
             public byte OpCode;
+
+            public bool Equals( InstructionData other )
+            {
+                return Equals( Instruction, other.Instruction ) && OpCode == other.OpCode;
+            }
+
+            public override bool Equals( object obj )
+            {
+                return obj is InstructionData other && Equals( other );
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ( ( Instruction != null ? Instruction.GetHashCode() : 0 ) * 397 ) ^ OpCode.GetHashCode();
+                }
+            }
 
         }
 
-        private readonly Instruction[] instructions;
+        private readonly Instruction[] m_Instructions;
 
         public abstract string SetKey { get; }
 
@@ -27,7 +46,7 @@ namespace VisCPU.Instructions
 
         public Instruction GetInstruction( string key, int arguments )
         {
-            Instruction ret = instructions.FirstOrDefault( x => x.Key == key && x.ArgumentCount == arguments );
+            Instruction ret = m_Instructions.FirstOrDefault( x => x.Key == key && x.ArgumentCount == arguments );
 
             if ( ret == null )
             {
@@ -39,7 +58,7 @@ namespace VisCPU.Instructions
 
         public uint GetInstruction( Instruction instr )
         {
-            int idx = instructions.ToList().IndexOf( instr );
+            int idx = m_Instructions.ToList().IndexOf( instr );
 
             if ( idx == -1 )
             {
@@ -51,7 +70,7 @@ namespace VisCPU.Instructions
 
         public Instruction GetInstruction( uint opCode )
         {
-            Instruction i = instructions[opCode];
+            Instruction i = m_Instructions[opCode];
 
             if ( i == null )
             {
@@ -63,12 +82,12 @@ namespace VisCPU.Instructions
 
         public Instruction[] GetInstructions()
         {
-            return instructions.ToArray();
+            return m_Instructions.ToArray();
         }
 
         public Instruction[] GetInstructions( string key )
         {
-            return instructions.Where( x => x.Key == key ).ToArray();
+            return m_Instructions.Where( x => x.Key == key ).ToArray();
         }
 
         #endregion
@@ -77,25 +96,25 @@ namespace VisCPU.Instructions
 
         protected InstructionSet( Instruction[] instructions, Instruction noOp = null )
         {
-            this.instructions = instructions;
+            m_Instructions = instructions;
         }
 
         protected InstructionSet( IEnumerable < InstructionData > data, Instruction noOp = null )
         {
-            instructions = new Instruction[byte.MaxValue];
+            m_Instructions = new Instruction[byte.MaxValue];
 
             foreach ( InstructionData instructionData in data )
             {
-                if ( instructions[instructionData.OpCode] == null )
+                if ( m_Instructions[instructionData.OpCode] == null )
                 {
-                    instructions[instructionData.OpCode] = instructionData.instruction;
+                    m_Instructions[instructionData.OpCode] = instructionData.Instruction;
                 }
                 else
                 {
                     EventManager < ErrorEvent >.SendEvent(
                                                           new DuplicateInstructionOpCodesEvent(
-                                                               instructions[instructionData.OpCode],
-                                                               instructionData.instruction,
+                                                               m_Instructions[instructionData.OpCode],
+                                                               instructionData.Instruction,
                                                                instructionData.OpCode
                                                               )
                                                          );
@@ -104,11 +123,11 @@ namespace VisCPU.Instructions
 
             if ( noOp != null )
             {
-                for ( int i = 0; i < instructions.Length; i++ )
+                for ( int i = 0; i < m_Instructions.Length; i++ )
                 {
-                    if ( instructions[i] == null )
+                    if ( m_Instructions[i] == null )
                     {
-                        instructions[i] = noOp;
+                        m_Instructions[i] = noOp;
                     }
                 }
             }

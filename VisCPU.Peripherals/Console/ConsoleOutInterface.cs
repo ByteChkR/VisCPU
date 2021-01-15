@@ -9,30 +9,30 @@ namespace VisCPU.Peripherals.Console
     public class ConsoleOutInterface : Peripheral
     {
 
-        private readonly ConsoleOutInterfaceSettings settings;
+        private readonly ConsoleOutInterfaceSettings m_Settings;
 
         #region Public
 
         public ConsoleOutInterface()
         {
-            settings = SettingsSystem.GetSettings < ConsoleOutInterfaceSettings >();
+            m_Settings = SettingsSystem.GetSettings < ConsoleOutInterfaceSettings >();
         }
 
         public override bool CanRead( uint address )
         {
-            return settings.InterfacePresentPin == address;
+            return m_Settings.InterfacePresentPin == address;
         }
 
         public override bool CanWrite( uint address )
         {
-            return address == settings.WriteOutputAddress ||
-                   settings.WriteNumOutputAddress == address ||
-                   settings.InterfaceClearPin == address;
+            return address == m_Settings.WriteOutputAddress ||
+                   m_Settings.WriteNumOutputAddress == address ||
+                   m_Settings.InterfaceClearPin == address;
         }
 
         public override uint ReadData( uint address )
         {
-            if ( address == settings.InterfacePresentPin )
+            if ( address == m_Settings.InterfacePresentPin )
             {
                 return 1;
             }
@@ -46,11 +46,11 @@ namespace VisCPU.Peripherals.Console
         {
             if ( CanWrite( address ) )
             {
-                if ( settings.InterfaceClearPin == address )
+                if ( m_Settings.InterfaceClearPin == address )
                 {
                     System.Console.Clear();
                 }
-                else if ( settings.WriteNumOutputAddress == address )
+                else if ( m_Settings.WriteNumOutputAddress == address )
                 {
                     System.Console.Write( data.ToString() );
                 }

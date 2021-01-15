@@ -12,7 +12,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// <summary>
         ///     The Value
         /// </summary>
-        public readonly IHLToken Value;
+        public readonly IHlToken Value;
 
         #region Public
 
@@ -21,7 +21,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">The XL Context</param>
         /// <param name="value">The Value of this Token</param>
-        public HLValueOperand( IHLToken value ) : base( value.SourceIndex )
+        public HLValueOperand( IHlToken value ) : base( value.SourceIndex )
         {
             Value = value;
         }
@@ -30,9 +30,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         ///     Returns all Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List < IHlToken > GetChildren()
         {
-            return new List < IHLToken > { Value };
+            return new List < IHlToken > { Value };
         }
 
         public override string ToString()

@@ -12,7 +12,7 @@ namespace VisCPU.Events
 
         public InstructionNotFoundEvent( byte opCode ) : base(
                                                               $"Can not find Instruction with op code: {opCode}",
-                                                              ErrorEventKeys.INSTR_OP_NOT_FOUND,
+                                                              ErrorEventKeys.s_InstrOpNotFound,
                                                               false
                                                              )
         {
@@ -20,7 +20,7 @@ namespace VisCPU.Events
 
         public InstructionNotFoundEvent( Instruction instruction ) : base(
                                                                           $"Can not find Instruction {instruction.Key}",
-                                                                          ErrorEventKeys.INSTR_OP_NOT_FOUND,
+                                                                          ErrorEventKeys.s_InstrOpNotFound,
                                                                           false
                                                                          )
         {
@@ -28,7 +28,7 @@ namespace VisCPU.Events
 
         public InstructionNotFoundEvent( string key, int args ) : base(
                                                                        $"Can not find Instruction {key} with argument count {args}",
-                                                                       ErrorEventKeys.INSTR_OP_NOT_FOUND,
+                                                                       ErrorEventKeys.s_InstrOpNotFound,
                                                                        false
                                                                       )
         {

@@ -11,7 +11,7 @@ namespace VisCPU.HL.Modules.ModuleManagers.Events
 
         public ModuleVersionAlreadyExistsEvent( string moduleName, string version ) : base(
              $"Module {moduleName} already has a build published for version {version}",
-             WarningEventKeys.MODULE_VERSION_EXISTS
+             WarningEventKeys.s_ModuleVersionExists
             )
         {
         }

@@ -81,10 +81,10 @@ namespace VisCPU.Console.Core.Subsystems
                 ConsoleOutInterface cout =
                     new ConsoleOutInterface();
 
-                HostFileSystem hostFS = new HostFileSystem();
+                HostFileSystem hostFs = new HostFileSystem();
                 BenchmarkDevice benchDev = new BenchmarkDevice();
 
-                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS, benchDev );
+                MemoryBus bus = mbs.CreateBus( cout, cin, hostFs, benchDev );
 
                 CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );
@@ -164,10 +164,10 @@ namespace VisCPU.Console.Core.Subsystems
                 ConsoleOutInterface cout =
                     new ConsoleOutInterface();
 
-                HostFileSystem hostFS = new HostFileSystem();
+                HostFileSystem hostFs = new HostFileSystem();
                 BenchmarkDevice benchDev = new BenchmarkDevice();
 
-                MemoryBus bus = mbs.CreateBus( cout, cin, hostFS, benchDev );
+                MemoryBus bus = mbs.CreateBus( cout, cin, hostFs, benchDev );
 
                 CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );

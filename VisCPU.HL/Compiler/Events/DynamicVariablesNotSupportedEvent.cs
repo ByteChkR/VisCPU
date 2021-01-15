@@ -11,7 +11,7 @@ namespace VisCPU.HL.Compiler.Events
 
         public DynamicVariablesNotSupportedEvent() : base(
                                                           "Dynamic Variables are not supported",
-                                                          ErrorEventKeys.HL_COMPILER_DYNAMIC_VARIABLES_NOT_SUPPORTED,
+                                                          ErrorEventKeys.s_HlCompilerDynamicVariablesNotSupported,
                                                           false
                                                          )
         {

@@ -11,7 +11,7 @@ namespace VisCPU.HL.Compiler.Events
 
         public TypeNotFoundEvent( string typeName ) : base(
                                                            $"Can not find type with name {typeName}",
-                                                           ErrorEventKeys.HL_TYPE_NOT_FOUND,
+                                                           ErrorEventKeys.s_HlTypeNotFound,
                                                            false
                                                           )
         {

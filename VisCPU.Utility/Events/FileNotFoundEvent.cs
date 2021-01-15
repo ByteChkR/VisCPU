@@ -10,7 +10,7 @@ namespace VisCPU.Utility.Events
 
         public FileNotFoundEvent( string file, bool canContinue ) : base(
                                                                          $"The file '{file}' could not be found.",
-                                                                         ErrorEventKeys.GENERIC_FILE_NOT_FOUND,
+                                                                         ErrorEventKeys.s_GenericFileNotFound,
                                                                          canContinue
                                                                         )
         {

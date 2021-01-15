@@ -14,19 +14,19 @@ namespace VisCPU.HL.Modules.ModuleManagers
     public class HttpModuleManager : ModuleManager
     {
 
-        private readonly string RepoName;
-        private readonly string LocalTempCache;
-        private List < ModulePackage > pList;
+        private readonly string m_RepoName;
+        private readonly string m_LocalTempCache;
+        private List < ModulePackage > m_PList;
 
-        private List < ModulePackage > PackageList => pList ?? ( pList = GetPackageList() );
+        private List < ModulePackage > PackageList => m_PList ?? ( m_PList = GetPackageList() );
 
         #region Public
 
         public HttpModuleManager( string repoName, string moduleRoot ) : base( moduleRoot )
         {
-            RepoName = repoName;
-            LocalTempCache = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config", "module", RepoName );
-            Directory.CreateDirectory( LocalTempCache );
+            m_RepoName = repoName;
+            m_LocalTempCache = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config", "module", m_RepoName );
+            Directory.CreateDirectory( m_LocalTempCache );
         }
 
         public override void Get( ProjectConfig target, string targetDir )
@@ -56,7 +56,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override string GetModulePackagePath( ModulePackage package )
         {
-            return Path.Combine( LocalTempCache, MODULE_PATH, package.ModuleName );
+            return Path.Combine( m_LocalTempCache, MODULE_PATH, package.ModuleName );
         }
 
         public override ModulePackage GetPackage( string name )
@@ -71,7 +71,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override string GetTargetDataPath( ProjectConfig target )
         {
-            return GetTargetDataPath( LocalTempCache, target.ProjectName, target.ProjectVersion );
+            return GetTargetDataPath( m_LocalTempCache, target.ProjectName, target.ProjectVersion );
         }
 
         public override string GetTargetDataUri( ProjectConfig target )
@@ -126,7 +126,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         private List < ModulePackage > GetPackageList()
         {
             string repoIndex = GetPackageListPath();
-            string localIndex = GetPackageListPath( LocalTempCache );
+            string localIndex = GetPackageListPath( m_LocalTempCache );
 
             if ( File.Exists( localIndex ) )
             {
@@ -139,7 +139,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
                 wc.DownloadFile( new Uri( repoIndex ), localIndex );
             }
 
-            List < ModulePackage > packages = LoadPackageList( LocalTempCache );
+            List < ModulePackage > packages = LoadPackageList( m_LocalTempCache );
             SaveInfo( packages );
 
             return packages;
@@ -190,7 +190,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
                     }
 
                     string dir = GetTargetDataPath(
-                                                   LocalTempCache,
+                                                   m_LocalTempCache,
                                                    modulePackage.ModuleName,
                                                    modulePackageModuleVersion
                                                   );

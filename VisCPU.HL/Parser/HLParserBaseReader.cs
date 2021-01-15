@@ -18,22 +18,22 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Input Source
         /// </summary>
-        private readonly string input;
+        private readonly string m_Input;
 
         /// <summary>
         ///     XL SettingsSystem
         /// </summary>
-        private readonly HLParserSettings settings;
+        private readonly HLParserSettings m_Settings;
 
         /// <summary>
         ///     The Current Reader Index.
         /// </summary>
-        private int currentIndex;
+        private int m_CurrentIndex;
 
         /// <summary>
         ///     The Current Token
         /// </summary>
-        private IHLToken currentToken;
+        private IHlToken m_CurrentToken;
 
         #region Public
 
@@ -44,73 +44,78 @@ namespace VisCPU.HL.Parser
         /// <param name="input">Source</param>
         public HLParserBaseReader( HLParserSettings settings, string input )
         {
-            this.input = input;
-            this.settings = settings;
+            m_Input = input;
+            m_Settings = settings;
         }
 
         /// <summary>
         ///     Advances the reader by one position inside the source tokens
         /// </summary>
         /// <returns></returns>
-        public IHLToken Advance()
+        public IHlToken Advance()
         {
-            if ( currentIndex < input.Length )
+            if ( m_CurrentIndex < m_Input.Length )
             {
-                if ( IsNewLine( input[currentIndex] ) )
+                if ( IsNewLine( m_Input[m_CurrentIndex] ) )
                 {
-                    currentToken = ReadNewLine();
+                    m_CurrentToken = ReadNewLine();
                 }
-                else if ( IsSpace( input[currentIndex] ) )
+                else if ( IsSpace( m_Input[m_CurrentIndex] ) )
                 {
-                    currentIndex++;
+                    m_CurrentIndex++;
 
                     return Advance();
                 }
-                else if ( IsSymbol( input[currentIndex] ) )
+                else if ( IsSymbol( m_Input[m_CurrentIndex] ) )
                 {
-                    currentToken = ReadSymbol();
+                    m_CurrentToken = ReadSymbol();
                 }
-                else if ( input[currentIndex] == '0' &&
-                          input.Length - 2 > currentIndex &&
-                          input[currentIndex + 1] == 'x' &&
-                          IsHexNumber( input[currentIndex + 2] ) )
+                else if ( m_Input[m_CurrentIndex] == '0' &&
+                          m_Input.Length - 2 > m_CurrentIndex &&
+                          m_Input[m_CurrentIndex + 1] == 'x' &&
+                          IsHexNumber( m_Input[m_CurrentIndex + 2] ) )
                 {
-                    currentToken = ReadHexNumber();
+                    m_CurrentToken = ReadHexNumber();
                 }
-                else if ( IsNumber( input[currentIndex] ) )
+                else if ( IsNumber( m_Input[m_CurrentIndex] ) )
                 {
-                    currentToken = ReadNumber();
+                    m_CurrentToken = ReadNumber();
                 }
-                else if ( IsLetter( input[currentIndex] ) )
+                else if ( IsLetter( m_Input[m_CurrentIndex] ) )
                 {
-                    currentToken = ReadWord();
+                    m_CurrentToken = ReadWord();
                 }
                 else
                 {
-                    currentToken = new HLTextToken( HLTokenType.Unknown, input[currentIndex].ToString(), currentIndex );
-                    currentIndex++;
+                    m_CurrentToken = new HLTextToken(
+                                                     HLTokenType.Unknown,
+                                                     m_Input[m_CurrentIndex].ToString(),
+                                                     m_CurrentIndex
+                                                    );
+
+                    m_CurrentIndex++;
                 }
 
-                return currentToken;
+                return m_CurrentToken;
             }
 
-            currentToken = new EOFToken();
+            m_CurrentToken = new EOFToken();
 
-            return currentToken;
+            return m_CurrentToken;
         }
 
-        public List < IHLToken > ReadToEnd()
+        public List < IHlToken > ReadToEnd()
         {
-            if ( currentToken == null )
+            if ( m_CurrentToken == null )
             {
                 Advance();
             }
 
-            List < IHLToken > ret = new List < IHLToken >();
+            List < IHlToken > ret = new List < IHlToken >();
 
-            while ( currentToken.Type != HLTokenType.EOF )
+            while ( m_CurrentToken.Type != HLTokenType.Eof )
             {
-                ret.Add( currentToken );
+                ret.Add( m_CurrentToken );
                 Advance();
             }
 
@@ -173,21 +178,21 @@ namespace VisCPU.HL.Parser
         /// <returns>True if Reserved Symbol</returns>
         private bool IsSymbol( char c )
         {
-            return settings.ReservedSymbols.ContainsKey( c );
+            return m_Settings.ReservedSymbols.ContainsKey( c );
         }
 
-        private IHLToken ReadHexNumber()
+        private IHlToken ReadHexNumber()
         {
-            int start = currentIndex;
+            int start = m_CurrentIndex;
             StringBuilder sb = new StringBuilder( "0x" );
-            currentIndex += 2;
+            m_CurrentIndex += 2;
 
             do
             {
-                sb.Append( input[currentIndex] );
-                currentIndex++;
+                sb.Append( m_Input[m_CurrentIndex] );
+                m_CurrentIndex++;
             }
-            while ( currentIndex < input.Length && IsHexNumber( input[currentIndex] ) );
+            while ( m_CurrentIndex < m_Input.Length && IsHexNumber( m_Input[m_CurrentIndex] ) );
 
             return new HLTextToken( HLTokenType.OpNumber, sb.ToString(), start );
         }
@@ -196,17 +201,17 @@ namespace VisCPU.HL.Parser
         ///     Reads all new Lines until a "non-newline" character is encountered.
         /// </summary>
         /// <returns></returns>
-        private IHLToken ReadNewLine()
+        private IHlToken ReadNewLine()
         {
             int len = 0;
-            int start = currentIndex;
+            int start = m_CurrentIndex;
 
             do
             {
                 len++;
-                currentIndex++;
+                m_CurrentIndex++;
             }
-            while ( currentIndex < input.Length && IsNewLine( input[currentIndex] ) );
+            while ( m_CurrentIndex < m_Input.Length && IsNewLine( m_Input[m_CurrentIndex] ) );
 
             return new HLTextToken( HLTokenType.OpNewLine, new StringBuilder().Append( '\n', len ).ToString(), start );
         }
@@ -215,17 +220,17 @@ namespace VisCPU.HL.Parser
         ///     reads a number from the source
         /// </summary>
         /// <returns></returns>
-        private IHLToken ReadNumber()
+        private IHlToken ReadNumber()
         {
-            int start = currentIndex;
+            int start = m_CurrentIndex;
             StringBuilder sb = new StringBuilder();
 
             do
             {
-                sb.Append( input[currentIndex] );
-                currentIndex++;
+                sb.Append( m_Input[m_CurrentIndex] );
+                m_CurrentIndex++;
             }
-            while ( currentIndex < input.Length && IsNumber( input[currentIndex] ) );
+            while ( m_CurrentIndex < m_Input.Length && IsNumber( m_Input[m_CurrentIndex] ) );
 
             return new HLTextToken( HLTokenType.OpNumber, sb.ToString(), start );
         }
@@ -234,17 +239,17 @@ namespace VisCPU.HL.Parser
         ///     Reads a sequence of spaces until the first "non-space" character is encountered.
         /// </summary>
         /// <returns></returns>
-        private IHLToken ReadSpace()
+        private IHlToken ReadSpace()
         {
             int len = 0;
-            int start = currentIndex;
+            int start = m_CurrentIndex;
 
             do
             {
                 len++;
-                currentIndex++;
+                m_CurrentIndex++;
             }
-            while ( currentIndex < input.Length && IsSpace( input[currentIndex] ) );
+            while ( m_CurrentIndex < m_Input.Length && IsSpace( m_Input[m_CurrentIndex] ) );
 
             return new HLTextToken( HLTokenType.OpSpace, new StringBuilder().Append( ' ', len ).ToString(), start );
         }
@@ -253,31 +258,31 @@ namespace VisCPU.HL.Parser
         ///     Reads a Symbol from the Source
         /// </summary>
         /// <returns></returns>
-        private IHLToken ReadSymbol()
+        private IHlToken ReadSymbol()
         {
-            char val = input[currentIndex];
-            int start = currentIndex;
-            currentIndex++;
+            char val = m_Input[m_CurrentIndex];
+            int start = m_CurrentIndex;
+            m_CurrentIndex++;
 
-            return new HLTextToken( settings.ReservedSymbols[val], val.ToString(), start );
+            return new HLTextToken( m_Settings.ReservedSymbols[val], val.ToString(), start );
         }
 
         /// <summary>
         ///     Reads a Word from the Source
         /// </summary>
         /// <returns></returns>
-        private IHLToken ReadWord()
+        private IHlToken ReadWord()
         {
-            int start = currentIndex;
+            int start = m_CurrentIndex;
             StringBuilder sb = new StringBuilder();
 
             do
             {
-                sb.Append( input[currentIndex] );
-                currentIndex++;
+                sb.Append( m_Input[m_CurrentIndex] );
+                m_CurrentIndex++;
             }
-            while ( currentIndex < input.Length &&
-                    ( IsNumber( input[currentIndex] ) || IsLetter( input[currentIndex] ) ) );
+            while ( m_CurrentIndex < m_Input.Length &&
+                    ( IsNumber( m_Input[m_CurrentIndex] ) || IsLetter( m_Input[m_CurrentIndex] ) ) );
 
             return new HLTextToken( HLTokenType.OpWord, sb.ToString(), start );
         }

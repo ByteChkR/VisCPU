@@ -19,20 +19,13 @@ namespace VisCPU.Utility.ArgumentParser
             {
                 Type t = o.GetType();
 
-                FieldInfo[] fis = t.GetFields( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).
-                                    Where(
-                                          x => x.FieldType == typeof( string ) ||
-                                               x.FieldType == typeof( string[] ) ||
-                                               x.FieldType == typeof( bool ) ||
-                                               x.FieldType == typeof( bool[] ) ||
-                                               x.FieldType == typeof( uint ) ||
-                                               x.FieldType == typeof( uint[] ) ||
-                                               x.FieldType.IsEnum ||
-                                               x.FieldType.IsArray && x.FieldType.GetElementType().IsEnum
-                                         ).
-                                    ToArray();
+                MemberInfo[] fis = t.GetMembers( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).
+                                     Where(
+                                           IsCorrectMemberType
+                                          ).
+                                     ToArray();
 
-                foreach ( FieldInfo fieldInfo in fis )
+                foreach ( MemberInfo fieldInfo in fis )
                 {
                     foreach ( ArgumentAttribute attr in fieldInfo.GetCustomAttributes < ArgumentAttribute >() )
                     {
@@ -75,21 +68,16 @@ namespace VisCPU.Utility.ArgumentParser
             {
                 Type t = o.GetType();
 
-                FieldInfo[] fis = t.GetFields( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).
-                                    Where(
-                                          x => x.FieldType == typeof( string ) ||
-                                               x.FieldType == typeof( string[] ) ||
-                                               x.FieldType == typeof( bool ) ||
-                                               x.FieldType == typeof( bool[] ) ||
-                                               x.FieldType == typeof( uint ) ||
-                                               x.FieldType == typeof( uint[] ) ||
-                                               x.FieldType.IsEnum ||
-                                               x.FieldType.IsArray && x.FieldType.GetElementType().IsEnum
-                                         ).
-                                    ToArray();
+                MemberInfo[] fis = t.GetMembers( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).
+                                     Where(
+                                           IsCorrectMemberType
+                                          ).
+                                     ToArray();
 
-                foreach ( FieldInfo fieldInfo in fis )
+                foreach ( MemberInfo fieldInfo in fis )
                 {
+                    ( Type fieldType, Action < object, object > setDel ) = GetInvocable( fieldInfo );
+
                     foreach ( ArgumentAttribute attr in fieldInfo.GetCustomAttributes < ArgumentAttribute >() )
                     {
                         string name;
@@ -105,65 +93,65 @@ namespace VisCPU.Utility.ArgumentParser
 
                         if ( parts.ContainsKey( name ) )
                         {
-                            if ( fieldInfo.FieldType == typeof( string ) )
+                            if ( fieldType == typeof( string ) )
                             {
-                                fieldInfo.SetValue( o, string.Concat( parts[name].Select( x => x + " " ) ).Trim() );
+                                setDel( o, string.Concat( parts[name].Select( x => x + " " ) ).Trim() );
                             }
-                            else if ( fieldInfo.FieldType == typeof( bool ) )
+                            else if ( fieldType == typeof( bool ) )
                             {
-                                fieldInfo.SetValue( o, parts[name].Length == 0 || bool.Parse( parts[name].First() ) );
+                                setDel( o, parts[name].Length == 0 || bool.Parse( parts[name].First() ) );
                             }
-                            else if ( fieldInfo.FieldType == typeof( uint ) )
+                            else if ( fieldType == typeof( uint ) )
                             {
-                                fieldInfo.SetValue( o, parts[name].First().ParseUInt() );
+                                setDel( o, parts[name].First().ParseUInt() );
                             }
-                            else if ( fieldInfo.FieldType.IsEnum )
+                            else if ( fieldType.IsEnum )
                             {
-                                fieldInfo.SetValue(
-                                                   o,
-                                                   Enum.ToObject(
-                                                                 fieldInfo.FieldType,
-                                                                 parts[name].
-                                                                     Select(
-                                                                            x => ( int ) Enum.Parse(
-                                                                                 fieldInfo.FieldType,
-                                                                                 x,
-                                                                                 true
-                                                                                )
-                                                                           ).
-                                                                     Aggregate( ( a, x ) => a |= x )
-                                                                )
-                                                  );
+                                setDel(
+                                       o,
+                                       Enum.ToObject(
+                                                     fieldType,
+                                                     parts[name].
+                                                         Select(
+                                                                x => ( int ) Enum.Parse(
+                                                                     fieldType,
+                                                                     x,
+                                                                     true
+                                                                    )
+                                                               ).
+                                                         Aggregate( ( a, x ) => a |= x )
+                                                    )
+                                      );
                             }
-                            else if ( fieldInfo.FieldType == typeof( string[] ) )
+                            else if ( fieldType == typeof( string[] ) )
                             {
-                                fieldInfo.SetValue( o, parts[name] );
+                                setDel( o, parts[name] );
                             }
-                            else if ( fieldInfo.FieldType == typeof( bool[] ) )
+                            else if ( fieldType == typeof( bool[] ) )
                             {
-                                fieldInfo.SetValue( o, parts[name].Select( bool.Parse ).ToArray() );
+                                setDel( o, parts[name].Select( bool.Parse ).ToArray() );
                             }
-                            else if ( fieldInfo.FieldType == typeof( uint[] ) )
+                            else if ( fieldType == typeof( uint[] ) )
                             {
-                                fieldInfo.SetValue( o, parts[name].Select( uint.Parse ).ToArray() );
+                                setDel( o, parts[name].Select( uint.Parse ).ToArray() );
                             }
-                            else if ( fieldInfo.FieldType.IsArray && fieldInfo.FieldType.GetElementType().IsEnum )
+                            else if ( fieldType.IsArray && fieldType.GetElementType().IsEnum )
                             {
-                                fieldInfo.SetValue(
-                                                   o,
-                                                   Enum.ToObject(
-                                                                 fieldInfo.FieldType.GetElementType(),
-                                                                 parts[name].
-                                                                     Select(
-                                                                            x => ( int ) Enum.Parse(
-                                                                                 fieldInfo.FieldType.GetElementType(),
-                                                                                 x,
-                                                                                 true
-                                                                                )
-                                                                           ).
-                                                                     ToArray()
-                                                                )
-                                                  );
+                                setDel(
+                                       o,
+                                       Enum.ToObject(
+                                                     fieldType.GetElementType(),
+                                                     parts[name].
+                                                         Select(
+                                                                x => ( int ) Enum.Parse(
+                                                                     fieldType.GetElementType(),
+                                                                     x,
+                                                                     true
+                                                                    )
+                                                               ).
+                                                         ToArray()
+                                                    )
+                                      );
                             }
                         }
                     }
@@ -193,6 +181,54 @@ namespace VisCPU.Utility.ArgumentParser
 
             parts.Add( lastArgName, p.ToArray() );
             Parse( parts, objs );
+        }
+
+        #endregion
+
+        #region Private
+
+        private static (Type, Action < object, object >) GetInvocable( MemberInfo mi )
+        {
+            if ( mi is PropertyInfo pi )
+            {
+                return ( pi.PropertyType, pi.SetValue );
+            }
+
+            if ( mi is FieldInfo fi )
+            {
+                return ( fi.FieldType, fi.SetValue );
+            }
+
+            return ( typeof( object ), ( o, o1 ) => { } );
+        }
+
+        private static bool IsCorrectFieldType( FieldInfo x )
+        {
+            return x.FieldType == typeof( string ) ||
+                   x.FieldType == typeof( string[] ) ||
+                   x.FieldType == typeof( bool ) ||
+                   x.FieldType == typeof( bool[] ) ||
+                   x.FieldType == typeof( uint ) ||
+                   x.FieldType == typeof( uint[] ) ||
+                   x.FieldType.IsEnum ||
+                   x.FieldType.IsArray && x.FieldType.GetElementType().IsEnum;
+        }
+
+        private static bool IsCorrectMemberType( MemberInfo x )
+        {
+            return x is FieldInfo fi ? IsCorrectFieldType( fi ) : x is PropertyInfo pi && IsCorrectPropertyType( pi );
+        }
+
+        private static bool IsCorrectPropertyType( PropertyInfo x )
+        {
+            return x.PropertyType == typeof( string ) ||
+                   x.PropertyType == typeof( string[] ) ||
+                   x.PropertyType == typeof( bool ) ||
+                   x.PropertyType == typeof( bool[] ) ||
+                   x.PropertyType == typeof( uint ) ||
+                   x.PropertyType == typeof( uint[] ) ||
+                   x.PropertyType.IsEnum ||
+                   x.PropertyType.IsArray && x.PropertyType.GetElementType().IsEnum && x.CanWrite;
         }
 
         #endregion

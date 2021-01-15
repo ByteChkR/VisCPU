@@ -13,7 +13,7 @@ namespace VisCPU.Peripherals.Events
 
         public InvalidPeripheralWriteEvent( uint address, uint data, Peripheral peripheral ) : base(
              $"Can not write data '0x{Convert.ToString( data, 16 )}' to address '0x{Convert.ToString( address, 16 )}' mapped to peripheral '{peripheral}'",
-             WarningEventKeys.PERIPHERAL_INVALID_WRITE
+             WarningEventKeys.s_PeripheralInvalidWrite
             )
         {
         }

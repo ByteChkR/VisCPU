@@ -12,14 +12,14 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// <summary>
         ///     The Definition Token
         /// </summary>
-        public readonly VariableDefinitionToken value;
+        public readonly VariableDefinitionToken VariableDefinition;
 
         public readonly HLExpression[] Initializer;
 
         /// <summary>
         ///     The Variable Value
         /// </summary>
-        public override IHLToken Value => value.Name;
+        public override IHlToken Value => VariableDefinition.Name;
 
         #region Public
 
@@ -27,11 +27,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        /// <param name="value">Variable Value</param>
-        public HLVarDefOperand( VariableDefinitionToken value, HLExpression[] initializer ) : base( value.SourceIndex )
+        /// <param name="variableDefinition">Variable Value</param>
+        public HLVarDefOperand( VariableDefinitionToken variableDefinition, HLExpression[] initializer ) :
+            base( variableDefinition.SourceIndex )
         {
             Initializer = initializer;
-            this.value = value;
+            VariableDefinition = variableDefinition;
         }
 
         public override string ToString()

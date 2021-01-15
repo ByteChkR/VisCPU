@@ -13,7 +13,7 @@ namespace VisCPU.HL.Importer.Events
 
         public ImporterTypeInvalidEvent( Type item ) : base(
                                                             $"Invalid Importer Type: '{item}'",
-                                                            ErrorEventKeys.IMPORTER_INVALID_TYPE,
+                                                            ErrorEventKeys.s_ImporterInvalidType,
                                                             false
                                                            )
         {

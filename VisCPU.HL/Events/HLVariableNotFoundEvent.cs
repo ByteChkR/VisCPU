@@ -11,7 +11,7 @@ namespace VisCPU.HL.Events
 
         public HLVariableNotFoundEvent( string varName, bool canContinue ) : base(
              $"Can not find variable: {varName}",
-             ErrorEventKeys.HL_VARIABLE_NOT_FOUND,
+             ErrorEventKeys.s_HlVariableNotFound,
              canContinue
             )
         {

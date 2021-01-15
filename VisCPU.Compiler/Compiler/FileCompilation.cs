@@ -18,7 +18,7 @@ namespace VisCPU.Compiler.Compiler
     {
 
         public readonly Dictionary < string, AddressItem > Constants = new Dictionary < string, AddressItem >();
-        public readonly List < uint > DataSection = new List < uint >();
+
         public readonly Dictionary < string, AddressItem > DataSectionHeader = new Dictionary < string, AddressItem >();
         public readonly List < FileReference > FileReferences = new List < FileReference >();
         public readonly Dictionary < string, AddressItem > Labels = new Dictionary < string, AddressItem >();
@@ -27,6 +27,8 @@ namespace VisCPU.Compiler.Compiler
 
         public readonly string Source;
         public readonly List < AToken[] > Tokens;
+
+        public List < uint > DataSection { get; } = new List < uint >();
 
         protected override LoggerSystems SubSystem => LoggerSystems.FileCompilation;
 

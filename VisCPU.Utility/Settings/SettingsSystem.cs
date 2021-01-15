@@ -12,7 +12,7 @@ namespace VisCPU.Utility.Settings
     public static class SettingsSystem
     {
 
-        private struct SettingsEntry
+        private struct SettingsEntry : IEquatable < SettingsEntry >
         {
 
             public readonly string DefaultFile;
@@ -27,18 +27,37 @@ namespace VisCPU.Utility.Settings
                 FileLoader = loader;
             }
 
+            public bool Equals( SettingsEntry other )
+            {
+                return DefaultFile == other.DefaultFile && Equals( FileLoader, other.FileLoader );
+            }
+
+            public override bool Equals( object obj )
+            {
+                return obj is SettingsEntry other && Equals( other );
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return ( ( DefaultFile != null ? DefaultFile.GetHashCode() : 0 ) * 397 ) ^
+                           ( FileLoader != null ? FileLoader.GetHashCode() : 0 );
+                }
+            }
+
         }
 
-        private static readonly Dictionary < Type, SettingsEntry > defaultLoaderMap =
+        private static readonly Dictionary < Type, SettingsEntry > s_DefaultLoaderMap =
             new Dictionary < Type, SettingsEntry >();
 
-        public static bool EnableIO { get; set; } = true;
+        public static bool EnableIo { get; set; } = true;
 
         #region Public
 
         public static bool DefaultExists( Type t )
         {
-            return defaultLoaderMap.ContainsKey( t );
+            return s_DefaultLoaderMap.ContainsKey( t );
         }
 
         public static bool DefaultExists < T >()
@@ -48,7 +67,7 @@ namespace VisCPU.Utility.Settings
 
         public static bool DefaultFileExists( Type t )
         {
-            return defaultLoaderMap.ContainsKey( t ) && File.Exists( defaultLoaderMap[t].DefaultFile );
+            return s_DefaultLoaderMap.ContainsKey( t ) && File.Exists( s_DefaultLoaderMap[t].DefaultFile );
         }
 
         public static bool DefaultFileExists < T >()
@@ -60,7 +79,7 @@ namespace VisCPU.Utility.Settings
         {
             if ( DefaultExists < T >() )
             {
-                return defaultLoaderMap[typeof( T )].DefaultFile;
+                return s_DefaultLoaderMap[typeof( T )].DefaultFile;
             }
 
             return null;
@@ -83,16 +102,16 @@ namespace VisCPU.Utility.Settings
 
         public static object GetSettings( Type t )
         {
-            if ( defaultLoaderMap.ContainsKey( t ) )
+            if ( s_DefaultLoaderMap.ContainsKey( t ) )
             {
-                if ( defaultLoaderMap[t].CachedObject != null )
+                if ( s_DefaultLoaderMap[t].CachedObject != null )
                 {
-                    return defaultLoaderMap[t].CachedObject;
+                    return s_DefaultLoaderMap[t].CachedObject;
                 }
 
-                SettingsEntry e = defaultLoaderMap[t];
-                e.CachedObject = GetSettings( defaultLoaderMap[t].FileLoader, t, defaultLoaderMap[t].DefaultFile );
-                defaultLoaderMap[t] = e;
+                SettingsEntry e = s_DefaultLoaderMap[t];
+                e.CachedObject = GetSettings( s_DefaultLoaderMap[t].FileLoader, t, s_DefaultLoaderMap[t].DefaultFile );
+                s_DefaultLoaderMap[t] = e;
 
                 return e.CachedObject;
             }
@@ -104,9 +123,9 @@ namespace VisCPU.Utility.Settings
 
         public static object GetSettings( Type t, string file )
         {
-            if ( defaultLoaderMap.ContainsKey( t ) )
+            if ( s_DefaultLoaderMap.ContainsKey( t ) )
             {
-                return GetSettings( defaultLoaderMap[t].FileLoader, t, file );
+                return GetSettings( s_DefaultLoaderMap[t].FileLoader, t, file );
             }
 
             EventManager < ErrorEvent >.SendEvent( new SettingsLoaderNotFoundEvent( t ) );
@@ -116,7 +135,7 @@ namespace VisCPU.Utility.Settings
 
         public static object GetSettings( SettingsLoader loader, Type t, string file )
         {
-            if ( EnableIO )
+            if ( EnableIo )
             {
                 return loader.LoadSettings( t, file );
             }
@@ -138,7 +157,7 @@ namespace VisCPU.Utility.Settings
 
         public static void RegisterDefaultLoader( Type t, SettingsLoader loader, string defaultFile )
         {
-            defaultLoaderMap[t] = new SettingsEntry( defaultFile, loader );
+            s_DefaultLoaderMap[t] = new SettingsEntry( defaultFile, loader );
         }
 
         public static void RegisterDefaultLoader(
@@ -147,7 +166,7 @@ namespace VisCPU.Utility.Settings
             string defaultFile,
             object defaultValues )
         {
-            defaultLoaderMap[t] = new SettingsEntry( defaultFile, loader );
+            s_DefaultLoaderMap[t] = new SettingsEntry( defaultFile, loader );
 
             if ( !DefaultFileExists( t ) )
             {
@@ -157,9 +176,13 @@ namespace VisCPU.Utility.Settings
 
         public static void SaveSettings( object o )
         {
-            if ( defaultLoaderMap.ContainsKey( o.GetType() ) )
+            if ( s_DefaultLoaderMap.ContainsKey( o.GetType() ) )
             {
-                SaveSettings( defaultLoaderMap[o.GetType()].FileLoader, o, defaultLoaderMap[o.GetType()].DefaultFile );
+                SaveSettings(
+                             s_DefaultLoaderMap[o.GetType()].FileLoader,
+                             o,
+                             s_DefaultLoaderMap[o.GetType()].DefaultFile
+                            );
 
                 return;
             }
@@ -169,9 +192,9 @@ namespace VisCPU.Utility.Settings
 
         public static void SaveSettings( object o, string file )
         {
-            if ( defaultLoaderMap.ContainsKey( o.GetType() ) )
+            if ( s_DefaultLoaderMap.ContainsKey( o.GetType() ) )
             {
-                SaveSettings( defaultLoaderMap[o.GetType()].FileLoader, o, file );
+                SaveSettings( s_DefaultLoaderMap[o.GetType()].FileLoader, o, file );
             }
 
             EventManager < ErrorEvent >.SendEvent( new SettingsLoaderNotFoundEvent( o.GetType(), true ) );
@@ -179,7 +202,7 @@ namespace VisCPU.Utility.Settings
 
         public static void SaveSettings( SettingsLoader loader, object o, string file )
         {
-            if ( EnableIO )
+            if ( EnableIo )
             {
                 loader.SaveSettings( o, file );
             }

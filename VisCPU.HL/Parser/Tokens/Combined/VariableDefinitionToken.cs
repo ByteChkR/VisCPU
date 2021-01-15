@@ -10,24 +10,24 @@
         /// <summary>
         ///     Initializer Expression
         /// </summary>
-        public readonly IHLToken[] InitializerExpression;
+        public readonly IHlToken[] InitializerExpression;
 
         /// <summary>
         ///     Variable Modifiers
         /// </summary>
-        public readonly IHLToken[] Modifiers;
+        public readonly IHlToken[] Modifiers;
 
         /// <summary>
         ///     Variable Name
         /// </summary>
-        public readonly IHLToken Name;
+        public readonly IHlToken Name;
 
-        public readonly IHLToken Size;
+        public readonly IHlToken Size;
 
         /// <summary>
         ///     Variable Type Name
         /// </summary>
-        public readonly IHLToken TypeName;
+        public readonly IHlToken TypeName;
 
         #region Public
 
@@ -40,12 +40,12 @@
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="initializerExpression">Initializer Expression</param>
         public VariableDefinitionToken(
-            IHLToken name,
-            IHLToken typeName,
-            IHLToken[] modifiers,
-            IHLToken[] subtokens,
-            IHLToken[] initializerExpression,
-            IHLToken size = null ) : base(
+            IHlToken name,
+            IHlToken typeName,
+            IHlToken[] modifiers,
+            IHlToken[] subtokens,
+            IHlToken[] initializerExpression,
+            IHlToken size = null ) : base(
                                           HLTokenType.OpVariableDefinition,
                                           subtokens,
                                           typeName.SourceIndex

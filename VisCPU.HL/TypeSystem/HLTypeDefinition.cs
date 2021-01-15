@@ -11,10 +11,10 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HLTypeDefinition : IHLTypeSystemInstance
+    public class HLTypeDefinition : IHlTypeSystemInstance
     {
 
-        private readonly List < HLMemberDefinition > Members = new List < HLMemberDefinition >();
+        private readonly List < HLMemberDefinition > m_Members = new List < HLMemberDefinition >();
 
         public string Name { get; }
 
@@ -83,26 +83,26 @@ namespace VisCPU.HL.TypeSystem
 
         public void AddMember( HLMemberDefinition member )
         {
-            if ( Members.Any( x => x.Name == member.Name ) )
+            if ( m_Members.Any( x => x.Name == member.Name ) )
             {
                 EventManager < ErrorEvent >.SendEvent( new HLMemberRedefinitionEvent( member.Name, Name ) );
 
                 return;
             }
 
-            Members.Add( member );
+            m_Members.Add( member );
         }
 
-        public List < IHLToken > GetChildren()
+        public List < IHlToken > GetChildren()
         {
-            return Members.Cast < IHLToken >().ToList();
+            return m_Members.Cast < IHlToken >().ToList();
         }
 
         public uint GetOffset( string name )
         {
             uint ret = 0;
 
-            foreach ( HLMemberDefinition hlMemberDefinition in Members )
+            foreach ( HLMemberDefinition hlMemberDefinition in m_Members )
             {
                 if ( hlMemberDefinition.Name == name )
                 {
@@ -119,17 +119,17 @@ namespace VisCPU.HL.TypeSystem
 
         public HLMemberDefinition GetPrivateOrPublicMember( string memberName )
         {
-            return Members.First( x => x.Name == memberName );
+            return m_Members.First( x => x.Name == memberName );
         }
 
         public HLMemberDefinition GetPublicMember( string memberName )
         {
-            return Members.First( x => x.IsPublic && x.Name == memberName );
+            return m_Members.First( x => x.IsPublic && x.Name == memberName );
         }
 
         public virtual uint GetSize()
         {
-            return ( uint ) Members.Sum( x => x.GetSize() );
+            return ( uint ) m_Members.Sum( x => x.GetSize() );
         }
 
         #endregion

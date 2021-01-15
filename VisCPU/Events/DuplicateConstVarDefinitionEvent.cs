@@ -11,7 +11,7 @@ namespace VisCPU.Events
 
         public DuplicateConstVarDefinitionEvent( string varName ) : base(
                                                                          $"Duplicate Definition of: {varName}",
-                                                                         ErrorEventKeys.HL_CONST_VAR_DUPLICATE_DEF,
+                                                                         ErrorEventKeys.s_HlConstVarDuplicateDef,
                                                                          false
                                                                         )
         {

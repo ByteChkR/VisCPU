@@ -11,7 +11,7 @@ namespace VisCPU.HL.Importer.Events
 
         public ImporterNotFoundEvent( string item ) : base(
                                                            $"Can not Find Importer for Item: '{item}'",
-                                                           ErrorEventKeys.IMPORTER_NOT_FOUND,
+                                                           ErrorEventKeys.s_ImporterNotFound,
                                                            false
                                                           )
         {

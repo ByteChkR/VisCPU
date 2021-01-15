@@ -11,7 +11,7 @@ namespace VisCPU.Utility.UriResolvers.Events
 
         public UriResolverFailureEvent( string uri ) : base(
                                                             $"Can not resolve uri '{uri}'",
-                                                            ErrorEventKeys.URI_RESOLVER_FAILURE,
+                                                            ErrorEventKeys.s_UriResolverFailure,
                                                             true
                                                            )
         {

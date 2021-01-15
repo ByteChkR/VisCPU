@@ -23,9 +23,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List < IHlToken > GetChildren()
         {
-            return new List < IHLToken >();
+            return new List < IHlToken >();
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public HLPropertyDefinition( string name, HLTypeDefinition type, IHLToken[] mods ) : base( name, mods )
+        public HLPropertyDefinition( string name, HLTypeDefinition type, IHlToken[] mods ) : base( name, mods )
         {
             PropertyType = type;
         }

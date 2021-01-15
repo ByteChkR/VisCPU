@@ -27,17 +27,17 @@ namespace VisCPU.HL.Compiler.Variables
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLVarDefOperand expr )
         {
-            if ( expr.value.Modifiers.All( x => x.Type != HLTokenType.OpConstMod ) )
+            if ( expr.VariableDefinition.Modifiers.All( x => x.Type != HLTokenType.OpConstMod ) )
             {
-                string asmVarName = expr.value.Name.ToString();
+                string asmVarName = expr.VariableDefinition.Name.ToString();
 
                 if ( compilation.ContainsLocalVariable( asmVarName ) )
                 {
                     EventManager < ErrorEvent >.SendEvent( new DuplicateVarDefinitionEvent( asmVarName ) );
                 }
 
-                HLTypeDefinition vdef = TypeSystem.GetType( expr.value.TypeName.ToString() );
-                uint arrSize = expr.value.Size?.ToString().ParseUInt() ?? 1;
+                HLTypeDefinition vdef = TypeSystem.GetType( expr.VariableDefinition.TypeName.ToString() );
+                uint arrSize = expr.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
 
                 if ( arrSize != 1 )
                 {
@@ -78,7 +78,9 @@ namespace VisCPU.HL.Compiler.Variables
                                            asmVarName,
                                            arrSize,
                                            vdef,
-                                           expr.value.Modifiers.Any( x => x.Type == HLTokenType.OpPublicMod )
+                                           expr.VariableDefinition.Modifiers.Any(
+                                                x => x.Type == HLTokenType.OpPublicMod
+                                               )
                                           );
 
                 if ( init != null )
@@ -89,9 +91,9 @@ namespace VisCPU.HL.Compiler.Variables
                 return dvar;
             }
 
-            if ( expr.value.Modifiers.Any( x => x.Type == HLTokenType.OpConstMod ) )
+            if ( expr.VariableDefinition.Modifiers.Any( x => x.Type == HLTokenType.OpConstMod ) )
             {
-                string asmVarName = expr.value.Name.ToString();
+                string asmVarName = expr.VariableDefinition.Name.ToString();
 
                 if ( compilation.ConstValTypes.ContainsKey( asmVarName ) )
                 {
@@ -100,13 +102,15 @@ namespace VisCPU.HL.Compiler.Variables
 
                 compilation.ConstValTypes.Add(
                                               asmVarName,
-                                              expr.value.InitializerExpression.FirstOrDefault()?.ToString()
+                                              expr.VariableDefinition.InitializerExpression.FirstOrDefault()?.ToString()
                                              );
 
                 return new ExpressionTarget(
                                             asmVarName,
                                             true,
-                                            compilation.TypeSystem.GetType( expr.value.TypeName.ToString() )
+                                            compilation.TypeSystem.GetType(
+                                                                           expr.VariableDefinition.TypeName.ToString()
+                                                                          )
                                            );
             }
 

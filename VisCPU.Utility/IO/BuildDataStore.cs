@@ -7,25 +7,25 @@ namespace VisCPU.Utility.IO
     public class BuildDataStore
     {
 
-        private string RootDir;
-        private IBuildDataStoreType[] Types;
+        private string m_RootDir;
+        private IBuildDataStoreType[] m_Types;
 
         #region Public
 
         public BuildDataStore( string rootDir, params IBuildDataStoreType[] types )
         {
-            Types = types;
-            RootDir = Directory.CreateDirectory( Path.Combine( rootDir, "build" ) ).FullName;
+            m_Types = types;
+            m_RootDir = Directory.CreateDirectory( Path.Combine( rootDir, "build" ) ).FullName;
 
-            foreach ( IBuildDataStoreType buildDataStoreType in Types )
+            foreach ( IBuildDataStoreType buildDataStoreType in m_Types )
             {
-                buildDataStoreType.Initialize( RootDir );
+                buildDataStoreType.Initialize( m_RootDir );
             }
         }
 
         public string GetStorePath( string storeType, string file )
         {
-            return Types.First( x => x.TypeName == storeType ).GetStoreDirectory( RootDir, file );
+            return m_Types.First( x => x.TypeName == storeType ).GetStoreDirectory( m_RootDir, file );
         }
 
         #endregion

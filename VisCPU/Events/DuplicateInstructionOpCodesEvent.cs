@@ -12,7 +12,7 @@ namespace VisCPU.Events
 
         public DuplicateInstructionOpCodesEvent( Instruction a, Instruction b, byte opCode ) : base(
              $"Instruction {a.Key} and {b.Key} share the same OpCode {opCode}",
-             ErrorEventKeys.INSTR_DUPLIVATE_OP_CODE,
+             ErrorEventKeys.s_InstrDuplivateOpCode,
              false
             )
         {

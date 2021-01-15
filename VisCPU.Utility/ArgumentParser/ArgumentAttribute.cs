@@ -3,7 +3,7 @@
 namespace VisCPU.Utility.ArgumentParser
 {
 
-    [AttributeUsage( AttributeTargets.Field, AllowMultiple = true )]
+    [AttributeUsage( AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true )]
     public class ArgumentAttribute : Attribute
     {
 

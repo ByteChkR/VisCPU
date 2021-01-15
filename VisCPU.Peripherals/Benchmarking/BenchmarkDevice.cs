@@ -14,8 +14,8 @@ namespace VisCPU.Peripherals.Benchmarking
         public class BenchmarkResultEvent : Event
         {
 
-            private string Name;
-            private TimeSpan Time;
+            private string m_Name;
+            private TimeSpan m_Time;
 
             public override string EventKey => "benchmark-run-result";
 
@@ -23,13 +23,13 @@ namespace VisCPU.Peripherals.Benchmarking
 
             public BenchmarkResultEvent( string name, TimeSpan time )
             {
-                Name = name;
-                Time = time;
+                m_Name = name;
+                m_Time = time;
             }
 
             public override string ToString()
             {
-                return $"{Name}: {Time.Milliseconds} ms";
+                return $"{m_Name}: {m_Time.Milliseconds} ms";
             }
 
             #endregion
@@ -42,8 +42,8 @@ namespace VisCPU.Peripherals.Benchmarking
         private const uint RUN_CLEAR_NAME = 0xFFFF4003;
         private const uint RUN_SET_NAME = 0xFFFF4004;
 
-        private readonly StringBuilder benchmarkName = new StringBuilder();
-        private readonly Stopwatch stopWatch = new Stopwatch();
+        private readonly StringBuilder m_BenchmarkName = new StringBuilder();
+        private readonly Stopwatch m_StopWatch = new Stopwatch();
 
         #region Public
 
@@ -71,7 +71,7 @@ namespace VisCPU.Peripherals.Benchmarking
         {
             if ( address == RUN_SET_NAME )
             {
-                benchmarkName.Append( ( char ) data );
+                m_BenchmarkName.Append( ( char ) data );
             }
             else if ( address == RUN_END )
             {
@@ -83,7 +83,7 @@ namespace VisCPU.Peripherals.Benchmarking
             }
             else if ( address == RUN_CLEAR_NAME )
             {
-                benchmarkName.Clear();
+                m_BenchmarkName.Clear();
             }
             else
             {
@@ -97,27 +97,27 @@ namespace VisCPU.Peripherals.Benchmarking
 
         private void BeginTimer()
         {
-            if ( stopWatch.IsRunning )
+            if ( m_StopWatch.IsRunning )
             {
                 throw new Exception( "Benchmark Run Already Running, Finish the Benchmark to start the next one" );
             }
 
-            stopWatch.Restart();
+            m_StopWatch.Restart();
         }
 
         private void PrintResult()
         {
-            EventManager.SendEvent( new BenchmarkResultEvent( benchmarkName.ToString(), stopWatch.Elapsed ) );
+            EventManager.SendEvent( new BenchmarkResultEvent( m_BenchmarkName.ToString(), m_StopWatch.Elapsed ) );
         }
 
         private void StopTimer()
         {
-            if ( !stopWatch.IsRunning )
+            if ( !m_StopWatch.IsRunning )
             {
                 throw new Exception( "No Benchmark Run running." );
             }
 
-            stopWatch.Stop();
+            m_StopWatch.Stop();
             PrintResult();
         }
 

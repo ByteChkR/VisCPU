@@ -8,15 +8,15 @@ namespace VisCPU.Utility.UriResolvers
     public class HttpUriResolver : UriResolver
     {
 
-        private readonly WebClient client = new WebClient();
+        private readonly WebClient m_Client = new WebClient();
 
-        private readonly string tempPath;
+        private readonly string m_TempPath;
 
         #region Public
 
         public HttpUriResolver( string tempPath )
         {
-            this.tempPath = tempPath;
+            m_TempPath = tempPath;
         }
 
         #endregion
@@ -37,15 +37,15 @@ namespace VisCPU.Utility.UriResolvers
         {
             string name = Path.GetFileName( uri );
 
-            return Path.Combine( tempPath, name );
+            return Path.Combine( m_TempPath, name );
         }
 
         protected override string Resolve( string uri )
         {
             string dst = GetFilePath( uri );
-            Directory.CreateDirectory( tempPath );
+            Directory.CreateDirectory( m_TempPath );
             Log( $"Resolving File: {uri} => {dst}" );
-            client.DownloadFile( uri, dst );
+            m_Client.DownloadFile( uri, dst );
 
             return dst;
         }

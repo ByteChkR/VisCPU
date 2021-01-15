@@ -11,9 +11,9 @@ namespace VisCPU.Compiler.Compiler
     public class Compilation
     {
 
-        private readonly AssemblyGenerator assemblyGenerator;
+        private readonly AssemblyGenerator m_AssemblyGenerator;
 
-        private readonly Linker linker;
+        private readonly Linker m_Linker;
 
         public List < byte > ByteCode { get; private set; }
 
@@ -25,8 +25,8 @@ namespace VisCPU.Compiler.Compiler
 
         public Compilation( Linker linker, AssemblyGenerator assemblyGenerator )
         {
-            this.linker = linker;
-            this.assemblyGenerator = assemblyGenerator;
+            m_Linker = linker;
+            m_AssemblyGenerator = assemblyGenerator;
         }
 
         public static LinkerInfo CreateFromResult( LinkerResult result )
@@ -46,12 +46,12 @@ namespace VisCPU.Compiler.Compiler
 
             LinkerTarget linkTarget = new LinkerTarget( fc, fc.Reference.LinkerArguments );
 
-            LinkerResult linkResult = linker.Link( linkTarget, this );
+            LinkerResult linkResult = m_Linker.Link( linkTarget, this );
 
             LinkerInfo = CreateFromResult( linkResult );
             LinkerResult = linkResult;
 
-            ByteCode = assemblyGenerator.Assemble( linkResult );
+            ByteCode = m_AssemblyGenerator.Assemble( linkResult );
         }
 
         #endregion

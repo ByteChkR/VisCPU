@@ -31,12 +31,12 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Operator Collection
         /// </summary>
-        private readonly HLExpressionOperatorCollection OpCollection;
+        private readonly HLExpressionOperatorCollection m_OpCollection;
 
         /// <summary>
         ///     The Current Token
         /// </summary>
-        public IHLToken CurrentToken { get; private set; }
+        public IHlToken CurrentToken { get; private set; }
 
         #region Public
 
@@ -52,7 +52,7 @@ namespace VisCPU.HL.Parser
             HLExpressionValueCreator valueCreator,
             HLExpressionOperator[] operators )
         {
-            OpCollection = new HLExpressionOperatorCollection( operators );
+            m_OpCollection = new HLExpressionOperatorCollection( operators );
             ValueCreator = valueCreator;
             Reader = reader;
             CurrentToken = reader.GetNext();
@@ -123,26 +123,26 @@ namespace VisCPU.HL.Parser
         /// <returns></returns>
         public HLExpression[] Parse()
         {
-            if ( CurrentToken.Type == HLTokenType.EOF )
+            if ( CurrentToken.Type == HLTokenType.Eof )
             {
                 return new HLExpression[0];
             }
 
-            List < HLExpression > ret = new List < HLExpression > { ParseExpr( OpCollection.Highest ) };
+            List < HLExpression > ret = new List < HLExpression > { ParseExpr( m_OpCollection.Highest ) };
 
-            while ( CurrentToken.Type != HLTokenType.EOF )
+            while ( CurrentToken.Type != HLTokenType.Eof )
             {
                 if ( CurrentToken.Type == HLTokenType.OpSemicolon || CurrentToken.Type == HLTokenType.OpBlockToken )
                 {
                     Eat( CurrentToken.Type );
                 }
 
-                if ( CurrentToken.Type == HLTokenType.EOF )
+                if ( CurrentToken.Type == HLTokenType.Eof )
                 {
                     break;
                 }
 
-                ret.Add( ParseExpr( OpCollection.Highest ) );
+                ret.Add( ParseExpr( m_OpCollection.Highest ) );
             }
 
             return ret.ToArray();
@@ -157,7 +157,7 @@ namespace VisCPU.HL.Parser
         {
             if ( stopAt == -1 )
             {
-                stopAt = OpCollection.Highest;
+                stopAt = m_OpCollection.Highest;
             }
 
             HLExpression node = ValueCreator.CreateValue( this );
@@ -169,16 +169,16 @@ namespace VisCPU.HL.Parser
                 return node;
             }
 
-            int end = Math.Min( stopAt, OpCollection.Highest );
+            int end = Math.Min( stopAt, m_OpCollection.Highest );
 
             for ( int i = 0; i <= end; i++ )
             {
-                if ( !OpCollection.HasLevel( i ) )
+                if ( !m_OpCollection.HasLevel( i ) )
                 {
                     continue;
                 }
 
-                List < HLExpressionOperator > ops = OpCollection.GetLevel( i );
+                List < HLExpressionOperator > ops = m_OpCollection.GetLevel( i );
                 HLExpressionOperator current = ops.FirstOrDefault( x => x.CanCreate( this, node ) );
 
                 if ( current != null )

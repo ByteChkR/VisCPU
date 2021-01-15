@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Linking.Events
 
         public FileReferencesUnsupportedEvent() : base(
                                                        "Single file linker does not support file references.",
-                                                       ErrorEventKeys.LINKER_FILE_REFERENCES_UNSUPPORTED,
+                                                       ErrorEventKeys.s_LinkerFileReferencesUnsupported,
                                                        false
                                                       )
         {

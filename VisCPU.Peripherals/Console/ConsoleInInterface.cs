@@ -9,18 +9,18 @@ namespace VisCPU.Peripherals.Console
     public class ConsoleInInterface : Peripheral
     {
 
-        private readonly ConsoleInInterfaceSettings settings;
+        private readonly ConsoleInInterfaceSettings m_Settings;
 
         #region Public
 
         public ConsoleInInterface()
         {
-            settings = SettingsSystem.GetSettings < ConsoleInInterfaceSettings >();
+            m_Settings = SettingsSystem.GetSettings < ConsoleInInterfaceSettings >();
         }
 
         public override bool CanRead( uint address )
         {
-            return address == settings.ReadInputAddress || address == settings.InterfacePresentPin;
+            return address == m_Settings.ReadInputAddress || address == m_Settings.InterfacePresentPin;
         }
 
         public override bool CanWrite( uint address )
@@ -30,12 +30,12 @@ namespace VisCPU.Peripherals.Console
 
         public override uint ReadData( uint address )
         {
-            if ( address == settings.InterfacePresentPin )
+            if ( address == m_Settings.InterfacePresentPin )
             {
                 return 1;
             }
 
-            if ( address == settings.ReadInputAddress )
+            if ( address == m_Settings.ReadInputAddress )
             {
                 return ( uint ) System.Console.Read();
             }

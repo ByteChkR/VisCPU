@@ -11,7 +11,7 @@ namespace VisCPU.HL.TypeSystem
     public class HLTypeSystem
     {
 
-        private readonly List < HLTypeDefinition > DefinedTypes = new List < HLTypeDefinition >();
+        private readonly List < HLTypeDefinition > m_DefinedTypes = new List < HLTypeDefinition >();
 
         #region Public
 
@@ -23,7 +23,7 @@ namespace VisCPU.HL.TypeSystem
 
         public HLTypeDefinition CreateEmptyType( string name )
         {
-            if ( DefinedTypes.Any( x => x.Name == name ) )
+            if ( m_DefinedTypes.Any( x => x.Name == name ) )
             {
                 EventManager < ErrorEvent >.SendEvent( new HLTypeRedefinitionEvent( name ) );
 
@@ -39,17 +39,17 @@ namespace VisCPU.HL.TypeSystem
 
         public HLTypeDefinition GetOrAdd( string name )
         {
-            return DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name );
+            return m_DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name );
         }
 
         public HLTypeDefinition GetType( string name )
         {
-            return DefinedTypes.First( x => x.Name == name );
+            return m_DefinedTypes.First( x => x.Name == name );
         }
 
         public bool HasType( string name )
         {
-            return DefinedTypes.Any( x => x.Name == name );
+            return m_DefinedTypes.Any( x => x.Name == name );
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace VisCPU.HL.TypeSystem
 
         private void AddItem( HLTypeDefinition def )
         {
-            DefinedTypes.Add( def );
+            m_DefinedTypes.Add( def );
         }
 
         #endregion

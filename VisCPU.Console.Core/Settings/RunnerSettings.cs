@@ -17,10 +17,10 @@ namespace VisCPU.Console.Core.Settings
     {
 
         [Argument( Name = "run:cpu.interrupt" )]
-        public uint CpuIntAddr = 0x00000000;
+        public uint CpuIntAddr;
 
         [Argument( Name = "run:cpu.reset" )]
-        public uint CpuResetAddr = 0x00000000;
+        public uint CpuResetAddr;
 
         [XmlIgnore]
         [JsonIgnore]
@@ -42,13 +42,13 @@ namespace VisCPU.Console.Core.Settings
         [Argument( Name = "run:i" )]
         [XmlIgnore]
         [JsonIgnore]
-        private readonly string[] inputFiles = null;
+        private readonly string[] m_InputFiles;
 
         [Argument( Name = "run:input-dirs" )]
         [Argument( Name = "run:if" )]
         [XmlIgnore]
         [JsonIgnore]
-        private readonly string[] inputFolders = null;
+        private readonly string[] m_InputFolders;
 
         [XmlIgnore]
         [JsonIgnore]
@@ -58,14 +58,14 @@ namespace VisCPU.Console.Core.Settings
             {
                 List < string > ret = new List < string >();
 
-                if ( inputFolders != null )
+                if ( m_InputFolders != null )
                 {
-                    ret.AddRange( inputFolders.SelectMany( x => Directory.GetFiles( x, "*.txt" ) ) );
+                    ret.AddRange( m_InputFolders.SelectMany( x => Directory.GetFiles( x, "*.txt" ) ) );
                 }
 
-                if ( inputFiles != null )
+                if ( m_InputFiles != null )
                 {
-                    ret.AddRange( inputFiles );
+                    ret.AddRange( m_InputFiles );
                 }
 
                 return ret.ToArray();

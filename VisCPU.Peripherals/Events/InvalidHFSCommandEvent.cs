@@ -12,7 +12,7 @@ namespace VisCPU.Peripherals.Events
 
         public InvalidHFSCommandEvent( HostFileSystemCommands command ) : base(
                                                                                $"Invalid Command: {command}",
-                                                                               ErrorEventKeys.HFS_INVALID_COMMAND,
+                                                                               ErrorEventKeys.s_HfsInvalidCommand,
                                                                                false
                                                                               )
         {

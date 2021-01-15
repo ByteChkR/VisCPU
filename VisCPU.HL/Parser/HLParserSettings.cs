@@ -10,67 +10,67 @@ namespace VisCPU.HL.Parser
     public class HLParserSettings
     {
 
-        private readonly string AbstractModifier = "abstract";
-        private readonly string AsKey = "as";
-        private readonly string BaseKey = "base";
-        private readonly string BreakKey = "break";
-        private readonly string CatchKey = "catch";
-        private readonly string ClassKey = "class";
-        private readonly string ContinueKey = "continue";
-        private readonly string DoKey = "do";
-        private readonly string ElseKey = "else";
-        private readonly string FinallyKey = "finally";
-        private readonly string ForEachKey = "foreach";
-        private readonly string ForKey = "for";
-        private readonly string IfKey = "if";
-        private readonly string InKey = "in";
-        private readonly string IsKey = "is";
-        private readonly string NamespaceKey = "namespace";
-        private readonly string NewKey = "new";
-        private readonly char OperatorAnd = '&';
-        private readonly char OperatorAsterisk = '*';
-        private readonly char OperatorBackSlash = '\\';
-        private readonly char OperatorBang = '!';
-        private readonly char OperatorBlockClose = '}';
-        private readonly char OperatorBlockOpen = '{';
-        private readonly char OperatorBracketsClose = ')';
-        private readonly char OperatorBracketsOpen = '(';
-        private readonly char OperatorCap = '^';
-        private readonly char OperatorColon = ':';
-        private readonly char OperatorComma = ',';
-        private readonly char OperatorDot = '.';
+        private readonly string m_AbstractModifier = "abstract";
+        private readonly string m_AsKey = "as";
+        private readonly string m_BaseKey = "base";
+        private readonly string m_BreakKey = "break";
+        private readonly string m_CatchKey = "catch";
+        private readonly string m_ClassKey = "class";
+        private readonly string m_ContinueKey = "continue";
+        private readonly string m_DoKey = "do";
+        private readonly string m_ElseKey = "else";
+        private readonly string m_FinallyKey = "finally";
+        private readonly string m_ForEachKey = "foreach";
+        private readonly string m_ForKey = "for";
+        private readonly string m_IfKey = "if";
+        private readonly string m_InKey = "in";
+        private readonly string m_IsKey = "is";
+        private readonly string m_NamespaceKey = "namespace";
+        private readonly string m_NewKey = "new";
+        private readonly char m_OperatorAnd = '&';
+        private readonly char m_OperatorAsterisk = '*';
+        private readonly char m_OperatorBackSlash = '\\';
+        private readonly char m_OperatorBang = '!';
+        private readonly char m_OperatorBlockClose = '}';
+        private readonly char m_OperatorBlockOpen = '{';
+        private readonly char m_OperatorBracketsClose = ')';
+        private readonly char m_OperatorBracketsOpen = '(';
+        private readonly char m_OperatorCap = '^';
+        private readonly char m_OperatorColon = ':';
+        private readonly char m_OperatorComma = ',';
+        private readonly char m_OperatorDot = '.';
 
-        private readonly char OperatorDoubleQuote = '"';
-        private readonly char OperatorEquality = '=';
-        private readonly char OperatorFwdSlash = '/';
-        private readonly char OperatorGreaterThan = '>';
-        private readonly char OperatorIndexAccessorClose = ']';
-        private readonly char OperatorIndexAccessorOpen = '[';
-        private readonly string OperatorKey = "operator";
-        private readonly char OperatorLessThan = '<';
-        private readonly char OperatorMinus = '-';
-        private readonly char OperatorNumSign = '#';
-        private readonly char OperatorPercent = '%';
-        private readonly char OperatorPipe = '|';
-        private readonly char OperatorPlus = '+';
-        private readonly char OperatorSemicolon = ';';
-        private readonly char OperatorSingleQuote = '\'';
-        private readonly char OperatorTilde = '~';
-        private readonly string OverrideModifier = "override";
-        private readonly string PrivateModifier = "private";
-        private readonly string ProtectedModifier = "protected";
+        private readonly char m_OperatorDoubleQuote = '"';
+        private readonly char m_OperatorEquality = '=';
+        private readonly char m_OperatorFwdSlash = '/';
+        private readonly char m_OperatorGreaterThan = '>';
+        private readonly char m_OperatorIndexAccessorClose = ']';
+        private readonly char m_OperatorIndexAccessorOpen = '[';
+        private readonly string m_OperatorKey = "operator";
+        private readonly char m_OperatorLessThan = '<';
+        private readonly char m_OperatorMinus = '-';
+        private readonly char m_OperatorNumSign = '#';
+        private readonly char m_OperatorPercent = '%';
+        private readonly char m_OperatorPipe = '|';
+        private readonly char m_OperatorPlus = '+';
+        private readonly char m_OperatorSemicolon = ';';
+        private readonly char m_OperatorSingleQuote = '\'';
+        private readonly char m_OperatorTilde = '~';
+        private readonly string m_OverrideModifier = "override";
+        private readonly string m_PrivateModifier = "private";
+        private readonly string m_ProtectedModifier = "protected";
 
-        private readonly string PublicModifier = "public";
-        private readonly string ReturnKey = "return";
-        private readonly string StaticModifier = "static";
-        private readonly string ConstModifier = "const";
-        private readonly string SwitchKey = "switch";
-        private readonly string ThisKey = "this";
-        private readonly string TryKey = "try";
-        private readonly string UsingKey = "using";
-        private readonly string VirtualModifier = "virtual";
-        private readonly string VoidKey = "void";
-        private readonly string WhileKey = "while";
+        private readonly string m_PublicModifier = "public";
+        private readonly string m_ReturnKey = "return";
+        private readonly string m_StaticModifier = "static";
+        private readonly string m_ConstModifier = "const";
+        private readonly string m_SwitchKey = "switch";
+        private readonly string m_ThisKey = "this";
+        private readonly string m_TryKey = "try";
+        private readonly string m_UsingKey = "using";
+        private readonly string m_VirtualModifier = "virtual";
+        private readonly string m_VoidKey = "void";
+        private readonly string m_WhileKey = "while";
 
         /// <summary>
         ///     Reserved Key Map
@@ -78,38 +78,38 @@ namespace VisCPU.HL.Parser
         public Dictionary < string, HLTokenType > ReservedKeys =>
             new Dictionary < string, HLTokenType >
             {
-                { IfKey, HLTokenType.OpIf },
-                { ElseKey, HLTokenType.OpElse },
-                { ForEachKey, HLTokenType.OpForEach },
-                { ForKey, HLTokenType.OpFor },
-                { InKey, HLTokenType.OpIn },
-                { IsKey, HLTokenType.OpIs },
-                { AsKey, HLTokenType.OpAs },
-                { DoKey, HLTokenType.OpDo },
-                { WhileKey, HLTokenType.OpWhile },
-                { SwitchKey, HLTokenType.OpSwitch },
-                { TryKey, HLTokenType.OpTry },
-                { CatchKey, HLTokenType.OpCatch },
-                { FinallyKey, HLTokenType.OpFinally },
-                { UsingKey, HLTokenType.OpUsing },
-                { NamespaceKey, HLTokenType.OpNamespace },
-                { ClassKey, HLTokenType.OpClass },
-                { ContinueKey, HLTokenType.OpContinue },
-                { BreakKey, HLTokenType.OpBreak },
-                { NewKey, HLTokenType.OpNew },
-                { BaseKey, HLTokenType.OpBase },
-                { ThisKey, HLTokenType.OpThis },
-                { PublicModifier, HLTokenType.OpPublicMod },
-                { PrivateModifier, HLTokenType.OpPrivateMod },
-                { ProtectedModifier, HLTokenType.OpProtectedMod },
-                { VirtualModifier, HLTokenType.OpVirtualMod },
-                { AbstractModifier, HLTokenType.OpAbstractMod },
-                { OverrideModifier, HLTokenType.OpOverrideMod },
-                { StaticModifier, HLTokenType.OpStaticMod },
-                { ConstModifier, HLTokenType.OpConstMod },
-                { ReturnKey, HLTokenType.OpReturn },
-                { VoidKey, HLTokenType.OpTypeVoid },
-                { OperatorKey, HLTokenType.OpOperatorImpl }
+                { m_IfKey, HLTokenType.OpIf },
+                { m_ElseKey, HLTokenType.OpElse },
+                { m_ForEachKey, HLTokenType.OpForEach },
+                { m_ForKey, HLTokenType.OpFor },
+                { m_InKey, HLTokenType.OpIn },
+                { m_IsKey, HLTokenType.OpIs },
+                { m_AsKey, HLTokenType.OpAs },
+                { m_DoKey, HLTokenType.OpDo },
+                { m_WhileKey, HLTokenType.OpWhile },
+                { m_SwitchKey, HLTokenType.OpSwitch },
+                { m_TryKey, HLTokenType.OpTry },
+                { m_CatchKey, HLTokenType.OpCatch },
+                { m_FinallyKey, HLTokenType.OpFinally },
+                { m_UsingKey, HLTokenType.OpUsing },
+                { m_NamespaceKey, HLTokenType.OpNamespace },
+                { m_ClassKey, HLTokenType.OpClass },
+                { m_ContinueKey, HLTokenType.OpContinue },
+                { m_BreakKey, HLTokenType.OpBreak },
+                { m_NewKey, HLTokenType.OpNew },
+                { m_BaseKey, HLTokenType.OpBase },
+                { m_ThisKey, HLTokenType.OpThis },
+                { m_PublicModifier, HLTokenType.OpPublicMod },
+                { m_PrivateModifier, HLTokenType.OpPrivateMod },
+                { m_ProtectedModifier, HLTokenType.OpProtectedMod },
+                { m_VirtualModifier, HLTokenType.OpVirtualMod },
+                { m_AbstractModifier, HLTokenType.OpAbstractMod },
+                { m_OverrideModifier, HLTokenType.OpOverrideMod },
+                { m_StaticModifier, HLTokenType.OpStaticMod },
+                { m_ConstModifier, HLTokenType.OpConstMod },
+                { m_ReturnKey, HLTokenType.OpReturn },
+                { m_VoidKey, HLTokenType.OpTypeVoid },
+                { m_OperatorKey, HLTokenType.OpOperatorImpl }
             };
 
         /// <summary>
@@ -118,10 +118,10 @@ namespace VisCPU.HL.Parser
         public Dictionary < string, HLTokenType > MemberModifiers =>
             new Dictionary < string, HLTokenType >
             {
-                { ConstModifier, HLTokenType.OpConstMod },
-                { StaticModifier, HLTokenType.OpStaticMod },
-                { PublicModifier, HLTokenType.OpPublicMod },
-                { PrivateModifier, HLTokenType.OpPrivateMod }
+                { m_ConstModifier, HLTokenType.OpConstMod },
+                { m_StaticModifier, HLTokenType.OpStaticMod },
+                { m_PublicModifier, HLTokenType.OpPublicMod },
+                { m_PrivateModifier, HLTokenType.OpPrivateMod }
             };
 
         /// <summary>
@@ -130,11 +130,11 @@ namespace VisCPU.HL.Parser
         public Dictionary < string, HLTokenType > ClassModifiers =>
             new Dictionary < string, HLTokenType >
             {
-                { PublicModifier, HLTokenType.OpPublicMod },
-                { PrivateModifier, HLTokenType.OpPrivateMod },
-                { ProtectedModifier, HLTokenType.OpProtectedMod },
-                { AbstractModifier, HLTokenType.OpAbstractMod },
-                { StaticModifier, HLTokenType.OpStaticMod }
+                { m_PublicModifier, HLTokenType.OpPublicMod },
+                { m_PrivateModifier, HLTokenType.OpPrivateMod },
+                { m_ProtectedModifier, HLTokenType.OpProtectedMod },
+                { m_AbstractModifier, HLTokenType.OpAbstractMod },
+                { m_StaticModifier, HLTokenType.OpStaticMod }
             };
 
         /// <summary>
@@ -149,33 +149,33 @@ namespace VisCPU.HL.Parser
         public Dictionary < char, HLTokenType > ReservedSymbols =>
             new Dictionary < char, HLTokenType >
             {
-                { OperatorNumSign, HLTokenType.OpNumSign },
-                { OperatorBackSlash, HLTokenType.OpBackSlash },
-                { OperatorSingleQuote, HLTokenType.OpSingleQuote },
-                { OperatorDoubleQuote, HLTokenType.OpDoubleQuote },
-                { OperatorBlockOpen, HLTokenType.OpBlockBracketOpen },
-                { OperatorBlockClose, HLTokenType.OpBlockBracketClose },
-                { OperatorBracketsOpen, HLTokenType.OpBracketOpen },
-                { OperatorBracketsClose, HLTokenType.OpBracketClose },
-                { OperatorIndexAccessorOpen, HLTokenType.OpIndexerBracketOpen },
-                { OperatorIndexAccessorClose, HLTokenType.OpIndexerBracketClose },
-                { OperatorAsterisk, HLTokenType.OpAsterisk },
-                { OperatorFwdSlash, HLTokenType.OpFwdSlash },
-                { OperatorSemicolon, HLTokenType.OpSemicolon },
-                { OperatorComma, HLTokenType.OpComma },
-                { OperatorColon, HLTokenType.OpColon },
-                { OperatorDot, HLTokenType.OpDot },
-                { OperatorPlus, HLTokenType.OpPlus },
-                { OperatorMinus, HLTokenType.OpMinus },
-                { OperatorPercent, HLTokenType.OpPercent },
-                { OperatorEquality, HLTokenType.OpEquality },
-                { OperatorAnd, HLTokenType.OpAnd },
-                { OperatorPipe, HLTokenType.OpPipe },
-                { OperatorCap, HLTokenType.OpCap },
-                { OperatorBang, HLTokenType.OpBang },
-                { OperatorLessThan, HLTokenType.OpLessThan },
-                { OperatorGreaterThan, HLTokenType.OpGreaterThan },
-                { OperatorTilde, HLTokenType.OpTilde }
+                { m_OperatorNumSign, HLTokenType.OpNumSign },
+                { m_OperatorBackSlash, HLTokenType.OpBackSlash },
+                { m_OperatorSingleQuote, HLTokenType.OpSingleQuote },
+                { m_OperatorDoubleQuote, HLTokenType.OpDoubleQuote },
+                { m_OperatorBlockOpen, HLTokenType.OpBlockBracketOpen },
+                { m_OperatorBlockClose, HLTokenType.OpBlockBracketClose },
+                { m_OperatorBracketsOpen, HLTokenType.OpBracketOpen },
+                { m_OperatorBracketsClose, HLTokenType.OpBracketClose },
+                { m_OperatorIndexAccessorOpen, HLTokenType.OpIndexerBracketOpen },
+                { m_OperatorIndexAccessorClose, HLTokenType.OpIndexerBracketClose },
+                { m_OperatorAsterisk, HLTokenType.OpAsterisk },
+                { m_OperatorFwdSlash, HLTokenType.OpFwdSlash },
+                { m_OperatorSemicolon, HLTokenType.OpSemicolon },
+                { m_OperatorComma, HLTokenType.OpComma },
+                { m_OperatorColon, HLTokenType.OpColon },
+                { m_OperatorDot, HLTokenType.OpDot },
+                { m_OperatorPlus, HLTokenType.OpPlus },
+                { m_OperatorMinus, HLTokenType.OpMinus },
+                { m_OperatorPercent, HLTokenType.OpPercent },
+                { m_OperatorEquality, HLTokenType.OpEquality },
+                { m_OperatorAnd, HLTokenType.OpAnd },
+                { m_OperatorPipe, HLTokenType.OpPipe },
+                { m_OperatorCap, HLTokenType.OpCap },
+                { m_OperatorBang, HLTokenType.OpBang },
+                { m_OperatorLessThan, HLTokenType.OpLessThan },
+                { m_OperatorGreaterThan, HLTokenType.OpGreaterThan },
+                { m_OperatorTilde, HLTokenType.OpTilde }
             };
 
     }

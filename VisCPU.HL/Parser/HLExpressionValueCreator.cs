@@ -65,7 +65,7 @@ namespace VisCPU.HL.Parser
 
             if ( parser.CurrentToken.Type == HLTokenType.OpReturn )
             {
-                IHLToken rt = parser.CurrentToken;
+                IHlToken rt = parser.CurrentToken;
                 parser.Eat( HLTokenType.OpReturn );
 
                 if ( parser.CurrentToken.Type == HLTokenType.OpSemicolon )
@@ -78,7 +78,7 @@ namespace VisCPU.HL.Parser
 
             if ( parser.CurrentToken.Type == HLTokenType.OpContinue )
             {
-                IHLToken ct = parser.CurrentToken;
+                IHlToken ct = parser.CurrentToken;
                 parser.Eat( HLTokenType.OpContinue );
 
                 return new HLContinueOp( ct.SourceIndex );
@@ -86,7 +86,7 @@ namespace VisCPU.HL.Parser
 
             if ( parser.CurrentToken.Type == HLTokenType.OpBreak )
             {
-                IHLToken bt = parser.CurrentToken;
+                IHlToken bt = parser.CurrentToken;
                 parser.Eat( HLTokenType.OpBreak );
 
                 return new HLBreakOp( bt.SourceIndex );
@@ -131,7 +131,7 @@ namespace VisCPU.HL.Parser
 
             if ( parser.CurrentToken.Type == HLTokenType.OpWord )
             {
-                IHLToken item = parser.CurrentToken;
+                IHlToken item = parser.CurrentToken;
                 parser.Eat( parser.CurrentToken.Type );
 
                 HLExpression token = new HLVarOperand( item, item.SourceIndex );

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
@@ -36,23 +37,23 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List < IHlToken > GetChildren()
         {
-            return new List < IHLToken > { Condition }.Concat( Block ).ToList();
+            return new List < IHlToken > { Condition }.Concat( Block ).ToList();
         }
 
         public override string ToString()
         {
-            string ret = $"while({Condition})(";
+            StringBuilder ret = new StringBuilder( $"while({Condition})(" );
 
-            foreach ( HLExpression xLangExpression in Block )
+            foreach ( HLExpression hlExpression in Block )
             {
-                ret += xLangExpression;
+                ret.Append( hlExpression );
             }
 
-            ret += ")";
+            ret.Append( ')' );
 
-            return ret;
+            return ret.ToString();
         }
 
         #endregion

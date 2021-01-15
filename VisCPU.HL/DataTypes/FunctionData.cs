@@ -6,15 +6,14 @@ namespace VisCPU.HL.DataTypes
     public class FunctionData : IExternalData
     {
 
-        //public bool HasReturnValue;
         public int ParameterCount;
         public bool Public;
-        private readonly Func < string[] > functionCompiler;
+        private readonly Func < string[] > m_FunctionCompiler;
 
-        private readonly string name;
-        private string[] compiledOutput;
+        private readonly string m_Name;
+        private string[] m_CompiledOutput;
 
-        public ExternalDataType DataType => ExternalDataType.FUNCTION;
+        public ExternalDataType DataType => ExternalDataType.Function;
 
         #region Public
 
@@ -25,33 +24,31 @@ namespace VisCPU.HL.DataTypes
             int parameterCount,
             bool hasReturnValue )
         {
-            this.name = name;
+            m_Name = name;
             Public = isPublic;
-            functionCompiler = funcCompiler;
-            compiledOutput = null;
+            m_FunctionCompiler = funcCompiler;
+            m_CompiledOutput = null;
             ParameterCount = parameterCount;
-
-            //HasReturnValue = hasReturnValue;
         }
 
         public string[] GetCompiledOutput()
         {
-            if ( compiledOutput == null )
+            if ( m_CompiledOutput == null )
             {
-                compiledOutput = functionCompiler();
+                m_CompiledOutput = m_FunctionCompiler();
             }
 
-            return compiledOutput;
+            return m_CompiledOutput;
         }
 
         public string GetFinalName()
         {
-            return name;
+            return m_Name;
         }
 
         public string GetName()
         {
-            return name;
+            return m_Name;
         }
 
         #endregion

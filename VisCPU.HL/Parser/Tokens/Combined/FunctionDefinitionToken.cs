@@ -4,21 +4,21 @@
     public class FunctionDefinitionToken : CombinedToken
     {
 
-        public readonly IHLToken[] Arguments;
-        public readonly IHLToken[] Block;
+        public readonly IHlToken[] Arguments;
+        public readonly IHlToken[] Block;
 
-        public readonly IHLToken FunctionName;
-        public readonly IHLToken FunctionReturnType;
-        public readonly IHLToken[] Mods;
+        public readonly IHlToken FunctionName;
+        public readonly IHlToken FunctionReturnType;
+        public readonly IHlToken[] Mods;
 
         #region Public
 
         public FunctionDefinitionToken(
-            IHLToken name,
-            IHLToken retType,
-            IHLToken[] args,
-            IHLToken[] mods,
-            IHLToken[] subtokens,
+            IHlToken name,
+            IHlToken retType,
+            IHlToken[] args,
+            IHlToken[] mods,
+            IHlToken[] subtokens,
             int start ) : base(
                                HLTokenType.OpFunctionDefinition,
                                subtokens,

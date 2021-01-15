@@ -11,12 +11,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// <summary>
         ///     The Definition Token
         /// </summary>
-        public readonly FunctionDefinitionToken value;
+        public readonly FunctionDefinitionToken FunctionDefinition;
 
         /// <summary>
         ///     The Variable Value
         /// </summary>
-        public override IHLToken Value => value;
+        public override IHlToken Value => FunctionDefinition;
 
         #region Public
 
@@ -24,10 +24,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        /// <param name="value">Variable Value</param>
-        public HLFuncDefOperand( FunctionDefinitionToken value, HLExpression[] block ) : base( value.SourceIndex )
+        /// <param name="functionDefinition">Variable Value</param>
+        public HLFuncDefOperand( FunctionDefinitionToken functionDefinition, HLExpression[] block ) :
+            base( functionDefinition.SourceIndex )
         {
-            this.value = value;
+            FunctionDefinition = functionDefinition;
             Block = block;
         }
 

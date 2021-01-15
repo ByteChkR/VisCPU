@@ -28,8 +28,8 @@ namespace VisCPU.HL.Compiler.Logic
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
-            string label = compilation.GetUniqueName( "bexpr_or" );
-            string labelF = compilation.GetUniqueName( "bexpr_or_f" );
+            string label = HLCompilation.GetUniqueName( "bexpr_or" );
+            string labelF = HLCompilation.GetUniqueName( "bexpr_or_f" );
             compilation.ProgramCode.Add( $"BNZ {target.ResultAddress} {label}" );
             compilation.ProgramCode.Add( $"BEZ {rTarget.ResultAddress} {labelF}" );
             compilation.ProgramCode.Add( $".{label} linker:hide" );

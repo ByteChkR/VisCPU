@@ -4,8 +4,8 @@
     public enum ExternalDataType
     {
 
-        FUNCTION,
-        VARIABLE
+        Function,
+        Variable
 
     }
 

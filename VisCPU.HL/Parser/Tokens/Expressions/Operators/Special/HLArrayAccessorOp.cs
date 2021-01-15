@@ -46,9 +46,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List < IHlToken > GetChildren()
         {
-            return ParameterList.Cast < IHLToken >().Concat( new[] { Left } ).ToList();
+            return ParameterList.Cast < IHlToken >().Concat( new[] { Left } ).ToList();
         }
 
         #endregion

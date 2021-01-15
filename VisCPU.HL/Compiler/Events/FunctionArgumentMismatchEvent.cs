@@ -11,7 +11,7 @@ namespace VisCPU.HL.Compiler.Events
 
         public FunctionArgumentMismatchEvent( string errMessage ) : base(
                                                                          errMessage,
-                                                                         ErrorEventKeys.HL_FUNCTION_ARGUMENT_MISMATCH,
+                                                                         ErrorEventKeys.s_HlFunctionArgumentMismatch,
                                                                          false
                                                                         )
         {

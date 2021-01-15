@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Assembler.Events
 
         public InvalidArgumentCountEvent( int line ) : base(
                                                             $"Too many arguments in line: '{line}'",
-                                                            ErrorEventKeys.ASM_GEN_TOO_MANY_ARGS,
+                                                            ErrorEventKeys.s_AsmGenTooManyArgs,
                                                             false
                                                            )
         {

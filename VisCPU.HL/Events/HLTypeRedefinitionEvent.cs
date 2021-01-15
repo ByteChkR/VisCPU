@@ -11,7 +11,7 @@ namespace VisCPU.HL.Events
 
         public HLTypeRedefinitionEvent( string typeName ) : base(
                                                                  $"Duplicate definition of type {typeName}",
-                                                                 ErrorEventKeys.HL_TYPE_DUPLICATE_DEF,
+                                                                 ErrorEventKeys.s_HlTypeDuplicateDef,
                                                                  false
                                                                 )
         {

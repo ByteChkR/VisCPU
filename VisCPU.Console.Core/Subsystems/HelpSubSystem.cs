@@ -8,13 +8,13 @@ namespace VisCPU.Console.Core.Subsystems
     public class HelpSubSystem : ConsoleSubsystem
     {
 
-        private readonly ConsoleSystem owner;
+        private readonly ConsoleSystem m_Owner;
 
         #region Public
 
         public HelpSubSystem( ConsoleSystem owner )
         {
-            this.owner = owner;
+            m_Owner = owner;
         }
 
         public static void WriteSubsystem( string subName, params object[] settings )
@@ -35,7 +35,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Run( IEnumerable < string > arguments )
         {
-            owner.Help();
+            m_Owner.Help();
         }
 
         #endregion

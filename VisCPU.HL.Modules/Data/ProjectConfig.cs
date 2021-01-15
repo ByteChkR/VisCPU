@@ -45,7 +45,7 @@ namespace VisCPU.HL.Modules.Data
                                                                             }
                                                                         };
 
-        private static readonly Dictionary < string, BuildJobRunner > BuildJobRunners =
+        private static readonly Dictionary < string, BuildJobRunner > s_BuildJobRunners =
             new Dictionary < string, BuildJobRunner >();
 
         #region Public
@@ -68,12 +68,12 @@ namespace VisCPU.HL.Modules.Data
 
         public static void AddRunner( BuildJobRunner runner )
         {
-            if ( BuildJobRunners.ContainsKey( runner.RunnerName ) )
+            if ( s_BuildJobRunners.ContainsKey( runner.RunnerName ) )
             {
                 return;
             }
 
-            BuildJobRunners[runner.RunnerName] = runner;
+            s_BuildJobRunners[runner.RunnerName] = runner;
         }
 
         public static ProjectConfig Deserialize( string data )
@@ -101,7 +101,7 @@ namespace VisCPU.HL.Modules.Data
 
         public void RunJob( string rootDir, ProjectBuildTarget buildTarget, BuildJob job, bool writeDebug = false )
         {
-            if ( !BuildJobRunners.ContainsKey( job.BuildJobRunner ) )
+            if ( !s_BuildJobRunners.ContainsKey( job.BuildJobRunner ) )
             {
                 Logger.LogMessage( LoggerSystems.ModuleSystem, "Can not Find Job Runner: {0}", job.BuildJobRunner );
 
@@ -115,7 +115,7 @@ namespace VisCPU.HL.Modules.Data
                 Logger.LogMessage( LoggerSystems.ModuleSystem, "Running Job: {0}", job.JobName );
             }
 
-            BuildJobRunners[job.BuildJobRunner].RunJob( rootDir, this, buildTarget, job );
+            s_BuildJobRunners[job.BuildJobRunner].RunJob( rootDir, this, buildTarget, job );
         }
 
         public void RunTarget( string rootDir, string target = null )

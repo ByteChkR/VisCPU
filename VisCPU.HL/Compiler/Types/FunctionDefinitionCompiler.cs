@@ -17,18 +17,18 @@ namespace VisCPU.HL.Compiler.Types
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLFuncDefOperand expr )
         {
-            bool isPublic = expr.value.Mods.Any( x => x.ToString() == "public" );
+            bool isPublic = expr.FunctionDefinition.Mods.Any( x => x.ToString() == "public" );
 
-            HLCompilation fComp = new HLCompilation( compilation, expr.value.FunctionName.ToString() );
+            HLCompilation fComp = new HLCompilation( compilation, expr.FunctionDefinition.FunctionName.ToString() );
 
-            compilation.FunctionMap[expr.value.FunctionName.ToString()] = new FunctionData(
-                 expr.value.FunctionName.ToString(),
+            compilation.FunctionMap[expr.FunctionDefinition.FunctionName.ToString()] = new FunctionData(
+                 expr.FunctionDefinition.FunctionName.ToString(),
                  isPublic,
                  () =>
                  {
-                     Log( $"Importing Function: {expr.value.FunctionName}" );
+                     Log( $"Importing Function: {expr.FunctionDefinition.FunctionName}" );
 
-                     foreach ( IHLToken valueArgument in expr.value.Arguments )
+                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
                      {
                          VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
                          string key = vdef.Name.ToString();
@@ -44,7 +44,7 @@ namespace VisCPU.HL.Compiler.Types
                      List < string > parsedVal =
                          fComp.Parse( expr.Block, false, null ).Replace( "\r", "" ).Split( '\n' ).ToList();
 
-                     foreach ( IHLToken valueArgument in expr.value.Arguments )
+                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
                      {
                          parsedVal.Insert(
                                           0,
@@ -56,8 +56,8 @@ namespace VisCPU.HL.Compiler.Types
 
                      return parsedVal.ToArray();
                  },
-                 expr.value.Arguments.Length,
-                 expr.value.FunctionReturnType.Type != HLTokenType.OpTypeVoid
+                 expr.FunctionDefinition.Arguments.Length,
+                 expr.FunctionDefinition.FunctionReturnType.Type != HLTokenType.OpTypeVoid
                 );
 
             return new ExpressionTarget();

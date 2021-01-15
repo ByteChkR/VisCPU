@@ -107,7 +107,7 @@ namespace VisCPU.Console.Core.Subsystems
                     continue;
                 }
 
-                foreach ( ( string stepName, BuildSteps step ) in settings.BuildSteps )
+                foreach ( ( string stepName, BuildSteps step ) in settings.InstanceBuildSteps )
                 {
                     string newFile = step( original, file );
 

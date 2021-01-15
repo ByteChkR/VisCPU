@@ -8,7 +8,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
     public class CompiletimeFunctionCompilerCollection
     {
 
-        private Dictionary < string, ICompiletimeFunctionCompiler > compilers =
+        private Dictionary < string, ICompiletimeFunctionCompiler > m_Compilers =
             new Dictionary < string, ICompiletimeFunctionCompiler >();
 
         #region Public
@@ -25,17 +25,17 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
         public void AddCompiler( ICompiletimeFunctionCompiler comp )
         {
-            compilers[comp.FuncName] = comp;
+            m_Compilers[comp.FuncName] = comp;
         }
 
         public ExpressionTarget Compile( string func, HLCompilation compilation, HLInvocationOp expr )
         {
-            return compilers[func].Compile( compilation, expr );
+            return m_Compilers[func].Compile( compilation, expr );
         }
 
         public bool IsCompiletimeFunction( string key )
         {
-            return compilers.ContainsKey( key );
+            return m_Compilers.ContainsKey( key );
         }
 
         #endregion

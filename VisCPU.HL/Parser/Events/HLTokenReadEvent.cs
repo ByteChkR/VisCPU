@@ -20,17 +20,17 @@ namespace VisCPU.HL.Parser.Events
         /// <summary>
         ///     The Expected Tokens
         /// </summary>
-        private readonly HLTokenType[] expected;
+        private readonly HLTokenType[] m_Expected;
 
         /// <summary>
         ///     The Sequence that was unexpected
         /// </summary>
-        private readonly IEnumerable < IHLToken > sequence;
+        private readonly IEnumerable < IHlToken > m_Sequence;
 
         /// <summary>
         ///     The Token that led to the Exception
         /// </summary>
-        private readonly HLTokenType unmatched;
+        private readonly HLTokenType m_Unmatched;
 
         #region Public
 
@@ -42,19 +42,19 @@ namespace VisCPU.HL.Parser.Events
         /// <param name="unmatched">Unmatched Token</param>
         /// <param name="start">Start index in source</param>
         public HLTokenReadEvent(
-            IEnumerable < IHLToken > tokenSequence,
+            IEnumerable < IHlToken > tokenSequence,
             HLTokenType[] expected,
             HLTokenType unmatched,
             int start ) :
             base(
                  $"Expected '{GetExpectedTokenString( expected )}' but got '{unmatched} at index {start}'",
-                 ErrorEventKeys.HL_INVALID_TOKEN,
+                 ErrorEventKeys.s_HlInvalidToken,
                  false
                 )
         {
-            sequence = tokenSequence;
-            this.expected = expected;
-            this.unmatched = unmatched;
+            m_Sequence = tokenSequence;
+            m_Expected = expected;
+            m_Unmatched = unmatched;
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace VisCPU.HL.Parser.Events
         /// <param name="unmatched">Unmatched Token</param>
         /// <param name="start">Start index in source</param>
         public HLTokenReadEvent(
-            IEnumerable < IHLToken > tokenSequence,
+            IEnumerable < IHlToken > tokenSequence,
             HLTokenType expected,
             HLTokenType unmatched,
             int start ) : this(
@@ -79,7 +79,7 @@ namespace VisCPU.HL.Parser.Events
 
         public HLTokenReadEvent( HLTokenType expected, HLTokenType got ) : base(
                                                                                 $"Expected Token '{expected}' but got '{got}'",
-                                                                                ErrorEventKeys.HL_INVALID_TOKEN,
+                                                                                ErrorEventKeys.s_HlInvalidToken,
                                                                                 false
                                                                                )
         {

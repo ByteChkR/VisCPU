@@ -11,7 +11,7 @@ namespace VisCPU.HL.Importer.Events
 
         public InvalidLinkImporterArgumentsEvent( string args ) : base(
                                                                        $"Invalid Arguments: {args}",
-                                                                       ErrorEventKeys.LINKER_IMPORTER_INVALID_ARGUMENTS,
+                                                                       ErrorEventKeys.s_LinkerImporterInvalidArguments,
                                                                        false
                                                                       )
         {

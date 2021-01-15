@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Compiler.Events
 
         public InvalidDataDefinitionEvent( string name ) : base(
                                                                 $"Invalid Memory Region Arguments: {name}",
-                                                                ErrorEventKeys.VASM_INVALID_DATA_DEFINITION,
+                                                                ErrorEventKeys.s_VasmInvalidDataDefinition,
                                                                 false
                                                                )
         {

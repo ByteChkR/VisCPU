@@ -15,8 +15,8 @@ namespace VisCPU.Utility.Logging
         Linker = 16,
         Parser = 32,
         Console = 64,
-        HL_Compiler = 128,
-        HL_Parser = 256,
+        HlCompiler = 128,
+        HlParser = 256,
         Peripherals = 512,
         MathInstructions = 1024,
         LogicInstructions = 2048,
@@ -26,7 +26,7 @@ namespace VisCPU.Utility.Logging
         BranchInstructions = 32768,
         MemoryInstructions = 65536,
         UriResolver = 131072,
-        HL_Importer = 262144,
+        HlImporter = 262144,
         ModuleSystem = 524288,
         Emit = 1048576,
 
@@ -38,7 +38,7 @@ namespace VisCPU.Utility.Logging
                           BranchInstructions |
                           MemoryInstructions,
 
-        HL = HL_Parser | HL_Compiler | HL_Importer,
+        Hl = HlParser | HlCompiler | HlImporter,
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 

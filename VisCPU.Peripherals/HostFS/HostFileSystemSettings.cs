@@ -10,26 +10,26 @@ namespace VisCPU.Peripherals.HostFS
     public class HostFileSystemSettings
     {
 
-        [Argument( Name = "hostfs:root.use" )]
-        public bool UseRootPath;
+        [field: Argument( Name = "hostfs:root.use" )]
+        public bool UseRootPath { get; }
 
-        [Argument( Name = "hostfs:delete.enable" )]
-        public bool EnableDeleteFiles;
+        [field: Argument( Name = "hostfs:delete.enable" )]
+        public bool EnableDeleteFiles { get; }
 
-        [Argument( Name = "hostfs:root" )]
-        public string RootPath = AppDomain.CurrentDomain.BaseDirectory;
+        [field: Argument( Name = "hostfs:root" )]
+        public string RootPath { get; } = AppDomain.CurrentDomain.BaseDirectory;
 
-        [Argument( Name = "hostfs:pin.present" )]
-        public uint PinPresent = 0xFFFF3000;
+        [field: Argument( Name = "hostfs:pin.present" )]
+        public uint PinPresent { get; } = 0xFFFF3000;
 
-        [Argument( Name = "hostfs:pin.status" )]
-        public uint PinStatus = 0xFFFF3001;
+        [field: Argument( Name = "hostfs:pin.status" )]
+        public uint PinStatus { get; } = 0xFFFF3001;
 
-        [Argument( Name = "hostfs:pin.data" )]
-        public uint PinData = 0xFFFF3002;
+        [field: Argument( Name = "hostfs:pin.data" )]
+        public uint PinData { get; } = 0xFFFF3002;
 
-        [Argument( Name = "hostfs:pin.cmd" )]
-        public uint PinCmd = 0xFFFF3003;
+        [field: Argument( Name = "hostfs:pin.cmd" )]
+        public uint PinCmd { get; } = 0xFFFF3003;
 
         #region Public
 

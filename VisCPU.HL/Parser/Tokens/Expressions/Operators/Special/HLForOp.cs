@@ -13,22 +13,22 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Continue Condition
         /// </summary>
-        private readonly HLExpression Condition;
+        private readonly HLExpression m_Condition;
 
         /// <summary>
         ///     The Expression Body
         /// </summary>
-        private readonly HLExpression[] ExprBody;
+        private readonly HLExpression[] m_ExprBody;
 
         /// <summary>
         ///     Variable Declaration
         /// </summary>
-        private readonly HLExpression VDecl;
+        private readonly HLExpression m_VDecl;
 
         /// <summary>
         ///     Variable Change Expression
         /// </summary>
-        private readonly HLExpression VInc;
+        private readonly HLExpression m_VInc;
 
         #region Public
 
@@ -48,24 +48,24 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             HLExpression[] exprBody,
             int sourceIdx ) : base( sourceIdx )
         {
-            Condition = condition;
-            VDecl = vDecl;
-            VInc = vInc;
-            ExprBody = exprBody;
+            m_Condition = condition;
+            m_VDecl = vDecl;
+            m_VInc = vInc;
+            m_ExprBody = exprBody;
         }
 
         /// <summary>
         ///     Returns Child Tokens of this Token
         /// </summary>
         /// <returns></returns>
-        public override List < IHLToken > GetChildren()
+        public override List < IHlToken > GetChildren()
         {
-            return new List < IHLToken >
+            return new List < IHlToken >
                    {
-                       VDecl,
-                       Condition,
-                       VInc
-                   }.Concat( ExprBody ).
+                       m_VDecl,
+                       m_Condition,
+                       m_VInc
+                   }.Concat( m_ExprBody ).
                      ToList();
         }
 

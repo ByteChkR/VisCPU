@@ -14,7 +14,7 @@ namespace VisCPU.HL.Compiler.Special
     public class InvocationExpressionCompiler : HLExpressionCompiler < HLInvocationOp >
     {
 
-        private readonly CompiletimeFunctionCompilerCollection ctFuncCollection =
+        private readonly CompiletimeFunctionCompilerCollection m_CtFuncCollection =
             new CompiletimeFunctionCompilerCollection();
 
         #region Public
@@ -23,9 +23,9 @@ namespace VisCPU.HL.Compiler.Special
         {
             string target = expr.Left.ToString();
 
-            if ( ctFuncCollection.IsCompiletimeFunction( target ) )
+            if ( m_CtFuncCollection.IsCompiletimeFunction( target ) )
             {
-                return ctFuncCollection.Compile( target, compilation, expr );
+                return m_CtFuncCollection.Compile( target, compilation, expr );
             }
 
             bool isInternalFunc = compilation.FunctionMap.ContainsKey( target );
@@ -33,7 +33,7 @@ namespace VisCPU.HL.Compiler.Special
             IExternalData externalSymbol =
                 compilation.ExternalSymbols.FirstOrDefault(
                                                            x => x.GetName() == target &&
-                                                                x.DataType == ExternalDataType.FUNCTION
+                                                                x.DataType == ExternalDataType.Function
                                                           );
 
             if ( isInternalFunc || externalSymbol != null )

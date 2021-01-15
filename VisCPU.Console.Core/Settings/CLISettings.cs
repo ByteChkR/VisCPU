@@ -11,10 +11,10 @@ namespace VisCPU.Console.Core.Settings
     {
 
         [Argument( Name = "cli:loop" )]
-        public bool Continuous = false;
+        public bool Continuous;
 
         [Argument( Name = "cli:waitOnExit" )]
-        public bool WaitOnExit = false;
+        public bool WaitOnExit;
 
         [Argument( Name = "cli:configs" )]
         public string[] Configs = new[] { "./default.args" };

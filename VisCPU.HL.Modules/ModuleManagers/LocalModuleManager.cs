@@ -18,7 +18,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
     public class LocalModuleManager : ModuleManager
     {
 
-        private readonly List < ModulePackage > packageList;
+        private readonly List < ModulePackage > m_PackageList;
 
         #region Public
 
@@ -38,12 +38,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
                 File.WriteAllText( modListPath, JsonConvert.SerializeObject( new List < ModulePackage >() ) );
             }
 
-            packageList =
+            m_PackageList =
                 JsonConvert.DeserializeObject < List < ModulePackage > >(
                                                                          File.ReadAllText( modListPath )
                                                                         );
 
-            packageList.ForEach( x => x.Manager = this );
+            m_PackageList.ForEach( x => x.Manager = this );
         }
 
         public override void AddPackage( ProjectConfig target, string moduleDataPath )
@@ -53,7 +53,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             if ( !HasPackage( target.ProjectName ) )
             {
                 package = new ModulePackage( this, target.ProjectName, new string[0] );
-                packageList.Add( package );
+                m_PackageList.Add( package );
             }
             else
             {
@@ -82,7 +82,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             Directory.CreateDirectory( data );
             File.Copy( moduleDataPath, GetTargetDataUri( target ) );
             ProjectConfig.Save( GetTargetInfoUri( package, target.ProjectVersion ), target );
-            SavePackageList( packageList );
+            SavePackageList( m_PackageList );
         }
 
         public override void Get( ProjectConfig target, string targetDir )
@@ -111,12 +111,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override ModulePackage GetPackage( string name )
         {
-            return packageList.First( x => x.ModuleName == name );
+            return m_PackageList.First( x => x.ModuleName == name );
         }
 
         public override IEnumerable < ModulePackage > GetPackages()
         {
-            return packageList;
+            return m_PackageList;
         }
 
         public override string GetTargetDataPath( ProjectConfig target )
@@ -136,15 +136,15 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override bool HasPackage( string name )
         {
-            return packageList.Any( x => x.ModuleName == name );
+            return m_PackageList.Any( x => x.ModuleName == name );
         }
 
         public override void RemovePackage( string moduleName )
         {
             ModulePackage p = GetPackage( moduleName );
             Directory.Delete( GetModulePackagePath( p ), true );
-            packageList.Remove( p );
-            SavePackageList( packageList );
+            m_PackageList.Remove( p );
+            SavePackageList( m_PackageList );
         }
 
         public override void RemoveTarget( string moduleName, string moduleVersion )
@@ -159,7 +159,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             }
 
             p.ModuleVersions.RemoveAll( x => x == moduleVersion );
-            SavePackageList( packageList );
+            SavePackageList( m_PackageList );
         }
 
         public override void Restore( ProjectConfig target, string rootDir )

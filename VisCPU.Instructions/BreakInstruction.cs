@@ -16,7 +16,7 @@
 
         public override void Process( CPU cpu )
         {
-            cpu.Set( CPU.Flags.BREAK );
+            cpu.Set( CPU.Flags.Break );
         }
 
         #endregion

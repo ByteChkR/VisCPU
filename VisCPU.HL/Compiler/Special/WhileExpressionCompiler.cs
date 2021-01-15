@@ -11,8 +11,8 @@ namespace VisCPU.HL.Compiler.Special
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLWhileOp expr )
         {
-            string startLabel = compilation.GetUniqueName( "while_start" );
-            string endLabel = compilation.GetUniqueName( "while_end" );
+            string startLabel = HLCompilation.GetUniqueName( "while_start" );
+            string endLabel = HLCompilation.GetUniqueName( "while_end" );
 
             compilation.ProgramCode.Add( $".{startLabel} linker:hide" );
 

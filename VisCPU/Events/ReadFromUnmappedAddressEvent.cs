@@ -13,7 +13,7 @@ namespace VisCPU.Events
 
         public ReadFromUnmappedAddressEvent( uint address ) : base(
                                                                    $"Tried to read from address 0x{Convert.ToString( address, 16 )} which is not mapped.",
-                                                                   WarningEventKeys.MEMORY_BUS_READ_UNMAPPED
+                                                                   WarningEventKeys.s_MemoryBusReadUnmapped
                                                                   )
         {
         }

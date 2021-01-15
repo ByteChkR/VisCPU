@@ -10,12 +10,12 @@ namespace VisCPU.Compiler.Linking
     public class LinkerSettings
     {
 
-        [Argument( Name = "linker:export-info" )]
-        [Argument( Name = "linker:export" )]
-        public bool ExportLinkerInfo;
+        [field: Argument( Name = "linker:no-hide" )]
+        public bool NoHiddenItems { get; }
 
-        [Argument( Name = "linker:no-hide" )]
-        public bool NoHiddenItems;
+        [field: Argument( Name = "linker:export-info" )]
+        [field: Argument( Name = "linker:export" )]
+        public bool ExportLinkerInfo { get; set; }
 
         #region Public
 

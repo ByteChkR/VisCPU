@@ -11,13 +11,13 @@ namespace VisCPU.HL.Parser.Tokens.Combined
     /// <summary>
     ///     Represents a Token that is constructed from its child tokens
     /// </summary>
-    public abstract class CombinedToken : IHLToken
+    public abstract class CombinedToken : IHlToken
     {
 
         /// <summary>
         ///     The Child Tokens
         /// </summary>
-        public readonly List < IHLToken > SubTokens;
+        public readonly List < IHlToken > SubTokens;
 
         /// <summary>
         ///     Start index in the source
@@ -35,7 +35,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         ///     Returns the Child Tokens
         /// </summary>
         /// <returns></returns>
-        public List < IHLToken > GetChildren()
+        public List < IHlToken > GetChildren()
         {
             return SubTokens;
         }
@@ -68,7 +68,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <param name="type">Token Type</param>
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="start">Start index in the source</param>
-        protected CombinedToken( HLTokenType type, IHLToken[] subtokens, int start )
+        protected CombinedToken( HLTokenType type, IHlToken[] subtokens, int start )
         {
             SubTokens = subtokens.ToList();
             SourceIndex = start;
@@ -80,11 +80,11 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        protected static string Unpack( IHLToken[] t )
+        protected static string Unpack( IHlToken[] t )
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach ( IHLToken token in t )
+            foreach ( IHlToken token in t )
             {
                 sb.Append( token );
             }

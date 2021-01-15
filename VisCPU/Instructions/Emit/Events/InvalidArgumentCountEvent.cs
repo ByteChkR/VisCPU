@@ -11,7 +11,7 @@ namespace VisCPU.Instructions.Emit.Events
 
         public InvalidArgumentCountEvent( string instr, int argCount ) : base(
                                                                               $"Too many arguments for Instruction '{instr}' argument count: {argCount}",
-                                                                              ErrorEventKeys.ASM_GEN_TOO_MANY_ARGS,
+                                                                              ErrorEventKeys.s_AsmGenTooManyArgs,
                                                                               false
                                                                              )
         {

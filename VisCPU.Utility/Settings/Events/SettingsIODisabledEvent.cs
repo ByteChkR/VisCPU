@@ -11,7 +11,7 @@ namespace VisCPU.Utility.Settings.Events
 
         public SettingsIODisabledEvent( string errMessage ) : base(
                                                                    errMessage,
-                                                                   ErrorEventKeys.SETTINGS_IO_DISABLED,
+                                                                   ErrorEventKeys.s_SettingsIoDisabled,
                                                                    false
                                                                   )
         {

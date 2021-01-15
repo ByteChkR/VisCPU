@@ -11,7 +11,7 @@ namespace VisCPU.HL.Compiler.Events
 
         public FunctionNotFoundEvent( string funcName ) : base(
                                                                $"Function '{funcName}' not found",
-                                                               ErrorEventKeys.HL_FUNCTION_NOT_FOUND,
+                                                               ErrorEventKeys.s_HlFunctionNotFound,
                                                                false
                                                               )
         {

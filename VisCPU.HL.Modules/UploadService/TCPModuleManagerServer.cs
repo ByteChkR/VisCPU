@@ -19,8 +19,8 @@ namespace VisCPU.HL.Modules.UploadService
         public readonly string TempStagingDirectory;
         public readonly ModuleManager Manager;
 
-        private bool stopServer = false;
-        private TcpListener Listener;
+        private bool m_StopServer;
+        private TcpListener m_Listener;
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
@@ -29,7 +29,7 @@ namespace VisCPU.HL.Modules.UploadService
         public TCPModuleManagerServer( ModuleManager manager, int port, string tempStagingDirectory )
         {
             Manager = manager;
-            Listener = TcpListener.Create( port );
+            m_Listener = TcpListener.Create( port );
             TempStagingDirectory = tempStagingDirectory;
             Directory.CreateDirectory( TempStagingDirectory );
         }
@@ -41,16 +41,16 @@ namespace VisCPU.HL.Modules.UploadService
 
         public void ServerLoop()
         {
-            stopServer = false;
-            Listener.Start();
+            m_StopServer = false;
+            m_Listener.Start();
 
-            while ( !stopServer )
+            while ( !m_StopServer )
             {
-                Task < TcpClient > clientTask = Listener.AcceptTcpClientAsync();
+                Task < TcpClient > clientTask = m_Listener.AcceptTcpClientAsync();
 
                 while ( !clientTask.IsCompleted )
                 {
-                    if ( stopServer )
+                    if ( m_StopServer )
                     {
                         break;
                     }
@@ -58,7 +58,7 @@ namespace VisCPU.HL.Modules.UploadService
                     Thread.Sleep( 500 );
                 }
 
-                if ( stopServer )
+                if ( m_StopServer )
                 {
                     break;
                 }
@@ -122,7 +122,7 @@ namespace VisCPU.HL.Modules.UploadService
 
         public void Stop()
         {
-            stopServer = true;
+            m_StopServer = true;
         }
 
         #endregion

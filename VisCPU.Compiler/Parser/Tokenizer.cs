@@ -11,8 +11,8 @@ namespace VisCPU.Compiler.Parser
     public class Tokenizer : VisBase
     {
 
-        private readonly string originalText;
-        private int position;
+        private readonly string m_OriginalText;
+        private int m_Position;
 
         protected override LoggerSystems SubSystem => LoggerSystems.Parser;
 
@@ -73,14 +73,14 @@ namespace VisCPU.Compiler.Parser
 
         private Tokenizer( string text )
         {
-            originalText = text;
+            m_OriginalText = text;
         }
 
         private AToken Advance()
         {
             if ( Current == '\0' )
             {
-                return new EOFToken( originalText, position, 0 );
+                return new EOFToken( m_OriginalText, m_Position, 0 );
             }
 
             ReadUntil( BeginningOfWord );
@@ -92,31 +92,31 @@ namespace VisCPU.Compiler.Parser
                 return Advance();
             }
 
-            int start = position;
+            int start = m_Position;
 
             if ( Current == '"' )
             {
                 char sepItem = Current;
-                position++;
+                m_Position++;
                 int len = ReadUntil( x => x == sepItem );
-                position++;
+                m_Position++;
 
-                return new StringToken( originalText, start, len + 2 );
+                return new StringToken( m_OriginalText, start, len + 2 );
             }
 
             if ( Current == ':' )
             {
                 int len = ReadUntil( EndOfWord );
 
-                return new WordToken( originalText, start, len ).Resolve();
+                return new WordToken( m_OriginalText, start, len ).Resolve();
             }
 
             if ( Current == '\n' )
             {
                 int size = 1;
-                position += size;
+                m_Position += size;
 
-                return new NewLineToken( originalText, start, size );
+                return new NewLineToken( m_OriginalText, start, size );
             }
 
             if ( Current == '\r' )
@@ -128,20 +128,20 @@ namespace VisCPU.Compiler.Parser
                     size++;
                 }
 
-                position += size;
+                m_Position += size;
 
-                return new NewLineToken( originalText, start, size );
+                return new NewLineToken( m_OriginalText, start, size );
             }
 
             if ( Current == '\'' )
             {
                 char sepItem = Current;
                 start++;
-                position++;
+                m_Position++;
                 int len = ReadUntil( x => x == sepItem );
-                position++;
+                m_Position++;
 
-                return new CharToken( originalText, start, len );
+                return new CharToken( m_OriginalText, start, len );
             }
 
             if ( char.IsDigit( Current ) )
@@ -152,16 +152,16 @@ namespace VisCPU.Compiler.Parser
 
                 if ( f == '0' && s == 'x' )
                 {
-                    return new HexToken( originalText, start, len );
+                    return new HexToken( m_OriginalText, start, len );
                 }
 
-                return new DecToken( originalText, start, len );
+                return new DecToken( m_OriginalText, start, len );
             }
             else
             {
                 int len = ReadUntil( EndOfWord );
 
-                return new WordToken( originalText, start, len ).Resolve();
+                return new WordToken( m_OriginalText, start, len ).Resolve();
             }
         }
 
@@ -201,19 +201,19 @@ namespace VisCPU.Compiler.Parser
 
         private char Peek( int offset )
         {
-            return position + offset < originalText.Length ? originalText[position + offset] : '\0';
+            return m_Position + offset < m_OriginalText.Length ? m_OriginalText[m_Position + offset] : '\0';
         }
 
         private int ReadUntil( Func < char, bool > func )
         {
-            int start = position;
+            int start = m_Position;
 
             while ( Current != '\0' && !func( Current ) )
             {
-                position++;
+                m_Position++;
             }
 
-            return position - start;
+            return m_Position - start;
         }
 
         #endregion

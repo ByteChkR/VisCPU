@@ -7,7 +7,7 @@ using VisCPU.HL.Parser.Tokens;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public abstract class HLMemberDefinition : IHLTypeSystemInstance
+    public abstract class HLMemberDefinition : IHlTypeSystemInstance
     {
 
         public readonly bool IsPublic;
@@ -24,7 +24,7 @@ namespace VisCPU.HL.TypeSystem
 
         public abstract uint GetSize();
 
-        public List < IHLToken > GetChildren()
+        public List < IHlToken > GetChildren()
         {
             return null;
         }
@@ -33,7 +33,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Protected
 
-        protected HLMemberDefinition( string name, IHLToken[] mods )
+        protected HLMemberDefinition( string name, IHlToken[] mods )
         {
             Name = name;
 

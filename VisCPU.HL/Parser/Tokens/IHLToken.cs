@@ -9,14 +9,14 @@ namespace VisCPU.HL.Parser.Tokens
     /// <summary>
     ///     Defines the Interface of a XLang Parsing Token
     /// </summary>
-    public interface IHLToken
+    public interface IHlToken
     {
 
         /// <summary>
         ///     Returns the Child Tokens
         /// </summary>
         /// <returns>Child Tokens</returns>
-        List < IHLToken > GetChildren();
+        List < IHlToken > GetChildren();
 
         /// <summary>
         ///     The Start index in the source code.

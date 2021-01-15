@@ -13,7 +13,7 @@ namespace VisCPU.Events
 
         public WriteToUnmappedAddressEvent( uint address, uint data ) : base(
                                                                              $"Tried to write value '0x{Convert.ToString( data, 16 )}' to address 0x{Convert.ToString( address, 16 )} which is not mapped.",
-                                                                             WarningEventKeys.MEMORY_BUS_WRITE_UNMAPPED
+                                                                             WarningEventKeys.s_MemoryBusWriteUnmapped
                                                                             )
         {
         }

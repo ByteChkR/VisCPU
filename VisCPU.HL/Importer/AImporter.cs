@@ -10,7 +10,7 @@ namespace VisCPU.HL.Importer
     public abstract class AImporter : VisBase, IImporter
     {
 
-        protected override LoggerSystems SubSystem => LoggerSystems.HL_Importer;
+        protected override LoggerSystems SubSystem => LoggerSystems.HlImporter;
 
         protected string CacheDirectory => Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "cache" );
 

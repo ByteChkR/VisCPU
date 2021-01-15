@@ -13,7 +13,7 @@ namespace VisCPU.Peripherals.Events
 
         public InvalidPeripheralReadEvent( uint address, Peripheral peripheral ) : base(
              $"Can not read address '0x{Convert.ToString( address, 16 )}' mapped to peripheral '{peripheral}'",
-             WarningEventKeys.PERIPHERAL_INVALID_READ
+             WarningEventKeys.s_PeripheralInvalidRead
             )
         {
         }

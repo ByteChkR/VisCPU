@@ -56,8 +56,6 @@ namespace VisCPU.HL.Compiler.Variables
             EventManager < ErrorEvent >.SendEvent( new HLVariableNotFoundEvent( expr.Value.ToString(), false ) );
 
             return new ExpressionTarget();
-
-            //varAddr = compilation.GetTempVar();
         }
 
         #endregion

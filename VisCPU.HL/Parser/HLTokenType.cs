@@ -121,7 +121,7 @@ namespace VisCPU.HL.Parser
         OpNumSign,
 
         //End Of File
-        EOF
+        Eof
 
     }
 

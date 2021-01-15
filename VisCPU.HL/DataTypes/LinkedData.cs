@@ -8,26 +8,26 @@ namespace VisCPU.HL.DataTypes
 
         public readonly AddressItem Info;
 
-        private string Name;
+        private string m_Name;
 
-        public ExternalDataType DataType => ExternalDataType.FUNCTION;
+        public ExternalDataType DataType => ExternalDataType.Function;
 
         #region Public
 
         public LinkedData( string name, AddressItem info )
         {
-            Name = name;
+            m_Name = name;
             Info = info;
         }
 
         public string GetFinalName()
         {
-            return Name;
+            return m_Name;
         }
 
         public string GetName()
         {
-            return Name;
+            return m_Name;
         }
 
         #endregion
