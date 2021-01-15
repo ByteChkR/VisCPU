@@ -269,7 +269,12 @@ namespace VisCPU.HL.BuildSystem
             Dictionary < string, string > varMap = new Dictionary < string, string >
                                                    {
                                                        { "VISDIR", AppDomain.CurrentDomain.BaseDirectory },
-                                                       { "PROJDIR", rootDir },
+                                                       {
+                                                           "PROJDIR",
+                                                           rootDir.EndsWith( "\\" ) || rootDir.EndsWith( "/" )
+                                                               ? rootDir
+                                                               : rootDir + "/"
+                                                       },
                                                        { "NAME", ProjectName },
                                                        { "VERSION", ProjectVersion },
                                                        { "TARGET", buildTarget.TargetName },

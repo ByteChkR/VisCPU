@@ -35,6 +35,8 @@ namespace VisCPU.Console.Core.Settings
 
         [Argument(Name = "run:working-dir")]
         [Argument(Name = "run:w-dir")]
+        [XmlIgnore]
+        [JsonIgnore]
         public string WorkingDir = Path.GetFullPath("./");
 
         [Argument( Name = "run:input" )]

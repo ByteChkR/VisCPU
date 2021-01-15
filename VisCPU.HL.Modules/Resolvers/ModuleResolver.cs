@@ -59,6 +59,16 @@ namespace VisCPU.HL.Modules.Resolvers
             ProjectBuildTarget releaseRunTarget = new ProjectBuildTarget();
             releaseRunTarget.TargetName = "ReleaseRun";
             releaseRunTarget.DependsOn = new[] { "%VISDIR%common/targets/releaseRun.json" };
+
+            ProjectBuildTarget publishTarget = new ProjectBuildTarget();
+            publishTarget.TargetName = "Publish";
+            publishTarget.DependsOn = new string[0];
+            BuildJob publishJob = new BuildJob();
+            publishJob.JobName = "Publish Project";
+            publishJob.BuildJobRunner = "merged";
+            publishJob.Arguments["merge:include"] = "%VISDIR%common/jobs/newVersion.json";
+            publishTarget.Jobs.Add( publishJob );
+            config.BuildTargets["Publish"] = publishTarget;
             config.BuildTargets["Debug"] = debugTarget;
             config.BuildTargets["DebugRun"] = debugRunTarget;
             config.BuildTargets["Release"] = releaseTarget;
@@ -89,6 +99,18 @@ namespace VisCPU.HL.Modules.Resolvers
             newVersionJob.JobName = "New Version Project %NAME%";
             newVersionJob.Arguments["publish"] = "%VISDIR%common/jobs/publish.json";
             newVersionJob.Arguments["restore"] = "%VISDIR%common/jobs/restore.json";
+
+
+            BuildJob dBuildJob = CreateDebugBuildJob();
+            BuildJob rBuildJob = CreateReleaseBuildJob();
+            BuildJob dRunJob = CreateDebugRunJob();
+            BuildJob rRunJob = CreateReleaseRunJob();
+
+            BuildJob.Save(Path.Combine(dir, "debug_build.json"), dBuildJob);
+            BuildJob.Save(Path.Combine(dir, "release_build.json"), rBuildJob);
+            BuildJob.Save(Path.Combine(dir, "debug_run.json"), dRunJob);
+            BuildJob.Save(Path.Combine(dir, "release_run.json"), rRunJob);
+
             BuildJob.Save(Path.Combine(dir, "clean.json"), cleanJob);
             BuildJob.Save(Path.Combine(dir, "restore.json"), restoreJob);
             BuildJob.Save(Path.Combine(dir, "publish.json"), publishJob);
@@ -110,13 +132,9 @@ namespace VisCPU.HL.Modules.Resolvers
             ProjectBuildTarget.Save(Path.Combine(dir, "release.json"), release);
             ProjectBuildTarget.Save(Path.Combine(dir, "releaseRun.json"), releaseRun);
         }
-        private static ProjectBuildTarget CreateDebugRunTarget()
+
+        private static BuildJob CreateDebugRunJob()
         {
-            ProjectBuildTarget debug = new ProjectBuildTarget();
-            debug.TargetName = "DebugRun";
-
-            debug.DependsOn = new[] { "%VISDIR%common/targets/debug.json" };
-
             BuildJob debugRunJob = new BuildJob();
             debugRunJob.JobName = "Build %NAME%@%VERSION%";
             debugRunJob.BuildJobRunner = "run";
@@ -131,20 +149,11 @@ namespace VisCPU.HL.Modules.Resolvers
             debugRunJob.Arguments["memory:persistent"] = "false";
             debugRunJob.Arguments["memory:persistent.path"] = "%VISDIR%config/memory/states/default.bin";
             debugRunJob.Arguments["memory:size"] = "262144";
-            debug.Jobs.Add(debugRunJob);
 
-            return debug;
+            return debugRunJob;
         }
-
-        private static ProjectBuildTarget CreateDebugTarget()
+        private static BuildJob CreateDebugBuildJob()
         {
-            ProjectBuildTarget debug = new ProjectBuildTarget();
-            debug.TargetName = "Debug";
-            BuildJob restoreJob = new BuildJob();
-            restoreJob.BuildJobRunner = "restore";
-            restoreJob.JobName = "Restore %NAME%@%VERSION%";
-            restoreJob.Arguments["repo"] = "local";
-            debug.Jobs.Add(restoreJob);
             BuildJob debugBuildJob = new BuildJob();
             debugBuildJob.JobName = "Build %NAME%@%VERSION%";
             debugBuildJob.BuildJobRunner = "build";
@@ -155,17 +164,11 @@ namespace VisCPU.HL.Modules.Resolvers
             debugBuildJob.Arguments["linker:export"] = "false";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
             debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
-            debug.Jobs.Add(debugBuildJob);
 
-            return debug;
+            return debugBuildJob;
         }
-        private static ProjectBuildTarget CreateReleaseRunTarget()
+        private static BuildJob CreateReleaseRunJob()
         {
-            ProjectBuildTarget release = new ProjectBuildTarget();
-            release.TargetName = "ReleaseRun";
-
-            release.DependsOn = new[] { "%VISDIR%common/targets/release.json" };
-
             BuildJob runJob = new BuildJob();
             runJob.JobName = "Run %NAME%@%VERSION%";
             runJob.BuildJobRunner = "run";
@@ -180,7 +183,77 @@ namespace VisCPU.HL.Modules.Resolvers
             runJob.Arguments["memory:persistent"] = "false";
             runJob.Arguments["memory:persistent.path"] = "%VISDIR%config/memory/states/default.bin";
             runJob.Arguments["memory:size"] = "262144";
-            release.Jobs.Add(runJob);
+
+            return runJob;
+        }
+        private static BuildJob CreateReleaseBuildJob()
+        {
+            BuildJob debugBuildJob = new BuildJob();
+            debugBuildJob.JobName = "Build %NAME%@%VERSION%";
+            debugBuildJob.BuildJobRunner = "build";
+            debugBuildJob.Arguments["build:input"] = "Program.vhl";
+            debugBuildJob.Arguments["build:steps"] = "HL-expr bin";
+            debugBuildJob.Arguments["build:clean"] = "false";
+            debugBuildJob.Arguments["assembler:offset.global"] = "0";
+            debugBuildJob.Arguments["linker:export"] = "false";
+            debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
+            debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
+
+            return debugBuildJob;
+        }
+
+
+        private static ProjectBuildTarget CreateDebugRunTarget()
+        {
+            ProjectBuildTarget debug = new ProjectBuildTarget();
+            debug.TargetName = "DebugRun";
+
+            debug.DependsOn = new[] { "%VISDIR%common/targets/debug.json" };
+            
+            BuildJob mergeRunJob = new BuildJob();
+            mergeRunJob.JobName = "Merged Debug Run";
+            mergeRunJob.BuildJobRunner = "merged";
+            mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/debug_run.json";
+            debug.Jobs.Add(mergeRunJob);
+
+            return debug;
+        }
+
+        private static ProjectBuildTarget CreateDebugTarget()
+        {
+            ProjectBuildTarget debug = new ProjectBuildTarget();
+            debug.TargetName = "Debug";
+            BuildJob restoreJob = new BuildJob();
+            restoreJob.BuildJobRunner = "restore";
+            restoreJob.JobName = "Restore %NAME%@%VERSION%";
+            restoreJob.Arguments["origin"] = "local";
+            debug.Jobs.Add(restoreJob);
+
+
+            BuildJob mergeBuildJob = new BuildJob();
+            mergeBuildJob.JobName = "Merged Debug Build";
+            mergeBuildJob.BuildJobRunner = "merged";
+            mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/debug_build.json";
+            debug.Jobs.Add(mergeBuildJob);
+
+            return debug;
+        }
+
+        
+
+
+        private static ProjectBuildTarget CreateReleaseRunTarget()
+        {
+            ProjectBuildTarget release = new ProjectBuildTarget();
+            release.TargetName = "ReleaseRun";
+
+            release.DependsOn = new[] { "%VISDIR%common/targets/release.json" };
+
+            BuildJob mergeRunJob = new BuildJob();
+            mergeRunJob.JobName = "Merged Release Run";
+            mergeRunJob.BuildJobRunner = "merged";
+            mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
+            release.Jobs.Add(mergeRunJob);
 
             return release;
         }
@@ -191,34 +264,15 @@ namespace VisCPU.HL.Modules.Resolvers
             BuildJob restoreJob = new BuildJob();
             restoreJob.BuildJobRunner = "restore";
             restoreJob.JobName = "Restore %NAME%@%VERSION%";
-            restoreJob.Arguments["repo"] = "local";
+            restoreJob.Arguments["origin"] = "local";
             release.Jobs.Add(restoreJob);
-            BuildJob buildJob = new BuildJob();
-            buildJob.JobName = "Build %NAME%@%VERSION%";
-            buildJob.BuildJobRunner = "build";
-            buildJob.Arguments["build:input"] = "Program.vhl";
-            buildJob.Arguments["build:steps"] = "HL-expr bin";
-            buildJob.Arguments["build:clean"] = "false";
-            buildJob.Arguments["assembler:offset.global"] = "0";
-            buildJob.Arguments["linker:export"] = "false";
-            buildJob.Arguments["compiler:optimize-temp-vars"] = "true";
-            buildJob.Arguments["compiler:optimize-const-expr"] = "true";
 
-            release.Jobs.Add(buildJob);
-            BuildJob runJob = new BuildJob();
-            runJob.JobName = "Run %NAME%@%VERSION%";
-            runJob.BuildJobRunner = "run";
-            runJob.Arguments["run:input"] = "Program.vbin";
-            runJob.Arguments["run:cpu.interrupt"] = "0x00000000";
-            runJob.Arguments["run:cpu.reset"] = "0x00000000";
-            runJob.Arguments["memory-bus:devices"] = "%VISDIR%config/memory/default.json";
+            BuildJob mergeBuildJob = new BuildJob();
+            mergeBuildJob.JobName = "Merged Release Build";
+            mergeBuildJob.BuildJobRunner = "merged";
+            mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_build.json";
+            release.Jobs.Add(mergeBuildJob); ;
 
-            runJob.Arguments["memory:read"] = "true";
-            runJob.Arguments["memory:write"] = "true";
-            runJob.Arguments["memory:persistent"] = "false";
-            runJob.Arguments["memory:persistent.path"] = "%VISDIR%config/memory/states/default.bin";
-            runJob.Arguments["memory:size"] = "262144";
-            release.Jobs.Add(runJob);
 
             return release;
         }
