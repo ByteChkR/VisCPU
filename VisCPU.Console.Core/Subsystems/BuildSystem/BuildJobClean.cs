@@ -4,63 +4,215 @@ using System.Linq;
 
 using VisCPU.Console.Core.Subsystems.Modules;
 using VisCPU.HL.BuildSystem;
-using VisCPU.HL.Modules.Data;
-using VisCPU.HL.Modules.ModuleManagers;
-using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.Events;
-using VisCPU.Utility.EventSystem;
+using VisCPU.HL.Modules.Resolvers;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem
 {
+
     public class BuildJobSystem : ConsoleSubsystem
     {
 
-        public override void Run(IEnumerable<string> args)
-        {
-            string[] a = args.ToArray();
-
-            string root = a.Length != 0
-                              ? Path.GetFullPath(a[0])
-                              : Directory.GetCurrentDirectory();
-
-
-            string src = Path.Combine(root, "project.json");
-
-            ProjectConfig.AddRunner(new BuildJobBuild());
-            ProjectConfig.AddRunner(new BuildJobClean());
-            ProjectConfig.AddRunner(new BuildJobPublish());
-            ProjectConfig.AddRunner(new BuildJobRestore());
-            ProjectConfig.AddRunner(new BuildJobExternalBuild());
-
-            ProjectConfig config = ProjectConfig.Load(src);
-            string target = config.DefaultTarget;
-            if (a.Length > 1)
-            {
-                target = a[1];
-            }
-
-            config.RunTarget(root, target);
-        }
+        #region Public
 
         public override void Help()
         {
             Log( "vis make <root> <target>" );
         }
 
+        public override void Run( IEnumerable < string > args )
+        {
+            ModuleResolver.Initialize();
+            string[] a = args.ToArray();
+
+            string root = a.Length != 0
+                              ? Path.GetFullPath( a[0] )
+                              : Directory.GetCurrentDirectory();
+
+            string src = Path.Combine( root, "project.json" );
+
+
+            ProjectConfig.AddRunner( new BuildJobBuild() );
+            ProjectConfig.AddRunner( new BuildJobClean() );
+            ProjectConfig.AddRunner( new BuildJobPublish() );
+            ProjectConfig.AddRunner( new BuildJobRestore() );
+            ProjectConfig.AddRunner(new BuildJobExternalBuild());
+            ProjectConfig.AddRunner(new BuildJobCombinedJobs());
+            ProjectConfig.AddRunner(new BuildJobMoveContent());
+            ProjectConfig.AddRunner(new BuildJobCopyContent());
+            ProjectConfig.AddRunner(new BuildJobRunJob());
+
+            ProjectConfig config = ProjectConfig.Load( src );
+            string target = config.DefaultTarget;
+
+            if ( a.Length > 1 )
+            {
+                target = a[1];
+            }
+
+            config.RunTarget( root, target );
+        }
+
+        #endregion
+
     }
 
-    public class BuildJobExternalBuild:BuildJobRunner
+    public class BuildJobExternalBuild : BuildJobRunner
     {
 
-        public override string RunnerName => "external";
+        public override string RunnerName => "external-build";
 
-        public override void RunJob( string projectRoot, ProjectConfig project, ProjectBuildTarget target, BuildJob job )
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
         {
             string path = job.Arguments["path"];
             job.Arguments.TryGetValue( "target", out string externalTarget );
-            ProjectConfig external = ProjectConfig.Load( path);
+            ProjectConfig external = ProjectConfig.Load( path );
             external.RunTarget( Path.GetDirectoryName( path ), externalTarget );
         }
+
+        #endregion
+
+    }
+
+    public class BuildJobCombinedJobs : BuildJobRunner
+    {
+
+        public override string RunnerName => "combined";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job)
+        {
+            foreach (KeyValuePair<string, string> buildJobs in job.Arguments)
+            {
+                BuildJob subJob = BuildJob.Load(buildJobs.Value);
+                project.RunJob(projectRoot, target, subJob);
+            }
+        }
+
+        #endregion
+
+    }
+
+    public class BuildJobRunJob : BuildJobRunner
+    {
+
+        public override string RunnerName => "run";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job)
+        {
+            ProgramRunner.Run( job.Arguments );
+        }
+
+        #endregion
+
+    }
+
+    public class BuildJobCopyContent : BuildJobRunner
+    {
+
+        public override string RunnerName => "copy";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
+        {
+            string input = job.Arguments["source"];
+            string output = job.Arguments["destination"];
+
+            if ( Directory.Exists( input ) )
+            {
+                Directory.CreateDirectory( output );
+                ProjectPackSubSystem.CopyTo( input, output );
+            }
+            else if ( File.Exists( input ) )
+            {
+                if ( Directory.Exists( output ) )
+                {
+                    File.Copy( input, Path.Combine( output, Path.GetFileName( input ) ), true );
+                }
+                else
+                {
+                    File.Copy( input, output, true );
+                }
+            }
+        }
+
+        #endregion
+
+    }
+
+    public class BuildJobMoveContent : BuildJobRunner
+    {
+
+        public override string RunnerName => "move";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
+        {
+            string input = job.Arguments["source"];
+            string output = job.Arguments["destination"];
+
+            if ( Directory.Exists( input ) )
+            {
+                if ( Directory.Exists( output ) )
+                {
+                    Directory.Delete( output );
+                }
+
+                Directory.Move( input, output );
+            }
+            else if ( File.Exists( input ) )
+            {
+                if ( Directory.Exists( output ) )
+                {
+                    string path = Path.Combine( output, Path.GetFileName( input ) );
+
+                    if ( File.Exists( path ) )
+                    {
+                        File.Delete( path );
+                    }
+
+                    File.Move( input, path );
+                }
+                else
+                {
+                    if ( File.Exists( output ) )
+                    {
+                        File.Delete( output );
+                    }
+
+                    File.Move( input, output );
+                }
+            }
+        }
+
+        #endregion
 
     }
 
@@ -69,26 +221,43 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
 
         public override string RunnerName => "clean";
 
-        public override void RunJob(string projectRoot, ProjectConfig project, ProjectBuildTarget target, BuildJob job)
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
         {
-            ProjectCleanSubSystem.Clean(projectRoot);
+            ProjectCleanSubSystem.Clean( projectRoot );
         }
 
+        #endregion
+
     }
+
     public class BuildJobRestore : BuildJobRunner
     {
 
         public override string RunnerName => "restore";
 
-        public override void RunJob(string projectRoot, ProjectConfig project, ProjectBuildTarget target, BuildJob job)
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
         {
-            if (!job.Arguments.TryGetValue("repo", out string repo))
+            if ( !job.Arguments.TryGetValue( "repo", out string repo ) )
             {
                 repo = "local";
             }
 
-            ProjectRestoreSubSystem.Restore(projectRoot, repo);
+            ProjectRestoreSubSystem.Restore( projectRoot, repo );
         }
+
+        #endregion
 
     }
 
@@ -97,34 +266,56 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
 
         public override string RunnerName => "publish";
 
-        public override void RunJob(string projectRoot, ProjectConfig project, ProjectBuildTarget target, BuildJob job)
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
         {
-            if (!job.Arguments.TryGetValue("repo", out string repo))
+            if ( !job.Arguments.TryGetValue( "repo", out string repo ) )
             {
                 repo = "local";
             }
 
             ProjectPackSubSystem.PackOptions opts = new ProjectPackSubSystem.PackOptions();
             ProjectPublishSubSystem.PublishOptions pops = new ProjectPublishSubSystem.PublishOptions();
-            if (job.Arguments.TryGetValue("version", out string ver))
-                opts.VersionString = ver; 
-            if (job.Arguments.TryGetValue("origin", out string origin))
+
+            if ( job.Arguments.TryGetValue( "version", out string ver ) )
+            {
+                opts.VersionString = ver;
+            }
+
+            if ( job.Arguments.TryGetValue( "origin", out string origin ) )
+            {
                 pops.Repository = origin;
-            ProjectPublishSubSystem.Publish(projectRoot, pops, opts);
+            }
+
+            ProjectPublishSubSystem.Publish( projectRoot, pops, opts );
         }
 
+        #endregion
+
     }
+
     public class BuildJobBuild : BuildJobRunner
     {
 
         public override string RunnerName => "build";
 
-        public override void RunJob(string projectRoot, ProjectConfig project, ProjectBuildTarget target, BuildJob job)
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job )
         {
-
-            ProgramBuilder.Build(job.Arguments);
-
+            ProgramBuilder.Build( job.Arguments );
         }
+
+        #endregion
 
     }
 

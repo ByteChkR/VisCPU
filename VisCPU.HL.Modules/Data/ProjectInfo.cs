@@ -18,9 +18,9 @@ namespace VisCPU.HL.Modules.Data
         [XmlIgnore]
         public ModuleManager Manager;
 
-        public string ProjectName;
-        public string ProjectVersion;
-        public List < ProjectDependency > Dependencies;
+        public string ProjectName = "MyProject";
+        public string ProjectVersion = "0.0.0.1";
+        public List < ProjectDependency > Dependencies = new List < ProjectDependency >();
         public ProjectInfo()
         {
         }

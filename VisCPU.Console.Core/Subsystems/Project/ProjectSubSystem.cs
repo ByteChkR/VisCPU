@@ -13,7 +13,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             new Dictionary < string, ConsoleSubsystem >
             {
                 { "clean", new ProjectCleanSubSystem() },
-                { "create", new ProjectCreateSubSystem() },
+                { "new", new ProjectCreateSubSystem() },
                 { "restore", new ProjectRestoreSubSystem() },
                 { "publish", new ProjectPublishSubSystem() },
                 { "add", new ProjectAddDependencySubSystem() },

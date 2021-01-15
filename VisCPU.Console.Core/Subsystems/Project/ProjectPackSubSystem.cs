@@ -182,7 +182,7 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         #region Private
 
-        private static void CopyTo( string src, string dst )
+        public static void CopyTo( string src, string dst )
         {
             foreach ( string dirPath in Directory.GetDirectories(
                                                                  src,

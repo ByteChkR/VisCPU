@@ -116,7 +116,7 @@ namespace VisCPU.Utility.ArgumentParser
                             }
                             else if (fieldInfo.FieldType == typeof(uint))
                             {
-                                fieldInfo.SetValue(o, uint.Parse(parts[name].First()));
+                                fieldInfo.SetValue(o, parts[name].First().ParseUInt());
                             }
                             else if (fieldInfo.FieldType.IsEnum)
                             {
