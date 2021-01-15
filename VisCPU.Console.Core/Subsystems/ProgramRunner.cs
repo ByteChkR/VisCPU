@@ -21,6 +21,19 @@ namespace VisCPU.Console.Core.Subsystems
     public class ProgramRunner : ConsoleSubsystem
     {
 
+        public override void Help()
+        {
+            RunnerSettings settings = RunnerSettings.Create();
+            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
+            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
+            HLCompilerSettings hls = HLCompilerSettings.Create();
+            MemorySettings ms = MemorySettings.Create();
+            MemoryBusSettings mbs = MemoryBusSettings.Create();
+            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
+
+            HelpSubSystem.WriteSubsystem("vis run", settings, cins, couts, hls, ms, mbs, hfs);
+        }
+
         #region Public
 
         public override void Run( IEnumerable < string > args )

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.Console.Core.Subsystems.Modules;
 using VisCPU.Console.Core.Subsystems.Origins.UploadService;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -14,8 +15,11 @@ namespace VisCPU.Console.Core.Subsystems.Origins
                 { "add", new AddOriginSubSystem() },
                 { "remove", new RemoveOriginSubSystem() },
                 { "list", new ListOriginSubSystem() },
-                { "upload-server", new UploadServerSubSystem() }
+                { "host", new UploadServerSubSystem() },
+                { "packages", new ListPackagesSubSystem() }
             };
+
+        
 
     }
 

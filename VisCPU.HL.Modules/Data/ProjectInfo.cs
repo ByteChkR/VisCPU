@@ -11,25 +11,27 @@ namespace VisCPU.HL.Modules.Data
 {
 
     [Serializable]
-    public struct ModuleTarget
+    public class ProjectInfo
     {
 
         [JsonIgnore]
         [XmlIgnore]
         public ModuleManager Manager;
 
-        public string ModuleName;
-        public string ModuleVersion;
-        public List < ModuleDependency > Dependencies;
-
-        public ModuleTarget(
-            ModuleManager manager,
-            string moduleName,
-            string moduleVersion,
-            ModuleDependency[] dependencies )
+        public string ProjectName;
+        public string ProjectVersion;
+        public List < ProjectDependency > Dependencies;
+        public ProjectInfo()
         {
-            ModuleName = moduleName;
-            ModuleVersion = moduleVersion;
+        }
+        public ProjectInfo(
+            ModuleManager manager,
+            string projectName,
+            string projectVersion,
+            ProjectDependency[] dependencies )
+        {
+            ProjectName = projectName;
+            ProjectVersion = projectVersion;
             Manager = manager;
             Dependencies = dependencies.ToList();
         }

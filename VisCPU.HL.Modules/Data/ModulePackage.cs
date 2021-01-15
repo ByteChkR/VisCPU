@@ -35,18 +35,18 @@ namespace VisCPU.HL.Modules.Data
             Manager = manager;
         }
 
-        public ModuleTarget GetInstallTarget( string version = null )
+        public ProjectInfo GetInstallTarget( string version = null )
         {
             if ( version != null )
             {
                 string infoPath = Manager.GetTargetInfoUri( this, version );
 
-                return JsonConvert.DeserializeObject < ModuleTarget >(
+                return JsonConvert.DeserializeObject < ProjectInfo >(
                                                                       File.ReadAllText( infoPath )
                                                                      );
             }
 
-            return JsonConvert.DeserializeObject < ModuleTarget >(
+            return JsonConvert.DeserializeObject < ProjectInfo >(
                                                                   File.ReadAllText(
                                                                        Manager.GetTargetInfoUri(
                                                                             this,

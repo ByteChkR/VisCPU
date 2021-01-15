@@ -22,6 +22,11 @@ namespace VisCPU.Console.Core.Subsystems.Origins
             SettingsSystem.SaveSettings( s );
         }
 
+        public override void Help()
+        {
+            Log( "vis origin add <name> <uri>" );
+        }
+
         #endregion
 
     }

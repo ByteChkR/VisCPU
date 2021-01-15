@@ -46,41 +46,41 @@ namespace VisCPU.HL.Modules.ModuleManagers
             packageList.ForEach( x => x.Manager = this );
         }
 
-        public override void AddPackage( ModuleTarget target, string moduleDataPath )
+        public override void AddPackage( ProjectInfo target, string moduleDataPath )
         {
             ModulePackage package;
 
-            if ( !HasPackage( target.ModuleName ) )
+            if ( !HasPackage( target.ProjectName ) )
             {
-                package = new ModulePackage( this, target.ModuleName, new string[0] );
+                package = new ModulePackage( this, target.ProjectName, new string[0] );
                 packageList.Add( package );
             }
             else
             {
-                package = GetPackage( target.ModuleName );
+                package = GetPackage( target.ProjectName );
             }
 
-            if ( package.HasTarget( target.ModuleVersion ) )
+            if ( package.HasTarget( target.ProjectVersion ) )
             {
                 EventManager < ErrorEvent >.SendEvent(
                                                       new ModuleVersionAlreadyExistsEvent(
-                                                           target.ModuleName,
-                                                           target.ModuleVersion
+                                                           target.ProjectName,
+                                                           target.ProjectVersion
                                                           )
                                                      );
 
                 return;
             }
 
-            package.ModuleVersions.Add( target.ModuleVersion );
+            package.ModuleVersions.Add( target.ProjectVersion );
             string data = GetTargetDataPath( target );
             Directory.CreateDirectory( data );
             File.Copy( moduleDataPath, GetTargetDataUri( target ) );
-            SaveModuleTarget( target, GetTargetInfoUri( package, target.ModuleVersion ) );
+            SaveModuleTarget( target, GetTargetInfoUri( package, target.ProjectVersion ) );
             SavePackageList( packageList );
         }
 
-        public override void Get( ModuleTarget target, string targetDir )
+        public override void Get( ProjectInfo target, string targetDir )
         {
             if ( Directory.Exists( targetDir ) )
             {
@@ -90,11 +90,11 @@ namespace VisCPU.HL.Modules.ModuleManagers
             string dataPath = GetTargetDataUri( target );
             ZipFile.ExtractToDirectory( dataPath, targetDir );
 
-            foreach ( ModuleDependency targetDependency in target.Dependencies )
+            foreach ( ProjectDependency targetDependency in target.Dependencies )
             {
                 Get(
                     ModuleResolver.Resolve( this, targetDependency ),
-                    Path.Combine( targetDir, targetDependency.ModuleName )
+                    Path.Combine( targetDir, targetDependency.ProjectName )
                    );
             }
         }
@@ -114,12 +114,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return packageList;
         }
 
-        public override string GetTargetDataPath( ModuleTarget target )
+        public override string GetTargetDataPath( ProjectInfo target )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ModuleName, target.ModuleVersion );
+            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ProjectName, target.ProjectVersion );
         }
 
-        public override string GetTargetDataUri( ModuleTarget target )
+        public override string GetTargetDataUri( ProjectInfo target )
         {
             return Path.Combine( GetTargetDataPath( target ), MODULE_DATA );
         }
@@ -145,7 +145,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         public override void RemoveTarget( string moduleName, string moduleVersion )
         {
             ModulePackage p = GetPackage( moduleName );
-            ModuleTarget t = p.GetInstallTarget( moduleVersion );
+            ProjectInfo t = p.GetInstallTarget( moduleVersion );
             string dataPath = GetTargetDataPath( t );
 
             if ( Directory.Exists( dataPath ) )
@@ -157,13 +157,13 @@ namespace VisCPU.HL.Modules.ModuleManagers
             SavePackageList( packageList );
         }
 
-        public override void Restore( ModuleTarget target, string rootDir )
+        public override void Restore( ProjectInfo target, string rootDir )
         {
-            foreach ( ModuleDependency targetDependency in target.Dependencies )
+            foreach ( ProjectDependency targetDependency in target.Dependencies )
             {
                 Get(
                     ModuleResolver.Resolve( this, targetDependency ),
-                    Path.Combine( rootDir, targetDependency.ModuleName )
+                    Path.Combine( rootDir, targetDependency.ProjectName )
                    );
             }
         }

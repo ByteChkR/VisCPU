@@ -29,7 +29,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
             Directory.CreateDirectory( LocalTempCache );
         }
 
-        public override void Get( ModuleTarget target, string targetDir )
+        public override void Get( ProjectInfo target, string targetDir )
         {
             if ( Directory.Exists( targetDir ) )
             {
@@ -45,11 +45,11 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
             ZipFile.ExtractToDirectory( dataPath, targetDir );
 
-            foreach ( ModuleDependency targetDependency in target.Dependencies )
+            foreach ( ProjectDependency targetDependency in target.Dependencies )
             {
                 Get(
                     ModuleResolver.Resolve( this, targetDependency ),
-                    Path.Combine( targetDir, targetDependency.ModuleName )
+                    Path.Combine( targetDir, targetDependency.ProjectName )
                    );
             }
         }
@@ -69,12 +69,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return PackageList;
         }
 
-        public override string GetTargetDataPath( ModuleTarget target )
+        public override string GetTargetDataPath( ProjectInfo target )
         {
-            return GetTargetDataPath( LocalTempCache, target.ModuleName, target.ModuleVersion );
+            return GetTargetDataPath( LocalTempCache, target.ProjectName, target.ProjectVersion );
         }
 
-        public override string GetTargetDataUri( ModuleTarget target )
+        public override string GetTargetDataUri( ProjectInfo target )
         {
             return Path.Combine( GetTargetDataPath( target ), MODULE_DATA );
         }
@@ -89,13 +89,13 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return PackageList.Any( x => x.ModuleName == name );
         }
 
-        public override void Restore( ModuleTarget target, string rootDir )
+        public override void Restore( ProjectInfo target, string rootDir )
         {
-            foreach ( ModuleDependency targetDependency in target.Dependencies )
+            foreach ( ProjectDependency targetDependency in target.Dependencies )
             {
                 Get(
                     ModuleResolver.Resolve( this, targetDependency ),
-                    Path.Combine( rootDir, targetDependency.ModuleName )
+                    Path.Combine( rootDir, targetDependency.ProjectName )
                    );
             }
         }
@@ -104,7 +104,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         #region Private
 
-        private void FetchData( ModuleTarget target )
+        private void FetchData( ProjectInfo target )
         {
             string dataUri = GetRemoteTargetDataUri( target );
             string dataLocal = GetTargetDataUri( target );
@@ -150,17 +150,17 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ModuleName );
         }
 
-        private string GetRemoteModulePackagePath( ModuleTarget package )
+        private string GetRemoteModulePackagePath( ProjectInfo package )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ModuleName );
+            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ProjectName );
         }
 
-        private string GetRemoteTargetDataPath( ModuleTarget target )
+        private string GetRemoteTargetDataPath( ProjectInfo target )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ModuleName, target.ModuleVersion );
+            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ProjectName, target.ProjectVersion );
         }
 
-        private string GetRemoteTargetDataUri( ModuleTarget target )
+        private string GetRemoteTargetDataUri( ProjectInfo target )
         {
             return Path.Combine( GetRemoteTargetDataPath( target ), MODULE_DATA );
         }
@@ -170,9 +170,9 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine( GetRemoteModulePackagePath( package ), moduleVersion, MODULE_TARGET );
         }
 
-        private string GetRemoteTargetInfoUri( ModuleTarget target )
+        private string GetRemoteTargetInfoUri( ProjectInfo target )
         {
-            return Path.Combine( GetRemoteModulePackagePath( target ), target.ModuleVersion, MODULE_TARGET );
+            return Path.Combine( GetRemoteModulePackagePath( target ), target.ProjectVersion, MODULE_TARGET );
         }
 
         private void SaveInfo( List < ModulePackage > packages )

@@ -20,6 +20,10 @@ namespace VisCPU.Console.Core.Subsystems.Origins
             }
         }
 
+        public override void Help()
+        {
+        }
+
         #endregion
 
     }

@@ -32,11 +32,11 @@ namespace VisCPU.HL.Modules.ModuleManagers
             File.WriteAllText(
                               targetFile,
                               JsonConvert.SerializeObject(
-                                                          new ModuleTarget(
+                                                          new ProjectInfo(
                                                                            null,
                                                                            "NewModule",
                                                                            "0.1",
-                                                                           new ModuleDependency[0]
+                                                                           new ProjectDependency[0]
                                                                           ),
                                                           Formatting.Indented
                                                          )
@@ -48,17 +48,17 @@ namespace VisCPU.HL.Modules.ModuleManagers
             return Path.Combine( root, MODULE_PATH, moduleName, moduleVersion );
         }
 
-        public static ModuleTarget LoadModuleTarget( string targetFile )
+        public static ProjectInfo LoadModuleTarget( string targetFile )
         {
-            return JsonConvert.DeserializeObject < ModuleTarget >( File.ReadAllText( targetFile ) );
+            return JsonConvert.DeserializeObject < ProjectInfo >( File.ReadAllText( targetFile ) );
         }
 
-        public static void SaveModuleTarget( ModuleTarget target, string targetFile )
+        public static void SaveModuleTarget( ProjectInfo target, string targetFile )
         {
             File.WriteAllText( targetFile, JsonConvert.SerializeObject( target, Formatting.Indented ) );
         }
 
-        public abstract void Get( ModuleTarget target, string targetDir );
+        public abstract void Get( ProjectInfo target, string targetDir );
 
         public abstract string GetModulePackagePath( ModulePackage package );
 
@@ -66,24 +66,24 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public abstract IEnumerable < ModulePackage > GetPackages();
 
-        public abstract string GetTargetDataPath( ModuleTarget target );
+        public abstract string GetTargetDataPath( ProjectInfo target );
 
-        public abstract string GetTargetDataUri( ModuleTarget target );
+        public abstract string GetTargetDataUri( ProjectInfo target );
 
         public abstract string GetTargetInfoUri( ModulePackage package, string moduleVersion );
 
         public abstract bool HasPackage( string name );
 
-        public abstract void Restore( ModuleTarget target, string rootDir );
+        public abstract void Restore( ProjectInfo target, string rootDir );
 
-        public virtual void AddPackage( ModuleTarget target, string moduleDataPath )
+        public virtual void AddPackage( ProjectInfo target, string moduleDataPath )
         {
             EventManager < ErrorEvent >.SendEvent( new ModuleManagerUnsupportedEvent( this, "Adding Packages" ) );
         }
 
-        public bool HasTarget( ModuleTarget target )
+        public bool HasTarget( ProjectInfo target )
         {
-            return HasPackage( target.ModuleName ) && GetPackage( target.ModuleName ).HasTarget( target.ModuleVersion );
+            return HasPackage( target.ProjectName ) && GetPackage( target.ProjectName ).HasTarget( target.ProjectVersion );
         }
 
         public virtual void RemovePackage( string moduleName )

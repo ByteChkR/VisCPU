@@ -6,6 +6,7 @@ using System.Text;
 
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
+using VisCPU.Console.Core.Subsystems.BuildSystem;
 using VisCPU.Console.Core.Subsystems.Modules;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Instructions;
@@ -24,7 +25,7 @@ namespace VisCPU.Console.Core
             {
                 { "run", new ProgramRunner() },
                 { "build", new ProgramBuilder() },
-                { "project", new ModuleSubSystem() },
+                { "project", new ProjectSubSystem() },
                 { "origin", new OriginSubSystem() },
                 { "reset", new ConsoleReset() }
             };

@@ -82,8 +82,7 @@ namespace VisCPU.HL.Modules.UploadService
                     byte[] mod = new byte[moduleTargetLength];
                     client.GetStream().Read( mod, 0, mod.Length );
 
-                    ModuleTarget target =
-                        JsonConvert.DeserializeObject < ModuleTarget >( Encoding.UTF8.GetString( mod ) );
+                    ProjectInfo target = ModuleManager.LoadModuleTarget( Encoding.UTF8.GetString( mod ) );
 
                     client.GetStream().Read( modLen, 0, modLen.Length );
                     int dataLength = BitConverter.ToInt32( modLen, 0 );

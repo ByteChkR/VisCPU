@@ -24,6 +24,14 @@ namespace VisCPU.Console.Core
             VisConsole.RunConsole( s, args.ToArray(), ss );
         }
 
+        public override void Help()
+        {
+            foreach (KeyValuePair<string, ConsoleSubsystem> consoleSubsystem in SubSystems)
+            {
+                consoleSubsystem.Value.Help();
+            }
+        }
+
         #endregion
 
     }

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\VisCPU\VisCPU.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Subsystems\BuildSystem\" />
+  </ItemGroup>
+
 </Project>

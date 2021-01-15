@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 
+using VisCPU.HL.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.ArgumentParser;
@@ -13,10 +14,10 @@ using VisCPU.Utility.Logging;
 namespace VisCPU.Console.Core.Subsystems.Modules
 {
 
-    public class ModulePackSubSystem : ConsoleSubsystem
+    public class ProjectPackSubSystem : ConsoleSubsystem
     {
 
-        private class PackOptions
+        public class PackOptions
         {
 
             [Argument( Name = "version" )]
@@ -27,6 +28,16 @@ namespace VisCPU.Console.Core.Subsystems.Modules
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
+
+        public static void WriteHelp()
+        {
+            HelpSubSystem.WriteSubsystem("vis project pack", new PackOptions());
+        }
+
+        public override void Help()
+        {
+            WriteHelp();
+        }
 
         public static Version ChangeVersion( Version version, string changeStr )
         {
@@ -115,30 +126,26 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                               );
         }
 
-        public static void Pack( IEnumerable < string > args )
+        public static void Pack( string projectRoot, PackOptions options )
         {
-            string[] a = args.ToArray();
 
-            string src = a.Length != 0
-                             ? Path.Combine( Path.GetFullPath( a[0] ), "project.json" )
-                             : Path.Combine( Directory.GetCurrentDirectory(), "project.json" );
+            string src = Path.Combine( Path.GetFullPath( projectRoot ), "project.json");
+            ProjectCleanSubSystem.Clean(Path.GetDirectoryName(src));
+            Logger.LogMessage(LoggerSystems.ModuleSystem, "Packing '{0}'", src);
 
             string outDir = Path.Combine( Path.GetDirectoryName( src ), "build" );
 
-            ModuleCleanSubSystem.Clean( Path.GetDirectoryName( src ) );
 
-            ModuleTarget t = ModuleManager.LoadModuleTarget( src );
+            ProjectConfig t = ProjectConfig.Load( src );
 
-            Version v = Version.Parse( t.ModuleVersion );
+            Version v = Version.Parse( t.ProjectVersion );
+            
 
-            PackOptions po = new PackOptions();
-            ArgumentSyntaxParser.Parse( a, po );
-
-            t.ModuleVersion = ChangeVersion( v, po.VersionString ).ToString();
+            t.ProjectVersion = ChangeVersion( v, options.VersionString ).ToString();
 
             string temp = Path.Combine(
                                        Path.GetDirectoryName( Directory.GetCurrentDirectory() ),
-                                       "temp_" + t.ModuleName
+                                       "temp_" + t.ProjectName
                                       );
 
             Directory.CreateDirectory( temp );
@@ -147,9 +154,9 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
             File.Delete( Path.Combine( temp, "project.json" ) );
 
-            foreach ( ModuleDependency moduleDependency in t.Dependencies )
+            foreach ( ProjectDependency moduleDependency in t.Dependencies )
             {
-                string p = Path.Combine( temp, moduleDependency.ModuleName );
+                string p = Path.Combine( temp, moduleDependency.ProjectName );
 
                 if ( Directory.Exists( p ) )
                 {
@@ -161,12 +168,14 @@ namespace VisCPU.Console.Core.Subsystems.Modules
             ZipFile.CreateFromDirectory( temp, Path.Combine( outDir, "module.zip" ) );
             Directory.Delete( temp, true );
             ModuleManager.SaveModuleTarget( t, Path.Combine( outDir, "module.json" ) );
-            ModuleManager.SaveModuleTarget( t, src );
+            ProjectConfig.Save( src, t );
         }
 
         public override void Run( IEnumerable < string > args )
         {
-            Pack( args );
+            PackOptions op = new PackOptions();
+            ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), op );
+            Pack( args.First(), op );
         }
 
         #endregion

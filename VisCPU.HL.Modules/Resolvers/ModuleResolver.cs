@@ -61,17 +61,17 @@ namespace VisCPU.HL.Modules.Resolvers
             }
         }
 
-        public static ModuleTarget Resolve( string repository, ModuleDependency dependency )
+        public static ProjectInfo Resolve( string repository, ProjectDependency dependency )
         {
             return Managers[repository].
-                   GetPackage( dependency.ModuleName ).
-                   GetInstallTarget( dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion );
+                   GetPackage( dependency.ProjectName ).
+                   GetInstallTarget( dependency.ProjectVersion == "ANY" ? null : dependency.ProjectVersion );
         }
 
-        public static ModuleTarget Resolve( ModuleManager manager, ModuleDependency dependency )
+        public static ProjectInfo Resolve( ModuleManager manager, ProjectDependency dependency )
         {
-            return manager.GetPackage( dependency.ModuleName ).
-                           GetInstallTarget( dependency.ModuleVersion == "ANY" ? null : dependency.ModuleVersion );
+            return manager.GetPackage( dependency.ProjectName ).
+                           GetInstallTarget( dependency.ProjectVersion == "ANY" ? null : dependency.ProjectVersion );
         }
 
         #endregion

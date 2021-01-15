@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using VisCPU.HL.BuildSystem;
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
 using VisCPU.Utility.Logging;
@@ -10,7 +11,7 @@ using VisCPU.Utility.Logging;
 namespace VisCPU.Console.Core.Subsystems.Modules
 {
 
-    public class ModuleCleanSubSystem : ConsoleSubsystem
+    public class ProjectCleanSubSystem : ConsoleSubsystem
     {
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
@@ -19,10 +20,12 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
         public static void Clean( string projectRoot )
         {
-            if ( !File.Exists( Path.Combine( projectRoot, "project.json" ) ) )
+            string src = Path.Combine( projectRoot, "project.json" );
+            if ( !File.Exists( src ) )
             {
                 throw new Exception( $"The folder '{projectRoot}' does not contain a 'project.json' file." );
             }
+            Logger.LogMessage(LoggerSystems.ModuleSystem, "Cleaning '{0}'", src);
 
             if ( Directory.Exists( Path.Combine( projectRoot, "build" ) ) )
             {
@@ -45,15 +48,20 @@ namespace VisCPU.Console.Core.Subsystems.Modules
                 }
             }
 
-            ModuleTarget t = ModuleManager.LoadModuleTarget( Path.Combine( projectRoot, "project.json" ) );
+            ProjectConfig t =ProjectConfig.Load( Path.Combine( projectRoot, "project.json" ) );
 
-            foreach ( ModuleDependency moduleDependency in t.Dependencies )
+            foreach ( ProjectDependency moduleDependency in t.Dependencies )
             {
-                if ( Directory.Exists( Path.Combine( projectRoot, moduleDependency.ModuleName ) ) )
+                if ( Directory.Exists( Path.Combine( projectRoot, moduleDependency.ProjectName ) ) )
                 {
-                    Directory.Delete( Path.Combine( projectRoot, moduleDependency.ModuleName ), true );
+                    Directory.Delete( Path.Combine( projectRoot, moduleDependency.ProjectName ), true );
                 }
             }
+        }
+
+        public override void Help()
+        {
+            Log("vis project clean <projectRoot>");
         }
 
         public override void Run( IEnumerable < string > args )

@@ -51,6 +51,11 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
             server.Stop();
         }
 
+        public override void Help()
+        {
+            HelpSubSystem.WriteSubsystem( "vis origin host <targetRepo>", this );
+        }
+
         #endregion
 
     }

@@ -29,60 +29,27 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Run( IEnumerable < string > arguments )
         {
-            if ( owner != null )
-            {
-                Log( VisConsole.ListSubsystems( owner.SubSystems, new StringBuilder() ).ToString() );
-            }
+            owner.Help();
+        }
 
-            WriteSubsystem( "CLI", CLISettings.Create() );
-            WriteSubsystem( "build", BuilderSettings.Create() );
-
-            WriteSettings( "linker", LinkerSettings.Create() );
-            WriteSettings( "compiler", HLCompilerSettings.Create() );
-            WriteSettings( "assembler", AssemblyGeneratorSettings.Create() );
-
-            WriteSubsystem( "run", RunnerSettings.Create() );
-
-            WriteSettings( "console-in", ConsoleInInterfaceSettings.Create() );
-            WriteSettings( "console-out", ConsoleOutInterfaceSettings.Create() );
-            WriteSettings( "memory", MemorySettings.Create() );
-            WriteSettings( "memory-bus", MemoryBusSettings.Create() );
-            WriteSettings( "hostfs", HostFileSystemSettings.Create() );
-
-            System.Console.WriteLine( "-log Subsystems: " );
-            string[] names = Enum.GetNames( typeof( LoggerSystems ) );
-
-            foreach ( string name in names )
-            {
-                System.Console.WriteLine( "\t" + name );
-            }
+        public override void Help()
+        {
         }
 
         #endregion
 
         #region Private
-
-        private void WriteSettings( string subName, object settings )
+        
+        
+        public static void WriteSubsystem(string subName, params object[] settings)
         {
-            System.Console.WriteLine( $"Arguments: {subName}" );
+            System.Console.WriteLine($"Arguments: {subName}");
 
-            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( settings );
+            IEnumerable<string> args = ArgumentSyntaxParser.GetArgNames(settings);
 
-            foreach ( string s1 in args )
+            foreach (string s1 in args)
             {
-                System.Console.WriteLine( "\tArg Name: " + s1 );
-            }
-        }
-
-        private void WriteSubsystem( string subName, object settings )
-        {
-            System.Console.WriteLine( $"Arguments: {subName}" );
-
-            IEnumerable < string > args = ArgumentSyntaxParser.GetArgNames( settings );
-
-            foreach ( string s1 in args )
-            {
-                System.Console.WriteLine( "\tArg Name: " + s1 );
+                System.Console.WriteLine("\tArg Name: " + s1);
             }
         }
 
