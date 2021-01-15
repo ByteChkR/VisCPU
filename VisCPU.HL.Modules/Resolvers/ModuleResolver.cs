@@ -231,6 +231,29 @@ namespace VisCPU.HL.Modules.Resolvers
 
         private static Dictionary<string, ModuleManager> Managers;
 
+        public static void AddManager(string name, string url)
+        {
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri u))
+            {
+                if (u.Scheme == "http" || u.Scheme == "https")
+                {
+                    Managers.Add(name, new HttpModuleManager(name, u.OriginalString));
+                }
+                else if (u.Scheme == "dev")
+                {
+                    Managers.Add(name, new TCPUploadModuleManager(u.OriginalString));
+                }
+                else
+                {
+                    Managers.Add(name, new LocalModuleManager(url));
+                }
+            }
+            else
+            {
+                Managers.Add(name, new LocalModuleManager(url));
+            }
+        }
+
         #region Public
 
         public static ModuleManager GetManager(string name)
@@ -253,25 +276,7 @@ namespace VisCPU.HL.Modules.Resolvers
 
                 foreach (KeyValuePair<string, string> origin in ResolverSettings.ModuleOrigins)
                 {
-                    if (Uri.TryCreate(origin.Value, UriKind.Absolute, out Uri u))
-                    {
-                        if (u.Scheme == "http" || u.Scheme == "https")
-                        {
-                            Managers.Add(origin.Key, new HttpModuleManager(origin.Key, u.OriginalString));
-                        }
-                        else if (u.Scheme == "dev")
-                        {
-                            Managers.Add(origin.Key, new TCPUploadModuleManager(u.OriginalString));
-                        }
-                        else
-                        {
-                            Managers.Add(origin.Key, new LocalModuleManager(origin.Value));
-                        }
-                    }
-                    else
-                    {
-                        Managers.Add(origin.Key, new LocalModuleManager(origin.Value));
-                    }
+                    AddManager( origin.Key, origin.Value );
                 }
             }
         }

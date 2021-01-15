@@ -16,6 +16,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins
         {
             ModuleResolver.ResolverSettings.ModuleOrigins[name] = uri;
             SettingsSystem.SaveSettings(ModuleResolver.ResolverSettings);
+            ModuleResolver.AddManager( name, uri );
         }
 
 
