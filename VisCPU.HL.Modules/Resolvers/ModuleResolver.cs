@@ -237,20 +237,20 @@ namespace VisCPU.HL.Modules.Resolvers
             {
                 if (u.Scheme == "http" || u.Scheme == "https")
                 {
-                    Managers.Add(name, new HttpModuleManager(name, u.OriginalString));
+                    Managers[name]= new HttpModuleManager(name, u.OriginalString);
                 }
                 else if (u.Scheme == "dev")
                 {
-                    Managers.Add(name, new TCPUploadModuleManager(u.OriginalString));
+                    Managers[name] = new TCPUploadModuleManager(u.OriginalString);
                 }
                 else
                 {
-                    Managers.Add(name, new LocalModuleManager(url));
+                    Managers[name] = new LocalModuleManager(url);
                 }
             }
             else
             {
-                Managers.Add(name, new LocalModuleManager(url));
+                Managers[name] = new LocalModuleManager(url);
             }
         }
 
