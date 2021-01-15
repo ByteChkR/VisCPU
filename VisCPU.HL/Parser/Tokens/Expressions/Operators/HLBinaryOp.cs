@@ -25,7 +25,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// <summary>
         ///     Right side of the Expression
         /// </summary>
-        public  HLExpression Right { get; }
+        public HLExpression Right { get; }
 
         public override HLTokenType Type => OperationType;
 

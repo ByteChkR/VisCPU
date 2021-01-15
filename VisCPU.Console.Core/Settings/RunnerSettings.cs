@@ -16,28 +16,6 @@ namespace VisCPU.Console.Core.Settings
     public class RunnerSettings
     {
 
-        [field: Argument( Name = "run:cpu.interrupt" )]
-        public uint CpuIntAddr { get; set; }
-
-        [field: Argument( Name = "run:cpu.reset" )]
-        public uint CpuResetAddr { get; set; }
-
-        [field: XmlIgnore]
-        [field: JsonIgnore]
-        public Dictionary < string, Func < string, string > > PreRunMap { get; } =
-            new Dictionary < string, Func < string, string > >
-            {
-                { ".z", UnCompressFile },
-                { ".vasm", FindBinary },
-                { ".vhl", FindBinary }
-            };
-
-        [field: Argument( Name = "run:working-dir" )]
-        [field: Argument( Name = "run:w-dir" )]
-        [ XmlIgnore]
-        [ JsonIgnore]
-        public string WorkingDir { get; set; } = Path.GetFullPath( "./" );
-
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]
         [XmlIgnore]
@@ -49,6 +27,28 @@ namespace VisCPU.Console.Core.Settings
         [XmlIgnore]
         [JsonIgnore]
         private readonly string[] m_InputFolders;
+
+        [field: Argument( Name = "run:cpu.interrupt" )]
+        public uint CpuIntAddr { get; set; }
+
+        [field: Argument( Name = "run:cpu.reset" )]
+        public uint CpuResetAddr { get; set; }
+
+        [XmlIgnore]
+        [JsonIgnore]
+        public Dictionary < string, Func < string, string > > PreRunMap { get; } =
+            new Dictionary < string, Func < string, string > >
+            {
+                { ".z", UnCompressFile },
+                { ".vasm", FindBinary },
+                { ".vhl", FindBinary }
+            };
+
+        [field: Argument( Name = "run:working-dir" )]
+        [field: Argument( Name = "run:w-dir" )]
+        [XmlIgnore]
+        [JsonIgnore]
+        public string WorkingDir { get; set; } = Path.GetFullPath( "./" );
 
         [XmlIgnore]
         [JsonIgnore]

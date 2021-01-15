@@ -18,7 +18,7 @@ namespace VisCPU.Instructions
             public readonly Instruction Instruction;
             public readonly byte OpCode;
 
-            public InstructionData(byte opCode, Instruction instr)
+            public InstructionData( byte opCode, Instruction instr )
             {
                 OpCode = opCode;
                 Instruction = instr;

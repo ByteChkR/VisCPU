@@ -30,7 +30,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
             string modListPath = Path.Combine(
                                               ModuleRoot.OriginalString,
-                                              MODULE_LIST
+                                              s_ModuleList
                                              );
 
             if ( !File.Exists( modListPath ) )
@@ -106,7 +106,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override string GetModulePackagePath( ModulePackage package )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ModuleName );
+            return Path.Combine( ModuleRoot.OriginalString, s_ModulePath, package.ModuleName );
         }
 
         public override ModulePackage GetPackage( string name )
@@ -121,17 +121,17 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override string GetTargetDataPath( ProjectConfig target )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ProjectName, target.ProjectVersion );
+            return Path.Combine( ModuleRoot.OriginalString, s_ModulePath, target.ProjectName, target.ProjectVersion );
         }
 
         public override string GetTargetDataUri( ProjectConfig target )
         {
-            return Path.Combine( GetTargetDataPath( target ), MODULE_DATA );
+            return Path.Combine( GetTargetDataPath( target ), s_ModuleData );
         }
 
         public override string GetTargetInfoUri( ModulePackage package, string moduleVersion )
         {
-            return Path.Combine( GetModulePackagePath( package ), moduleVersion, MODULE_TARGET );
+            return Path.Combine( GetModulePackagePath( package ), moduleVersion, s_ModuleTarget );
         }
 
         public override bool HasPackage( string name )

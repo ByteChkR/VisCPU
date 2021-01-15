@@ -16,8 +16,11 @@ namespace VisCPU.HL.Modules.Data
     public class ProjectConfig
     {
 
-        [ JsonIgnore]
-        [ XmlIgnore]
+        private static readonly Dictionary < string, BuildJobRunner > s_BuildJobRunners =
+            new Dictionary < string, BuildJobRunner >();
+
+        [JsonIgnore]
+        [XmlIgnore]
         public ModuleManager Manager { get; }
 
         public string ProjectName { get; set; } = "MyProject";
@@ -48,9 +51,6 @@ namespace VisCPU.HL.Modules.Data
                              }
                 }
             };
-
-        private static readonly Dictionary < string, BuildJobRunner > s_BuildJobRunners =
-            new Dictionary < string, BuildJobRunner >();
 
         #region Public
 

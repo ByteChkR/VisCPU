@@ -17,14 +17,14 @@ namespace VisCPU.HL.Parser
     {
 
         /// <summary>
-        ///     Input Token Stream
-        /// </summary>
-        public List < IHlToken > Tokens { get; }
-
-        /// <summary>
         ///     The Current Position inside the token Stream
         /// </summary>
         private int m_CurrentIdx;
+
+        /// <summary>
+        ///     Input Token Stream
+        /// </summary>
+        public List < IHlToken > Tokens { get; }
 
         #region Public
 

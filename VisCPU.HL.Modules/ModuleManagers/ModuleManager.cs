@@ -17,10 +17,10 @@ namespace VisCPU.HL.Modules.ModuleManagers
     public abstract class ModuleManager : VisBase
     {
 
-        public static readonly string MODULE_LIST = "index.json";
-        public static readonly string MODULE_DATA = "module.zip";
-        public static readonly string MODULE_TARGET = "module.json";
-        public static readonly string MODULE_PATH = "modules";
+        public static readonly string s_ModuleList = "index.json";
+        public static readonly string s_ModuleData = "module.zip";
+        public static readonly string s_ModuleTarget = "module.json";
+        public static readonly string s_ModulePath = "modules";
 
         public Uri ModuleRoot { get; }
 
@@ -46,7 +46,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public static string GetTargetDataPath( string root, string moduleName, string moduleVersion )
         {
-            return Path.Combine( root, MODULE_PATH, moduleName, moduleVersion );
+            return Path.Combine( root, s_ModulePath, moduleName, moduleVersion );
         }
 
         public abstract void Get( ProjectConfig target, string targetDir );
@@ -101,7 +101,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
         {
             return Path.Combine(
                                 root,
-                                MODULE_LIST
+                                s_ModuleList
                                );
         }
 

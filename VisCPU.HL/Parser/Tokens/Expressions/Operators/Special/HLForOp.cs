@@ -11,6 +11,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     {
 
         /// <summary>
+        ///     Variable Change Expression
+        /// </summary>
+        private readonly HLExpression m_VInc;
+
+        /// <summary>
         ///     Continue Condition
         /// </summary>
         public HLExpression Condition { get; }
@@ -24,11 +29,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Variable Declaration
         /// </summary>
         public HLExpression VDecl { get; }
-
-        /// <summary>
-        ///     Variable Change Expression
-        /// </summary>
-        private readonly HLExpression m_VInc;
 
         #region Public
 

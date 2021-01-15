@@ -16,8 +16,8 @@ namespace VisCPU.HL.Modules.UploadService
     public class TCPModuleManagerServer : VisBase
     {
 
-        private readonly string TempStagingDirectory;
-        private readonly ModuleManager Manager;
+        private readonly string m_TempStagingDirectory;
+        private readonly ModuleManager m_Manager;
 
         private bool m_StopServer;
         private readonly TcpListener m_Listener;
@@ -28,15 +28,15 @@ namespace VisCPU.HL.Modules.UploadService
 
         public TCPModuleManagerServer( ModuleManager manager, int port, string tempStagingDirectory )
         {
-            Manager = manager;
+            m_Manager = manager;
             m_Listener = TcpListener.Create( port );
-            TempStagingDirectory = tempStagingDirectory;
-            Directory.CreateDirectory( TempStagingDirectory );
+            m_TempStagingDirectory = tempStagingDirectory;
+            Directory.CreateDirectory( m_TempStagingDirectory );
         }
 
         public string GetTempFile()
         {
-            return Path.Combine( TempStagingDirectory, Path.GetRandomFileName() );
+            return Path.Combine( m_TempStagingDirectory, Path.GetRandomFileName() );
         }
 
         public void ServerLoop()
@@ -94,7 +94,7 @@ namespace VisCPU.HL.Modules.UploadService
 
                     s.Close();
 
-                    Manager.AddPackage( target, tempFile );
+                    m_Manager.AddPackage( target, tempFile );
 
                     File.Delete( tempFile );
 
@@ -117,7 +117,7 @@ namespace VisCPU.HL.Modules.UploadService
                 client.Close();
             }
 
-            Directory.Delete( TempStagingDirectory, true );
+            Directory.Delete( m_TempStagingDirectory, true );
         }
 
         public void Stop()

@@ -48,7 +48,7 @@ namespace VisCPU.Compiler.Implementations
                 result.DataSectionHeader.
                        ApplyOffset(
                                    settings.GlobalOffset +
-                                   ( uint ) result.LinkedBinary.Count * CPUSettings.INSTRUCTION_SIZE
+                                   ( uint ) result.LinkedBinary.Count * CPUSettings.s_InstructionSize
                                   ).
                        ToDictionary( x => x.Key, x => x.Value );
 
@@ -86,7 +86,7 @@ namespace VisCPU.Compiler.Implementations
                 Dictionary < string, AddressItem > hds = resultHiddenAddressItem.Value.ApplyOffset(
                          settings.GlobalOffset +
                          ( uint ) result.LinkedBinary.Count *
-                         CPUSettings.INSTRUCTION_SIZE
+                         CPUSettings.s_InstructionSize
                         ).
                     ToDictionary(
                                  x => x.Key,
@@ -129,12 +129,12 @@ namespace VisCPU.Compiler.Implementations
                     }
                 }
 
-                if ( bytes.Count > CPUSettings.BYTE_SIZE )
+                if ( bytes.Count > CPUSettings.s_ByteSize )
                 {
                     EventManager < ErrorEvent >.SendEvent( new InvalidArgumentCountEvent( i ) );
                 }
 
-                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, (int)CPUSettings.BYTE_SIZE - bytes.Count ) );
+                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.s_ByteSize - bytes.Count ) );
 
                 instrBytes.AddRange( bytes );
             }

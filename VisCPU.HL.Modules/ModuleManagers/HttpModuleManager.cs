@@ -56,7 +56,7 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override string GetModulePackagePath( ModulePackage package )
         {
-            return Path.Combine( m_LocalTempCache, MODULE_PATH, package.ModuleName );
+            return Path.Combine( m_LocalTempCache, s_ModulePath, package.ModuleName );
         }
 
         public override ModulePackage GetPackage( string name )
@@ -76,12 +76,12 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         public override string GetTargetDataUri( ProjectConfig target )
         {
-            return Path.Combine( GetTargetDataPath( target ), MODULE_DATA );
+            return Path.Combine( GetTargetDataPath( target ), s_ModuleData );
         }
 
         public override string GetTargetInfoUri( ModulePackage package, string moduleVersion )
         {
-            return Path.Combine( GetModulePackagePath( package ), moduleVersion, MODULE_TARGET );
+            return Path.Combine( GetModulePackagePath( package ), moduleVersion, s_ModuleTarget );
         }
 
         public override bool HasPackage( string name )
@@ -147,32 +147,32 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
         private string GetRemoteModulePackagePath( ModulePackage package )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ModuleName );
+            return Path.Combine( ModuleRoot.OriginalString, s_ModulePath, package.ModuleName );
         }
 
         private string GetRemoteModulePackagePath( ProjectConfig package )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, package.ProjectName );
+            return Path.Combine( ModuleRoot.OriginalString, s_ModulePath, package.ProjectName );
         }
 
         private string GetRemoteTargetDataPath( ProjectConfig target )
         {
-            return Path.Combine( ModuleRoot.OriginalString, MODULE_PATH, target.ProjectName, target.ProjectVersion );
+            return Path.Combine( ModuleRoot.OriginalString, s_ModulePath, target.ProjectName, target.ProjectVersion );
         }
 
         private string GetRemoteTargetDataUri( ProjectConfig target )
         {
-            return Path.Combine( GetRemoteTargetDataPath( target ), MODULE_DATA );
+            return Path.Combine( GetRemoteTargetDataPath( target ), s_ModuleData );
         }
 
         private string GetRemoteTargetInfoUri( ModulePackage package, string moduleVersion )
         {
-            return Path.Combine( GetRemoteModulePackagePath( package ), moduleVersion, MODULE_TARGET );
+            return Path.Combine( GetRemoteModulePackagePath( package ), moduleVersion, s_ModuleTarget );
         }
 
         private string GetRemoteTargetInfoUri( ProjectConfig target )
         {
-            return Path.Combine( GetRemoteModulePackagePath( target ), target.ProjectVersion, MODULE_TARGET );
+            return Path.Combine( GetRemoteModulePackagePath( target ), target.ProjectVersion, s_ModuleTarget );
         }
 
         private void SaveInfo( List < ModulePackage > packages )

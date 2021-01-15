@@ -6,8 +6,8 @@ namespace VisCPU
     public static class CPUSettings
     {
 
-        public static readonly uint INSTRUCTION_SIZE = 4;
-        public static readonly uint BYTE_SIZE = 16;
+        public static readonly uint s_InstructionSize = 4;
+        public static readonly uint s_ByteSize = 16;
 
         public static bool DumpOnCrash { get; set; }
 

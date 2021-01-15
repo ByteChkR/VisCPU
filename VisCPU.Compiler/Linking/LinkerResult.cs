@@ -14,13 +14,17 @@ namespace VisCPU.Compiler.Linking
         public List < uint > DataSection { get; }
 
         public Dictionary < string, AddressItem > DataSectionHeader { get; }
+
         public Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenConstantItems { get; }
+
         public Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenDataSectionItems { get; }
 
         public Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenLabelItems { get; }
+
         public Dictionary < string, AddressItem > Labels { get; }
 
         public List < AToken[] > LinkedBinary { get; }
+
         public LinkerTarget[] Targets { get; }
 
         #region Public

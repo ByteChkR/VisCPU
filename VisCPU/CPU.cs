@@ -145,7 +145,11 @@ namespace VisCPU
             return ( ProcessorFlags & flag ) != 0;
         }
 
-        public void LoadBinary( uint[] bios ) => LoadBinary( bios, 0 );
+        public void LoadBinary( uint[] bios )
+        {
+            LoadBinary( bios, 0 );
+        }
+
         public void LoadBinary( uint[] bios, uint start )
         {
             ProgramCounter = start;
@@ -185,21 +189,21 @@ namespace VisCPU
             m_Stack.Push( value );
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void PushState(uint pc, Flags flags)
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public void PushState( uint pc, Flags flags )
         {
             m_CpuStack.Push(
-                            new CPUState(ProcessorFlags, ProgramCounter)
+                            new CPUState( ProcessorFlags, ProgramCounter )
                            );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void PushState(uint pc)
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public void PushState( uint pc )
         {
-            PushState(pc, Flags.None);
+            PushState( pc, Flags.None );
         }
 
         public void Run()
@@ -230,17 +234,17 @@ namespace VisCPU
             ProcessorFlags |= flag;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetState(uint pc, Flags flags)
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public void SetState( uint pc, Flags flags )
         {
             ProcessorFlags = flags;
             ProgramCounter = pc;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetState(uint pc)
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public void SetState( uint pc )
         {
-            SetState(pc, Flags.None);
+            SetState( pc, Flags.None );
         }
 
         public int Step()

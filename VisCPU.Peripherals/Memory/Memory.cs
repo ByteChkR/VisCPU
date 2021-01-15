@@ -11,12 +11,12 @@ namespace VisCPU.Peripherals.Memory
     public class Memory : Peripheral
     {
 
-        private readonly uint[] InternalMemory;
+        private readonly uint[] m_InternalMemory;
         private readonly string m_FullPersistentPath;
 
         private readonly MemorySettings m_Settings;
 
-        public uint EndAddress => m_Settings.Start + ( uint ) InternalMemory.Length;
+        public uint EndAddress => m_Settings.Start + ( uint ) m_InternalMemory.Length;
 
         #region Public
 
@@ -35,9 +35,9 @@ namespace VisCPU.Peripherals.Memory
 
                 if ( File.Exists( settings.PersistentPath ) )
                 {
-                    InternalMemory = File.ReadAllBytes( settings.PersistentPath ).ToUInt();
+                    m_InternalMemory = File.ReadAllBytes( settings.PersistentPath ).ToUInt();
 
-                    if ( InternalMemory.Length != settings.Size )
+                    if ( m_InternalMemory.Length != settings.Size )
                     {
                         EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( settings.PersistentPath, true ) );
 
@@ -47,7 +47,7 @@ namespace VisCPU.Peripherals.Memory
                 else
                 {
                     EventManager < ErrorEvent >.SendEvent( new FileNotFoundEvent( settings.PersistentPath, true ) );
-                    InternalMemory = new uint[settings.Size];
+                    m_InternalMemory = new uint[settings.Size];
 
                     //File does not exist
                 }
@@ -59,7 +59,7 @@ namespace VisCPU.Peripherals.Memory
                     EventManager < WarningEvent >.SendEvent( new MemoryPersistentPathUnsetEvent() );
                 }
 
-                InternalMemory = new uint[settings.Size];
+                m_InternalMemory = new uint[settings.Size];
 
                 //Not persistent or persistent path not set
             }
@@ -77,25 +77,25 @@ namespace VisCPU.Peripherals.Memory
 
         public override void Dump( Stream str )
         {
-            str.Write( InternalMemory.ToBytes(), 0, InternalMemory.Length * sizeof( uint ) );
+            str.Write( m_InternalMemory.ToBytes(), 0, m_InternalMemory.Length * sizeof( uint ) );
         }
 
         public override uint ReadData( uint address )
         {
-            return InternalMemory[address - m_Settings.Start];
+            return m_InternalMemory[address - m_Settings.Start];
         }
 
         public override void Shutdown()
         {
             if ( m_Settings.Persistent && m_FullPersistentPath != null )
             {
-                File.WriteAllBytes( m_FullPersistentPath, InternalMemory.ToBytes() );
+                File.WriteAllBytes( m_FullPersistentPath, m_InternalMemory.ToBytes() );
             }
         }
 
         public override void WriteData( uint address, uint data )
         {
-            InternalMemory[address - m_Settings.Start] = data;
+            m_InternalMemory[address - m_Settings.Start] = data;
         }
 
         #endregion
