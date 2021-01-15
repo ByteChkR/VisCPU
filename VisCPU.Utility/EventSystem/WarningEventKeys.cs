@@ -3,6 +3,7 @@
 
     public static class WarningEventKeys
     {
+        public const string MODULE_VERSION_EXISTS = "module-version-exists";
 
         public const string MEMORY_BUS_DEVICE_OVERLAP = "memory-bus-device-overlap";
         public const string MEMORY_BUS_READ_UNMAPPED = "memory-bus-read-unmapped";

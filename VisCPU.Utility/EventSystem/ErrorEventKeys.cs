@@ -47,7 +47,6 @@
         public const string IMPORTER_NOT_FOUND = "importer-not-found";
         public const string IMPORTER_INVALID_TYPE = "importer-type-invalid";
 
-        public const string MODULE_VERSION_EXISTS = "module-version-exists";
         public const string MODULE_MANAGER_UNSUPPORTED_FEATURE = "module-manager-feature-unsupported";
 
         public const string ORIGIN_URL_SCHEME_UNSUPPORTED = "origin-url-scheme-unsupported";

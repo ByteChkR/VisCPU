@@ -62,14 +62,15 @@ namespace VisCPU.HL.Modules.ModuleManagers
 
             if ( package.HasTarget( target.ProjectVersion ) )
             {
-                EventManager < ErrorEvent >.SendEvent(
+                EventManager < WarningEvent >.SendEvent(
                                                       new ModuleVersionAlreadyExistsEvent(
                                                            target.ProjectName,
                                                            target.ProjectVersion
                                                           )
                                                      );
-
-                return;
+                string dataDir = GetTargetDataPath(target);
+                if(Directory.Exists(dataDir))
+                Directory.Delete( dataDir, true );
             }
 
             package.ModuleVersions.Add( target.ProjectVersion );
