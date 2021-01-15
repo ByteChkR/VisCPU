@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -245,7 +246,6 @@ namespace VisCPU.HL.Modules.Resolvers
             if (ResolverSettings == null && Managers == null)
             {
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config/module"));
-                CommonFiles.GenerateCommonFiles();
                 ResolverSettings = ModuleResolverSettings.Create();
                 Managers = new Dictionary<string, ModuleManager>();
 
@@ -273,6 +273,14 @@ namespace VisCPU.HL.Modules.Resolvers
                 }
             }
         }
+
+        public static ProjectInfo Resolve(string name, string version= "ANY")
+        {
+            return Managers.First(x=>x.Value.HasPackage(name)).Value.
+                   GetPackage(name).
+                   GetInstallTarget(version == "ANY" ? null :version);
+        }
+
 
         public static ProjectInfo Resolve(string repository, ProjectDependency dependency)
         {

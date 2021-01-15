@@ -152,8 +152,6 @@ namespace VisCPU.Console.Core.Subsystems.Modules
 
             CopyTo( Path.GetDirectoryName( src ), temp );
 
-            File.Delete( Path.Combine( temp, "project.json" ) );
-
             foreach ( ProjectDependency moduleDependency in t.Dependencies )
             {
                 string p = Path.Combine( temp, moduleDependency.ProjectName );

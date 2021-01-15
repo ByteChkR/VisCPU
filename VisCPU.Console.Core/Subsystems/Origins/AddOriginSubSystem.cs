@@ -12,14 +12,20 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         #region Public
 
-        public override void Run( IEnumerable < string > args )
+        public static void AddOrigin(string name, string uri)
         {
             ModuleResolverSettings s = ModuleResolverSettings.Create();
+            s.ModuleOrigins[name] = uri;
+            SettingsSystem.SaveSettings(s);
+        }
+
+
+        public override void Run( IEnumerable < string > args )
+        {
             string[] a = args.ToArray();
             string name = a[0];
             string url = a[1];
-            s.ModuleOrigins[name] = url;
-            SettingsSystem.SaveSettings( s );
+            AddOrigin( name, url );
         }
 
         public override void Help()

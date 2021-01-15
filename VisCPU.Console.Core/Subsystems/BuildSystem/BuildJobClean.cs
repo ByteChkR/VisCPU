@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Console.Core.Subsystems.Modules;
+using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.HL.BuildSystem;
+using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.Resolvers;
 using VisCPU.Utility.Logging;
 
@@ -17,40 +19,116 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
 
         public override void Help()
         {
-            Log( "vis make <root> <target>" );
+            Log("vis make <root> <target>");
         }
 
-        public override void Run( IEnumerable < string > args )
+
+        public override void Run(IEnumerable<string> args)
         {
             ModuleResolver.Initialize();
+            CommonFiles.GenerateCommonFiles();
             string[] a = args.ToArray();
 
             string root = a.Length != 0
-                              ? Path.GetFullPath( a[0] )
+                              ? Path.GetFullPath(a[0])
                               : Directory.GetCurrentDirectory();
 
-            string src = Path.Combine( root, "project.json" );
+            string src = Path.Combine(root, "project.json");
 
 
-            ProjectConfig.AddRunner( new BuildJobBuild() );
-            ProjectConfig.AddRunner( new BuildJobClean() );
-            ProjectConfig.AddRunner( new BuildJobPublish() );
-            ProjectConfig.AddRunner( new BuildJobRestore() );
+            ProjectConfig.AddRunner(new BuildJobBuild());
+            ProjectConfig.AddRunner(new BuildJobClean());
+            ProjectConfig.AddRunner(new BuildJobPublish());
+            ProjectConfig.AddRunner(new BuildJobRestore());
             ProjectConfig.AddRunner(new BuildJobExternalBuild());
             ProjectConfig.AddRunner(new BuildJobCombinedJobs());
             ProjectConfig.AddRunner(new BuildJobMoveContent());
             ProjectConfig.AddRunner(new BuildJobCopyContent());
             ProjectConfig.AddRunner(new BuildJobRunJob());
+            ProjectConfig.AddRunner(new BuildJobGetDependency());
+            ProjectConfig.AddRunner(new BuildJobAddOrigin());
+            ProjectConfig.AddRunner(new BuildJobRemoveOrigin());
 
-            ProjectConfig config = ProjectConfig.Load( src );
+            ProjectConfig config = ProjectConfig.Load(src);
             string target = config.DefaultTarget;
 
-            if ( a.Length > 1 )
+            if (a.Length > 1)
             {
                 target = a[1];
             }
 
-            config.RunTarget( root, target );
+            config.RunTarget(root, target);
+        }
+
+        #endregion
+
+    }
+
+    public class BuildJobGetDependency : BuildJobRunner
+    {
+
+        public override string RunnerName => "get-dependency";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job)
+        {
+
+            foreach (KeyValuePair<string, string> keyValuePair in job.Arguments)
+            {
+                ProjectInfo info = ModuleResolver.Resolve(keyValuePair.Key, keyValuePair.Value);
+                info.Manager.Get(info, Path.Combine(projectRoot, info.ProjectName));
+            }
+        }
+
+        #endregion
+
+    }
+
+    public class BuildJobAddOrigin : BuildJobRunner
+    {
+
+        public override string RunnerName => "add-origin";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job)
+        {
+            foreach (KeyValuePair<string, string> keyValuePair in job.Arguments)
+            {
+                AddOriginSubSystem.AddOrigin(keyValuePair.Key, keyValuePair.Value);
+            }
+        }
+
+        #endregion
+
+    }
+
+    public class BuildJobRemoveOrigin : BuildJobRunner
+    {
+
+        public override string RunnerName => "remove-origins";
+
+        #region Public
+
+        public override void RunJob(
+            string projectRoot,
+            ProjectConfig project,
+            ProjectBuildTarget target,
+            BuildJob job)
+        {
+            foreach (string argumentsKey in job.Arguments.Keys)
+            {
+                RemoveOriginSubSystem.RemoveOrigin(argumentsKey);
+            }
         }
 
         #endregion
@@ -68,12 +146,12 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
             string path = job.Arguments["path"];
-            job.Arguments.TryGetValue( "target", out string externalTarget );
-            ProjectConfig external = ProjectConfig.Load( path );
-            external.RunTarget( Path.GetDirectoryName( path ), externalTarget );
+            job.Arguments.TryGetValue("target", out string externalTarget);
+            ProjectConfig external = ProjectConfig.Load(path);
+            external.RunTarget(Path.GetDirectoryName(path), externalTarget);
         }
 
         #endregion
@@ -117,7 +195,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             ProjectBuildTarget target,
             BuildJob job)
         {
-            ProgramRunner.Run( job.Arguments );
+            ProgramRunner.Run(job.Arguments);
         }
 
         #endregion
@@ -135,25 +213,25 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
             string input = job.Arguments["source"];
             string output = job.Arguments["destination"];
 
-            if ( Directory.Exists( input ) )
+            if (Directory.Exists(input))
             {
-                Directory.CreateDirectory( output );
-                ProjectPackSubSystem.CopyTo( input, output );
+                Directory.CreateDirectory(output);
+                ProjectPackSubSystem.CopyTo(input, output);
             }
-            else if ( File.Exists( input ) )
+            else if (File.Exists(input))
             {
-                if ( Directory.Exists( output ) )
+                if (Directory.Exists(output))
                 {
-                    File.Copy( input, Path.Combine( output, Path.GetFileName( input ) ), true );
+                    File.Copy(input, Path.Combine(output, Path.GetFileName(input)), true);
                 }
                 else
                 {
-                    File.Copy( input, output, true );
+                    File.Copy(input, output, true);
                 }
             }
         }
@@ -173,41 +251,41 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
             string input = job.Arguments["source"];
             string output = job.Arguments["destination"];
 
-            if ( Directory.Exists( input ) )
+            if (Directory.Exists(input))
             {
-                if ( Directory.Exists( output ) )
+                if (Directory.Exists(output))
                 {
-                    Directory.Delete( output );
+                    Directory.Delete(output);
                 }
 
-                Directory.Move( input, output );
+                Directory.Move(input, output);
             }
-            else if ( File.Exists( input ) )
+            else if (File.Exists(input))
             {
-                if ( Directory.Exists( output ) )
+                if (Directory.Exists(output))
                 {
-                    string path = Path.Combine( output, Path.GetFileName( input ) );
+                    string path = Path.Combine(output, Path.GetFileName(input));
 
-                    if ( File.Exists( path ) )
+                    if (File.Exists(path))
                     {
-                        File.Delete( path );
+                        File.Delete(path);
                     }
 
-                    File.Move( input, path );
+                    File.Move(input, path);
                 }
                 else
                 {
-                    if ( File.Exists( output ) )
+                    if (File.Exists(output))
                     {
-                        File.Delete( output );
+                        File.Delete(output);
                     }
 
-                    File.Move( input, output );
+                    File.Move(input, output);
                 }
             }
         }
@@ -227,9 +305,9 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
-            ProjectCleanSubSystem.Clean( projectRoot );
+            ProjectCleanSubSystem.Clean(projectRoot);
         }
 
         #endregion
@@ -247,14 +325,14 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
-            if ( !job.Arguments.TryGetValue( "repo", out string repo ) )
+            if (!job.Arguments.TryGetValue("repo", out string repo))
             {
                 repo = "local";
             }
 
-            ProjectRestoreSubSystem.Restore( projectRoot, repo );
+            ProjectRestoreSubSystem.Restore(projectRoot, repo);
         }
 
         #endregion
@@ -272,9 +350,9 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
-            if ( !job.Arguments.TryGetValue( "repo", out string repo ) )
+            if (!job.Arguments.TryGetValue("repo", out string repo))
             {
                 repo = "local";
             }
@@ -282,17 +360,17 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             ProjectPackSubSystem.PackOptions opts = new ProjectPackSubSystem.PackOptions();
             ProjectPublishSubSystem.PublishOptions pops = new ProjectPublishSubSystem.PublishOptions();
 
-            if ( job.Arguments.TryGetValue( "version", out string ver ) )
+            if (job.Arguments.TryGetValue("version", out string ver))
             {
                 opts.VersionString = ver;
             }
 
-            if ( job.Arguments.TryGetValue( "origin", out string origin ) )
+            if (job.Arguments.TryGetValue("origin", out string origin))
             {
                 pops.Repository = origin;
             }
 
-            ProjectPublishSubSystem.Publish( projectRoot, pops, opts );
+            ProjectPublishSubSystem.Publish(projectRoot, pops, opts);
         }
 
         #endregion
@@ -310,9 +388,9 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            BuildJob job)
         {
-            ProgramBuilder.Build( job.Arguments );
+            ProgramBuilder.Build(job.Arguments);
         }
 
         #endregion
