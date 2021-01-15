@@ -11,24 +11,24 @@ namespace VisCPU.Peripherals.Memory
     {
 
         [field: Argument( Name = "memory:read" )]
-        public bool EnableRead { get; } = true;
+        public bool EnableRead { get; set; } = true;
 
         [field: Argument( Name = "memory:write" )]
-        public bool EnableWrite { get; } = true;
+        public bool EnableWrite { get; set; } = true;
 
         [field: Argument( Name = "memory:persistent" )]
-        public bool Persistent { get; }
+        public bool Persistent { get; set; }
 
         [field: Argument( Name = "memory:persistent.path" )]
-        public string PersistentPath { get; } = "./config/memory/states/default.bin";
+        public string PersistentPath { get; set; } = "./config/memory/states/default.bin";
 
         [field: Argument( Name = "memory:size" )]
-        public uint Size { get; } = 262144;
+        public uint Size { get; set; } = 262144;
 
         #region Unity Event Functions
 
         [field: Argument( Name = "memory:start" )]
-        public uint Start { get; }
+        public uint Start { get; set; }
 
         #endregion
 

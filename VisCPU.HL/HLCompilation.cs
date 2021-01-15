@@ -248,10 +248,10 @@ namespace VisCPU.HL
                         return;
                     }
 
-                    List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                     string ConcatContent()
                     {
+                        List<IHlToken> content = tokens.GetRange(i + 1, endQuote - i - 1);
                         return OriginalText.Substring(
                                                       content.First().SourceIndex,
                                                       tokens[i + 1 + content.Count].SourceIndex -

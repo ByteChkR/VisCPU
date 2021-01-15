@@ -51,6 +51,7 @@
         public static readonly string s_ImporterInvalidType = "importer-type-invalid";
 
         public static readonly string s_ModuleManagerUnsupportedFeature = "module-manager-feature-unsupported";
+        public static readonly string s_ModuleFileNotFound = "module-file-not-found";
 
         public static readonly string s_OriginUrlSchemeUnsupported = "origin-url-scheme-unsupported";
 

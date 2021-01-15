@@ -18,9 +18,9 @@ namespace VisCPU.Console.Core.Subsystems.Project
         public class PublishOptions
         {
 
-            [Argument( Name = "origin" )]
-            [Argument( Name = "o" )]
-            public string Repository = "local";
+            [field: Argument( Name = "origin" )]
+            [field: Argument( Name = "o" )]
+            public string Repository { get; set; } = "local";
 
         }
 

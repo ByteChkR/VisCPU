@@ -15,11 +15,11 @@ namespace VisCPU.Console.Core.Subsystems.Project
         private class AddDependencyConfig
         {
 
-            [Argument( Name = "name" )]
-            public string Name = "ModuleDependency";
+            [field: Argument( Name = "name" )]
+            public string Name { get; set; } = "ModuleDependency";
 
-            [Argument( Name = "version" )]
-            public string Version = "ANY";
+            [field: Argument( Name = "version" )]
+            public string Version { get; set; } = "ANY";
 
         }
 

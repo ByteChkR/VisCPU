@@ -16,11 +16,11 @@ namespace VisCPU.Console.Core.Settings
     public class RunnerSettings
     {
 
-        [Argument( Name = "run:cpu.interrupt" )]
-        public uint CpuIntAddr;
+        [field: Argument( Name = "run:cpu.interrupt" )]
+        public uint CpuIntAddr { get; set; }
 
-        [Argument( Name = "run:cpu.reset" )]
-        public uint CpuResetAddr;
+        [field: Argument( Name = "run:cpu.reset" )]
+        public uint CpuResetAddr { get; set; }
 
         [XmlIgnore]
         [JsonIgnore]
@@ -32,11 +32,11 @@ namespace VisCPU.Console.Core.Settings
                 { ".vhl", FindBinary }
             };
 
-        [Argument( Name = "run:working-dir" )]
-        [Argument( Name = "run:w-dir" )]
-        [XmlIgnore]
-        [JsonIgnore]
-        public string WorkingDir = Path.GetFullPath( "./" );
+        [field: Argument( Name = "run:working-dir" )]
+        [field: Argument( Name = "run:w-dir" )]
+        [ XmlIgnore]
+        [ JsonIgnore]
+        public string WorkingDir { get; set; } = Path.GetFullPath( "./" );
 
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]

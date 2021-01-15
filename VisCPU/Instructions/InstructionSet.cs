@@ -12,11 +12,17 @@ namespace VisCPU.Instructions
     public abstract class InstructionSet
     {
 
-        public struct InstructionData : IEquatable < InstructionData >
+        public readonly struct InstructionData : IEquatable < InstructionData >
         {
 
-            public Instruction Instruction;
-            public byte OpCode;
+            public readonly Instruction Instruction;
+            public readonly byte OpCode;
+
+            public InstructionData(byte opCode, Instruction instr)
+            {
+                OpCode = opCode;
+                Instruction = instr;
+            }
 
             public bool Equals( InstructionData other )
             {
@@ -30,10 +36,7 @@ namespace VisCPU.Instructions
 
             public override int GetHashCode()
             {
-                unchecked
-                {
-                    return ( ( Instruction != null ? Instruction.GetHashCode() : 0 ) * 397 ) ^ OpCode.GetHashCode();
-                }
+                return ( ( Instruction != null ? Instruction.GetHashCode() : 0 ) * 397 ) ^ OpCode.GetHashCode();
             }
 
         }

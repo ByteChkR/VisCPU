@@ -16,14 +16,17 @@ namespace VisCPU.HL.Modules.Data
     public class ProjectConfig
     {
 
-        [JsonIgnore]
-        [XmlIgnore]
-        public ModuleManager Manager;
+        [ JsonIgnore]
+        [ XmlIgnore]
+        public ModuleManager Manager { get; }
 
-        public string ProjectName = "MyProject";
-        public string ProjectVersion = "0.0.0.1";
-        public List < ProjectDependency > Dependencies = new List < ProjectDependency >();
-        public string DefaultTarget = "Debug";
+        public string ProjectName { get; set; } = "MyProject";
+
+        public string ProjectVersion { get; set; } = "0.0.0.1";
+
+        public List < ProjectDependency > Dependencies { get; } = new List < ProjectDependency >();
+
+        public string DefaultTarget { get; } = "Debug";
 
         public Dictionary < string, ProjectBuildTarget > BuildTargets = new Dictionary < string, ProjectBuildTarget >
                                                                         {

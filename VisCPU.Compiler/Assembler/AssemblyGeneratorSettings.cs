@@ -10,8 +10,8 @@ namespace VisCPU.Compiler.Assembler
     public class AssemblyGeneratorSettings
     {
 
-        [Argument( Name = "assembler:offset.global" )]
-        public uint GlobalOffset;
+        [field: Argument( Name = "assembler:offset.global" )]
+        public uint GlobalOffset { get; set; }
 
         #region Public
 

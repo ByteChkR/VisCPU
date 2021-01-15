@@ -184,15 +184,21 @@ namespace VisCPU
             m_Stack.Push( value );
         }
 
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
-        public void PushState( uint pc, Flags flags = Flags.None )
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void PushState(uint pc, Flags flags)
         {
             m_CpuStack.Push(
-                            new CPUState( ProcessorFlags, ProgramCounter )
+                            new CPUState(ProcessorFlags, ProgramCounter)
                            );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void PushState(uint pc)
+        {
+            PushState(pc, Flags.None);
         }
 
         public void Run()
@@ -223,11 +229,17 @@ namespace VisCPU
             ProcessorFlags |= flag;
         }
 
-        [MethodImpl( MethodImplOptions.AggressiveInlining )]
-        public void SetState( uint pc, Flags flags = Flags.None )
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetState(uint pc, Flags flags)
         {
             ProcessorFlags = flags;
             ProgramCounter = pc;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SetState(uint pc)
+        {
+            SetState(pc, Flags.None);
         }
 
         public int Step()

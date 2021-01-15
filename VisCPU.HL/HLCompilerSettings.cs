@@ -11,11 +11,11 @@ namespace VisCPU.HL
     public class HLCompilerSettings
     {
 
-        [Argument( Name = "compiler:optimize-temp-vars" )]
-        public bool OptimizeTempVarUsage = true;
+        [field: Argument( Name = "compiler:optimize-temp-vars" )]
+        public bool OptimizeTempVarUsage { get; set; } = true;
 
-        [Argument( Name = "compiler:optimize-const-expr" )]
-        public bool OptimizeConstExpressions;
+        [field: Argument( Name = "compiler:optimize-const-expr" )]
+        public bool OptimizeConstExpressions { get; set; }
 
         #region Public
 

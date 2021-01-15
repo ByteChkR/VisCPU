@@ -12,7 +12,7 @@ namespace VisCPU.HL.Modules.Resolvers
     {
 
         [field: Argument( Name = "module.origins" )]
-        public Dictionary < string, string > ModuleOrigins { get; } =
+        public Dictionary < string, string > ModuleOrigins { get; set; } =
             new Dictionary < string, string > { { "local", "config/module/local" } };
 
         #region Public

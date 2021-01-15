@@ -17,10 +17,11 @@ namespace VisCPU.HL.Modules.Data
 
         [JsonIgnore]
         [XmlIgnore]
-        public ModuleManager Manager;
+        public ModuleManager Manager { get; set; }
 
-        public string ModuleName;
-        public List < string > ModuleVersions;
+        public string ModuleName { get; set; }
+
+        public List < string > ModuleVersions { get; set; }
 
         #region Public
 

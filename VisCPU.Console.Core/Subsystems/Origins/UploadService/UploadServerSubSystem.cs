@@ -14,8 +14,8 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
     public class UploadServerSubSystem : ConsoleSubsystem
     {
 
-        [Argument( Name = "port" )]
-        public int Port = 21212;
+        [field: Argument( Name = "port" )]
+        public int Port { get; set; } = 21212;
 
         #region Public
 

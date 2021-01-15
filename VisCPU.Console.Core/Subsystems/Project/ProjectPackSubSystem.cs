@@ -18,8 +18,8 @@ namespace VisCPU.Console.Core.Subsystems.Project
         public class PackOptions
         {
 
-            [Argument( Name = "version" )]
-            public string VersionString = "X.X.X.+";
+            [field: Argument( Name = "version" )]
+            public string VersionString { get; set; } = "X.X.X.+";
 
         }
 

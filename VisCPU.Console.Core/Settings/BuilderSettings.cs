@@ -35,20 +35,20 @@ namespace VisCPU.Console.Core.Settings
         [Argument( Name = "build:steps" )]
         public readonly string[] BuildSteps = { "bin" };
 
-        [Argument( Name = "build:clean" )]
-        public bool CleanBuildOutput = true;
+        [field: Argument( Name = "build:clean" )]
+        public bool CleanBuildOutput { get; set; } = true;
 
-        [Argument( Name = "build:input" )]
-        [Argument( Name = "build:i" )]
+        [field: Argument( Name = "build:input" )]
+        [field: Argument( Name = "build:i" )]
         [XmlIgnore]
         [JsonIgnore]
-        public string[] EntryFiles;
+        public string[] EntryFiles { get; set; }
 
-        [Argument( Name = "build:input-dirs" )]
-        [Argument( Name = "build:if" )]
-        [XmlIgnore]
-        [JsonIgnore]
-        public string[] InputFolders;
+        [field: Argument( Name = "build:input-dirs" )]
+        [field: Argument( Name = "build:if" )]
+        [ XmlIgnore]
+        [ JsonIgnore]
+        public string[] InputFolders { get; set; }
 
         [XmlIgnore]
         [JsonIgnore]

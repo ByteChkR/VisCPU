@@ -8,8 +8,9 @@ namespace VisCPU.Compiler.Linking
     public class LinkerTarget
     {
 
-        public readonly IReadOnlyList < object > AdditionalCompilationFlags;
-        public readonly FileCompilation FileCompilation;
+        public IReadOnlyList < object > AdditionalCompilationFlags { get; }
+
+        public FileCompilation FileCompilation { get; }
 
         #region Public
 

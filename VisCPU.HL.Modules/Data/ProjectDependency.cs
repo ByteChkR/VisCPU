@@ -7,8 +7,9 @@ namespace VisCPU.HL.Modules.Data
     public class ProjectDependency
     {
 
-        public string ProjectName;
-        public string ProjectVersion;
+        public string ProjectName { get; set; }
+
+        public string ProjectVersion { get; set; }
 
     }
 

@@ -16,9 +16,9 @@ namespace VisCPU.Console.Core.Subsystems.Project
         private class RestoreOptions
         {
 
-            [Argument( Name = "origin" )]
-            [Argument( Name = "o" )]
-            public string Origin = "local";
+            [field: Argument( Name = "origin" )]
+            [field: Argument( Name = "o" )]
+            public string Origin { get; set; } = "local";
 
         }
 

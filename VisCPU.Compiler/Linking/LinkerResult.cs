@@ -9,17 +9,19 @@ namespace VisCPU.Compiler.Linking
     public class LinkerResult
     {
 
-        public readonly Dictionary < string, AddressItem > Constants;
-        public readonly List < uint > DataSection;
-        public readonly Dictionary < string, AddressItem > DataSectionHeader;
-        public readonly Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenConstantItems;
-        public readonly Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenDataSectionItems;
+        public Dictionary < string, AddressItem > Constants { get; }
 
-        public readonly Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenLabelItems;
-        public readonly Dictionary < string, AddressItem > Labels;
+        public List < uint > DataSection { get; }
 
-        public readonly List < AToken[] > LinkedBinary;
-        public readonly LinkerTarget[] Targets;
+        public Dictionary < string, AddressItem > DataSectionHeader { get; }
+        public Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenConstantItems { get; }
+        public Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenDataSectionItems { get; }
+
+        public Dictionary < (int, int), Dictionary < string, AddressItem > > HiddenLabelItems { get; }
+        public Dictionary < string, AddressItem > Labels { get; }
+
+        public List < AToken[] > LinkedBinary { get; }
+        public LinkerTarget[] Targets { get; }
 
         #region Public
 

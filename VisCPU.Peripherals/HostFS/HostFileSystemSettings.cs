@@ -11,25 +11,25 @@ namespace VisCPU.Peripherals.HostFS
     {
 
         [field: Argument( Name = "hostfs:root.use" )]
-        public bool UseRootPath { get; }
+        public bool UseRootPath { get; set; }
 
         [field: Argument( Name = "hostfs:delete.enable" )]
-        public bool EnableDeleteFiles { get; }
+        public bool EnableDeleteFiles { get; set; }
 
         [field: Argument( Name = "hostfs:root" )]
-        public string RootPath { get; } = AppDomain.CurrentDomain.BaseDirectory;
+        public string RootPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
 
         [field: Argument( Name = "hostfs:pin.present" )]
-        public uint PinPresent { get; } = 0xFFFF3000;
+        public uint PinPresent { get; set; } = 0xFFFF3000;
 
         [field: Argument( Name = "hostfs:pin.status" )]
-        public uint PinStatus { get; } = 0xFFFF3001;
+        public uint PinStatus { get; set; } = 0xFFFF3001;
 
         [field: Argument( Name = "hostfs:pin.data" )]
-        public uint PinData { get; } = 0xFFFF3002;
+        public uint PinData { get; set; } = 0xFFFF3002;
 
         [field: Argument( Name = "hostfs:pin.cmd" )]
-        public uint PinCmd { get; } = 0xFFFF3003;
+        public uint PinCmd { get; set; } = 0xFFFF3003;
 
         #region Public
 

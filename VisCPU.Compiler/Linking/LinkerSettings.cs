@@ -11,7 +11,7 @@ namespace VisCPU.Compiler.Linking
     {
 
         [field: Argument( Name = "linker:no-hide" )]
-        public bool NoHiddenItems { get; }
+        public bool NoHiddenItems { get; set; }
 
         [field: Argument( Name = "linker:export-info" )]
         [field: Argument( Name = "linker:export" )]

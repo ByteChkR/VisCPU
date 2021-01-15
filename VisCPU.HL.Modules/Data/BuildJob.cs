@@ -9,9 +9,11 @@ namespace VisCPU.HL.Modules.Data
     public class BuildJob
     {
 
-        public string JobName;
-        public string BuildJobRunner;
-        public Dictionary < string, string > Arguments = new Dictionary < string, string >();
+        public string JobName { get; set; }
+
+        public string BuildJobRunner { get; set; }
+
+        public Dictionary < string, string > Arguments { get; } = new Dictionary < string, string >();
 
         #region Public
 

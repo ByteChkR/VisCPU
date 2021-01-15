@@ -9,9 +9,11 @@ namespace VisCPU.HL.Modules.Data
     public class ProjectBuildTarget
     {
 
-        public string TargetName;
-        public string[] DependsOn = new string[0];
-        public List < BuildJob > Jobs = new List < BuildJob >();
+        public string TargetName { get; set; }
+
+        public string[] DependsOn { get; set; } = new string[0];
+
+        public List < BuildJob > Jobs { get; set; } = new List < BuildJob >();
 
         #region Public
 

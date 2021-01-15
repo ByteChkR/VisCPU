@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.HL.Modules.Data;
+using VisCPU.Utility.Events;
+using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Project
@@ -22,7 +24,8 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
             if ( !File.Exists( src ) )
             {
-                throw new Exception( $"The folder '{projectRoot}' does not contain a 'project.json' file." );
+                EventManager<ErrorEvent>.SendEvent(new ProjectFileNotFoundEvent(projectRoot));
+                return;
             }
 
             Logger.LogMessage( LoggerSystems.ModuleSystem, "Cleaning '{0}'", src );
