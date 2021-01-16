@@ -41,22 +41,16 @@ namespace VisCPU.HL.Modules.BuildSystem
                 config.ProjectVersion = version;
             }
 
-            ProjectBuildTarget debugTarget = new ProjectBuildTarget();
-            debugTarget.TargetName = "Debug";
-            debugTarget.DependsOn = new[] { "%VISDIR%common/targets/debug.json" };
-            ProjectBuildTarget debugRunTarget = new ProjectBuildTarget();
-            debugRunTarget.TargetName = "DebugRun";
-            debugRunTarget.DependsOn = new[] { "%VISDIR%common/targets/debugRun.json" };
-            ProjectBuildTarget releaseTarget = new ProjectBuildTarget();
-            releaseTarget.TargetName = "Release";
-            releaseTarget.DependsOn = new[] { "%VISDIR%common/targets/release.json" };
-            ProjectBuildTarget releaseRunTarget = new ProjectBuildTarget();
-            releaseRunTarget.TargetName = "ReleaseRun";
-            releaseRunTarget.DependsOn = new[] { "%VISDIR%common/targets/releaseRun.json" };
+            ProjectBuildTarget debugTarget = CreateDebugTarget();
+
+            ProjectBuildTarget debugRunTarget = CreateDebugRunTarget();
+
+            ProjectBuildTarget releaseTarget = CreateReleaseTarget();
+
+            ProjectBuildTarget releaseRunTarget = CreateReleaseRunTarget();
 
             ProjectBuildTarget publishTarget = new ProjectBuildTarget();
             publishTarget.TargetName = "Publish";
-            publishTarget.DependsOn = new string[0];
             BuildJob publishJob = new BuildJob();
             publishJob.JobName = "Publish Project";
             publishJob.BuildJobRunner = "merged";
@@ -99,7 +93,7 @@ namespace VisCPU.HL.Modules.BuildSystem
             debugBuildJob.Arguments["build:steps"] = "HL-expr bin";
             debugBuildJob.Arguments["build:clean"] = "false";
             debugBuildJob.Arguments["assembler:offset.global"] = "0";
-            debugBuildJob.Arguments["linker:export"] = "false";
+            debugBuildJob.Arguments["linker:export"] = "true";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
             debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
 
@@ -131,12 +125,13 @@ namespace VisCPU.HL.Modules.BuildSystem
             ProjectBuildTarget debug = new ProjectBuildTarget();
             debug.TargetName = "DebugRun";
 
-            debug.DependsOn = new[] { "%VISDIR%common/targets/debug.json" };
+            debug.DependsOn = new[] { "Debug" };
 
             BuildJob mergeRunJob = new BuildJob();
             mergeRunJob.JobName = "Merged Debug Run";
             mergeRunJob.BuildJobRunner = "merged";
             mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/debug_run.json";
+            mergeRunJob.Arguments["run:input"] = "Program.vbin";
             debug.Jobs.Add( mergeRunJob );
 
             return debug;
@@ -156,6 +151,7 @@ namespace VisCPU.HL.Modules.BuildSystem
             mergeBuildJob.JobName = "Merged Debug Build";
             mergeBuildJob.BuildJobRunner = "merged";
             mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/debug_build.json";
+            mergeBuildJob.Arguments["build:input"] = "Program.vhl";
             debug.Jobs.Add( mergeBuildJob );
 
             return debug;
@@ -170,7 +166,7 @@ namespace VisCPU.HL.Modules.BuildSystem
             debugBuildJob.Arguments["build:steps"] = "HL-expr bin";
             debugBuildJob.Arguments["build:clean"] = "false";
             debugBuildJob.Arguments["assembler:offset.global"] = "0";
-            debugBuildJob.Arguments["linker:export"] = "false";
+            debugBuildJob.Arguments["linker:export"] = "true";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
             debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
 
@@ -202,12 +198,13 @@ namespace VisCPU.HL.Modules.BuildSystem
             ProjectBuildTarget release = new ProjectBuildTarget();
             release.TargetName = "ReleaseRun";
 
-            release.DependsOn = new[] { "%VISDIR%common/targets/release.json" };
+            release.DependsOn = new[] { "Release" };
 
             BuildJob mergeRunJob = new BuildJob();
             mergeRunJob.JobName = "Merged Release Run";
             mergeRunJob.BuildJobRunner = "merged";
             mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
+            mergeRunJob.Arguments["run:input"] = "Program.vbin";
             release.Jobs.Add( mergeRunJob );
 
             return release;
@@ -227,6 +224,7 @@ namespace VisCPU.HL.Modules.BuildSystem
             mergeBuildJob.JobName = "Merged Release Build";
             mergeBuildJob.BuildJobRunner = "merged";
             mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_build.json";
+            mergeBuildJob.Arguments["build:input"] = "Program.vhl";
             release.Jobs.Add( mergeBuildJob );
 
             return release;
@@ -273,16 +271,16 @@ namespace VisCPU.HL.Modules.BuildSystem
 
         private static void GenerateCommonTargets()
         {
-            string dir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "common/targets" );
-            Directory.CreateDirectory( dir );
-            ProjectBuildTarget debug = CreateDebugTarget();
-            ProjectBuildTarget release = CreateReleaseTarget();
-            ProjectBuildTarget debugRun = CreateDebugRunTarget();
-            ProjectBuildTarget releaseRun = CreateReleaseRunTarget();
-            ProjectBuildTarget.Save( Path.Combine( dir, "debug.json" ), debug );
-            ProjectBuildTarget.Save( Path.Combine( dir, "debugRun.json" ), debugRun );
-            ProjectBuildTarget.Save( Path.Combine( dir, "release.json" ), release );
-            ProjectBuildTarget.Save( Path.Combine( dir, "releaseRun.json" ), releaseRun );
+            //string dir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "common/targets" );
+            //Directory.CreateDirectory( dir );
+            //ProjectBuildTarget debug = CreateDebugTarget();
+            //ProjectBuildTarget release = CreateReleaseTarget();
+            //ProjectBuildTarget debugRun = CreateDebugRunTarget();
+            //ProjectBuildTarget releaseRun = CreateReleaseRunTarget();
+            //ProjectBuildTarget.Save( Path.Combine( dir, "debug.json" ), debug );
+            //ProjectBuildTarget.Save( Path.Combine( dir, "debugRun.json" ), debugRun );
+            //ProjectBuildTarget.Save( Path.Combine( dir, "release.json" ), release );
+            //ProjectBuildTarget.Save( Path.Combine( dir, "releaseRun.json" ), releaseRun );
         }
 
         #endregion
