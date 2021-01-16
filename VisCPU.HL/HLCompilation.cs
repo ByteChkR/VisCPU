@@ -16,6 +16,7 @@ using VisCPU.HL.Parser.Tokens.Combined;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
+using VisCPU.Instructions.Emit;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -39,7 +40,8 @@ namespace VisCPU.HL
         internal readonly Dictionary < string, FunctionData > FunctionMap = new Dictionary < string, FunctionData >();
 
         internal readonly string OriginalText;
-        internal readonly List < string > ProgramCode = new List < string >();
+
+        internal readonly EmitterResult < string > EmitterResult = new EmitterResult < string >( new TextEmitter() );
 
         internal HLCompilerCollection TypeMap;
 
@@ -645,7 +647,9 @@ namespace VisCPU.HL
                 sb.AppendLine( "; ________________ MAIN PROGRAM CODE ________________" );
             }
 
-            foreach ( string programCode in ProgramCode )
+            string[] code = EmitterResult.Get();
+
+            foreach ( string programCode in code )
             {
                 sb.AppendLine( programCode );
             }
@@ -770,7 +774,8 @@ namespace VisCPU.HL
             if ( m_UnusedTempVars.Count != 0 )
             {
                 string oldName = m_UnusedTempVars.Dequeue();
-                ProgramCode.Add( $"LOAD {oldName} {initValue} ;Temp Var House-keeping" );
+
+                EmitterResult.Emit( "LOAD", oldName, initValue.ToString() );
 
                 return m_VariableMap[oldName];
             }
@@ -779,7 +784,7 @@ namespace VisCPU.HL
 
             if ( initValue != 0 )
             {
-                ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
+                EmitterResult.Emit( $"LOAD", name, initValue.ToString() );
             }
 
             return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
@@ -790,14 +795,14 @@ namespace VisCPU.HL
             if ( m_UnusedTempVars.Count != 0 )
             {
                 string oldName = m_UnusedTempVars.Dequeue();
-                ProgramCode.Add( $"COPY {initValue} {oldName} ;Temp Var House-keeping" );
+                EmitterResult.Emit( $"COPY", initValue, oldName );
 
                 return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
-            ProgramCode.Add( $"COPY {initValue} {name} ;Temp Var House-keeping" );
+            EmitterResult.Emit( $"COPY", initValue, name );
 
             return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
@@ -807,14 +812,14 @@ namespace VisCPU.HL
             if ( m_UnusedTempVars.Count != 0 )
             {
                 string oldName = m_UnusedTempVars.Dequeue();
-                ProgramCode.Add( $"DREF {initValue} {oldName} ;Temp Var House-keeping" );
+                EmitterResult.Emit( $"DREF", initValue, oldName );
 
                 return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
-            ProgramCode.Add( $"DREF {initValue} {name} ;Temp Var House-keeping" );
+            EmitterResult.Emit( $"DREF", initValue, name );
 
             return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
@@ -824,14 +829,14 @@ namespace VisCPU.HL
             if ( m_UnusedTempVars.Count != 0 )
             {
                 string oldName = m_UnusedTempVars.Dequeue();
-                ProgramCode.Add( $"LOAD {oldName} {initValue} ;Temp Var House-keeping" );
+                EmitterResult.Emit( $"LOAD", oldName, initValue );
 
                 return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
-            ProgramCode.Add( $"LOAD {name} {initValue} ;Temp Var House-keeping" );
+            EmitterResult.Emit( $"LOAD", name, initValue );
 
             return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }
@@ -841,14 +846,14 @@ namespace VisCPU.HL
             if ( m_UnusedTempVars.Count != 0 )
             {
                 string oldName = m_UnusedTempVars.Dequeue();
-                ProgramCode.Add( $"POP {oldName} ;Temp Var House-keeping" );
+                EmitterResult.Emit( "POP", oldName );
 
                 return m_VariableMap[oldName];
             }
 
             string name = GetUniqueName( "tmp" );
 
-            ProgramCode.Add( $"POP {name} ;Temp Var House-keeping" );
+            EmitterResult.Emit( "POP", name );
 
             return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
         }

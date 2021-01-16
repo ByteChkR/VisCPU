@@ -14,19 +14,19 @@ namespace VisCPU.HL.Compiler.Special
             string startLabel = HLCompilation.GetUniqueName( "while_start" );
             string endLabel = HLCompilation.GetUniqueName( "while_end" );
 
-            compilation.ProgramCode.Add( $".{startLabel} linker:hide" );
+            compilation.EmitterResult.Store( $".{startLabel} linker:hide" );
 
             ExpressionTarget target = compilation.Parse( expr.Condition ).MakeAddress( compilation );
 
-            compilation.ProgramCode.Add( $"BEZ {target.ResultAddress} {endLabel}" );
+            compilation.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
             foreach ( HLExpression hlExpression in expr.Block )
             {
                 compilation.Parse( hlExpression );
             }
 
-            compilation.ProgramCode.Add( $"JMP {startLabel}" );
-            compilation.ProgramCode.Add( $".{endLabel} linker:hide" );
+            compilation.EmitterResult.Emit( $"JMP", startLabel );
+            compilation.EmitterResult.Store( $".{endLabel} linker:hide" );
 
             compilation.ReleaseTempVar( target.ResultAddress );
 

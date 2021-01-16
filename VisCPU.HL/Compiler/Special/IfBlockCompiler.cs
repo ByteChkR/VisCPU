@@ -21,11 +21,11 @@ namespace VisCPU.HL.Compiler.Special
 
                 if ( i != 0 )
                 {
-                    compilation.ProgramCode.Add( $".{thisLabel} linker:hide" );
+                    compilation.EmitterResult.Store( $".{thisLabel} linker:hide" );
                 }
                 else
                 {
-                    compilation.ProgramCode.Add( "; Start IF" );
+                    compilation.EmitterResult.Store( "; Start IF" );
                 }
 
                 ExpressionTarget exprTarget = compilation.Parse(
@@ -44,20 +44,20 @@ namespace VisCPU.HL.Compiler.Special
                     nextLabel = expr.ElseBranch != null ? elseLabel : endLabel;
                 }
 
-                compilation.ProgramCode.Add( $"BEZ {exprTarget.ResultAddress} {nextLabel}" );
+                compilation.EmitterResult.Emit( $"BEZ", exprTarget.ResultAddress, nextLabel );
 
                 foreach ( HLExpression hlExpression in expr.ConditionMap[i].Item2 )
                 {
                     compilation.Parse( hlExpression );
                 }
 
-                compilation.ProgramCode.Add( $"JMP {endLabel}" );
+                compilation.EmitterResult.Emit( $"JMP", endLabel );
                 compilation.ReleaseTempVar( exprTarget.ResultAddress );
             }
 
             if ( expr.ElseBranch != null )
             {
-                compilation.ProgramCode.Add( $".{elseLabel} linker:hide" );
+                compilation.EmitterResult.Store( $".{elseLabel} linker:hide" );
 
                 foreach ( HLExpression hlExpression in expr.ElseBranch )
                 {
@@ -65,7 +65,7 @@ namespace VisCPU.HL.Compiler.Special
                 }
             }
 
-            compilation.ProgramCode.Add( $".{endLabel} linker:hide" );
+            compilation.EmitterResult.Store( $".{endLabel} linker:hide" );
 
             return new ExpressionTarget();
         }

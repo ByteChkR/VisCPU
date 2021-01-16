@@ -21,7 +21,7 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
                                                   MakeAddress( compilation );
 
             string tmp = compilation.GetTempVar( ~( uint ) 0 );
-            compilation.ProgramCode.Add( $"XOR {target} {tmp}" );
+            compilation.EmitterResult.Emit( $"XOR", target.ResultAddress, tmp );
 
             return target.CopyIfNotNull( compilation, outputTarget, true );
         }

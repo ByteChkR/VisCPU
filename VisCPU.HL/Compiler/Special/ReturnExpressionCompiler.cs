@@ -17,18 +17,18 @@ namespace VisCPU.HL.Compiler.Special
                                                        ).
                                                   MakeAddress( compilation );
 
-                compilation.ProgramCode.Add( $"PUSH {pt.ResultAddress}" );
+                compilation.EmitterResult.Emit( $"PUSH", pt.ResultAddress );
 
                 compilation.ReleaseTempVar( pt.ResultAddress );
             }
             else
             {
                 string v = compilation.GetTempVar( 0 );
-                compilation.ProgramCode.Add( $"PUSH {v}" );
+                compilation.EmitterResult.Emit( $"PUSH", v );
                 compilation.ReleaseTempVar( v );
             }
 
-            compilation.ProgramCode.Add( "RET" );
+            compilation.EmitterResult.Emit( "RET" );
 
             return new ExpressionTarget();
         }

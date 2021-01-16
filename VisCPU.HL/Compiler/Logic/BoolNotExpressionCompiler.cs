@@ -24,10 +24,10 @@ namespace VisCPU.HL.Compiler.Logic
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
             string label = HLCompilation.GetUniqueName( "bexpr_not" );
-            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
-            compilation.ProgramCode.Add( $"BEZ {target.ResultAddress} {label}" );
-            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 0" );
-            compilation.ProgramCode.Add( $".{label} linker:hide" );
+            compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "1" );
+            compilation.EmitterResult.Emit( $"BEZ", target.ResultAddress, label );
+            compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "0" );
+            compilation.EmitterResult.Store( $".{label} linker:hide" );
             compilation.ReleaseTempVar( target.ResultAddress );
 
             return outputTarget;

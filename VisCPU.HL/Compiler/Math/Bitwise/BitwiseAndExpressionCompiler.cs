@@ -24,18 +24,23 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
             {
-                compilation.ProgramCode.Add(
-                                            $"AND {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
+                compilation.EmitterResult.Emit(
+                                               $"AND",
+                                               target.ResultAddress,
+                                               rTarget.ResultAddress
+                                              );
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
 
                 return target;
             }
 
-            compilation.ProgramCode.Add(
-                                        $"AND {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                       );
+            compilation.EmitterResult.Emit(
+                                           $"AND",
+                                           target.ResultAddress,
+                                           rTarget.ResultAddress,
+                                           outputTarget.ResultAddress
+                                          );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
             compilation.ReleaseTempVar( target.ResultAddress );

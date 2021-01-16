@@ -38,25 +38,27 @@ namespace VisCPU.HL.Compiler.Special
             if ( tempPtrVar.TypeDefinition is ArrayTypeDefintion adef )
             {
                 string tmpSName = compilation.GetTempVar( adef.ElementType.GetSize() );
-                compilation.ProgramCode.Add( $"MUL {pn.ResultAddress} {tmpSName}" );
+                compilation.EmitterResult.Emit( $"MUL", pn.ResultAddress, tmpSName );
                 compilation.ReleaseTempVar( tmpSName );
-                compilation.ProgramCode.Add( $"LOAD {tempPtr.ResultAddress} {tempPtrVar.ResultAddress}" );
+                compilation.EmitterResult.Emit( $"LOAD", tempPtr.ResultAddress, tempPtrVar.ResultAddress );
             }
             else
             {
                 string tmpSName = compilation.GetTempVar( tempPtrVar.TypeDefinition.GetSize() );
-                compilation.ProgramCode.Add( $"MUL {pn.ResultAddress} {tmpSName}" );
+                compilation.EmitterResult.Emit( $"MUL", pn.ResultAddress, tmpSName );
                 compilation.ReleaseTempVar( tmpSName );
-                compilation.ProgramCode.Add( $"COPY {tempPtrVar.ResultAddress} {tempPtr.ResultAddress}" );
+                compilation.EmitterResult.Emit( $"COPY", tempPtrVar.ResultAddress, tempPtr.ResultAddress );
             }
 
-            compilation.ProgramCode.Add( $"ADD {tempPtr.ResultAddress} {pn.ResultAddress} ; Apply offset" );
+            compilation.EmitterResult.Emit( $"ADD", tempPtr.ResultAddress, pn.ResultAddress );
 
             if ( outputTarget.ResultAddress != null )
             {
-                compilation.ProgramCode.Add(
-                                            $"DREF {tempPtr.ResultAddress} {outputTarget.ResultAddress} ; Dereference Array Pointer"
-                                           );
+                compilation.EmitterResult.Emit(
+                                               $"DREF",
+                                               tempPtr.ResultAddress,
+                                               outputTarget.ResultAddress
+                                              );
 
                 compilation.ReleaseTempVar( tempPtr.ResultAddress );
                 compilation.ReleaseTempVar( tempPtrVar.ResultAddress );

@@ -83,7 +83,7 @@ namespace VisCPU.HL.Compiler
                 return this;
             }
 
-            compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} {ResultAddress}" );
+            compilation.EmitterResult.Emit( $"LOAD", target.ResultAddress, ResultAddress );
 
             return target;
         }
@@ -100,11 +100,11 @@ namespace VisCPU.HL.Compiler
 
             if ( !IsAddress )
             {
-                compilation.ProgramCode.Add( $"LOAD {target.ResultAddress} {ResultAddress}" );
+                compilation.EmitterResult.Emit( $"LOAD", target.ResultAddress, ResultAddress );
             }
             else
             {
-                compilation.ProgramCode.Add( $"COPY {ResultAddress} {target.ResultAddress}" );
+                compilation.EmitterResult.Emit( $"COPY", ResultAddress, target.ResultAddress );
             }
 
             compilation.ReleaseTempVar( ResultAddress );

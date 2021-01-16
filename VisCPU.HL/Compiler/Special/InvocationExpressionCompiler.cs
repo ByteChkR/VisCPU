@@ -61,14 +61,15 @@ namespace VisCPU.HL.Compiler.Special
                                                             ).
                                                        MakeAddress( compilation );
 
-                    compilation.ProgramCode.Add(
-                                                $"PUSH {arg.ResultAddress}; Push Param {parameter}"
-                                               );
+                    compilation.EmitterResult.Emit(
+                                                   $"PUSH",
+                                                   arg.ResultAddress
+                                                  );
 
                     compilation.ReleaseTempVar( arg.ResultAddress );
                 }
 
-                compilation.ProgramCode.Add( $"JSR {funcEmit}" );
+                compilation.EmitterResult.Emit( $"JSR", funcEmit );
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
                                                                    compilation.GetTempVarPop(),
@@ -86,20 +87,21 @@ namespace VisCPU.HL.Compiler.Special
                 {
                     ExpressionTarget tt = compilation.Parse( parameter );
 
-                    compilation.ProgramCode.Add(
-                                                $"PUSH {tt.ResultAddress}; Push Param {parameter}"
-                                               );
+                    compilation.EmitterResult.Emit(
+                                                   $"PUSH",
+                                                   tt.ResultAddress
+                                                  );
 
                     compilation.ReleaseTempVar( tt.ResultAddress );
                 }
 
                 if ( compilation.ContainsVariable( target ) )
                 {
-                    compilation.ProgramCode.Add( $"JSREF {compilation.GetFinalName( target )}" );
+                    compilation.EmitterResult.Emit( $"JSREF", compilation.GetFinalName( target ) );
                 }
                 else
                 {
-                    compilation.ProgramCode.Add( $"JSREF {target}" );
+                    compilation.EmitterResult.Emit( $"JSREF", target );
                 }
 
                 ExpressionTarget tempReturn = new ExpressionTarget(

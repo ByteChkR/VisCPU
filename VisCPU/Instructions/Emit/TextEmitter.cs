@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 using VisCPU.Instructions.Emit.Events;
 using VisCPU.Utility.Events;
@@ -7,7 +8,44 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Instructions.Emit
 {
 
-    public class VasmEmitter : Emitter < string >
+    public class EmitterResult < T >
+    {
+
+        private readonly Emitter < T > m_Emitter;
+        private readonly List < T > store = new List < T >();
+
+        #region Public
+
+        public EmitterResult( Emitter < T > emitter )
+        {
+            m_Emitter = emitter;
+        }
+
+        public void Clear()
+        {
+            store.Clear();
+        }
+
+        public void Emit( string instructionKey, params string[] arguments )
+        {
+            store.Add( m_Emitter.Emit( instructionKey, arguments ) );
+        }
+
+        public T[] Get()
+        {
+            return store.ToArray();
+        }
+
+        public void Store( T data )
+        {
+            store.Add( data );
+        }
+
+        #endregion
+
+    }
+
+    public class TextEmitter : Emitter < string >
     {
 
         #region Public

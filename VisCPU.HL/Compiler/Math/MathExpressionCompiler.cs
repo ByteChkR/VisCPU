@@ -39,9 +39,12 @@ namespace VisCPU.HL.Compiler.Math
                                                            compilation.TypeSystem.GetType( "var" )
                                                           );
 
-                compilation.ProgramCode.Add(
-                                            $"{InstructionKey} {et.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
+                compilation.EmitterResult.Emit(
+                                               InstructionKey,
+                                               et.ResultAddress,
+                                               rTarget.ResultAddress,
+                                               outputTarget.ResultAddress
+                                              );
 
                 compilation.ReleaseTempVar( et.ResultAddress );
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
@@ -50,9 +53,12 @@ namespace VisCPU.HL.Compiler.Math
                 return outputTarget;
             }
 
-            compilation.ProgramCode.Add(
-                                        $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress} {outputTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                       );
+            compilation.EmitterResult.Emit(
+                                           InstructionKey,
+                                           target.ResultAddress,
+                                           rTarget.ResultAddress,
+                                           outputTarget.ResultAddress
+                                          );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
             compilation.ReleaseTempVar( target.ResultAddress );

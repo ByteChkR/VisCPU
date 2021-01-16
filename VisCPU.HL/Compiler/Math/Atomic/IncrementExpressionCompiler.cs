@@ -12,9 +12,10 @@ namespace VisCPU.HL.Compiler.Math.Atomic
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
 
-            compilation.ProgramCode.Add(
-                                        $"INC {target.ResultAddress}; Increment: {expr.Left}"
-                                       );
+            compilation.EmitterResult.Emit(
+                                           $"INC",
+                                           target.ResultAddress
+                                          );
 
             return target;
         }

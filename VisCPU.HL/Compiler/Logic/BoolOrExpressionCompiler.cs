@@ -30,11 +30,11 @@ namespace VisCPU.HL.Compiler.Logic
             //.if_b0_fail
             string label = HLCompilation.GetUniqueName( "bexpr_or" );
             string labelF = HLCompilation.GetUniqueName( "bexpr_or_f" );
-            compilation.ProgramCode.Add( $"BNZ {target.ResultAddress} {label}" );
-            compilation.ProgramCode.Add( $"BEZ {rTarget.ResultAddress} {labelF}" );
-            compilation.ProgramCode.Add( $".{label} linker:hide" );
-            compilation.ProgramCode.Add( $"LOAD {outputTarget.ResultAddress} 1" );
-            compilation.ProgramCode.Add( $".{labelF} linker:hide" );
+            compilation.EmitterResult.Emit( $"BNZ", target.ResultAddress, label );
+            compilation.EmitterResult.Emit( $"BEZ", rTarget.ResultAddress, labelF );
+            compilation.EmitterResult.Store( $".{label} linker:hide" );
+            compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "1" );
+            compilation.EmitterResult.Store( $".{labelF} linker:hide" );
             compilation.ReleaseTempVar( rTarget.ResultAddress );
             compilation.ReleaseTempVar( target.ResultAddress );
 

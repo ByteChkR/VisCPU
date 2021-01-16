@@ -15,9 +15,11 @@ namespace VisCPU.HL.Compiler.Memory
             ExpressionTarget target,
             ExpressionTarget outputTarget )
         {
-            compilation.ProgramCode.Add(
-                                        $"DREF {target.ResultAddress} {outputTarget.ResultAddress}; Dereference"
-                                       );
+            compilation.EmitterResult.Emit(
+                                           $"DREF",
+                                           target.ResultAddress,
+                                           outputTarget.ResultAddress
+                                          );
 
             return outputTarget.Cast( target.TypeDefinition );
         }

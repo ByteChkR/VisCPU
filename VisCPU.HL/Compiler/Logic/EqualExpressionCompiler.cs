@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 
 namespace VisCPU.HL.Compiler.Logic
 {
@@ -27,22 +25,24 @@ namespace VisCPU.HL.Compiler.Logic
 
             if ( !rTarget.IsAddress && !target.IsPointer )
             {
-                compilation.ProgramCode.Add(
-                                            $"LOAD {target.ResultAddress} {rTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-                                           );
+                compilation.EmitterResult.Emit(
+                                               $"LOAD",
+                                               target.ResultAddress,
+                                               rTarget.ResultAddress
+                                              );
 
                 return target;
             }
-
-            List < string > lines = new List < string >();
 
             if ( target.IsPointer )
             {
                 if ( rTarget.IsPointer )
                 {
-                    lines.Add(
-                              $"CREF {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-                             );
+                    compilation.EmitterResult.Emit(
+                                                   $"CREF",
+                                                   rTarget.ResultAddress,
+                                                   target.ResultAddress
+                                                  );
                 }
                 else
                 {
@@ -54,9 +54,11 @@ namespace VisCPU.HL.Compiler.Logic
                                                                       compilation.TypeSystem.GetType( "var" )
                                                                      );
 
-                    lines.Add(
-                              $"CREF {tmpTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-                             );
+                    compilation.EmitterResult.Emit(
+                                                   $"CREF",
+                                                   tmpTarget.ResultAddress,
+                                                   target.ResultAddress
+                                                  );
 
                     compilation.ReleaseTempVar( tmpTarget.ResultAddress );
                 }
@@ -73,31 +75,25 @@ namespace VisCPU.HL.Compiler.Logic
                                                                       compilation.TypeSystem.GetType( "var" )
                                                                      );
 
-                    lines.Add(
-                              $"CREF {rTarget.ResultAddress} {tmpTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-                             );
+                    compilation.EmitterResult.Emit(
+                                                   $"CREF",
+                                                   rTarget.ResultAddress,
+                                                   tmpTarget.ResultAddress
+                                                  );
 
                     compilation.ReleaseTempVar( tmpTarget.ResultAddress );
                 }
                 else if ( rTarget.ResultAddress != target.ResultAddress )
                 {
-                    if ( !rTarget.IsAddress )
-                    {
-                        lines.Add(
-                                  $"LOAD {target.ResultAddress} {rTarget.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-                                 );
-                    }
-                    else
-                    {
-                        lines.Add(
-                                  $"COPY {rTarget.ResultAddress} {target.ResultAddress} ; Left: {expr.Left} ; Right: {expr.Right}"
-                                 );
-                    }
+                    compilation.EmitterResult.Emit(
+                                                   $"COPY",
+                                                   rTarget.ResultAddress,
+                                                   target.ResultAddress
+                                                  );
                 }
             }
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
-            compilation.ProgramCode.AddRange( lines );
 
             return target;
         }

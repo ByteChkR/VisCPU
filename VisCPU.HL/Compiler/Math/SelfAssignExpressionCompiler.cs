@@ -21,9 +21,11 @@ namespace VisCPU.HL.Compiler.Math
                                                         ).
                                                    MakeAddress( compilation );
 
-            compilation.ProgramCode.Add(
-                                        $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress}; Left: {expr.Left} ; Right: {expr.Right}"
-                                       );
+            compilation.EmitterResult.Emit(
+                                           InstructionKey,
+                                           target.ResultAddress,
+                                           rTarget.ResultAddress
+                                          );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
 

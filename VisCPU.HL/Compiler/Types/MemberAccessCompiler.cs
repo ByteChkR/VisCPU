@@ -37,13 +37,13 @@ namespace VisCPU.HL.Compiler.Types
                 tmpVar = compilation.GetTempVarLoad( lType.ResultAddress );
             }
 
-            compilation.ProgramCode.Add( $"ADD {tmpVar} {tmpOff}" );
+            compilation.EmitterResult.Emit( $"ADD", tmpVar, tmpOff );
 
             compilation.ReleaseTempVar( tmpOff );
 
             if ( outputTarget.ResultAddress != null )
             {
-                compilation.ProgramCode.Add( $"DREF {tmpVar} {outputTarget.ResultAddress}" );
+                compilation.EmitterResult.Emit( $"DREF", tmpVar, outputTarget.ResultAddress );
                 compilation.ReleaseTempVar( tmpVar );
 
                 return outputTarget;
