@@ -41,11 +41,11 @@ namespace VisCPU.Tests.Utils
 
         protected void Initialize()
         {
-            LinkerSettings.Create();
-            ConsoleInInterfaceSettings.Create();
-            ConsoleOutInterfaceSettings.Create();
-            HLCompilerSettings.Create();
-            MemorySettings.Create();
+            SettingsSystem.GetSettings < LinkerSettings>();
+            SettingsSystem.GetSettings < ConsoleInInterfaceSettings>();
+            SettingsSystem.GetSettings < ConsoleOutInterfaceSettings>();
+            SettingsSystem.GetSettings < HLCompilerSettings>();
+            SettingsSystem.GetSettings < MemorySettings>();
         }
 
         protected void Vasm2Vbin( string file )

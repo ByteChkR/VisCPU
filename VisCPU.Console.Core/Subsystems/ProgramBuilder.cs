@@ -24,10 +24,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Build( Dictionary < string, string > args )
         {
-            BuilderSettings settings = BuilderSettings.Create();
-            AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
-            LinkerSettings ls = LinkerSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
+            BuilderSettings settings = SettingsSystem.GetSettings< BuilderSettings>();
+            AssemblyGeneratorSettings asettings = SettingsSystem.GetSettings < AssemblyGeneratorSettings>();
+            LinkerSettings ls = SettingsSystem.GetSettings < LinkerSettings>();
+            HLCompilerSettings hls = SettingsSystem.GetSettings < HLCompilerSettings>();
 
             ArgumentSyntaxParser.Parse(
                                        args,
@@ -46,10 +46,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Build( IEnumerable < string > args )
         {
-            BuilderSettings settings = BuilderSettings.Create();
-            AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
-            LinkerSettings ls = LinkerSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
+            BuilderSettings settings = SettingsSystem.GetSettings<BuilderSettings>();
+            AssemblyGeneratorSettings asettings = SettingsSystem.GetSettings<AssemblyGeneratorSettings>();
+            LinkerSettings ls = SettingsSystem.GetSettings<LinkerSettings>();
+            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
 
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
@@ -68,10 +68,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Help()
         {
-            BuilderSettings settings = BuilderSettings.Create();
-            AssemblyGeneratorSettings asettings = AssemblyGeneratorSettings.Create();
-            LinkerSettings ls = LinkerSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
+            BuilderSettings settings = SettingsSystem.GetSettings<BuilderSettings>();
+            AssemblyGeneratorSettings asettings = SettingsSystem.GetSettings<AssemblyGeneratorSettings>();
+            LinkerSettings ls = SettingsSystem.GetSettings<LinkerSettings>();
+            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
             HelpSubSystem.WriteSubsystem( "vis build", settings, asettings, ls, hls );
         }
 

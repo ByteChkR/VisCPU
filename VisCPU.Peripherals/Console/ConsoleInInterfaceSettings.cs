@@ -16,15 +16,7 @@ namespace VisCPU.Peripherals.Console
 
         [field: Argument( Name = "console:in.pin.read" )]
         public uint ReadInputAddress { get; set; } = 0xFFFF1004;
-
-        #region Public
-
-        public static ConsoleInInterfaceSettings Create()
-        {
-            return SettingsSystem.GetSettings < ConsoleInInterfaceSettings >();
-        }
-
-        #endregion
+        
 
         #region Private
 

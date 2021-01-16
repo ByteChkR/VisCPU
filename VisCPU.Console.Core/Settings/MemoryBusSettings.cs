@@ -19,11 +19,7 @@ namespace VisCPU.Console.Core.Settings
             };
 
         #region Public
-
-        public static MemoryBusSettings Create()
-        {
-            return SettingsSystem.GetSettings < MemoryBusSettings >();
-        }
+        
 
         public MemoryBus CreateBus( params Peripheral[] additionalPeripherals )
         {

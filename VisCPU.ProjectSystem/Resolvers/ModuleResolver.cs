@@ -5,6 +5,7 @@ using System.Linq;
 
 using VisCPU.HL.Modules.Data;
 using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.HL.Modules.Resolvers
 {
@@ -56,7 +57,7 @@ namespace VisCPU.HL.Modules.Resolvers
             if ( ResolverSettings == null && s_Managers == null )
             {
                 Directory.CreateDirectory( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config/module" ) );
-                ResolverSettings = ModuleResolverSettings.Create();
+                ResolverSettings = SettingsSystem.GetSettings < ModuleResolverSettings >();
                 s_Managers = new Dictionary < string, ModuleManager >();
 
                 foreach ( KeyValuePair < string, string > origin in ResolverSettings.ModuleOrigins )

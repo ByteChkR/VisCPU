@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\VisCPU.Compiler\VisCPU.Compiler.csproj" />
-    <ProjectReference Include="..\VisCPU.HL.Modules\VisCPU.HL.Modules.csproj" />
+    <ProjectReference Include="..\VisCPU.ProjectSystem\VisCPU.ProjectSystem.csproj" />
     <ProjectReference Include="..\VisCPU.HL\VisCPU.HL.csproj" />
     <ProjectReference Include="..\VisCPU.Instructions\VisCPU.Instructions.csproj" />
     <ProjectReference Include="..\VisCPU.Peripherals\VisCPU.Peripherals.csproj" />

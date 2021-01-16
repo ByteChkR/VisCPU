@@ -77,15 +77,7 @@ namespace VisCPU.Console.Core.Settings
                 return ret.ToArray();
             }
         }
-
-        #region Public
-
-        public static BuilderSettings Create()
-        {
-            return SettingsSystem.GetSettings < BuilderSettings >();
-        }
-
-        #endregion
+        
 
         #region Private
 

@@ -10,6 +10,7 @@ using VisCPU.Compiler.Parser.Tokens;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Implementations
@@ -24,7 +25,7 @@ namespace VisCPU.Compiler.Implementations
         {
             List < byte > instrBytes = new List < byte >();
 
-            AssemblyGeneratorSettings settings = AssemblyGeneratorSettings.Create();
+            AssemblyGeneratorSettings settings = SettingsSystem.GetSettings<AssemblyGeneratorSettings>();
 
             if ( settings.GlobalOffset != 0 )
             {

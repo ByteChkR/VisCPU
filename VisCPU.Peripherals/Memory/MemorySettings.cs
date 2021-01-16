@@ -31,15 +31,7 @@ namespace VisCPU.Peripherals.Memory
         public uint Start { get; set; }
 
         #endregion
-
-        #region Public
-
-        public static MemorySettings Create()
-        {
-            return SettingsSystem.GetSettings < MemorySettings >();
-        }
-
-        #endregion
+        
 
         #region Private
 

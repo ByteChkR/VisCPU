@@ -72,15 +72,7 @@ namespace VisCPU.Console.Core.Settings
             }
         }
 
-        #region Public
-
-        public static RunnerSettings Create()
-        {
-            return SettingsSystem.GetSettings < RunnerSettings >();
-        }
-
-        #endregion
-
+        
         #region Private
 
         static RunnerSettings()

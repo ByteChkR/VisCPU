@@ -16,16 +16,7 @@ namespace VisCPU.HL
 
         [field: Argument( Name = "compiler:optimize-const-expr" )]
         public bool OptimizeConstExpressions { get; set; }
-
-        #region Public
-
-        public static HLCompilerSettings Create()
-        {
-            return SettingsSystem.GetSettings < HLCompilerSettings >();
-        }
-
-        #endregion
-
+        
         #region Private
 
         static HLCompilerSettings()

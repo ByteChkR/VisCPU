@@ -22,16 +22,7 @@ namespace VisCPU.Peripherals.Console
 
         [field: Argument( Name = "console:out.pin.clear" )]
         public uint InterfaceClearPin { get; set; } = 0xFFFF1005;
-
-        #region Public
-
-        public static ConsoleOutInterfaceSettings Create()
-        {
-            return SettingsSystem.GetSettings < ConsoleOutInterfaceSettings >();
-        }
-
-        #endregion
-
+        
         #region Private
 
         static ConsoleOutInterfaceSettings()

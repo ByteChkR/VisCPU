@@ -12,6 +12,7 @@ using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core
 {
@@ -130,7 +131,7 @@ namespace VisCPU.Console.Core
                 return;
             }
 
-            CLISettings s = CLISettings.Create();
+            CLISettings s =SettingsSystem.GetSettings< CLISettings>();
             EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse( args, s, Logger.s_Settings );

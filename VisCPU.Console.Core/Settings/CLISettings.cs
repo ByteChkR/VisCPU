@@ -18,15 +18,7 @@ namespace VisCPU.Console.Core.Settings
 
         [field: Argument( Name = "cli:configs" )]
         public string[] Configs { get; set; } = new[] { "./default.args" };
-
-        #region Public
-
-        public static CLISettings Create()
-        {
-            return SettingsSystem.GetSettings < CLISettings >();
-        }
-
-        #endregion
+        
 
         #region Private
 

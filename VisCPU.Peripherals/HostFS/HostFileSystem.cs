@@ -5,6 +5,7 @@ using System.Text;
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Peripherals.HostFS
 {
@@ -27,7 +28,7 @@ namespace VisCPU.Peripherals.HostFS
             m_Settings = settings;
         }
 
-        public HostFileSystem() : this( HostFileSystemSettings.Create() )
+        public HostFileSystem() : this( SettingsSystem.GetSettings< HostFileSystemSettings>())
         {
         }
 

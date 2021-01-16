@@ -17,14 +17,6 @@ namespace VisCPU.Compiler.Linking
         [field: Argument( Name = "linker:export" )]
         public bool ExportLinkerInfo { get; set; }
 
-        #region Public
-
-        public static LinkerSettings Create()
-        {
-            return SettingsSystem.GetSettings < LinkerSettings >();
-        }
-
-        #endregion
 
         #region Private
 

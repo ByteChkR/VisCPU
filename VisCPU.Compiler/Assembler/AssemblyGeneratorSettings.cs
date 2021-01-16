@@ -12,16 +12,7 @@ namespace VisCPU.Compiler.Assembler
 
         [field: Argument( Name = "assembler:offset.global" )]
         public uint GlobalOffset { get; set; }
-
-        #region Public
-
-        public static AssemblyGeneratorSettings Create()
-        {
-            return SettingsSystem.GetSettings < AssemblyGeneratorSettings >();
-        }
-
-        #endregion
-
+        
         #region Private
 
         static AssemblyGeneratorSettings()

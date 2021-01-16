@@ -30,15 +30,7 @@ namespace VisCPU.Peripherals.HostFS
 
         [field: Argument( Name = "hostfs:pin.cmd" )]
         public uint PinCmd { get; set; } = 0xFFFF3003;
-
-        #region Public
-
-        public static HostFileSystemSettings Create()
-        {
-            return SettingsSystem.GetSettings < HostFileSystemSettings >();
-        }
-
-        #endregion
+        
 
         #region Private
 

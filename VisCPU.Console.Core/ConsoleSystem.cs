@@ -4,6 +4,7 @@ using System.Linq;
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Utility.ArgumentParser;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core
 {
@@ -25,7 +26,7 @@ namespace VisCPU.Console.Core
 
         public override void Run( IEnumerable < string > args )
         {
-            CLISettings s = CLISettings.Create();
+            CLISettings s = SettingsSystem.GetSettings< CLISettings>();
             ArgumentSyntaxParser.Parse( args.ToArray(), s );
             Dictionary < string, ConsoleSubsystem > ss = SubSystems;
             ss["help"] = new HelpSubSystem( this );

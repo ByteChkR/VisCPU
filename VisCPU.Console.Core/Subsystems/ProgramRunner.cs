@@ -25,14 +25,14 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Run( Dictionary < string, string > args )
         {
-            RunnerSettings settings = RunnerSettings.Create();
+            RunnerSettings settings = SettingsSystem.GetSettings < RunnerSettings>();
             
-            HLCompilerSettings hls = HLCompilerSettings.Create();
-            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
-            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
-            MemorySettings ms = MemorySettings.Create();
-            MemoryBusSettings mbs = MemoryBusSettings.Create();
-            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
+            HLCompilerSettings hls = SettingsSystem.GetSettings < HLCompilerSettings>();
+            ConsoleInInterfaceSettings cins = SettingsSystem.GetSettings < ConsoleInInterfaceSettings>();
+            ConsoleOutInterfaceSettings couts = SettingsSystem.GetSettings < ConsoleOutInterfaceSettings>();
+            MemorySettings ms = SettingsSystem.GetSettings < MemorySettings>();
+            MemoryBusSettings mbs = SettingsSystem.GetSettings < MemoryBusSettings>();
+            HostFileSystemSettings hfs = SettingsSystem.GetSettings < HostFileSystemSettings>();
 
             ArgumentSyntaxParser.Parse(
                                        args,
@@ -96,26 +96,27 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Help()
         {
-            RunnerSettings settings = RunnerSettings.Create();
-            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
-            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
-            MemorySettings ms = MemorySettings.Create();
-            MemoryBusSettings mbs = MemoryBusSettings.Create();
-            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
+            RunnerSettings settings = SettingsSystem.GetSettings<RunnerSettings>();
+
+            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
+            ConsoleInInterfaceSettings cins = SettingsSystem.GetSettings<ConsoleInInterfaceSettings>();
+            ConsoleOutInterfaceSettings couts = SettingsSystem.GetSettings<ConsoleOutInterfaceSettings>();
+            MemorySettings ms = SettingsSystem.GetSettings<MemorySettings>();
+            MemoryBusSettings mbs = SettingsSystem.GetSettings<MemoryBusSettings>();
+            HostFileSystemSettings hfs = SettingsSystem.GetSettings<HostFileSystemSettings>();
 
             HelpSubSystem.WriteSubsystem( "vis run", settings, cins, couts, hls, ms, mbs, hfs );
         }
 
         public override void Run( IEnumerable < string > args )
         {
-            RunnerSettings settings = RunnerSettings.Create();
-            ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
-            ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
-            MemorySettings ms = MemorySettings.Create();
-            MemoryBusSettings mbs = MemoryBusSettings.Create();
-            HostFileSystemSettings hfs = HostFileSystemSettings.Create();
+            RunnerSettings settings = SettingsSystem.GetSettings<RunnerSettings>();
+            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
+            ConsoleInInterfaceSettings cins = SettingsSystem.GetSettings<ConsoleInInterfaceSettings>();
+            ConsoleOutInterfaceSettings couts = SettingsSystem.GetSettings<ConsoleOutInterfaceSettings>();
+            MemorySettings ms = SettingsSystem.GetSettings<MemorySettings>();
+            MemoryBusSettings mbs = SettingsSystem.GetSettings<MemoryBusSettings>();
+            HostFileSystemSettings hfs = SettingsSystem.GetSettings<HostFileSystemSettings>();
 
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),

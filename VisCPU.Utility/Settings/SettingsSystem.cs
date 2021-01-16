@@ -102,6 +102,8 @@ namespace VisCPU.Utility.Settings
 
         public static object GetSettings( Type t )
         {
+            //Ensure that the static constructor of the type has ran.
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(t.TypeHandle);
             if ( s_DefaultLoaderMap.ContainsKey( t ) )
             {
                 if ( s_DefaultLoaderMap[t].CachedObject != null )
@@ -135,6 +137,7 @@ namespace VisCPU.Utility.Settings
 
         public static object GetSettings( SettingsLoader loader, Type t, string file )
         {
+
             if ( EnableIo )
             {
                 return loader.LoadSettings( t, file );

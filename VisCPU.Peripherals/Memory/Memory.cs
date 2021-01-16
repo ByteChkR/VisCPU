@@ -4,6 +4,7 @@ using VisCPU.Peripherals.Events;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.Peripherals.Memory
 {
@@ -20,7 +21,7 @@ namespace VisCPU.Peripherals.Memory
 
         #region Public
 
-        public Memory() : this( MemorySettings.Create() )
+        public Memory() : this(SettingsSystem.GetSettings< MemorySettings>() )
         {
         }
 

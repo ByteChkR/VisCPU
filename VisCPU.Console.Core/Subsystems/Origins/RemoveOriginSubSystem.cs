@@ -14,7 +14,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public static void RemoveOrigin( string name )
         {
-            ModuleResolverSettings s = ModuleResolverSettings.Create();
+            ModuleResolverSettings s = SettingsSystem.GetSettings<ModuleResolverSettings>();
             s.ModuleOrigins.Remove( name );
             SettingsSystem.SaveSettings( s );
         }
