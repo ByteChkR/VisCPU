@@ -21,15 +21,15 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ProgramRunner : ConsoleSubsystem
     {
-
         #region Public
 
         public static void Run( Dictionary < string, string > args )
         {
             RunnerSettings settings = RunnerSettings.Create();
+            
+            HLCompilerSettings hls = HLCompilerSettings.Create();
             ConsoleInInterfaceSettings cins = ConsoleInInterfaceSettings.Create();
             ConsoleOutInterfaceSettings couts = ConsoleOutInterfaceSettings.Create();
-            HLCompilerSettings hls = HLCompilerSettings.Create();
             MemorySettings ms = MemorySettings.Create();
             MemoryBusSettings mbs = MemoryBusSettings.Create();
             HostFileSystemSettings hfs = HostFileSystemSettings.Create();

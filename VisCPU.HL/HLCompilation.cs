@@ -723,7 +723,7 @@ namespace VisCPU.HL
                 Eat( HLTokenType.OpComma );
             }
 
-            return ret.ToArray();
+            return ret.Cast<IHlToken>().ToArray();
 
             void Eat( HLTokenType type )
             {
