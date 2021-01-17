@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using VisCPU.HL.Modules.Resolvers;
+using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -14,9 +14,9 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public static void AddOrigin( string name, string uri )
         {
-            ModuleResolver.ResolverSettings.ModuleOrigins[name] = uri;
-            SettingsSystem.SaveSettings( ModuleResolver.ResolverSettings );
-            ModuleResolver.AddManager( name, uri );
+            ProjectResolver.ResolverSettings.ModuleOrigins[name] = uri;
+            SettingsManager.SaveSettings( ProjectResolver.ResolverSettings );
+            ProjectResolver.AddManager( name, uri );
         }
 
         public override void Help()

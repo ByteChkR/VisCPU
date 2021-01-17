@@ -6,7 +6,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Utility.Settings.Events
 {
 
-    public class SettingsLoaderNotFoundEvent : ErrorEvent
+    internal class SettingsLoaderNotFoundEvent : ErrorEvent
     {
 
         #region Public

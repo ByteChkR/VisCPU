@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-
-using VisCPU.Utility.ArgumentParser;
+﻿using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Console.Core.Settings
 {
@@ -18,20 +16,19 @@ namespace VisCPU.Console.Core.Settings
 
         [field: Argument( Name = "cli:configs" )]
         public string[] Configs { get; set; } = new[] { "./default.args" };
-        
 
         #region Private
 
         static CLISettings()
         {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "config/console.json"
-                                                             ),
-                                                 new CLISettings()
-                                                );
+            SettingsCategory cliCategory = SettingsCategories.Get( "sdk", true );
+
+            SettingsManager.RegisterDefaultLoader(
+                                                  new JSONSettingsLoader(),
+                                                  cliCategory,
+                                                  "cli.json",
+                                                  new CLISettings()
+                                                 );
         }
 
         #endregion

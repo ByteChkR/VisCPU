@@ -6,7 +6,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Events
 {
 
-    public class ReadFromUnmappedAddressEvent : WarningEvent
+    internal class ReadFromUnmappedAddressEvent : WarningEvent
     {
 
         #region Public

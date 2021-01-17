@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Console.Core.Subsystems.Origins.Events
 {
 
-    public class OriginUrlSchemeNotSupportedEvent : ErrorEvent
+    internal class OriginUrlSchemeNotSupportedEvent : ErrorEvent
     {
 
         #region Public

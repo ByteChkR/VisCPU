@@ -5,7 +5,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Events
 {
 
-    public class InstructionNotFoundEvent : ErrorEvent
+    internal class InstructionNotFoundEvent : ErrorEvent
     {
 
         #region Public

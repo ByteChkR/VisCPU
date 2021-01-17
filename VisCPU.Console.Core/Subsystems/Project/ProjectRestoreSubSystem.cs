@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 
-using VisCPU.HL.Modules.Data;
-using VisCPU.HL.Modules.Resolvers;
+using VisCPU.ProjectSystem.Data;
+using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 
@@ -33,7 +33,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
             ProjectConfig t =
                 ProjectConfig.Load( src );
 
-            ModuleResolver.GetManager( repo ).Restore( t, projectRoot );
+            ProjectResolver.GetManager( repo ).Restore( t, projectRoot );
         }
 
         public override void Help()

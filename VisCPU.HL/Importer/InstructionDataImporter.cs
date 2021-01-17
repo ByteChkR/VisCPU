@@ -15,16 +15,13 @@ namespace VisCPU.HL.Importer
     public class InstructionDataImporter : AImporter, IDataImporter, IFileImporter
     {
 
-        private InstructionSet m_InstructionSet;
-
         private string InstructionDirectory => Path.Combine( CacheDirectory, "instruction-src" );
 
         #region Public
 
-        public InstructionDataImporter( InstructionSet set )
+        public InstructionDataImporter()
         {
             Directory.CreateDirectory( InstructionDirectory );
-            m_InstructionSet = set;
         }
 
         public override bool CanImport( string input )
@@ -108,7 +105,7 @@ namespace VisCPU.HL.Importer
                 cmd = s[0];
             }
 
-            Instruction[] iis = m_InstructionSet.GetInstructions( cmd );
+            Instruction[] iis = CPUSettings.InstructionSet.GetInstructions( cmd );
 
             return argCount != -1 ? iis.First( x => x.ArgumentCount == argCount ) : iis.First();
         }
@@ -125,7 +122,7 @@ namespace VisCPU.HL.Importer
                 {
                     List < string > data = new List < string >();
 
-                    foreach ( Instruction instruction in m_InstructionSet.GetInstructions() )
+                    foreach ( Instruction instruction in CPUSettings.InstructionSet.GetInstructions() )
                     {
                         data.Add(
                                  $":include {( this as IFileImporter ).ProcessImport( $"vasm-bridge {instruction.Key} {instruction.ArgumentCount}" )}"
@@ -156,7 +153,7 @@ namespace VisCPU.HL.Importer
             {
                 List < IExternalData > data = new List < IExternalData >();
 
-                foreach ( Instruction instruction in m_InstructionSet.GetInstructions() )
+                foreach ( Instruction instruction in CPUSettings.InstructionSet.GetInstructions() )
                 {
                     data.Add(
                              new FunctionData(

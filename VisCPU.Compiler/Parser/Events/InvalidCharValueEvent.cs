@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Compiler.Parser.Events
 {
 
-    public class InvalidCharValueEvent : ErrorEvent
+    internal class InvalidCharValueEvent : ErrorEvent
     {
 
         #region Public

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 
-using VisCPU.HL.Modules.Data;
+using VisCPU.ProjectSystem.Data;
 
-namespace VisCPU.HL.Modules.BuildSystem
+namespace VisCPU.ProjectSystem.BuildSystem
 {
 
     public static class CommonFiles
@@ -51,7 +51,7 @@ namespace VisCPU.HL.Modules.BuildSystem
 
             ProjectBuildTarget publishTarget = new ProjectBuildTarget();
             publishTarget.TargetName = "Publish";
-            BuildJob publishJob = new BuildJob();
+            ProjectBuildJob publishJob = new ProjectBuildJob();
             publishJob.JobName = "Publish Project";
             publishJob.BuildJobRunner = "merged";
             publishJob.Arguments["merge:include"] = "%VISDIR%common/jobs/newVersion.json";
@@ -84,9 +84,9 @@ namespace VisCPU.HL.Modules.BuildSystem
 
         #region Private
 
-        private static BuildJob CreateDebugBuildJob()
+        private static ProjectBuildJob CreateDebugBuildJob()
         {
-            BuildJob debugBuildJob = new BuildJob();
+            ProjectBuildJob debugBuildJob = new ProjectBuildJob();
             debugBuildJob.JobName = "Build %NAME%@%VERSION%";
             debugBuildJob.BuildJobRunner = "build";
             debugBuildJob.Arguments["build:input"] = "Program.vhl";
@@ -100,9 +100,9 @@ namespace VisCPU.HL.Modules.BuildSystem
             return debugBuildJob;
         }
 
-        private static BuildJob CreateDebugRunJob()
+        private static ProjectBuildJob CreateDebugRunJob()
         {
-            BuildJob debugRunJob = new BuildJob();
+            ProjectBuildJob debugRunJob = new ProjectBuildJob();
             debugRunJob.JobName = "Build %NAME%@%VERSION%";
             debugRunJob.BuildJobRunner = "run";
             debugRunJob.Arguments["run:input"] = "Program.vbin";
@@ -127,7 +127,7 @@ namespace VisCPU.HL.Modules.BuildSystem
 
             debug.DependsOn = new[] { "Debug" };
 
-            BuildJob mergeRunJob = new BuildJob();
+            ProjectBuildJob mergeRunJob = new ProjectBuildJob();
             mergeRunJob.JobName = "Merged Debug Run";
             mergeRunJob.BuildJobRunner = "merged";
             mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/debug_run.json";
@@ -141,13 +141,13 @@ namespace VisCPU.HL.Modules.BuildSystem
         {
             ProjectBuildTarget debug = new ProjectBuildTarget();
             debug.TargetName = "Debug";
-            BuildJob restoreJob = new BuildJob();
+            ProjectBuildJob restoreJob = new ProjectBuildJob();
             restoreJob.BuildJobRunner = "restore";
             restoreJob.JobName = "Restore %NAME%@%VERSION%";
             restoreJob.Arguments["origin"] = "local";
             debug.Jobs.Add( restoreJob );
 
-            BuildJob mergeBuildJob = new BuildJob();
+            ProjectBuildJob mergeBuildJob = new ProjectBuildJob();
             mergeBuildJob.JobName = "Merged Debug Build";
             mergeBuildJob.BuildJobRunner = "merged";
             mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/debug_build.json";
@@ -157,9 +157,9 @@ namespace VisCPU.HL.Modules.BuildSystem
             return debug;
         }
 
-        private static BuildJob CreateReleaseBuildJob()
+        private static ProjectBuildJob CreateReleaseBuildJob()
         {
-            BuildJob debugBuildJob = new BuildJob();
+            ProjectBuildJob debugBuildJob = new ProjectBuildJob();
             debugBuildJob.JobName = "Build %NAME%@%VERSION%";
             debugBuildJob.BuildJobRunner = "build";
             debugBuildJob.Arguments["build:input"] = "Program.vhl";
@@ -173,9 +173,9 @@ namespace VisCPU.HL.Modules.BuildSystem
             return debugBuildJob;
         }
 
-        private static BuildJob CreateReleaseRunJob()
+        private static ProjectBuildJob CreateReleaseRunJob()
         {
-            BuildJob runJob = new BuildJob();
+            ProjectBuildJob runJob = new ProjectBuildJob();
             runJob.JobName = "Run %NAME%@%VERSION%";
             runJob.BuildJobRunner = "run";
             runJob.Arguments["run:input"] = "Program.vbin";
@@ -200,7 +200,7 @@ namespace VisCPU.HL.Modules.BuildSystem
 
             release.DependsOn = new[] { "Release" };
 
-            BuildJob mergeRunJob = new BuildJob();
+            ProjectBuildJob mergeRunJob = new ProjectBuildJob();
             mergeRunJob.JobName = "Merged Release Run";
             mergeRunJob.BuildJobRunner = "merged";
             mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
@@ -214,13 +214,13 @@ namespace VisCPU.HL.Modules.BuildSystem
         {
             ProjectBuildTarget release = new ProjectBuildTarget();
             release.TargetName = "Release";
-            BuildJob restoreJob = new BuildJob();
+            ProjectBuildJob restoreJob = new ProjectBuildJob();
             restoreJob.BuildJobRunner = "restore";
             restoreJob.JobName = "Restore %NAME%@%VERSION%";
             restoreJob.Arguments["origin"] = "local";
             release.Jobs.Add( restoreJob );
 
-            BuildJob mergeBuildJob = new BuildJob();
+            ProjectBuildJob mergeBuildJob = new ProjectBuildJob();
             mergeBuildJob.JobName = "Merged Release Build";
             mergeBuildJob.BuildJobRunner = "merged";
             mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_build.json";
@@ -234,39 +234,39 @@ namespace VisCPU.HL.Modules.BuildSystem
         {
             string dir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "common/jobs" );
             Directory.CreateDirectory( dir );
-            BuildJob cleanJob = new BuildJob();
+            ProjectBuildJob cleanJob = new ProjectBuildJob();
             cleanJob.BuildJobRunner = "clean";
             cleanJob.JobName = "Clean Project %NAME%@%VERSION%";
 
-            BuildJob restoreJob = new BuildJob();
+            ProjectBuildJob restoreJob = new ProjectBuildJob();
             restoreJob.BuildJobRunner = "restore";
             restoreJob.JobName = "Restore Project %NAME%@%VERSION%";
 
-            BuildJob publishJob = new BuildJob();
+            ProjectBuildJob publishJob = new ProjectBuildJob();
             publishJob.BuildJobRunner = "publish";
             publishJob.JobName = "Publish Project %NAME%@%VERSION%";
             publishJob.Arguments["repo"] = "local";
 
-            BuildJob newVersionJob = new BuildJob();
+            ProjectBuildJob newVersionJob = new ProjectBuildJob();
             newVersionJob.BuildJobRunner = "combined";
             newVersionJob.JobName = "New Version Project %NAME%";
             newVersionJob.Arguments["publish"] = "%VISDIR%common/jobs/publish.json";
             newVersionJob.Arguments["restore"] = "%VISDIR%common/jobs/restore.json";
 
-            BuildJob dBuildJob = CreateDebugBuildJob();
-            BuildJob rBuildJob = CreateReleaseBuildJob();
-            BuildJob dRunJob = CreateDebugRunJob();
-            BuildJob rRunJob = CreateReleaseRunJob();
+            ProjectBuildJob dBuildJob = CreateDebugBuildJob();
+            ProjectBuildJob rBuildJob = CreateReleaseBuildJob();
+            ProjectBuildJob dRunJob = CreateDebugRunJob();
+            ProjectBuildJob rRunJob = CreateReleaseRunJob();
 
-            BuildJob.Save( Path.Combine( dir, "debug_build.json" ), dBuildJob );
-            BuildJob.Save( Path.Combine( dir, "release_build.json" ), rBuildJob );
-            BuildJob.Save( Path.Combine( dir, "debug_run.json" ), dRunJob );
-            BuildJob.Save( Path.Combine( dir, "release_run.json" ), rRunJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "debug_build.json" ), dBuildJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "release_build.json" ), rBuildJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "debug_run.json" ), dRunJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "release_run.json" ), rRunJob );
 
-            BuildJob.Save( Path.Combine( dir, "clean.json" ), cleanJob );
-            BuildJob.Save( Path.Combine( dir, "restore.json" ), restoreJob );
-            BuildJob.Save( Path.Combine( dir, "publish.json" ), publishJob );
-            BuildJob.Save( Path.Combine( dir, "newVersion.json" ), newVersionJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "clean.json" ), cleanJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "restore.json" ), restoreJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "publish.json" ), publishJob );
+            ProjectBuildJob.Save( Path.Combine( dir, "newVersion.json" ), newVersionJob );
         }
 
         private static void GenerateCommonTargets()

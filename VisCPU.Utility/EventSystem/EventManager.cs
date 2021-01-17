@@ -43,6 +43,11 @@ namespace VisCPU.Utility.EventSystem
             {
                 Console.WriteLine( $"[{wrn.EventKey}] {wrn.Message}" );
             }
+
+            if ( obj is ErrorEvent err )
+            {
+                Console.WriteLine( $"[{err.EventKey}] {err.Message}" );
+            }
             else
             {
                 Console.WriteLine( $"[{obj.EventKey}] {obj}" );

@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-
-using VisCPU.Utility.ArgumentParser;
+﻿using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Compiler.Assembler
 {
@@ -12,19 +10,19 @@ namespace VisCPU.Compiler.Assembler
 
         [field: Argument( Name = "assembler:offset.global" )]
         public uint GlobalOffset { get; set; }
-        
+
         #region Private
 
         static AssemblyGeneratorSettings()
         {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "config/linker.json"
-                                                             ),
-                                                 new AssemblyGeneratorSettings()
-                                                );
+            SettingsCategory assemblerCategory = SettingsCategories.Get( "sdk.compiler.vasm", true );
+
+            SettingsManager.RegisterDefaultLoader(
+                                                  new JSONSettingsLoader(),
+                                                  assemblerCategory,
+                                                  "assembler.json",
+                                                  new AssemblyGeneratorSettings()
+                                                 );
         }
 
         #endregion

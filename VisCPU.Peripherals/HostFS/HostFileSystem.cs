@@ -28,7 +28,7 @@ namespace VisCPU.Peripherals.HostFS
             m_Settings = settings;
         }
 
-        public HostFileSystem() : this( SettingsSystem.GetSettings< HostFileSystemSettings>())
+        public HostFileSystem() : this( SettingsManager.GetSettings < HostFileSystemSettings >() )
         {
         }
 

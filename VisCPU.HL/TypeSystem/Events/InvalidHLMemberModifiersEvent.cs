@@ -5,7 +5,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.TypeSystem.Events
 {
 
-    public abstract class InvalidHLMemberModifiersEvent : ErrorEvent
+    internal abstract class InvalidHLMemberModifiersEvent : ErrorEvent
     {
 
         #region Protected

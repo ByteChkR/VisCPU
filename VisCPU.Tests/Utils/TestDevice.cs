@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 
+using VisCPU.Peripherals;
+
 namespace VisCPU.Tests.Utils
 {
 

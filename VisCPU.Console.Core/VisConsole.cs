@@ -9,6 +9,10 @@ using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Console.Core.Subsystems.Project;
 using VisCPU.Instructions;
+using VisCPU.Peripherals;
+using VisCPU.Peripherals.Benchmarking;
+using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.HostFS;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
@@ -56,6 +60,16 @@ namespace VisCPU.Console.Core
 
         public static void RunConsole( string[] args )
         {
+            CPUSettings.FallbackSet = new DefaultSet();
+
+            Peripheral.DebugPeripherals = new Peripheral[]
+                                          {
+                                              new BenchmarkDevice(),
+                                              new ConsoleInInterface(),
+                                              new ConsoleOutInterface(),
+                                              new HostFileSystem()
+                                          };
+
             VisConsole vs = new VisConsole();
             vs.Run( args );
         }
@@ -76,8 +90,6 @@ namespace VisCPU.Console.Core
                                     Remove( 0, 1 ).
                                     Split( new[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
                 }
-
-                CPUSettings.InstructionSet = new DefaultSet();
 
                 foreach ( string subSystemKey in subSystemKeys )
                 {
@@ -116,12 +128,6 @@ namespace VisCPU.Console.Core
 
         #region Private
 
-        [STAThread]
-        private static void Main( string[] args )
-        {
-            RunConsole( args );
-        }
-
         private void Run( string[] args )
         {
             if ( args.Length < 1 )
@@ -131,7 +137,7 @@ namespace VisCPU.Console.Core
                 return;
             }
 
-            CLISettings s =SettingsSystem.GetSettings< CLISettings>();
+            CLISettings s = SettingsManager.GetSettings < CLISettings >();
             EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse( args, s, Logger.s_Settings );

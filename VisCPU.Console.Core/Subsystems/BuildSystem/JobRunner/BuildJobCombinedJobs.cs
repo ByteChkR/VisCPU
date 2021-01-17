@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using VisCPU.HL.Modules.BuildSystem;
-using VisCPU.HL.Modules.Data;
+using VisCPU.ProjectSystem.BuildSystem;
+using VisCPU.ProjectSystem.Data;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 {
@@ -17,11 +17,11 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            ProjectBuildJob job )
         {
             foreach ( KeyValuePair < string, string > buildJobs in job.Arguments )
             {
-                BuildJob subJob = BuildJob.Load( buildJobs.Value );
+                ProjectBuildJob subJob = ProjectBuildJob.Load( buildJobs.Value );
                 project.RunJob( projectRoot, target, subJob );
             }
         }

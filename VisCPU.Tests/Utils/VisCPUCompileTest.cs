@@ -41,11 +41,11 @@ namespace VisCPU.Tests.Utils
 
         protected void Initialize()
         {
-            SettingsSystem.GetSettings < LinkerSettings>();
-            SettingsSystem.GetSettings < ConsoleInInterfaceSettings>();
-            SettingsSystem.GetSettings < ConsoleOutInterfaceSettings>();
-            SettingsSystem.GetSettings < HLCompilerSettings>();
-            SettingsSystem.GetSettings < MemorySettings>();
+            SettingsManager.GetSettings < LinkerSettings >();
+            SettingsManager.GetSettings < ConsoleInInterfaceSettings >();
+            SettingsManager.GetSettings < ConsoleOutInterfaceSettings >();
+            SettingsManager.GetSettings < HLCompilerSettings >();
+            SettingsManager.GetSettings < MemorySettings >();
         }
 
         protected void Vasm2Vbin( string file )
@@ -59,7 +59,7 @@ namespace VisCPU.Tests.Utils
                                          ) +
                              ".vbin";
 
-            if ( SettingsSystem.GetSettings < LinkerSettings >().ExportLinkerInfo )
+            if ( SettingsManager.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
                 comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }

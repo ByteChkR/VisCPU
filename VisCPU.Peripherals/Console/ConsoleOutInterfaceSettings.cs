@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Peripherals.Console
 {
@@ -22,19 +22,19 @@ namespace VisCPU.Peripherals.Console
 
         [field: Argument( Name = "console:out.pin.clear" )]
         public uint InterfaceClearPin { get; set; } = 0xFFFF1005;
-        
+
         #region Private
 
         static ConsoleOutInterfaceSettings()
         {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "./config/console/out.json"
-                                                             ),
-                                                 new ConsoleOutInterfaceSettings()
-                                                );
+            SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
+
+            SettingsManager.RegisterDefaultLoader(
+                                                  new JSONSettingsLoader(),
+                                                  coutCategory,
+                                                  "out.json",
+                                                  new ConsoleOutInterfaceSettings()
+                                                 );
         }
 
         #endregion

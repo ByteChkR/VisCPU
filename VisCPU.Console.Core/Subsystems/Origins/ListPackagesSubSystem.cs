@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using VisCPU.HL.Modules.Data;
-using VisCPU.HL.Modules.ModuleManagers;
-using VisCPU.HL.Modules.Resolvers;
+using VisCPU.ProjectSystem.Data;
+using VisCPU.ProjectSystem.Database;
+using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -25,11 +25,11 @@ namespace VisCPU.Console.Core.Subsystems.Origins
         {
             string searchStr = args.FirstOrDefault();
 
-            foreach ( KeyValuePair < string, ModuleManager > keyValuePair in ModuleResolver.GetManagers() )
+            foreach ( KeyValuePair < string, ProjectDatabase > keyValuePair in ProjectResolver.GetManagers() )
             {
                 Log( $"{keyValuePair.Key} : {keyValuePair.Value.ModuleRoot}" );
 
-                foreach ( ModulePackage modulePackage in keyValuePair.Value.GetPackages() )
+                foreach ( ProjectPackage modulePackage in keyValuePair.Value.GetPackages() )
                 {
                     if ( searchStr != null && !modulePackage.ModuleName.StartsWith( searchStr ) )
                     {

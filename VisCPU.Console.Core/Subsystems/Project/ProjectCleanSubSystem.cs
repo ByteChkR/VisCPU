@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Console.Core.Subsystems.Project.Events;
-using VisCPU.HL.Modules.Data;
+using VisCPU.ProjectSystem.Data;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;

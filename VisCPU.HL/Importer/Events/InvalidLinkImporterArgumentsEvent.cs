@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Importer.Events
 {
 
-    public class InvalidLinkImporterArgumentsEvent : ErrorEvent
+    internal class InvalidLinkImporterArgumentsEvent : ErrorEvent
     {
 
         #region Public

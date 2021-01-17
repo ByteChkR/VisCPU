@@ -5,9 +5,7 @@ using System.Linq;
 
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
-using VisCPU.Peripherals.Benchmarking;
-using VisCPU.Peripherals.Console;
-using VisCPU.Peripherals.HostFS;
+using VisCPU.Peripherals;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
@@ -21,36 +19,31 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ProgramRunner : ConsoleSubsystem
     {
+
         #region Public
 
         public static void Run( Dictionary < string, string > args )
         {
-            RunnerSettings settings = SettingsSystem.GetSettings < RunnerSettings>();
-            
-            HLCompilerSettings hls = SettingsSystem.GetSettings < HLCompilerSettings>();
-            ConsoleInInterfaceSettings cins = SettingsSystem.GetSettings < ConsoleInInterfaceSettings>();
-            ConsoleOutInterfaceSettings couts = SettingsSystem.GetSettings < ConsoleOutInterfaceSettings>();
-            MemorySettings ms = SettingsSystem.GetSettings < MemorySettings>();
-            MemoryBusSettings mbs = SettingsSystem.GetSettings < MemoryBusSettings>();
-            HostFileSystemSettings hfs = SettingsSystem.GetSettings < HostFileSystemSettings>();
+            CPUSettings cpuSettings = SettingsManager.GetSettings < CPUSettings >();
+            RunnerSettings settings = new RunnerSettings();
+
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            MemorySettings ms = SettingsManager.GetSettings < MemorySettings >();
+            MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
             ArgumentSyntaxParser.Parse(
                                        args,
                                        settings,
-                                       cins,
-                                       couts,
                                        hls,
                                        ms,
-                                       mbs
+                                       mbs,
+                                       cpuSettings
                                       );
 
-            SettingsSystem.SaveSettings( settings );
-            SettingsSystem.SaveSettings( cins );
-            SettingsSystem.SaveSettings( couts );
-            SettingsSystem.SaveSettings( hls );
-            SettingsSystem.SaveSettings( ms );
-            SettingsSystem.SaveSettings( mbs );
-            SettingsSystem.SaveSettings( hfs );
+            SettingsManager.SaveSettings( hls );
+            SettingsManager.SaveSettings( ms );
+            SettingsManager.SaveSettings( mbs );
+            SettingsManager.SaveSettings( cpuSettings );
 
             if ( settings.InputFiles == null )
             {
@@ -76,17 +69,9 @@ namespace VisCPU.Console.Core.Subsystems
                 Logger.LogMessage( LoggerSystems.Console, "Run File: '{0}'", file );
                 uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
 
-                ConsoleInInterface cin = new ConsoleInInterface();
+                MemoryBus bus = CreateBus( mbs );
 
-                ConsoleOutInterface cout =
-                    new ConsoleOutInterface();
-
-                HostFileSystem hostFs = new HostFileSystem();
-                BenchmarkDevice benchDev = new BenchmarkDevice();
-
-                MemoryBus bus = mbs.CreateBus( cout, cin, hostFs, benchDev );
-
-                CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
+                CPU cpu = new CPU( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
@@ -96,45 +81,37 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Help()
         {
-            RunnerSettings settings = SettingsSystem.GetSettings<RunnerSettings>();
+            CPUSettings cpuSettings = SettingsManager.GetSettings < CPUSettings >();
+            RunnerSettings settings = new RunnerSettings();
 
-            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
-            ConsoleInInterfaceSettings cins = SettingsSystem.GetSettings<ConsoleInInterfaceSettings>();
-            ConsoleOutInterfaceSettings couts = SettingsSystem.GetSettings<ConsoleOutInterfaceSettings>();
-            MemorySettings ms = SettingsSystem.GetSettings<MemorySettings>();
-            MemoryBusSettings mbs = SettingsSystem.GetSettings<MemoryBusSettings>();
-            HostFileSystemSettings hfs = SettingsSystem.GetSettings<HostFileSystemSettings>();
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            MemorySettings ms = SettingsManager.GetSettings < MemorySettings >();
+            MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
-            HelpSubSystem.WriteSubsystem( "vis run", settings, cins, couts, hls, ms, mbs, hfs );
+            HelpSubSystem.WriteSubsystem( "vis run", settings, hls, ms, mbs, cpuSettings );
         }
 
         public override void Run( IEnumerable < string > args )
         {
-            RunnerSettings settings = SettingsSystem.GetSettings<RunnerSettings>();
-            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
-            ConsoleInInterfaceSettings cins = SettingsSystem.GetSettings<ConsoleInInterfaceSettings>();
-            ConsoleOutInterfaceSettings couts = SettingsSystem.GetSettings<ConsoleOutInterfaceSettings>();
-            MemorySettings ms = SettingsSystem.GetSettings<MemorySettings>();
-            MemoryBusSettings mbs = SettingsSystem.GetSettings<MemoryBusSettings>();
-            HostFileSystemSettings hfs = SettingsSystem.GetSettings<HostFileSystemSettings>();
+            CPUSettings cpuSettings = SettingsManager.GetSettings < CPUSettings >();
+            RunnerSettings settings = new RunnerSettings();
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            MemorySettings ms = SettingsManager.GetSettings < MemorySettings >();
+            MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
                                        settings,
-                                       cins,
-                                       couts,
                                        hls,
                                        ms,
-                                       mbs
+                                       mbs,
+                                       cpuSettings
                                       );
 
-            SettingsSystem.SaveSettings( settings );
-            SettingsSystem.SaveSettings( cins );
-            SettingsSystem.SaveSettings( couts );
-            SettingsSystem.SaveSettings( hls );
-            SettingsSystem.SaveSettings( ms );
-            SettingsSystem.SaveSettings( mbs );
-            SettingsSystem.SaveSettings( hfs );
+            SettingsManager.SaveSettings( hls );
+            SettingsManager.SaveSettings( ms );
+            SettingsManager.SaveSettings( mbs );
+            SettingsManager.SaveSettings( cpuSettings );
 
             if ( settings.InputFiles == null )
             {
@@ -160,17 +137,9 @@ namespace VisCPU.Console.Core.Subsystems
                 Log( $"Run File: '{file}'" );
                 uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
 
-                ConsoleInInterface cin = new ConsoleInInterface();
+                MemoryBus bus = CreateBus( mbs );
 
-                ConsoleOutInterface cout =
-                    new ConsoleOutInterface();
-
-                HostFileSystem hostFs = new HostFileSystem();
-                BenchmarkDevice benchDev = new BenchmarkDevice();
-
-                MemoryBus bus = mbs.CreateBus( cout, cin, hostFs, benchDev );
-
-                CPU cpu = new CPU( bus, settings.CpuResetAddr, settings.CpuIntAddr );
+                CPU cpu = new CPU( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
@@ -181,6 +150,22 @@ namespace VisCPU.Console.Core.Subsystems
         #endregion
 
         #region Private
+
+        private static MemoryBus CreateBus( MemoryBusSettings settings, params Peripheral[] additionalPeripherals )
+        {
+            return new MemoryBus(
+                                 settings.MemoryDevices.Select(
+                                                               x => new Memory(
+                                                                               SettingsManager.
+                                                                                   GetSettings < MemorySettings >(
+                                                                                        x
+                                                                                       )
+                                                                              )
+                                                              ).
+                                          Concat( additionalPeripherals ).
+                                          Concat( Peripheral.GetExtensionPeripherals() )
+                                );
+        }
 
         private static string RunPreRunSteps( RunnerSettings settings, string file )
         {

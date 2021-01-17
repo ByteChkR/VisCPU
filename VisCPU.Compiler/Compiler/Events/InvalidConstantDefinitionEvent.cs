@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Compiler.Compiler.Events
 {
 
-    public class InvalidConstantDefinitionEvent : ErrorEvent
+    internal class InvalidConstantDefinitionEvent : ErrorEvent
     {
 
         #region Public

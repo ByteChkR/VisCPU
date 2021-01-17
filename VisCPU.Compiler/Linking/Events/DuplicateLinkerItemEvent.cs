@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Compiler.Linking.Events
 {
 
-    public class DuplicateLinkerItemEvent : WarningEvent
+    internal class DuplicateLinkerItemEvent : WarningEvent
     {
 
         #region Public

@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Console.Core.Subsystems.Project.Events
 {
 
-    public class ProjectFileNotFoundEvent : ErrorEvent
+    internal class ProjectFileNotFoundEvent : ErrorEvent
     {
 
         #region Public

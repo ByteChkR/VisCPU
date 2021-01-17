@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
 using VisCPU.Console.Core.Subsystems.Project;
-using VisCPU.HL.Modules.BuildSystem;
-using VisCPU.HL.Modules.Data;
+using VisCPU.ProjectSystem.BuildSystem;
+using VisCPU.ProjectSystem.Data;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 {
@@ -18,7 +18,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            ProjectBuildJob job )
         {
             string input = job.Arguments["source"];
             string output = job.Arguments["destination"];

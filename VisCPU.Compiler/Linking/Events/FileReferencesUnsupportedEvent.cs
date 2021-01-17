@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Compiler.Linking.Events
 {
 
-    public class FileReferencesUnsupportedEvent : ErrorEvent
+    internal class FileReferencesUnsupportedEvent : ErrorEvent
     {
 
         #region Public

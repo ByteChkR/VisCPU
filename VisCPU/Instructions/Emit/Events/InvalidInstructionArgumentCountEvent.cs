@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Instructions.Emit.Events
 {
 
-    public class InvalidInstructionArgumentCountEvent : ErrorEvent
+    internal class InvalidInstructionArgumentCountEvent : ErrorEvent
     {
 
         #region Public

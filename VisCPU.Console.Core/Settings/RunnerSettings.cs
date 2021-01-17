@@ -8,7 +8,6 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Settings
 {
@@ -27,12 +26,6 @@ namespace VisCPU.Console.Core.Settings
         [XmlIgnore]
         [JsonIgnore]
         private readonly string[] m_InputFolders;
-
-        [field: Argument( Name = "run:cpu.interrupt" )]
-        public uint CpuIntAddr { get; set; }
-
-        [field: Argument( Name = "run:cpu.reset" )]
-        public uint CpuResetAddr { get; set; }
 
         [XmlIgnore]
         [JsonIgnore]
@@ -72,20 +65,7 @@ namespace VisCPU.Console.Core.Settings
             }
         }
 
-        
         #region Private
-
-        static RunnerSettings()
-        {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "config/runner.json"
-                                                             ),
-                                                 new RunnerSettings()
-                                                );
-        }
 
         private static string FindBinary( string arg )
         {

@@ -3,7 +3,7 @@ using System.IO;
 
 using Newtonsoft.Json;
 
-namespace VisCPU.HL.Modules.Data
+namespace VisCPU.ProjectSystem.Data
 {
 
     public class ProjectBuildTarget
@@ -13,7 +13,7 @@ namespace VisCPU.HL.Modules.Data
 
         public string[] DependsOn { get; set; } = new string[0];
 
-        public List < BuildJob > Jobs { get; set; } = new List < BuildJob >();
+        public List < ProjectBuildJob > Jobs { get; set; } = new List < ProjectBuildJob >();
 
         #region Public
 

@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.ProjectSystem", "Vis
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.ILCompiler", "VisCPU.ILCompiler\VisCPU.ILCompiler.csproj", "{8BD8F27D-F0E1-4493-BD6C-067FFF64A7AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisCPU.Extensions", "VisCPU.Extensions\VisCPU.Extensions.csproj", "{B6066B4B-93C6-4A1D-81ED-B8288C3C5D9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{8BD8F27D-F0E1-4493-BD6C-067FFF64A7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BD8F27D-F0E1-4493-BD6C-067FFF64A7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BD8F27D-F0E1-4493-BD6C-067FFF64A7AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6066B4B-93C6-4A1D-81ED-B8288C3C5D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6066B4B-93C6-4A1D-81ED-B8288C3C5D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6066B4B-93C6-4A1D-81ED-B8288C3C5D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6066B4B-93C6-4A1D-81ED-B8288C3C5D9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

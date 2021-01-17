@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Compiler.Compiler.Events
 {
 
-    public class InvalidDataDefinitionEvent : ErrorEvent
+    internal class InvalidDataDefinitionEvent : ErrorEvent
     {
 
         #region Public

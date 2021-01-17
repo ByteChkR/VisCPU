@@ -3,9 +3,9 @@ using System.IO;
 using System.Linq;
 
 using VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner;
-using VisCPU.HL.Modules.BuildSystem;
-using VisCPU.HL.Modules.Data;
-using VisCPU.HL.Modules.Resolvers;
+using VisCPU.ProjectSystem.BuildSystem;
+using VisCPU.ProjectSystem.Data;
+using VisCPU.ProjectSystem.Resolvers;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem
 {
@@ -22,7 +22,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
 
         public override void Run( IEnumerable < string > args )
         {
-            ModuleResolver.Initialize();
+            ProjectResolver.Initialize();
             CommonFiles.GenerateCommonFiles();
             string[] a = args.ToArray();
 

@@ -25,7 +25,7 @@ namespace VisCPU.Compiler.Implementations
         {
             List < byte > instrBytes = new List < byte >();
 
-            AssemblyGeneratorSettings settings = SettingsSystem.GetSettings<AssemblyGeneratorSettings>();
+            AssemblyGeneratorSettings settings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
 
             if ( settings.GlobalOffset != 0 )
             {
@@ -49,7 +49,7 @@ namespace VisCPU.Compiler.Implementations
                 result.DataSectionHeader.
                        ApplyOffset(
                                    settings.GlobalOffset +
-                                   ( uint ) result.LinkedBinary.Count * CPUSettings.s_InstructionSize
+                                   ( uint ) result.LinkedBinary.Count * CPUSettings.InstructionSize
                                   ).
                        ToDictionary( x => x.Key, x => x.Value );
 
@@ -87,7 +87,7 @@ namespace VisCPU.Compiler.Implementations
                 Dictionary < string, AddressItem > hds = resultHiddenAddressItem.Value.ApplyOffset(
                          settings.GlobalOffset +
                          ( uint ) result.LinkedBinary.Count *
-                         CPUSettings.s_InstructionSize
+                         CPUSettings.InstructionSize
                         ).
                     ToDictionary(
                                  x => x.Key,
@@ -130,12 +130,12 @@ namespace VisCPU.Compiler.Implementations
                     }
                 }
 
-                if ( bytes.Count > CPUSettings.s_ByteSize )
+                if ( bytes.Count > CPUSettings.ByteSize )
                 {
                     EventManager < ErrorEvent >.SendEvent( new InvalidArgumentCountEvent( i ) );
                 }
 
-                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.s_ByteSize - bytes.Count ) );
+                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.ByteSize - bytes.Count ) );
 
                 instrBytes.AddRange( bytes );
             }

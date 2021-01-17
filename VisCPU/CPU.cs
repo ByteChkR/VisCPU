@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 
 using VisCPU.Instructions;
 using VisCPU.Utility;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU
 {
@@ -121,7 +122,7 @@ namespace VisCPU
 
             Instruction instruction = CPUSettings.InstructionSet.GetInstruction( op );
 
-            if ( instruction == null && CPUSettings.DumpOnCrash )
+            if ( instruction == null && SettingsManager.GetSettings < CPUSettings >().DumpOnCrash )
             {
                 Dump();
             }

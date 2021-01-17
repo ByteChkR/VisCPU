@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using VisCPU.HL.Modules.Resolvers;
+using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -14,9 +14,9 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
         public static void RemoveOrigin( string name )
         {
-            ModuleResolverSettings s = SettingsSystem.GetSettings<ModuleResolverSettings>();
+            ProjectResolverSettings s = SettingsManager.GetSettings < ProjectResolverSettings >();
             s.ModuleOrigins.Remove( name );
-            SettingsSystem.SaveSettings( s );
+            SettingsManager.SaveSettings( s );
         }
 
         public override void Help()

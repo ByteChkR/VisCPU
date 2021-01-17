@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-
-using VisCPU.Utility.ArgumentParser;
+﻿using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Compiler.Linking
 {
@@ -17,19 +15,18 @@ namespace VisCPU.Compiler.Linking
         [field: Argument( Name = "linker:export" )]
         public bool ExportLinkerInfo { get; set; }
 
-
         #region Private
 
         static LinkerSettings()
         {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "config/linker.json"
-                                                             ),
-                                                 new LinkerSettings()
-                                                );
+            SettingsCategory linkerCategory = SettingsCategories.Get( "sdk.compiler.vasm", true );
+
+            SettingsManager.RegisterDefaultLoader(
+                                                  new JSONSettingsLoader(),
+                                                  linkerCategory,
+                                                  "linker.json",
+                                                  new LinkerSettings()
+                                                 );
         }
 
         #endregion

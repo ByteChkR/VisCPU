@@ -4,13 +4,6 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.Instructions.Emit
 {
 
-    public interface IEmitter
-    {
-
-        object Emit( string instructionKey, params string[] arguments );
-
-    }
-
     public abstract class Emitter < EmitType > : VisBase, IEmitter
     {
 

@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Events
 {
 
-    public class HLVariableNotFoundEvent : ErrorEvent
+    internal class HLVariableNotFoundEvent : ErrorEvent
     {
 
         #region Public

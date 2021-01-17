@@ -5,7 +5,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Events
 {
 
-    public class MultipleReceiverWriteEvent : WarningEvent
+    internal class MultipleReceiverWriteEvent : WarningEvent
     {
 
         #region Public

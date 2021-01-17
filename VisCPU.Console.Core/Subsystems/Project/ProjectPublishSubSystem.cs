@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 
-using VisCPU.HL.Modules.Data;
-using VisCPU.HL.Modules.Resolvers;
+using VisCPU.ProjectSystem.Data;
+using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -48,11 +48,11 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
             Logger.LogMessage( LoggerSystems.ModuleSystem, "Publishing '{0}'", src );
 
-            ModuleResolver.GetManager( publishOptions.Repository ).
-                           AddPackage(
-                                      t,
-                                      Path.Combine( root, "build", "module.zip" )
-                                     );
+            ProjectResolver.GetManager( publishOptions.Repository ).
+                            AddPackage(
+                                       t,
+                                       Path.Combine( root, "build", "module.zip" )
+                                      );
         }
 
         public override void Help()

@@ -5,7 +5,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Peripherals.Events
 {
 
-    public class InvalidHFSCommandEvent : ErrorEvent
+    internal class InvalidHFSCommandEvent : ErrorEvent
     {
 
         #region Public

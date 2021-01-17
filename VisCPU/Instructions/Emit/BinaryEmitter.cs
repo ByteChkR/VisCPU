@@ -42,7 +42,7 @@ namespace VisCPU.Instructions.Emit
                 bytes.AddRange( BitConverter.GetBytes( uint.Parse( aToken ) ) );
             }
 
-            if ( bytes.Count > CPUSettings.s_ByteSize )
+            if ( bytes.Count > CPUSettings.ByteSize )
             {
                 EventManager < ErrorEvent >.SendEvent(
                                                       new InvalidInstructionArgumentCountEvent(
@@ -52,7 +52,7 @@ namespace VisCPU.Instructions.Emit
                                                      );
             }
 
-            bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.s_ByteSize - bytes.Count ) );
+            bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.ByteSize - bytes.Count ) );
 
             return bytes.ToArray();
         }

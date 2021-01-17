@@ -6,11 +6,11 @@ using System.Xml.Serialization;
 
 using Newtonsoft.Json;
 
-using VisCPU.HL.Modules.BuildSystem;
-using VisCPU.HL.Modules.ModuleManagers;
+using VisCPU.ProjectSystem.BuildSystem;
+using VisCPU.ProjectSystem.Database;
 using VisCPU.Utility.Logging;
 
-namespace VisCPU.HL.Modules.Data
+namespace VisCPU.ProjectSystem.Data
 {
 
     public class ProjectConfig
@@ -21,7 +21,7 @@ namespace VisCPU.HL.Modules.Data
 
         [JsonIgnore]
         [XmlIgnore]
-        public ModuleManager Manager { get; }
+        public ProjectDatabase Manager { get; }
 
         public string ProjectName { get; set; } = "MyProject";
 
@@ -38,9 +38,9 @@ namespace VisCPU.HL.Modules.Data
                     "Debug", new ProjectBuildTarget
                              {
                                  TargetName = "Debug",
-                                 Jobs = new List < BuildJob >
+                                 Jobs = new List < ProjectBuildJob >
                                         {
-                                            new BuildJob
+                                            new ProjectBuildJob
                                             {
                                                 JobName =
                                                     "Clean Project Folder",
@@ -55,7 +55,7 @@ namespace VisCPU.HL.Modules.Data
         #region Public
 
         public ProjectConfig(
-            ModuleManager manager,
+            ProjectDatabase manager,
             string projectName,
             string projectVersion,
             ProjectDependency[] dependencies )
@@ -103,7 +103,11 @@ namespace VisCPU.HL.Modules.Data
                                               );
         }
 
-        public void RunJob( string rootDir, ProjectBuildTarget buildTarget, BuildJob job, bool writeDebug = false )
+        public void RunJob(
+            string rootDir,
+            ProjectBuildTarget buildTarget,
+            ProjectBuildJob job,
+            bool writeDebug = false )
         {
             if ( !s_BuildJobRunners.ContainsKey( job.BuildJobRunner ) )
             {
@@ -154,7 +158,7 @@ namespace VisCPU.HL.Modules.Data
                 }
             }
 
-            foreach ( BuildJob buildTargetJob in buildTarget.Jobs )
+            foreach ( ProjectBuildJob buildTargetJob in buildTarget.Jobs )
             {
                 RunJob( rootDir, buildTarget, buildTargetJob, true );
             }
@@ -164,7 +168,7 @@ namespace VisCPU.HL.Modules.Data
 
         #region Private
 
-        private void ResolveBuildJobItems( string rootDir, ProjectBuildTarget buildTarget, BuildJob job )
+        private void ResolveBuildJobItems( string rootDir, ProjectBuildTarget buildTarget, ProjectBuildJob job )
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
                                                    {

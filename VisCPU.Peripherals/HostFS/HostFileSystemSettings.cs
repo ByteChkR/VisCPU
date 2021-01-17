@@ -1,8 +1,8 @@
 ﻿using System;
-using System.IO;
 
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Peripherals.HostFS
 {
@@ -30,20 +30,19 @@ namespace VisCPU.Peripherals.HostFS
 
         [field: Argument( Name = "hostfs:pin.cmd" )]
         public uint PinCmd { get; set; } = 0xFFFF3003;
-        
 
         #region Private
 
         static HostFileSystemSettings()
         {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "./config/host_fs/settings.json"
-                                                             ),
-                                                 new HostFileSystemSettings()
-                                                );
+            SettingsCategory hfsCategory = Peripheral.s_PeripheralCategory.AddCategory( "host-fs" );
+
+            SettingsManager.RegisterDefaultLoader(
+                                                  new JSONSettingsLoader(),
+                                                  hfsCategory,
+                                                  "default.json",
+                                                  new HostFileSystemSettings()
+                                                 );
         }
 
         #endregion

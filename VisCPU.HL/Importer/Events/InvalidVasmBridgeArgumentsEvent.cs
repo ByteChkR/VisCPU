@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Importer.Events
 {
 
-    public class InvalidVasmBridgeArgumentsEvent : ErrorEvent
+    internal class InvalidVasmBridgeArgumentsEvent : ErrorEvent
     {
 
         #region Public

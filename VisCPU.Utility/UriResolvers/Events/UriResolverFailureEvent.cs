@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Utility.UriResolvers.Events
 {
 
-    public class UriResolverFailureEvent : ErrorEvent
+    internal class UriResolverFailureEvent : ErrorEvent
     {
 
         #region Public

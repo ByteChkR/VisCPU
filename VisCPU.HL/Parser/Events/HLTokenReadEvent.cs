@@ -14,7 +14,7 @@ namespace VisCPU.HL.Parser.Events
     /// <summary>
     ///     Occurs if the Parser Encounters a Token that is unexpected
     /// </summary>
-    public class HLTokenReadEvent : ErrorEvent
+    internal class HLTokenReadEvent : ErrorEvent
     {
 
         /// <summary>

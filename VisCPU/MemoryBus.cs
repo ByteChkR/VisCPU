@@ -4,9 +4,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 
 using VisCPU.Events;
+using VisCPU.Peripherals;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU
@@ -76,7 +78,7 @@ namespace VisCPU
                 receivers++;
             }
 
-            if ( CPUSettings.WarnOnUnmappedAccess && receivers == 0 )
+            if ( SettingsManager.GetSettings < CPUSettings >().WarnOnUnmappedAccess && receivers == 0 )
             {
                 EventManager < WarningEvent >.SendEvent( new ReadFromUnmappedAddressEvent( address ) );
             }
@@ -109,7 +111,7 @@ namespace VisCPU
                 peripheral.WriteData( address, data );
             }
 
-            if ( CPUSettings.WarnOnUnmappedAccess && !hasReceiver )
+            if ( SettingsManager.GetSettings < CPUSettings >().WarnOnUnmappedAccess && !hasReceiver )
             {
                 EventManager < WarningEvent >.SendEvent( new WriteToUnmappedAddressEvent( address, data ) );
             }

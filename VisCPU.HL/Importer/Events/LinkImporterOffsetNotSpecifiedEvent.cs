@@ -6,7 +6,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Importer.Events
 {
 
-    public class LinkImporterOffsetNotSpecifiedEvent : ErrorEvent
+    internal class LinkImporterOffsetNotSpecifiedEvent : ErrorEvent
     {
 
         #region Public

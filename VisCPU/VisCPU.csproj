@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\VisCPU.Extensions\VisCPU.Extensions.csproj" />
     <ProjectReference Include="..\VisCPU.Utility\VisCPU.Utility.csproj" />
   </ItemGroup>
 

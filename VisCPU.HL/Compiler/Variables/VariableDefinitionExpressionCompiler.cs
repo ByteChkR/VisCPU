@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 
-using VisCPU.Events;
 using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.Events;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;

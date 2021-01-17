@@ -7,7 +7,6 @@ using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.HL.Importer;
-using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -24,10 +23,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Build( Dictionary < string, string > args )
         {
-            BuilderSettings settings = SettingsSystem.GetSettings< BuilderSettings>();
-            AssemblyGeneratorSettings asettings = SettingsSystem.GetSettings < AssemblyGeneratorSettings>();
-            LinkerSettings ls = SettingsSystem.GetSettings < LinkerSettings>();
-            HLCompilerSettings hls = SettingsSystem.GetSettings < HLCompilerSettings>();
+            BuilderSettings settings = new BuilderSettings();
+            AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
                                        args,
@@ -37,19 +36,18 @@ namespace VisCPU.Console.Core.Subsystems
                                        hls
                                       );
 
-            SettingsSystem.SaveSettings( ls );
-            SettingsSystem.SaveSettings( settings );
-            SettingsSystem.SaveSettings( asettings );
-            SettingsSystem.SaveSettings( hls );
+            SettingsManager.SaveSettings( ls );
+            SettingsManager.SaveSettings( asettings );
+            SettingsManager.SaveSettings( hls );
             Build( settings );
         }
 
         public static void Build( IEnumerable < string > args )
         {
-            BuilderSettings settings = SettingsSystem.GetSettings<BuilderSettings>();
-            AssemblyGeneratorSettings asettings = SettingsSystem.GetSettings<AssemblyGeneratorSettings>();
-            LinkerSettings ls = SettingsSystem.GetSettings<LinkerSettings>();
-            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
+            BuilderSettings settings = new BuilderSettings();
+            AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
                                        args.ToArray(),
@@ -59,19 +57,18 @@ namespace VisCPU.Console.Core.Subsystems
                                        hls
                                       );
 
-            SettingsSystem.SaveSettings( ls );
-            SettingsSystem.SaveSettings( settings );
-            SettingsSystem.SaveSettings( asettings );
-            SettingsSystem.SaveSettings( hls );
+            SettingsManager.SaveSettings( ls );
+            SettingsManager.SaveSettings( asettings );
+            SettingsManager.SaveSettings( hls );
             Build( settings );
         }
 
         public override void Help()
         {
-            BuilderSettings settings = SettingsSystem.GetSettings<BuilderSettings>();
-            AssemblyGeneratorSettings asettings = SettingsSystem.GetSettings<AssemblyGeneratorSettings>();
-            LinkerSettings ls = SettingsSystem.GetSettings<LinkerSettings>();
-            HLCompilerSettings hls = SettingsSystem.GetSettings<HLCompilerSettings>();
+            BuilderSettings settings = new BuilderSettings();
+            AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
             HelpSubSystem.WriteSubsystem( "vis build", settings, asettings, ls, hls );
         }
 
@@ -86,7 +83,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         private static void Build( BuilderSettings settings )
         {
-            ImporterSystem.Add( new InstructionDataImporter( new DefaultSet() ), new LinkerImporter() );
+            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter() );
 
             if ( settings.InputFiles == null )
             {

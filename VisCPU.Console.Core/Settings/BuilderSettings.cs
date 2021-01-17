@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -77,21 +76,8 @@ namespace VisCPU.Console.Core.Settings
                 return ret.ToArray();
             }
         }
-        
 
         #region Private
-
-        static BuilderSettings()
-        {
-            SettingsSystem.RegisterDefaultLoader(
-                                                 new JSONSettingsLoader(),
-                                                 Path.Combine(
-                                                              AppDomain.CurrentDomain.BaseDirectory,
-                                                              "config/build.json"
-                                                             ),
-                                                 new BuilderSettings()
-                                                );
-        }
 
         private static string CompressFile( string lastStepFile )
         {
@@ -129,7 +115,7 @@ namespace VisCPU.Console.Core.Settings
                                          ) +
                              ".vbin";
 
-            if ( SettingsSystem.GetSettings < LinkerSettings >().ExportLinkerInfo )
+            if ( SettingsManager.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
                 comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }

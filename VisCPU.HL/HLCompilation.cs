@@ -47,7 +47,7 @@ namespace VisCPU.HL
 
         private static uint s_Counter;
 
-        private readonly HLCompilerSettings m_Settings = SettingsSystem.GetSettings < HLCompilerSettings >();
+        private readonly HLCompilerSettings m_Settings = SettingsManager.GetSettings < HLCompilerSettings >();
         private readonly string m_Directory;
 
         private readonly List < string > m_IncludedFiles = new List < string >();
@@ -723,7 +723,7 @@ namespace VisCPU.HL
                 Eat( HLTokenType.OpComma );
             }
 
-            return ret.Cast<IHlToken>().ToArray();
+            return ret.Cast < IHlToken >().ToArray();
 
             void Eat( HLTokenType type )
             {

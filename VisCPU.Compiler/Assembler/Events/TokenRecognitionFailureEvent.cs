@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Compiler.Assembler.Events
 {
 
-    public class TokenRecognitionFailureEvent : ErrorEvent
+    internal class TokenRecognitionFailureEvent : ErrorEvent
     {
 
         #region Public

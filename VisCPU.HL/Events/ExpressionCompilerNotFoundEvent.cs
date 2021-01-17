@@ -5,7 +5,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Events
 {
 
-    public class ExpressionCompilerNotFoundEvent : ErrorEvent
+    internal class ExpressionCompilerNotFoundEvent : ErrorEvent
     {
 
         #region Public

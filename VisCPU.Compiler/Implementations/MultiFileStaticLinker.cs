@@ -23,7 +23,7 @@ namespace VisCPU.Compiler.Implementations
         {
             Dictionary < FileReference, LinkerTarget > tree = DiscoverCompilationTree( target );
 
-            return ProcessOrdered( target, tree, !SettingsSystem.GetSettings < LinkerSettings >().NoHiddenItems );
+            return ProcessOrdered( target, tree, !SettingsManager.GetSettings < LinkerSettings >().NoHiddenItems );
         }
 
         #endregion
@@ -111,7 +111,7 @@ namespace VisCPU.Compiler.Implementations
                 result.HiddenLabelItems[k] =
                     SelectHidden( linkerTarget.FileCompilation.Labels.ToArray() ).
                         ApplyOffset(
-                                    ( uint ) result.LinkedBinary.Count * CPUSettings.s_InstructionSize
+                                    ( uint ) result.LinkedBinary.Count * CPUSettings.InstructionSize
                                    ).
                         ToDictionary( x => x.Key, x => x.Value );
 
@@ -123,7 +123,7 @@ namespace VisCPU.Compiler.Implementations
                                 result.Labels,
                                 linkerTarget.FileCompilation.Labels.ApplyOffset(
                                                                                 ( uint ) result.LinkedBinary.Count *
-                                                                                CPUSettings.s_InstructionSize
+                                                                                CPUSettings.InstructionSize
                                                                                ),
                                 enableHide
                                );

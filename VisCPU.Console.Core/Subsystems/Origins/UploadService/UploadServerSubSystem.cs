@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-using VisCPU.HL.Modules.Resolvers;
-using VisCPU.HL.Modules.UploadService;
+using VisCPU.ProjectSystem.Resolvers;
+using VisCPU.ProjectSystem.UploadService;
 using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
@@ -28,14 +28,14 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
         {
             ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), this );
 
-            TCPModuleManagerServer server = new TCPModuleManagerServer(
-                                                                       ModuleResolver.GetManager( args.First() ),
-                                                                       Port,
-                                                                       Path.Combine(
-                                                                            AppDomain.CurrentDomain.BaseDirectory,
-                                                                            "cache/upload_server"
-                                                                           )
-                                                                      );
+            TCPProjectDatabaseServer server = new TCPProjectDatabaseServer(
+                                                                           ProjectResolver.GetManager( args.First() ),
+                                                                           Port,
+                                                                           Path.Combine(
+                                                                                AppDomain.CurrentDomain.BaseDirectory,
+                                                                                "cache/upload_server"
+                                                                               )
+                                                                          );
 
             Thread t = new Thread( server.ServerLoop );
             t.Start();

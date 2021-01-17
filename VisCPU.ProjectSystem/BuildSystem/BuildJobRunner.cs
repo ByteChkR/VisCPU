@@ -1,6 +1,6 @@
-﻿using VisCPU.HL.Modules.Data;
+﻿using VisCPU.ProjectSystem.Data;
 
-namespace VisCPU.HL.Modules.BuildSystem
+namespace VisCPU.ProjectSystem.BuildSystem
 {
 
     public abstract class BuildJobRunner
@@ -14,7 +14,7 @@ namespace VisCPU.HL.Modules.BuildSystem
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job );
+            ProjectBuildJob job );
 
         #endregion
 

@@ -1,6 +1,5 @@
 using NUnit.Framework;
 
-using VisCPU.Instructions;
 using VisCPU.Tests.Utils;
 
 namespace VisCPU.Tests
@@ -15,7 +14,6 @@ namespace VisCPU.Tests
         public void Setup()
         {
             Initialize();
-            CPUSettings.InstructionSet = new DefaultSet();
             TestDevice.OnFail += ( name, reason ) => Assert.Fail( $"Test '{name}' failed with Reason '{reason}'" );
         }
 

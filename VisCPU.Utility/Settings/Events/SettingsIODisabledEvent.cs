@@ -4,7 +4,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Utility.Settings.Events
 {
 
-    public class SettingsIODisabledEvent : ErrorEvent
+    internal class SettingsIODisabledEvent : ErrorEvent
     {
 
         #region Public

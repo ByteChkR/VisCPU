@@ -21,7 +21,7 @@ namespace VisCPU.HL.Compiler.Math
             ExpressionTarget target = compilation.Parse( expr.Left );
             ExpressionTarget rTarget = compilation.Parse( expr.Right );
 
-            if ( SettingsSystem.GetSettings < HLCompilerSettings >().OptimizeConstExpressions &&
+            if ( SettingsManager.GetSettings < HLCompilerSettings >().OptimizeConstExpressions &&
                  !target.IsAddress &&
                  !rTarget.IsAddress )
             {

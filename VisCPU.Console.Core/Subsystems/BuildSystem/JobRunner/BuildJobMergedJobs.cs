@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using VisCPU.HL.Modules.BuildSystem;
-using VisCPU.HL.Modules.Data;
+using VisCPU.ProjectSystem.BuildSystem;
+using VisCPU.ProjectSystem.Data;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 {
@@ -17,9 +17,9 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
             string projectRoot,
             ProjectConfig project,
             ProjectBuildTarget target,
-            BuildJob job )
+            ProjectBuildJob job )
         {
-            BuildJob includeJob = BuildJob.Load( job.Arguments["merge:include"] );
+            ProjectBuildJob includeJob = ProjectBuildJob.Load( job.Arguments["merge:include"] );
 
             foreach ( KeyValuePair < string, string > buildJobs in job.Arguments )
             {

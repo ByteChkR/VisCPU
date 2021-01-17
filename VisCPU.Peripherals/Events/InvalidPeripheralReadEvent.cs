@@ -6,7 +6,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Peripherals.Events
 {
 
-    public class InvalidPeripheralReadEvent : WarningEvent
+    internal class InvalidPeripheralReadEvent : WarningEvent
     {
 
         #region Public

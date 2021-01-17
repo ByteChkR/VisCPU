@@ -5,7 +5,7 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Events
 {
 
-    public class DuplicateInstructionOpCodesEvent : ErrorEvent
+    internal class DuplicateInstructionOpCodesEvent : ErrorEvent
     {
 
         #region Public

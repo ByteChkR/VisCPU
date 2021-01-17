@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VisCPU.HL.Modules.Data
+namespace VisCPU.ProjectSystem.Data
 {
 
     [Serializable]
