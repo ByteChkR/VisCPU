@@ -1,1 +1,0 @@
-﻿D:\Users\Tim\Documents\viscpu\VisCPU.Console\bin\Debug\net5.0\vis.exe
