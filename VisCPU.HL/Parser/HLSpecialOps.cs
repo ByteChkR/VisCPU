@@ -27,9 +27,9 @@ namespace VisCPU.HL.Parser
             parser.Eat( HLTokenType.OpFor );
             parser.Eat( HLTokenType.OpBracketOpen );
             HLExpression vDecl = parser.ParseExpr();
-            parser.Eat( HLTokenType.OpSemicolon );
+            //parser.Eat( HLTokenType.OpSemicolon );
             HLExpression condition = parser.ParseExpr();
-            parser.Eat( HLTokenType.OpSemicolon );
+            //parser.Eat( HLTokenType.OpSemicolon );
             HLExpression vInc = parser.ParseExpr();
             parser.Eat( HLTokenType.OpBracketClose );
 

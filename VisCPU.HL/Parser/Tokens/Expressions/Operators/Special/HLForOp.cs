@@ -13,7 +13,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Variable Change Expression
         /// </summary>
-        private readonly HLExpression m_VInc;
+        public HLExpression VInc { get; }
 
         /// <summary>
         ///     Continue Condition
@@ -50,7 +50,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         {
             Condition = condition;
             VDecl = vDecl;
-            m_VInc = vInc;
+            VInc = vInc;
             ExprBody = exprBody;
         }
 
@@ -64,7 +64,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
                    {
                        VDecl,
                        Condition,
-                       m_VInc
+                       VInc
                    }.Concat( ExprBody ).
                      ToList();
         }

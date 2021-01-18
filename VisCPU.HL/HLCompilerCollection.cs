@@ -43,6 +43,7 @@ namespace VisCPU.HL
                             { typeof( HLIfOp ), new IfBlockCompiler() },
                             { typeof( HLReturnOp ), new ReturnExpressionCompiler() },
                             { typeof( HLWhileOp ), new WhileExpressionCompiler() },
+                            { typeof( HLForOp ), new ForExpressionCompiler() },
                             {
                                 typeof( HLUnaryOp ), new OperatorCompilerCollection < HLUnaryOp
                                 >(
