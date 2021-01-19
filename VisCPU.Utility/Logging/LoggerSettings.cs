@@ -6,8 +6,10 @@ namespace VisCPU.Utility.Logging
     public class LoggerSettings
     {
 
-        [Argument( Name = "log" )]
-        private readonly LoggerSystems m_EnabledSystems = LoggerSystems.Default;
+        [field: Argument( Name = "log" )]
+        private LoggerSystems m_EnabledSystems = LoggerSystems.Default;
+
+        public void SetLogLevel(LoggerSystems systemFlags) => m_EnabledSystems = systemFlags;
 
         [field: Argument( Name = "log-all" )]
         public bool EnableAll { get; set; }

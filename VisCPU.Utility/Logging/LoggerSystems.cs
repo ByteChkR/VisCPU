@@ -29,6 +29,7 @@ namespace VisCPU.Utility.Logging
         HlImporter = 262144,
         ModuleSystem = 524288,
         Emit = 1048576,
+        HlIntegration = 2097152,
 
         AllInstructions = MathInstructions |
                           LogicInstructions |
@@ -38,7 +39,7 @@ namespace VisCPU.Utility.Logging
                           BranchInstructions |
                           MemoryInstructions,
 
-        Hl = HlParser | HlCompiler | HlImporter,
+        Hl = HlParser | HlCompiler | HlImporter | HlIntegration,
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
