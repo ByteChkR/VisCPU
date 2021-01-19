@@ -19,7 +19,7 @@ namespace VisCPU.Events
         }
 
         public InstructionNotFoundEvent( Instruction instruction ) : base(
-                                                                          $"Can not find Instruction {instruction.Key}",
+                                                                          $"Can not find Instruction {instruction?.Key}",
                                                                           ErrorEventKeys.s_InstrOpNotFound,
                                                                           false
                                                                          )

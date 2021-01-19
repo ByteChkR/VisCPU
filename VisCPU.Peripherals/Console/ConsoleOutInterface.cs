@@ -1,4 +1,5 @@
-﻿using VisCPU.Peripherals.Events;
+﻿using System;
+using VisCPU.Peripherals.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
@@ -10,6 +11,10 @@ namespace VisCPU.Peripherals.Console
     {
 
         private readonly ConsoleOutInterfaceSettings m_Settings;
+
+        public Action<char> WriteConsoleChar { get; set; } = System.Console.Write;
+        public Action ConsoleClear { get; set; } = System.Console.Clear;
+        public Action<uint> WriteConsoleNum { get; set; } = x => System.Console.Write(x.ToString());
 
         #region Public
 
@@ -48,15 +53,15 @@ namespace VisCPU.Peripherals.Console
             {
                 if ( m_Settings.InterfaceClearPin == address )
                 {
-                    System.Console.Clear();
+                    ConsoleClear();
                 }
                 else if ( m_Settings.WriteNumOutputAddress == address )
                 {
-                    System.Console.Write( data.ToString() );
+                    WriteConsoleNum(data);
                 }
                 else
                 {
-                    System.Console.Write( ( char ) data );
+                    WriteConsoleChar((char) data);
                 }
             }
         }

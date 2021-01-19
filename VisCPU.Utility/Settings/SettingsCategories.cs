@@ -12,6 +12,8 @@ namespace VisCPU.Utility.Settings
 
     public static class SettingsCategories
     {
+        private static string DefaultConfigDir = AppDomain.CurrentDomain.BaseDirectory;
+        public static void SetDefaultConfigDir(string dir) => DefaultConfigDir = dir;
 
         private static readonly List < (string rootDir, SettingsCategory category) > s_RootCategories =
             new List < (string, SettingsCategory) >();
@@ -56,7 +58,7 @@ namespace VisCPU.Utility.Settings
                     return null;
                 }
 
-                current = Add( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "configs" ), parts[0] );
+                current = Add( Path.Combine(DefaultConfigDir, "configs" ), parts[0] );
             }
 
             for ( int i = 1; i < parts.Length; i++ )

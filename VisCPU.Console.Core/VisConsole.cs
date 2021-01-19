@@ -62,6 +62,7 @@ namespace VisCPU.Console.Core
         {
             CPUSettings.FallbackSet = new DefaultSet();
 
+#if DEBUG
             Peripheral.DebugPeripherals = new Peripheral[]
                                           {
                                               new BenchmarkDevice(),
@@ -69,6 +70,7 @@ namespace VisCPU.Console.Core
                                               new ConsoleOutInterface(),
                                               new HostFileSystem()
                                           };
+#endif
 
             VisConsole vs = new VisConsole();
             vs.Run( args );

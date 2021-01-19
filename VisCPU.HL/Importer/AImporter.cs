@@ -11,8 +11,8 @@ namespace VisCPU.HL.Importer
     {
 
         protected override LoggerSystems SubSystem => LoggerSystems.HlImporter;
-
-        protected string CacheDirectory => Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "cache" );
+        public static string CacheRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache");
+        protected string CacheDirectory => CacheRoot;
 
         #region Public
 

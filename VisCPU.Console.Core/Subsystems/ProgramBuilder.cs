@@ -81,7 +81,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         #region Private
 
-        private static void Build( BuilderSettings settings )
+        public static void Build( BuilderSettings settings )
         {
             ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter() );
 

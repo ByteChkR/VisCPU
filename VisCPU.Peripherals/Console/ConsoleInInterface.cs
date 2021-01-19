@@ -1,4 +1,5 @@
-﻿using VisCPU.Peripherals.Events;
+﻿using System;
+using VisCPU.Peripherals.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
@@ -10,6 +11,7 @@ namespace VisCPU.Peripherals.Console
     {
 
         private readonly ConsoleInInterfaceSettings m_Settings;
+        public Func<int> ReadConsoleInput { get; set; } = System.Console.Read;
 
         #region Public
 
@@ -37,7 +39,7 @@ namespace VisCPU.Peripherals.Console
 
             if ( address == m_Settings.ReadInputAddress )
             {
-                return ( uint ) System.Console.Read();
+                return ( uint ) ReadConsoleInput();
             }
 
             EventManager < WarningEvent >.SendEvent( new InvalidPeripheralReadEvent( address, this ) );

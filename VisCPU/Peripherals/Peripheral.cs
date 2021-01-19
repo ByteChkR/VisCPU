@@ -5,6 +5,8 @@ using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 
+using VisCPU.Extensions;
+
 namespace VisCPU.Peripherals
 {
 
