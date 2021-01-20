@@ -9,11 +9,11 @@ using VisCPU.ProjectSystem.Data;
 namespace VisCPU.ProjectSystem.Database.Implementations
 {
 
-    public class TCPProjectDatabase : ProjectDatabase
+    public class TcpProjectDatabase : ProjectDatabase
     {
         #region Public
 
-        public TCPProjectDatabase( string moduleRoot ) : base( moduleRoot )
+        public TcpProjectDatabase( string moduleRoot ) : base( moduleRoot )
         {
         }
 

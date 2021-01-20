@@ -4,11 +4,11 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Events
 {
 
-    internal class HLVariableNotFoundEvent : ErrorEvent
+    internal class HlVariableNotFoundEvent : ErrorEvent
     {
         #region Public
 
-        public HLVariableNotFoundEvent( string varName, bool canContinue ) : base(
+        public HlVariableNotFoundEvent( string varName, bool canContinue ) : base(
             $"Can not find variable: {varName}",
             ErrorEventKeys.s_HlVariableNotFound,
             canContinue

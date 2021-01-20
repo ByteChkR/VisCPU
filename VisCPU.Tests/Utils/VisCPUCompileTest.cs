@@ -12,7 +12,7 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.Tests.Utils
 {
 
-    public abstract class VisCPUCompileTest
+    public abstract class VisCpuCompileTest
     {
         protected readonly TestDevice TestDevice = new TestDevice();
 
@@ -42,7 +42,7 @@ namespace VisCPU.Tests.Utils
             SettingsManager.GetSettings < LinkerSettings >();
             SettingsManager.GetSettings < ConsoleInInterfaceSettings >();
             SettingsManager.GetSettings < ConsoleOutInterfaceSettings >();
-            SettingsManager.GetSettings < HLCompilerSettings >();
+            SettingsManager.GetSettings < HlCompilerSettings >();
             SettingsManager.GetSettings < MemorySettings >();
         }
 
@@ -68,7 +68,7 @@ namespace VisCPU.Tests.Utils
         protected void Vhl2Vasm( string file )
         {
             string src = File.ReadAllText( file );
-            HLCompilation c = new HLCompilation( src, Path.GetDirectoryName( file ) );
+            HlCompilation c = new HlCompilation( src, Path.GetDirectoryName( file ) );
             string outp = c.Parse();
 
             string outFile = Path.Combine( Path.GetDirectoryName( file ), Path.GetFileNameWithoutExtension( file ) ) +

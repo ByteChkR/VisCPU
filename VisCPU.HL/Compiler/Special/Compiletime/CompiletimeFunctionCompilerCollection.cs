@@ -26,7 +26,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             m_Compilers[comp.FuncName] = comp;
         }
 
-        public ExpressionTarget Compile( string func, HLCompilation compilation, HLInvocationOp expr )
+        public ExpressionTarget Compile( string func, HlCompilation compilation, HlInvocationOp expr )
         {
             return m_Compilers[func].Compile( compilation, expr );
         }

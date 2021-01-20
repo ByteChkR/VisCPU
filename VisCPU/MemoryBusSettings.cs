@@ -22,10 +22,10 @@ namespace VisCPU
 
         static MemoryBusSettings()
         {
-            SettingsCategory busCategory = CPUSettings.s_CpuCategory;
+            SettingsCategory busCategory = CpuSettings.s_CpuCategory;
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 busCategory,
                 "memory-bus.json",
                 new MemoryBusSettings()

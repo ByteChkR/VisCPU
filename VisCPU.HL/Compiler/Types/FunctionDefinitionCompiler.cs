@@ -9,15 +9,15 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 namespace VisCPU.HL.Compiler.Types
 {
 
-    public class FunctionDefinitionCompiler : HLExpressionCompiler < HLFuncDefOperand >
+    public class FunctionDefinitionCompiler : HlExpressionCompiler < HlFuncDefOperand >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLFuncDefOperand expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlFuncDefOperand expr )
         {
             bool isPublic = expr.FunctionDefinition.Mods.Any( x => x.ToString() == "public" );
 
-            HLCompilation fComp = new HLCompilation( compilation, expr.FunctionDefinition.FunctionName.ToString() );
+            HlCompilation fComp = new HlCompilation( compilation, expr.FunctionDefinition.FunctionName.ToString() );
 
             compilation.FunctionMap[expr.FunctionDefinition.FunctionName.ToString()] = new FunctionData(
                 expr.FunctionDefinition.FunctionName.ToString(),
@@ -55,7 +55,7 @@ namespace VisCPU.HL.Compiler.Types
                     return parsedVal.ToArray();
                 },
                 expr.FunctionDefinition.Arguments.Length,
-                expr.FunctionDefinition.FunctionReturnType.Type != HLTokenType.OpTypeVoid
+                expr.FunctionDefinition.FunctionReturnType.Type != HlTokenType.OpTypeVoid
             );
 
             return new ExpressionTarget();

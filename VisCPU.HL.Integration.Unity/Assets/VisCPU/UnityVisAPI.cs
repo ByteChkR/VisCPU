@@ -2,9 +2,9 @@
 using UnityEngine;
 using VisCPU;
 
-public static class UnityVisAPI
+public static class UnityVisApi
 {
-    private static Dictionary < uint, Object > m_ObjectHandles = new Dictionary < uint, Object >();
+    private static readonly Dictionary < uint, Object > s_ObjectHandles = new Dictionary < uint, Object >();
 
     #region Public
 
@@ -15,9 +15,9 @@ public static class UnityVisAPI
         int x = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -35,9 +35,9 @@ public static class UnityVisAPI
         int x = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -55,9 +55,9 @@ public static class UnityVisAPI
         int y = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -75,9 +75,9 @@ public static class UnityVisAPI
         int z = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -106,7 +106,7 @@ public static class UnityVisAPI
         if ( obj )
         {
             uint handle = ( uint ) obj.GetInstanceID();
-            m_ObjectHandles[handle] = obj;
+            s_ObjectHandles[handle] = obj;
 
             return handle;
         }
@@ -118,11 +118,11 @@ public static class UnityVisAPI
     {
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
             Object.Destroy( obj );
-            m_ObjectHandles.Remove( handle );
+            s_ObjectHandles.Remove( handle );
 
             return 1;
         }
@@ -155,9 +155,9 @@ public static class UnityVisAPI
     {
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -174,9 +174,9 @@ public static class UnityVisAPI
     {
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -193,9 +193,9 @@ public static class UnityVisAPI
     {
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -247,9 +247,9 @@ public static class UnityVisAPI
         int x = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -267,9 +267,9 @@ public static class UnityVisAPI
         int x = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -287,9 +287,9 @@ public static class UnityVisAPI
         int y = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {
@@ -307,9 +307,9 @@ public static class UnityVisAPI
         int z = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
 
-        if ( m_ObjectHandles.ContainsKey( handle ) )
+        if ( s_ObjectHandles.ContainsKey( handle ) )
         {
-            Object obj = m_ObjectHandles[handle];
+            Object obj = s_ObjectHandles[handle];
 
             if ( obj is GameObject gobj )
             {

@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace VisCPU.Utility.Settings.Loader
 {
 
-    public class XMLSettingsLoader : SettingsLoader
+    public class XmlSettingsLoader : SettingsLoader
     {
         private readonly Dictionary < Type, XmlSerializer > m_Serializers = new Dictionary < Type, XmlSerializer >();
 

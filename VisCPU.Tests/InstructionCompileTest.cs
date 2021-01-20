@@ -6,7 +6,7 @@ namespace VisCPU.Tests
 
     [TestFixture]
     [SingleThreaded]
-    public class InstructionCompileTest : VisCPUCompileTest
+    public class InstructionCompileTest : VisCpuCompileTest
     {
         [OneTimeSetUp]
         public void Setup()
@@ -36,7 +36,7 @@ namespace VisCPU.Tests
         [TestCaseSource( nameof( GetTestBinaryInstructions ), new object[] { "tests/instructions" } )]
         public void RunTests( string file )
         {
-            VisCPURun.Run( file, TestDevice );
+            VisCpuRun.Run( file, TestDevice );
         }
     }
 

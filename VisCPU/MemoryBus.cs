@@ -76,7 +76,7 @@ namespace VisCPU
                 receivers++;
             }
 
-            if ( SettingsManager.GetSettings < CPUSettings >().WarnOnUnmappedAccess && receivers == 0 )
+            if ( SettingsManager.GetSettings < CpuSettings >().WarnOnUnmappedAccess && receivers == 0 )
             {
                 EventManager < WarningEvent >.SendEvent( new ReadFromUnmappedAddressEvent( address ) );
             }
@@ -109,7 +109,7 @@ namespace VisCPU
                 peripheral.WriteData( address, data );
             }
 
-            if ( SettingsManager.GetSettings < CPUSettings >().WarnOnUnmappedAccess && !hasReceiver )
+            if ( SettingsManager.GetSettings < CpuSettings >().WarnOnUnmappedAccess && !hasReceiver )
             {
                 EventManager < WarningEvent >.SendEvent( new WriteToUnmappedAddressEvent( address, data ) );
             }

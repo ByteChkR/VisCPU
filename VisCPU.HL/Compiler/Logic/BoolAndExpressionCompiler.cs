@@ -3,15 +3,15 @@
 namespace VisCPU.HL.Compiler.Logic
 {
 
-    public class BoolAndExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
+    public class BoolAndExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
         protected override bool NeedsOutput => true;
 
         #region Public
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLBinaryOp expr,
+            HlCompilation compilation,
+            HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
@@ -27,7 +27,7 @@ namespace VisCPU.HL.Compiler.Logic
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value
             //.if_b0_fail
-            string label = HLCompilation.GetUniqueName( "bexpr_and" );
+            string label = HlCompilation.GetUniqueName( "bexpr_and" );
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "0" );
             compilation.EmitterResult.Emit( $"BEZ", target.ResultAddress, label );
             compilation.EmitterResult.Emit( $"BEZ", rTarget.ResultAddress, label );

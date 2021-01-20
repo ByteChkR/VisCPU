@@ -11,9 +11,9 @@ namespace VisCPU.HL
 
         #region Public
 
-        public HLCompilation Parse( string expr, string dir, BuildDataStore store )
+        public HlCompilation Parse( string expr, string dir, BuildDataStore store )
         {
-            HLCompilation c = new HLCompilation( expr, dir, store );
+            HlCompilation c = new HlCompilation( expr, dir, store );
 
             return c;
         }

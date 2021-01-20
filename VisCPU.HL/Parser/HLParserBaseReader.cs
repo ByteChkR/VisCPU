@@ -11,7 +11,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     XLang base Reader that is used by the BoardParser
     /// </summary>
-    public class HLParserBaseReader
+    public class HlParserBaseReader
     {
         /// <summary>
         ///     Input Source
@@ -21,7 +21,7 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     XL SettingsSystem
         /// </summary>
-        private readonly HLParserSettings m_Settings;
+        private readonly HlParserSettings m_Settings;
 
         /// <summary>
         ///     The Current Reader Index.
@@ -40,7 +40,7 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="settings">XL SettingsSystem</param>
         /// <param name="input">Source</param>
-        public HLParserBaseReader( HLParserSettings settings, string input )
+        public HlParserBaseReader( HlParserSettings settings, string input )
         {
             m_Input = input;
             m_Settings = settings;
@@ -85,8 +85,8 @@ namespace VisCPU.HL.Parser
                 }
                 else
                 {
-                    m_CurrentToken = new HLTextToken(
-                        HLTokenType.Unknown,
+                    m_CurrentToken = new HlTextToken(
+                        HlTokenType.Unknown,
                         m_Input[m_CurrentIndex].ToString(),
                         m_CurrentIndex
                     );
@@ -97,7 +97,7 @@ namespace VisCPU.HL.Parser
                 return m_CurrentToken;
             }
 
-            m_CurrentToken = new EOFToken();
+            m_CurrentToken = new EofToken();
 
             return m_CurrentToken;
         }
@@ -111,7 +111,7 @@ namespace VisCPU.HL.Parser
 
             List < IHlToken > ret = new List < IHlToken >();
 
-            while ( m_CurrentToken.Type != HLTokenType.Eof )
+            while ( m_CurrentToken.Type != HlTokenType.Eof )
             {
                 ret.Add( m_CurrentToken );
                 Advance();
@@ -192,7 +192,7 @@ namespace VisCPU.HL.Parser
             }
             while ( m_CurrentIndex < m_Input.Length && IsHexNumber( m_Input[m_CurrentIndex] ) );
 
-            return new HLTextToken( HLTokenType.OpNumber, sb.ToString(), start );
+            return new HlTextToken( HlTokenType.OpNumber, sb.ToString(), start );
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace VisCPU.HL.Parser
             }
             while ( m_CurrentIndex < m_Input.Length && IsNewLine( m_Input[m_CurrentIndex] ) );
 
-            return new HLTextToken( HLTokenType.OpNewLine, new StringBuilder().Append( '\n', len ).ToString(), start );
+            return new HlTextToken( HlTokenType.OpNewLine, new StringBuilder().Append( '\n', len ).ToString(), start );
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace VisCPU.HL.Parser
             }
             while ( m_CurrentIndex < m_Input.Length && IsNumber( m_Input[m_CurrentIndex] ) );
 
-            return new HLTextToken( HLTokenType.OpNumber, sb.ToString(), start );
+            return new HlTextToken( HlTokenType.OpNumber, sb.ToString(), start );
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace VisCPU.HL.Parser
             }
             while ( m_CurrentIndex < m_Input.Length && IsSpace( m_Input[m_CurrentIndex] ) );
 
-            return new HLTextToken( HLTokenType.OpSpace, new StringBuilder().Append( ' ', len ).ToString(), start );
+            return new HlTextToken( HlTokenType.OpSpace, new StringBuilder().Append( ' ', len ).ToString(), start );
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace VisCPU.HL.Parser
             int start = m_CurrentIndex;
             m_CurrentIndex++;
 
-            return new HLTextToken( m_Settings.ReservedSymbols[val], val.ToString(), start );
+            return new HlTextToken( m_Settings.ReservedSymbols[val], val.ToString(), start );
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace VisCPU.HL.Parser
             while ( m_CurrentIndex < m_Input.Length &&
                     ( IsNumber( m_Input[m_CurrentIndex] ) || IsLetter( m_Input[m_CurrentIndex] ) ) );
 
-            return new HLTextToken( HLTokenType.OpWord, sb.ToString(), start );
+            return new HlTextToken( HlTokenType.OpWord, sb.ToString(), start );
         }
 
         #endregion

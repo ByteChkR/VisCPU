@@ -4,15 +4,15 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class ForExpressionCompiler : HLExpressionCompiler < HLForOp >
+    public class ForExpressionCompiler : HlExpressionCompiler < HlForOp >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLForOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlForOp expr )
         {
-            string startLabel = HLCompilation.GetUniqueName( "for_start" );
-            string condLabel = HLCompilation.GetUniqueName( "for_eval_condition" );
-            string endLabel = HLCompilation.GetUniqueName( "for_end" );
+            string startLabel = HlCompilation.GetUniqueName( "for_start" );
+            string condLabel = HlCompilation.GetUniqueName( "for_eval_condition" );
+            string endLabel = HlCompilation.GetUniqueName( "for_end" );
 
             compilation.EmitterResult.Store(
                 $".{startLabel} linker:hide" ); //Unused, makes clear where the for compiler started emitting code.
@@ -29,7 +29,7 @@ namespace VisCPU.HL.Compiler.Special
                 cond.ResultAddress,
                 endLabel ); //Check if Expression "Equal to Zero" => jump to end if it is
 
-            foreach ( HLExpression hlExpression in expr.ExprBody )
+            foreach ( HlExpression hlExpression in expr.ExprBody )
             {
                 compilation.ReleaseTempVar(
                     compilation.Parse( hlExpression ).

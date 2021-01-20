@@ -10,7 +10,7 @@ using VisCPU.Utility.Settings;
 namespace VisCPU
 {
 
-    public class CPU
+    public class Cpu
     {
         [Flags]
         public enum Flags
@@ -23,25 +23,25 @@ namespace VisCPU
 
         public readonly MemoryBus MemoryBus;
 
-        private readonly struct CPUState : IEquatable < CPUState >
+        private readonly struct CpuState : IEquatable < CpuState >
         {
             public readonly Flags Flags;
             public readonly uint Pc;
 
-            public CPUState( Flags flags, uint pc )
+            public CpuState( Flags flags, uint pc )
             {
                 Flags = flags;
                 Pc = pc;
             }
 
-            public bool Equals( CPUState other )
+            public bool Equals( CpuState other )
             {
                 return Flags == other.Flags && Pc == other.Pc;
             }
 
             public override bool Equals( object obj )
             {
-                return obj is CPUState other && Equals( other );
+                return obj is CpuState other && Equals( other );
             }
 
             public override int GetHashCode()
@@ -53,7 +53,7 @@ namespace VisCPU
             }
         }
 
-        private readonly Stack < CPUState > m_CpuStack = new Stack < CPUState >();
+        private readonly Stack < CpuState > m_CpuStack = new Stack < CpuState >();
 
         private readonly uint m_IntAddress;
 
@@ -65,7 +65,7 @@ namespace VisCPU
 
         public Flags ProcessorFlags { get; private set; }
 
-        public event Action < CPU > OnBreak;
+        public event Action < Cpu > OnBreak;
 
         #region Unity Event Functions
 
@@ -80,7 +80,7 @@ namespace VisCPU
 
         #region Public
 
-        public CPU( MemoryBus bus, uint resetAddress, uint interruptAddress )
+        public Cpu( MemoryBus bus, uint resetAddress, uint interruptAddress )
         {
             MemoryBus = bus;
             m_IntAddress = interruptAddress;
@@ -114,9 +114,9 @@ namespace VisCPU
 
             uint op = MemoryBus.Read( ProgramCounter );
 
-            Instruction instruction = CPUSettings.InstructionSet.GetInstruction( op );
+            Instruction instruction = CpuSettings.InstructionSet.GetInstruction( op );
 
-            if ( instruction == null && SettingsManager.GetSettings < CPUSettings >().DumpOnCrash )
+            if ( instruction == null && SettingsManager.GetSettings < CpuSettings >().DumpOnCrash )
             {
                 Dump();
             }
@@ -172,7 +172,7 @@ namespace VisCPU
         {
             if ( m_CpuStack.Count != 0 )
             {
-                CPUState state = m_CpuStack.Pop();
+                CpuState state = m_CpuStack.Pop();
                 ProgramCounter = state.Pc;
                 ProcessorFlags = state.Flags;
             }
@@ -188,7 +188,7 @@ namespace VisCPU
         public void PushState( uint pc, Flags flags )
         {
             m_CpuStack.Push(
-                new CPUState( ProcessorFlags, ProgramCounter )
+                new CpuState( ProcessorFlags, ProgramCounter )
             );
 
             ProcessorFlags = flags;
@@ -268,12 +268,12 @@ namespace VisCPU
         {
             FileStream fs = File.Create( ".\\crash.dump.info" );
             TextWriter tw = new IndentedTextWriter( new StreamWriter( fs ) );
-            List < CPUState > states = new List < CPUState >( m_CpuStack );
+            List < CpuState > states = new List < CpuState >( m_CpuStack );
             tw.WriteLine( "Stack:" );
 
             for ( int i = 0; i < states.Count; i++ )
             {
-                CPUState cpuState = states[i];
+                CpuState cpuState = states[i];
                 tw.WriteLine( "Stack Pos: " + i + " PC: " + cpuState.Pc.ToHexString() + " FLAGS: " + cpuState.Flags );
             }
 

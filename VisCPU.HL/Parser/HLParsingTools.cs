@@ -10,7 +10,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     Collection of Tools for Parsing through a stream of tokens.
     /// </summary>
-    public static class HLParsingTools
+    public static class HlParsingTools
     {
         #region Public
 
@@ -25,7 +25,7 @@ namespace VisCPU.HL.Parser
             if ( !ReadAnyOrNone( tokens, start, out IHlToken ret ) )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                    new HLTokenReadEvent( tokens, HLTokenType.Any, ret.Type, start )
+                    new HlTokenReadEvent( tokens, HlTokenType.Any, ret.Type, start )
                 );
             }
 
@@ -48,7 +48,7 @@ namespace VisCPU.HL.Parser
                 return true;
             }
 
-            result = new EOFToken();
+            result = new EofToken();
 
             return false;
         }
@@ -64,17 +64,17 @@ namespace VisCPU.HL.Parser
         public static bool ReadNoneOrAnyOf(
             List < IHlToken > tokens,
             int start,
-            HLTokenType[] type,
+            HlTokenType[] type,
             out IHlToken result )
         {
-            foreach ( HLTokenType tokenType in type )
+            foreach ( HlTokenType tokenType in type )
             {
                 if ( ReadOneOrNone( tokens, start, tokenType, out result ) )
                 {
                     return true;
                 }
 
-                if ( result.Type == HLTokenType.Eof )
+                if ( result.Type == HlTokenType.Eof )
                 {
                     return false;
                 }
@@ -93,7 +93,7 @@ namespace VisCPU.HL.Parser
         /// <param name="step">Step per read token</param>
         /// <param name="type">Accepted Type</param>
         /// <returns>Read Tokens</returns>
-        public static IHlToken[] ReadNoneOrMany( List < IHlToken > tokens, int start, int step, HLTokenType type )
+        public static IHlToken[] ReadNoneOrMany( List < IHlToken > tokens, int start, int step, HlTokenType type )
         {
             List < IHlToken > ret = new List < IHlToken >();
             int currentStart = start;
@@ -115,7 +115,7 @@ namespace VisCPU.HL.Parser
         /// <param name="step">Step per read token</param>
         /// <param name="type">Accepted Types</param>
         /// <returns>Read Tokens</returns>
-        public static IHlToken[] ReadNoneOrManyOf( List < IHlToken > tokens, int start, int step, HLTokenType[] type )
+        public static IHlToken[] ReadNoneOrManyOf( List < IHlToken > tokens, int start, int step, HlTokenType[] type )
         {
             List < IHlToken > res = new List < IHlToken >();
             int currentIdx = start;
@@ -141,11 +141,11 @@ namespace VisCPU.HL.Parser
         /// <param name="start">Start Index</param>
         /// <param name="type">Accepted Type</param>
         /// <returns></returns>
-        public static IHlToken ReadOne( List < IHlToken > tokens, int start, HLTokenType type )
+        public static IHlToken ReadOne( List < IHlToken > tokens, int start, HlTokenType type )
         {
             if ( !ReadOneOrNone( tokens, start, type, out IHlToken ret ) )
             {
-                EventManager < ErrorEvent >.SendEvent( new HLTokenReadEvent( tokens, type, ret.Type, start ) );
+                EventManager < ErrorEvent >.SendEvent( new HlTokenReadEvent( tokens, type, ret.Type, start ) );
             }
 
             return ret;
@@ -158,11 +158,11 @@ namespace VisCPU.HL.Parser
         /// <param name="start">Start index</param>
         /// <param name="type">Accepted Types</param>
         /// <returns>The read token</returns>
-        public static IHlToken ReadOneOfAny( List < IHlToken > tokens, int start, HLTokenType[] type )
+        public static IHlToken ReadOneOfAny( List < IHlToken > tokens, int start, HlTokenType[] type )
         {
             if ( !ReadNoneOrAnyOf( tokens, start, type, out IHlToken ret ) )
             {
-                EventManager < ErrorEvent >.SendEvent( new HLTokenReadEvent( tokens, type, ret.Type, start ) );
+                EventManager < ErrorEvent >.SendEvent( new HlTokenReadEvent( tokens, type, ret.Type, start ) );
             }
 
             return ret;
@@ -176,7 +176,7 @@ namespace VisCPU.HL.Parser
         /// <param name="step">Step per read token</param>
         /// <param name="type">Accepted Token</param>
         /// <returns>Read Tokens</returns>
-        public static IHlToken[] ReadOneOrMany( List < IHlToken > tokens, int start, int step, HLTokenType type )
+        public static IHlToken[] ReadOneOrMany( List < IHlToken > tokens, int start, int step, HlTokenType type )
         {
             List < IHlToken > ret = new List < IHlToken > { ReadOne( tokens, start, type ) };
             ret.AddRange( ReadNoneOrMany( tokens, start + step, step, type ) );
@@ -192,7 +192,7 @@ namespace VisCPU.HL.Parser
         /// <param name="step">Step per read token</param>
         /// <param name="type">Accepted Types</param>
         /// <returns>Read Tokens</returns>
-        public static IHlToken[] ReadOneOrManyOf( List < IHlToken > tokens, int start, int step, HLTokenType[] type )
+        public static IHlToken[] ReadOneOrManyOf( List < IHlToken > tokens, int start, int step, HlTokenType[] type )
         {
             List < IHlToken > ret = new List < IHlToken > { ReadOneOfAny( tokens, start, type ) };
             ret.AddRange( ReadNoneOrManyOf( tokens, start + step, step, type ) );
@@ -208,7 +208,7 @@ namespace VisCPU.HL.Parser
         /// <param name="type">Token Type</param>
         /// <param name="result">Read Token</param>
         /// <returns>True if token was read.</returns>
-        public static bool ReadOneOrNone( List < IHlToken > tokens, int start, HLTokenType type, out IHlToken result )
+        public static bool ReadOneOrNone( List < IHlToken > tokens, int start, HlTokenType type, out IHlToken result )
         {
             if ( start >= 0 && tokens.Count > start )
             {
@@ -222,7 +222,7 @@ namespace VisCPU.HL.Parser
                 return false;
             }
 
-            result = new EOFToken();
+            result = new EofToken();
 
             return false;
         }
@@ -235,7 +235,7 @@ namespace VisCPU.HL.Parser
         /// <param name="step">Step per read Token</param>
         /// <param name="type">End token type</param>
         /// <returns>Read Tokens</returns>
-        public static IHlToken[] ReadUntil( List < IHlToken > tokens, int start, int step, HLTokenType type )
+        public static IHlToken[] ReadUntil( List < IHlToken > tokens, int start, int step, HlTokenType type )
         {
             return ReadUntilAny( tokens, start, step, new[] { type } );
         }
@@ -248,7 +248,7 @@ namespace VisCPU.HL.Parser
         /// <param name="step">Step per read Token</param>
         /// <param name="type">End Tokens</param>
         /// <returns>Read Tokens</returns>
-        public static IHlToken[] ReadUntilAny( List < IHlToken > tokens, int start, int step, HLTokenType[] type )
+        public static IHlToken[] ReadUntilAny( List < IHlToken > tokens, int start, int step, HlTokenType[] type )
         {
             List < IHlToken > ret = new List < IHlToken >();
             int currentStart = start;
@@ -262,7 +262,7 @@ namespace VisCPU.HL.Parser
 
                 currentStart += step;
 
-                if ( result.Type != HLTokenType.Eof )
+                if ( result.Type != HlTokenType.Eof )
                 {
                     ret.Add( result );
                 }

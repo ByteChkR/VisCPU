@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Plus/Minus Operators
     /// </summary>
-    public class PlusMinusOperators : HLExpressionOperator
+    public class PlusMinusOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,14 +22,14 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpPlus &&
-                   parser.Reader.PeekNext().Type != HLTokenType.OpPlus &&
-                   parser.Reader.PeekNext().Type != HLTokenType.OpEquality ||
-                   parser.CurrentToken.Type == HLTokenType.OpMinus &&
-                   parser.Reader.PeekNext().Type != HLTokenType.OpMinus &&
-                   parser.Reader.PeekNext().Type != HLTokenType.OpEquality;
+            return parser.CurrentToken.Type == HlTokenType.OpPlus &&
+                   parser.Reader.PeekNext().Type != HlTokenType.OpPlus &&
+                   parser.Reader.PeekNext().Type != HlTokenType.OpEquality ||
+                   parser.CurrentToken.Type == HlTokenType.OpMinus &&
+                   parser.Reader.PeekNext().Type != HlTokenType.OpMinus &&
+                   parser.Reader.PeekNext().Type != HlTokenType.OpEquality;
         }
 
         /// <summary>
@@ -38,13 +38,13 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            HLTokenType type = parser.CurrentToken.Type;
+            HlTokenType type = parser.CurrentToken.Type;
             parser.Eat( parser.CurrentToken.Type );
 
-            HLExpression token =
-                new HLBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
+            HlExpression token =
+                new HlBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
 
             return token;
         }

@@ -138,7 +138,7 @@ namespace VisCPU.Console.Core.Settings
 
             BuildDataStore ds = new BuildDataStore(
                 BuildTempDirectory ?? Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ),
-                new HLBuildDataStore()
+                new HlBuildDataStore()
             );
 
             string newFile = ds.GetStorePath(

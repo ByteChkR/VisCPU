@@ -213,7 +213,7 @@ namespace VisCPU.Peripherals.HostFS
                         break;
 
                     default:
-                        EventManager < ErrorEvent >.SendEvent( new InvalidHFSCommandEvent( cmd ) );
+                        EventManager < ErrorEvent >.SendEvent( new InvalidHfsCommandEvent( cmd ) );
 
                         break;
                 }

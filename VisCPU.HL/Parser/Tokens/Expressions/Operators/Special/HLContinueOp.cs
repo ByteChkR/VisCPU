@@ -6,7 +6,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     Continue Operator Implementation
     /// </summary>
-    public class HLContinueOp : HLExpression
+    public class HlContinueOp : HlExpression
     {
         #region Public
 
@@ -14,7 +14,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        public HLContinueOp( int sourceIdx ) : base( sourceIdx )
+        public HlContinueOp( int sourceIdx ) : base( sourceIdx )
         {
         }
 

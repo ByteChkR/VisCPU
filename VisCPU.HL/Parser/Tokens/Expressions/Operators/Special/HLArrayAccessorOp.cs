@@ -10,22 +10,22 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     Array Accessor Operator Implementation
     /// </summary>
-    public class HLArrayAccessorOp : HLExpression
+    public class HlArrayAccessorOp : HlExpression
     {
         /// <summary>
         ///     Left Side (the array)
         /// </summary>
-        public HLExpression Left { get; }
+        public HlExpression Left { get; }
 
         /// <summary>
         ///     The Accessor Arguments
         /// </summary>
-        public HLExpression[] ParameterList { get; }
+        public HlExpression[] ParameterList { get; }
 
         /// <summary>
         ///     The Operator Token
         /// </summary>
-        public override HLTokenType Type => HLTokenType.OpArrayAccess;
+        public override HlTokenType Type => HlTokenType.OpArrayAccess;
 
         #region Public
 
@@ -35,7 +35,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="context">XL Context</param>
         /// <param name="list">Left Side Array</param>
         /// <param name="parameterList">Array Accessor Parameters</param>
-        public HLArrayAccessorOp( HLExpression list, List < HLExpression > parameterList ) : base( list.SourceIndex )
+        public HlArrayAccessorOp( HlExpression list, List < HlExpression > parameterList ) : base( list.SourceIndex )
         {
             Left = list;
             ParameterList = parameterList.ToArray();

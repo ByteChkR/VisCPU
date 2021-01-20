@@ -7,40 +7,40 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HLTypeSystem
+    public class HlTypeSystem
     {
-        private readonly List < HLTypeDefinition > m_DefinedTypes = new List < HLTypeDefinition >();
+        private readonly List < HlTypeDefinition > m_DefinedTypes = new List < HlTypeDefinition >();
 
         #region Public
 
-        public HLTypeSystem()
+        public HlTypeSystem()
         {
             AddItem( new VarTypeDefinition() );
             AddItem( new StringTypeDefinition() );
         }
 
-        public HLTypeDefinition CreateEmptyType( string name )
+        public HlTypeDefinition CreateEmptyType( string name )
         {
             if ( m_DefinedTypes.Any( x => x.Name == name ) )
             {
-                EventManager < ErrorEvent >.SendEvent( new HLTypeRedefinitionEvent( name ) );
+                EventManager < ErrorEvent >.SendEvent( new HlTypeRedefinitionEvent( name ) );
 
                 return null;
             }
 
-            HLTypeDefinition def = new HLTypeDefinition( name );
+            HlTypeDefinition def = new HlTypeDefinition( name );
 
             AddItem( def );
 
             return def;
         }
 
-        public HLTypeDefinition GetOrAdd( string name )
+        public HlTypeDefinition GetOrAdd( string name )
         {
             return m_DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name );
         }
 
-        public HLTypeDefinition GetType( string name )
+        public HlTypeDefinition GetType( string name )
         {
             return m_DefinedTypes.First( x => x.Name == name );
         }
@@ -54,7 +54,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Private
 
-        private void AddItem( HLTypeDefinition def )
+        private void AddItem( HlTypeDefinition def )
         {
             m_DefinedTypes.Add( def );
         }

@@ -12,7 +12,7 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.ProjectSystem.UploadService
 {
 
-    public class TCPProjectDatabaseServer : VisBase
+    public class TcpProjectDatabaseServer : VisBase
     {
         private readonly string m_TempStagingDirectory;
         private readonly ProjectDatabase m_Manager;
@@ -24,7 +24,7 @@ namespace VisCPU.ProjectSystem.UploadService
 
         #region Public
 
-        public TCPProjectDatabaseServer( ProjectDatabase manager, int port, string tempStagingDirectory )
+        public TcpProjectDatabaseServer( ProjectDatabase manager, int port, string tempStagingDirectory )
         {
             m_Manager = manager;
             m_Listener = TcpListener.Create( port );

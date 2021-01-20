@@ -24,7 +24,7 @@ namespace VisCPU.Console.Core.Subsystems
             BuilderSettings settings = new BuilderSettings();
             AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
             LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
                 args,
@@ -45,7 +45,7 @@ namespace VisCPU.Console.Core.Subsystems
             BuilderSettings settings = new BuilderSettings();
             AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
             LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
                 args.ToArray(),
@@ -110,7 +110,7 @@ namespace VisCPU.Console.Core.Subsystems
             BuilderSettings settings = new BuilderSettings();
             AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
             LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
             HelpSubSystem.WriteSubsystem( "vis build", settings, asettings, ls, hls );
         }
 

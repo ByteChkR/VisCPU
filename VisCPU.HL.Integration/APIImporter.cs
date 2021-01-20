@@ -9,14 +9,14 @@ using VisCPU.Utility;
 namespace VisCPU.HL.Integration
 {
 
-    public class APIImporter : AImporter, IDataImporter, IFileImporter
+    public class ApiImporter : AImporter, IDataImporter, IFileImporter
     {
         public readonly string DeviceDriverDirectory;
         private readonly Dictionary < uint, FunctionData > m_ExposedApis = new Dictionary < uint, FunctionData >();
 
         #region Public
 
-        public APIImporter()
+        public ApiImporter()
         {
             DeviceDriverDirectory = Path.Combine( CacheRoot, "api-devices" );
 
@@ -34,7 +34,7 @@ namespace VisCPU.HL.Integration
                 DeviceDriverDirectory,
                 funcData.GetFinalName() + ".vhl" );
 
-            File.WriteAllText( driverDir, GenerateAPIDriver( funcData, addr ) );
+            File.WriteAllText( driverDir, GenerateApiDriver( funcData, addr ) );
         }
 
         public override bool CanImport( string input )
@@ -46,7 +46,7 @@ namespace VisCPU.HL.Integration
 
         #region Private
 
-        private string GenerateAPIDriver( FunctionData data, uint devAddr )
+        private string GenerateApiDriver( FunctionData data, uint devAddr )
         {
             StringBuilder sb = new StringBuilder("// This is an automatically generated file.\n");
             sb.Append("// Do not change unless you know exactly what you are doing.\n");

@@ -13,10 +13,10 @@ namespace VisCPU.Peripherals
     public abstract class Peripheral : VisBase
     {
         public static readonly SettingsCategory s_PeripheralCategory =
-            CPUSettings.s_CpuCategory.AddCategory( "peripherals" );
+            CpuSettings.s_CpuCategory.AddCategory( "peripherals" );
 
         public static readonly SettingsCategory s_PeripheralExtensions =
-            CPUSettings.s_CpuExtensionsCategory.AddCategory( "peripherals" );
+            CpuSettings.s_CpuExtensionsCategory.AddCategory( "peripherals" );
 
         protected override LoggerSystems SubSystem => LoggerSystems.Peripherals;
 

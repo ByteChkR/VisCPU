@@ -105,7 +105,7 @@ namespace VisCPU.HL.Importer
                 cmd = s[0];
             }
 
-            Instruction[] iis = CPUSettings.InstructionSet.GetInstructions( cmd );
+            Instruction[] iis = CpuSettings.InstructionSet.GetInstructions( cmd );
 
             return argCount != -1 ? iis.First( x => x.ArgumentCount == argCount ) : iis.First();
         }
@@ -122,7 +122,7 @@ namespace VisCPU.HL.Importer
                 {
                     List < string > data = new List < string >();
 
-                    foreach ( Instruction instruction in CPUSettings.InstructionSet.GetInstructions() )
+                    foreach ( Instruction instruction in CpuSettings.InstructionSet.GetInstructions() )
                     {
                         data.Add(
                             $":include {( this as IFileImporter ).ProcessImport( $"vasm-bridge {instruction.Key} {instruction.ArgumentCount}" )}"
@@ -153,7 +153,7 @@ namespace VisCPU.HL.Importer
             {
                 List < IExternalData > data = new List < IExternalData >();
 
-                foreach ( Instruction instruction in CPUSettings.InstructionSet.GetInstructions() )
+                foreach ( Instruction instruction in CpuSettings.InstructionSet.GetInstructions() )
                 {
                     data.Add(
                         new FunctionData(

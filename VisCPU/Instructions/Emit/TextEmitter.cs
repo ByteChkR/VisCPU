@@ -14,7 +14,7 @@ namespace VisCPU.Instructions.Emit
         {
             StringBuilder sb = new StringBuilder( instructionKey );
 
-            Instruction instr = CPUSettings.InstructionSet.GetInstruction(
+            Instruction instr = CpuSettings.InstructionSet.GetInstruction(
                 instructionKey,
                 arguments.Length
             );

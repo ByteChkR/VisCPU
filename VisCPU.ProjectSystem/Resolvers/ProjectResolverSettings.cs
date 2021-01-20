@@ -22,7 +22,7 @@ namespace VisCPU.ProjectSystem.Resolvers
             SettingsCategory moduleCategory = SettingsCategories.Get( "sdk.module", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 moduleCategory,
                 "resolver-settings.json",
                 new ProjectResolverSettings()

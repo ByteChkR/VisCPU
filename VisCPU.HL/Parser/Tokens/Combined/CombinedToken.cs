@@ -26,7 +26,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <summary>
         ///     The Token Type
         /// </summary>
-        public HLTokenType Type { get; }
+        public HlTokenType Type { get; }
 
         #region Public
 
@@ -67,7 +67,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <param name="type">Token Type</param>
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="start">Start index in the source</param>
-        protected CombinedToken( HLTokenType type, IHlToken[] subtokens, int start )
+        protected CombinedToken( HlTokenType type, IHlToken[] subtokens, int start )
         {
             SubTokens = subtokens.ToList();
             SourceIndex = start;

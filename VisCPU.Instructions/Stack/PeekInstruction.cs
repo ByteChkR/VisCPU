@@ -13,7 +13,7 @@
 
         #region Public
 
-        public override void Process( CPU cpu )
+        public override void Process( Cpu cpu )
         {
             uint addr = cpu.DecodeArgument( 0 );
 

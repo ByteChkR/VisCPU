@@ -9,7 +9,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
     /// <summary>
     ///     Implements a Variable Operand
     /// </summary>
-    public class HLVarOperand : HLExpression
+    public class HlVarOperand : HlExpression
     {
         /// <summary>
         ///     The Token Value
@@ -23,7 +23,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="value">Variable Value</param>
-        public HLVarOperand( IHlToken value, int sourceIdx ) : base( sourceIdx )
+        public HlVarOperand( IHlToken value, int sourceIdx ) : base( sourceIdx )
         {
             Value = value;
         }
@@ -50,7 +50,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         ///     Protected Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        protected HLVarOperand( int sourceIdx ) : base( sourceIdx )
+        protected HlVarOperand( int sourceIdx ) : base( sourceIdx )
         {
         }
 

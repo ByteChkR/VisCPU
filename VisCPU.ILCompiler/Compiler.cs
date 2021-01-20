@@ -85,7 +85,7 @@ namespace VisCPU.ILCompiler
                     typeof( object ).Assembly.Location
                 ),
                 MetadataReference.CreateFromFile(
-                    typeof( CPU ).Assembly.Location
+                    typeof( Cpu ).Assembly.Location
                 ),
                 MetadataReference.CreateFromFile(
                     typeof( File ).Assembly.Location

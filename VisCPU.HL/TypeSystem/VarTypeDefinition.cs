@@ -1,11 +1,11 @@
 ﻿namespace VisCPU.HL.TypeSystem
 {
 
-    public class VarTypeDefinition : HLTypeDefinition
+    public class VarTypeDefinition : HlTypeDefinition
     {
         #region Public
 
-        public VarTypeDefinition() : base( HLCompilation.VAL_TYPE )
+        public VarTypeDefinition() : base( HlCompilation.ValType )
         {
         }
 

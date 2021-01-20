@@ -5,11 +5,11 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.Peripherals.Events
 {
 
-    internal class InvalidHFSCommandEvent : ErrorEvent
+    internal class InvalidHfsCommandEvent : ErrorEvent
     {
         #region Public
 
-        public InvalidHFSCommandEvent( HostFileSystemCommands command ) : base(
+        public InvalidHfsCommandEvent( HostFileSystemCommands command ) : base(
             $"Invalid Command: {command}",
             ErrorEventKeys.s_HfsInvalidCommand,
             false

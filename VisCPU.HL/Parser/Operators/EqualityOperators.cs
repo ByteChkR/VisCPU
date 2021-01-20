@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Equality Operator
     /// </summary>
-    public class EqualityOperators : HLExpressionOperator
+    public class EqualityOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,10 +22,10 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpEquality &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpEquality;
+            return parser.CurrentToken.Type == HlTokenType.OpEquality &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpEquality;
         }
 
         /// <summary>
@@ -34,14 +34,14 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            parser.Eat( HLTokenType.OpEquality );
-            parser.Eat( HLTokenType.OpEquality );
+            parser.Eat( HlTokenType.OpEquality );
+            parser.Eat( HlTokenType.OpEquality );
 
-            return new HLBinaryOp(
+            return new HlBinaryOp(
                 currentNode,
-                HLTokenType.OpComparison,
+                HlTokenType.OpComparison,
                 parser.ParseExpr( PrecedenceLevel )
             );
         }

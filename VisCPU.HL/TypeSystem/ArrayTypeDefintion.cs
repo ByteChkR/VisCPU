@@ -1,15 +1,15 @@
 ﻿namespace VisCPU.HL.TypeSystem
 {
 
-    public class ArrayTypeDefintion : HLTypeDefinition
+    public class ArrayTypeDefintion : HlTypeDefinition
     {
-        public HLTypeDefinition ElementType { get; }
+        public HlTypeDefinition ElementType { get; }
 
         public uint Size { get; }
 
         #region Public
 
-        public ArrayTypeDefintion( HLTypeDefinition elementType, uint size ) : base( elementType.Name + "[]" )
+        public ArrayTypeDefintion( HlTypeDefinition elementType, uint size ) : base( elementType.Name + "[]" )
         {
             Size = size;
             ElementType = elementType;

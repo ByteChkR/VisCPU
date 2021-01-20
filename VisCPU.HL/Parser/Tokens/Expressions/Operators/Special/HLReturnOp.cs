@@ -6,14 +6,14 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     Return Operator Implementation
     /// </summary>
-    public class HLReturnOp : HLExpression
+    public class HlReturnOp : HlExpression
     {
         /// <summary>
         ///     Right side expression (return value)
         /// </summary>
-        public HLExpression Right { get; }
+        public HlExpression Right { get; }
 
-        public override HLTokenType Type => HLTokenType.OpReturn;
+        public override HlTokenType Type => HlTokenType.OpReturn;
 
         #region Public
 
@@ -22,7 +22,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="right">Right side Expression</param>
-        public HLReturnOp( HLExpression right, int sourceIdx ) : base( sourceIdx )
+        public HlReturnOp( HlExpression right, int sourceIdx ) : base( sourceIdx )
         {
             Right = right;
         }

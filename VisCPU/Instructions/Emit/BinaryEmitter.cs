@@ -16,7 +16,7 @@ namespace VisCPU.Instructions.Emit
         {
             List < byte > bytes = new List < byte >();
 
-            Instruction instr = CPUSettings.InstructionSet.GetInstruction(
+            Instruction instr = CpuSettings.InstructionSet.GetInstruction(
                 instructionKey,
                 arguments.Length
             );
@@ -29,7 +29,7 @@ namespace VisCPU.Instructions.Emit
             }
 
             uint opCode =
-                CPUSettings.InstructionSet.GetInstruction(
+                CpuSettings.InstructionSet.GetInstruction(
                     instr
                 );
 
@@ -40,7 +40,7 @@ namespace VisCPU.Instructions.Emit
                 bytes.AddRange( BitConverter.GetBytes( uint.Parse( aToken ) ) );
             }
 
-            if ( bytes.Count > CPUSettings.ByteSize )
+            if ( bytes.Count > CpuSettings.ByteSize )
             {
                 EventManager < ErrorEvent >.SendEvent(
                     new InvalidInstructionArgumentCountEvent(
@@ -50,7 +50,7 @@ namespace VisCPU.Instructions.Emit
                 );
             }
 
-            bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.ByteSize - bytes.Count ) );
+            bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CpuSettings.ByteSize - bytes.Count ) );
 
             return bytes.ToArray();
         }

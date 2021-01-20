@@ -13,9 +13,9 @@ namespace VisCPU.HL.Compiler
         public readonly string ResultAddress;
         public readonly bool IsAddress;
         public readonly bool IsPointer;
-        public readonly HLTypeDefinition TypeDefinition;
+        public readonly HlTypeDefinition TypeDefinition;
 
-        public ExpressionTarget( string resultAddress, bool isAddress, HLTypeDefinition def ) : this(
+        public ExpressionTarget( string resultAddress, bool isAddress, HlTypeDefinition def ) : this(
             resultAddress,
             isAddress,
             def,
@@ -24,7 +24,7 @@ namespace VisCPU.HL.Compiler
         {
         }
 
-        public ExpressionTarget( string resultAddress, bool isAddress, HLTypeDefinition def, bool isPointer )
+        public ExpressionTarget( string resultAddress, bool isAddress, HlTypeDefinition def, bool isPointer )
         {
             ResultAddress = resultAddress;
             IsAddress = isAddress;
@@ -52,7 +52,7 @@ namespace VisCPU.HL.Compiler
             return 0;
         }
 
-        public ExpressionTarget Cast( HLTypeDefinition newType )
+        public ExpressionTarget Cast( HlTypeDefinition newType )
         {
             return new ExpressionTarget( ResultAddress, IsAddress, newType, IsPointer );
         }
@@ -62,7 +62,7 @@ namespace VisCPU.HL.Compiler
             return new ExpressionTarget( ResultAddress, isAddress, TypeDefinition, isPointer );
         }
 
-        public ExpressionTarget MakeAddress( HLCompilation c )
+        public ExpressionTarget MakeAddress( HlCompilation c )
         {
             if ( IsAddress )
             {
@@ -79,7 +79,7 @@ namespace VisCPU.HL.Compiler
             return tmpVal;
         }
 
-        public ExpressionTarget LoadIfNotNull( HLCompilation compilation, ExpressionTarget target )
+        public ExpressionTarget LoadIfNotNull( HlCompilation compilation, ExpressionTarget target )
         {
             if ( target.ResultAddress == null || target.ResultAddress == ResultAddress )
             {
@@ -92,7 +92,7 @@ namespace VisCPU.HL.Compiler
         }
 
         public ExpressionTarget CopyIfNotNull(
-            HLCompilation compilation,
+            HlCompilation compilation,
             ExpressionTarget target,
             bool releaseSource = false )
         {

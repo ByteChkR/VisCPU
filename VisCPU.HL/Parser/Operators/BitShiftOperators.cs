@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Logical AND Operator
     /// </summary>
-    public class BitShiftOperators : HLExpressionOperator
+    public class BitShiftOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,12 +22,12 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpLessThan &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpLessThan ||
-                   parser.CurrentToken.Type == HLTokenType.OpGreaterThan &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpGreaterThan;
+            return parser.CurrentToken.Type == HlTokenType.OpLessThan &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpLessThan ||
+                   parser.CurrentToken.Type == HlTokenType.OpGreaterThan &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpGreaterThan;
         }
 
         /// <summary>
@@ -36,22 +36,22 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            HLTokenType type = parser.CurrentToken.Type;
+            HlTokenType type = parser.CurrentToken.Type;
             parser.Eat( type );
             parser.Eat( type );
 
-            if ( type == HLTokenType.OpLessThan )
+            if ( type == HlTokenType.OpLessThan )
             {
-                type = HLTokenType.OpShiftLeft;
+                type = HlTokenType.OpShiftLeft;
             }
-            else if ( type == HLTokenType.OpGreaterThan )
+            else if ( type == HlTokenType.OpGreaterThan )
             {
-                type = HLTokenType.OpShiftRight;
+                type = HlTokenType.OpShiftRight;
             }
 
-            return new HLBinaryOp(
+            return new HlBinaryOp(
                 currentNode,
                 type,
                 parser.ParseExpr( PrecedenceLevel )

@@ -8,14 +8,14 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     While Operator Implementation
     /// </summary>
-    public class HLWhileOp : HLExpression
+    public class HlWhileOp : HlExpression
     {
-        public HLExpression[] Block { get; }
+        public HlExpression[] Block { get; }
 
         /// <summary>
         ///     Continue Expression
         /// </summary>
-        public HLExpression Condition { get; }
+        public HlExpression Condition { get; }
 
         #region Public
 
@@ -26,7 +26,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="condition">Continue Condition</param>
         /// <param name="operationType">Operation Type</param>
         /// <param name="exprBody">Expression Body</param>
-        public HLWhileOp( HLExpression condition, HLExpression[] block, int sourceIdx ) : base( sourceIdx )
+        public HlWhileOp( HlExpression condition, HlExpression[] block, int sourceIdx ) : base( sourceIdx )
         {
             Condition = condition;
             Block = block;
@@ -45,7 +45,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         {
             StringBuilder ret = new StringBuilder( $"while({Condition})(" );
 
-            foreach ( HLExpression hlExpression in Block )
+            foreach ( HlExpression hlExpression in Block )
             {
                 ret.Append( hlExpression );
             }

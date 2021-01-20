@@ -25,7 +25,7 @@ namespace VisCPU.HL.Parser.Tokens
         /// <summary>
         ///     The Token Type
         /// </summary>
-        HLTokenType Type { get; }
+        HlTokenType Type { get; }
     }
 
 }

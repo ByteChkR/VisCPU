@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace VisCPU.Utility.Settings.Loader
 {
 
-    public class JSONSettingsLoader : SettingsLoader
+    public class JsonSettingsLoader : SettingsLoader
     {
         #region Public
 

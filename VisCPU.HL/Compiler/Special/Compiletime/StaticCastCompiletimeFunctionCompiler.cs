@@ -12,7 +12,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
         #region Public
 
-        public ExpressionTarget Compile( HLCompilation compilation, HLInvocationOp expr )
+        public ExpressionTarget Compile( HlCompilation compilation, HlInvocationOp expr )
         {
             if ( expr.ParameterList.Length != 2 )
             {

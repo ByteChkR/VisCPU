@@ -21,7 +21,7 @@ namespace VisCPU.Compiler.Linking
             SettingsCategory linkerCategory = SettingsCategories.Get( "sdk.compiler.vasm", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 linkerCategory,
                 "linker.json",
                 new LinkerSettings()

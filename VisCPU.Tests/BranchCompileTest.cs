@@ -6,7 +6,7 @@ namespace VisCPU.Tests
 
     [TestFixture]
     [SingleThreaded]
-    public class BranchCompileTest : VisCPUCompileTest
+    public class BranchCompileTest : VisCpuCompileTest
     {
         [OneTimeSetUp]
         public void Setup()
@@ -36,7 +36,7 @@ namespace VisCPU.Tests
         [TestCaseSource( nameof( GetTestBinaryInstructions ), new object[] { "tests/branches" } )]
         public void RunTests( string file )
         {
-            VisCPURun.Run( file, TestDevice );
+            VisCpuRun.Run( file, TestDevice );
         }
     }
 

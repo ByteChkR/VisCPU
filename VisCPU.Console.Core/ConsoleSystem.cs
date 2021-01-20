@@ -24,7 +24,7 @@ namespace VisCPU.Console.Core
 
         public override void Run( IEnumerable < string > args )
         {
-            CLISettings s = SettingsManager.GetSettings < CLISettings >();
+            CliSettings s = SettingsManager.GetSettings < CliSettings >();
             ArgumentSyntaxParser.Parse( args.ToArray(), s );
             Dictionary < string, ConsoleSubsystem > ss = SubSystems;
             ss["help"] = new HelpSubSystem( this );

@@ -6,8 +6,8 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.HL.Compiler
 {
 
-    public abstract class HLExpressionCompiler < T > : VisBase, IHlExpressionCompiler
-        where T : HLExpression
+    public abstract class HlExpressionCompiler < T > : VisBase, IHlExpressionCompiler
+        where T : HlExpression
     {
         protected override LoggerSystems SubSystem => LoggerSystems.HlCompiler;
 
@@ -18,14 +18,14 @@ namespace VisCPU.HL.Compiler
         #region Public
 
         public virtual ExpressionTarget ParseExpression(
-            HLCompilation compilation,
+            HlCompilation compilation,
             T expr,
             ExpressionTarget outputTarget )
         {
             throw new NotImplementedException();
         }
 
-        public virtual ExpressionTarget ParseExpression( HLCompilation compilation, T expr )
+        public virtual ExpressionTarget ParseExpression( HlCompilation compilation, T expr )
         {
             throw new NotImplementedException();
         }
@@ -35,7 +35,7 @@ namespace VisCPU.HL.Compiler
         #region Private
 
         private ExpressionTarget InnerParseExpression(
-            HLCompilation compilation,
+            HlCompilation compilation,
             T expr,
             ExpressionTarget outputTarget )
         {
@@ -64,8 +64,8 @@ namespace VisCPU.HL.Compiler
         }
 
         ExpressionTarget IHlExpressionCompiler.Parse(
-            HLCompilation compilation,
-            HLExpression expr,
+            HlCompilation compilation,
+            HlExpression expr,
             ExpressionTarget outputTarget )
         {
             return InnerParseExpression( compilation, ( T ) expr, outputTarget );

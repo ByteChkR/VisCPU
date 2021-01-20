@@ -3,11 +3,11 @@
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class ReturnExpressionCompiler : HLExpressionCompiler < HLReturnOp >
+    public class ReturnExpressionCompiler : HlExpressionCompiler < HlReturnOp >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLReturnOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlReturnOp expr )
         {
             if ( expr.Right != null )
             {

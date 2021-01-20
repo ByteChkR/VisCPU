@@ -4,9 +4,9 @@ using VisCPU.HL.Parser.Tokens;
 namespace VisCPU.HL.Parser
 {
 
-    public class EOFToken : IHlToken
+    public class EofToken : IHlToken
     {
-        public HLTokenType Type => HLTokenType.Eof;
+        public HlTokenType Type => HlTokenType.Eof;
 
         public int SourceIndex { get; }
 

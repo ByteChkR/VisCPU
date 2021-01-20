@@ -14,7 +14,7 @@ using VisCPU.Utility.Settings;
 using VisCPU.HL.Integration;
 using Logger = VisCPU.Utility.Logging.Logger;
 
-public class VisCPUInstanceProvider : MonoBehaviour
+public class VisCpuInstanceProvider : MonoBehaviour
 {
     [SerializeField]
     private LoggerSystems m_LogOutput = LoggerSystems.Default;
@@ -71,25 +71,25 @@ public class VisCPUInstanceProvider : MonoBehaviour
         cout.WriteConsoleChar = chr => m_ConsoleOutput.text = m_ConsoleOutput.text + chr;
 
         CPU cpu = new CPUInstanceBuilder().WithPeripherals( mem, cout ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_DestroyByName, "UNITY_DestroyByName", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_DestroyByName, "UNITY_DestroyByName", 2 ).
                                            WithExposedAPI(
-                                               UnityVisAPI.UAPI_DestroyByHandle,
+                                               UnityVisApi.UAPI_DestroyByHandle,
                                                "UNITY_DestroyByHandle",
                                                1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_CreateHandle, "UNITY_CreateHandle", 2 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_SetPosition, "UNITY_SetPosition", 4 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_AddPosition, "UNITY_AddPosition", 4 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_SetPositionX, "UNITY_SetPositionX", 2 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_SetPositionY, "UNITY_SetPositionY", 2 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_SetPositionZ, "UNITY_SetPositionZ", 2 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_GetPositionX, "UNITY_GetPositionX", 1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_GetPositionY, "UNITY_GetPositionY", 1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_GetPositionZ, "UNITY_GetPositionZ", 1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_AddPositionX, "UNITY_AddPositionX", 1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_AddPositionY, "UNITY_AddPositionY", 1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_Log, "UNITY_Log", 2 ).
-                                           WithExposedAPI( UnityVisAPI.UAPI_LogError, "UNITY_LogError", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_CreateHandle, "UNITY_CreateHandle", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_SetPosition, "UNITY_SetPosition", 4 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_AddPosition, "UNITY_AddPosition", 4 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_SetPositionX, "UNITY_SetPositionX", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_SetPositionY, "UNITY_SetPositionY", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_SetPositionZ, "UNITY_SetPositionZ", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_GetPositionX, "UNITY_GetPositionX", 1 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_GetPositionY, "UNITY_GetPositionY", 1 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_GetPositionZ, "UNITY_GetPositionZ", 1 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_AddPositionX, "UNITY_AddPositionX", 1 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_AddPositionY, "UNITY_AddPositionY", 1 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_Log, "UNITY_Log", 2 ).
+                                           WithExposedAPI( UnityVisApi.UAPI_LogError, "UNITY_LogError", 2 ).
                                            Build();
 
         m_CpuInstance = cpu;

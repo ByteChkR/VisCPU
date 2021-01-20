@@ -4,21 +4,21 @@ using VisCPU.HL.TypeSystem;
 namespace VisCPU.HL.Compiler.Types
 {
 
-    public class MemberAccessCompiler : HLExpressionCompiler < HLMemberAccessOp >
+    public class MemberAccessCompiler : HlExpressionCompiler < HlMemberAccessOp >
     {
         protected override bool AllImplementations => true;
 
         #region Public
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLMemberAccessOp expr,
+            HlCompilation compilation,
+            HlMemberAccessOp expr,
             ExpressionTarget outputTarget )
         {
             string tmpVar;
             ExpressionTarget lType = compilation.Parse( expr.Left );
 
-            uint off = HLTypeDefinition.RecursiveGetOffset(
+            uint off = HlTypeDefinition.RecursiveGetOffset(
                 lType.TypeDefinition,
                 0,
                 0,
@@ -48,19 +48,19 @@ namespace VisCPU.HL.Compiler.Types
                 return outputTarget;
             }
 
-            HLMemberDefinition mdef =
-                HLTypeDefinition.RecursiveGetPublicMember(
+            HlMemberDefinition mdef =
+                HlTypeDefinition.RecursiveGetPublicMember(
                     lType.TypeDefinition,
                     0,
                     expr.MemberName.ToString().Split( '.' )
                 );
 
-            if ( mdef is HLPropertyDefinition pdef )
+            if ( mdef is HlPropertyDefinition pdef )
             {
                 return new ExpressionTarget( tmpVar, true, pdef.PropertyType, true );
             }
 
-            if ( mdef is HLFunctionDefinition fdef )
+            if ( mdef is HlFunctionDefinition fdef )
             {
                 return new ExpressionTarget( tmpVar, true, fdef.ReturnType, true );
             }
@@ -68,7 +68,7 @@ namespace VisCPU.HL.Compiler.Types
             return new ExpressionTarget();
         }
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLMemberAccessOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlMemberAccessOp expr )
         {
             return ParseExpression( compilation, expr, new ExpressionTarget() );
         }

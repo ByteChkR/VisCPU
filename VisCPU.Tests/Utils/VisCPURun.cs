@@ -5,7 +5,7 @@ using VisCPU.Utility;
 namespace VisCPU.Tests.Utils
 {
 
-    public static class VisCPURun
+    public static class VisCpuRun
     {
         #region Public
 
@@ -16,7 +16,7 @@ namespace VisCPU.Tests.Utils
                 testDevice
             );
 
-            CPU cpu = new CPU( bus, 0x00, 0x00 );
+            Cpu cpu = new Cpu( bus, 0x00, 0x00 );
             cpu.LoadBinary( File.ReadAllBytes( file ).ToUInt() );
             cpu.Run();
         }

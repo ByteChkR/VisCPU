@@ -13,7 +13,7 @@
 
         #region Public
 
-        public override void Process( CPU cpu )
+        public override void Process( Cpu cpu )
         {
             uint a = cpu.MemoryBus.Read( cpu.DecodeArgument( 0 ) );
             uint address = cpu.DecodeArgument( 1 );

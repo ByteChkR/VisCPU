@@ -10,14 +10,14 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class InvocationExpressionCompiler : HLExpressionCompiler < HLInvocationOp >
+    public class InvocationExpressionCompiler : HlExpressionCompiler < HlInvocationOp >
     {
         private readonly CompiletimeFunctionCompilerCollection m_CtFuncCollection =
             new CompiletimeFunctionCompilerCollection();
 
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLInvocationOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlInvocationOp expr )
         {
             string target = expr.Left.ToString();
 
@@ -52,7 +52,7 @@ namespace VisCPU.HL.Compiler.Special
                     );
                 }
 
-                foreach ( HLExpression parameter in expr.ParameterList )
+                foreach ( HlExpression parameter in expr.ParameterList )
                 {
                     ExpressionTarget arg = compilation.Parse(
                                                            parameter
@@ -81,7 +81,7 @@ namespace VisCPU.HL.Compiler.Special
             if ( compilation.ContainsVariable( target ) ||
                  compilation.ConstValTypes.ContainsKey( target ) )
             {
-                foreach ( HLExpression parameter in expr.ParameterList )
+                foreach ( HlExpression parameter in expr.ParameterList )
                 {
                     ExpressionTarget tt = compilation.Parse( parameter );
 

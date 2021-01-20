@@ -8,28 +8,28 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Compiler
 {
 
-    public class OperatorCompilerCollection < T > : HLExpressionCompiler < T >
-        where T : HLExpression
+    public class OperatorCompilerCollection < T > : HlExpressionCompiler < T >
+        where T : HlExpression
     {
-        private readonly Dictionary < HLTokenType, HLExpressionCompiler < T > > m_OpCompilers =
-            new Dictionary < HLTokenType, HLExpressionCompiler < T > >();
+        private readonly Dictionary < HlTokenType, HlExpressionCompiler < T > > m_OpCompilers =
+            new Dictionary < HlTokenType, HlExpressionCompiler < T > >();
 
         protected override bool AllImplementations => true;
 
         #region Public
 
-        public OperatorCompilerCollection( Dictionary < HLTokenType, HLExpressionCompiler < T > > opCompilers )
+        public OperatorCompilerCollection( Dictionary < HlTokenType, HlExpressionCompiler < T > > opCompilers )
         {
             m_OpCompilers = opCompilers;
         }
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, T expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, T expr )
         {
             return ParseExpression( compilation, expr, new ExpressionTarget() );
         }
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
+            HlCompilation compilation,
             T expr,
             ExpressionTarget outputTarget )
         {

@@ -15,7 +15,7 @@ namespace VisCPU.Instructions
 
         #region Public
 
-        public abstract void Process( CPU cpu );
+        public abstract void Process( Cpu cpu );
 
         #endregion
     }

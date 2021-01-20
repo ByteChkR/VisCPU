@@ -3,11 +3,11 @@
 namespace VisCPU.Compiler.Parser.Tokens
 {
 
-    public class EOFToken : AToken
+    public class EofToken : AToken
     {
         #region Public
 
-        public EOFToken( string originalText, int start, int length ) : base( originalText, start, length )
+        public EofToken( string originalText, int start, int length ) : base( originalText, start, length )
         {
         }
 

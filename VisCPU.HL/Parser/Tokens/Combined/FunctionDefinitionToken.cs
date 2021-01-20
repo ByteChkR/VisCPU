@@ -22,7 +22,7 @@
             IHlToken[] mods,
             IHlToken[] subtokens,
             int start ) : base(
-            HLTokenType.OpFunctionDefinition,
+            HlTokenType.OpFunctionDefinition,
             subtokens,
             start
         )

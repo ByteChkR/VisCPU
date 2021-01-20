@@ -3,15 +3,15 @@
 namespace VisCPU.HL.Compiler.Math
 {
 
-    public abstract class SelfAssignExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
+    public abstract class SelfAssignExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
         protected abstract string InstructionKey { get; }
 
         #region Public
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLBinaryOp expr )
+            HlCompilation compilation,
+            HlBinaryOp expr )
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
 

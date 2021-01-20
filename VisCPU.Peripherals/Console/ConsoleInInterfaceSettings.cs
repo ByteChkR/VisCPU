@@ -22,7 +22,7 @@ namespace VisCPU.Peripherals.Console
             SettingsCategory cinCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 cinCategory,
                 "in.json",
                 new ConsoleInInterfaceSettings()

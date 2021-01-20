@@ -28,7 +28,7 @@ namespace VisCPU.Peripherals.Console
             SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 coutCategory,
                 "out.json",
                 new ConsoleOutInterfaceSettings()

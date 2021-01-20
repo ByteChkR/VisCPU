@@ -4,14 +4,14 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class WhileExpressionCompiler : HLExpressionCompiler < HLWhileOp >
+    public class WhileExpressionCompiler : HlExpressionCompiler < HlWhileOp >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLWhileOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlWhileOp expr )
         {
-            string startLabel = HLCompilation.GetUniqueName( "while_start" );
-            string endLabel = HLCompilation.GetUniqueName( "while_end" );
+            string startLabel = HlCompilation.GetUniqueName( "while_start" );
+            string endLabel = HlCompilation.GetUniqueName( "while_end" );
 
             compilation.EmitterResult.Store( $".{startLabel} linker:hide" );
 
@@ -19,7 +19,7 @@ namespace VisCPU.HL.Compiler.Special
 
             compilation.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
-            foreach ( HLExpression hlExpression in expr.Block )
+            foreach ( HlExpression hlExpression in expr.Block )
             {
                 compilation.Parse( hlExpression );
             }

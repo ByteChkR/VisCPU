@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Logical AND Operator
     /// </summary>
-    public class LogicalAndOperators : HLExpressionOperator
+    public class LogicalAndOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,10 +22,10 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpAnd &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpAnd;
+            return parser.CurrentToken.Type == HlTokenType.OpAnd &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpAnd;
         }
 
         /// <summary>
@@ -34,14 +34,14 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            parser.Eat( HLTokenType.OpAnd );
-            parser.Eat( HLTokenType.OpAnd );
+            parser.Eat( HlTokenType.OpAnd );
+            parser.Eat( HlTokenType.OpAnd );
 
-            return new HLBinaryOp(
+            return new HlBinaryOp(
                 currentNode,
-                HLTokenType.OpLogicalAnd,
+                HlTokenType.OpLogicalAnd,
                 parser.ParseExpr( PrecedenceLevel )
             );
         }

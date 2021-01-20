@@ -4,11 +4,11 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Events
 {
 
-    internal class HLTypeRedefinitionEvent : ErrorEvent
+    internal class HlTypeRedefinitionEvent : ErrorEvent
     {
         #region Public
 
-        public HLTypeRedefinitionEvent( string typeName ) : base(
+        public HlTypeRedefinitionEvent( string typeName ) : base(
             $"Duplicate definition of type {typeName}",
             ErrorEventKeys.s_HlTypeDuplicateDef,
             false

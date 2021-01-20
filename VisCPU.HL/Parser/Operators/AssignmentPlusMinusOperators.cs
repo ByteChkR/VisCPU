@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Unary Plus/Minus by Assignment Operators
     /// </summary>
-    public class AssignmentPlusMinusOperators : HLExpressionOperator
+    public class AssignmentPlusMinusOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,12 +22,12 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpPlus &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpPlus ||
-                   parser.CurrentToken.Type == HLTokenType.OpMinus &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpMinus;
+            return parser.CurrentToken.Type == HlTokenType.OpPlus &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpPlus ||
+                   parser.CurrentToken.Type == HlTokenType.OpMinus &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpMinus;
         }
 
         /// <summary>
@@ -36,17 +36,17 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            HLTokenType tt = parser.CurrentToken.Type == HLTokenType.OpPlus
-                ? HLTokenType.OpUnaryIncrement
-                : HLTokenType.OpUnaryDecrement;
+            HlTokenType tt = parser.CurrentToken.Type == HlTokenType.OpPlus
+                ? HlTokenType.OpUnaryIncrement
+                : HlTokenType.OpUnaryDecrement;
 
             parser.Eat( parser.CurrentToken.Type );
             parser.Eat( parser.CurrentToken.Type );
 
-            HLExpression token =
-                new HLUnaryOp( currentNode, tt );
+            HlExpression token =
+                new HlUnaryOp( currentNode, tt );
 
             return token;
         }

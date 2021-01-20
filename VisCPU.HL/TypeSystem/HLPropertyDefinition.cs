@@ -4,15 +4,15 @@ using VisCPU.HL.Parser.Tokens;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HLPropertyDefinition : HLMemberDefinition
+    public class HlPropertyDefinition : HlMemberDefinition
     {
-        public HLTypeDefinition PropertyType { get; }
+        public HlTypeDefinition PropertyType { get; }
 
-        public override HLTokenType Type => HLTokenType.OpPropertyDefinition;
+        public override HlTokenType Type => HlTokenType.OpPropertyDefinition;
 
         #region Public
 
-        public HLPropertyDefinition( string name, HLTypeDefinition type, IHlToken[] mods ) : base( name, mods )
+        public HlPropertyDefinition( string name, HlTypeDefinition type, IHlToken[] mods ) : base( name, mods )
         {
             PropertyType = type;
         }

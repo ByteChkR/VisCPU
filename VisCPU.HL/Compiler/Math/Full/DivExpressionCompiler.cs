@@ -8,7 +8,7 @@
         #region Protected
 
         protected override ExpressionTarget ComputeStatic(
-            HLCompilation compilation,
+            HlCompilation compilation,
             ExpressionTarget left,
             ExpressionTarget right )
         {

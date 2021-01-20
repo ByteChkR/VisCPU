@@ -4,40 +4,40 @@ using VisCPU.Peripherals;
 namespace VisCPU.HL.Integration
 {
 
-    public class APIImporterDevice : Peripheral
+    public class ApiImporterDevice : Peripheral
     {
-        private CPU ExecutingCPU;
-        private readonly uint ListenAddr;
-        private readonly Func < CPU, uint > InvokeExec;
+        private Cpu m_ExecutingCpu;
+        private readonly uint m_ListenAddr;
+        private readonly Func < Cpu, uint > m_InvokeExec;
 
         #region Public
 
-        public APIImporterDevice( uint addr, Func < CPU, uint > invokeExec )
+        public ApiImporterDevice( uint addr, Func < Cpu, uint > invokeExec )
         {
-            ListenAddr = addr;
-            InvokeExec = invokeExec;
+            m_ListenAddr = addr;
+            m_InvokeExec = invokeExec;
         }
 
         public override bool CanRead( uint address )
         {
-            return address == ListenAddr;
+            return address == m_ListenAddr;
         }
 
         public override bool CanWrite( uint address )
         {
-            return address == ListenAddr;
+            return address == m_ListenAddr;
         }
 
         public override uint ReadData( uint address )
         {
-            ExecutingCPU.Push( InvokeExec( ExecutingCPU ) );
+            m_ExecutingCpu.Push( m_InvokeExec( m_ExecutingCpu ) );
 
-            return CPUSettings.InstructionSet.GetInstruction( CPUSettings.InstructionSet.GetInstruction( "RET", 0 ) );
+            return CpuSettings.InstructionSet.GetInstruction( CpuSettings.InstructionSet.GetInstruction( "RET", 0 ) );
         }
 
-        public void SetExecutingCPU( CPU executingCPU )
+        public void SetExecutingCpu( Cpu executingCpu )
         {
-            ExecutingCPU = executingCPU;
+            m_ExecutingCpu = executingCpu;
         }
 
         public override void WriteData( uint address, uint data )

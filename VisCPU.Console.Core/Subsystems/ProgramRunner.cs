@@ -22,10 +22,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Run( Dictionary < string, string > args )
         {
-            CPUSettings cpuSettings = SettingsManager.GetSettings < CPUSettings >();
+            CpuSettings cpuSettings = SettingsManager.GetSettings < CpuSettings >();
             RunnerSettings settings = new RunnerSettings();
 
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
             MemorySettings ms = SettingsManager.GetSettings < MemorySettings >();
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
@@ -69,7 +69,7 @@ namespace VisCPU.Console.Core.Subsystems
 
                 MemoryBus bus = CreateBus( mbs );
 
-                CPU cpu = new CPU( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
+                Cpu cpu = new Cpu( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
@@ -79,10 +79,10 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Help()
         {
-            CPUSettings cpuSettings = SettingsManager.GetSettings < CPUSettings >();
+            CpuSettings cpuSettings = SettingsManager.GetSettings < CpuSettings >();
             RunnerSettings settings = new RunnerSettings();
 
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
             MemorySettings ms = SettingsManager.GetSettings < MemorySettings >();
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
@@ -91,9 +91,9 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Run( IEnumerable < string > args )
         {
-            CPUSettings cpuSettings = SettingsManager.GetSettings < CPUSettings >();
+            CpuSettings cpuSettings = SettingsManager.GetSettings < CpuSettings >();
             RunnerSettings settings = new RunnerSettings();
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
             MemorySettings ms = SettingsManager.GetSettings < MemorySettings >();
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
@@ -137,7 +137,7 @@ namespace VisCPU.Console.Core.Subsystems
 
                 MemoryBus bus = CreateBus( mbs );
 
-                CPU cpu = new CPU( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
+                Cpu cpu = new Cpu( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }

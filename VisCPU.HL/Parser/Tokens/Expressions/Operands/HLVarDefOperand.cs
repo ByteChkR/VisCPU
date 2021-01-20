@@ -6,14 +6,14 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
     /// <summary>
     ///     Implements a Variable Operand that is also a Variable Definition
     /// </summary>
-    public class HLVarDefOperand : HLVarOperand
+    public class HlVarDefOperand : HlVarOperand
     {
         /// <summary>
         ///     The Definition Token
         /// </summary>
         public VariableDefinitionToken VariableDefinition { get; }
 
-        public HLExpression[] Initializer { get; }
+        public HlExpression[] Initializer { get; }
 
         /// <summary>
         ///     The Variable Value
@@ -27,7 +27,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="variableDefinition">Variable Value</param>
-        public HLVarDefOperand( VariableDefinitionToken variableDefinition, HLExpression[] initializer ) :
+        public HlVarDefOperand( VariableDefinitionToken variableDefinition, HlExpression[] initializer ) :
             base( variableDefinition.SourceIndex )
         {
             Initializer = initializer;

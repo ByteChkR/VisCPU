@@ -9,7 +9,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
     /// <summary>
     ///     Implements the base of any XLangExpression implementation
     /// </summary>
-    public abstract class HLExpression : IHlToken
+    public abstract class HlExpression : IHlToken
     {
         /// <summary>
         ///     Start index in source
@@ -19,7 +19,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         /// <summary>
         ///     The Token Type (OpExpression)
         /// </summary>
-        public virtual HLTokenType Type => HLTokenType.OpExpression;
+        public virtual HlTokenType Type => HlTokenType.OpExpression;
 
         #region Public
 
@@ -37,7 +37,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         ///     Protected Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        protected HLExpression( int sourceIndex )
+        protected HlExpression( int sourceIndex )
         {
             SourceIndex = sourceIndex;
         }

@@ -4,13 +4,13 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.Instructions.Emit
 {
 
-    public abstract class Emitter < EmitType > : VisBase, IEmitter
+    public abstract class Emitter < TEmitType > : VisBase, IEmitter
     {
         protected override LoggerSystems SubSystem => LoggerSystems.Emit;
 
         #region Public
 
-        public abstract EmitType Emit( string instructionKey, params string[] arguments );
+        public abstract TEmitType Emit( string instructionKey, params string[] arguments );
 
         #endregion
 

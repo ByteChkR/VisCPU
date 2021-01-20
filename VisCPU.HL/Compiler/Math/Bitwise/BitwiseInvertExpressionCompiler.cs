@@ -3,15 +3,15 @@
 namespace VisCPU.HL.Compiler.Math.Bitwise
 {
 
-    public class BitwiseInvertExpressionCompiler : HLExpressionCompiler < HLUnaryOp >
+    public class BitwiseInvertExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
         protected override bool AllImplementations => true;
 
         #region Public
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLUnaryOp expr,
+            HlCompilation compilation,
+            HlUnaryOp expr,
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(

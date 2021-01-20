@@ -4,15 +4,15 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class IfBlockCompiler : HLExpressionCompiler < HLIfOp >
+    public class IfBlockCompiler : HlExpressionCompiler < HlIfOp >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLIfOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlIfOp expr )
         {
-            string endLabel = HLCompilation.GetUniqueName( "if_end" );
-            string elseLabel = HLCompilation.GetUniqueName( "if_else" );
-            string blockLabels = HLCompilation.GetUniqueName( "if_b{0}" );
+            string endLabel = HlCompilation.GetUniqueName( "if_end" );
+            string elseLabel = HlCompilation.GetUniqueName( "if_else" );
+            string blockLabels = HlCompilation.GetUniqueName( "if_b{0}" );
 
             for ( int i = 0; i < expr.ConditionMap.Count; i++ )
             {
@@ -45,7 +45,7 @@ namespace VisCPU.HL.Compiler.Special
 
                 compilation.EmitterResult.Emit( $"BEZ", exprTarget.ResultAddress, nextLabel );
 
-                foreach ( HLExpression hlExpression in expr.ConditionMap[i].Item2 )
+                foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
                 {
                     compilation.Parse( hlExpression );
                 }
@@ -58,7 +58,7 @@ namespace VisCPU.HL.Compiler.Special
             {
                 compilation.EmitterResult.Store( $".{elseLabel} linker:hide" );
 
-                foreach ( HLExpression hlExpression in expr.ElseBranch )
+                foreach ( HlExpression hlExpression in expr.ElseBranch )
                 {
                     compilation.Parse( hlExpression );
                 }

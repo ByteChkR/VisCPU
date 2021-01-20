@@ -9,24 +9,24 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
     /// <summary>
     ///     Implements Binary Operators
     /// </summary>
-    public class HLBinaryOp : HLExpression
+    public class HlBinaryOp : HlExpression
     {
         /// <summary>
         ///     Left side of the Expression
         /// </summary>
-        public HLExpression Left { get; }
+        public HlExpression Left { get; }
 
         /// <summary>
         ///     The Operation Type
         /// </summary>
-        public HLTokenType OperationType { get; }
+        public HlTokenType OperationType { get; }
 
         /// <summary>
         ///     Right side of the Expression
         /// </summary>
-        public HLExpression Right { get; }
+        public HlExpression Right { get; }
 
-        public override HLTokenType Type => OperationType;
+        public override HlTokenType Type => OperationType;
 
         #region Public
 
@@ -37,10 +37,10 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// <param name="left">Left Side</param>
         /// <param name="operationType">Operation Type</param>
         /// <param name="right">Right Side</param>
-        public HLBinaryOp(
-            HLExpression left,
-            HLTokenType operationType,
-            HLExpression right ) : base( left.SourceIndex )
+        public HlBinaryOp(
+            HlExpression left,
+            HlTokenType operationType,
+            HlExpression right ) : base( left.SourceIndex )
         {
             Left = left;
             OperationType = operationType;

@@ -4,20 +4,20 @@ using VisCPU.HL.Parser.Tokens;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HLFunctionDefinition : HLMemberDefinition
+    public class HlFunctionDefinition : HlMemberDefinition
     {
-        public HLTypeDefinition ReturnType { get; }
+        public HlTypeDefinition ReturnType { get; }
 
-        public HLTypeDefinition[] ParameterTypes { get; }
+        public HlTypeDefinition[] ParameterTypes { get; }
 
-        public override HLTokenType Type => HLTokenType.OpFunctionDefinition;
+        public override HlTokenType Type => HlTokenType.OpFunctionDefinition;
 
         #region Public
 
-        public HLFunctionDefinition(
+        public HlFunctionDefinition(
             string name,
-            HLTypeDefinition returnType,
-            HLTypeDefinition[] parameters,
+            HlTypeDefinition returnType,
+            HlTypeDefinition[] parameters,
             IHlToken[] mods ) : base( name, mods )
         {
             ReturnType = returnType;

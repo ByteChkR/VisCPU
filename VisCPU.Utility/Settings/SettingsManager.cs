@@ -143,7 +143,7 @@ namespace VisCPU.Utility.Settings
                 return loader.LoadSettings( t, file );
             }
 
-            EventManager < ErrorEvent >.SendEvent( new SettingsIODisabledEvent( "IO Is disabled." ) );
+            EventManager < ErrorEvent >.SendEvent( new SettingsIoDisabledEvent( "IO Is disabled." ) );
 
             return null;
         }

@@ -4,15 +4,15 @@ using VisCPU.HL.TypeSystem;
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class ArrayAccessCompiler : HLExpressionCompiler < HLArrayAccessorOp >
+    public class ArrayAccessCompiler : HlExpressionCompiler < HlArrayAccessorOp >
     {
         protected override bool AllImplementations => true;
 
         #region Public
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLArrayAccessorOp expr,
+            HlCompilation compilation,
+            HlArrayAccessorOp expr,
             ExpressionTarget outputTarget )
         {
             ExpressionTarget tempPtrVar = compilation.Parse( expr.Left );
@@ -72,7 +72,7 @@ namespace VisCPU.HL.Compiler.Special
             return tempPtr;
         }
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLArrayAccessorOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlArrayAccessorOp expr )
         {
             return ParseExpression( compilation, expr, new ExpressionTarget() );
         }

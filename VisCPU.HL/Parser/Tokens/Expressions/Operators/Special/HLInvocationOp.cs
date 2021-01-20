@@ -8,22 +8,22 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     Invocation () Operator Implementation
     /// </summary>
-    public class HLInvocationOp : HLExpression
+    public class HlInvocationOp : HlExpression
     {
         /// <summary>
         ///     Left side Expression
         /// </summary>
-        public HLExpression Left { get; }
+        public HlExpression Left { get; }
 
         /// <summary>
         ///     Invocation Arguments
         /// </summary>
-        public HLExpression[] ParameterList { get; }
+        public HlExpression[] ParameterList { get; }
 
         /// <summary>
         ///     Operation Type
         /// </summary>
-        public override HLTokenType Type => HLTokenType.OpInvocation;
+        public override HlTokenType Type => HlTokenType.OpInvocation;
 
         #region Public
 
@@ -33,7 +33,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="context">XL Context</param>
         /// <param name="left">Left Side Expression</param>
         /// <param name="parameterList">Parameter list</param>
-        public HLInvocationOp( HLExpression left, HLExpression[] parameterList ) : base( left.SourceIndex )
+        public HlInvocationOp( HlExpression left, HlExpression[] parameterList ) : base( left.SourceIndex )
         {
             Left = left;
             ParameterList = parameterList;
@@ -54,7 +54,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 
             for ( int i = 0; i < ParameterList.Length; i++ )
             {
-                HLExpression hlExpression = ParameterList[i];
+                HlExpression hlExpression = ParameterList[i];
                 ret.Append( hlExpression );
 
                 if ( i != ParameterList.Length - 1 )

@@ -7,20 +7,20 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Compiler.Variables
 {
 
-    public class VarExpressionCompiler : HLExpressionCompiler < HLVarOperand >
+    public class VarExpressionCompiler : HlExpressionCompiler < HlVarOperand >
     {
         protected override bool AllImplementations => true;
 
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLVarOperand expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlVarOperand expr )
         {
             return ParseExpression( compilation, expr, new ExpressionTarget() );
         }
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLVarOperand expr,
+            HlCompilation compilation,
+            HlVarOperand expr,
             ExpressionTarget outputTarget )
         {
             if ( compilation.ConstValTypes.ContainsKey( expr.Value.ToString() ) )
@@ -41,7 +41,7 @@ namespace VisCPU.HL.Compiler.Variables
                     true,
                     v.TypeDefinition,
                     v.TypeDefinition.GetSize() != v.Size ||
-                    v.TypeDefinition.Name != HLCompilation.VAL_TYPE
+                    v.TypeDefinition.Name != HlCompilation.ValType
                 ).CopyIfNotNull( compilation, outputTarget );
             }
 
@@ -52,7 +52,7 @@ namespace VisCPU.HL.Compiler.Variables
                 return new ExpressionTarget( varAddr, true, null );
             }
 
-            EventManager < ErrorEvent >.SendEvent( new HLVariableNotFoundEvent( expr.Value.ToString(), false ) );
+            EventManager < ErrorEvent >.SendEvent( new HlVariableNotFoundEvent( expr.Value.ToString(), false ) );
 
             return new ExpressionTarget();
         }

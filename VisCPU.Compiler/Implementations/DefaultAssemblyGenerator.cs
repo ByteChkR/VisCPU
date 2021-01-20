@@ -47,7 +47,7 @@ namespace VisCPU.Compiler.Implementations
                 result.DataSectionHeader.
                        ApplyOffset(
                            settings.GlobalOffset +
-                           ( uint ) result.LinkedBinary.Count * CPUSettings.InstructionSize
+                           ( uint ) result.LinkedBinary.Count * CpuSettings.InstructionSize
                        ).
                        ToDictionary( x => x.Key, x => x.Value );
 
@@ -85,7 +85,7 @@ namespace VisCPU.Compiler.Implementations
                 Dictionary < string, AddressItem > hds = resultHiddenAddressItem.Value.ApplyOffset(
                         settings.GlobalOffset +
                         ( uint ) result.LinkedBinary.Count *
-                        CPUSettings.InstructionSize
+                        CpuSettings.InstructionSize
                     ).
                     ToDictionary(
                         x => x.Key,
@@ -107,8 +107,8 @@ namespace VisCPU.Compiler.Implementations
                 IEnumerable < AToken > args = result.LinkedBinary[i].Skip( 1 );
 
                 uint opCode =
-                    CPUSettings.InstructionSet.GetInstruction(
-                        CPUSettings.InstructionSet.GetInstruction(
+                    CpuSettings.InstructionSet.GetInstruction(
+                        CpuSettings.InstructionSet.GetInstruction(
                             instr.GetValue(),
                             result.LinkedBinary[i].Length - 1
                         )
@@ -128,12 +128,12 @@ namespace VisCPU.Compiler.Implementations
                     }
                 }
 
-                if ( bytes.Count > CPUSettings.ByteSize )
+                if ( bytes.Count > CpuSettings.ByteSize )
                 {
                     EventManager < ErrorEvent >.SendEvent( new InvalidArgumentCountEvent( i ) );
                 }
 
-                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CPUSettings.ByteSize - bytes.Count ) );
+                bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CpuSettings.ByteSize - bytes.Count ) );
 
                 instrBytes.AddRange( bytes );
             }

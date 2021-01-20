@@ -58,7 +58,7 @@ namespace VisCPU.Console.Core
 
         public static void RunConsole( string[] args )
         {
-            CPUSettings.FallbackSet = new DefaultSet();
+            CpuSettings.FallbackSet = new DefaultSet();
 
 #if DEBUG
             Peripheral.DebugPeripherals = new Peripheral[]
@@ -72,7 +72,7 @@ namespace VisCPU.Console.Core
         }
 
         internal static void RunConsole(
-            CLISettings settings,
+            CliSettings settings,
             string[] args,
             Dictionary < string, ConsoleSubsystem > subsystems )
         {
@@ -134,7 +134,7 @@ namespace VisCPU.Console.Core
                 return;
             }
 
-            CLISettings s = SettingsManager.GetSettings < CLISettings >();
+            CliSettings s = SettingsManager.GetSettings < CliSettings >();
             EventManager.RegisterDefaultHandlers();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
             ArgumentSyntaxParser.Parse( args, s, Logger.s_Settings );

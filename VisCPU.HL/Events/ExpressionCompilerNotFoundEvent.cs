@@ -9,7 +9,7 @@ namespace VisCPU.HL.Events
     {
         #region Public
 
-        public ExpressionCompilerNotFoundEvent( HLExpression expr ) : base(
+        public ExpressionCompilerNotFoundEvent( HlExpression expr ) : base(
             $"No Compiler found for expression: ({expr.Type}) '{expr}'",
             ErrorEventKeys.s_HlCompilerNotFound,
             false

@@ -263,7 +263,7 @@ namespace VisCPU.Compiler.Compiler
                     {
                         Address =
                             ( uint ) ( i *
-                                       CPUSettings.InstructionSize
+                                       CpuSettings.InstructionSize
                             ),
                         LinkerArguments = linkerArgs
                     };

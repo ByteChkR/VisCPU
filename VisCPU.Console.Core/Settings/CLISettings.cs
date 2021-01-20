@@ -5,7 +5,7 @@ using VisCPU.Utility.Settings.Loader;
 namespace VisCPU.Console.Core.Settings
 {
 
-    public class CLISettings
+    public class CliSettings
     {
         [field: Argument( Name = "cli:loop" )]
         public bool Continuous { get; set; }
@@ -18,15 +18,15 @@ namespace VisCPU.Console.Core.Settings
 
         #region Private
 
-        static CLISettings()
+        static CliSettings()
         {
             SettingsCategory cliCategory = SettingsCategories.Get( "sdk", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 cliCategory,
                 "cli.json",
-                new CLISettings()
+                new CliSettings()
             );
         }
 

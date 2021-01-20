@@ -6,17 +6,17 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     Member Access . Operator Implementation
     /// </summary>
-    public class HLMemberAccessOp : HLExpression
+    public class HlMemberAccessOp : HlExpression
     {
         /// <summary>
         ///     Left Side expression
         /// </summary>
-        public HLExpression Left { get; }
+        public HlExpression Left { get; }
 
         /// <summary>
         ///     Name of the Member that is beeing accessed.
         /// </summary>
-        public HLExpression MemberName { get; }
+        public HlExpression MemberName { get; }
 
         #region Public
 
@@ -26,7 +26,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="context">XL Context</param>
         /// <param name="left">Left Side Expression</param>
         /// <param name="memberName"></param>
-        public HLMemberAccessOp( HLExpression left, HLExpression memberName ) : base(
+        public HlMemberAccessOp( HlExpression left, HlExpression memberName ) : base(
             left.SourceIndex
         )
         {

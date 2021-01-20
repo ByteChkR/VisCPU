@@ -3,11 +3,11 @@
 namespace VisCPU.HL.Compiler.Math.Atomic
 {
 
-    public class IncrementExpressionCompiler : HLExpressionCompiler < HLUnaryOp >
+    public class IncrementExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLUnaryOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlUnaryOp expr )
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
 

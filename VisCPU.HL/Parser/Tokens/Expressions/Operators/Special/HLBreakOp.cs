@@ -6,7 +6,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     Break Operator Implementation
     /// </summary>
-    public class HLBreakOp : HLExpression
+    public class HlBreakOp : HlExpression
     {
         #region Public
 
@@ -14,7 +14,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        public HLBreakOp( int sourceIdx ) : base( sourceIdx )
+        public HlBreakOp( int sourceIdx ) : base( sourceIdx )
         {
         }
 

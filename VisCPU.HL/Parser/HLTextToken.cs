@@ -10,7 +10,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     Represents a Token that contains a Sequence of Characters
     /// </summary>
-    public class HLTextToken : IHlToken
+    public class HlTextToken : IHlToken
     {
         /// <summary>
         ///     The Token Value
@@ -20,7 +20,7 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     The Token type
         /// </summary>
-        public HLTokenType Type { get; }
+        public HlTokenType Type { get; }
 
         /// <summary>
         ///     The Start index in the source stream
@@ -35,7 +35,7 @@ namespace VisCPU.HL.Parser
         /// <param name="type">Token Type</param>
         /// <param name="value">Token Value</param>
         /// <param name="startIndex">Start index in the source stream</param>
-        public HLTextToken( HLTokenType type, string value, int startIndex )
+        public HlTextToken( HlTokenType type, string value, int startIndex )
         {
             Type = type;
             Value = value;

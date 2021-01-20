@@ -20,14 +20,14 @@ namespace VisCPU.HL.DataTypes
 
         private readonly string m_Name;
         private readonly string m_FinalName;
-        public readonly HLTypeDefinition TypeDefinition;
+        public readonly HlTypeDefinition TypeDefinition;
         public readonly bool IsVisible;
 
         public uint Size { get; }
 
         public readonly string InitContent;
 
-        public VariableData( string name, string finalName, uint dataSize, HLTypeDefinition tdef, bool isVisible )
+        public VariableData( string name, string finalName, uint dataSize, HlTypeDefinition tdef, bool isVisible )
         {
             InitContent = null;
             Size = dataSize;
@@ -37,7 +37,7 @@ namespace VisCPU.HL.DataTypes
             IsVisible = isVisible;
         }
 
-        public VariableData( string name, string finalName, string content, HLTypeDefinition tdef, bool isVisible )
+        public VariableData( string name, string finalName, string content, HlTypeDefinition tdef, bool isVisible )
         {
             m_Name = name;
             m_FinalName = finalName;

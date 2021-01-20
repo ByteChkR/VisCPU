@@ -6,19 +6,19 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
     /// <summary>
     ///     Implements Unary Operators
     /// </summary>
-    public class HLUnaryOp : HLExpression
+    public class HlUnaryOp : HlExpression
     {
         /// <summary>
         ///     Left Side of the Expression
         /// </summary>
-        public HLExpression Left { get; }
+        public HlExpression Left { get; }
 
         /// <summary>
         ///     The Expression Type
         /// </summary>
-        public HLTokenType OperationType { get; }
+        public HlTokenType OperationType { get; }
 
-        public override HLTokenType Type => OperationType;
+        public override HlTokenType Type => OperationType;
 
         #region Public
 
@@ -28,7 +28,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// <param name="context">XL Context</param>
         /// <param name="left">Left Side</param>
         /// <param name="operationType">Operation Type</param>
-        public HLUnaryOp( HLExpression left, HLTokenType operationType ) : base( left.SourceIndex )
+        public HlUnaryOp( HlExpression left, HlTokenType operationType ) : base( left.SourceIndex )
         {
             Left = left;
             OperationType = operationType;

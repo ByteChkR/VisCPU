@@ -12,20 +12,20 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Compiler.Variables
 {
 
-    public class VariableDefinitionExpressionCompiler : HLExpressionCompiler < HLVarDefOperand >
+    public class VariableDefinitionExpressionCompiler : HlExpressionCompiler < HlVarDefOperand >
     {
-        public readonly HLTypeSystem TypeSystem;
+        public readonly HlTypeSystem TypeSystem;
 
         #region Public
 
-        public VariableDefinitionExpressionCompiler( HLTypeSystem typeSystem )
+        public VariableDefinitionExpressionCompiler( HlTypeSystem typeSystem )
         {
             TypeSystem = typeSystem;
         }
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLVarDefOperand expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlVarDefOperand expr )
         {
-            if ( expr.VariableDefinition.Modifiers.All( x => x.Type != HLTokenType.OpConstMod ) )
+            if ( expr.VariableDefinition.Modifiers.All( x => x.Type != HlTokenType.OpConstMod ) )
             {
                 string asmVarName = expr.VariableDefinition.Name.ToString();
 
@@ -34,7 +34,7 @@ namespace VisCPU.HL.Compiler.Variables
                     EventManager < ErrorEvent >.SendEvent( new DuplicateVarDefinitionEvent( asmVarName ) );
                 }
 
-                HLTypeDefinition vdef = TypeSystem.GetType( expr.VariableDefinition.TypeName.ToString() );
+                HlTypeDefinition vdef = TypeSystem.GetType( expr.VariableDefinition.TypeName.ToString() );
                 uint arrSize = expr.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
 
                 if ( arrSize != 1 )
@@ -42,12 +42,12 @@ namespace VisCPU.HL.Compiler.Variables
                     vdef = new ArrayTypeDefintion( vdef, arrSize );
                 }
 
-                HLExpression init = expr.Initializer.FirstOrDefault();
+                HlExpression init = expr.Initializer.FirstOrDefault();
 
                 if ( init != null )
                 {
-                    if ( init is HLValueOperand vOp &&
-                         vOp.Value.Type == HLTokenType.OpStringLiteral )
+                    if ( init is HlValueOperand vOp &&
+                         vOp.Value.Type == HlTokenType.OpStringLiteral )
                     {
                         ExpressionTarget svar = new ExpressionTarget(
                             compilation.GetFinalName( asmVarName ),
@@ -77,7 +77,7 @@ namespace VisCPU.HL.Compiler.Variables
                     arrSize,
                     vdef,
                     expr.VariableDefinition.Modifiers.Any(
-                        x => x.Type == HLTokenType.OpPublicMod
+                        x => x.Type == HlTokenType.OpPublicMod
                     )
                 );
 
@@ -89,7 +89,7 @@ namespace VisCPU.HL.Compiler.Variables
                 return dvar;
             }
 
-            if ( expr.VariableDefinition.Modifiers.Any( x => x.Type == HLTokenType.OpConstMod ) )
+            if ( expr.VariableDefinition.Modifiers.Any( x => x.Type == HlTokenType.OpConstMod ) )
             {
                 string asmVarName = expr.VariableDefinition.Name.ToString();
 

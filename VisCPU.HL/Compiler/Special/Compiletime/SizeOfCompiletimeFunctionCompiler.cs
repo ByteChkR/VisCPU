@@ -13,7 +13,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
         #region Public
 
-        public ExpressionTarget Compile( HLCompilation compilation, HLInvocationOp expr )
+        public ExpressionTarget Compile( HlCompilation compilation, HlInvocationOp expr )
         {
             if ( expr.ParameterList.Length != 1 )
             {
@@ -45,7 +45,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             }
 
             EventManager < ErrorEvent >.SendEvent(
-                new HLVariableNotFoundEvent(
+                new HlVariableNotFoundEvent(
                     expr.ParameterList[0].ToString(),
                     false
                 )

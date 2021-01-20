@@ -13,12 +13,12 @@ namespace VisCPU.HL.Parser.Events
     /// <summary>
     ///     Occurs if the Parser Encounters a Token that is unexpected
     /// </summary>
-    internal class HLTokenReadEvent : ErrorEvent
+    internal class HlTokenReadEvent : ErrorEvent
     {
         /// <summary>
         ///     The Expected Tokens
         /// </summary>
-        private readonly HLTokenType[] m_Expected;
+        private readonly HlTokenType[] m_Expected;
 
         /// <summary>
         ///     The Sequence that was unexpected
@@ -28,7 +28,7 @@ namespace VisCPU.HL.Parser.Events
         /// <summary>
         ///     The Token that led to the Exception
         /// </summary>
-        private readonly HLTokenType m_Unmatched;
+        private readonly HlTokenType m_Unmatched;
 
         #region Public
 
@@ -39,10 +39,10 @@ namespace VisCPU.HL.Parser.Events
         /// <param name="expected">Expected Tokens</param>
         /// <param name="unmatched">Unmatched Token</param>
         /// <param name="start">Start index in source</param>
-        public HLTokenReadEvent(
+        public HlTokenReadEvent(
             IEnumerable < IHlToken > tokenSequence,
-            HLTokenType[] expected,
-            HLTokenType unmatched,
+            HlTokenType[] expected,
+            HlTokenType unmatched,
             int start ) :
             base(
                 $"Expected '{GetExpectedTokenString( expected )}' but got '{unmatched} at index {start}'",
@@ -62,10 +62,10 @@ namespace VisCPU.HL.Parser.Events
         /// <param name="expected">Expected Token</param>
         /// <param name="unmatched">Unmatched Token</param>
         /// <param name="start">Start index in source</param>
-        public HLTokenReadEvent(
+        public HlTokenReadEvent(
             IEnumerable < IHlToken > tokenSequence,
-            HLTokenType expected,
-            HLTokenType unmatched,
+            HlTokenType expected,
+            HlTokenType unmatched,
             int start ) : this(
             tokenSequence,
             new[] { expected },
@@ -75,7 +75,7 @@ namespace VisCPU.HL.Parser.Events
         {
         }
 
-        public HLTokenReadEvent( HLTokenType expected, HLTokenType got ) : base(
+        public HlTokenReadEvent( HlTokenType expected, HlTokenType got ) : base(
             $"Expected Token '{expected}' but got '{got}'",
             ErrorEventKeys.s_HlInvalidToken,
             false
@@ -92,7 +92,7 @@ namespace VisCPU.HL.Parser.Events
         /// </summary>
         /// <param name="expected">Expected Tokens</param>
         /// <returns></returns>
-        private static string GetExpectedTokenString( HLTokenType[] expected )
+        private static string GetExpectedTokenString( HlTokenType[] expected )
         {
             StringBuilder sb = new StringBuilder();
 

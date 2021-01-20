@@ -3,9 +3,9 @@
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
 {
 
-    public class HLFuncDefOperand : HLVarOperand
+    public class HlFuncDefOperand : HlVarOperand
     {
-        public HLExpression[] Block { get; }
+        public HlExpression[] Block { get; }
 
         /// <summary>
         ///     The Definition Token
@@ -24,7 +24,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="functionDefinition">Variable Value</param>
-        public HLFuncDefOperand( FunctionDefinitionToken functionDefinition, HLExpression[] block ) :
+        public HlFuncDefOperand( FunctionDefinitionToken functionDefinition, HlExpression[] block ) :
             base( functionDefinition.SourceIndex )
         {
             FunctionDefinition = functionDefinition;

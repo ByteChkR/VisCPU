@@ -5,11 +5,11 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.TypeSystem.Events
 {
 
-    internal abstract class InvalidHLMemberModifiersEvent : ErrorEvent
+    internal abstract class InvalidHlMemberModifiersEvent : ErrorEvent
     {
         #region Protected
 
-        protected InvalidHLMemberModifiersEvent( HLTokenType a, HLTokenType b ) : base(
+        protected InvalidHlMemberModifiersEvent( HlTokenType a, HlTokenType b ) : base(
             $"Token '{a}' can not be used together with '{b}'",
             ErrorEventKeys.s_HlInvalidMemberModifiers,
             false

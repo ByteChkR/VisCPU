@@ -6,7 +6,7 @@ using VisCPU.HL.Parser.Tokens;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public abstract class HLMemberDefinition : IHlTypeSystemInstance
+    public abstract class HlMemberDefinition : IHlTypeSystemInstance
     {
         public bool IsPublic { get; }
 
@@ -18,7 +18,7 @@ namespace VisCPU.HL.TypeSystem
 
         public int SourceIndex { get; }
 
-        public abstract HLTokenType Type { get; }
+        public abstract HlTokenType Type { get; }
 
         #region Public
 
@@ -33,13 +33,13 @@ namespace VisCPU.HL.TypeSystem
 
         #region Protected
 
-        protected HLMemberDefinition( string name, IHlToken[] mods )
+        protected HlMemberDefinition( string name, IHlToken[] mods )
         {
             Name = name;
 
-            IsConstant = mods.Any( x => x.Type == HLTokenType.OpConstMod );
-            IsStatic = mods.Any( x => x.Type == HLTokenType.OpStaticMod );
-            IsPublic = mods.Any( x => x.Type == HLTokenType.OpPublicMod );
+            IsConstant = mods.Any( x => x.Type == HlTokenType.OpConstMod );
+            IsStatic = mods.Any( x => x.Type == HlTokenType.OpStaticMod );
+            IsPublic = mods.Any( x => x.Type == HlTokenType.OpPublicMod );
         }
 
         #endregion

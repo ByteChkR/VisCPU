@@ -14,22 +14,22 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     Parses XLangExpressions from a Token Stream
     /// </summary>
-    public class HLExpressionParser
+    public class HlExpressionParser
     {
         /// <summary>
         ///     Operator Collection
         /// </summary>
-        private readonly HLExpressionOperatorCollection m_OpCollection;
+        private readonly HlExpressionOperatorCollection m_OpCollection;
 
         /// <summary>
         ///     Token Reader
         /// </summary>
-        public HLExpressionReader Reader { get; }
+        public HlExpressionReader Reader { get; }
 
         /// <summary>
         ///     Value Creator
         /// </summary>
-        public HLExpressionValueCreator ValueCreator { get; }
+        public HlExpressionValueCreator ValueCreator { get; }
 
         /// <summary>
         ///     The Current Token
@@ -45,12 +45,12 @@ namespace VisCPU.HL.Parser
         /// <param name="reader">Token Reader</param>
         /// <param name="valueCreator">XLExpression Value Creator</param>
         /// <param name="operators">Operator Collection</param>
-        public HLExpressionParser(
-            HLExpressionReader reader,
-            HLExpressionValueCreator valueCreator,
-            HLExpressionOperator[] operators )
+        public HlExpressionParser(
+            HlExpressionReader reader,
+            HlExpressionValueCreator valueCreator,
+            HlExpressionOperator[] operators )
         {
-            m_OpCollection = new HLExpressionOperatorCollection( operators );
+            m_OpCollection = new HlExpressionOperatorCollection( operators );
             ValueCreator = valueCreator;
             Reader = reader;
             CurrentToken = reader.GetNext();
@@ -62,9 +62,9 @@ namespace VisCPU.HL.Parser
         /// <param name="context">XL Context</param>
         /// <param name="reader">Expression Reader</param>
         /// <returns></returns>
-        public static HLExpressionParser Create( HLExpressionReader reader )
+        public static HlExpressionParser Create( HlExpressionReader reader )
         {
-            HLExpressionOperator[] operators =
+            HlExpressionOperator[] operators =
             {
                 new ArraySubscriptOperator(),
                 new AssignmentOperators(),
@@ -86,9 +86,9 @@ namespace VisCPU.HL.Parser
                 new AssignmentByOperators()
             };
 
-            HLExpressionValueCreator valueCreator = new HLExpressionValueCreator();
+            HlExpressionValueCreator valueCreator = new HlExpressionValueCreator();
 
-            return new HLExpressionParser( reader, valueCreator, operators );
+            return new HlExpressionParser( reader, valueCreator, operators );
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace VisCPU.HL.Parser
         ///     Throws an Error if a different token was found
         /// </summary>
         /// <param name="type">Expected Token Type</param>
-        public void Eat( HLTokenType type )
+        public void Eat( HlTokenType type )
         {
             if ( CurrentToken.Type == type )
             {
@@ -105,7 +105,7 @@ namespace VisCPU.HL.Parser
             else
             {
                 EventManager < ErrorEvent >.SendEvent(
-                    new HLTokenReadEvent(
+                    new HlTokenReadEvent(
                         Reader.Tokens,
                         type,
                         CurrentToken.Type,
@@ -119,23 +119,23 @@ namespace VisCPU.HL.Parser
         ///     Parses the Expressions inside the Token Reader Stream
         /// </summary>
         /// <returns></returns>
-        public HLExpression[] Parse()
+        public HlExpression[] Parse()
         {
-            if ( CurrentToken.Type == HLTokenType.Eof )
+            if ( CurrentToken.Type == HlTokenType.Eof )
             {
-                return new HLExpression[0];
+                return new HlExpression[0];
             }
 
-            List < HLExpression > ret = new List < HLExpression > { ParseExpr( m_OpCollection.Highest ) };
+            List < HlExpression > ret = new List < HlExpression > { ParseExpr( m_OpCollection.Highest ) };
 
-            while ( CurrentToken.Type != HLTokenType.Eof )
+            while ( CurrentToken.Type != HlTokenType.Eof )
             {
-                if ( CurrentToken.Type == HLTokenType.OpSemicolon || CurrentToken.Type == HLTokenType.OpBlockToken )
+                if ( CurrentToken.Type == HlTokenType.OpSemicolon || CurrentToken.Type == HlTokenType.OpBlockToken )
                 {
                     Eat( CurrentToken.Type );
                 }
 
-                if ( CurrentToken.Type == HLTokenType.Eof )
+                if ( CurrentToken.Type == HlTokenType.Eof )
                 {
                     break;
                 }
@@ -146,7 +146,7 @@ namespace VisCPU.HL.Parser
             return ret.ToArray();
         }
 
-        public HLExpression ParseExpr()
+        public HlExpression ParseExpr()
         {
             return ParseExpr( -1 );
         }
@@ -156,18 +156,18 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="stopAt">Operator Precedence</param>
         /// <returns>Expression at the Specified Index</returns>
-        public HLExpression ParseExpr( int stopAt )
+        public HlExpression ParseExpr( int stopAt )
         {
             if ( stopAt == -1 )
             {
                 stopAt = m_OpCollection.Highest;
             }
 
-            HLExpression node = ValueCreator.CreateValue( this );
+            HlExpression node = ValueCreator.CreateValue( this );
 
-            if ( CurrentToken.Type == HLTokenType.OpSemicolon )
+            if ( CurrentToken.Type == HlTokenType.OpSemicolon )
             {
-                Eat( HLTokenType.OpSemicolon );
+                Eat( HlTokenType.OpSemicolon );
 
                 return node;
             }
@@ -181,8 +181,8 @@ namespace VisCPU.HL.Parser
                     continue;
                 }
 
-                List < HLExpressionOperator > ops = m_OpCollection.GetLevel( i );
-                HLExpressionOperator current = ops.FirstOrDefault( x => x.CanCreate( this, node ) );
+                List < HlExpressionOperator > ops = m_OpCollection.GetLevel( i );
+                HlExpressionOperator current = ops.FirstOrDefault( x => x.CanCreate( this, node ) );
 
                 if ( current != null )
                 {

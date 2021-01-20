@@ -27,7 +27,7 @@ namespace VisCPU.ProjectSystem.Resolvers
                 }
                 else if ( u.Scheme == "dev" )
                 {
-                    s_Managers[name] = new TCPProjectDatabase( u.OriginalString );
+                    s_Managers[name] = new TcpProjectDatabase( u.OriginalString );
                 }
                 else
                 {

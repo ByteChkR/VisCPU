@@ -13,7 +13,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
         #region Public
 
-        public ExpressionTarget Compile( HLCompilation compilation, HLInvocationOp expr )
+        public ExpressionTarget Compile( HlCompilation compilation, HlInvocationOp expr )
         {
             if ( expr.ParameterList.Length != 2 )
             {
@@ -24,7 +24,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                 );
             }
 
-            HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
+            HlTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
             uint off = type.GetOffset( expr.ParameterList[1].ToString() );
             string v = compilation.GetTempVar( off );
 

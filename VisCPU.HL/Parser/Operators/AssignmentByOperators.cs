@@ -11,7 +11,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Assignment by Sum and Difference
     /// </summary>
-    public class AssignmentByOperators : HLExpressionOperator
+    public class AssignmentByOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -26,23 +26,23 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return ( parser.CurrentToken.Type == HLTokenType.OpPlus ||
-                     parser.CurrentToken.Type == HLTokenType.OpMinus ||
-                     parser.CurrentToken.Type == HLTokenType.OpAsterisk ||
-                     parser.CurrentToken.Type == HLTokenType.OpFwdSlash ||
-                     parser.CurrentToken.Type == HLTokenType.OpPercent ||
-                     parser.CurrentToken.Type == HLTokenType.OpAnd ||
-                     parser.CurrentToken.Type == HLTokenType.OpPipe ||
-                     parser.CurrentToken.Type == HLTokenType.OpCap ) &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpEquality ||
-                   parser.CurrentToken.Type == HLTokenType.OpLessThan &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpLessThan &&
-                   parser.Reader.PeekNext( 2 ).Type == HLTokenType.OpLessThan ||
-                   parser.CurrentToken.Type == HLTokenType.OpGreaterThan &&
-                   parser.Reader.PeekNext().Type == HLTokenType.OpGreaterThan &&
-                   parser.Reader.PeekNext( 2 ).Type == HLTokenType.OpLessThan;
+            return ( parser.CurrentToken.Type == HlTokenType.OpPlus ||
+                     parser.CurrentToken.Type == HlTokenType.OpMinus ||
+                     parser.CurrentToken.Type == HlTokenType.OpAsterisk ||
+                     parser.CurrentToken.Type == HlTokenType.OpFwdSlash ||
+                     parser.CurrentToken.Type == HlTokenType.OpPercent ||
+                     parser.CurrentToken.Type == HlTokenType.OpAnd ||
+                     parser.CurrentToken.Type == HlTokenType.OpPipe ||
+                     parser.CurrentToken.Type == HlTokenType.OpCap ) &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpEquality ||
+                   parser.CurrentToken.Type == HlTokenType.OpLessThan &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpLessThan &&
+                   parser.Reader.PeekNext( 2 ).Type == HlTokenType.OpLessThan ||
+                   parser.CurrentToken.Type == HlTokenType.OpGreaterThan &&
+                   parser.Reader.PeekNext().Type == HlTokenType.OpGreaterThan &&
+                   parser.Reader.PeekNext( 2 ).Type == HlTokenType.OpLessThan;
         }
 
         /// <summary>
@@ -51,83 +51,83 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
             IHlToken token = parser.CurrentToken;
 
-            HLTokenType tt;
+            HlTokenType tt;
 
             switch ( parser.CurrentToken.Type )
             {
-                case HLTokenType.OpPlus:
-                    tt = HLTokenType.OpSumAssign;
+                case HlTokenType.OpPlus:
+                    tt = HlTokenType.OpSumAssign;
 
                     break;
 
-                case HLTokenType.OpMinus:
-                    tt = HLTokenType.OpDifAssign;
+                case HlTokenType.OpMinus:
+                    tt = HlTokenType.OpDifAssign;
 
                     break;
 
-                case HLTokenType.OpAsterisk:
-                    tt = HLTokenType.OpProdAssign;
+                case HlTokenType.OpAsterisk:
+                    tt = HlTokenType.OpProdAssign;
 
                     break;
 
-                case HLTokenType.OpFwdSlash:
-                    tt = HLTokenType.OpQuotAssign;
+                case HlTokenType.OpFwdSlash:
+                    tt = HlTokenType.OpQuotAssign;
 
                     break;
 
-                case HLTokenType.OpPercent:
-                    tt = HLTokenType.OpRemAssign;
+                case HlTokenType.OpPercent:
+                    tt = HlTokenType.OpRemAssign;
 
                     break;
 
-                case HLTokenType.OpPipe:
-                    tt = HLTokenType.OpOrAssign;
+                case HlTokenType.OpPipe:
+                    tt = HlTokenType.OpOrAssign;
 
                     break;
 
-                case HLTokenType.OpAnd:
-                    tt = HLTokenType.OpAndAssign;
+                case HlTokenType.OpAnd:
+                    tt = HlTokenType.OpAndAssign;
 
                     break;
 
-                case HLTokenType.OpCap:
-                    tt = HLTokenType.OpXOrAssign;
+                case HlTokenType.OpCap:
+                    tt = HlTokenType.OpXOrAssign;
 
                     break;
 
-                case HLTokenType.OpGreaterThan:
-                    tt = HLTokenType.OpShiftRightAssign;
+                case HlTokenType.OpGreaterThan:
+                    tt = HlTokenType.OpShiftRightAssign;
                     parser.Eat( token.Type );
 
                     break;
 
-                case HLTokenType.OpLessThan:
-                    tt = HLTokenType.OpShiftLeftAssign;
+                case HlTokenType.OpLessThan:
+                    tt = HlTokenType.OpShiftLeftAssign;
                     parser.Eat( token.Type );
 
                     break;
 
                 default:
                     EventManager < ErrorEvent >.SendEvent(
-                        new HLTokenReadEvent(
-                            HLTokenType.Any,
+                        new HlTokenReadEvent(
+                            HlTokenType.Any,
                             parser.CurrentToken.Type
                         )
                     );
 
-                    tt = HLTokenType.Unknown;
+                    tt = HlTokenType.Unknown;
 
                     break;
             }
 
             parser.Eat( token.Type );
-            parser.Eat( HLTokenType.OpEquality );
+            parser.Eat( HlTokenType.OpEquality );
 
-            return new HLBinaryOp( currentNode, tt, parser.ParseExpr( PrecedenceLevel ) );
+            return new HlBinaryOp( currentNode, tt, parser.ParseExpr( PrecedenceLevel ) );
         }
 
         #endregion

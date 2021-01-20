@@ -12,7 +12,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     XLang Expression Reader Implementation
     /// </summary>
-    public class HLExpressionReader
+    public class HlExpressionReader
     {
         /// <summary>
         ///     The Current Position inside the token Stream
@@ -30,7 +30,7 @@ namespace VisCPU.HL.Parser
         ///     Public Constructor
         /// </summary>
         /// <param name="tokens">Token Stream</param>
-        public HLExpressionReader( List < IHlToken > tokens )
+        public HlExpressionReader( List < IHlToken > tokens )
         {
             Tokens = tokens.ToList();
         }
@@ -41,7 +41,7 @@ namespace VisCPU.HL.Parser
         /// <returns></returns>
         public IHlToken GetNext()
         {
-            HLParsingTools.ReadAnyOrNone( Tokens, m_CurrentIdx, out IHlToken result );
+            HlParsingTools.ReadAnyOrNone( Tokens, m_CurrentIdx, out IHlToken result );
             m_CurrentIdx++;
 
             return result;
@@ -54,7 +54,7 @@ namespace VisCPU.HL.Parser
         /// <returns>Token at the specified Position</returns>
         public IHlToken PeekNext( int advance )
         {
-            HLParsingTools.ReadAnyOrNone( Tokens, m_CurrentIdx + advance - 1, out IHlToken result );
+            HlParsingTools.ReadAnyOrNone( Tokens, m_CurrentIdx + advance - 1, out IHlToken result );
 
             return result;
         }

@@ -15,7 +15,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     Implements AXLangExpressionValueCreator
     /// </summary>
-    public class HLExpressionValueCreator
+    public class HlExpressionValueCreator
     {
         #region Public
 
@@ -24,100 +24,100 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed Expression</returns>
-        public HLExpression CreateValue( HLExpressionParser parser )
+        public HlExpression CreateValue( HlExpressionParser parser )
         {
-            if ( parser.CurrentToken.Type == HLTokenType.OpBang || parser.CurrentToken.Type == HLTokenType.OpTilde )
+            if ( parser.CurrentToken.Type == HlTokenType.OpBang || parser.CurrentToken.Type == HlTokenType.OpTilde )
             {
-                HLTokenType t = parser.CurrentToken.Type;
+                HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HLExpression token = new HLUnaryOp( CreateValue( parser ), t );
+                HlExpression token = new HlUnaryOp( CreateValue( parser ), t );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpAnd )
+            if ( parser.CurrentToken.Type == HlTokenType.OpAnd )
             {
-                HLTokenType t = parser.CurrentToken.Type;
+                HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HLExpression token = new HLUnaryOp( CreateValue( parser ), HLTokenType.OpReference );
+                HlExpression token = new HlUnaryOp( CreateValue( parser ), HlTokenType.OpReference );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpAsterisk )
+            if ( parser.CurrentToken.Type == HlTokenType.OpAsterisk )
             {
-                HLTokenType t = parser.CurrentToken.Type;
+                HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HLExpression token = new HLUnaryOp( CreateValue( parser ), HLTokenType.OpDeReference );
+                HlExpression token = new HlUnaryOp( CreateValue( parser ), HlTokenType.OpDeReference );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpNew )
+            if ( parser.CurrentToken.Type == HlTokenType.OpNew )
             {
                 parser.Eat( parser.CurrentToken.Type );
-                HLExpression token = new HLUnaryOp( parser.ParseExpr(), HLTokenType.OpNew );
+                HlExpression token = new HlUnaryOp( parser.ParseExpr(), HlTokenType.OpNew );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpReturn )
+            if ( parser.CurrentToken.Type == HlTokenType.OpReturn )
             {
                 IHlToken rt = parser.CurrentToken;
-                parser.Eat( HLTokenType.OpReturn );
+                parser.Eat( HlTokenType.OpReturn );
 
-                if ( parser.CurrentToken.Type == HLTokenType.OpSemicolon )
+                if ( parser.CurrentToken.Type == HlTokenType.OpSemicolon )
                 {
-                    return new HLReturnOp( null, rt.SourceIndex );
+                    return new HlReturnOp( null, rt.SourceIndex );
                 }
 
-                return new HLReturnOp( parser.ParseExpr(), rt.SourceIndex );
+                return new HlReturnOp( parser.ParseExpr(), rt.SourceIndex );
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpContinue )
+            if ( parser.CurrentToken.Type == HlTokenType.OpContinue )
             {
                 IHlToken ct = parser.CurrentToken;
-                parser.Eat( HLTokenType.OpContinue );
+                parser.Eat( HlTokenType.OpContinue );
 
-                return new HLContinueOp( ct.SourceIndex );
+                return new HlContinueOp( ct.SourceIndex );
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpBreak )
+            if ( parser.CurrentToken.Type == HlTokenType.OpBreak )
             {
                 IHlToken bt = parser.CurrentToken;
-                parser.Eat( HLTokenType.OpBreak );
+                parser.Eat( HlTokenType.OpBreak );
 
-                return new HLBreakOp( bt.SourceIndex );
+                return new HlBreakOp( bt.SourceIndex );
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpIf )
+            if ( parser.CurrentToken.Type == HlTokenType.OpIf )
             {
-                return HLSpecialOps.ReadIf( parser );
+                return HlSpecialOps.ReadIf( parser );
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpFor )
+            if ( parser.CurrentToken.Type == HlTokenType.OpFor )
             {
-                return HLSpecialOps.ReadFor( parser );
+                return HlSpecialOps.ReadFor( parser );
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpWhile )
+            if ( parser.CurrentToken.Type == HlTokenType.OpWhile )
             {
-                return HLSpecialOps.ReadWhile( parser );
+                return HlSpecialOps.ReadWhile( parser );
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpBracketOpen )
+            if ( parser.CurrentToken.Type == HlTokenType.OpBracketOpen )
             {
-                parser.Eat( HLTokenType.OpBracketOpen );
-                HLExpression token = parser.ParseExpr();
-                parser.Eat( HLTokenType.OpBracketClose );
+                parser.Eat( HlTokenType.OpBracketOpen );
+                HlExpression token = parser.ParseExpr();
+                parser.Eat( HlTokenType.OpBracketClose );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpThis ||
-                 parser.CurrentToken.Type == HLTokenType.OpBase )
+            if ( parser.CurrentToken.Type == HlTokenType.OpThis ||
+                 parser.CurrentToken.Type == HlTokenType.OpBase )
             {
-                HLExpression token = new HLVarOperand(
+                HlExpression token = new HlVarOperand(
                     parser.CurrentToken,
                     parser.CurrentToken.SourceIndex
                 );
@@ -127,66 +127,66 @@ namespace VisCPU.HL.Parser
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpWord )
+            if ( parser.CurrentToken.Type == HlTokenType.OpWord )
             {
                 IHlToken item = parser.CurrentToken;
                 parser.Eat( parser.CurrentToken.Type );
 
-                HLExpression token = new HLVarOperand( item, item.SourceIndex );
+                HlExpression token = new HlVarOperand( item, item.SourceIndex );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpVariableDefinition )
+            if ( parser.CurrentToken.Type == HlTokenType.OpVariableDefinition )
             {
                 VariableDefinitionToken vd = ( VariableDefinitionToken ) parser.CurrentToken;
-                HLVarDefOperand token;
+                HlVarDefOperand token;
 
                 if ( vd.InitializerExpression != null && vd.InitializerExpression.Length != 0 )
                 {
-                    HLExpressionParser p =
-                        HLExpressionParser.Create( new HLExpressionReader( vd.InitializerExpression.ToList() ) );
+                    HlExpressionParser p =
+                        HlExpressionParser.Create( new HlExpressionReader( vd.InitializerExpression.ToList() ) );
 
                     token =
-                        new HLVarDefOperand( vd, p.Parse() );
+                        new HlVarDefOperand( vd, p.Parse() );
                 }
                 else
                 {
                     token =
-                        new HLVarDefOperand( vd, new HLExpression[0] );
+                        new HlVarDefOperand( vd, new HlExpression[0] );
                 }
 
-                parser.Eat( HLTokenType.OpVariableDefinition );
+                parser.Eat( HlTokenType.OpVariableDefinition );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpFunctionDefinition )
+            if ( parser.CurrentToken.Type == HlTokenType.OpFunctionDefinition )
             {
                 FunctionDefinitionToken fToken = ( FunctionDefinitionToken ) parser.CurrentToken;
-                parser.Eat( HLTokenType.OpFunctionDefinition );
+                parser.Eat( HlTokenType.OpFunctionDefinition );
 
-                HLExpression token =
-                    new HLFuncDefOperand(
+                HlExpression token =
+                    new HlFuncDefOperand(
                         fToken,
-                        HLExpressionParser.Create( new HLExpressionReader( fToken.Block.ToList() ) ).
+                        HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
                                            Parse()
                     );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HLTokenType.OpNumber ||
-                 parser.CurrentToken.Type == HLTokenType.OpStringLiteral ||
-                 parser.CurrentToken.Type == HLTokenType.OpCharLiteral )
+            if ( parser.CurrentToken.Type == HlTokenType.OpNumber ||
+                 parser.CurrentToken.Type == HlTokenType.OpStringLiteral ||
+                 parser.CurrentToken.Type == HlTokenType.OpCharLiteral )
             {
-                HLExpression token = new HLValueOperand( parser.CurrentToken );
+                HlExpression token = new HlValueOperand( parser.CurrentToken );
                 parser.Eat( parser.CurrentToken.Type );
 
                 return token;
             }
 
-            EventManager < ErrorEvent >.SendEvent( new HLTokenReadEvent( HLTokenType.Any, parser.CurrentToken.Type ) );
+            EventManager < ErrorEvent >.SendEvent( new HlTokenReadEvent( HlTokenType.Any, parser.CurrentToken.Type ) );
 
             return null;
         }

@@ -109,7 +109,7 @@ namespace VisCPU.Compiler.Implementations
                 result.HiddenLabelItems[k] =
                     SelectHidden( linkerTarget.FileCompilation.Labels.ToArray() ).
                         ApplyOffset(
-                            ( uint ) result.LinkedBinary.Count * CPUSettings.InstructionSize
+                            ( uint ) result.LinkedBinary.Count * CpuSettings.InstructionSize
                         ).
                         ToDictionary( x => x.Key, x => x.Value );
 
@@ -121,7 +121,7 @@ namespace VisCPU.Compiler.Implementations
                     result.Labels,
                     linkerTarget.FileCompilation.Labels.ApplyOffset(
                         ( uint ) result.LinkedBinary.Count *
-                        CPUSettings.InstructionSize
+                        CpuSettings.InstructionSize
                     ),
                     enableHide
                 );

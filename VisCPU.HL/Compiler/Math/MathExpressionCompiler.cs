@@ -4,7 +4,7 @@ using VisCPU.Utility.Settings;
 namespace VisCPU.HL.Compiler.Math
 {
 
-    public abstract class MathExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
+    public abstract class MathExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
         protected abstract string InstructionKey { get; }
 
@@ -13,14 +13,14 @@ namespace VisCPU.HL.Compiler.Math
         #region Public
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLBinaryOp expr,
+            HlCompilation compilation,
+            HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
             ExpressionTarget rTarget = compilation.Parse( expr.Right );
 
-            if ( SettingsManager.GetSettings < HLCompilerSettings >().OptimizeConstExpressions &&
+            if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
                  !target.IsAddress &&
                  !rTarget.IsAddress )
             {
@@ -70,7 +70,7 @@ namespace VisCPU.HL.Compiler.Math
         #region Protected
 
         protected abstract ExpressionTarget ComputeStatic(
-            HLCompilation compilation,
+            HlCompilation compilation,
             ExpressionTarget left,
             ExpressionTarget right );
 

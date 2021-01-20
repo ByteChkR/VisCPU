@@ -15,7 +15,7 @@ namespace VisCPU.Instructions.Math
 
         #region Public
 
-        public override void Process( CPU cpu )
+        public override void Process( Cpu cpu )
         {
             uint addressA = cpu.DecodeArgument( 0 );      //Number A Address
             uint addressB = cpu.DecodeArgument( 1 );      //Number B Address

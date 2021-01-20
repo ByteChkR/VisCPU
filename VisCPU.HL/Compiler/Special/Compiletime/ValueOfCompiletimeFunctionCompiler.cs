@@ -11,7 +11,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
         #region Public
 
-        public ExpressionTarget Compile( HLCompilation compilation, HLInvocationOp expr )
+        public ExpressionTarget Compile( HlCompilation compilation, HlInvocationOp expr )
         {
             ExpressionTarget t = compilation.Parse( expr.ParameterList.First() );
 

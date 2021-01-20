@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Member Selector Operator
     /// </summary>
-    public class MemberSelectorOperator : HLExpressionOperator
+    public class MemberSelectorOperator : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,9 +22,9 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpDot;
+            return parser.CurrentToken.Type == HlTokenType.OpDot;
         }
 
         /// <summary>
@@ -33,11 +33,11 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            parser.Eat( HLTokenType.OpDot );
+            parser.Eat( HlTokenType.OpDot );
 
-            return new HLMemberAccessOp( currentNode, parser.ParseExpr( PrecedenceLevel ) );
+            return new HlMemberAccessOp( currentNode, parser.ParseExpr( PrecedenceLevel ) );
         }
 
         #endregion

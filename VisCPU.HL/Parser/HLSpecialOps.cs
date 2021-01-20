@@ -10,7 +10,7 @@ namespace VisCPU.HL.Parser
     /// <summary>
     ///     Implements Special Expressions that do require some custom parsing steps
     /// </summary>
-    public static class HLSpecialOps
+    public static class HlSpecialOps
     {
         #region Public
 
@@ -19,31 +19,31 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed Expression</returns>
-        public static HLExpression ReadFor( HLExpressionParser parser )
+        public static HlExpression ReadFor( HlExpressionParser parser )
         {
             IHlToken ft = parser.CurrentToken;
-            parser.Eat( HLTokenType.OpFor );
-            parser.Eat( HLTokenType.OpBracketOpen );
-            HLExpression vDecl = parser.ParseExpr();
-            HLExpression condition = parser.ParseExpr();
-            HLExpression vInc = parser.ParseExpr();
-            parser.Eat( HLTokenType.OpBracketClose );
+            parser.Eat( HlTokenType.OpFor );
+            parser.Eat( HlTokenType.OpBracketOpen );
+            HlExpression vDecl = parser.ParseExpr();
+            HlExpression condition = parser.ParseExpr();
+            HlExpression vInc = parser.ParseExpr();
+            parser.Eat( HlTokenType.OpBracketClose );
 
-            HLExpression token = null;
-            List < HLExpression > block;
+            HlExpression token = null;
+            List < HlExpression > block;
 
-            if ( parser.CurrentToken.Type != HLTokenType.OpBlockToken )
+            if ( parser.CurrentToken.Type != HlTokenType.OpBlockToken )
             {
-                block = new List < HLExpression > { parser.ParseExpr() };
+                block = new List < HlExpression > { parser.ParseExpr() };
             }
             else
             {
-                block = HLExpressionParser.Create( new HLExpressionReader( parser.CurrentToken.GetChildren() ) ).
+                block = HlExpressionParser.Create( new HlExpressionReader( parser.CurrentToken.GetChildren() ) ).
                                            Parse().
                                            ToList();
             }
 
-            token = new HLForOp( vDecl, condition, vInc, block.ToArray(), ft.SourceIndex );
+            token = new HlForOp( vDecl, condition, vInc, block.ToArray(), ft.SourceIndex );
 
             return token;
         }
@@ -53,33 +53,33 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed If Expression</returns>
-        public static HLExpression ReadIf( HLExpressionParser parser )
+        public static HlExpression ReadIf( HlExpressionParser parser )
         {
-            List < (HLExpression, HLExpression[]) > conditions =
-                new List < (HLExpression, HLExpression[]) >();
+            List < (HlExpression, HlExpression[]) > conditions =
+                new List < (HlExpression, HlExpression[]) >();
 
-            HLExpression[] elseBranch = null;
+            HlExpression[] elseBranch = null;
             IHlToken it = parser.CurrentToken;
             conditions.Add( ReadIfStatement( parser ) );
 
-            while ( parser.CurrentToken.Type == HLTokenType.OpElse )
+            while ( parser.CurrentToken.Type == HlTokenType.OpElse )
             {
-                parser.Eat( HLTokenType.OpElse );
+                parser.Eat( HlTokenType.OpElse );
 
-                if ( parser.CurrentToken.Type == HLTokenType.OpIf )
+                if ( parser.CurrentToken.Type == HlTokenType.OpIf )
                 {
                     conditions.Add( ReadIfStatement( parser ) );
                 }
                 else
                 {
-                    List < HLExpression > content = ReadIfBlockContent( parser );
+                    List < HlExpression > content = ReadIfBlockContent( parser );
                     elseBranch = content.ToArray();
 
                     break;
                 }
             }
 
-            return new HLIfOp( conditions, elseBranch, it.SourceIndex );
+            return new HlIfOp( conditions, elseBranch, it.SourceIndex );
         }
 
         /// <summary>
@@ -87,29 +87,29 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed Expression</returns>
-        public static HLExpression ReadWhile( HLExpressionParser parser )
+        public static HlExpression ReadWhile( HlExpressionParser parser )
         {
             IHlToken wT = parser.CurrentToken;
-            parser.Eat( HLTokenType.OpWhile );
-            parser.Eat( HLTokenType.OpBracketOpen );
-            HLExpression condition = parser.ParseExpr();
-            parser.Eat( HLTokenType.OpBracketClose );
+            parser.Eat( HlTokenType.OpWhile );
+            parser.Eat( HlTokenType.OpBracketOpen );
+            HlExpression condition = parser.ParseExpr();
+            parser.Eat( HlTokenType.OpBracketClose );
 
-            HLExpression token = null;
-            List < HLExpression > block;
+            HlExpression token = null;
+            List < HlExpression > block;
 
-            if ( parser.CurrentToken.Type != HLTokenType.OpBlockToken )
+            if ( parser.CurrentToken.Type != HlTokenType.OpBlockToken )
             {
-                block = new List < HLExpression > { parser.ParseExpr() };
+                block = new List < HlExpression > { parser.ParseExpr() };
             }
             else
             {
-                block = HLExpressionParser.Create( new HLExpressionReader( parser.CurrentToken.GetChildren() ) ).
+                block = HlExpressionParser.Create( new HlExpressionReader( parser.CurrentToken.GetChildren() ) ).
                                            Parse().
                                            ToList();
             }
 
-            token = new HLWhileOp( condition, block.ToArray(), wT.SourceIndex );
+            token = new HlWhileOp( condition, block.ToArray(), wT.SourceIndex );
 
             return token;
         }
@@ -123,20 +123,20 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed Expression Block</returns>
-        private static List < HLExpression > ReadIfBlockContent( HLExpressionParser parser )
+        private static List < HlExpression > ReadIfBlockContent( HlExpressionParser parser )
         {
-            if ( parser.CurrentToken.Type != HLTokenType.OpBlockToken )
+            if ( parser.CurrentToken.Type != HlTokenType.OpBlockToken )
             {
-                HLExpression expr = parser.ParseExpr();
-                parser.Eat( HLTokenType.OpSemicolon );
+                HlExpression expr = parser.ParseExpr();
+                parser.Eat( HlTokenType.OpSemicolon );
 
-                return new List < HLExpression > { expr };
+                return new List < HlExpression > { expr };
             }
 
             IHlToken token = parser.CurrentToken;
-            parser.Eat( HLTokenType.OpBlockToken );
+            parser.Eat( HlTokenType.OpBlockToken );
 
-            return HLExpressionParser.Create( new HLExpressionReader( token.GetChildren() ) ).Parse().ToList();
+            return HlExpressionParser.Create( new HlExpressionReader( token.GetChildren() ) ).Parse().ToList();
         }
 
         /// <summary>
@@ -144,14 +144,14 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed Condition Expression and Expression Block</returns>
-        private static (HLExpression, HLExpression[]) ReadIfStatement( HLExpressionParser parser )
+        private static (HlExpression, HlExpression[]) ReadIfStatement( HlExpressionParser parser )
         {
-            parser.Eat( HLTokenType.OpIf );
-            parser.Eat( HLTokenType.OpBracketOpen );
-            HLExpression condition = parser.ParseExpr();
-            parser.Eat( HLTokenType.OpBracketClose );
+            parser.Eat( HlTokenType.OpIf );
+            parser.Eat( HlTokenType.OpBracketOpen );
+            HlExpression condition = parser.ParseExpr();
+            parser.Eat( HlTokenType.OpBracketClose );
 
-            List < HLExpression > content = ReadIfBlockContent( parser );
+            List < HlExpression > content = ReadIfBlockContent( parser );
 
             return ( condition, content.ToArray() );
         }

@@ -15,7 +15,7 @@ namespace VisCPU.Instructions.Branch
 
         #region Public
 
-        public override void Process( CPU cpu )
+        public override void Process( Cpu cpu )
         {
             cpu.PopState();
         }

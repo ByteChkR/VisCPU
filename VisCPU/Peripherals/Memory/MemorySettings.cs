@@ -43,7 +43,7 @@ namespace VisCPU.Peripherals.Memory
             SettingsCategory memoryCategory = Peripheral.s_PeripheralCategory.AddCategory( "memory" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 memoryCategory,
                 "default.json",
                 new MemorySettings()

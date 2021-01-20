@@ -34,11 +34,11 @@ namespace VisCPU.Peripherals.Benchmarking
             #endregion
         }
 
-        private const uint DEVICE_PRESENT = 0xFFFF4000;
-        private const uint RUN_BEGIN = 0xFFFF4001;
-        private const uint RUN_END = 0xFFFF4002;
-        private const uint RUN_CLEAR_NAME = 0xFFFF4003;
-        private const uint RUN_SET_NAME = 0xFFFF4004;
+        private const uint DevicePresent = 0xFFFF4000;
+        private const uint RunBegin = 0xFFFF4001;
+        private const uint RunEnd = 0xFFFF4002;
+        private const uint RunClearName = 0xFFFF4003;
+        private const uint RunSetName = 0xFFFF4004;
 
         private readonly StringBuilder m_BenchmarkName = new StringBuilder();
         private readonly Stopwatch m_StopWatch = new Stopwatch();
@@ -47,17 +47,17 @@ namespace VisCPU.Peripherals.Benchmarking
 
         public override bool CanRead( uint address )
         {
-            return address == DEVICE_PRESENT;
+            return address == DevicePresent;
         }
 
         public override bool CanWrite( uint address )
         {
-            return address == RUN_SET_NAME || address == RUN_CLEAR_NAME || address == RUN_END || address == RUN_BEGIN;
+            return address == RunSetName || address == RunClearName || address == RunEnd || address == RunBegin;
         }
 
         public override uint ReadData( uint address )
         {
-            if ( address == DEVICE_PRESENT )
+            if ( address == DevicePresent )
             {
                 return 1;
             }
@@ -67,19 +67,19 @@ namespace VisCPU.Peripherals.Benchmarking
 
         public override void WriteData( uint address, uint data )
         {
-            if ( address == RUN_SET_NAME )
+            if ( address == RunSetName )
             {
                 m_BenchmarkName.Append( ( char ) data );
             }
-            else if ( address == RUN_END )
+            else if ( address == RunEnd )
             {
                 StopTimer();
             }
-            else if ( address == RUN_BEGIN )
+            else if ( address == RunBegin )
             {
                 BeginTimer();
             }
-            else if ( address == RUN_CLEAR_NAME )
+            else if ( address == RunClearName )
             {
                 m_BenchmarkName.Clear();
             }

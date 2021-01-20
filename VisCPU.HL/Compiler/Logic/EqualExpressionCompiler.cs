@@ -3,11 +3,11 @@
 namespace VisCPU.HL.Compiler.Logic
 {
 
-    public class EqualExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
+    public class EqualExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLBinaryOp expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlBinaryOp expr )
         {
             ExpressionTarget target = compilation.Parse( expr.Left ).MakeAddress( compilation );
 

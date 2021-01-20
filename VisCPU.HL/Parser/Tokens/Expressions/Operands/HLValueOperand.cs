@@ -6,7 +6,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
     /// <summary>
     ///     Implements a (terminal) value expression
     /// </summary>
-    public class HLValueOperand : HLExpression
+    public class HlValueOperand : HlExpression
     {
         /// <summary>
         ///     The Value
@@ -20,7 +20,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         /// </summary>
         /// <param name="context">The XL Context</param>
         /// <param name="value">The Value of this Token</param>
-        public HLValueOperand( IHlToken value ) : base( value.SourceIndex )
+        public HlValueOperand( IHlToken value ) : base( value.SourceIndex )
         {
             Value = value;
         }

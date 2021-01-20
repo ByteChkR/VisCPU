@@ -1,11 +1,11 @@
 ﻿namespace VisCPU.HL.TypeSystem
 {
 
-    public class StringTypeDefinition : HLTypeDefinition
+    public class StringTypeDefinition : HlTypeDefinition
     {
         #region Public
 
-        public StringTypeDefinition() : base( HLCompilation.STRING_TYPE )
+        public StringTypeDefinition() : base( HlCompilation.StringType )
         {
         }
 

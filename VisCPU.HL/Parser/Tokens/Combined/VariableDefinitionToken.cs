@@ -45,7 +45,7 @@
             IHlToken[] subtokens,
             IHlToken[] initializerExpression,
             IHlToken size = null ) : base(
-            HLTokenType.OpVariableDefinition,
+            HlTokenType.OpVariableDefinition,
             subtokens,
             typeName.SourceIndex
         )

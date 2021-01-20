@@ -7,24 +7,24 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     If/Else Operator Implementation
     /// </summary>
-    public class HLIfOp : HLExpression
+    public class HlIfOp : HlExpression
     {
         /// <summary>
         ///     Condition Map
         /// </summary>
-        public List < (HLExpression, HLExpression[]) > ConditionMap { get; }
+        public List < (HlExpression, HlExpression[]) > ConditionMap { get; }
 
         /// <summary>
         ///     Else Branch Block
         /// </summary>
-        public HLExpression[] ElseBranch { get; }
+        public HlExpression[] ElseBranch { get; }
 
         /// <summary>
         ///     Operation Type
         /// </summary>
-        public HLTokenType OperationType { get; } = HLTokenType.OpIf;
+        public HlTokenType OperationType { get; } = HlTokenType.OpIf;
 
-        public override HLTokenType Type => OperationType;
+        public override HlTokenType Type => OperationType;
 
         #region Public
 
@@ -35,9 +35,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="operationType">Operation Type</param>
         /// <param name="conditionMap">Condition Map</param>
         /// <param name="elseBranch">Else Branch Block</param>
-        public HLIfOp(
-            List < (HLExpression, HLExpression[]) > conditionMap,
-            HLExpression[] elseBranch,
+        public HlIfOp(
+            List < (HlExpression, HlExpression[]) > conditionMap,
+            HlExpression[] elseBranch,
             int sourceIdx ) : base( sourceIdx )
         {
             ConditionMap = conditionMap;

@@ -36,7 +36,7 @@ namespace VisCPU.Peripherals.HostFS
             SettingsCategory hfsCategory = Peripheral.s_PeripheralCategory.AddCategory( "host-fs" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 hfsCategory,
                 "default.json",
                 new HostFileSystemSettings()

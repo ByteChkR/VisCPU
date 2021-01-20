@@ -27,7 +27,7 @@ namespace VisCPU.Compiler.Parser
             {
                 AToken current = reader.Advance();
 
-                if ( current is EOFToken )
+                if ( current is EofToken )
                 {
                     break;
                 }
@@ -78,7 +78,7 @@ namespace VisCPU.Compiler.Parser
         {
             if ( Current == '\0' )
             {
-                return new EOFToken( m_OriginalText, m_Position, 0 );
+                return new EofToken( m_OriginalText, m_Position, 0 );
             }
 
             ReadUntil( BeginningOfWord );

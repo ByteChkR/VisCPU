@@ -7,27 +7,27 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// <summary>
     ///     For Operator Implementation
     /// </summary>
-    public class HLForOp : HLExpression
+    public class HlForOp : HlExpression
     {
         /// <summary>
         ///     Variable Change Expression
         /// </summary>
-        public HLExpression VInc { get; }
+        public HlExpression VInc { get; }
 
         /// <summary>
         ///     Continue Condition
         /// </summary>
-        public HLExpression Condition { get; }
+        public HlExpression Condition { get; }
 
         /// <summary>
         ///     The Expression Body
         /// </summary>
-        public HLExpression[] ExprBody { get; }
+        public HlExpression[] ExprBody { get; }
 
         /// <summary>
         ///     Variable Declaration
         /// </summary>
-        public HLExpression VDecl { get; }
+        public HlExpression VDecl { get; }
 
         #region Public
 
@@ -40,11 +40,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="vInc">Variable Change Expression</param>
         /// <param name="operationType">Operation Type</param>
         /// <param name="exprBody">The Expression Body</param>
-        public HLForOp(
-            HLExpression vDecl,
-            HLExpression condition,
-            HLExpression vInc,
-            HLExpression[] exprBody,
+        public HlForOp(
+            HlExpression vDecl,
+            HlExpression condition,
+            HlExpression vInc,
+            HlExpression[] exprBody,
             int sourceIdx ) : base( sourceIdx )
         {
             Condition = condition;

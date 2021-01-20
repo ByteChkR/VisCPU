@@ -3,14 +3,14 @@
 namespace VisCPU.HL.Compiler.Memory
 {
 
-    public class DereferenceExpressionCompiler : HLExpressionCompiler < HLUnaryOp >
+    public class DereferenceExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
         protected override bool NeedsOutput => true;
 
         #region Public
 
         public static ExpressionTarget Emit(
-            HLCompilation compilation,
+            HlCompilation compilation,
             ExpressionTarget target,
             ExpressionTarget outputTarget )
         {
@@ -24,8 +24,8 @@ namespace VisCPU.HL.Compiler.Memory
         }
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLUnaryOp expr,
+            HlCompilation compilation,
+            HlUnaryOp expr,
             ExpressionTarget outputTarget )
         {
             return Emit( compilation, compilation.Parse( expr.Left ), outputTarget );

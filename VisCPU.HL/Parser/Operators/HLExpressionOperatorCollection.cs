@@ -8,7 +8,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     A Collection of Expression Operators
     /// </summary>
-    public class HLExpressionOperatorCollection
+    public class HlExpressionOperatorCollection
     {
         /// <summary>
         ///     Precedence Bucket
@@ -18,13 +18,13 @@ namespace VisCPU.HL.Parser.Operators
             /// <summary>
             ///     Operators in this Precedence Bucket
             /// </summary>
-            public readonly List < HLExpressionOperator > Bucket;
+            public readonly List < HlExpressionOperator > Bucket;
 
             /// <summary>
             ///     Public Constructor
             /// </summary>
             /// <param name="operators">Operators</param>
-            public PrecedenceBucket( List < HLExpressionOperator > operators )
+            public PrecedenceBucket( List < HlExpressionOperator > operators )
             {
                 Bucket = operators;
             }
@@ -66,9 +66,9 @@ namespace VisCPU.HL.Parser.Operators
         ///     Public Constructor
         /// </summary>
         /// <param name="operators">Operators</param>
-        public HLExpressionOperatorCollection( HLExpressionOperator[] operators )
+        public HlExpressionOperatorCollection( HlExpressionOperator[] operators )
         {
-            foreach ( HLExpressionOperator xLangExpressionOperator in operators )
+            foreach ( HlExpressionOperator xLangExpressionOperator in operators )
             {
                 if ( m_Buckets.ContainsKey( xLangExpressionOperator.PrecedenceLevel ) )
                 {
@@ -77,7 +77,7 @@ namespace VisCPU.HL.Parser.Operators
                 else
                 {
                     m_Buckets[xLangExpressionOperator.PrecedenceLevel] =
-                        new PrecedenceBucket( new List < HLExpressionOperator > { xLangExpressionOperator } );
+                        new PrecedenceBucket( new List < HlExpressionOperator > { xLangExpressionOperator } );
                 }
             }
         }
@@ -87,7 +87,7 @@ namespace VisCPU.HL.Parser.Operators
         /// </summary>
         /// <param name="level">Precedence Level</param>
         /// <returns></returns>
-        public List < HLExpressionOperator > GetLevel( int level )
+        public List < HlExpressionOperator > GetLevel( int level )
         {
             return m_Buckets[level].Bucket;
         }

@@ -7,10 +7,10 @@ namespace VisCPU.Tests.Utils
 
     public class TestDevice : Peripheral
     {
-        private const uint TEST_BEGIN = 0xFFFF2000;
-        private const uint TEST_FAIL = 0xFFFF2001;
-        private const uint TEST_PASS = 0xFFFF2002;
-        private const uint TEST_DEVICE_PRESENT = 0xFFFF2003;
+        private const uint TestBegin = 0xFFFF2000;
+        private const uint TestFail = 0xFFFF2001;
+        private const uint TestPass = 0xFFFF2002;
+        private const uint TestDevicePresent = 0xFFFF2003;
         private readonly StringBuilder m_TextBuilder = new StringBuilder();
         private uint m_CurrentCommand;
 
@@ -24,17 +24,17 @@ namespace VisCPU.Tests.Utils
 
         public override bool CanRead( uint address )
         {
-            return address == TEST_DEVICE_PRESENT;
+            return address == TestDevicePresent;
         }
 
         public override bool CanWrite( uint address )
         {
-            return address == TEST_BEGIN || address == TEST_FAIL || address == TEST_PASS;
+            return address == TestBegin || address == TestFail || address == TestPass;
         }
 
         public override uint ReadData( uint address )
         {
-            if ( address == TEST_DEVICE_PRESENT )
+            if ( address == TestDevicePresent )
             {
                 return 1;
             }
@@ -49,7 +49,7 @@ namespace VisCPU.Tests.Utils
                 throw new Exception( $"Finish Command {m_CurrentCommand} before starting {address} command" );
             }
 
-            if ( address == TEST_PASS && data != 0 )
+            if ( address == TestPass && data != 0 )
             {
                 PassTest();
 
@@ -76,12 +76,12 @@ namespace VisCPU.Tests.Utils
             {
                 switch ( address )
                 {
-                    case TEST_BEGIN:
+                    case TestBegin:
                         BeginTest();
 
                         break;
 
-                    case TEST_FAIL:
+                    case TestFail:
                         FailTest();
 
                         break;

@@ -4,7 +4,7 @@ using VisCPU.Utility.IO;
 namespace VisCPU.HL
 {
 
-    public class HLBuildDataStore : IBuildDataStoreType
+    public class HlBuildDataStore : IBuildDataStoreType
     {
         public string TypeName => "HL2VASM";
 

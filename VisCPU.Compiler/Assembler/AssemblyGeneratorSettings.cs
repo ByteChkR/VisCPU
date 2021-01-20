@@ -17,7 +17,7 @@ namespace VisCPU.Compiler.Assembler
             SettingsCategory assemblerCategory = SettingsCategories.Get( "sdk.compiler.vasm", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 assemblerCategory,
                 "assembler.json",
                 new AssemblyGeneratorSettings()

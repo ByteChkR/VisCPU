@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements Unary Operators
     /// </summary>
-    public class UnaryOperators : HLExpressionOperator
+    public class UnaryOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,13 +22,13 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
             return
-                parser.CurrentToken.Type == HLTokenType.OpBang &&
-                parser.Reader.PeekNext().Type != HLTokenType.OpEquality ||
-                parser.CurrentToken.Type == HLTokenType.OpTilde &&
-                parser.Reader.PeekNext().Type != HLTokenType.OpEquality;
+                parser.CurrentToken.Type == HlTokenType.OpBang &&
+                parser.Reader.PeekNext().Type != HlTokenType.OpEquality ||
+                parser.CurrentToken.Type == HlTokenType.OpTilde &&
+                parser.Reader.PeekNext().Type != HlTokenType.OpEquality;
         }
 
         /// <summary>
@@ -37,12 +37,12 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            HLTokenType type = parser.CurrentToken.Type;
+            HlTokenType type = parser.CurrentToken.Type;
             parser.Eat( type );
 
-            HLExpression token = new HLUnaryOp( parser.ParseExpr( PrecedenceLevel ), type );
+            HlExpression token = new HlUnaryOp( parser.ParseExpr( PrecedenceLevel ), type );
 
             return token;
         }

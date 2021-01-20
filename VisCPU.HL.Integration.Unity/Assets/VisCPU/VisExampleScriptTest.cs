@@ -5,7 +5,7 @@ using VisCPU.HL.Integration;
 public class VisExampleScriptTest : MonoBehaviour
 {
     [SerializeField]
-    private VisCPUInstanceProvider m_Provider = null;
+    private VisCpuInstanceProvider m_Provider = null;
 
     [SerializeField]
     private string m_SourceFile = "./Assets/VisCPU/Examples/HelloWorld.vhl";

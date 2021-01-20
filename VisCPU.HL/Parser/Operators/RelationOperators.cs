@@ -7,7 +7,7 @@ namespace VisCPU.HL.Parser.Operators
     /// <summary>
     ///     Implements LessThan/GreaterThan Operators
     /// </summary>
-    public class RelationOperators : HLExpressionOperator
+    public class RelationOperators : HlExpressionOperator
     {
         /// <summary>
         ///     Precedence Level of the Operators
@@ -22,10 +22,10 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">Parser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns>True if this Expression operator can create an expression</returns>
-        public override bool CanCreate( HLExpressionParser parser, HLExpression currentNode )
+        public override bool CanCreate( HlExpressionParser parser, HlExpression currentNode )
         {
-            return parser.CurrentToken.Type == HLTokenType.OpLessThan ||
-                   parser.CurrentToken.Type == HLTokenType.OpGreaterThan;
+            return parser.CurrentToken.Type == HlTokenType.OpLessThan ||
+                   parser.CurrentToken.Type == HlTokenType.OpGreaterThan;
         }
 
         /// <summary>
@@ -34,44 +34,44 @@ namespace VisCPU.HL.Parser.Operators
         /// <param name="parser">XLExpressionParser</param>
         /// <param name="currentNode">Current Expression Node</param>
         /// <returns></returns>
-        public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
+        public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
-            HLTokenType type = parser.CurrentToken.Type;
+            HlTokenType type = parser.CurrentToken.Type;
             parser.Eat( parser.CurrentToken.Type );
-            HLExpression node = null;
+            HlExpression node = null;
 
-            if ( type == HLTokenType.OpLessThan )
+            if ( type == HlTokenType.OpLessThan )
             {
-                if ( parser.CurrentToken.Type == HLTokenType.OpEquality )
+                if ( parser.CurrentToken.Type == HlTokenType.OpEquality )
                 {
-                    parser.Eat( HLTokenType.OpEquality );
+                    parser.Eat( HlTokenType.OpEquality );
 
-                    node = new HLBinaryOp(
+                    node = new HlBinaryOp(
                         currentNode,
-                        HLTokenType.OpLessOrEqual,
+                        HlTokenType.OpLessOrEqual,
                         parser.ParseExpr( PrecedenceLevel )
                     );
                 }
                 else
                 {
-                    node = new HLBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
+                    node = new HlBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
                 }
             }
-            else if ( type == HLTokenType.OpGreaterThan )
+            else if ( type == HlTokenType.OpGreaterThan )
             {
-                if ( parser.CurrentToken.Type == HLTokenType.OpEquality )
+                if ( parser.CurrentToken.Type == HlTokenType.OpEquality )
                 {
-                    parser.Eat( HLTokenType.OpEquality );
+                    parser.Eat( HlTokenType.OpEquality );
 
-                    node = new HLBinaryOp(
+                    node = new HlBinaryOp(
                         currentNode,
-                        HLTokenType.OpGreaterOrEqual,
+                        HlTokenType.OpGreaterOrEqual,
                         parser.ParseExpr( PrecedenceLevel )
                     );
                 }
                 else
                 {
-                    node = new HLBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
+                    node = new HlBinaryOp( currentNode, type, parser.ParseExpr( PrecedenceLevel ) );
                 }
             }
 

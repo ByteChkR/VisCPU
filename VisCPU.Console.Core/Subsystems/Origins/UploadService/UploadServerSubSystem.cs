@@ -26,7 +26,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
         {
             ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), this );
 
-            TCPProjectDatabaseServer server = new TCPProjectDatabaseServer(
+            TcpProjectDatabaseServer server = new TcpProjectDatabaseServer(
                 ProjectResolver.GetManager( args.First() ),
                 Port,
                 Path.Combine(

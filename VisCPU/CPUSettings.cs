@@ -8,7 +8,7 @@ using VisCPU.Utility.Settings.Loader;
 namespace VisCPU
 {
 
-    public class CPUSettings
+    public class CpuSettings
     {
         public static readonly SettingsCategory s_CpuCategory = SettingsCategories.Get( "cpu", true );
 
@@ -44,7 +44,7 @@ namespace VisCPU
 
                 foreach ( InstructionSet instructionSet in extensions )
                 {
-                    if ( instructionSet.SetKey == SettingsManager.GetSettings < CPUSettings >().InstructionSetName )
+                    if ( instructionSet.SetKey == SettingsManager.GetSettings < CpuSettings >().InstructionSetName )
                     {
                         s_CachedInstructionSet = instructionSet;
 
@@ -73,13 +73,13 @@ namespace VisCPU
 
         #region Private
 
-        static CPUSettings()
+        static CpuSettings()
         {
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 s_CpuCategory,
                 "cpu.json",
-                new CPUSettings()
+                new CpuSettings()
             );
         }
 

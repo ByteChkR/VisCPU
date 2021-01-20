@@ -7,7 +7,7 @@ namespace VisCPU.HL
 {
 
     [Serializable]
-    public class HLCompilerSettings
+    public class HlCompilerSettings
     {
         [field: Argument( Name = "compiler:optimize-temp-vars" )]
         public bool OptimizeTempVarUsage { get; set; } = true;
@@ -17,15 +17,15 @@ namespace VisCPU.HL
 
         #region Private
 
-        static HLCompilerSettings()
+        static HlCompilerSettings()
         {
             SettingsCategory hlcCategory = SettingsCategories.Get( "sdk.compiler.hl", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JSONSettingsLoader(),
+                new JsonSettingsLoader(),
                 hlcCategory,
                 "compiler.json",
-                new HLCompilerSettings()
+                new HlCompilerSettings()
             );
         }
 

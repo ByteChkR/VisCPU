@@ -4,15 +4,15 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 namespace VisCPU.HL.Compiler.Variables
 {
 
-    public class ConstExpressionCompiler : HLExpressionCompiler < HLValueOperand >
+    public class ConstExpressionCompiler : HlExpressionCompiler < HlValueOperand >
     {
         protected override bool AllImplementations => true;
 
         #region Public
 
-        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLValueOperand expr )
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlValueOperand expr )
         {
-            string value = expr.Value.Type == HLTokenType.OpCharLiteral ? $"'{expr.Value}'" : expr.Value.ToString();
+            string value = expr.Value.Type == HlTokenType.OpCharLiteral ? $"'{expr.Value}'" : expr.Value.ToString();
 
             ExpressionTarget tmp =
                 new ExpressionTarget( value, false, compilation.TypeSystem.GetType( "var" ) );
@@ -21,11 +21,11 @@ namespace VisCPU.HL.Compiler.Variables
         }
 
         public override ExpressionTarget ParseExpression(
-            HLCompilation compilation,
-            HLValueOperand expr,
+            HlCompilation compilation,
+            HlValueOperand expr,
             ExpressionTarget outputTarget )
         {
-            string value = expr.Value.Type == HLTokenType.OpCharLiteral ? $"'{expr.Value}'" : expr.Value.ToString();
+            string value = expr.Value.Type == HlTokenType.OpCharLiteral ? $"'{expr.Value}'" : expr.Value.ToString();
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, value );
 
