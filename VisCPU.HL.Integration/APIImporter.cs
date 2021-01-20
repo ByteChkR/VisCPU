@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer;
+using VisCPU.Utility;
 
 namespace VisCPU.HL.Integration
 {
@@ -47,7 +48,9 @@ namespace VisCPU.HL.Integration
 
         private string GenerateAPIDriver( FunctionData data, uint devAddr )
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder("// This is an automatically generated file.\n");
+            sb.Append("// Do not change unless you know exactly what you are doing.\n");
+            sb.AppendFormat("// Device Driver for API Call: {0} on Address {1}\n\n", data.GetFinalName(), devAddr.ToHexString());
             sb.AppendFormat( "public var {0}(", data.GetFinalName() );
 
             for ( int i = 0; i < data.ParameterCount; i++ )
@@ -62,10 +65,10 @@ namespace VisCPU.HL.Integration
                 }
             }
 
-            sb.Append( ")" );
+            sb.Append( ")\n{\n" );
 
-            sb.AppendFormat( "var addr = {0};\n", devAddr );
-            sb.AppendFormat( "return addr(" );
+            sb.AppendFormat( "\tvar addr = {0};\n", devAddr );
+            sb.AppendFormat( "\treturn addr(" );
 
             for ( int i = 0; i < data.ParameterCount; i++ )
             {

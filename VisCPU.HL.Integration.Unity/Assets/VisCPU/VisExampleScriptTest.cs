@@ -13,6 +13,11 @@ public class VisExampleScriptTest : MonoBehaviour
 
     #region Public
 
+    private void Start()
+    {
+        m_SourceFile = Path.GetFullPath( m_SourceFile );
+    }
+
     public void Compile()
     {
         string file = CompilerHelper.Compile(

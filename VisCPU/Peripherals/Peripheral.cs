@@ -3,6 +3,9 @@ using System.IO;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
+#if !DEBUG
+using VisCPU.Extensions;
+#endif
 
 namespace VisCPU.Peripherals
 {
@@ -28,15 +31,15 @@ namespace VisCPU.Peripherals
             ExtensionLoader.LoadFrom < Peripheral >(s_PeripheralExtensions.GetCategoryDirectory(), true );
 #endif
 
-        #region Unity Event Functions
+#region Unity Event Functions
 
         public virtual void Reset()
         {
         }
 
-        #endregion
+#endregion
 
-        #region Public
+#region Public
 
         public abstract bool CanRead( uint address );
 
@@ -54,7 +57,7 @@ namespace VisCPU.Peripherals
         {
         }
 
-        #endregion
+#endregion
     }
 
 }

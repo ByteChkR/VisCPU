@@ -17,7 +17,7 @@ using Logger = VisCPU.Utility.Logging.Logger;
 public class VisCPUInstanceProvider : MonoBehaviour
 {
     [SerializeField]
-    private LoggerSystems m_LogOutput;
+    private LoggerSystems m_LogOutput = LoggerSystems.Default;
 
     [SerializeField]
     private Text m_ConsoleOutput = null;

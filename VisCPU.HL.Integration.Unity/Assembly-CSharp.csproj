@@ -56,7 +56,6 @@
     <Compile Include="Assets\VisCPU\UnityVisAPI.cs" />
     <Compile Include="Assets\VisCPU\VisExampleScriptTest.cs" />
     <Compile Include="Assets\VisCPU\VisCPUInstanceProvider.cs" />
-    <Compile Include="Assets\VisCPU\UI\VisCPUUnityConsoleDriver.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\VisCPU\Impl\VisCPU.dll" />
@@ -259,14 +258,26 @@
     <Reference Include="UnityEditor">
       <HintPath>D:\UnityEditors\2020.1.10f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\VisCPU\Impl\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Compiler">
+      <HintPath>Assets\VisCPU\Impl\VisCPU.Compiler.dll</HintPath>
+    </Reference>
     <Reference Include="VisCPU.Console.Core">
       <HintPath>Assets\VisCPU\Impl\VisCPU.Console.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU">
+      <HintPath>Assets\VisCPU\Impl\VisCPU.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Extensions">
+      <HintPath>Assets\VisCPU\Impl\VisCPU.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.HL">
       <HintPath>Assets\VisCPU\Impl\VisCPU.HL.dll</HintPath>
     </Reference>
-    <Reference Include="VisCPU.Extensions">
-      <HintPath>Assets\VisCPU\Impl\VisCPU.Extensions.dll</HintPath>
+    <Reference Include="VisCPU.HL.Integration">
+      <HintPath>Assets\VisCPU\Impl\VisCPU.HL.Integration.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Instructions">
       <HintPath>Assets\VisCPU\Impl\VisCPU.Instructions.dll</HintPath>
@@ -274,23 +285,11 @@
     <Reference Include="VisCPU.Peripherals">
       <HintPath>Assets\VisCPU\Impl\VisCPU.Peripherals.dll</HintPath>
     </Reference>
-    <Reference Include="VisCPU.Utility">
-      <HintPath>Assets\VisCPU\Impl\VisCPU.Utility.dll</HintPath>
-    </Reference>
     <Reference Include="VisCPU.ProjectSystem">
       <HintPath>Assets\VisCPU\Impl\VisCPU.ProjectSystem.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Assets\VisCPU\Impl\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="VisCPU">
-      <HintPath>Assets\VisCPU\Impl\VisCPU.dll</HintPath>
-    </Reference>
-    <Reference Include="VisCPU.Compiler">
-      <HintPath>Assets\VisCPU\Impl\VisCPU.Compiler.dll</HintPath>
-    </Reference>
-    <Reference Include="VisCPU.HL.Integration">
-      <HintPath>Assets\VisCPU\Impl\VisCPU.HL.Integration.dll</HintPath>
+    <Reference Include="VisCPU.Utility">
+      <HintPath>Assets\VisCPU\Impl\VisCPU.Utility.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:\UnityEditors\2020.1.10f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>

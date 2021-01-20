@@ -35,6 +35,8 @@ namespace VisCPU.HL.Importer
         {
             List < string > data = new List < string >();
             Log( $"Generating Function for Instruction {target.Key}" );
+            data.Add("; This is an automatically generated file.");
+            data.Add("; Do not change unless you know exactly what you are doing.");            
             data.Add( $"; Generated vasm file for instruction: {target.Key}" );
 
             data.Add( $":data tmp_ret 0x01 linker:hide" );
@@ -49,12 +51,12 @@ namespace VisCPU.HL.Importer
 
             for ( int i = 0; i < target.ArgumentCount; i++ )
             {
-                data.Add( $"POP arg_{i}" );
-                data.Add( $"DREF arg_{i} arg_{i}_v" );
+                data.Add( $"\tPOP arg_{i}" );
+                data.Add( $"\tDREF arg_{i} arg_{i}_v" );
             }
 
             StringBuilder sb = new StringBuilder();
-            sb.Append( $"{target.Key}" );
+            sb.Append( $"\t{target.Key}" );
 
             for ( int i = 0; i < target.ArgumentCount; i++ )
             {
@@ -65,13 +67,13 @@ namespace VisCPU.HL.Importer
 
             for ( int i = 0; i < target.ArgumentCount; i++ )
             {
-                data.Add( $"LOAD tmp_ret arg_{i}_v" );
-                data.Add( $"CREF tmp_ret arg_{i}" );
+                data.Add( $"\tLOAD tmp_ret arg_{i}_v" );
+                data.Add( $"\tCREF tmp_ret arg_{i}" );
             }
 
-            data.Add( $"LOAD tmp_ret 0" );
-            data.Add( $"PUSH tmp_ret" );
-            data.Add( $"RET" );
+            data.Add( $"\tLOAD tmp_ret 0" );
+            data.Add( $"\tPUSH tmp_ret" );
+            data.Add( $"\tRET" );
 
             return data.ToArray();
         }
