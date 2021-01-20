@@ -6,7 +6,6 @@ namespace VisCPU.ILCompiler
 
     internal class SimpleUnloadableAssemblyLoadContext : AssemblyLoadContext
     {
-
         #region Public
 
         public SimpleUnloadableAssemblyLoadContext()
@@ -24,7 +23,6 @@ namespace VisCPU.ILCompiler
         }
 
         #endregion
-
     }
 
 }

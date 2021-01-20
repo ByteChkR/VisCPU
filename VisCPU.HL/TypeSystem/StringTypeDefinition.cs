@@ -3,7 +3,6 @@
 
     public class StringTypeDefinition : HLTypeDefinition
     {
-
         #region Public
 
         public StringTypeDefinition() : base( HLCompilation.STRING_TYPE )
@@ -16,7 +15,6 @@
         }
 
         #endregion
-
     }
 
 }

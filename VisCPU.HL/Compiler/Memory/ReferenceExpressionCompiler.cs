@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Memory
 
     public class ReferenceExpressionCompiler : HLExpressionCompiler < HLUnaryOp >
     {
-
         protected override bool NeedsOutput => true;
 
         #region Public
@@ -16,10 +15,10 @@ namespace VisCPU.HL.Compiler.Memory
             ExpressionTarget outputTarget )
         {
             compilation.EmitterResult.Emit(
-                                           $"LOAD",
-                                           outputTarget.ResultAddress,
-                                           target.ResultAddress
-                                          );
+                $"LOAD",
+                outputTarget.ResultAddress,
+                target.ResultAddress
+            );
 
             return outputTarget.Cast( target.TypeDefinition );
         }
@@ -33,7 +32,6 @@ namespace VisCPU.HL.Compiler.Memory
         }
 
         #endregion
-
     }
 
 }

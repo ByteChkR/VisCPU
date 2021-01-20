@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-
 using VisCPU.Peripherals;
 
 namespace VisCPU.Tests.Utils
@@ -8,7 +7,6 @@ namespace VisCPU.Tests.Utils
 
     public class TestDevice : Peripheral
     {
-
         private const uint TEST_BEGIN = 0xFFFF2000;
         private const uint TEST_FAIL = 0xFFFF2001;
         private const uint TEST_PASS = 0xFFFF2002;
@@ -125,7 +123,6 @@ namespace VisCPU.Tests.Utils
         }
 
         #endregion
-
     }
 
 }

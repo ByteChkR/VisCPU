@@ -7,7 +7,6 @@ namespace VisCPU.Console.Core.Settings
 
     public class CLISettings
     {
-
         [field: Argument( Name = "cli:loop" )]
         public bool Continuous { get; set; }
 
@@ -24,15 +23,14 @@ namespace VisCPU.Console.Core.Settings
             SettingsCategory cliCategory = SettingsCategories.Get( "sdk", true );
 
             SettingsManager.RegisterDefaultLoader(
-                                                  new JSONSettingsLoader(),
-                                                  cliCategory,
-                                                  "cli.json",
-                                                  new CLISettings()
-                                                 );
+                new JSONSettingsLoader(),
+                cliCategory,
+                "cli.json",
+                new CLISettings()
+            );
         }
 
         #endregion
-
     }
 
 }

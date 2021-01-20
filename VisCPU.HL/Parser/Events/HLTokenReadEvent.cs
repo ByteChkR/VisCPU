@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -16,7 +15,6 @@ namespace VisCPU.HL.Parser.Events
     /// </summary>
     internal class HLTokenReadEvent : ErrorEvent
     {
-
         /// <summary>
         ///     The Expected Tokens
         /// </summary>
@@ -47,10 +45,10 @@ namespace VisCPU.HL.Parser.Events
             HLTokenType unmatched,
             int start ) :
             base(
-                 $"Expected '{GetExpectedTokenString( expected )}' but got '{unmatched} at index {start}'",
-                 ErrorEventKeys.s_HlInvalidToken,
-                 false
-                )
+                $"Expected '{GetExpectedTokenString( expected )}' but got '{unmatched} at index {start}'",
+                ErrorEventKeys.s_HlInvalidToken,
+                false
+            )
         {
             m_Sequence = tokenSequence;
             m_Expected = expected;
@@ -69,19 +67,19 @@ namespace VisCPU.HL.Parser.Events
             HLTokenType expected,
             HLTokenType unmatched,
             int start ) : this(
-                               tokenSequence,
-                               new[] { expected },
-                               unmatched,
-                               start
-                              )
+            tokenSequence,
+            new[] { expected },
+            unmatched,
+            start
+        )
         {
         }
 
         public HLTokenReadEvent( HLTokenType expected, HLTokenType got ) : base(
-                                                                                $"Expected Token '{expected}' but got '{got}'",
-                                                                                ErrorEventKeys.s_HlInvalidToken,
-                                                                                false
-                                                                               )
+            $"Expected Token '{expected}' but got '{got}'",
+            ErrorEventKeys.s_HlInvalidToken,
+            false
+        )
         {
         }
 
@@ -112,7 +110,6 @@ namespace VisCPU.HL.Parser.Events
         }
 
         #endregion
-
     }
 
 }

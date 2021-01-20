@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Compiler.Special.Compiletime;
 using VisCPU.HL.DataTypes;
@@ -13,7 +12,6 @@ namespace VisCPU.HL.Compiler.Special
 
     public class InvocationExpressionCompiler : HLExpressionCompiler < HLInvocationOp >
     {
-
         private readonly CompiletimeFunctionCompilerCollection m_CtFuncCollection =
             new CompiletimeFunctionCompilerCollection();
 
@@ -32,39 +30,39 @@ namespace VisCPU.HL.Compiler.Special
 
             IExternalData externalSymbol =
                 compilation.ExternalSymbols.FirstOrDefault(
-                                                           x => x.GetName() == target &&
-                                                                x.DataType == ExternalDataType.Function
-                                                          );
+                    x => x.GetName() == target &&
+                         x.DataType == ExternalDataType.Function
+                );
 
             if ( isInternalFunc || externalSymbol != null )
             {
                 string funcEmit = externalSymbol is LinkedData l ? l.Info.Address.ToString() : target;
 
                 int targetLength = isInternalFunc
-                                       ? compilation.FunctionMap[target].ParameterCount
-                                       : ( externalSymbol as FunctionData )?.ParameterCount ??
-                                         expr.ParameterList.Length;
+                    ? compilation.FunctionMap[target].ParameterCount
+                    : ( externalSymbol as FunctionData )?.ParameterCount ??
+                      expr.ParameterList.Length;
 
                 if ( expr.ParameterList.Length != targetLength )
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
-                                                              )
-                                                         );
+                        new FunctionArgumentMismatchEvent(
+                            $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
+                        )
+                    );
                 }
 
                 foreach ( HLExpression parameter in expr.ParameterList )
                 {
                     ExpressionTarget arg = compilation.Parse(
-                                                             parameter
-                                                            ).
+                                                           parameter
+                                                       ).
                                                        MakeAddress( compilation );
 
                     compilation.EmitterResult.Emit(
-                                                   $"PUSH",
-                                                   arg.ResultAddress
-                                                  );
+                        $"PUSH",
+                        arg.ResultAddress
+                    );
 
                     compilation.ReleaseTempVar( arg.ResultAddress );
                 }
@@ -72,10 +70,10 @@ namespace VisCPU.HL.Compiler.Special
                 compilation.EmitterResult.Emit( $"JSR", funcEmit );
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVarPop(),
-                                                                   true,
-                                                                   compilation.TypeSystem.GetType( "var" )
-                                                                  );
+                    compilation.GetTempVarPop(),
+                    true,
+                    compilation.TypeSystem.GetType( "var" )
+                );
 
                 return tempReturn;
             }
@@ -88,9 +86,9 @@ namespace VisCPU.HL.Compiler.Special
                     ExpressionTarget tt = compilation.Parse( parameter );
 
                     compilation.EmitterResult.Emit(
-                                                   $"PUSH",
-                                                   tt.ResultAddress
-                                                  );
+                        $"PUSH",
+                        tt.ResultAddress
+                    );
 
                     compilation.ReleaseTempVar( tt.ResultAddress );
                 }
@@ -105,10 +103,10 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVarPop(),
-                                                                   true,
-                                                                   compilation.TypeSystem.GetType( "var" )
-                                                                  );
+                    compilation.GetTempVarPop(),
+                    true,
+                    compilation.TypeSystem.GetType( "var" )
+                );
 
                 return tempReturn;
             }
@@ -119,7 +117,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

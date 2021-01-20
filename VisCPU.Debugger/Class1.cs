@@ -3,7 +3,6 @@
 
     public class Class1
     {
-
     }
 
 }

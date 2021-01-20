@@ -3,7 +3,6 @@
 
     public class VarTypeDefinition : HLTypeDefinition
     {
-
         #region Public
 
         public VarTypeDefinition() : base( HLCompilation.VAL_TYPE )
@@ -16,7 +15,6 @@
         }
 
         #endregion
-
     }
 
 }

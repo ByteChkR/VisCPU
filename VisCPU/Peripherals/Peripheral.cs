@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
-
-using VisCPU.Extensions;
 
 namespace VisCPU.Peripherals
 {
 
     public abstract class Peripheral : VisBase
     {
-
         public static readonly SettingsCategory s_PeripheralCategory =
             CPUSettings.s_CpuCategory.AddCategory( "peripherals" );
 
@@ -59,7 +55,6 @@ namespace VisCPU.Peripherals
         }
 
         #endregion
-
     }
 
 }

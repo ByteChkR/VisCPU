@@ -6,19 +6,17 @@ namespace VisCPU.HL.Events
 
     internal class HLTypeRedefinitionEvent : ErrorEvent
     {
-
         #region Public
 
         public HLTypeRedefinitionEvent( string typeName ) : base(
-                                                                 $"Duplicate definition of type {typeName}",
-                                                                 ErrorEventKeys.s_HlTypeDuplicateDef,
-                                                                 false
-                                                                )
+            $"Duplicate definition of type {typeName}",
+            ErrorEventKeys.s_HlTypeDuplicateDef,
+            false
+        )
         {
         }
 
         #endregion
-
     }
 
 }

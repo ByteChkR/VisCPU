@@ -8,7 +8,6 @@ namespace VisCPU.ILCompiler
 
     internal class Runner
     {
-
         #region Public
 
         public void Execute( byte[] compiledAssembly, string[] args )
@@ -40,8 +39,8 @@ namespace VisCPU.ILCompiler
                 MethodInfo? entry = assembly.EntryPoint;
 
                 _ = entry != null && entry.GetParameters().Length > 0
-                        ? entry.Invoke( null, new object[] { args } )
-                        : entry.Invoke( null, null );
+                    ? entry.Invoke( null, new object[] { args } )
+                    : entry.Invoke( null, null );
 
                 assemblyLoadContext.Unload();
 
@@ -50,7 +49,6 @@ namespace VisCPU.ILCompiler
         }
 
         #endregion
-
     }
 
 }

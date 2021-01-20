@@ -13,7 +13,6 @@ namespace VisCPU.HL.Parser.Tokens.Combined
     /// </summary>
     public abstract class CombinedToken : IHlToken
     {
-
         /// <summary>
         ///     The Child Tokens
         /// </summary>
@@ -93,7 +92,6 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         }
 
         #endregion
-
     }
 
 }

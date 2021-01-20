@@ -5,7 +5,6 @@ namespace VisCPU.ProjectSystem.BuildSystem
 
     public abstract class BuildJobRunner
     {
-
         public abstract string RunnerName { get; }
 
         #region Public
@@ -17,7 +16,6 @@ namespace VisCPU.ProjectSystem.BuildSystem
             ProjectBuildJob job );
 
         #endregion
-
     }
 
 }

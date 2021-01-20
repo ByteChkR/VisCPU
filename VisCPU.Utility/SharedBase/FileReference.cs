@@ -5,7 +5,6 @@ namespace VisCPU.Utility.SharedBase
 
     public readonly struct FileReference : IEquatable < FileReference >
     {
-
         public string File { get; }
 
         public object[] LinkerArguments { get; }
@@ -36,7 +35,6 @@ namespace VisCPU.Utility.SharedBase
         {
             return File != null ? File.GetHashCode() : 0;
         }
-
     }
 
 }

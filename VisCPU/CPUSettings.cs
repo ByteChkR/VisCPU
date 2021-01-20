@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Extensions;
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
@@ -11,7 +10,6 @@ namespace VisCPU
 
     public class CPUSettings
     {
-
         public static readonly SettingsCategory s_CpuCategory = SettingsCategories.Get( "cpu", true );
 
         public static readonly SettingsCategory s_CpuExtensionsCategory =
@@ -20,7 +18,7 @@ namespace VisCPU
         public static readonly SettingsCategory s_CpuInstructionExtensionsCategory =
             SettingsCategories.Get( "cpu.extensions.instructions", true );
 
-        private static InstructionSet s_CachedInstructionSet = null;
+        private static InstructionSet s_CachedInstructionSet;
 
         public static uint InstructionSize { get; } = 4;
 
@@ -39,10 +37,10 @@ namespace VisCPU
 
                 IEnumerable < InstructionSet > extensions =
                     ExtensionLoader.LoadFrom < InstructionSet >(
-                                                                s_CpuInstructionExtensionsCategory.
-                                                                    GetCategoryDirectory(),
-                                                                true
-                                                               );
+                        s_CpuInstructionExtensionsCategory.
+                            GetCategoryDirectory(),
+                        true
+                    );
 
                 foreach ( InstructionSet instructionSet in extensions )
                 {
@@ -78,15 +76,14 @@ namespace VisCPU
         static CPUSettings()
         {
             SettingsManager.RegisterDefaultLoader(
-                                                  new JSONSettingsLoader(),
-                                                  s_CpuCategory,
-                                                  "cpu.json",
-                                                  new CPUSettings()
-                                                 );
+                new JSONSettingsLoader(),
+                s_CpuCategory,
+                "cpu.json",
+                new CPUSettings()
+            );
         }
 
         #endregion
-
     }
 
 }

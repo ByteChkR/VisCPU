@@ -8,7 +8,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLBreakOp : HLExpression
     {
-
         #region Public
 
         /// <summary>
@@ -29,7 +28,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

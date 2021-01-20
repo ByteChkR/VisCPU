@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Math.Atomic
 
     public class DecrementExpressionCompiler : HLExpressionCompiler < HLUnaryOp >
     {
-
         #region Public
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLUnaryOp expr )
@@ -13,15 +12,14 @@ namespace VisCPU.HL.Compiler.Math.Atomic
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             compilation.EmitterResult.Emit(
-                                           $"DEC",
-                                           target.ResultAddress
-                                          );
+                $"DEC",
+                target.ResultAddress
+            );
 
             return target;
         }
 
         #endregion
-
     }
 
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
@@ -18,7 +17,6 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ProgramBuilder : ConsoleSubsystem
     {
-
         #region Public
 
         public static void Build( Dictionary < string, string > args )
@@ -29,12 +27,12 @@ namespace VisCPU.Console.Core.Subsystems
             HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
-                                       args,
-                                       settings,
-                                       asettings,
-                                       ls,
-                                       hls
-                                      );
+                args,
+                settings,
+                asettings,
+                ls,
+                hls
+            );
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
@@ -50,36 +48,18 @@ namespace VisCPU.Console.Core.Subsystems
             HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
-                                       args.ToArray(),
-                                       settings,
-                                       asettings,
-                                       ls,
-                                       hls
-                                      );
+                args.ToArray(),
+                settings,
+                asettings,
+                ls,
+                hls
+            );
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
             SettingsManager.SaveSettings( hls );
             Build( settings );
         }
-
-        public override void Help()
-        {
-            BuilderSettings settings = new BuilderSettings();
-            AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
-            LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
-            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
-            HelpSubSystem.WriteSubsystem( "vis build", settings, asettings, ls, hls );
-        }
-
-        public override void Run( IEnumerable < string > args )
-        {
-            Build( args );
-        }
-
-        #endregion
-
-        #region Private
 
         public static void Build( BuilderSettings settings )
         {
@@ -98,8 +78,8 @@ namespace VisCPU.Console.Core.Subsystems
                 if ( !File.Exists( file ) )
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                                                          new FileNotFoundEvent( Path.GetFullPath( file ), true )
-                                                         );
+                        new FileNotFoundEvent( Path.GetFullPath( file ), true )
+                    );
 
                     continue;
                 }
@@ -114,9 +94,9 @@ namespace VisCPU.Console.Core.Subsystems
                     }
 
                     Logger.LogMessage(
-                                      LoggerSystems.Console,
-                                      $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'"
-                                     );
+                        LoggerSystems.Console,
+                        $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'"
+                    );
 
                     file = newFile;
                 }
@@ -125,8 +105,21 @@ namespace VisCPU.Console.Core.Subsystems
             }
         }
 
-        #endregion
+        public override void Help()
+        {
+            BuilderSettings settings = new BuilderSettings();
+            AssemblyGeneratorSettings asettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            LinkerSettings ls = SettingsManager.GetSettings < LinkerSettings >();
+            HLCompilerSettings hls = SettingsManager.GetSettings < HLCompilerSettings >();
+            HelpSubSystem.WriteSubsystem( "vis build", settings, asettings, ls, hls );
+        }
 
+        public override void Run( IEnumerable < string > args )
+        {
+            Build( args );
+        }
+
+        #endregion
     }
 
 }

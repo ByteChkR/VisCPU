@@ -4,13 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime;
-
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CSharp.RuntimeBinder;
-
 using VisCPU.Instructions;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
@@ -20,7 +18,6 @@ namespace VisCPU.ILCompiler
 
     internal class Compiler
     {
-
         #region Public
 
         public static byte[] Base64Decode( string base64EncodedData )
@@ -50,10 +47,10 @@ namespace VisCPU.ILCompiler
 
                     IEnumerable < Diagnostic > failures =
                         result.Diagnostics.Where(
-                                                 diagnostic =>
-                                                     diagnostic.IsWarningAsError ||
-                                                     diagnostic.Severity == DiagnosticSeverity.Error
-                                                );
+                            diagnostic =>
+                                diagnostic.IsWarningAsError ||
+                                diagnostic.Severity == DiagnosticSeverity.Error
+                        );
 
                     foreach ( Diagnostic diagnostic in failures )
                     {
@@ -83,36 +80,36 @@ namespace VisCPU.ILCompiler
             SyntaxTree parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree( codeString, options );
 
             List < MetadataReference > references = new List < MetadataReference >
-                                                    {
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( object ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( CPU ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( File ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( UIntExtensions ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( Memory ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( DefaultSet ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( Console ).Assembly.Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( AssemblyTargetedPatchBandAttribute ).Assembly.
+            {
+                MetadataReference.CreateFromFile(
+                    typeof( object ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( CPU ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( File ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( UIntExtensions ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( Memory ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( DefaultSet ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( Console ).Assembly.Location
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( AssemblyTargetedPatchBandAttribute ).Assembly.
                                                                  Location
-                                                            ),
-                                                        MetadataReference.CreateFromFile(
-                                                             typeof( CSharpArgumentInfo ).Assembly.Location
-                                                            ),
-                                                    };
+                ),
+                MetadataReference.CreateFromFile(
+                    typeof( CSharpArgumentInfo ).Assembly.Location
+                ),
+            };
 
             List < Assembly > asms = AppDomain.CurrentDomain.GetAssemblies().ToList();
 
@@ -123,22 +120,21 @@ namespace VisCPU.ILCompiler
                      ForEach( x => references.Add( MetadataReference.CreateFromFile( Assembly.Load( x ).Location ) ) );
 
             CSharpCompilationOptions copts = new CSharpCompilationOptions(
-                                                                          OutputKind.ConsoleApplication,
-                                                                          optimizationLevel: OptimizationLevel.Release,
-                                                                          assemblyIdentityComparer:
-                                                                          DesktopAssemblyIdentityComparer.Default
-                                                                         );
+                OutputKind.ConsoleApplication,
+                optimizationLevel: OptimizationLevel.Release,
+                assemblyIdentityComparer:
+                DesktopAssemblyIdentityComparer.Default
+            );
 
             return CSharpCompilation.Create(
-                                            name,
-                                            new[] { parsedSyntaxTree },
-                                            references,
-                                            copts
-                                           );
+                name,
+                new[] { parsedSyntaxTree },
+                references,
+                copts
+            );
         }
 
         #endregion
-
     }
 
 }

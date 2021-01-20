@@ -8,7 +8,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
     /// </summary>
     public class HLVarDefOperand : HLVarOperand
     {
-
         /// <summary>
         ///     The Definition Token
         /// </summary>
@@ -41,7 +40,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         }
 
         #endregion
-
     }
 
 }

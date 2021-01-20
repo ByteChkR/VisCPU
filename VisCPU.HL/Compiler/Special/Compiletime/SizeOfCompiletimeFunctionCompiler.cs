@@ -9,7 +9,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class SizeOfCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
-
         public string FuncName => "size_of";
 
         #region Public
@@ -19,17 +18,17 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 1 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new FunctionArgumentMismatchEvent(
-                                                           "Invalid Arguments. Expected size_of(variable)"
-                                                          )
-                                                     );
+                    new FunctionArgumentMismatchEvent(
+                        "Invalid Arguments. Expected size_of(variable)"
+                    )
+                );
             }
 
             if ( compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
             {
                 string v = compilation.GetTempVar(
-                                                  compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
-                                                 );
+                    compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
+                );
 
                 return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
             }
@@ -37,26 +36,25 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
             {
                 string v = compilation.GetTempVar(
-                                                  compilation.TypeSystem.
-                                                              GetType( expr.ParameterList[0].ToString() ).
-                                                              GetSize()
-                                                 );
+                    compilation.TypeSystem.
+                                GetType( expr.ParameterList[0].ToString() ).
+                                GetSize()
+                );
 
                 return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
             }
 
             EventManager < ErrorEvent >.SendEvent(
-                                                  new HLVariableNotFoundEvent(
-                                                                              expr.ParameterList[0].ToString(),
-                                                                              false
-                                                                             )
-                                                 );
+                new HLVariableNotFoundEvent(
+                    expr.ParameterList[0].ToString(),
+                    false
+                )
+            );
 
             return new ExpressionTarget();
         }
 
         #endregion
-
     }
 
 }

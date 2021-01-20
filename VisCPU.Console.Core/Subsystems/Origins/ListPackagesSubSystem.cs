@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.ProjectSystem.Data;
 using VisCPU.ProjectSystem.Database;
 using VisCPU.ProjectSystem.Resolvers;
@@ -11,7 +10,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
     public class ListPackagesSubSystem : ConsoleSubsystem
     {
-
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
@@ -47,7 +45,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
         }
 
         #endregion
-
     }
 
 }

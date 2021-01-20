@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
 
     public class BitwiseInvertExpressionCompiler : HLExpressionCompiler < HLUnaryOp >
     {
-
         protected override bool AllImplementations => true;
 
         #region Public
@@ -16,8 +15,8 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
+                                                      expr.Left
+                                                  ).
                                                   MakeAddress( compilation );
 
             string tmp = compilation.GetTempVar( ~( uint ) 0 );
@@ -27,7 +26,6 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
         }
 
         #endregion
-
     }
 
 }

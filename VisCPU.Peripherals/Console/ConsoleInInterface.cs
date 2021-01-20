@@ -9,9 +9,9 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleInInterface : Peripheral
     {
-
         private readonly ConsoleInInterfaceSettings m_Settings;
-        public Func<int> ReadConsoleInput { get; set; } = System.Console.Read;
+
+        public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
 
         #region Public
 
@@ -53,7 +53,6 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
-
     }
 
 }

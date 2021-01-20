@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-
 using VisCPU.ProjectSystem.Data;
 
 namespace VisCPU.ProjectSystem.BuildSystem
@@ -8,12 +7,10 @@ namespace VisCPU.ProjectSystem.BuildSystem
 
     public static class CommonFiles
     {
-
         #region Public
 
         public static void GenerateCommonFiles()
         {
-            GenerateCommonTargets();
             GenerateCommonJobs();
         }
 
@@ -74,9 +71,9 @@ namespace VisCPU.ProjectSystem.BuildSystem
             if ( !File.Exists( Path.Combine( rootDir, "Program.vhl" ) ) )
             {
                 File.WriteAllText(
-                                  Path.Combine( rootDir, "Program.vhl" ),
-                                  @"//Entry Point of Project"
-                                 );
+                    Path.Combine( rootDir, "Program.vhl" ),
+                    @"//Entry Point of Project"
+                );
             }
         }
 
@@ -269,22 +266,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
             ProjectBuildJob.Save( Path.Combine( dir, "newVersion.json" ), newVersionJob );
         }
 
-        private static void GenerateCommonTargets()
-        {
-            //string dir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "common/targets" );
-            //Directory.CreateDirectory( dir );
-            //ProjectBuildTarget debug = CreateDebugTarget();
-            //ProjectBuildTarget release = CreateReleaseTarget();
-            //ProjectBuildTarget debugRun = CreateDebugRunTarget();
-            //ProjectBuildTarget releaseRun = CreateReleaseRunTarget();
-            //ProjectBuildTarget.Save( Path.Combine( dir, "debug.json" ), debug );
-            //ProjectBuildTarget.Save( Path.Combine( dir, "debugRun.json" ), debugRun );
-            //ProjectBuildTarget.Save( Path.Combine( dir, "release.json" ), release );
-            //ProjectBuildTarget.Save( Path.Combine( dir, "releaseRun.json" ), releaseRun );
-        }
-
         #endregion
-
     }
 
 }

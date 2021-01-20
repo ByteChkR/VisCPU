@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-
 using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.ProjectSystem.UploadService;
 using VisCPU.Utility.ArgumentParser;
@@ -13,7 +12,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
 
     public class UploadServerSubSystem : ConsoleSubsystem
     {
-
         [field: Argument( Name = "port" )]
         public int Port { get; set; } = 21212;
 
@@ -29,13 +27,13 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
             ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), this );
 
             TCPProjectDatabaseServer server = new TCPProjectDatabaseServer(
-                                                                           ProjectResolver.GetManager( args.First() ),
-                                                                           Port,
-                                                                           Path.Combine(
-                                                                                AppDomain.CurrentDomain.BaseDirectory,
-                                                                                "cache/upload_server"
-                                                                               )
-                                                                          );
+                ProjectResolver.GetManager( args.First() ),
+                Port,
+                Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "cache/upload_server"
+                )
+            );
 
             Thread t = new Thread( server.ServerLoop );
             t.Start();
@@ -57,7 +55,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
         }
 
         #endregion
-
     }
 
 }

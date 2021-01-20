@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.Parser
@@ -15,7 +14,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HLExpressionReader
     {
-
         /// <summary>
         ///     The Current Position inside the token Stream
         /// </summary>
@@ -88,7 +86,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

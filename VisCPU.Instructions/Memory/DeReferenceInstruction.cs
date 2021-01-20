@@ -3,7 +3,6 @@
 
     public class DeReferenceInstruction : MemoryInstruction
     {
-
         public override uint Cycles => 1;
 
         public override string Key => "DREF";
@@ -24,7 +23,6 @@
         }
 
         #endregion
-
     }
 
 }

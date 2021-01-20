@@ -4,31 +4,30 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class WhileExpressionCompiler : HLExpressionCompiler<HLWhileOp>
+    public class WhileExpressionCompiler : HLExpressionCompiler < HLWhileOp >
     {
-
         #region Public
 
-        public override ExpressionTarget ParseExpression(HLCompilation compilation, HLWhileOp expr)
+        public override ExpressionTarget ParseExpression( HLCompilation compilation, HLWhileOp expr )
         {
-            string startLabel = HLCompilation.GetUniqueName("while_start");
-            string endLabel = HLCompilation.GetUniqueName("while_end");
+            string startLabel = HLCompilation.GetUniqueName( "while_start" );
+            string endLabel = HLCompilation.GetUniqueName( "while_end" );
 
-            compilation.EmitterResult.Store($".{startLabel} linker:hide");
+            compilation.EmitterResult.Store( $".{startLabel} linker:hide" );
 
-            ExpressionTarget target = compilation.Parse(expr.Condition).MakeAddress(compilation);
+            ExpressionTarget target = compilation.Parse( expr.Condition ).MakeAddress( compilation );
 
-            compilation.EmitterResult.Emit($"BEZ", target.ResultAddress, endLabel);
+            compilation.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
-            foreach (HLExpression hlExpression in expr.Block)
+            foreach ( HLExpression hlExpression in expr.Block )
             {
-                compilation.Parse(hlExpression);
+                compilation.Parse( hlExpression );
             }
 
-            compilation.EmitterResult.Emit($"JMP", startLabel);
-            compilation.EmitterResult.Store($".{endLabel} linker:hide");
+            compilation.EmitterResult.Emit( $"JMP", startLabel );
+            compilation.EmitterResult.Store( $".{endLabel} linker:hide" );
 
-            compilation.ReleaseTempVar(target.ResultAddress);
+            compilation.ReleaseTempVar( target.ResultAddress );
 
             //.while_start
             //LOAD tmp_condition_var 0x00
@@ -41,7 +40,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

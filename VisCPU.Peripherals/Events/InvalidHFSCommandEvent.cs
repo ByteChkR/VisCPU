@@ -7,19 +7,17 @@ namespace VisCPU.Peripherals.Events
 
     internal class InvalidHFSCommandEvent : ErrorEvent
     {
-
         #region Public
 
         public InvalidHFSCommandEvent( HostFileSystemCommands command ) : base(
-                                                                               $"Invalid Command: {command}",
-                                                                               ErrorEventKeys.s_HfsInvalidCommand,
-                                                                               false
-                                                                              )
+            $"Invalid Command: {command}",
+            ErrorEventKeys.s_HfsInvalidCommand,
+            false
+        )
         {
         }
 
         #endregion
-
     }
 
 }

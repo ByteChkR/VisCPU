@@ -9,7 +9,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class OffsetOfCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
-
         public string FuncName => "offset_of";
 
         #region Public
@@ -19,10 +18,10 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 2 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new FunctionArgumentMismatchEvent(
-                                                           "Invalid Arguments. Expected offset_of(type, member)"
-                                                          )
-                                                     );
+                    new FunctionArgumentMismatchEvent(
+                        "Invalid Arguments. Expected offset_of(type, member)"
+                    )
+                );
             }
 
             HLTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
@@ -33,7 +32,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
         }
 
         #endregion
-
     }
 
 }

@@ -3,7 +3,6 @@
 
     public class FunctionDefinitionToken : CombinedToken
     {
-
         public IHlToken[] Arguments { get; }
 
         public IHlToken[] Block { get; }
@@ -23,10 +22,10 @@
             IHlToken[] mods,
             IHlToken[] subtokens,
             int start ) : base(
-                               HLTokenType.OpFunctionDefinition,
-                               subtokens,
-                               start
-                              )
+            HLTokenType.OpFunctionDefinition,
+            subtokens,
+            start
+        )
         {
             FunctionName = name;
             FunctionReturnType = retType;
@@ -36,7 +35,6 @@
         }
 
         #endregion
-
     }
 
 }

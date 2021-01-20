@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-
+using VisCPU.Peripherals.Events;
+using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
@@ -10,10 +11,8 @@ namespace VisCPU.Peripherals.Benchmarking
 
     public class BenchmarkDevice : Peripheral
     {
-
         public class BenchmarkResultEvent : Event
         {
-
             private readonly string m_Name;
             private TimeSpan m_Time;
 
@@ -33,7 +32,6 @@ namespace VisCPU.Peripherals.Benchmarking
             }
 
             #endregion
-
         }
 
         private const uint DEVICE_PRESENT = 0xFFFF4000;
@@ -87,7 +85,8 @@ namespace VisCPU.Peripherals.Benchmarking
             }
             else
             {
-                throw new Exception( "Invalid use of Benchmark Device" );
+                EventManager < ErrorEvent >.SendEvent(
+                    new InvalidBenchmarkDeviceUsageEvent( $"Unrecognized Address: {address.ToHexString()}" ) );
             }
         }
 
@@ -99,7 +98,11 @@ namespace VisCPU.Peripherals.Benchmarking
         {
             if ( m_StopWatch.IsRunning )
             {
-                throw new Exception( "Benchmark Run Already Running, Finish the Benchmark to start the next one" );
+                EventManager < ErrorEvent >.SendEvent(
+                    new InvalidBenchmarkDeviceUsageEvent(
+                        "Benchmark Run Already Running, Finish the Benchmark to start the next one" ) );
+
+                return;
             }
 
             m_StopWatch.Restart();
@@ -114,7 +117,10 @@ namespace VisCPU.Peripherals.Benchmarking
         {
             if ( !m_StopWatch.IsRunning )
             {
-                throw new Exception( "No Benchmark Run running." );
+                EventManager < ErrorEvent >.SendEvent(
+                    new InvalidBenchmarkDeviceUsageEvent( "No Benchmark Run running." ) );
+
+                return;
             }
 
             m_StopWatch.Stop();
@@ -122,7 +128,6 @@ namespace VisCPU.Peripherals.Benchmarking
         }
 
         #endregion
-
     }
 
 }

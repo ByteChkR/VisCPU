@@ -10,13 +10,11 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class HLExpressionOperatorCollection
     {
-
         /// <summary>
         ///     Precedence Bucket
         /// </summary>
         private readonly struct PrecedenceBucket : IEquatable < PrecedenceBucket >
         {
-
             /// <summary>
             ///     Operators in this Precedence Bucket
             /// </summary>
@@ -45,7 +43,6 @@ namespace VisCPU.HL.Parser.Operators
             {
                 return Bucket != null ? Bucket.GetHashCode() : 0;
             }
-
         }
 
         /// <summary>
@@ -106,7 +103,6 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
-
     }
 
 }

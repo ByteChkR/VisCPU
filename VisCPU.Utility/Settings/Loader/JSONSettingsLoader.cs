@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-
 using Newtonsoft.Json;
 
 namespace VisCPU.Utility.Settings.Loader
@@ -8,7 +7,6 @@ namespace VisCPU.Utility.Settings.Loader
 
     public class JSONSettingsLoader : SettingsLoader
     {
-
         #region Public
 
         public override object LoadSettings( Type t, string file )
@@ -22,7 +20,6 @@ namespace VisCPU.Utility.Settings.Loader
         }
 
         #endregion
-
     }
 
 }

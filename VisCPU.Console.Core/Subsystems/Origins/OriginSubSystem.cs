@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Console.Core.Subsystems.Origins.UploadService;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
@@ -7,7 +6,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
     public class OriginSubSystem : ConsoleSystem
     {
-
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {
@@ -17,7 +15,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
                 { "host", new UploadServerSubSystem() },
                 { "packages", new ListPackagesSubSystem() }
             };
-
     }
 
 }

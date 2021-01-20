@@ -3,7 +3,6 @@
 
     public class WarningEvent : Event
     {
-
         public string Message { get; }
 
         public override string EventKey { get; }
@@ -17,7 +16,6 @@
         }
 
         #endregion
-
     }
 
 }

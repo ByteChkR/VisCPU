@@ -3,7 +3,6 @@
 
     public static class ErrorEventKeys
     {
-
         public static readonly string s_HlConstVarDuplicateDef = "hl-const-var-duplicate-definition";
 
         public static readonly string s_HlCompilerDynamicVariablesNotSupported =
@@ -17,6 +16,7 @@
         public static readonly string s_HlFunctionArgumentMismatch = "hl-function-argument-mismatch";
         public static readonly string s_HlFunctionNotFound = "hl-function-not-found";
         public static readonly string s_HlTypeNotFound = "hl-type-not-found";
+        public static readonly string s_HlStaticParseFailed = "hl-static-parse-failed";
         public static readonly string s_HlVariableNotFound = "hl-variable-not-found";
         public static readonly string s_HlCompilerNotFound = "hl-compiler-not-found";
         public static readonly string s_HlInvalidToken = "hl-invalid-token";
@@ -45,6 +45,7 @@
         public static readonly string s_UriResolverFailure = "uri-resolver-failure";
 
         public static readonly string s_HfsInvalidCommand = "hfs-invalid-command";
+        public static readonly string s_BenchmarkDeviceInvalidUsage = "benchmark-device-invalid-usage";
 
         public static readonly string s_VasmBridgeInvalidArguments = "vasm-bridge-invalid-arguments";
         public static readonly string s_LinkerImporterInvalidArguments = "linker-importer-invalid-arguments";
@@ -56,7 +57,6 @@
         public static readonly string s_ModuleFileNotFound = "module-file-not-found";
 
         public static readonly string s_OriginUrlSchemeUnsupported = "origin-url-scheme-unsupported";
-
     }
 
 }

@@ -3,9 +3,7 @@
 
     public class ModAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
-
         protected override string InstructionKey => "MOD";
-
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
+using VisCPU.HL.Integration;
 
 public class VisExampleScriptTest : MonoBehaviour
 {

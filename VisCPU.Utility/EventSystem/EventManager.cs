@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Utility.Events;
 
 namespace VisCPU.Utility.EventSystem
@@ -7,7 +6,6 @@ namespace VisCPU.Utility.EventSystem
 
     public static class EventManager
     {
-
         public static event Action < Event > OnEventReceive;
 
         #region Public
@@ -55,12 +53,10 @@ namespace VisCPU.Utility.EventSystem
         }
 
         #endregion
-
     }
 
     public static class EventManager < T > where T : Event
     {
-
         public static event Action < T > OnEventReceive;
 
         #region Public
@@ -72,7 +68,6 @@ namespace VisCPU.Utility.EventSystem
         }
 
         #endregion
-
     }
 
 }

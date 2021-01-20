@@ -7,7 +7,6 @@ namespace VisCPU.HL
 
     public class ExpressionParser : VisBase
     {
-
         protected override LoggerSystems SubSystem => LoggerSystems.HlParser;
 
         #region Public
@@ -20,7 +19,6 @@ namespace VisCPU.HL
         }
 
         #endregion
-
     }
 
 }

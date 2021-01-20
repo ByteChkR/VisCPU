@@ -9,7 +9,6 @@ namespace VisCPU.HL.Compiler.Variables
 
     public class VarExpressionCompiler : HLExpressionCompiler < HLVarOperand >
     {
-
         protected override bool AllImplementations => true;
 
         #region Public
@@ -38,12 +37,12 @@ namespace VisCPU.HL.Compiler.Variables
                 varAddr = v.GetFinalName();
 
                 return new ExpressionTarget(
-                                            varAddr,
-                                            true,
-                                            v.TypeDefinition,
-                                            v.TypeDefinition.GetSize() != v.Size ||
-                                            v.TypeDefinition.Name != HLCompilation.VAL_TYPE
-                                           ).CopyIfNotNull( compilation, outputTarget );
+                    varAddr,
+                    true,
+                    v.TypeDefinition,
+                    v.TypeDefinition.GetSize() != v.Size ||
+                    v.TypeDefinition.Name != HLCompilation.VAL_TYPE
+                ).CopyIfNotNull( compilation, outputTarget );
             }
 
             if ( compilation.FunctionMap.ContainsKey( expr.Value.ToString() ) )
@@ -59,7 +58,6 @@ namespace VisCPU.HL.Compiler.Variables
         }
 
         #endregion
-
     }
 
 }

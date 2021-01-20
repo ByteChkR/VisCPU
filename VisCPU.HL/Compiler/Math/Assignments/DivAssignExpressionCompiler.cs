@@ -3,9 +3,7 @@
 
     public class DivAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
-
         protected override string InstructionKey => "DIV";
-
     }
 
 }

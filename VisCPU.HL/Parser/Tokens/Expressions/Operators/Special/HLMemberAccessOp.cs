@@ -8,7 +8,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLMemberAccessOp : HLExpression
     {
-
         /// <summary>
         ///     Left Side expression
         /// </summary>
@@ -28,8 +27,8 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="left">Left Side Expression</param>
         /// <param name="memberName"></param>
         public HLMemberAccessOp( HLExpression left, HLExpression memberName ) : base(
-             left.SourceIndex
-            )
+            left.SourceIndex
+        )
         {
             Left = left;
             MemberName = memberName;
@@ -52,7 +51,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

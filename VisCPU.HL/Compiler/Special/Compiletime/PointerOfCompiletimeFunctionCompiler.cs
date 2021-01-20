@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 
@@ -8,7 +7,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class PointerOfCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
-
         public string FuncName => "ptr_of";
 
         #region Public
@@ -18,14 +16,14 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             ExpressionTarget et = compilation.Parse( expr.ParameterList.First() );
 
             ExpressionTarget ret = ReferenceExpressionCompiler.Emit(
-                                                                    compilation,
-                                                                    et,
-                                                                    new ExpressionTarget(
-                                                                         compilation.GetTempVar( 0 ),
-                                                                         true,
-                                                                         compilation.TypeSystem.GetType( "var" )
-                                                                        )
-                                                                   );
+                compilation,
+                et,
+                new ExpressionTarget(
+                    compilation.GetTempVar( 0 ),
+                    true,
+                    compilation.TypeSystem.GetType( "var" )
+                )
+            );
 
             compilation.ReleaseTempVar( et.ResultAddress );
 
@@ -33,7 +31,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
         }
 
         #endregion
-
     }
 
 }

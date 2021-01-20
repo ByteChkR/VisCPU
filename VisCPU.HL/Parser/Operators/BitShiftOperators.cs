@@ -9,7 +9,6 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class BitShiftOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -53,14 +52,13 @@ namespace VisCPU.HL.Parser.Operators
             }
 
             return new HLBinaryOp(
-                                  currentNode,
-                                  type,
-                                  parser.ParseExpr( PrecedenceLevel )
-                                 );
+                currentNode,
+                type,
+                parser.ParseExpr( PrecedenceLevel )
+            );
         }
 
         #endregion
-
     }
 
 }

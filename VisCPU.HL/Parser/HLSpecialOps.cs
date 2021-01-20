@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
@@ -13,7 +12,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public static class HLSpecialOps
     {
-
         #region Public
 
         /// <summary>
@@ -27,9 +25,7 @@ namespace VisCPU.HL.Parser
             parser.Eat( HLTokenType.OpFor );
             parser.Eat( HLTokenType.OpBracketOpen );
             HLExpression vDecl = parser.ParseExpr();
-            //parser.Eat( HLTokenType.OpSemicolon );
             HLExpression condition = parser.ParseExpr();
-            //parser.Eat( HLTokenType.OpSemicolon );
             HLExpression vInc = parser.ParseExpr();
             parser.Eat( HLTokenType.OpBracketClose );
 
@@ -161,7 +157,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

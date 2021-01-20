@@ -9,7 +9,6 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class AssignmentOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -43,7 +42,6 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
-
     }
 
 }

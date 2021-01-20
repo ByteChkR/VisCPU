@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.ProjectSystem.BuildSystem;
 using VisCPU.ProjectSystem.Data;
@@ -9,7 +8,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobAddOrigin : BuildJobRunner
     {
-
         public override string RunnerName => "add-origin";
 
         #region Public
@@ -27,7 +25,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
-
     }
 
 }

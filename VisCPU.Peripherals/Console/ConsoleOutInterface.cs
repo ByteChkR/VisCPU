@@ -9,12 +9,13 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleOutInterface : Peripheral
     {
-
         private readonly ConsoleOutInterfaceSettings m_Settings;
 
-        public Action<char> WriteConsoleChar { get; set; } = System.Console.Write;
+        public Action < char > WriteConsoleChar { get; set; } = System.Console.Write;
+
         public Action ConsoleClear { get; set; } = System.Console.Clear;
-        public Action<uint> WriteConsoleNum { get; set; } = x => System.Console.Write(x.ToString());
+
+        public Action < uint > WriteConsoleNum { get; set; } = x => System.Console.Write( x.ToString() );
 
         #region Public
 
@@ -57,17 +58,16 @@ namespace VisCPU.Peripherals.Console
                 }
                 else if ( m_Settings.WriteNumOutputAddress == address )
                 {
-                    WriteConsoleNum(data);
+                    WriteConsoleNum( data );
                 }
                 else
                 {
-                    WriteConsoleChar((char) data);
+                    WriteConsoleChar( ( char ) data );
                 }
             }
         }
 
         #endregion
-
     }
 
 }

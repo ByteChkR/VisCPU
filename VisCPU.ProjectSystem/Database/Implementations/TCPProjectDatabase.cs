@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
-
 using Newtonsoft.Json;
-
 using VisCPU.ProjectSystem.Data;
 
 namespace VisCPU.ProjectSystem.Database.Implementations
@@ -13,7 +11,6 @@ namespace VisCPU.ProjectSystem.Database.Implementations
 
     public class TCPProjectDatabase : ProjectDatabase
     {
-
         #region Public
 
         public TCPProjectDatabase( string moduleRoot ) : base( moduleRoot )
@@ -85,7 +82,6 @@ namespace VisCPU.ProjectSystem.Database.Implementations
         }
 
         #endregion
-
     }
 
 }

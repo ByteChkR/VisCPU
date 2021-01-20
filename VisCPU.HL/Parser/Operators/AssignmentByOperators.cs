@@ -13,7 +13,6 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class AssignmentByOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -114,11 +113,11 @@ namespace VisCPU.HL.Parser.Operators
 
                 default:
                     EventManager < ErrorEvent >.SendEvent(
-                                                          new HLTokenReadEvent(
-                                                                               HLTokenType.Any,
-                                                                               parser.CurrentToken.Type
-                                                                              )
-                                                         );
+                        new HLTokenReadEvent(
+                            HLTokenType.Any,
+                            parser.CurrentToken.Type
+                        )
+                    );
 
                     tt = HLTokenType.Unknown;
 
@@ -132,7 +131,6 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
-
     }
 
 }

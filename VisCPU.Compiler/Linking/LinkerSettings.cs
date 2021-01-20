@@ -7,7 +7,6 @@ namespace VisCPU.Compiler.Linking
 
     public class LinkerSettings
     {
-
         [field: Argument( Name = "linker:no-hide" )]
         public bool NoHiddenItems { get; set; }
 
@@ -22,15 +21,14 @@ namespace VisCPU.Compiler.Linking
             SettingsCategory linkerCategory = SettingsCategories.Get( "sdk.compiler.vasm", true );
 
             SettingsManager.RegisterDefaultLoader(
-                                                  new JSONSettingsLoader(),
-                                                  linkerCategory,
-                                                  "linker.json",
-                                                  new LinkerSettings()
-                                                 );
+                new JSONSettingsLoader(),
+                linkerCategory,
+                "linker.json",
+                new LinkerSettings()
+            );
         }
 
         #endregion
-
     }
 
 }

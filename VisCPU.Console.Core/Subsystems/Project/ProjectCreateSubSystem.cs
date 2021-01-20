@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.ProjectSystem.BuildSystem;
 using VisCPU.Utility.Logging;
 
@@ -10,7 +9,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
     public class ProjectCreateSubSystem : ConsoleSubsystem
     {
-
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
@@ -25,8 +23,8 @@ namespace VisCPU.Console.Core.Subsystems.Project
             string[] a = args.ToArray();
 
             string path = a.Length != 0
-                              ? Path.GetFullPath( a[0] )
-                              : Directory.GetCurrentDirectory();
+                ? Path.GetFullPath( a[0] )
+                : Directory.GetCurrentDirectory();
 
             Log( $"Writing Project Info: {path}" );
 
@@ -34,7 +32,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
         }
 
         #endregion
-
     }
 
 }

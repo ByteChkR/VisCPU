@@ -9,7 +9,6 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class InEqualityOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -41,17 +40,16 @@ namespace VisCPU.HL.Parser.Operators
             parser.Eat( HLTokenType.OpEquality );
 
             return new HLUnaryOp(
-                                 new HLBinaryOp(
-                                                currentNode,
-                                                HLTokenType.OpComparison,
-                                                parser.ParseExpr( PrecedenceLevel )
-                                               ),
-                                 HLTokenType.OpBang
-                                );
+                new HLBinaryOp(
+                    currentNode,
+                    HLTokenType.OpComparison,
+                    parser.ParseExpr( PrecedenceLevel )
+                ),
+                HLTokenType.OpBang
+            );
         }
 
         #endregion
-
     }
 
 }

@@ -9,7 +9,6 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class AssignmentPlusMinusOperators : HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -40,8 +39,8 @@ namespace VisCPU.HL.Parser.Operators
         public override HLExpression Create( HLExpressionParser parser, HLExpression currentNode )
         {
             HLTokenType tt = parser.CurrentToken.Type == HLTokenType.OpPlus
-                                 ? HLTokenType.OpUnaryIncrement
-                                 : HLTokenType.OpUnaryDecrement;
+                ? HLTokenType.OpUnaryIncrement
+                : HLTokenType.OpUnaryDecrement;
 
             parser.Eat( parser.CurrentToken.Type );
             parser.Eat( parser.CurrentToken.Type );
@@ -53,7 +52,6 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
-
     }
 
 }

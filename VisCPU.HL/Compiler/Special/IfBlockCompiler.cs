@@ -6,7 +6,6 @@ namespace VisCPU.HL.Compiler.Special
 
     public class IfBlockCompiler : HLExpressionCompiler < HLIfOp >
     {
-
         #region Public
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLIfOp expr )
@@ -29,8 +28,8 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 ExpressionTarget exprTarget = compilation.Parse(
-                                                                expr.ConditionMap[i].Item1
-                                                               ).
+                                                              expr.ConditionMap[i].Item1
+                                                          ).
                                                           MakeAddress( compilation );
 
                 string nextLabel;
@@ -71,7 +70,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

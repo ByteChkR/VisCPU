@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -12,10 +11,9 @@ namespace VisCPU.Peripherals.HostFS
 
     public class HostFileSystem : Peripheral
     {
-
         private HostFileSystemStatus m_Status = HostFileSystemStatus.HfsStatusReady;
-        private HostFileSystemSettings m_Settings;
-        private StringBuilder m_SbPath = new StringBuilder();
+        private readonly HostFileSystemSettings m_Settings;
+        private readonly StringBuilder m_SbPath = new StringBuilder();
         private FileInfo m_CurrentFile;
         private FileStream m_CurrentFileStream;
         private bool m_ReadFileSize;
@@ -237,7 +235,6 @@ namespace VisCPU.Peripherals.HostFS
         }
 
         #endregion
-
     }
 
 }

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
 using VisCPU.Events;
 using VisCPU.Peripherals;
 using VisCPU.Utility.Events;
@@ -16,7 +15,6 @@ namespace VisCPU
 
     public class MemoryBus : VisBase
     {
-
         private readonly List < Peripheral > m_Peripherals;
 
         protected override LoggerSystems SubSystem => LoggerSystems.MemoryBus;
@@ -118,7 +116,6 @@ namespace VisCPU
         }
 
         #endregion
-
     }
 
 }

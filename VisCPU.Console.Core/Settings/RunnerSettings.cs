@@ -4,9 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
-
 using Newtonsoft.Json;
-
 using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Console.Core.Settings
@@ -14,7 +12,6 @@ namespace VisCPU.Console.Core.Settings
 
     public class RunnerSettings
     {
-
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]
         [XmlIgnore]
@@ -32,9 +29,7 @@ namespace VisCPU.Console.Core.Settings
         public Dictionary < string, Func < string, string > > PreRunMap { get; } =
             new Dictionary < string, Func < string, string > >
             {
-                { ".z", UnCompressFile },
-                { ".vasm", FindBinary },
-                { ".vhl", FindBinary }
+                { ".z", UnCompressFile }, { ".vasm", FindBinary }, { ".vhl", FindBinary }
             };
 
         [field: Argument( Name = "run:working-dir" )]
@@ -105,7 +100,6 @@ namespace VisCPU.Console.Core.Settings
         }
 
         #endregion
-
     }
 
 }

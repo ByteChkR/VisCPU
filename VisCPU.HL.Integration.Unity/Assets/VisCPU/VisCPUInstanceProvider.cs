@@ -11,6 +11,7 @@ using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
+using VisCPU.HL.Integration;
 using Logger = VisCPU.Utility.Logging.Logger;
 
 public class VisCPUInstanceProvider : MonoBehaviour

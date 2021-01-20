@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;
@@ -18,7 +17,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HLExpressionValueCreator
     {
-
         #region Public
 
         /// <summary>
@@ -120,9 +118,9 @@ namespace VisCPU.HL.Parser
                  parser.CurrentToken.Type == HLTokenType.OpBase )
             {
                 HLExpression token = new HLVarOperand(
-                                                      parser.CurrentToken,
-                                                      parser.CurrentToken.SourceIndex
-                                                     );
+                    parser.CurrentToken,
+                    parser.CurrentToken.SourceIndex
+                );
 
                 parser.Eat( parser.CurrentToken.Type );
 
@@ -170,10 +168,10 @@ namespace VisCPU.HL.Parser
 
                 HLExpression token =
                     new HLFuncDefOperand(
-                                         fToken,
-                                         HLExpressionParser.Create( new HLExpressionReader( fToken.Block.ToList() ) ).
-                                                            Parse()
-                                        );
+                        fToken,
+                        HLExpressionParser.Create( new HLExpressionReader( fToken.Block.ToList() ) ).
+                                           Parse()
+                    );
 
                 return token;
             }
@@ -194,7 +192,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

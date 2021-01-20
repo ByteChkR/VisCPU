@@ -3,9 +3,7 @@
 
     public class InEqualityExpressionCompiler : RelationalExpressionCompiler
     {
-
         protected override string InstructionKey => "BNE";
-
     }
 
 }

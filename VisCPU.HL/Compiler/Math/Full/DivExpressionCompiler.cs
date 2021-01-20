@@ -3,7 +3,6 @@
 
     public class DivExpressionCompiler : MathExpressionCompiler
     {
-
         protected override string InstructionKey => "DIV";
 
         #region Protected
@@ -17,7 +16,6 @@
         }
 
         #endregion
-
     }
 
 }

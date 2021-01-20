@@ -10,7 +10,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLWhileOp : HLExpression
     {
-
         public HLExpression[] Block { get; }
 
         /// <summary>
@@ -57,7 +56,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

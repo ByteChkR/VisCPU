@@ -5,7 +5,6 @@ namespace VisCPU.Instructions
 
     public abstract class Instruction : VisBase
     {
-
         public abstract uint Cycles { get; }
 
         public abstract string Key { get; }
@@ -19,7 +18,6 @@ namespace VisCPU.Instructions
         public abstract void Process( CPU cpu );
 
         #endregion
-
     }
 
 }

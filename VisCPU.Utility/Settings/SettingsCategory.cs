@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings.Events;
@@ -12,7 +11,6 @@ namespace VisCPU.Utility.Settings
 
     public class SettingsCategory : IEnumerable < SettingsCategory >
     {
-
         private readonly List < SettingsCategory > m_SubCategories = new List < SettingsCategory >();
 
         public SettingsCategory Parent { get; }
@@ -84,7 +82,6 @@ namespace VisCPU.Utility.Settings
         }
 
         #endregion
-
     }
 
 }

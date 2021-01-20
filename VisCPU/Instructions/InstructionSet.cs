@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -11,10 +10,8 @@ namespace VisCPU.Instructions
 
     public abstract class InstructionSet
     {
-
         public readonly struct InstructionData : IEquatable < InstructionData >
         {
-
             public readonly Instruction Instruction;
             public readonly byte OpCode;
 
@@ -38,7 +35,6 @@ namespace VisCPU.Instructions
             {
                 return ( ( Instruction != null ? Instruction.GetHashCode() : 0 ) * 397 ) ^ OpCode.GetHashCode();
             }
-
         }
 
         private readonly Instruction[] m_Instructions;
@@ -115,12 +111,12 @@ namespace VisCPU.Instructions
                 else
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                                                          new DuplicateInstructionOpCodesEvent(
-                                                               m_Instructions[instructionData.OpCode],
-                                                               instructionData.Instruction,
-                                                               instructionData.OpCode
-                                                              )
-                                                         );
+                        new DuplicateInstructionOpCodesEvent(
+                            m_Instructions[instructionData.OpCode],
+                            instructionData.Instruction,
+                            instructionData.OpCode
+                        )
+                    );
                 }
             }
 
@@ -137,7 +133,6 @@ namespace VisCPU.Instructions
         }
 
         #endregion
-
     }
 
 }

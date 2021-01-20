@@ -6,7 +6,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobRunJob : BuildJobRunner
     {
-
         public override string RunnerName => "run";
 
         #region Public
@@ -21,7 +20,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
-
     }
 
 }

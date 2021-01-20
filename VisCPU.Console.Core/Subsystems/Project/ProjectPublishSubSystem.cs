@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.ProjectSystem.Data;
 using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.ArgumentParser;
@@ -14,14 +13,11 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
     public class ProjectPublishSubSystem : ConsoleSubsystem
     {
-
         public class PublishOptions
         {
-
             [field: Argument( Name = "origin" )]
             [field: Argument( Name = "o" )]
             public string Repository { get; set; } = "local";
-
         }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
@@ -50,9 +46,9 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
             ProjectResolver.GetManager( publishOptions.Repository ).
                             AddPackage(
-                                       t,
-                                       Path.Combine( root, "build", "module.zip" )
-                                      );
+                                t,
+                                Path.Combine( root, "build", "module.zip" )
+                            );
         }
 
         public override void Help()
@@ -60,10 +56,10 @@ namespace VisCPU.Console.Core.Subsystems.Project
             ProjectPackSubSystem.WriteHelp();
 
             HelpSubSystem.WriteSubsystem(
-                                         "vis project publish <repo> <projectDir>",
-                                         new ProjectPackSubSystem.PackOptions(),
-                                         new PublishOptions()
-                                        );
+                "vis project publish <repo> <projectDir>",
+                new ProjectPackSubSystem.PackOptions(),
+                new PublishOptions()
+            );
         }
 
         public override void Run( IEnumerable < string > args )
@@ -71,8 +67,8 @@ namespace VisCPU.Console.Core.Subsystems.Project
             string[] a = args.ToArray();
 
             string root = a.Length != 0
-                              ? Path.GetFullPath( a[1] )
-                              : Directory.GetCurrentDirectory();
+                ? Path.GetFullPath( a[1] )
+                : Directory.GetCurrentDirectory();
 
             ProjectPackSubSystem.PackOptions op = new ProjectPackSubSystem.PackOptions();
             PublishOptions pops = new PublishOptions();
@@ -81,7 +77,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
         }
 
         #endregion
-
     }
 
 }

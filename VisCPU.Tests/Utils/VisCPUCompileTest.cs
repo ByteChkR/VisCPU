@@ -1,6 +1,5 @@
 using System.IO;
 using System.Linq;
-
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Implementations;
 using VisCPU.Compiler.Linking;
@@ -15,7 +14,6 @@ namespace VisCPU.Tests.Utils
 
     public abstract class VisCPUCompileTest
     {
-
         protected readonly TestDevice TestDevice = new TestDevice();
 
         #region Protected
@@ -54,9 +52,9 @@ namespace VisCPU.Tests.Utils
             comp.Compile( file );
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName( Path.GetFullPath( file ) ),
-                                          Path.GetFileNameWithoutExtension( file )
-                                         ) +
+                                 Path.GetDirectoryName( Path.GetFullPath( file ) ),
+                                 Path.GetFileNameWithoutExtension( file )
+                             ) +
                              ".vbin";
 
             if ( SettingsManager.GetSettings < LinkerSettings >().ExportLinkerInfo )
@@ -80,7 +78,6 @@ namespace VisCPU.Tests.Utils
         }
 
         #endregion
-
     }
 
 }

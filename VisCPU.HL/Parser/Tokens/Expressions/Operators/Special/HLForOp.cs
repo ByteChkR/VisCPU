@@ -9,7 +9,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLForOp : HLExpression
     {
-
         /// <summary>
         ///     Variable Change Expression
         /// </summary>
@@ -60,17 +59,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <returns></returns>
         public override List < IHlToken > GetChildren()
         {
-            return new List < IHlToken >
-                   {
-                       VDecl,
-                       Condition,
-                       VInc
-                   }.Concat( ExprBody ).
-                     ToList();
+            return new List < IHlToken > { VDecl, Condition, VInc }.Concat( ExprBody ).
+                                                                    ToList();
         }
 
         #endregion
-
     }
 
 }

@@ -5,7 +5,6 @@ namespace VisCPU.Console
 
     public static class Program
     {
-
         #region Private
 
         private static void Main( string[] args )
@@ -14,7 +13,6 @@ namespace VisCPU.Console
         }
 
         #endregion
-
     }
 
 }

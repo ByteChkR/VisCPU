@@ -12,7 +12,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLArrayAccessorOp : HLExpression
     {
-
         /// <summary>
         ///     Left Side (the array)
         /// </summary>
@@ -52,7 +51,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

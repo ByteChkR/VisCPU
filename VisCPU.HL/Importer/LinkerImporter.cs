@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
 using VisCPU.Utility;
@@ -14,7 +13,6 @@ namespace VisCPU.HL.Importer
 
     public class LinkerImporter : AImporter, IDataImporter
     {
-
         #region Public
 
         public override bool CanImport( string input )
@@ -69,7 +67,6 @@ namespace VisCPU.HL.Importer
         }
 
         #endregion
-
     }
 
 }

@@ -6,19 +6,17 @@ namespace VisCPU.Compiler.Assembler.Events
 
     internal class InvalidArgumentCountEvent : ErrorEvent
     {
-
         #region Public
 
         public InvalidArgumentCountEvent( int line ) : base(
-                                                            $"Too many arguments in line: '{line}'",
-                                                            ErrorEventKeys.s_AsmGenTooManyArgs,
-                                                            false
-                                                           )
+            $"Too many arguments in line: '{line}'",
+            ErrorEventKeys.s_AsmGenTooManyArgs,
+            false
+        )
         {
         }
 
         #endregion
-
     }
 
 }

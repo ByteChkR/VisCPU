@@ -4,13 +4,13 @@ using VisCPU.Utility.EventSystem;
 namespace VisCPU.HL.Compiler.Events
 {
 
-    public class FunctionNotFoundEvent : ErrorEvent
+    public class StaticParseFailedEvent : ErrorEvent
     {
         #region Public
 
-        public FunctionNotFoundEvent( string funcName ) : base(
-            $"Function '{funcName}' not found",
-            ErrorEventKeys.s_HlFunctionNotFound,
+        public StaticParseFailedEvent( string data ) : base(
+            $"Can not parse data '{data}'",
+            ErrorEventKeys.s_HlStaticParseFailed,
             false
         )
         {

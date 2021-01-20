@@ -1,5 +1,4 @@
 ﻿using System.IO;
-
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -10,7 +9,6 @@ namespace VisCPU.Peripherals.Memory
 
     public class Memory : Peripheral
     {
-
         private readonly uint[] m_InternalMemory;
         private readonly string m_FullPersistentPath;
 
@@ -99,7 +97,6 @@ namespace VisCPU.Peripherals.Memory
         }
 
         #endregion
-
     }
 
 }

@@ -8,7 +8,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLReturnOp : HLExpression
     {
-
         /// <summary>
         ///     Right side expression (return value)
         /// </summary>
@@ -43,7 +42,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

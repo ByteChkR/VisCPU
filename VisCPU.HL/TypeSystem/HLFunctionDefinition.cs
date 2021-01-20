@@ -6,7 +6,6 @@ namespace VisCPU.HL.TypeSystem
 
     public class HLFunctionDefinition : HLMemberDefinition
     {
-
         public HLTypeDefinition ReturnType { get; }
 
         public HLTypeDefinition[] ParameterTypes { get; }
@@ -31,7 +30,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

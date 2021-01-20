@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Linking
@@ -8,7 +7,6 @@ namespace VisCPU.Compiler.Linking
 
     public class LinkerResult
     {
-
         public Dictionary < string, AddressItem > Constants { get; }
 
         public List < uint > DataSection { get; }
@@ -49,7 +47,6 @@ namespace VisCPU.Compiler.Linking
         }
 
         #endregion
-
     }
 
 }

@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Relational
 
     public abstract class RelationalExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
     {
-
         protected override bool NeedsOutput => true;
 
         protected abstract string InstructionKey { get; }
@@ -18,26 +17,26 @@ namespace VisCPU.HL.Compiler.Relational
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
+                                                      expr.Left
+                                                  ).
                                                   MakeAddress( compilation );
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right,
-                                                         new ExpressionTarget(
-                                                                              compilation.GetTempVar( 0 ),
-                                                                              true,
-                                                                              compilation.TypeSystem.GetType( "var" )
-                                                                             )
-                                                        );
+                expr.Right,
+                new ExpressionTarget(
+                    compilation.GetTempVar( 0 ),
+                    true,
+                    compilation.TypeSystem.GetType( "var" )
+                )
+            );
 
             if ( target.IsPointer )
             {
                 ExpressionTarget tmp = new ExpressionTarget(
-                                                            compilation.GetTempVarDref( target.ResultAddress ),
-                                                            true,
-                                                            compilation.TypeSystem.GetType( "var" )
-                                                           );
+                    compilation.GetTempVarDref( target.ResultAddress ),
+                    true,
+                    compilation.TypeSystem.GetType( "var" )
+                );
 
                 compilation.ReleaseTempVar( target.ResultAddress );
                 target = tmp;
@@ -46,10 +45,10 @@ namespace VisCPU.HL.Compiler.Relational
             if ( rTarget.IsPointer )
             {
                 ExpressionTarget tmp = new ExpressionTarget(
-                                                            compilation.GetTempVarDref( rTarget.ResultAddress ),
-                                                            true,
-                                                            compilation.TypeSystem.GetType( "var" )
-                                                           );
+                    compilation.GetTempVarDref( rTarget.ResultAddress ),
+                    true,
+                    compilation.TypeSystem.GetType( "var" )
+                );
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
                 rTarget = tmp;
@@ -62,8 +61,8 @@ namespace VisCPU.HL.Compiler.Relational
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "1" );
 
             compilation.EmitterResult.Store(
-                                            $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress} {label}"
-                                           );
+                $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress} {label}"
+            );
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "0" );
             compilation.EmitterResult.Store( $".{label} linker:hide" );
@@ -74,7 +73,6 @@ namespace VisCPU.HL.Compiler.Relational
         }
 
         #endregion
-
     }
 
 }

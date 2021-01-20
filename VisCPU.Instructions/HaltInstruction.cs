@@ -3,7 +3,6 @@
 
     public class HaltInstruction : BaseInstruction
     {
-
         public override uint Cycles => 1;
 
         public override string Key => "HLT";
@@ -20,7 +19,6 @@
         }
 
         #endregion
-
     }
 
 }

@@ -10,7 +10,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLInvocationOp : HLExpression
     {
-
         /// <summary>
         ///     Left side Expression
         /// </summary>
@@ -70,7 +69,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

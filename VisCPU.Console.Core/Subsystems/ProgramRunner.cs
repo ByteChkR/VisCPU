@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Peripherals;
@@ -19,7 +18,6 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ProgramRunner : ConsoleSubsystem
     {
-
         #region Public
 
         public static void Run( Dictionary < string, string > args )
@@ -32,13 +30,13 @@ namespace VisCPU.Console.Core.Subsystems
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
             ArgumentSyntaxParser.Parse(
-                                       args,
-                                       settings,
-                                       hls,
-                                       ms,
-                                       mbs,
-                                       cpuSettings
-                                      );
+                args,
+                settings,
+                hls,
+                ms,
+                mbs,
+                cpuSettings
+            );
 
             SettingsManager.SaveSettings( hls );
             SettingsManager.SaveSettings( ms );
@@ -100,13 +98,13 @@ namespace VisCPU.Console.Core.Subsystems
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
             ArgumentSyntaxParser.Parse(
-                                       args.ToArray(),
-                                       settings,
-                                       hls,
-                                       ms,
-                                       mbs,
-                                       cpuSettings
-                                      );
+                args.ToArray(),
+                settings,
+                hls,
+                ms,
+                mbs,
+                cpuSettings
+            );
 
             SettingsManager.SaveSettings( hls );
             SettingsManager.SaveSettings( ms );
@@ -154,17 +152,17 @@ namespace VisCPU.Console.Core.Subsystems
         private static MemoryBus CreateBus( MemoryBusSettings settings, params Peripheral[] additionalPeripherals )
         {
             return new MemoryBus(
-                                 settings.MemoryDevices.Select(
-                                                               x => new Memory(
-                                                                               SettingsManager.
-                                                                                   GetSettings < MemorySettings >(
-                                                                                        x
-                                                                                       )
-                                                                              )
-                                                              ).
-                                          Concat( additionalPeripherals ).
-                                          Concat( Peripheral.GetExtensionPeripherals() )
-                                );
+                settings.MemoryDevices.Select(
+                             x => new Memory(
+                                 SettingsManager.
+                                     GetSettings < MemorySettings >(
+                                         x
+                                     )
+                             )
+                         ).
+                         Concat( additionalPeripherals ).
+                         Concat( Peripheral.GetExtensionPeripherals() )
+            );
         }
 
         private static string RunPreRunSteps( RunnerSettings settings, string file )
@@ -183,7 +181,6 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
-
     }
 
 }

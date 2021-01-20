@@ -6,7 +6,6 @@ namespace VisCPU.HL.TypeSystem
 
     public class HLPropertyDefinition : HLMemberDefinition
     {
-
         public HLTypeDefinition PropertyType { get; }
 
         public override HLTokenType Type => HLTokenType.OpPropertyDefinition;
@@ -24,7 +23,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

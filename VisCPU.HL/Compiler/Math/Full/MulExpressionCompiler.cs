@@ -3,7 +3,6 @@
 
     public class MulExpressionCompiler : MathExpressionCompiler
     {
-
         protected override string InstructionKey => "MUL";
 
         #region Protected
@@ -17,7 +16,6 @@
         }
 
         #endregion
-
     }
 
 }

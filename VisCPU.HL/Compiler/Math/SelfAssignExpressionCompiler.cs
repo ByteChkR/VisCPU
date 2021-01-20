@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Math
 
     public abstract class SelfAssignExpressionCompiler : HLExpressionCompiler < HLBinaryOp >
     {
-
         protected abstract string InstructionKey { get; }
 
         #region Public
@@ -17,15 +16,15 @@ namespace VisCPU.HL.Compiler.Math
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
+                                                       expr.Right
+                                                   ).
                                                    MakeAddress( compilation );
 
             compilation.EmitterResult.Emit(
-                                           InstructionKey,
-                                           target.ResultAddress,
-                                           rTarget.ResultAddress
-                                          );
+                InstructionKey,
+                target.ResultAddress,
+                rTarget.ResultAddress
+            );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
 
@@ -33,7 +32,6 @@ namespace VisCPU.HL.Compiler.Math
         }
 
         #endregion
-
     }
 
 }

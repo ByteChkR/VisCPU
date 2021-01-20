@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Operators;
 using VisCPU.HL.Parser.Tokens;
@@ -17,7 +16,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HLExpressionParser
     {
-
         /// <summary>
         ///     Operator Collection
         /// </summary>
@@ -107,13 +105,13 @@ namespace VisCPU.HL.Parser
             else
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new HLTokenReadEvent(
-                                                                           Reader.Tokens,
-                                                                           type,
-                                                                           CurrentToken.Type,
-                                                                           CurrentToken.SourceIndex
-                                                                          )
-                                                     );
+                    new HLTokenReadEvent(
+                        Reader.Tokens,
+                        type,
+                        CurrentToken.Type,
+                        CurrentToken.SourceIndex
+                    )
+                );
             }
         }
 
@@ -196,7 +194,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

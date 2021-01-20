@@ -8,7 +8,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public abstract class HLExpressionOperator
     {
-
         /// <summary>
         ///     Precedence Level of the Operator
         /// </summary>
@@ -33,7 +32,6 @@ namespace VisCPU.HL.Parser
         public abstract HLExpression Create( HLExpressionParser parser, HLExpression currentNode );
 
         #endregion
-
     }
 
 }

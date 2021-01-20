@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.Utility.Settings;
 
@@ -9,7 +8,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
 
     public class RemoveOriginSubSystem : ConsoleSubsystem
     {
-
         #region Public
 
         public static void RemoveOrigin( string name )
@@ -30,7 +28,6 @@ namespace VisCPU.Console.Core.Subsystems.Origins
         }
 
         #endregion
-
     }
 
 }

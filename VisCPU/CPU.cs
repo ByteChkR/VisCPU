@@ -3,7 +3,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
-
 using VisCPU.Instructions;
 using VisCPU.Utility;
 using VisCPU.Utility.Settings;
@@ -13,23 +12,19 @@ namespace VisCPU
 
     public class CPU
     {
-
         [Flags]
         public enum Flags
         {
-
             None = 0,
             Break = 1,
             Interrupt = 2,
             Halt = 4
-
         }
 
         public readonly MemoryBus MemoryBus;
 
         private readonly struct CPUState : IEquatable < CPUState >
         {
-
             public readonly Flags Flags;
             public readonly uint Pc;
 
@@ -56,7 +51,6 @@ namespace VisCPU
                     return ( ( int ) Flags * 397 ) ^ ( int ) Pc;
                 }
             }
-
         }
 
         private readonly Stack < CPUState > m_CpuStack = new Stack < CPUState >();
@@ -194,8 +188,8 @@ namespace VisCPU
         public void PushState( uint pc, Flags flags )
         {
             m_CpuStack.Push(
-                            new CPUState( ProcessorFlags, ProgramCounter )
-                           );
+                new CPUState( ProcessorFlags, ProgramCounter )
+            );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -291,7 +285,6 @@ namespace VisCPU
         }
 
         #endregion
-
     }
 
 }

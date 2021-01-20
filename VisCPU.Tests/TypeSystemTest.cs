@@ -1,5 +1,4 @@
 using NUnit.Framework;
-
 using VisCPU.Tests.Utils;
 
 namespace VisCPU.Tests
@@ -9,7 +8,6 @@ namespace VisCPU.Tests
     [SingleThreaded]
     public class TypeSystemTest : VisCPUCompileTest
     {
-
         [OneTimeSetUp]
         public void Setup()
         {
@@ -40,7 +38,6 @@ namespace VisCPU.Tests
         {
             VisCPURun.Run( file, TestDevice );
         }
-
     }
 
 }

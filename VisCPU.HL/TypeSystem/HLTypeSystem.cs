@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Events;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
@@ -10,7 +9,6 @@ namespace VisCPU.HL.TypeSystem
 
     public class HLTypeSystem
     {
-
         private readonly List < HLTypeDefinition > m_DefinedTypes = new List < HLTypeDefinition >();
 
         #region Public
@@ -62,7 +60,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

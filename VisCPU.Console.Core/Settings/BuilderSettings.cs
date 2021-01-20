@@ -3,9 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
-
 using Newtonsoft.Json;
-
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Implementations;
 using VisCPU.Compiler.Linking;
@@ -22,38 +20,38 @@ namespace VisCPU.Console.Core.Settings
 
     public class BuilderSettings
     {
-        public static string BuildTempDirectory = null;
-
-        private static readonly Dictionary<string, BuildSteps> s_AllBuildSteps =
-            new Dictionary<string, BuildSteps>
+        private static readonly Dictionary < string, BuildSteps > s_AllBuildSteps =
+            new Dictionary < string, BuildSteps >
             {
                 { "HL-expr", ( file, lastFile ) => CreateExpressionBuildStep( lastFile ) },
                 { "bin", CreateBinary },
                 { "compress", ( file, lastFile ) => CompressFile( lastFile ) }
             };
 
-        [field: Argument(Name = "build:steps")]
+        public static string BuildTempDirectory { get; set; } = null;
+
+        [field: Argument( Name = "build:steps" )]
         public string[] Steps { get; set; } = { "bin" };
 
-        [field: Argument(Name = "build:clean")]
+        [field: Argument( Name = "build:clean" )]
         public bool CleanBuildOutput { get; set; } = true;
 
-        [field: Argument(Name = "build:input")]
-        [field: Argument(Name = "build:i")]
+        [field: Argument( Name = "build:input" )]
+        [field: Argument( Name = "build:i" )]
         [XmlIgnore]
         [JsonIgnore]
         public string[] EntryFiles { get; set; }
 
-        [field: Argument(Name = "build:input-dirs")]
-        [field: Argument(Name = "build:if")]
+        [field: Argument( Name = "build:input-dirs" )]
+        [field: Argument( Name = "build:if" )]
         [XmlIgnore]
         [JsonIgnore]
         public string[] InputFolders { get; set; }
 
         [XmlIgnore]
         [JsonIgnore]
-        public IEnumerable<(string, BuildSteps)> InstanceBuildSteps =>
-            Steps.Select(x => (x, s_AllBuildSteps[x]));
+        public IEnumerable < (string, BuildSteps) > InstanceBuildSteps =>
+            Steps.Select( x => ( x, s_AllBuildSteps[x] ) );
 
         [XmlIgnore]
         [JsonIgnore]
@@ -61,17 +59,17 @@ namespace VisCPU.Console.Core.Settings
         {
             get
             {
-                List<string> ret = new List<string>();
+                List < string > ret = new List < string >();
 
-                if (InputFolders != null)
+                if ( InputFolders != null )
                 {
-                    ret.AddRange(InputFolders.SelectMany(x => Directory.GetFiles(x, "*.vasm")));
-                    ret.AddRange(InputFolders.SelectMany(x => Directory.GetFiles(x, "*.vhl")));
+                    ret.AddRange( InputFolders.SelectMany( x => Directory.GetFiles( x, "*.vasm" ) ) );
+                    ret.AddRange( InputFolders.SelectMany( x => Directory.GetFiles( x, "*.vhl" ) ) );
                 }
 
-                if (EntryFiles != null)
+                if ( EntryFiles != null )
                 {
-                    ret.AddRange(EntryFiles);
+                    ret.AddRange( EntryFiles );
                 }
 
                 return ret.ToArray();
@@ -80,17 +78,17 @@ namespace VisCPU.Console.Core.Settings
 
         #region Private
 
-        private static string CompressFile(string lastStepFile)
+        private static string CompressFile( string lastStepFile )
         {
             string newFile = lastStepFile + ".z";
 
-            using (Stream input = File.OpenRead(lastStepFile))
+            using ( Stream input = File.OpenRead( lastStepFile ) )
             {
-                using (Stream output = File.Create(newFile))
+                using ( Stream output = File.Create( newFile ) )
                 {
-                    using (Stream s = new GZipStream(output, CompressionLevel.Optimal))
+                    using ( Stream s = new GZipStream( output, CompressionLevel.Optimal ) )
                     {
-                        input.CopyTo(s);
+                        input.CopyTo( s );
                     }
                 }
             }
@@ -98,66 +96,65 @@ namespace VisCPU.Console.Core.Settings
             return newFile;
         }
 
-        private static string CreateBinary(string originalFile, string lastStepFile)
+        private static string CreateBinary( string originalFile, string lastStepFile )
         {
-            if (Path.GetExtension(lastStepFile) != ".vasm")
+            if ( Path.GetExtension( lastStepFile ) != ".vasm" )
             {
-                EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(lastStepFile, true));
+                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( lastStepFile, true ) );
 
                 return lastStepFile;
             }
 
-            Compilation comp = new Compilation(new MultiFileStaticLinker(), new DefaultAssemblyGenerator());
-            comp.Compile(lastStepFile);
+            Compilation comp = new Compilation( new MultiFileStaticLinker(), new DefaultAssemblyGenerator() );
+            comp.Compile( lastStepFile );
 
             string newFile = Path.Combine(
-                                          Path.GetDirectoryName(Path.GetFullPath(originalFile)),
-                                          Path.GetFileNameWithoutExtension(originalFile)
-                                         ) +
+                                 Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
+                                 Path.GetFileNameWithoutExtension( originalFile )
+                             ) +
                              ".vbin";
 
-            if (SettingsManager.GetSettings<LinkerSettings>().ExportLinkerInfo)
+            if ( SettingsManager.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
-                comp.LinkerInfo.Save(newFile, LinkerInfo.LinkerInfoFormat.Text);
+                comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
             }
 
-            File.WriteAllBytes(newFile, comp.ByteCode.ToArray());
+            File.WriteAllBytes( newFile, comp.ByteCode.ToArray() );
 
             return newFile;
         }
 
-        private static string CreateExpressionBuildStep(string lastStepFile)
+        private static string CreateExpressionBuildStep( string lastStepFile )
         {
-            if (Path.GetExtension(lastStepFile) != ".vhl")
+            if ( Path.GetExtension( lastStepFile ) != ".vhl" )
             {
-                EventManager<ErrorEvent>.SendEvent(new FileInvalidEvent(lastStepFile, true));
+                EventManager < ErrorEvent >.SendEvent( new FileInvalidEvent( lastStepFile, true ) );
 
                 return lastStepFile;
             }
 
             ExpressionParser p = new ExpressionParser();
-            string file = File.ReadAllText(lastStepFile);
+            string file = File.ReadAllText( lastStepFile );
 
             BuildDataStore ds = new BuildDataStore(
-                                                   BuildTempDirectory ?? Path.GetDirectoryName(Path.GetFullPath(lastStepFile)),
-                                                   new HLBuildDataStore()
-                                                  );
+                BuildTempDirectory ?? Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ),
+                new HLBuildDataStore()
+            );
 
             string newFile = ds.GetStorePath(
-                                             "HL2VASM",
-                                             Path.GetFileNameWithoutExtension(Path.GetFullPath(lastStepFile))
-                                            );
+                "HL2VASM",
+                Path.GetFileNameWithoutExtension( Path.GetFullPath( lastStepFile ) )
+            );
 
             File.WriteAllText(
-                              newFile,
-                              p.Parse(file, Path.GetDirectoryName(Path.GetFullPath(lastStepFile)), ds).Parse()
-                             );
+                newFile,
+                p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ), ds ).Parse()
+            );
 
             return newFile;
         }
 
         #endregion
-
     }
 
 }

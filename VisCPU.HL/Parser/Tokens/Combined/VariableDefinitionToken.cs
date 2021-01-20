@@ -6,7 +6,6 @@
     /// </summary>
     public class VariableDefinitionToken : CombinedToken
     {
-
         /// <summary>
         ///     Initializer Expression
         /// </summary>
@@ -46,10 +45,10 @@
             IHlToken[] subtokens,
             IHlToken[] initializerExpression,
             IHlToken size = null ) : base(
-                                          HLTokenType.OpVariableDefinition,
-                                          subtokens,
-                                          typeName.SourceIndex
-                                         )
+            HLTokenType.OpVariableDefinition,
+            subtokens,
+            typeName.SourceIndex
+        )
         {
             Modifiers = modifiers;
             Name = name;
@@ -68,7 +67,6 @@
         }
 
         #endregion
-
     }
 
 }

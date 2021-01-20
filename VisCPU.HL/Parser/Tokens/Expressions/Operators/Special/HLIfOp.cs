@@ -9,7 +9,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HLIfOp : HLExpression
     {
-
         /// <summary>
         ///     Condition Map
         /// </summary>
@@ -58,7 +57,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

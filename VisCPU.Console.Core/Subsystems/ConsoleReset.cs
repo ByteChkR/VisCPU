@@ -7,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ConsoleReset : ConsoleSubsystem
     {
-
         #region Public
 
         public override void Help()
@@ -31,7 +30,6 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
-
     }
 
 }

@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Special
 
     public class ReturnExpressionCompiler : HLExpressionCompiler < HLReturnOp >
     {
-
         #region Public
 
         public override ExpressionTarget ParseExpression( HLCompilation compilation, HLReturnOp expr )
@@ -13,8 +12,8 @@ namespace VisCPU.HL.Compiler.Special
             if ( expr.Right != null )
             {
                 ExpressionTarget pt = compilation.Parse(
-                                                        expr.Right
-                                                       ).
+                                                      expr.Right
+                                                  ).
                                                   MakeAddress( compilation );
 
                 compilation.EmitterResult.Emit( $"PUSH", pt.ResultAddress );
@@ -34,7 +33,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

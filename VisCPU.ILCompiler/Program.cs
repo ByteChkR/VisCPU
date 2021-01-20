@@ -3,9 +3,8 @@
 namespace VisCPU.ILCompiler
 {
 
-    internal class Program
+    internal static class Program
     {
-
         #region Private
 
         private static void Main( string[] args )
@@ -14,9 +13,9 @@ namespace VisCPU.ILCompiler
             string name = Path.GetFileNameWithoutExtension( args[0] );
 
             string outP = Path.Combine(
-                                       Path.GetDirectoryName( args[0] ),
-                                       name + ".exe"
-                                      );
+                Path.GetDirectoryName( args[0] ),
+                name + ".exe"
+            );
 
             byte[] asm = c.Compile( args[0], name );
             File.WriteAllBytes( outP, asm );
@@ -32,16 +31,15 @@ namespace VisCPU.ILCompiler
 }";
 
             File.WriteAllText(
-                              Path.Combine(
-                                           Path.GetDirectoryName( args[0] ),
-                                           name + ".runtimeconfig.json"
-                                          ),
-                              runtimeConfig
-                             );
+                Path.Combine(
+                    Path.GetDirectoryName( args[0] ),
+                    name + ".runtimeconfig.json"
+                ),
+                runtimeConfig
+            );
         }
 
         #endregion
-
     }
 
 }
