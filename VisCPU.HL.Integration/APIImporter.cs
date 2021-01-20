@@ -62,6 +62,7 @@ public class APIImporter: AImporter, IDataImporter, IFileImporter
         KeyValuePair<uint, FunctionData> api = m_ExposedApis.First(x => x.Value.GetFinalName() == name);
         string target = Path.Combine(DeviceDriverDirectory,
             api.Value.GetFinalName() + ".vhl");
+        Log("Including Device Driver: {0} :: {1}", name, target);
         return target;
     }
 

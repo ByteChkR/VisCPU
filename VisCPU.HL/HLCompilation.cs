@@ -894,11 +894,13 @@ namespace VisCPU.HL
                     );
 
                     Uri import = new Uri(includedFile, UriKind.RelativeOrAbsolute);
-                    Uri dir = new Uri(m_Directory, UriKind.Absolute);
+                    Uri dir = new Uri(Directory.GetCurrentDirectory()+"/", UriKind.Absolute);
                     if (import.IsAbsoluteUri)
                     {
+                    	Log($"Relative Base Path: {dir.OriginalString}");
                         name = dir.MakeRelativeUri(import).OriginalString;
                         name = name.Remove(name.Length - 4, 4);
+                    	Log($"Fixed Path to File: {includedFile} => {name}");
                     }
 
 
