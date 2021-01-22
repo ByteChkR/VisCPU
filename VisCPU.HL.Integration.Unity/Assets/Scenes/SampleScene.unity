@@ -382,10 +382,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2046100603439513963, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2828278797143180660, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -402,38 +398,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_PrintStackTrace
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_UsePersistentPath
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_LogOutput
-      value: 655424
-      objectReference: {fileID: 0}
-    - target: {fileID: 3536335874707870390, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3546651161792880534, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4292647988017973889, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_Text
-      value: https://raw.githubusercontent.com/ByteChkR/VisCPU/master/VisCPU.HL.Integration.Unity/Examples/MovePanel.vhl
-      objectReference: {fileID: 0}
-    - target: {fileID: 5414008194942873800, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5414008194942873800, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_Text
-      value: <enter url>
-      objectReference: {fileID: 0}
     - target: {fileID: 6335327494276562040, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_Name
       value: VisCPU_OutputViewer
@@ -441,14 +405,6 @@ PrefabInstance:
     - target: {fileID: 8126375094952122047, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8126375094952122047, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8126375094952122047, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.0000044852495
       objectReference: {fileID: 0}
     - target: {fileID: 8606608620575199975, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_LocalPosition.x
@@ -533,10 +489,6 @@ PrefabInstance:
     - target: {fileID: 8606608620575199975, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_Pivot.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8734376871565174766, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
-      propertyPath: m_Text
-      value: https://raw.githubusercontent.com/ByteChkR/VisCPU/master/VisCPU.HL.Integration.Unity/Examples/MovePanel.vhl
       objectReference: {fileID: 0}
     - target: {fileID: 8992483226979053563, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_AnchorMax.x

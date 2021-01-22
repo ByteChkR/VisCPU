@@ -167,6 +167,13 @@ namespace VisCPU
             return m_Stack.Pop();
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void ClearStackAndStates()
+        {
+            m_Stack.Clear();
+            m_CpuStack.Clear();
+        }
+
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void PopState()
         {

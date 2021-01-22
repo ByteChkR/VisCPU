@@ -1,0 +1,34 @@
+
+#import "api-integration UNITY_SubscribeUpdate"
+#import "api-integration UNITY_Log"
+
+// Hack to break out of the update loop
+// Used until better method is found/implemented
+#import "vasm-bridge HLT"
+
+private var frameCounter = 0;
+private var printCount = 60;
+private static string printText = "Update";
+
+private void Update()
+{
+	frameCounter++;
+
+	if(frameCounter % printCount == 0)
+	{
+		UNITY_Log(&printText, size_of(printText));
+	}
+
+	//Exit Update Loop
+	I0_HLT();
+	return;
+}
+
+
+private void InitializeUpdate()
+{
+	UNITY_SubscribeUpdate(&Update);
+	return;
+}
+
+InitializeUpdate();

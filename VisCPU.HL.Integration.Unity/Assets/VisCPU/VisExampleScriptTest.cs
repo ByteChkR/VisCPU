@@ -14,6 +14,9 @@ public class VisExampleScriptTest : MonoBehaviour
     private VisCpuInstanceProvider m_Provider = null;
 
     [SerializeField]
+    private bool m_Async = true;
+
+    [SerializeField]
     private Text m_SourceFileText = null;
 
     private byte[] m_LastCompile = null;
@@ -43,6 +46,9 @@ public class VisExampleScriptTest : MonoBehaviour
             target = srcPath;
 
         }
+
+        m_Provider.ClearUpdateAddrList();
+
         string file = CompilerHelper.Compile(
             target,
             Path.Combine(UnityIsAPieceOfShitHelper.AppRoot, "build"),
@@ -59,7 +65,11 @@ public class VisExampleScriptTest : MonoBehaviour
         {
             Debug.LogError("Script not compiled. Can not run uncompiled script.");
         }
-        StartCoroutine(m_Provider.RunAsync(m_LastCompile).GetEnumerator());
+
+        if ( m_Async )
+            StartCoroutine( m_Provider.RunAsync( m_LastCompile ).GetEnumerator() );
+        else
+            m_Provider.Run( m_LastCompile );
     }
 
     #endregion

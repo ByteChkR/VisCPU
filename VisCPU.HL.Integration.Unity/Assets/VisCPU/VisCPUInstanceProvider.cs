@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -18,9 +19,11 @@ using Logger = VisCPU.Utility.Logging.Logger;
 
 public class VisCpuInstanceProvider : MonoBehaviour
 {
+
     [SerializeField]
     private LoggerSystems m_LogOutput = LoggerSystems.Default;
 
+    private List < uint > m_UpdateAddrList = new List < uint >();
     [SerializeField]
     private bool m_UsePersistentPath=false;
     [SerializeField]
@@ -103,9 +106,40 @@ public class VisCpuInstanceProvider : MonoBehaviour
                                            WithExposedApi( UnityVisApi.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1 ).
                                            WithExposedApi( UnityVisApi.UAPI_Log, "UNITY_Log", 2 ).
                                            WithExposedApi( UnityVisApi.UAPI_LogError, "UNITY_LogError", 2 ).
+                                           WithExposedApi(UAPI_RegisterUpdate, "UNITY_SubscribeUpdate", 1).
                                            Build();
 
         m_CpuInstance = cpu;
+    }
+
+    private uint UAPI_RegisterUpdate( Cpu cpu )
+    {
+        uint addr = cpu.Pop();
+        m_UpdateAddrList.Add( addr );
+
+        return 0;
+    }
+
+    private void Update()
+    {
+        foreach ( uint u in m_UpdateAddrList )
+        {
+            m_CpuInstance.ClearStackAndStates();
+            m_CpuInstance.SetState( u ); //Jump to Registered Function
+
+            while ( !m_CpuInstance.HasSet(Cpu.Flags.Halt) )
+            {
+                m_CpuInstance.Cycle();
+            }
+
+            m_CpuInstance.UnSet( Cpu.Flags.Halt );
+        }
+    }
+
+
+    public void ClearUpdateAddrList()
+    {
+        m_UpdateAddrList.Clear();
     }
 
     private void Application_logMessageReceived(string condition, string stackTrace, LogType type)
