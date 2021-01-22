@@ -406,6 +406,14 @@ PrefabInstance:
       propertyPath: m_PrintStackTrace
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_UsePersistentPath
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_LogOutput
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3536335874707870390, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -525,6 +533,10 @@ PrefabInstance:
     - target: {fileID: 8606608620575199975, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8734376871565174766, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_Text
+      value: https://raw.githubusercontent.com/ByteChkR/VisCPU/master/VisCPU.HL.Integration.Unity/Examples/MovePanel.vhl
       objectReference: {fileID: 0}
     - target: {fileID: 8992483226979053563, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_AnchorMax.x
