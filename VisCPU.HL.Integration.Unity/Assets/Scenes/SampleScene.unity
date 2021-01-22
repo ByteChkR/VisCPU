@@ -402,6 +402,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_PrintStackTrace
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3536335874707870390, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -409,6 +413,18 @@ PrefabInstance:
     - target: {fileID: 3546651161792880534, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4292647988017973889, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_Text
+      value: https://raw.githubusercontent.com/ByteChkR/VisCPU/master/VisCPU.HL.Integration.Unity/Examples/MovePanel.vhl
+      objectReference: {fileID: 0}
+    - target: {fileID: 5414008194942873800, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5414008194942873800, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
+      propertyPath: m_Text
+      value: <enter url>
       objectReference: {fileID: 0}
     - target: {fileID: 6335327494276562040, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_Name

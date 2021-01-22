@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using VisCPU.ProjectSystem.Data;
 using VisCPU.ProjectSystem.Database.Events;
 using VisCPU.ProjectSystem.Resolvers;
+using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 
@@ -182,7 +183,7 @@ namespace VisCPU.ProjectSystem.Database.Implementations
             }
 
             return Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
+                UnityIsAPieceOfShitHelper.AppRoot,
                 moduleRoot
             );
         }

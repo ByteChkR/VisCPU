@@ -18,7 +18,7 @@ namespace VisCPU.HL.Integration
 
         public ApiImporter()
         {
-            DeviceDriverDirectory = Path.Combine( CacheRoot, "api-devices" );
+            DeviceDriverDirectory = Path.Combine( CacheDirectory, "api-devices" );
 
             if ( !Directory.Exists( DeviceDriverDirectory ) )
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using VisCPU.Utility;
 
 namespace VisCPU.Console.Core.Subsystems
 {
@@ -15,8 +16,8 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Run( IEnumerable < string > args )
         {
-            string configDir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "config" );
-            string cacheDir = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, "cache" );
+            string configDir = Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "config" );
+            string cacheDir = Path.Combine(UnityIsAPieceOfShitHelper.AppRoot, "cache" );
 
             if ( Directory.Exists( configDir ) )
             {

@@ -11,7 +11,7 @@ namespace VisCPU.Utility.Settings
 
     public static class SettingsCategories
     {
-        private static string s_DefaultConfigDir = AppDomain.CurrentDomain.BaseDirectory;
+        private static string DefaultConfigDir => UnityIsAPieceOfShitHelper.AppRoot;
 
         private static readonly List < (string rootDir, SettingsCategory category) > s_RootCategories =
             new List < (string, SettingsCategory) >();
@@ -56,7 +56,7 @@ namespace VisCPU.Utility.Settings
                     return null;
                 }
 
-                current = Add( Path.Combine( s_DefaultConfigDir, "configs" ), parts[0] );
+                current = Add( Path.Combine( DefaultConfigDir, "configs" ), parts[0] );
             }
 
             for ( int i = 1; i < parts.Length; i++ )
@@ -93,12 +93,6 @@ namespace VisCPU.Utility.Settings
 
             return "";
         }
-
-        public static void SetDefaultConfigDir( string dir )
-        {
-            s_DefaultConfigDir = dir;
-        }
-
         #endregion
     }
 

@@ -21,7 +21,7 @@ namespace VisCPU.Utility.Settings
             public SettingsEntry( string defaultFile, SettingsLoader loader )
             {
                 CachedObject = null;
-                DefaultFile = Path.GetFullPath( Path.Combine( AppDomain.CurrentDomain.BaseDirectory, defaultFile ) );
+                DefaultFile = Path.GetFullPath( Path.Combine(UnityIsAPieceOfShitHelper.AppRoot, defaultFile ) );
                 Directory.CreateDirectory( Path.GetDirectoryName( DefaultFile ) );
                 FileLoader = loader;
             }

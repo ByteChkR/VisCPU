@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using Newtonsoft.Json;
 using VisCPU.ProjectSystem.BuildSystem;
 using VisCPU.ProjectSystem.Database;
+using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.ProjectSystem.Data
@@ -169,7 +170,7 @@ namespace VisCPU.ProjectSystem.Data
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
             {
-                { "VISDIR", AppDomain.CurrentDomain.BaseDirectory },
+                { "VISDIR",  UnityIsAPieceOfShitHelper.AppRoot  },
                 {
                     "PROJDIR", rootDir.EndsWith( "\\" ) ||
                                rootDir.EndsWith( "/" )
@@ -197,7 +198,7 @@ namespace VisCPU.ProjectSystem.Data
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
             {
-                { "VISDIR", AppDomain.CurrentDomain.BaseDirectory },
+                { "VISDIR",  UnityIsAPieceOfShitHelper.AppRoot  },
                 {
                     "PROJDIR", rootDir.EndsWith( "\\" ) ||
                                rootDir.EndsWith( "/" )

@@ -2,6 +2,7 @@
 using System.IO;
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
+using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.Integration
@@ -28,7 +29,7 @@ namespace VisCPU.HL.Integration
 
             Logger.LogMessage(
                 LoggerSystems.HlIntegration,
-                "Current Working Dir: " + AppDomain.CurrentDomain.BaseDirectory );
+                "Current Working Dir: " + UnityIsAPieceOfShitHelper.AppRoot );
 
             Logger.LogMessage(
                 LoggerSystems.HlIntegration,

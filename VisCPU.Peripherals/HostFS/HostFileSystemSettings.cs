@@ -1,4 +1,5 @@
 ﻿using System;
+using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.Settings.Loader;
@@ -15,7 +16,7 @@ namespace VisCPU.Peripherals.HostFS
         public bool EnableDeleteFiles { get; set; }
 
         [field: Argument( Name = "hostfs:root" )]
-        public string RootPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+        public string RootPath { get; set; } = UnityIsAPieceOfShitHelper.AppRoot;
 
         [field: Argument( Name = "hostfs:pin.present" )]
         public uint PinPresent { get; set; } = 0xFFFF3000;

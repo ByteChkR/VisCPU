@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using VisCPU.ProjectSystem.Resolvers;
 using VisCPU.ProjectSystem.UploadService;
+using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
@@ -30,7 +31,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
                 ProjectResolver.GetManager( args.First() ),
                 Port,
                 Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
+                    UnityIsAPieceOfShitHelper.AppRoot,
                     "cache/upload_server"
                 )
             );

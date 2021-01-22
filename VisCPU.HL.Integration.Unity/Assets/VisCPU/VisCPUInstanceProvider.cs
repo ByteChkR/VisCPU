@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.IO;
+using System.Reflection;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using VisCPU;
@@ -28,22 +30,28 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
     [SerializeField]
     private Text m_ConsoleOutput = null;
-
-    [SerializeField]
-    public string TempBuildOutput = null;
-
-    [SerializeField]
-    public string ConfigPath = null;
-
-    [SerializeField]
-    public string ImporterCache = null;
-
-    [SerializeField]
-    public string BuildOutput = null;
-
+    
     private Cpu m_CpuInstance = null;
 
+    [SerializeField]
+    private string m_VisSubPath = "vis";
+
     #region Unity Event Functions
+
+    private void Awake()
+    {
+        if(m_UsePersistentPath)
+        {
+            UnityIsAPieceOfShitHelper.SetCustomBase( Path.Combine(Application.persistentDataPath, m_VisSubPath ) );
+
+        }
+        else
+        {
+            UnityIsAPieceOfShitHelper.SetCustomBase(Path.GetFullPath(m_VisSubPath));
+        }
+        if (!Directory.Exists(UnityIsAPieceOfShitHelper.AppRoot))
+            Directory.CreateDirectory(UnityIsAPieceOfShitHelper.AppRoot);
+    }
 
     private void OnDestroy()
     {
@@ -52,7 +60,6 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
     private void Start()
     {
-
 
         Logger.s_Settings.SetLogLevel( m_LogOutput );
         EventManager.RegisterDefaultHandlers();
@@ -63,27 +70,11 @@ public class VisCpuInstanceProvider : MonoBehaviour
         {
             Application.logMessageReceived += Application_logMessageReceived;
         }
+        
 
-        if ( m_UsePersistentPath )
-        {
-            string persistentPath = Application.persistentDataPath;
-            //Path Setup
-            ImporterCache = Path.GetFullPath(Path.Combine(persistentPath,ImporterCache));
-            TempBuildOutput = Path.GetFullPath(Path.Combine(persistentPath,TempBuildOutput));
-            ConfigPath = Path.GetFullPath(Path.Combine(persistentPath,ConfigPath));
-            BuildOutput = Path.GetFullPath(Path.Combine(persistentPath, BuildOutput));
-        }
-        else
-        {
-            //Path Setup
-            ImporterCache = Path.GetFullPath(ImporterCache);
-            TempBuildOutput = Path.GetFullPath(TempBuildOutput);
-            ConfigPath = Path.GetFullPath(ConfigPath);
-            BuildOutput = Path.GetFullPath(BuildOutput);
-        }
 
-        AImporter.CacheRoot = ImporterCache;
-        SettingsCategories.SetDefaultConfigDir( ConfigPath );
+        Debug.Log( $"Vis App Root: {UnityIsAPieceOfShitHelper.AppRoot}");
+        
 
         CpuSettings.FallbackSet = new DefaultSet();
 
