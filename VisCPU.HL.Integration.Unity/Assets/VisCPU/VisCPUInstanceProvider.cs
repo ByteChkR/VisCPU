@@ -40,6 +40,9 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_ANDROID
+        m_UsePersistentPath = true;
+#endif
         if(m_UsePersistentPath)
         {
             UnityIsAPieceOfShitHelper.SetCustomBase( Path.Combine(Application.persistentDataPath, m_VisSubPath ) );

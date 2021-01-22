@@ -404,7 +404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_PrintStackTrace
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_UsePersistentPath
@@ -412,7 +412,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2896574948998140842, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_LogOutput
-      value: -1
+      value: 655424
       objectReference: {fileID: 0}
     - target: {fileID: 3536335874707870390, guid: 8d0ca0f858b9e094fb99ecf4968b0a18, type: 3}
       propertyPath: m_IsActive
