@@ -20,6 +20,13 @@ public class VisCpuInstanceProvider : MonoBehaviour
     private LoggerSystems m_LogOutput = LoggerSystems.Default;
 
     [SerializeField]
+    private bool m_UsePersistentPath=false;
+    [SerializeField]
+    private bool m_UseInGameConsole = true;
+    [SerializeField]
+    private bool m_PrintStackTrace = false;
+
+    [SerializeField]
     private Text m_ConsoleOutput = null;
 
     [SerializeField]
@@ -34,7 +41,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
     [SerializeField]
     public string BuildOutput = null;
 
-    private CPU m_CpuInstance = null;
+    private Cpu m_CpuInstance = null;
 
     #region Unity Event Functions
 
@@ -52,47 +59,69 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
         Logger.OnLogReceive += ( systems, s ) => Debug.Log( $"[{systems}] {s}" );
 
-        //Path Setup
-        ImporterCache = Path.GetFullPath( ImporterCache );
-        TempBuildOutput = Path.GetFullPath( TempBuildOutput );
-        ConfigPath = Path.GetFullPath( ConfigPath );
-        BuildOutput = Path.GetFullPath( BuildOutput );
+        if ( m_UseInGameConsole )
+        {
+            Application.logMessageReceived += Application_logMessageReceived;
+        }
+
+        if ( m_UsePersistentPath )
+        {
+            string persistentPath = Application.persistentDataPath;
+            //Path Setup
+            ImporterCache = Path.GetFullPath(Path.Combine(persistentPath,ImporterCache));
+            TempBuildOutput = Path.GetFullPath(Path.Combine(persistentPath,TempBuildOutput));
+            ConfigPath = Path.GetFullPath(Path.Combine(persistentPath,ConfigPath));
+            BuildOutput = Path.GetFullPath(Path.Combine(persistentPath, BuildOutput));
+        }
+        else
+        {
+            //Path Setup
+            ImporterCache = Path.GetFullPath(ImporterCache);
+            TempBuildOutput = Path.GetFullPath(TempBuildOutput);
+            ConfigPath = Path.GetFullPath(ConfigPath);
+            BuildOutput = Path.GetFullPath(BuildOutput);
+        }
 
         AImporter.CacheRoot = ImporterCache;
         SettingsCategories.SetDefaultConfigDir( ConfigPath );
 
-        CPUSettings.FallbackSet = new DefaultSet();
+        CpuSettings.FallbackSet = new DefaultSet();
 
         Memory mem = new Memory();
 
-        ConsoleOutInterface cout = new ConsoleOutInterface();
-        cout.ConsoleClear = () => m_ConsoleOutput.text = "";
-        cout.WriteConsoleNum = chr => m_ConsoleOutput.text = m_ConsoleOutput.text + chr;
-        cout.WriteConsoleChar = chr => m_ConsoleOutput.text = m_ConsoleOutput.text + chr;
-
-        CPU cpu = new CPUInstanceBuilder().WithPeripherals( mem, cout ).
-                                           WithExposedAPI( UnityVisApi.UAPI_DestroyByName, "UNITY_DestroyByName", 2 ).
-                                           WithExposedAPI(
+        Cpu cpu = new CpuInstanceBuilder().WithPeripherals( mem ).
+                                           WithExposedApi( UnityVisApi.UAPI_DestroyByName, "UNITY_DestroyByName", 2 ).
+                                           WithExposedApi(
                                                UnityVisApi.UAPI_DestroyByHandle,
                                                "UNITY_DestroyByHandle",
                                                1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_CreateHandle, "UNITY_CreateHandle", 2 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_SetPosition, "UNITY_SetPosition", 4 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_AddPosition, "UNITY_AddPosition", 4 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_SetPositionX, "UNITY_SetPositionX", 2 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_SetPositionY, "UNITY_SetPositionY", 2 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_SetPositionZ, "UNITY_SetPositionZ", 2 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_GetPositionX, "UNITY_GetPositionX", 1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_GetPositionY, "UNITY_GetPositionY", 1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_GetPositionZ, "UNITY_GetPositionZ", 1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_AddPositionX, "UNITY_AddPositionX", 1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_AddPositionY, "UNITY_AddPositionY", 1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_Log, "UNITY_Log", 2 ).
-                                           WithExposedAPI( UnityVisApi.UAPI_LogError, "UNITY_LogError", 2 ).
+                                           WithExposedApi( UnityVisApi.UAPI_CreateHandle, "UNITY_CreateHandle", 2 ).
+                                           WithExposedApi( UnityVisApi.UAPI_SetPosition, "UNITY_SetPosition", 4 ).
+                                           WithExposedApi( UnityVisApi.UAPI_AddPosition, "UNITY_AddPosition", 4 ).
+                                           WithExposedApi( UnityVisApi.UAPI_SetPositionX, "UNITY_SetPositionX", 2 ).
+                                           WithExposedApi( UnityVisApi.UAPI_SetPositionY, "UNITY_SetPositionY", 2 ).
+                                           WithExposedApi( UnityVisApi.UAPI_SetPositionZ, "UNITY_SetPositionZ", 2 ).
+                                           WithExposedApi( UnityVisApi.UAPI_GetPositionX, "UNITY_GetPositionX", 1 ).
+                                           WithExposedApi( UnityVisApi.UAPI_GetPositionY, "UNITY_GetPositionY", 1 ).
+                                           WithExposedApi( UnityVisApi.UAPI_GetPositionZ, "UNITY_GetPositionZ", 1 ).
+                                           WithExposedApi( UnityVisApi.UAPI_AddPositionX, "UNITY_AddPositionX", 1 ).
+                                           WithExposedApi( UnityVisApi.UAPI_AddPositionY, "UNITY_AddPositionY", 1 ).
+                                           WithExposedApi( UnityVisApi.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1 ).
+                                           WithExposedApi( UnityVisApi.UAPI_Log, "UNITY_Log", 2 ).
+                                           WithExposedApi( UnityVisApi.UAPI_LogError, "UNITY_LogError", 2 ).
                                            Build();
 
         m_CpuInstance = cpu;
+    }
+
+    private void Application_logMessageReceived(string condition, string stackTrace, LogType type)
+    {
+        m_ConsoleOutput.text += $"\n[{type}]{condition}";
+
+        if ( m_PrintStackTrace )
+        {
+            m_ConsoleOutput.text += $"\n{stackTrace}";
+        }
     }
 
     #endregion
@@ -103,7 +132,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
     {
         m_CpuInstance.LoadBinary( data.ToUInt() );
         m_CpuInstance.Run();
-        m_CpuInstance.UnSet( CPU.Flags.Halt );
+        m_CpuInstance.UnSet( Cpu.Flags.Halt );
     }
 
     public void Run( string file )
@@ -121,13 +150,13 @@ public class VisCpuInstanceProvider : MonoBehaviour
         uint itCount = 0;
         m_CpuInstance.LoadBinary( data.ToUInt() );
 
-        while ( !m_CpuInstance.HasSet( CPU.Flags.Halt ) )
+        while ( !m_CpuInstance.HasSet(Cpu.Flags.Halt ) )
         {
             m_CpuInstance.Cycle();
 
-            if ( m_CpuInstance.HasSet( CPU.Flags.Break ) )
+            if ( m_CpuInstance.HasSet(Cpu.Flags.Break ) )
             {
-                m_CpuInstance.UnSet( CPU.Flags.Break );
+                m_CpuInstance.UnSet(Cpu.Flags.Break );
             }
 
             if ( itCount > 1000 )
@@ -142,7 +171,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
             }
         }
 
-        m_CpuInstance.UnSet( CPU.Flags.Halt );
+        m_CpuInstance.UnSet(Cpu.Flags.Halt );
     }
 
     #endregion

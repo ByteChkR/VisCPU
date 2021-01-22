@@ -1,22 +1,13 @@
-#include "cout.vhl"
 #import "api-integration UNITY_CreateHandle"
 #import "api-integration UNITY_SetPositionX"
 #import "api-integration UNITY_GetPositionX"
+#import "api-integration UNITY_Log"
+#import "api-integration UNITY_LogError"
 
 private static string OBJ_TestPanel = "TestPanel";
 private static string TXT_ObjectNotFound = "Could not find object.";
+private static string TXT_ObjectFound = "Found Test Panel";
 private static string TXT_SetPosFailed = "SetPosition Failed.";
-private static string TXT_DisplayId = "Panel Instance:";
-
-
-private void PrintInstanceID(var id)
-{
-	COUT_WriteString(&TXT_DisplayId, size_of(TXT_DisplayId));
-	COUT_WriteNumber(id);
-	COUT_WriteNewLine();
-	return;
-}
-
 
 private void MovePanel(var panel)
 {
@@ -34,7 +25,7 @@ private void MovePanel(var panel)
 
 	if(!ret)
 	{
-		COUT_WriteString(&TXT_SetPosFailed, size_of(TXT_SetPosFailed));
+		UNITY_LogError(&TXT_SetPosFailed, size_of(TXT_SetPosFailed));
 	}
 	return;
 }
@@ -43,13 +34,13 @@ private void Initialize()
 {
 	var testPanel = UNITY_CreateHandle(&OBJ_TestPanel, size_of(OBJ_TestPanel));
 
-	PrintInstanceID(testPanel);
 	if(!testPanel)
 	{
-		COUT_WriteString(&TXT_ObjectNotFound, size_of(TXT_ObjectNotFound));
+		UNITY_LogError(&TXT_ObjectNotFound, size_of(TXT_ObjectNotFound));
 	}
 	else
 	{
+		UNITY_Log(&TXT_ObjectFound, size_of(TXT_ObjectFound));
 		for(var i = 0; i < 1000; i++)
 		{
 			MovePanel(testPanel);

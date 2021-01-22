@@ -8,7 +8,7 @@ public static class UnityVisApi
 
     #region Public
 
-    public static uint UAPI_AddPosition( CPU executingCpu )
+    public static uint UAPI_AddPosition( Cpu executingCpu )
     {
         int z = ( int ) executingCpu.Pop();
         int y = ( int ) executingCpu.Pop();
@@ -30,7 +30,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_AddPositionX( CPU executingCpu )
+    public static uint UAPI_AddPositionX(Cpu executingCpu )
     {
         int x = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
@@ -50,7 +50,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_AddPositionY( CPU executingCpu )
+    public static uint UAPI_AddPositionY(Cpu executingCpu )
     {
         int y = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
@@ -70,7 +70,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_AddPositionZ( CPU executingCpu )
+    public static uint UAPI_AddPositionZ(Cpu executingCpu )
     {
         int z = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
@@ -90,7 +90,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_CreateHandle( CPU executingCpu )
+    public static uint UAPI_CreateHandle(Cpu executingCpu )
     {
         uint len = executingCpu.Pop();
         uint ptr = executingCpu.Pop();
@@ -114,7 +114,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_DestroyByHandle( CPU executingCpu )
+    public static uint UAPI_DestroyByHandle(Cpu executingCpu )
     {
         uint handle = executingCpu.Pop();
 
@@ -130,7 +130,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_DestroyByName( CPU executingCpu )
+    public static uint UAPI_DestroyByName(Cpu executingCpu )
     {
         uint len = executingCpu.Pop();
         uint ptr = executingCpu.Pop();
@@ -151,7 +151,7 @@ public static class UnityVisApi
         return ( uint ) ( obj ? 1 : 0 );
     }
 
-    public static uint UAPI_GetPositionX( CPU executingCpu )
+    public static uint UAPI_GetPositionX(Cpu executingCpu )
     {
         uint handle = executingCpu.Pop();
 
@@ -170,7 +170,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_GetPositionY( CPU executingCpu )
+    public static uint UAPI_GetPositionY(Cpu executingCpu )
     {
         uint handle = executingCpu.Pop();
 
@@ -189,7 +189,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_GetPositionZ( CPU executingCpu )
+    public static uint UAPI_GetPositionZ(Cpu executingCpu )
     {
         uint handle = executingCpu.Pop();
 
@@ -208,7 +208,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_Log( CPU executingCpu )
+    public static uint UAPI_Log(Cpu executingCpu )
     {
         uint len = executingCpu.Pop();
         uint ptr = executingCpu.Pop();
@@ -224,7 +224,7 @@ public static class UnityVisApi
         return 1;
     }
 
-    public static uint UAPI_LogError( CPU executingCpu )
+    public static uint UAPI_LogError(Cpu executingCpu )
     {
         uint len = executingCpu.Pop();
         uint ptr = executingCpu.Pop();
@@ -240,7 +240,7 @@ public static class UnityVisApi
         return 1;
     }
 
-    public static uint UAPI_SetPosition( CPU executingCpu )
+    public static uint UAPI_SetPosition(Cpu executingCpu )
     {
         int z = ( int ) executingCpu.Pop();
         int y = ( int ) executingCpu.Pop();
@@ -262,7 +262,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_SetPositionX( CPU executingCpu )
+    public static uint UAPI_SetPositionX(Cpu executingCpu )
     {
         int x = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
@@ -282,7 +282,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_SetPositionY( CPU executingCpu )
+    public static uint UAPI_SetPositionY(Cpu executingCpu )
     {
         int y = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
@@ -302,7 +302,7 @@ public static class UnityVisApi
         return 0;
     }
 
-    public static uint UAPI_SetPositionZ( CPU executingCpu )
+    public static uint UAPI_SetPositionZ(Cpu executingCpu )
     {
         int z = ( int ) executingCpu.Pop();
         uint handle = executingCpu.Pop();
