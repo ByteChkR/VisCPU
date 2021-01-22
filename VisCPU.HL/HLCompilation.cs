@@ -892,7 +892,11 @@ namespace VisCPU.HL
                     );
                     UriKind kind = includedFile.StartsWith("/") || includedFile.StartsWith("\\") ? UriKind.Absolute : UriKind.RelativeOrAbsolute;
                     Log("Detected Uri Kind: {0}", kind);
-                    Uri import = new Uri("file://"+ includedFile, kind );
+                    Uri import = null;
+                    if(kind == UriKind.Absolute)
+                        import = new Uri("file://"+ includedFile, kind );
+                    else 
+                        import = new Uri(includedFile, kind );
                     Uri dir = new Uri("file://"+ Directory.GetCurrentDirectory() + "/", UriKind.Absolute );
 
                     if ( import.IsAbsoluteUri )
