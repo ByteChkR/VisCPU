@@ -16,7 +16,10 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
             ProjectBuildTarget target,
             ProjectBuildJob job )
         {
+            string old = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(projectRoot);
             ProgramBuilder.Build( job.Arguments );
+            Directory.SetCurrentDirectory(old);
         }
 
         #endregion
