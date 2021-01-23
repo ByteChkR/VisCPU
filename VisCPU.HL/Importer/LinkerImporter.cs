@@ -32,36 +32,10 @@ namespace VisCPU.HL.Importer
             }
 
             string cmd = input.Remove( 0, tagLen );
-            uint offset = 0;
-
-            if ( File.Exists( cmd ) )
-            {
-                Log( "Reading Offset from Binary: " + cmd );
-                byte[] buf = new byte[sizeof( uint ) * 4];
-
-                using ( FileStream fs = File.OpenRead( cmd ) )
-                {
-                    fs.Read( buf, 0, buf.Length );
-                }
-
-                offset = BitConverter.ToUInt32( buf, sizeof( uint ) * 2 );
-                Log( "Detected Offset: " + offset );
-            }
-            else if ( cmd.StartsWith( "-" ) )
-            {
-                int end = cmd.IndexOf( ' ', 1 );
-                offset = uint.Parse( cmd.Substring( 1, end - 1 ) );
-                Log( "Parsed Offset: " + cmd );
-                cmd = cmd.Substring( end + 1 );
-            }
-            else
-            {
-                EventManager < ErrorEvent >.SendEvent( new LinkImporterOffsetNotSpecifiedEvent( cmd ) );
-            }
 
             LinkerInfo info = LinkerInfo.Load( cmd );
 
-            return info.Labels.ApplyOffset( offset ).
+            return info.Labels.
                         Select( x => ( IExternalData ) new LinkedData( x.Key, x.Value ) ).
                         ToArray();
         }

@@ -15,6 +15,7 @@
         HfsGetFilesNum = 0x09,
         HfsGetFiles = 0x0A,
         HfsFileExist = 0x0B,
+        HfsLoadSymbols = 0x0C,
     }
 
 }

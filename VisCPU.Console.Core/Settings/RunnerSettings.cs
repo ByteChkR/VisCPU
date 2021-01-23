@@ -18,7 +18,7 @@ namespace VisCPU.Console.Core.Settings
         [Argument(Name = "run:symbols")]
         [XmlIgnore]
         [JsonIgnore]
-        private string[] AdditionalSymbols;
+        public string[] AdditionalSymbols;
 
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]

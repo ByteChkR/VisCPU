@@ -211,7 +211,12 @@ namespace VisCPU.Peripherals.HostFS
                         File.Delete( targetFile );
 
                         break;
+                    case HostFileSystemCommands.HfsLoadSymbols:
+                        string target = GetPath( m_SbPath.ToString() );
+                        m_SbPath.Clear();
+                        CpuDebugHelper.LoadSymbols( target );
 
+                        break;
                     default:
                         EventManager < ErrorEvent >.SendEvent( new InvalidHfsCommandEvent( cmd ) );
 

@@ -30,6 +30,7 @@ namespace VisCPU.Utility.Logging
         Emit = 1048576,
         HlIntegration = 2097152,
         StackTrace = 4194304,
+        Debug = 8388608,
 
         AllInstructions = MathInstructions |
                           LogicInstructions |
@@ -43,7 +44,7 @@ namespace VisCPU.Utility.Logging
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console | ModuleSystem | StackTrace
+        Default = UriResolver | Console | ModuleSystem | StackTrace | Debug
     }
 
 }

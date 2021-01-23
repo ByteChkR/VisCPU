@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
+using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Implementations;
 using VisCPU.Compiler.Linking;
@@ -116,7 +117,10 @@ namespace VisCPU.Console.Core.Settings
 
             if ( SettingsManager.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
-                comp.LinkerInfo.Save( newFile, LinkerInfo.LinkerInfoFormat.Text );
+                comp.LinkerInfo.Save(
+                    newFile,
+                    LinkerInfo.LinkerInfoFormat.Text,
+                    SettingsManager.GetSettings < AssemblyGeneratorSettings >().GlobalOffset );
             }
 
             File.WriteAllBytes( newFile, comp.ByteCode.ToArray() );

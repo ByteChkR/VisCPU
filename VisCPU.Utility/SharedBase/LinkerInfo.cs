@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Utility.SharedBase
 {
@@ -49,8 +50,22 @@ namespace VisCPU.Utility.SharedBase
             };
         }
 
-        public void Save( string outputFile, LinkerInfoFormat format )
+        public void Save( string outputFile, LinkerInfoFormat format, uint offset=0 )
         {
+            foreach (string labelKeys in Labels.Keys)
+            {
+                AddressItem item = Labels[labelKeys];
+                item.Address += offset;
+                Labels[labelKeys] = item;
+            }
+
+            foreach (string labelKeys in DataSectionHeader.Keys)
+            {
+                AddressItem item = DataSectionHeader[labelKeys];
+                item.Address += offset;
+                DataSectionHeader[labelKeys] = item;
+            }
+
             bool saveSource = ( format & LinkerInfoFormat.IncludeSource ) != 0;
 
             if ( ( format & LinkerInfoFormat.Xml ) != 0 )
@@ -65,6 +80,7 @@ namespace VisCPU.Utility.SharedBase
 
         public static LinkerInfo Load( string programFile )
         {
+            Logger.LogMessage( LoggerSystems.Debug, "Trying to load Symbols for: '{0}'", programFile );
             if ( File.Exists( programFile + ".linkerxml" ) )
             {
                 return LoadXml( programFile + ".linkerxml" );
@@ -74,6 +90,7 @@ namespace VisCPU.Utility.SharedBase
             {
                 return LoadText( programFile + ".linkertext" );
             }
+            Logger.LogMessage(LoggerSystems.Debug, "Failed to load Symbols for: '{0}'", programFile);
 
             return CreateEmpty();
         }

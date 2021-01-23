@@ -75,8 +75,13 @@ namespace VisCPU.Console.Core.Subsystems
 
                 if ( settings.LoadDebugSymbols )
                 {
-                    LinkerInfo symbols = LinkerInfo.Load( file );
-                    cpu.SetInterruptHandler( ( cpu1, u ) => InterruptHandler( symbols, cpu, u ) );
+                    CpuDebugHelper.LoadSymbols( file );
+
+                    foreach (string symPath in settings.AdditionalSymbols)
+                    {
+                        CpuDebugHelper.LoadSymbols( symPath );
+                    }
+                    cpu.SetInterruptHandler( InterruptHandler);
                 }
 
                 cpu.LoadBinary( fileCode );
@@ -150,8 +155,15 @@ namespace VisCPU.Console.Core.Subsystems
 
                 if ( settings.LoadDebugSymbols )
                 {
-                    LinkerInfo symbols = LinkerInfo.Load( file );
-                    cpu.SetInterruptHandler( ( cpu1, u ) => InterruptHandler( symbols, cpu, u ) );
+                    CpuDebugHelper.LoadSymbols( file );
+
+                    if(settings.AdditionalSymbols!=null)
+                    foreach ( string symPath in settings.AdditionalSymbols )
+                    {
+                        CpuDebugHelper.LoadSymbols( symPath );
+                    }
+
+                    cpu.SetInterruptHandler(InterruptHandler);
                 }
 
                 cpu.LoadBinary( fileCode );
@@ -181,8 +193,18 @@ namespace VisCPU.Console.Core.Subsystems
             );
         }
 
-        private static void InterruptHandler( LinkerInfo symbols, Cpu cpu, uint code )
+        private static void InterruptHandler( Cpu cpu, uint code )
         {
+            List <(string Key, AddressItem Value)> mergedInfo = new List < (string, AddressItem) >();
+
+            foreach ( LinkerInfo linkerInfo in CpuDebugHelper.LoadedSymbols )
+            {
+                foreach ( KeyValuePair < string, AddressItem > linkerInfoLabel in linkerInfo.Labels )
+                {
+                    mergedInfo.Add( ( linkerInfoLabel.Key, linkerInfoLabel.Value ) );
+                }
+            }
+
             if(code==0)
                 Logger.LogMessage(LoggerSystems.StackTrace, "Interrupt Fired.");
             else
@@ -208,8 +230,8 @@ namespace VisCPU.Console.Core.Subsystems
 
                 if (callee != 0)
                 {
-                    KeyValuePair<string, AddressItem> item =
-                        symbols.Labels.FirstOrDefault(x => x.Value.Address == callee);
+                    (string Key, AddressItem Value) item =
+                        mergedInfo.FirstOrDefault(x => x.Value.Address == callee);
 
                     if (item.Key == null)
                     {
