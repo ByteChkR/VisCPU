@@ -18,6 +18,11 @@ namespace VisCPU.HL.Integration
             m_InvokeExec = invokeExec;
         }
 
+        public override void Reset()
+        {
+
+        }
+
         public override bool CanRead( uint address )
         {
             return address == m_ListenAddr;

@@ -128,6 +128,12 @@ namespace VisCPU.Peripherals.Benchmarking
         }
 
         #endregion
+
+        public override void Reset()
+        {
+            m_StopWatch.Reset();
+            m_BenchmarkName.Clear();
+        }
     }
 
 }

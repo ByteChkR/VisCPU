@@ -23,9 +23,9 @@ public class VisCpuInstanceProvider : MonoBehaviour
     [SerializeField]
     private LoggerSystems m_LogOutput = LoggerSystems.Default;
 
-    private List < uint > m_UpdateAddrList = new List < uint >();
+    private List<uint> m_UpdateAddrList = new List<uint>();
     [SerializeField]
-    private bool m_UsePersistentPath=false;
+    private bool m_UsePersistentPath = false;
     [SerializeField]
     private bool m_UseInGameConsole = true;
     [SerializeField]
@@ -33,7 +33,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
     [SerializeField]
     private Text m_ConsoleOutput = null;
-    
+
     private Cpu m_CpuInstance = null;
 
     [SerializeField]
@@ -46,9 +46,9 @@ public class VisCpuInstanceProvider : MonoBehaviour
 #if UNITY_ANDROID
         m_UsePersistentPath = true;
 #endif
-        if(m_UsePersistentPath)
+        if (m_UsePersistentPath)
         {
-            UnityIsAPieceOfShitHelper.SetCustomBase( Path.Combine(Application.persistentDataPath, m_VisSubPath ) );
+            UnityIsAPieceOfShitHelper.SetCustomBase(Path.Combine(Application.persistentDataPath, m_VisSubPath));
 
         }
         else
@@ -67,72 +67,72 @@ public class VisCpuInstanceProvider : MonoBehaviour
     private void Start()
     {
 
-        Logger.s_Settings.SetLogLevel( m_LogOutput );
+        Logger.s_Settings.SetLogLevel(m_LogOutput);
         EventManager.RegisterDefaultHandlers();
 
-        Logger.OnLogReceive += ( systems, s ) => Debug.Log( $"[{systems}] {s}" );
+        Logger.OnLogReceive += (systems, s) => Debug.Log($"[{systems}] {s}");
 
-        if ( m_UseInGameConsole )
+        if (m_UseInGameConsole)
         {
             Application.logMessageReceived += Application_logMessageReceived;
         }
-        
 
 
-        Debug.Log( $"Vis App Root: {UnityIsAPieceOfShitHelper.AppRoot}");
-        
+
+        Debug.Log($"Vis App Root: {UnityIsAPieceOfShitHelper.AppRoot}");
+
 
         CpuSettings.FallbackSet = new DefaultSet();
 
         Memory mem = new Memory();
 
-        Cpu cpu = new CpuInstanceBuilder().WithPeripherals( mem ).
-                                           WithExposedApi( UnityVisApi.UAPI_DestroyByName, "UNITY_DestroyByName", 2 ).
+        Cpu cpu = new CpuInstanceBuilder().WithPeripherals(mem).
+                                           WithExposedApi(UnityVisApi.UAPI_DestroyByName, "UNITY_DestroyByName", 2).
                                            WithExposedApi(
                                                UnityVisApi.UAPI_DestroyByHandle,
                                                "UNITY_DestroyByHandle",
-                                               1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_CreateHandle, "UNITY_CreateHandle", 2 ).
-                                           WithExposedApi( UnityVisApi.UAPI_SetPosition, "UNITY_SetPosition", 4 ).
-                                           WithExposedApi( UnityVisApi.UAPI_AddPosition, "UNITY_AddPosition", 4 ).
-                                           WithExposedApi( UnityVisApi.UAPI_SetPositionX, "UNITY_SetPositionX", 2 ).
-                                           WithExposedApi( UnityVisApi.UAPI_SetPositionY, "UNITY_SetPositionY", 2 ).
-                                           WithExposedApi( UnityVisApi.UAPI_SetPositionZ, "UNITY_SetPositionZ", 2 ).
-                                           WithExposedApi( UnityVisApi.UAPI_GetPositionX, "UNITY_GetPositionX", 1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_GetPositionY, "UNITY_GetPositionY", 1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_GetPositionZ, "UNITY_GetPositionZ", 1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_AddPositionX, "UNITY_AddPositionX", 1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_AddPositionY, "UNITY_AddPositionY", 1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1 ).
-                                           WithExposedApi( UnityVisApi.UAPI_Log, "UNITY_Log", 2 ).
-                                           WithExposedApi( UnityVisApi.UAPI_LogError, "UNITY_LogError", 2 ).
+                                               1).
+                                           WithExposedApi(UnityVisApi.UAPI_CreateHandle, "UNITY_CreateHandle", 2).
+                                           WithExposedApi(UnityVisApi.UAPI_SetPosition, "UNITY_SetPosition", 4).
+                                           WithExposedApi(UnityVisApi.UAPI_AddPosition, "UNITY_AddPosition", 4).
+                                           WithExposedApi(UnityVisApi.UAPI_SetPositionX, "UNITY_SetPositionX", 2).
+                                           WithExposedApi(UnityVisApi.UAPI_SetPositionY, "UNITY_SetPositionY", 2).
+                                           WithExposedApi(UnityVisApi.UAPI_SetPositionZ, "UNITY_SetPositionZ", 2).
+                                           WithExposedApi(UnityVisApi.UAPI_GetPositionX, "UNITY_GetPositionX", 1).
+                                           WithExposedApi(UnityVisApi.UAPI_GetPositionY, "UNITY_GetPositionY", 1).
+                                           WithExposedApi(UnityVisApi.UAPI_GetPositionZ, "UNITY_GetPositionZ", 1).
+                                           WithExposedApi(UnityVisApi.UAPI_AddPositionX, "UNITY_AddPositionX", 1).
+                                           WithExposedApi(UnityVisApi.UAPI_AddPositionY, "UNITY_AddPositionY", 1).
+                                           WithExposedApi(UnityVisApi.UAPI_AddPositionZ, "UNITY_AddPositionZ", 1).
+                                           WithExposedApi(UnityVisApi.UAPI_Log, "UNITY_Log", 2).
+                                           WithExposedApi(UnityVisApi.UAPI_LogError, "UNITY_LogError", 2).
                                            WithExposedApi(UAPI_RegisterUpdate, "UNITY_SubscribeUpdate", 1).
                                            Build();
 
         m_CpuInstance = cpu;
     }
 
-    private uint UAPI_RegisterUpdate( Cpu cpu )
+    private uint UAPI_RegisterUpdate(Cpu cpu)
     {
         uint addr = cpu.Pop();
-        m_UpdateAddrList.Add( addr );
+        m_UpdateAddrList.Add(addr);
 
         return 0;
     }
 
     private void Update()
     {
-        foreach ( uint u in m_UpdateAddrList )
+        foreach (uint u in m_UpdateAddrList)
         {
             m_CpuInstance.ClearStackAndStates();
-            m_CpuInstance.SetState( u ); //Jump to Registered Function
+            m_CpuInstance.PushState( u ); //Jump to Registered Function
 
-            while ( !m_CpuInstance.HasSet(Cpu.Flags.Halt) )
+            while (m_CpuInstance.StackDepth != 0)
             {
                 m_CpuInstance.Cycle();
             }
 
-            m_CpuInstance.UnSet( Cpu.Flags.Halt );
+            m_CpuInstance.UnSet(Cpu.Flags.Halt);
         }
     }
 
@@ -146,7 +146,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
     {
         m_ConsoleOutput.text += $"\n[{type}]{condition}";
 
-        if ( m_PrintStackTrace )
+        if (m_PrintStackTrace)
         {
             m_ConsoleOutput.text += $"\n{stackTrace}";
         }
@@ -156,38 +156,38 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
     #region Public
 
-    public void Run( byte[] data )
+    public void Run(byte[] data)
     {
-        m_CpuInstance.LoadBinary( data.ToUInt() );
+        m_CpuInstance.LoadBinary(data.ToUInt());
         m_CpuInstance.Run();
-        m_CpuInstance.UnSet( Cpu.Flags.Halt );
+        m_CpuInstance.UnSet(Cpu.Flags.Halt);
     }
 
-    public void Run( string file )
+    public void Run(string file)
     {
-        Run( File.ReadAllBytes( file ) );
+        Run(File.ReadAllBytes(file));
     }
 
-    public IEnumerable RunAsync( string file )
+    public IEnumerable RunAsync(string file)
     {
-        return RunAsync( File.ReadAllBytes( file ) );
+        return RunAsync(File.ReadAllBytes(file));
     }
 
-    public IEnumerable RunAsync( byte[] data )
+    public IEnumerable RunAsync(byte[] data)
     {
         uint itCount = 0;
-        m_CpuInstance.LoadBinary( data.ToUInt() );
+        m_CpuInstance.LoadBinary(data.ToUInt());
 
-        while ( !m_CpuInstance.HasSet(Cpu.Flags.Halt ) )
+        while (!m_CpuInstance.HasSet(Cpu.Flags.Halt))
         {
             m_CpuInstance.Cycle();
 
-            if ( m_CpuInstance.HasSet(Cpu.Flags.Break ) )
+            if (m_CpuInstance.HasSet(Cpu.Flags.Break))
             {
-                m_CpuInstance.UnSet(Cpu.Flags.Break );
+                m_CpuInstance.UnSet(Cpu.Flags.Break);
             }
 
-            if ( itCount > 1000 )
+            if (itCount > 1000)
             {
                 itCount = 0;
 
@@ -199,7 +199,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
             }
         }
 
-        m_CpuInstance.UnSet(Cpu.Flags.Halt );
+        m_CpuInstance.UnSet(Cpu.Flags.Halt);
     }
 
     #endregion

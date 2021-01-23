@@ -235,6 +235,17 @@ namespace VisCPU.Peripherals.HostFS
         }
 
         #endregion
+
+        public override void Reset()
+        {
+            m_CurrentFile = null;
+            m_CurrentFileStream?.Dispose();
+            m_CurrentFileStream = null;
+            m_SbPath.Clear();
+            m_ReadFileSize = false;
+            m_ReadFileExists = false;
+            m_Status = HostFileSystemStatus.HfsStatusReady;
+        }
     }
 
 }

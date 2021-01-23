@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
+using VisCPU.Instructions;
 using VisCPU.Peripherals;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
@@ -12,6 +13,7 @@ using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Console.Core.Subsystems
 {
@@ -70,6 +72,13 @@ namespace VisCPU.Console.Core.Subsystems
                 MemoryBus bus = CreateBus( mbs );
 
                 Cpu cpu = new Cpu( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
+
+                if ( settings.LoadDebugSymbols )
+                {
+                    LinkerInfo symbols = LinkerInfo.Load( file );
+                    cpu.SetInterruptHandler( ( cpu1, u ) => InterruptHandler( symbols, cpu, u ) );
+                }
+
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
@@ -138,6 +147,13 @@ namespace VisCPU.Console.Core.Subsystems
                 MemoryBus bus = CreateBus( mbs );
 
                 Cpu cpu = new Cpu( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
+
+                if ( settings.LoadDebugSymbols )
+                {
+                    LinkerInfo symbols = LinkerInfo.Load( file );
+                    cpu.SetInterruptHandler( ( cpu1, u ) => InterruptHandler( symbols, cpu, u ) );
+                }
+
                 cpu.LoadBinary( fileCode );
                 cpu.Run();
             }
@@ -163,6 +179,60 @@ namespace VisCPU.Console.Core.Subsystems
                          Concat( additionalPeripherals ).
                          Concat( Peripheral.GetExtensionPeripherals() )
             );
+        }
+
+        private static void InterruptHandler( LinkerInfo symbols, Cpu cpu, uint code )
+        {
+            if(code==0)
+                Logger.LogMessage(LoggerSystems.StackTrace, "Interrupt Fired.");
+            else
+                Logger.LogMessage(LoggerSystems.StackTrace, "FATAL ERROR!");
+            IEnumerable<uint> stackStates = cpu.GetCpuStates();
+            int stackNum = cpu.StackDepth-1;
+            foreach (uint pc in stackStates)
+            {
+
+                uint callingInstruction = cpu.MemoryBus.Read(pc);
+
+                Instruction instr = CpuSettings.InstructionSet.GetInstruction(callingInstruction);
+                uint callee = 0;
+
+                if (instr.Key == "JMP" || instr.Key == "JSR")
+                {
+                    callee = cpu.MemoryBus.Read(pc + 1);
+                }
+                else if (instr.Key == "JSREF")
+                {
+                    callee = cpu.MemoryBus.Read(cpu.MemoryBus.Read(pc + 1));
+                }
+
+                if (callee != 0)
+                {
+                    KeyValuePair<string, AddressItem> item =
+                        symbols.Labels.FirstOrDefault(x => x.Value.Address == callee);
+
+                    if (item.Key == null)
+                    {
+                        Logger.LogMessage(
+                            LoggerSystems.StackTrace,
+                            "\t[Element {1}] Function at address: {0} was not exported",
+                            callee.ToHexString(), stackNum);
+                    }
+                    else
+
+                    {
+                        Logger.LogMessage(LoggerSystems.StackTrace, "\t[Element {1}] {0}", item.Key, stackNum);
+                    }
+
+                }
+
+                stackNum--;
+            }
+            cpu.UnSet(Cpu.Flags.Interrupt);
+            if ( code != 0 ) //No Crash, Just Log and Continue
+            {
+                cpu.Set(Cpu.Flags.Halt);
+            }
         }
 
         private static string RunPreRunSteps( RunnerSettings settings, string file )

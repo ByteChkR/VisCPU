@@ -53,6 +53,11 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
+
+        public override void Reset()
+        {
+
+        }
     }
 
 }

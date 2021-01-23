@@ -63,6 +63,10 @@ namespace VisCPU.Peripherals.Memory
             }
         }
 
+        public override void Reset()
+        {
+        }
+
         public override bool CanRead( uint address )
         {
             return m_Settings.EnableRead && address < EndAddress && address >= m_Settings.Start;

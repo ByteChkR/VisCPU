@@ -2,9 +2,11 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using VisCPU.Instructions;
 using VisCPU.Utility;
+using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
 
 namespace VisCPU
@@ -20,6 +22,17 @@ namespace VisCPU
             Interrupt = 2,
             Halt = 4
         }
+
+        private  Action < Cpu, uint > m_InterruptHandler;
+
+        public IEnumerable < uint > GetCpuStates() => m_CpuStack.Select( x => x.Pc ); 
+
+        public void SetInterruptHandler( Action < Cpu, uint > handler )
+        {
+            m_InterruptHandler = handler;
+        }
+
+        public int StackDepth => m_CpuStack.Count;
 
         public readonly MemoryBus MemoryBus;
 
@@ -228,6 +241,20 @@ namespace VisCPU
             }
 
             MemoryBus.Shutdown();
+        }
+
+        public void FireInterrupt( uint intCode )
+        {
+
+            if ( m_InterruptHandler != null )
+            {
+                Set(Flags.Interrupt);
+                m_InterruptHandler( this, intCode );
+            }
+            else
+            {
+                Logger.LogMessage( LoggerSystems.All, "Interrupt Handler not Attached." );
+            }
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]

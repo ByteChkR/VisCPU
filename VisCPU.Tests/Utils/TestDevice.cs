@@ -22,6 +22,12 @@ namespace VisCPU.Tests.Utils
 
         #region Public
 
+        public override void Reset()
+        {
+            m_CurrentCommand = 0;
+            m_CurrentTest = null;
+        }
+
         public override bool CanRead( uint address )
         {
             return address == TestDevicePresent;

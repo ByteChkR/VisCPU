@@ -20,6 +20,7 @@ namespace VisCPU.Instructions
             new Instruction[]
             {
                 new NoOpInstruction(),
+                new InterruptInstruction(),
                 new BreakInstruction(),
                 new HaltInstruction(),
                 new AddInstruction(),
