@@ -77,6 +77,7 @@ namespace VisCPU.Console.Core.Subsystems
                 {
                     CpuDebugHelper.LoadSymbols( file );
 
+                    if(settings.AdditionalSymbols != null)
                     foreach (string symPath in settings.AdditionalSymbols)
                     {
                         CpuDebugHelper.LoadSymbols( symPath );
