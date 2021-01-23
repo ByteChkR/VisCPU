@@ -23,7 +23,7 @@ namespace VisCPU.ProjectSystem.Database.Implementations
         public HttpProjectDatabase( string repoName, string moduleRoot ) : base( moduleRoot )
         {
 
-            m_LocalTempCache = SettingsCategories.Get( "sdk.module.origins", false ).
+            m_LocalTempCache = SettingsCategories.Get( "sdk.module.origins", true ).
                                                   AddCategory( repoName ).
                                                   GetCategoryDirectory();
 
