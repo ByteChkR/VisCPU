@@ -32,7 +32,7 @@ namespace VisCPU.Utility.EventSystem
                 return;
             }
 
-            throw new EventManagerException ( $"[{obj.EventKey}] {obj.Message}" );
+            throw new EventManagerException( $"[{obj.EventKey}] {obj.Message}" );
         }
 
         private static void EventManagerOnEventReceive( Event obj )

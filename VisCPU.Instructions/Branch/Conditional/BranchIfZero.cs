@@ -1,7 +1,7 @@
 ﻿namespace VisCPU.Instructions.Branch.Conditional
 {
 
-    public class BranchIfZero : BranchInstruction
+    public class BranchIfZero : BranchIfEqual
     {
         public override uint Cycles => 1;
 
@@ -18,7 +18,7 @@
             uint a = cpu.MemoryBus.Read( cpu.DecodeArgument( 0 ) );
             uint address = cpu.DecodeArgument( 1 );
 
-            bool jmp = a == 0;
+            bool jmp = Calculate( a, 0 );
 
             if ( jmp )
             {

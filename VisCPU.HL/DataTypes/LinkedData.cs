@@ -5,9 +5,9 @@ namespace VisCPU.HL.DataTypes
 
     public class LinkedData : IExternalData
     {
-        public AddressItem Info { get; }
-
         private readonly string m_Name;
+
+        public AddressItem Info { get; }
 
         public ExternalDataType DataType { get; }
 

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using VisCPU.Utility.Events;
-using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings.Events;
 
 namespace VisCPU.Utility.Settings
 {
@@ -52,7 +49,11 @@ namespace VisCPU.Utility.Settings
             return m_SubCategories.FirstOrDefault( x => x.CategoryName == name );
         }
 
-        public string GetCategoryDirectory() => GetCategoryDirectory( null );
+        public string GetCategoryDirectory()
+        {
+            return GetCategoryDirectory( null );
+        }
+
         public string GetCategoryDirectory( string root )
         {
             List < string > parts = new List < string > { root ?? SettingsCategories.GetRootDir( this ) };

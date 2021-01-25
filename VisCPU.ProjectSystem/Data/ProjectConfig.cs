@@ -100,6 +100,11 @@ namespace VisCPU.ProjectSystem.Data
             );
         }
 
+        public void RunDefaultTarget( string rootDir )
+        {
+            RunTarget( rootDir, DefaultTarget );
+        }
+
         public void RunJob(
             string rootDir,
             ProjectBuildTarget buildTarget,
@@ -122,8 +127,6 @@ namespace VisCPU.ProjectSystem.Data
 
             s_BuildJobRunners[job.BuildJobRunner].RunJob( rootDir, this, buildTarget, job );
         }
-
-        public void RunDefaultTarget( string rootDir ) => RunTarget( rootDir, DefaultTarget );
 
         public void RunTarget( string rootDir, string target )
         {

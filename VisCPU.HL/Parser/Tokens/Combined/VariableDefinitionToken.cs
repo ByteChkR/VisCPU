@@ -42,7 +42,8 @@
             subtokens,
             initializerExpression,
             null )
-        { }
+        {
+        }
 
         /// <summary>
         ///     Public Constructor

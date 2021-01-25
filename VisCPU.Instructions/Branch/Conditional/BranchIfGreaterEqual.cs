@@ -13,18 +13,9 @@
 
         #region Public
 
-        public override void Process( Cpu cpu )
+        public override bool Calculate( uint a, uint b )
         {
-            uint a = cpu.MemoryBus.Read( cpu.DecodeArgument( 0 ) );
-            uint b = cpu.MemoryBus.Read( cpu.DecodeArgument( 1 ) );
-            uint address = cpu.DecodeArgument( 2 );
-
-            bool jmp = a >= b;
-
-            if ( jmp )
-            {
-                cpu.SetState( address - InstructionSize );
-            }
+            return a >= b;
         }
 
         #endregion

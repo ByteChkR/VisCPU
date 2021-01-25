@@ -90,10 +90,10 @@ namespace VisCPU.HL.Compiler
 
             return target;
         }
-        
+
         public ExpressionTarget CopyIfNotNull(
             HlCompilation compilation,
-            ExpressionTarget target)
+            ExpressionTarget target )
         {
             if ( target.ResultAddress == null || target.ResultAddress == ResultAddress )
             {

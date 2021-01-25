@@ -95,8 +95,9 @@ namespace VisCPU.Tests.Utils
                         FailTest();
 
                         break;
+
                     default:
-                        throw new NotSupportedException("Invalid Test Device Command");
+                        throw new NotSupportedException( "Invalid Test Device Command" );
                 }
 
                 m_CurrentCommand = 0;
@@ -112,7 +113,7 @@ namespace VisCPU.Tests.Utils
         {
             if ( m_CurrentTest != null )
             {
-                throw new TestDeviceException ( $"Finish test {m_CurrentTest} before starting test {m_TextBuilder}" );
+                throw new TestDeviceException( $"Finish test {m_CurrentTest} before starting test {m_TextBuilder}" );
             }
 
             m_CurrentTest = m_TextBuilder.ToString();

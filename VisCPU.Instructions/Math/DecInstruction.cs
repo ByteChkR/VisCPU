@@ -1,7 +1,9 @@
-﻿namespace VisCPU.Instructions.Math
+﻿using VisCPU.Instructions.Math.Self;
+
+namespace VisCPU.Instructions.Math
 {
 
-    public class DecInstruction : MathInstruction
+    public class DecInstruction : SubSelfInstruction
     {
         public override uint Cycles => 1;
 
@@ -19,7 +21,7 @@
 
             uint a = cpu.MemoryBus.Read( addressA ); //Read Value From RAM
 
-            uint result = a - 1; //Calculate Value
+            uint result = Calculate( a, 1 ); //Calculate Value
 
             cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }

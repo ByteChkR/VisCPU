@@ -7,13 +7,17 @@ namespace VisCPU.Peripherals.Console
     public class ConsoleInterfaceSettings
     {
         public uint InterfacePresentPin { get; set; } = 0xFFFF1006;
+
         public uint WidthAddr { get; set; } = 0xFFFF1007;
+
         public uint HeightAddr { get; set; } = 0xFFFF1008;
 
         public uint CursorLeftAddr { get; set; } = 0xFFFF1009;
+
         public uint CursorTopAddr { get; set; } = 0xFFFF100A;
 
         public uint BackColorAddr { get; set; } = 0xFFFF100B;
+
         public uint ForeColorAddr { get; set; } = 0xFFFF100C;
 
         public uint ResetColorAddr { get; set; } = 0xFFFF100D;

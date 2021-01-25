@@ -15,18 +15,9 @@ namespace VisCPU.Instructions.Math
 
         #region Public
 
-        public override void Process( Cpu cpu )
+        public override uint Calculate( uint a, uint b )
         {
-            uint addressA = cpu.DecodeArgument( 0 );      //Number A Address
-            uint addressB = cpu.DecodeArgument( 1 );      //Number B Address
-            uint addressResult = cpu.DecodeArgument( 2 ); //Number Result Address
-
-            uint a = cpu.MemoryBus.Read( addressA ); //Read Value From RAM
-            uint b = cpu.MemoryBus.Read( addressB ); //Read Value From RAM
-
-            uint result = ( uint ) ( ( int ) a >> ( int ) b ); //Calculate Value
-
-            cpu.MemoryBus.Write( addressResult, result ); //Write back Result
+            return a >> ( int ) b;
         }
 
         #endregion

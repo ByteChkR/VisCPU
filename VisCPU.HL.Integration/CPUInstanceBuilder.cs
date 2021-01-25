@@ -19,9 +19,14 @@ namespace VisCPU.HL.Integration
 
         #region Public
 
+        public CpuInstanceBuilder() : this( 0 )
+        {
+        }
 
-        public CpuInstanceBuilder() : this(0) { }
-        public CpuInstanceBuilder(uint resetAddr):this(resetAddr, 0) { }
+        public CpuInstanceBuilder( uint resetAddr ) : this( resetAddr, 0 )
+        {
+        }
+
         public CpuInstanceBuilder( uint resetAddr, uint intAddr )
         {
 

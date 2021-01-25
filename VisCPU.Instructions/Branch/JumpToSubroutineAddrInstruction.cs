@@ -3,7 +3,7 @@
 namespace VisCPU.Instructions.Branch
 {
 
-    public class JumpToSubroutineAddrInstruction : BranchInstruction
+    public class JumpToSubroutineAddrInstruction : UnconditionalBranchInstruction
     {
         public override uint Cycles => 1;
 

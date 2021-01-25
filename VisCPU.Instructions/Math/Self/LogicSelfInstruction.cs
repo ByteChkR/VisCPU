@@ -3,7 +3,7 @@
 namespace VisCPU.Instructions.Math.Self
 {
 
-    public abstract class LogicInstruction : MathInstruction
+    public abstract class LogicSelfInstruction : MathSelfInstruction
     {
         protected override LoggerSystems SubSystem => LoggerSystems.LogicInstructions;
     }

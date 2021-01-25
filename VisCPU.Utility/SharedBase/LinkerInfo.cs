@@ -50,7 +50,11 @@ namespace VisCPU.Utility.SharedBase
             };
         }
 
-        public void Save( string outputFile, LinkerInfoFormat format ) => Save( outputFile, format, 0 );
+        public void Save( string outputFile, LinkerInfoFormat format )
+        {
+            Save( outputFile, format, 0 );
+        }
+
         public void Save( string outputFile, LinkerInfoFormat format, uint offset )
         {
             foreach ( string labelKeys in Labels.Keys )

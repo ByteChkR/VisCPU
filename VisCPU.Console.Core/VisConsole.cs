@@ -35,15 +35,17 @@ namespace VisCPU.Console.Core
 
         #region Public
 
+        public static StringBuilder ListSubsystems(
+            Dictionary < string, ConsoleSubsystem > ss,
+            StringBuilder sb )
+        {
+            return ListSubsystems( ss, sb, 0 );
+        }
 
         public static StringBuilder ListSubsystems(
             Dictionary < string, ConsoleSubsystem > ss,
-            StringBuilder sb ) =>
-            ListSubsystems( ss, sb, 0 );
-        public static StringBuilder ListSubsystems(
-            Dictionary < string, ConsoleSubsystem > ss,
             StringBuilder sb,
-            int indentation)
+            int indentation )
         {
             sb.Append( '\t', indentation );
             sb.AppendLine( "Sub Systems:" );

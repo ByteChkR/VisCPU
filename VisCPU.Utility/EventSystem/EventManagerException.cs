@@ -5,7 +5,13 @@ namespace VisCPU.Utility.EventSystem
 
     public class EventManagerException : Exception
     {
-        public EventManagerException(string msg) :base(msg) { }
+        #region Public
+
+        public EventManagerException( string msg ) : base( msg )
+        {
+        }
+
+        #endregion
     }
 
 }

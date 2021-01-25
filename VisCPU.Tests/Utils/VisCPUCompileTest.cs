@@ -4,7 +4,6 @@ using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Implementations;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
-using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Console.IO;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.Settings;
