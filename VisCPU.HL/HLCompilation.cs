@@ -890,14 +890,24 @@ namespace VisCPU.HL
                               "/" +
                               includedFile.Remove( includedFile.Length - 4, 4 )
                     );
-                    UriKind kind = includedFile.StartsWith("/") || includedFile.StartsWith("\\") ? UriKind.Absolute : UriKind.RelativeOrAbsolute;
-                    Log("Detected Uri Kind: {0}", kind);
+
+                    UriKind kind = includedFile.StartsWith( "/" ) || includedFile.StartsWith( "\\" )
+                        ? UriKind.Absolute
+                        : UriKind.RelativeOrAbsolute;
+
+                    Log( "Detected Uri Kind: {0}", kind );
                     Uri import = null;
-                    if(kind == UriKind.Absolute)
-                        import = new Uri("file://"+ includedFile, kind );
-                    else 
-                        import = new Uri(includedFile, kind );
-                    Uri dir = new Uri("file://"+ Directory.GetCurrentDirectory() + "/", UriKind.Absolute );
+
+                    if ( kind == UriKind.Absolute )
+                    {
+                        import = new Uri( "file://" + includedFile, kind );
+                    }
+                    else
+                    {
+                        import = new Uri( includedFile, kind );
+                    }
+
+                    Uri dir = new Uri( "file://" + Directory.GetCurrentDirectory() + "/", UriKind.Absolute );
 
                     if ( import.IsAbsoluteUri )
                     {

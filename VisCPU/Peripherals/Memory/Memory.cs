@@ -16,6 +16,14 @@ namespace VisCPU.Peripherals.Memory
 
         public uint EndAddress => m_Settings.Start + ( uint ) m_InternalMemory.Length;
 
+        #region Unity Event Functions
+
+        public override void Reset()
+        {
+        }
+
+        #endregion
+
         #region Public
 
         public Memory() : this( SettingsManager.GetSettings < MemorySettings >() )
@@ -61,10 +69,6 @@ namespace VisCPU.Peripherals.Memory
 
                 //Not persistent or persistent path not set
             }
-        }
-
-        public override void Reset()
-        {
         }
 
         public override bool CanRead( uint address )

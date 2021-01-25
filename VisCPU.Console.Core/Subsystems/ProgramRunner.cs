@@ -77,12 +77,15 @@ namespace VisCPU.Console.Core.Subsystems
                 {
                     CpuDebugHelper.LoadSymbols( file );
 
-                    if(settings.AdditionalSymbols != null)
-                    foreach (string symPath in settings.AdditionalSymbols)
+                    if ( settings.AdditionalSymbols != null )
                     {
-                        CpuDebugHelper.LoadSymbols( symPath );
+                        foreach ( string symPath in settings.AdditionalSymbols )
+                        {
+                            CpuDebugHelper.LoadSymbols( symPath );
+                        }
                     }
-                    cpu.SetInterruptHandler( InterruptHandler);
+
+                    cpu.SetInterruptHandler( InterruptHandler );
                 }
 
                 cpu.LoadBinary( fileCode );
@@ -158,13 +161,15 @@ namespace VisCPU.Console.Core.Subsystems
                 {
                     CpuDebugHelper.LoadSymbols( file );
 
-                    if(settings.AdditionalSymbols!=null)
-                    foreach ( string symPath in settings.AdditionalSymbols )
+                    if ( settings.AdditionalSymbols != null )
                     {
-                        CpuDebugHelper.LoadSymbols( symPath );
+                        foreach ( string symPath in settings.AdditionalSymbols )
+                        {
+                            CpuDebugHelper.LoadSymbols( symPath );
+                        }
                     }
 
-                    cpu.SetInterruptHandler(InterruptHandler);
+                    cpu.SetInterruptHandler( InterruptHandler );
                 }
 
                 cpu.LoadBinary( fileCode );
@@ -196,7 +201,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         private static void InterruptHandler( Cpu cpu, uint code )
         {
-            List <(string Key, AddressItem Value)> mergedInfo = new List < (string, AddressItem) >();
+            List < (string Key, AddressItem Value) > mergedInfo = new List < (string, AddressItem) >();
 
             foreach ( LinkerInfo linkerInfo in CpuDebugHelper.LoadedSymbols )
             {
@@ -206,55 +211,64 @@ namespace VisCPU.Console.Core.Subsystems
                 }
             }
 
-            if(code==0)
-                Logger.LogMessage(LoggerSystems.StackTrace, "Interrupt Fired.");
+            if ( code == 0 )
+            {
+                Logger.LogMessage( LoggerSystems.StackTrace, "Interrupt Fired." );
+            }
             else
-                Logger.LogMessage(LoggerSystems.StackTrace, "FATAL ERROR!");
-            IEnumerable<uint> stackStates = cpu.GetCpuStates();
-            int stackNum = cpu.StackDepth-1;
-            foreach (uint pc in stackStates)
+            {
+                Logger.LogMessage( LoggerSystems.StackTrace, "FATAL ERROR!" );
+            }
+
+            IEnumerable < uint > stackStates = cpu.GetCpuStates();
+            int stackNum = cpu.StackDepth - 1;
+
+            foreach ( uint pc in stackStates )
             {
 
-                uint callingInstruction = cpu.MemoryBus.Read(pc);
+                uint callingInstruction = cpu.MemoryBus.Read( pc );
 
-                Instruction instr = CpuSettings.InstructionSet.GetInstruction(callingInstruction);
+                Instruction instr = CpuSettings.InstructionSet.GetInstruction( callingInstruction );
                 uint callee = 0;
 
-                if (instr.Key == "JMP" || instr.Key == "JSR")
+                if ( instr.Key == "JMP" || instr.Key == "JSR" )
                 {
-                    callee = cpu.MemoryBus.Read(pc + 1);
+                    callee = cpu.MemoryBus.Read( pc + 1 );
                 }
-                else if (instr.Key == "JSREF")
+                else if ( instr.Key == "JSREF" )
                 {
-                    callee = cpu.MemoryBus.Read(cpu.MemoryBus.Read(pc + 1));
+                    callee = cpu.MemoryBus.Read( cpu.MemoryBus.Read( pc + 1 ) );
                 }
 
-                if (callee != 0)
+                if ( callee != 0 )
                 {
                     (string Key, AddressItem Value) item =
-                        mergedInfo.FirstOrDefault(x => x.Value.Address == callee);
+                        mergedInfo.FirstOrDefault( x => x.Value.Address == callee );
 
-                    if (item.Key == null)
+                    if ( item.Key == null )
                     {
                         Logger.LogMessage(
                             LoggerSystems.StackTrace,
                             "\t[Element {1}] Function at address: {0} was not exported",
-                            callee.ToHexString(), stackNum);
+                            callee.ToHexString(),
+                            stackNum );
                     }
                     else
 
                     {
-                        Logger.LogMessage(LoggerSystems.StackTrace, "\t[Element {1}] {0}", item.Key, stackNum);
+                        Logger.LogMessage( LoggerSystems.StackTrace, "\t[Element {1}] {0}", item.Key, stackNum );
                     }
 
                 }
 
                 stackNum--;
             }
-            cpu.UnSet(Cpu.Flags.Interrupt);
+
+            cpu.UnSet( Cpu.Flags.Interrupt );
+
             if ( code != 0 ) //No Crash, Just Log and Continue
             {
-                cpu.Set(Cpu.Flags.Halt);
+                cpu.Set( Cpu.Flags.Halt );
             }
         }
 

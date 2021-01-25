@@ -10,7 +10,9 @@ namespace VisCPU.Console
 
         private static void Main( string[] args )
         {
-            UnityIsAPieceOfShitHelper.SetAppDomainBase(); // Hack to be able to use the .netstandard libs in unity AND as console app.
+            UnityIsAPieceOfShitHelper.
+                SetAppDomainBase(); // Hack to be able to use the .netstandard libs in unity AND as console app.
+
             VisConsole.RunConsole( args );
         }
 

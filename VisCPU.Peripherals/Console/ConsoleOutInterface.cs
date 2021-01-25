@@ -17,6 +17,14 @@ namespace VisCPU.Peripherals.Console
 
         public Action < uint > WriteConsoleNum { get; set; } = x => System.Console.Write( x.ToString() );
 
+        #region Unity Event Functions
+
+        public override void Reset()
+        {
+        }
+
+        #endregion
+
         #region Public
 
         public ConsoleOutInterface()
@@ -68,10 +76,6 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
-
-        public override void Reset()
-        {
-        }
     }
 
 }

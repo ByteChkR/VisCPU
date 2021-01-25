@@ -8,23 +8,10 @@ using VisCPU.Instructions;
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
-using VisCPU.Utility.SharedBase;
 
 namespace VisCPU
 {
 
-    public static class CpuDebugHelper
-    {
-        private static readonly List < LinkerInfo > infos = new List < LinkerInfo >();
-
-        public static IEnumerable < LinkerInfo > LoadedSymbols => infos;
-        public static void LoadSymbols( LinkerInfo info )
-        {
-            infos.Add( info );
-        }
-
-        public static void LoadSymbols( string binary ) => LoadSymbols( LinkerInfo.Load(binary) );
-    }
     public class Cpu
     {
         [Flags]
@@ -35,17 +22,6 @@ namespace VisCPU
             Interrupt = 2,
             Halt = 4
         }
-
-        private  Action < Cpu, uint > m_InterruptHandler;
-
-        public IEnumerable < uint > GetCpuStates() => m_CpuStack.Select( x => x.Pc ); 
-
-        public void SetInterruptHandler( Action < Cpu, uint > handler )
-        {
-            m_InterruptHandler = handler;
-        }
-
-        public int StackDepth => m_CpuStack.Count;
 
         public readonly MemoryBus MemoryBus;
 
@@ -79,6 +55,8 @@ namespace VisCPU
             }
         }
 
+        private Action < Cpu, uint > m_InterruptHandler;
+
         private readonly Stack < CpuState > m_CpuStack = new Stack < CpuState >();
 
         private readonly uint m_IntAddress;
@@ -86,6 +64,8 @@ namespace VisCPU
         private readonly uint m_ResetAddress;
         private readonly Stack < uint > m_Stack = new Stack < uint >();
         private uint m_RemainingCycles;
+
+        public int StackDepth => m_CpuStack.Count;
 
         public uint ProgramCounter { get; private set; }
 
@@ -111,6 +91,13 @@ namespace VisCPU
             MemoryBus = bus;
             m_IntAddress = interruptAddress;
             m_ResetAddress = resetAddress;
+        }
+
+        [MethodImpl( MethodImplOptions.AggressiveInlining )]
+        public void ClearStackAndStates()
+        {
+            m_Stack.Clear();
+            m_CpuStack.Clear();
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -160,6 +147,25 @@ namespace VisCPU
             return MemoryBus.Read( ProgramCounter + ( uint ) argNum + 1 );
         }
 
+        public void FireInterrupt( uint intCode )
+        {
+
+            if ( m_InterruptHandler != null )
+            {
+                Set( Flags.Interrupt );
+                m_InterruptHandler( this, intCode );
+            }
+            else
+            {
+                Logger.LogMessage( LoggerSystems.All, "Interrupt Handler not Attached." );
+            }
+        }
+
+        public IEnumerable < uint > GetCpuStates()
+        {
+            return m_CpuStack.Select( x => x.Pc );
+        }
+
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public bool HasSet( Flags flag )
         {
@@ -191,13 +197,6 @@ namespace VisCPU
         public uint Pop()
         {
             return m_Stack.Pop();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ClearStackAndStates()
-        {
-            m_Stack.Clear();
-            m_CpuStack.Clear();
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -256,24 +255,15 @@ namespace VisCPU
             MemoryBus.Shutdown();
         }
 
-        public void FireInterrupt( uint intCode )
-        {
-
-            if ( m_InterruptHandler != null )
-            {
-                Set(Flags.Interrupt);
-                m_InterruptHandler( this, intCode );
-            }
-            else
-            {
-                Logger.LogMessage( LoggerSystems.All, "Interrupt Handler not Attached." );
-            }
-        }
-
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void Set( Flags flag )
         {
             ProcessorFlags |= flag;
+        }
+
+        public void SetInterruptHandler( Action < Cpu, uint > handler )
+        {
+            m_InterruptHandler = handler;
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]

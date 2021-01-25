@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -170,7 +169,7 @@ namespace VisCPU.ProjectSystem.Data
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
             {
-                { "VISDIR",  UnityIsAPieceOfShitHelper.AppRoot  },
+                { "VISDIR", UnityIsAPieceOfShitHelper.AppRoot },
                 {
                     "PROJDIR", rootDir.EndsWith( "\\" ) ||
                                rootDir.EndsWith( "/" )
@@ -198,7 +197,7 @@ namespace VisCPU.ProjectSystem.Data
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
             {
-                { "VISDIR",  UnityIsAPieceOfShitHelper.AppRoot  },
+                { "VISDIR", UnityIsAPieceOfShitHelper.AppRoot },
                 {
                     "PROJDIR", rootDir.EndsWith( "\\" ) ||
                                rootDir.EndsWith( "/" )

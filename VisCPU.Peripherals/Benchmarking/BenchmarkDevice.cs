@@ -43,6 +43,16 @@ namespace VisCPU.Peripherals.Benchmarking
         private readonly StringBuilder m_BenchmarkName = new StringBuilder();
         private readonly Stopwatch m_StopWatch = new Stopwatch();
 
+        #region Unity Event Functions
+
+        public override void Reset()
+        {
+            m_StopWatch.Reset();
+            m_BenchmarkName.Clear();
+        }
+
+        #endregion
+
         #region Public
 
         public override bool CanRead( uint address )
@@ -128,12 +138,6 @@ namespace VisCPU.Peripherals.Benchmarking
         }
 
         #endregion
-
-        public override void Reset()
-        {
-            m_StopWatch.Reset();
-            m_BenchmarkName.Clear();
-        }
     }
 
 }

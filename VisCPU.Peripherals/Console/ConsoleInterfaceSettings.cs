@@ -33,10 +33,11 @@ namespace VisCPU.Peripherals.Console
 
         #endregion
 
+        #region Private
 
         static ConsoleInterfaceSettings()
         {
-            SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory("console");
+            SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
                 new JsonSettingsLoader(),
@@ -45,6 +46,8 @@ namespace VisCPU.Peripherals.Console
                 new ConsoleInterfaceSettings()
             );
         }
+
+        #endregion
     }
 
 }

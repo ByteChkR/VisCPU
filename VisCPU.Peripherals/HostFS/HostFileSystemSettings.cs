@@ -1,5 +1,4 @@
-﻿using System;
-using VisCPU.Utility;
+﻿using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.Settings.Loader;

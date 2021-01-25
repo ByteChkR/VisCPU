@@ -13,6 +13,15 @@ namespace VisCPU.Peripherals.Console
 
         public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
 
+        #region Unity Event Functions
+
+        public override void Reset()
+        {
+
+        }
+
+        #endregion
+
         #region Public
 
         public ConsoleInInterface()
@@ -53,11 +62,6 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
-
-        public override void Reset()
-        {
-
-        }
     }
 
 }

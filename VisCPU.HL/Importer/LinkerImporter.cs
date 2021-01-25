@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
-using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.SharedBase;
@@ -36,8 +33,11 @@ namespace VisCPU.HL.Importer
             LinkerInfo info = LinkerInfo.Load( cmd );
 
             return info.Labels.
-                        Select( x => ( IExternalData ) new LinkedData(
-                                    x.Key, x.Value, ExternalDataType.Function ) ).
+                        Select(
+                            x => ( IExternalData ) new LinkedData(
+                                x.Key,
+                                x.Value,
+                                ExternalDataType.Function ) ).
                         Concat(
                             info.DataSectionHeader.Select(
                                 x => ( IExternalData ) new LinkedData(

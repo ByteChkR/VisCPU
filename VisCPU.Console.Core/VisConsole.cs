@@ -12,7 +12,6 @@ using VisCPU.Peripherals;
 using VisCPU.Peripherals.Benchmarking;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.HostFS;
-using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
@@ -23,8 +22,6 @@ namespace VisCPU.Console.Core
 
     public class VisConsole : ConsoleSystem
     {
-
-
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {

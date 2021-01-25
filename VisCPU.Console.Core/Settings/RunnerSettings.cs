@@ -12,10 +12,10 @@ namespace VisCPU.Console.Core.Settings
 
     public class RunnerSettings
     {
-        [Argument(Name = "run:load-symbols")]
+        [Argument( Name = "run:load-symbols" )]
         public bool LoadDebugSymbols = true;
 
-        [Argument(Name = "run:symbols")]
+        [Argument( Name = "run:symbols" )]
         [XmlIgnore]
         [JsonIgnore]
         public string[] AdditionalSymbols;

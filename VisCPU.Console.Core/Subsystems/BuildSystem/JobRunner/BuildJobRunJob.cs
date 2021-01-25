@@ -1,6 +1,6 @@
-﻿using VisCPU.ProjectSystem.BuildSystem;
+﻿using System.IO;
+using VisCPU.ProjectSystem.BuildSystem;
 using VisCPU.ProjectSystem.Data;
-using System.IO;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 {
@@ -18,9 +18,9 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
             ProjectBuildJob job )
         {
             string old = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(projectRoot);
+            Directory.SetCurrentDirectory( projectRoot );
             ProgramRunner.Run( job.Arguments );
-            Directory.SetCurrentDirectory(old);
+            Directory.SetCurrentDirectory( old );
         }
 
         #endregion

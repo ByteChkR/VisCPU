@@ -19,6 +19,21 @@ namespace VisCPU.Peripherals.HostFS
         private bool m_ReadFileSize;
         private bool m_ReadFileExists;
 
+        #region Unity Event Functions
+
+        public override void Reset()
+        {
+            m_CurrentFile = null;
+            m_CurrentFileStream?.Dispose();
+            m_CurrentFileStream = null;
+            m_SbPath.Clear();
+            m_ReadFileSize = false;
+            m_ReadFileExists = false;
+            m_Status = HostFileSystemStatus.HfsStatusReady;
+        }
+
+        #endregion
+
         #region Public
 
         public HostFileSystem( HostFileSystemSettings settings )
@@ -211,12 +226,14 @@ namespace VisCPU.Peripherals.HostFS
                         File.Delete( targetFile );
 
                         break;
+
                     case HostFileSystemCommands.HfsLoadSymbols:
                         string target = GetPath( m_SbPath.ToString() );
                         m_SbPath.Clear();
                         CpuDebugHelper.LoadSymbols( target );
 
                         break;
+
                     default:
                         EventManager < ErrorEvent >.SendEvent( new InvalidHfsCommandEvent( cmd ) );
 
@@ -240,17 +257,6 @@ namespace VisCPU.Peripherals.HostFS
         }
 
         #endregion
-
-        public override void Reset()
-        {
-            m_CurrentFile = null;
-            m_CurrentFileStream?.Dispose();
-            m_CurrentFileStream = null;
-            m_SbPath.Clear();
-            m_ReadFileSize = false;
-            m_ReadFileExists = false;
-            m_Status = HostFileSystemStatus.HfsStatusReady;
-        }
     }
 
 }

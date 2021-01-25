@@ -20,13 +20,17 @@ namespace VisCPU.Tests.Utils
 
         public event Action < string, string > OnFail;
 
-        #region Public
+        #region Unity Event Functions
 
         public override void Reset()
         {
             m_CurrentCommand = 0;
             m_CurrentTest = null;
         }
+
+        #endregion
+
+        #region Public
 
         public override bool CanRead( uint address )
         {

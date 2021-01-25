@@ -3,11 +3,21 @@ using VisCPU.Peripherals;
 
 namespace VisCPU.HL.Integration
 {
+
     public class ApiImporterDevice : Peripheral
     {
         private Cpu m_ExecutingCpu;
         private readonly uint m_ListenAddr;
         private readonly Func < Cpu, uint > m_InvokeExec;
+
+        #region Unity Event Functions
+
+        public override void Reset()
+        {
+
+        }
+
+        #endregion
 
         #region Public
 
@@ -15,11 +25,6 @@ namespace VisCPU.HL.Integration
         {
             m_ListenAddr = addr;
             m_InvokeExec = invokeExec;
-        }
-
-        public override void Reset()
-        {
-
         }
 
         public override bool CanRead( uint address )

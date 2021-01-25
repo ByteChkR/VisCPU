@@ -35,8 +35,8 @@ namespace VisCPU.HL.Importer
         {
             List < string > data = new List < string >();
             Log( $"Generating Function for Instruction {target.Key}" );
-            data.Add("; This is an automatically generated file.");
-            data.Add("; Do not change unless you know exactly what you are doing.");            
+            data.Add( "; This is an automatically generated file." );
+            data.Add( "; Do not change unless you know exactly what you are doing." );
             data.Add( $"; Generated vasm file for instruction: {target.Key}" );
 
             data.Add( $":data tmp_ret 0x01 linker:hide" );

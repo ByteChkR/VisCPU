@@ -48,9 +48,14 @@ namespace VisCPU.HL.Integration
 
         private string GenerateApiDriver( FunctionData data, uint devAddr )
         {
-            StringBuilder sb = new StringBuilder("// This is an automatically generated file.\n");
-            sb.Append("// Do not change unless you know exactly what you are doing.\n");
-            sb.AppendFormat("// Device Driver for API Call: {0} on Address {1}\n\n", data.GetFinalName(), devAddr.ToHexString());
+            StringBuilder sb = new StringBuilder( "// This is an automatically generated file.\n" );
+            sb.Append( "// Do not change unless you know exactly what you are doing.\n" );
+
+            sb.AppendFormat(
+                "// Device Driver for API Call: {0} on Address {1}\n\n",
+                data.GetFinalName(),
+                devAddr.ToHexString() );
+
             sb.AppendFormat( "public var {0}(", data.GetFinalName() );
 
             for ( int i = 0; i < data.ParameterCount; i++ )

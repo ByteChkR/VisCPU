@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using VisCPU.ProjectSystem.Data;
 using VisCPU.Utility;
 
@@ -232,7 +231,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
 
         private static void GenerateCommonJobs()
         {
-            string dir = Path.Combine(UnityIsAPieceOfShitHelper.AppRoot, "common/jobs" );
+            string dir = Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "common/jobs" );
             Directory.CreateDirectory( dir );
             ProjectBuildJob cleanJob = new ProjectBuildJob();
             cleanJob.BuildJobRunner = "clean";
