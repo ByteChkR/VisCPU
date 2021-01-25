@@ -38,7 +38,6 @@
         public static readonly string s_GenericFileNotFound = "generic-file-not-found";
 
         public static readonly string s_SettingsDuplicateCategory = "settings-duplicate-category";
-        public static readonly string s_SettingsDuplicateRootCategory = "settings-duplicate-root-category";
         public static readonly string s_SettingsLoaderNotFound = "settings-loader-not-found";
         public static readonly string s_SettingsIoDisabled = "settings-io-disabled";
 
@@ -56,6 +55,7 @@
         public static readonly string s_ModuleManagerUnsupportedFeature = "module-manager-feature-unsupported";
         public static readonly string s_ModuleFileNotFound = "module-file-not-found";
 
+        public static readonly string s_HfsReadFailure = "hfs-read-failure";
         public static readonly string s_OriginUrlSchemeUnsupported = "origin-url-scheme-unsupported";
     }
 

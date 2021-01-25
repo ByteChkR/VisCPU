@@ -6,15 +6,15 @@ namespace VisCPU
 
     public static class CpuDebugHelper
     {
-        private static readonly List < LinkerInfo > infos = new List < LinkerInfo >();
+        private static readonly List < LinkerInfo > s_Infos = new List < LinkerInfo >();
 
-        public static IEnumerable < LinkerInfo > LoadedSymbols => infos;
+        public static IEnumerable < LinkerInfo > LoadedSymbols => s_Infos;
 
         #region Public
 
         public static void LoadSymbols( LinkerInfo info )
         {
-            infos.Add( info );
+            s_Infos.Add( info );
         }
 
         public static void LoadSymbols( string binary )

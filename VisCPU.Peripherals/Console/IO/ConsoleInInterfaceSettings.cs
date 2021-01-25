@@ -3,7 +3,7 @@ using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.Settings.Loader;
 
-namespace VisCPU.Peripherals.Console
+namespace VisCPU.Peripherals.Console.IO
 {
 
     [Serializable]

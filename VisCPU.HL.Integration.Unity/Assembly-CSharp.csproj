@@ -56,7 +56,6 @@
     <Compile Include="Assets\VisCPU\UnityVisApi.cs" />
     <Compile Include="Assets\VisCPU\VisExampleScriptTest.cs" />
     <Compile Include="Assets\VisCPU\VisCpuInstanceProvider.cs" />
-    <Compile Include="Assets\Scenes\TestScene\PlayerController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\VisCPU\Impl\VisCPU.dll" />

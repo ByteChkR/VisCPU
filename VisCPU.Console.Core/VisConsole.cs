@@ -11,6 +11,7 @@ using VisCPU.Instructions;
 using VisCPU.Peripherals;
 using VisCPU.Peripherals.Benchmarking;
 using VisCPU.Peripherals.Console;
+using VisCPU.Peripherals.Console.IO;
 using VisCPU.Peripherals.HostFS;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;

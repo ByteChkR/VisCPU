@@ -96,7 +96,13 @@ namespace VisCPU.Peripherals.HostFS
                 if ( m_Status == HostFileSystemStatus.HfsStatusFileOpen )
                 {
                     byte[] buf = new byte[sizeof( uint )];
-                    m_CurrentFileStream.Read( buf, 0, sizeof( uint ) );
+                    int read = m_CurrentFileStream.Read( buf, 0, sizeof( uint ) );
+
+                    if ( read != sizeof( uint ) )
+                    {
+                        EventManager < ErrorEvent >.SendEvent(
+                            new HostFileSystemReadFailureEvent( "Did not read full uint size." ) );
+                    }
 
                     return BitConverter.ToUInt32( buf, 0 );
                 }

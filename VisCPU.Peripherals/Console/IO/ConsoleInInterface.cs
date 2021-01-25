@@ -4,7 +4,7 @@ using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Settings;
 
-namespace VisCPU.Peripherals.Console
+namespace VisCPU.Peripherals.Console.IO
 {
 
     public class ConsoleInInterface : Peripheral
