@@ -95,6 +95,8 @@ namespace VisCPU.Tests.Utils
                         FailTest();
 
                         break;
+                    default:
+                        break;
                 }
 
                 m_CurrentCommand = 0;
