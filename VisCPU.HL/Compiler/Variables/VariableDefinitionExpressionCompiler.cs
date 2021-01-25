@@ -14,13 +14,13 @@ namespace VisCPU.HL.Compiler.Variables
 
     public class VariableDefinitionExpressionCompiler : HlExpressionCompiler < HlVarDefOperand >
     {
-        public readonly HlTypeSystem TypeSystem;
+        private readonly HlTypeSystem m_TypeSystem;
 
         #region Public
 
         public VariableDefinitionExpressionCompiler( HlTypeSystem typeSystem )
         {
-            TypeSystem = typeSystem;
+            m_TypeSystem = typeSystem;
         }
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlVarDefOperand expr )
@@ -34,7 +34,7 @@ namespace VisCPU.HL.Compiler.Variables
                     EventManager < ErrorEvent >.SendEvent( new DuplicateVarDefinitionEvent( asmVarName ) );
                 }
 
-                HlTypeDefinition vdef = TypeSystem.GetType( expr.VariableDefinition.TypeName.ToString() );
+                HlTypeDefinition vdef = m_TypeSystem.GetType( expr.VariableDefinition.TypeName.ToString() );
                 uint arrSize = expr.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
 
                 if ( arrSize != 1 )
@@ -83,7 +83,7 @@ namespace VisCPU.HL.Compiler.Variables
 
                 if ( init != null )
                 {
-                    return compilation.Parse( init, dvar ).CopyIfNotNull( compilation, dvar, true );
+                    return compilation.Parse( init, dvar ).CopyIfNotNull( compilation, dvar );
                 }
 
                 return dvar;

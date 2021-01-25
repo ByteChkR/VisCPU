@@ -92,13 +92,13 @@ namespace VisCPU.Instructions
         #endregion
 
         #region Protected
-
-        protected InstructionSet( Instruction[] instructions, Instruction noOp = null )
+        protected InstructionSet(Instruction[] instructions) :this(instructions, null) { }
+        protected InstructionSet( Instruction[] instructions, Instruction noOp )
         {
             m_Instructions = instructions;
         }
-
-        protected InstructionSet( IEnumerable < InstructionData > data, Instruction noOp = null )
+        protected InstructionSet(IEnumerable<InstructionData> data) :this(data, null) { }
+        protected InstructionSet( IEnumerable < InstructionData > data, Instruction noOp)
         {
             m_Instructions = new Instruction[byte.MaxValue];
 

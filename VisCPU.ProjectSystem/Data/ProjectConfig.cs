@@ -104,7 +104,7 @@ namespace VisCPU.ProjectSystem.Data
             string rootDir,
             ProjectBuildTarget buildTarget,
             ProjectBuildJob job,
-            bool writeDebug = false )
+            bool writeDebug )
         {
             if ( !s_BuildJobRunners.ContainsKey( job.BuildJobRunner ) )
             {
@@ -123,9 +123,10 @@ namespace VisCPU.ProjectSystem.Data
             s_BuildJobRunners[job.BuildJobRunner].RunJob( rootDir, this, buildTarget, job );
         }
 
-        public void RunTarget( string rootDir, string target = null )
+        public void RunDefaultTarget( string rootDir ) => RunTarget( rootDir, DefaultTarget );
+
+        public void RunTarget( string rootDir, string target )
         {
-            string t = target ?? DefaultTarget;
 
             if ( !BuildTargets.ContainsKey( target ) )
             {
@@ -134,7 +135,7 @@ namespace VisCPU.ProjectSystem.Data
                 return;
             }
 
-            ProjectBuildTarget buildTarget = BuildTargets[t];
+            ProjectBuildTarget buildTarget = BuildTargets[target];
 
             RunTarget( rootDir, buildTarget );
         }

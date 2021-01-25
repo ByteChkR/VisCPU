@@ -16,13 +16,14 @@ namespace VisCPU.Console.Core.Settings
         [Argument( Name = "run:i" )]
         [XmlIgnore]
         [JsonIgnore]
-        private readonly string[] m_InputFiles;
+        private readonly string[] m_InputFiles = new string[0];
 
         [Argument( Name = "run:input-dirs" )]
         [Argument( Name = "run:if" )]
         [XmlIgnore]
         [JsonIgnore]
-        private readonly string[] m_InputFolders;
+        private readonly string[] m_InputFolders = new string[0];
+
         [field: Argument( Name = "run:load-symbols" )]
         public bool LoadDebugSymbols { get; } = true;
 

@@ -22,7 +22,7 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
             string tmp = compilation.GetTempVar( ~( uint ) 0 );
             compilation.EmitterResult.Emit( $"XOR", target.ResultAddress, tmp );
 
-            return target.CopyIfNotNull( compilation, outputTarget, true );
+            return target.CopyIfNotNull( compilation, outputTarget );
         }
 
         #endregion

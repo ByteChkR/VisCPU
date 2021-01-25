@@ -67,9 +67,13 @@ public class VisExampleScriptTest : MonoBehaviour
         }
 
         if ( m_Async )
+        {
             StartCoroutine( m_Provider.RunAsync( m_LastCompile ).GetEnumerator() );
+        }
         else
+        {
             m_Provider.Run( m_LastCompile );
+        }
     }
 
     #endregion

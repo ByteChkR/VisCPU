@@ -20,7 +20,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
             foreach ( KeyValuePair < string, string > buildJobs in job.Arguments )
             {
                 ProjectBuildJob subJob = ProjectBuildJob.Load( buildJobs.Value );
-                project.RunJob( projectRoot, target, subJob );
+                project.RunJob( projectRoot, target, subJob, false );
             }
         }
 

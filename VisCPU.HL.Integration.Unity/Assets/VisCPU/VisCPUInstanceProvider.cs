@@ -23,7 +23,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
     [SerializeField]
     private LoggerSystems m_LogOutput = LoggerSystems.Default;
 
-    private List<uint> m_UpdateAddrList = new List<uint>();
+    private readonly List<uint> m_UpdateAddrList = new List<uint>();
     [SerializeField]
     private bool m_UsePersistentPath;
     [SerializeField]
@@ -49,14 +49,15 @@ public class VisCpuInstanceProvider : MonoBehaviour
         if (m_UsePersistentPath)
         {
             UnityIsAPieceOfShitHelper.SetCustomBase(Path.Combine(Application.persistentDataPath, m_VisSubPath));
-
         }
         else
         {
             UnityIsAPieceOfShitHelper.SetCustomBase(Path.GetFullPath(m_VisSubPath));
         }
         if (!Directory.Exists(UnityIsAPieceOfShitHelper.AppRoot))
+        {
             Directory.CreateDirectory(UnityIsAPieceOfShitHelper.AppRoot);
+        }
     }
 
     private void OnDestroy()

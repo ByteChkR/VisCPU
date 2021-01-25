@@ -30,6 +30,20 @@
 
         #region Public
 
+        public VariableDefinitionToken(
+            IHlToken name,
+            IHlToken typeName,
+            IHlToken[] modifiers,
+            IHlToken[] subtokens,
+            IHlToken[] initializerExpression ) : this(
+            name,
+            typeName,
+            modifiers,
+            subtokens,
+            initializerExpression,
+            null )
+        { }
+
         /// <summary>
         ///     Public Constructor
         /// </summary>
@@ -38,13 +52,14 @@
         /// <param name="modifiers">Variable Modifiers</param>
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="initializerExpression">Initializer Expression</param>
+        /// <param name="size">Size of the Variable</param>
         public VariableDefinitionToken(
             IHlToken name,
             IHlToken typeName,
             IHlToken[] modifiers,
             IHlToken[] subtokens,
             IHlToken[] initializerExpression,
-            IHlToken size = null ) : base(
+            IHlToken size ) : base(
             HlTokenType.OpVariableDefinition,
             subtokens,
             typeName.SourceIndex

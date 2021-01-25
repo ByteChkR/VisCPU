@@ -33,17 +33,10 @@ namespace VisCPU.Utility.Settings
             Parent = parent;
         }
 
-        public SettingsCategory AddCategory( string name, bool errorIfExists = false )
+        public SettingsCategory AddCategory( string name )
         {
             if ( m_SubCategories.Any( x => x.CategoryName == name ) )
             {
-                if ( errorIfExists )
-                {
-                    EventManager < ErrorEvent >.SendEvent( new SettingsCategoryExistsEvent( this, name ) );
-
-                    return null;
-                }
-
                 return GetCategory( name );
             }
 
@@ -59,7 +52,8 @@ namespace VisCPU.Utility.Settings
             return m_SubCategories.FirstOrDefault( x => x.CategoryName == name );
         }
 
-        public string GetCategoryDirectory( string root = null )
+        public string GetCategoryDirectory() => GetCategoryDirectory( null );
+        public string GetCategoryDirectory( string root )
         {
             List < string > parts = new List < string > { root ?? SettingsCategories.GetRootDir( this ) };
             parts.AddRange( FullCategoryName.Split( '.' ) );
