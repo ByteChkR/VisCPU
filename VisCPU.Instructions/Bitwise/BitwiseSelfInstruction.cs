@@ -1,4 +1,5 @@
 ﻿using VisCPU.Instructions.Math;
+using VisCPU.Instructions.Math.Self;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Instructions.Bitwise
