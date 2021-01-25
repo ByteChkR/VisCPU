@@ -96,7 +96,7 @@ namespace VisCPU.Tests.Utils
 
                         break;
                     default:
-                        break;
+                        throw new NotSupportedException("Invalid Test Device Command");
                 }
 
                 m_CurrentCommand = 0;
