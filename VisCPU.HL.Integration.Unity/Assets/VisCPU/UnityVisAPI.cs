@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 using VisCPU;
 
 public static class UnityVisApi
@@ -134,14 +135,14 @@ public static class UnityVisApi
     {
         uint len = executingCpu.Pop();
         uint ptr = executingCpu.Pop();
-        string name = "";
+        StringBuilder sb = new StringBuilder();
 
         for ( uint i = 0; i < len; i++ )
         {
-            name += ( char ) executingCpu.MemoryBus.Read( ptr + i );
+            sb.Append(( char ) executingCpu.MemoryBus.Read( ptr + i ));
         }
 
-        GameObject obj = GameObject.Find( name );
+        GameObject obj = GameObject.Find( sb.ToString() );
 
         if ( obj )
         {
@@ -212,14 +213,15 @@ public static class UnityVisApi
     {
         uint len = executingCpu.Pop();
         uint ptr = executingCpu.Pop();
-        string content = "";
+        StringBuilder sb = new StringBuilder();
 
         for ( uint i = 0; i < len; i++ )
         {
-            content += ( char ) executingCpu.MemoryBus.Read( ptr + i );
+
+            sb.Append(( char ) executingCpu.MemoryBus.Read( ptr + i ));
         }
 
-        Debug.Log( content );
+        Debug.Log( sb.ToString() );
 
         return 1;
     }

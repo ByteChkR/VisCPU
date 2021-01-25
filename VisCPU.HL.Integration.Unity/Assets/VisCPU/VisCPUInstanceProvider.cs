@@ -25,16 +25,16 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
     private List<uint> m_UpdateAddrList = new List<uint>();
     [SerializeField]
-    private bool m_UsePersistentPath = false;
+    private bool m_UsePersistentPath;
     [SerializeField]
     private bool m_UseInGameConsole = true;
     [SerializeField]
-    private bool m_PrintStackTrace = false;
+    private bool m_PrintStackTrace;
 
     [SerializeField]
-    private Text m_ConsoleOutput = null;
+    private Text m_ConsoleOutput;
 
-    private Cpu m_CpuInstance = null;
+    private Cpu m_CpuInstance;
 
     [SerializeField]
     private string m_VisSubPath = "vis";

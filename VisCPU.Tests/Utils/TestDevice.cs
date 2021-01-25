@@ -56,7 +56,7 @@ namespace VisCPU.Tests.Utils
         {
             if ( m_CurrentCommand != 0 && m_CurrentCommand != address )
             {
-                throw new Exception( $"Finish Command {m_CurrentCommand} before starting {address} command" );
+                throw new TestDeviceException( $"Finish Command {m_CurrentCommand} before starting {address} command" );
             }
 
             if ( address == TestPass && data != 0 )
@@ -110,7 +110,7 @@ namespace VisCPU.Tests.Utils
         {
             if ( m_CurrentTest != null )
             {
-                throw new Exception( $"Finish test {m_CurrentTest} before starting test {m_TextBuilder}" );
+                throw new TestDeviceException ( $"Finish test {m_CurrentTest} before starting test {m_TextBuilder}" );
             }
 
             m_CurrentTest = m_TextBuilder.ToString();

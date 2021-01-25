@@ -11,15 +11,15 @@ public class VisExampleScriptTest : MonoBehaviour
         @"https://raw.githubusercontent.com/ByteChkR/VisCPU/master/VisCPU.HL.Integration.Unity/Examples/MovePanel.vhl";
 
     [SerializeField]
-    private VisCpuInstanceProvider m_Provider = null;
+    private VisCpuInstanceProvider m_Provider;
 
     [SerializeField]
     private bool m_Async = true;
 
     [SerializeField]
-    private Text m_SourceFileText = null;
+    private Text m_SourceFileText;
 
-    private byte[] m_LastCompile = null;
+    private byte[] m_LastCompile;
 
     private void Start()
     {
