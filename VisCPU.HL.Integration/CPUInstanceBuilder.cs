@@ -22,7 +22,7 @@ namespace VisCPU.HL.Integration
 
         public CpuInstanceBuilder() : this(0) { }
         public CpuInstanceBuilder(uint resetAddr):this(resetAddr, 0) { }
-        public CpuInstanceBuilder( uint resetAddr = 0, uint intAddr = 0 )
+        public CpuInstanceBuilder( uint resetAddr, uint intAddr )
         {
 
             m_Importer = new ApiImporter();
