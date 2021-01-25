@@ -9,14 +9,15 @@ namespace VisCPU.HL.DataTypes
 
         private string m_Name;
 
-        public ExternalDataType DataType => ExternalDataType.Function;
+        public ExternalDataType DataType { get; }
 
         #region Public
 
-        public LinkedData( string name, AddressItem info )
+        public LinkedData( string name, AddressItem info, ExternalDataType type )
         {
             m_Name = name;
             Info = info;
+            DataType = type;
         }
 
         public string GetFinalName()

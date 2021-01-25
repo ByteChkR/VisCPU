@@ -66,7 +66,11 @@ namespace VisCPU.Console.Core
 #if DEBUG
             Peripheral.DebugPeripherals = new Peripheral[]
             {
-                new BenchmarkDevice(), new ConsoleInInterface(), new ConsoleOutInterface(), new HostFileSystem()
+                new BenchmarkDevice(),
+                new ConsoleInInterface(),
+                new ConsoleOutInterface(),
+                new HostFileSystem(),
+                new ConsoleInterface()
             };
 #endif
 

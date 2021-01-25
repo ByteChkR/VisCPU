@@ -36,7 +36,14 @@ namespace VisCPU.HL.Importer
             LinkerInfo info = LinkerInfo.Load( cmd );
 
             return info.Labels.
-                        Select( x => ( IExternalData ) new LinkedData( x.Key, x.Value ) ).
+                        Select( x => ( IExternalData ) new LinkedData(
+                                    x.Key, x.Value, ExternalDataType.Function ) ).
+                        Concat(
+                            info.DataSectionHeader.Select(
+                                x => ( IExternalData ) new LinkedData(
+                                    x.Key,
+                                    x.Value,
+                                    ExternalDataType.Variable ) ) ).
                         ToArray();
         }
 

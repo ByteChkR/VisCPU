@@ -3,7 +3,6 @@ using VisCPU.Peripherals;
 
 namespace VisCPU.HL.Integration
 {
-
     public class ApiImporterDevice : Peripheral
     {
         private Cpu m_ExecutingCpu;
