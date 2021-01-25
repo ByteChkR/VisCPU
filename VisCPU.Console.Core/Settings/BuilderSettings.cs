@@ -29,7 +29,7 @@ namespace VisCPU.Console.Core.Settings
                 { "compress", ( file, lastFile ) => CompressFile( lastFile ) }
             };
 
-        public static string BuildTempDirectory { get; set; } = null;
+        public static string BuildTempDirectory { get; set; }
 
         [field: Argument( Name = "build:steps" )]
         public string[] Steps { get; set; } = { "bin" };

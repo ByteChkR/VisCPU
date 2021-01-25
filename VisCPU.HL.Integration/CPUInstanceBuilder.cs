@@ -14,7 +14,7 @@ namespace VisCPU.HL.Integration
         private readonly List < Peripheral > m_Peripherals;
         private readonly uint m_InterruptAddr;
         private readonly uint m_ResetAddr;
-        private List < ApiImporterDevice > m_ApiDevs = new List < ApiImporterDevice >();
+        private readonly List < ApiImporterDevice > m_ApiDevs = new List < ApiImporterDevice >();
         private uint m_NextApiAddr = 0xFFFFAAAA;
 
         #region Public

@@ -73,7 +73,7 @@ namespace VisCPU.HL.Integration
             sb.Append( ")\n{\n" );
 
             sb.AppendFormat( "\tvar addr = {0};\n", devAddr );
-            sb.AppendFormat( "\treturn addr(" );
+            sb.Append( "\treturn addr(" );
 
             for ( int i = 0; i < data.ParameterCount; i++ )
             {

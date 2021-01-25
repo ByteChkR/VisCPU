@@ -9,7 +9,7 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleInterface : Peripheral
     {
-        private ConsoleInterfaceSettings m_Settings;
+        private readonly ConsoleInterfaceSettings m_Settings;
 
         #region Unity Event Functions
 

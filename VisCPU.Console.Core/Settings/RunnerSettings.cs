@@ -12,14 +12,6 @@ namespace VisCPU.Console.Core.Settings
 
     public class RunnerSettings
     {
-        [Argument( Name = "run:load-symbols" )]
-        public bool LoadDebugSymbols = true;
-
-        [Argument( Name = "run:symbols" )]
-        [XmlIgnore]
-        [JsonIgnore]
-        public string[] AdditionalSymbols;
-
         [Argument( Name = "run:input" )]
         [Argument( Name = "run:i" )]
         [XmlIgnore]
@@ -31,6 +23,13 @@ namespace VisCPU.Console.Core.Settings
         [XmlIgnore]
         [JsonIgnore]
         private readonly string[] m_InputFolders;
+        [field: Argument( Name = "run:load-symbols" )]
+        public bool LoadDebugSymbols { get; } = true;
+
+        [field: Argument( Name = "run:symbols" )]
+        [XmlIgnore]
+        [JsonIgnore]
+        public string[] AdditionalSymbols { get; set; }
 
         [XmlIgnore]
         [JsonIgnore]
