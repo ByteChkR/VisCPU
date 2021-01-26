@@ -1,9 +1,9 @@
-﻿using VisCPU.Instructions.Math.Self;
+﻿using VisCPU.Instructions.Math.Self.Float;
 
-namespace VisCPU.Instructions.Math
+namespace VisCPU.Instructions.Math.Float
 {
 
-    public class DecInstruction : SubSelfInstruction
+    public class IncFInstruction : AddFSelfInstruction
     {
         public override uint Cycles => 1;
 
@@ -11,7 +11,7 @@ namespace VisCPU.Instructions.Math
 
         public override uint ArgumentCount => 1;
 
-        public override string Key => "DEC";
+        public override string Key => "INC.F";
 
         #region Public
 
@@ -21,7 +21,7 @@ namespace VisCPU.Instructions.Math
 
             uint a = cpu.MemoryBus.Read(addressA); //Read Value From RAM
 
-            uint result = Calculate(a, 1); //Calculate Value
+            uint result = (this as MathInstruction).Calculate(a, 1); //Calculate Value
 
             cpu.MemoryBus.Write(addressA, result); //Write back Result
         }

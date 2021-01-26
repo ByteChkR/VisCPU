@@ -4,6 +4,7 @@ using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler
 {
@@ -34,7 +35,7 @@ namespace VisCPU.HL.Compiler
 
         public uint StaticParse()
         {
-            if ( ResultAddress.TryParseUInt( out uint hret ) )
+            if (TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName && ResultAddress.TryParseUInt(out uint hret))
             {
                 return hret;
             }

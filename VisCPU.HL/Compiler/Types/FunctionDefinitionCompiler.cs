@@ -50,12 +50,13 @@ namespace VisCPU.HL.Compiler.Types
                         );
                     }
 
+                    parsedVal.Add( "PUSH 0 ; Push anything. Will not be used anyway." );
                     parsedVal.Add( "RET ; Compiler Safeguard." );
 
                     return parsedVal.ToArray();
                 },
                 expr.FunctionDefinition.Arguments.Length,
-                expr.FunctionDefinition.FunctionReturnType.Type != HlTokenType.OpTypeVoid
+                expr.FunctionDefinition.FunctionReturnType.ToString()
             );
 
             return new ExpressionTarget();

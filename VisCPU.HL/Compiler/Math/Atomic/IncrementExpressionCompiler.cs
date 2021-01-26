@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Math.Atomic
 {
@@ -11,8 +12,12 @@ namespace VisCPU.HL.Compiler.Math.Atomic
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
 
+            string instrKey =
+                target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName
+                    ? "INC.F"
+                    : "INC";
             compilation.EmitterResult.Emit(
-                $"INC",
+                instrKey,
                 target.ResultAddress
             );
 

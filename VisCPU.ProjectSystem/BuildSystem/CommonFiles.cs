@@ -107,12 +107,12 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugRunJob.Arguments["run:cpu.interrupt"] = "0x00000000";
             debugRunJob.Arguments["run:cpu.reset"] = "0x00000000";
             debugRunJob.Arguments["run:working-dir"] = "%PROJDIR%";
-            debugRunJob.Arguments["memory-bus:devices"] = "%VISDIR%config/memory/default.json";
+            debugRunJob.Arguments["memory-bus:devices"] = "%VISDIR%configs/cpu/peripherals/memory/default.json";
 
             debugRunJob.Arguments["memory:read"] = "true";
             debugRunJob.Arguments["memory:write"] = "true";
             debugRunJob.Arguments["memory:persistent"] = "false";
-            debugRunJob.Arguments["memory:persistent.path"] = "%VISDIR%config/memory/states/default.bin";
+            debugRunJob.Arguments["memory:persistent.path"] = "%VISDIR%configs/cpu/peripherals/memory/states/default.bin";
             debugRunJob.Arguments["memory:size"] = "262144";
 
             return debugRunJob;
@@ -181,12 +181,12 @@ namespace VisCPU.ProjectSystem.BuildSystem
             runJob.Arguments["run:cpu.interrupt"] = "0x00000000";
             runJob.Arguments["run:cpu.reset"] = "0x00000000";
             runJob.Arguments["run:working-dir"] = "%PROJDIR%";
-            runJob.Arguments["memory-bus:devices"] = "%VISDIR%config/memory/default.json";
+            runJob.Arguments["memory-bus:devices"] = "%VISDIR%configs/cpu/peripherals/memory/default.json";
 
             runJob.Arguments["memory:read"] = "true";
             runJob.Arguments["memory:write"] = "true";
             runJob.Arguments["memory:persistent"] = "false";
-            runJob.Arguments["memory:persistent.path"] = "%VISDIR%config/memory/states/default.bin";
+            runJob.Arguments["memory:persistent.path"] = "%VISDIR%configs/cpu/peripherals/memory/states/default.bin";
             runJob.Arguments["memory:size"] = "262144";
 
             return runJob;

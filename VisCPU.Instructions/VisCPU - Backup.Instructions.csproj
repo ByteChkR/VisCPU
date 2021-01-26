@@ -16,4 +16,8 @@
     <ProjectReference Include="..\VisCPU\VisCPU.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Math\Self\Float\" />
+  </ItemGroup>
+
 </Project>

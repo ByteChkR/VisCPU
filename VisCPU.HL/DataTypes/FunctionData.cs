@@ -11,6 +11,7 @@ namespace VisCPU.HL.DataTypes
         private string[] m_CompiledOutput;
 
         public int ParameterCount { get; }
+        public string ReturnType { get; }
 
         public bool Public { get; }
 
@@ -23,13 +24,14 @@ namespace VisCPU.HL.DataTypes
             bool isPublic,
             Func < string[] > funcCompiler,
             int parameterCount,
-            bool hasReturnValue )
+            string returnType )
         {
             m_Name = name;
             Public = isPublic;
             m_FunctionCompiler = funcCompiler;
             m_CompiledOutput = null;
             ParameterCount = parameterCount;
+            ReturnType = returnType;
         }
 
         public string[] GetCompiledOutput()

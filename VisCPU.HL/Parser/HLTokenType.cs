@@ -22,6 +22,7 @@ namespace VisCPU.HL.Parser
         OpPercent,
         OpSpace,
         OpNumber,
+        OpDecimalNumber,
         OpWord,
         OpBracketOpen,
         OpBracketClose,

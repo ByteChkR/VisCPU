@@ -1,7 +1,7 @@
-﻿namespace VisCPU.Instructions.Math
+﻿namespace VisCPU.Instructions.Math.Float
 {
 
-    public class DivInstruction : MathInstruction
+    public class DivFInstruction : MathFInstruction
     {
         public override uint Cycles => 1;
 
@@ -9,11 +9,11 @@
 
         public override uint ArgumentCount => 3;
 
-        public override string Key => "DIV";
+        public override string Key => "DIV.F";
 
         #region Public
 
-        public override uint Calculate(uint a, uint b)
+        public override float Calculate(float a, float b)
         {
             return a / b;
         }

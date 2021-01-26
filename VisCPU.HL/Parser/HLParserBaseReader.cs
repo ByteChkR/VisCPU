@@ -230,6 +230,11 @@ namespace VisCPU.HL.Parser
             }
             while ( m_CurrentIndex < m_Input.Length && IsNumber( m_Input[m_CurrentIndex] ) );
 
+            if ( m_Input.Length > m_CurrentIndex && char.ToUpper( m_Input[m_CurrentIndex] ) == 'F' )
+            {
+                m_CurrentIndex++;
+                return new HlTextToken(HlTokenType.OpDecimalNumber, sb.ToString(), start);
+            }
             return new HlTextToken( HlTokenType.OpNumber, sb.ToString(), start );
         }
 

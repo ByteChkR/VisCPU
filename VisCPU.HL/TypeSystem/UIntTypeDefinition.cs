@@ -3,11 +3,11 @@
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class StringTypeDefinition : HlTypeDefinition
+    public class UIntTypeDefinition : HlTypeDefinition
     {
         #region Public
 
-        public StringTypeDefinition() : base(HLBaseTypeNames.s_StringTypeName)
+        public UIntTypeDefinition() : base(HLBaseTypeNames.s_UintTypeName)
         {
         }
 

@@ -7,6 +7,7 @@ using VisCPU.HL.Importer.Events;
 using VisCPU.Instructions;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Importer
 {
@@ -161,7 +162,7 @@ namespace VisCPU.HL.Importer
                             false,
                             null,
                             ( int ) instruction.ArgumentCount,
-                            true
+                            HLBaseTypeNames.s_UintTypeName
                         )
                     );
                 }
@@ -174,7 +175,7 @@ namespace VisCPU.HL.Importer
                 true,
                 null,
                 ( int ) target.ArgumentCount,
-                true
+                HLBaseTypeNames.s_UintTypeName
             );
 
             return new[] { d };

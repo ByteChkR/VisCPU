@@ -3,11 +3,11 @@
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class StringTypeDefinition : HlTypeDefinition
+    public class FloatTypeDefinition : HlTypeDefinition
     {
         #region Public
 
-        public StringTypeDefinition() : base(HLBaseTypeNames.s_StringTypeName)
+        public FloatTypeDefinition() : base(HLBaseTypeNames.s_FloatTypeName)
         {
         }
 

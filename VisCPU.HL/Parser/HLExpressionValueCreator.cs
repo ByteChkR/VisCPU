@@ -177,9 +177,11 @@ namespace VisCPU.HL.Parser
             }
 
             if ( parser.CurrentToken.Type == HlTokenType.OpNumber ||
+                 parser.CurrentToken.Type == HlTokenType.OpDecimalNumber ||
                  parser.CurrentToken.Type == HlTokenType.OpStringLiteral ||
                  parser.CurrentToken.Type == HlTokenType.OpCharLiteral )
             {
+                
                 HlExpression token = new HlValueOperand( parser.CurrentToken );
                 parser.Eat( parser.CurrentToken.Type );
 

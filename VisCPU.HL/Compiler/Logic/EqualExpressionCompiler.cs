@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Logic
 {
@@ -50,7 +51,7 @@ namespace VisCPU.HL.Compiler.Logic
                             rTarget.ResultAddress
                         ),
                         true,
-                        compilation.TypeSystem.GetType( "var" )
+                        compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                     );
 
                     compilation.EmitterResult.Emit(
@@ -71,7 +72,7 @@ namespace VisCPU.HL.Compiler.Logic
                             target.ResultAddress
                         ),
                         true,
-                        compilation.TypeSystem.GetType( "var" )
+                        compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                     );
 
                     compilation.EmitterResult.Emit(

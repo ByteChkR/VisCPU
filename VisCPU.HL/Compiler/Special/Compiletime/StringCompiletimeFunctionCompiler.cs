@@ -3,6 +3,7 @@ using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
 {
@@ -31,12 +32,12 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                   Select( x => x.ToString() ).
                                   Aggregate( ( input, elem ) => input + ' ' + elem );
 
-            compilation.CreateVariable( varName, content, compilation.TypeSystem.GetType( "var" ), false );
+            compilation.CreateVariable( varName, content, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName), false );
 
             return new ExpressionTarget(
                 compilation.GetFinalName( varName ),
                 true,
-                compilation.TypeSystem.GetType( "var" )
+                compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
             );
         }
 

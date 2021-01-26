@@ -6,6 +6,7 @@ using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special
 {
@@ -72,7 +73,7 @@ namespace VisCPU.HL.Compiler.Special
                 ExpressionTarget tempReturn = new ExpressionTarget(
                     compilation.GetTempVarPop(),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                 );
 
                 return tempReturn;
@@ -105,7 +106,7 @@ namespace VisCPU.HL.Compiler.Special
                 ExpressionTarget tempReturn = new ExpressionTarget(
                     compilation.GetTempVarPop(),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                 );
 
                 return tempReturn;

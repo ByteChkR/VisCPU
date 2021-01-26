@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Relational
 {
@@ -26,7 +27,7 @@ namespace VisCPU.HL.Compiler.Relational
                 new ExpressionTarget(
                     compilation.GetTempVar( 0 ),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                 )
             );
 
@@ -35,7 +36,7 @@ namespace VisCPU.HL.Compiler.Relational
                 ExpressionTarget tmp = new ExpressionTarget(
                     compilation.GetTempVarDref( target.ResultAddress ),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                 );
 
                 compilation.ReleaseTempVar( target.ResultAddress );
@@ -47,7 +48,7 @@ namespace VisCPU.HL.Compiler.Relational
                 ExpressionTarget tmp = new ExpressionTarget(
                     compilation.GetTempVarDref( rTarget.ResultAddress ),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                 );
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );

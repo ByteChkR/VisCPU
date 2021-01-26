@@ -31,8 +31,6 @@ namespace VisCPU.HL
     public class HlCompilation : VisBase
     {
         public readonly HlTypeSystem TypeSystem = new HlTypeSystem();
-        internal const string StringType = "string";
-        internal const string ValType = "var";
         internal readonly Dictionary < string, string > ConstValTypes = new Dictionary < string, string >();
         internal readonly List < IExternalData > ExternalSymbols = new List < IExternalData >();
         internal readonly Dictionary < string, FunctionData > FunctionMap = new Dictionary < string, FunctionData >();
@@ -785,7 +783,7 @@ namespace VisCPU.HL
                 EmitterResult.Emit( $"LOAD", name, initValue.ToString() );
             }
 
-            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd(HLBaseTypeNames.s_UintTypeName), false );
         }
 
         private VariableData GetFreeTempVarCopy( string initValue )
@@ -802,7 +800,7 @@ namespace VisCPU.HL
 
             EmitterResult.Emit( $"COPY", initValue, name );
 
-            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd(HLBaseTypeNames.s_UintTypeName), false );
         }
 
         private VariableData GetFreeTempVarDref( string initValue )
@@ -819,7 +817,7 @@ namespace VisCPU.HL
 
             EmitterResult.Emit( $"DREF", initValue, name );
 
-            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd(HLBaseTypeNames.s_UintTypeName), false );
         }
 
         private VariableData GetFreeTempVarLoad( string initValue )
@@ -836,7 +834,7 @@ namespace VisCPU.HL
 
             EmitterResult.Emit( $"LOAD", name, initValue );
 
-            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd(HLBaseTypeNames.s_UintTypeName), false );
         }
 
         private VariableData GetFreeTempVarPop()
@@ -853,7 +851,7 @@ namespace VisCPU.HL
 
             EmitterResult.Emit( "POP", name );
 
-            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd( "var" ), false );
+            return m_VariableMap[name] = new VariableData( name, name, 1, TypeSystem.GetOrAdd(HLBaseTypeNames.s_UintTypeName), false );
         }
 
         private string GetPrefix()

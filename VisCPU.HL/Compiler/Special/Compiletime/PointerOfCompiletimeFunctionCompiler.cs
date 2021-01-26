@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
 {
@@ -21,7 +22,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                 new ExpressionTarget(
                     compilation.GetTempVar( 0 ),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
                 )
             );
 

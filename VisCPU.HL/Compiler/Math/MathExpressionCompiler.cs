@@ -1,5 +1,6 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.Utility.Settings;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Math
 {
@@ -30,16 +31,23 @@ namespace VisCPU.HL.Compiler.Math
             target = target.MakeAddress( compilation );
             rTarget = rTarget.MakeAddress( compilation );
 
+            string instrKey =
+                target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName ||
+                rTarget.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName
+                    ? InstructionKey + ".F"
+                    : InstructionKey;
+
+
             if ( target.IsPointer )
             {
                 ExpressionTarget et = new ExpressionTarget(
                     compilation.GetTempVarDref( target.ResultAddress ),
                     true,
-                    compilation.TypeSystem.GetType( "var" )
+                    target.TypeDefinition
                 );
 
                 compilation.EmitterResult.Emit(
-                    InstructionKey,
+                    instrKey,
                     et.ResultAddress,
                     rTarget.ResultAddress,
                     outputTarget.ResultAddress
@@ -53,7 +61,7 @@ namespace VisCPU.HL.Compiler.Math
             }
 
             compilation.EmitterResult.Emit(
-                InstructionKey,
+                instrKey,
                 target.ResultAddress,
                 rTarget.ResultAddress,
                 outputTarget.ResultAddress

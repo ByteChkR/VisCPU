@@ -3,6 +3,7 @@ using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
 {
@@ -30,7 +31,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                     compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
                 );
 
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
+                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) );
             }
 
             if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
@@ -41,7 +42,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                 GetSize()
                 );
 
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
+                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) );
             }
 
             EventManager < ErrorEvent >.SendEvent(

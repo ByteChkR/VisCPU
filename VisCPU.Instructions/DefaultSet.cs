@@ -3,7 +3,9 @@ using VisCPU.Instructions.Bitwise.Self;
 using VisCPU.Instructions.Branch;
 using VisCPU.Instructions.Branch.Conditional;
 using VisCPU.Instructions.Math;
+using VisCPU.Instructions.Math.Float;
 using VisCPU.Instructions.Math.Self;
+using VisCPU.Instructions.Math.Self.Float;
 using VisCPU.Instructions.Memory;
 using VisCPU.Instructions.Stack;
 
@@ -65,7 +67,19 @@ namespace VisCPU.Instructions
                 new ReturnFromSubroutineInstruction(),
                 new PushInstruction(),
                 new PopInstruction(),
-                new PeekInstruction()
+                new PeekInstruction(),
+                new AddFInstruction(),
+                new AddFSelfInstruction(),
+                new MulFInstruction(),
+                new MulFSelfInstruction(),
+                new ModFInstruction(),
+                new ModFSelfInstruction(),
+                new DivFInstruction(),
+                new DivFSelfInstruction(),
+                new SubFInstruction(),
+                new SubFSelfInstruction(),
+                new IncFInstruction(),
+                new DecFInstruction(),
             },
             new NoOpInstruction()
         )

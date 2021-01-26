@@ -3,6 +3,7 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
 {
@@ -28,7 +29,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             uint off = type.GetOffset( expr.ParameterList[1].ToString() );
             string v = compilation.GetTempVar( off );
 
-            return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( "var" ) );
+            return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) );
         }
 
         #endregion
