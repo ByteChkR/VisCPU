@@ -17,6 +17,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         public HlExpression Condition { get; }
 
+        public override bool IsStatic()
+        {
+            return Condition.IsStatic();
+        }
+
         #region Public
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
+using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Relational
@@ -19,17 +20,24 @@ namespace VisCPU.HL.Compiler.Relational
         {
             ExpressionTarget target = compilation.Parse(
                                                       expr.Left
-                                                  ).
-                                                  MakeAddress( compilation );
+                                                  );
 
             ExpressionTarget rTarget = compilation.Parse(
-                expr.Right,
-                new ExpressionTarget(
-                    compilation.GetTempVar( 0 ),
-                    true,
-                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
-                )
+                expr.Right
             );
+
+            if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
+                 !target.IsAddress &&
+                 !rTarget.IsAddress)
+            {
+                return new ExpressionTarget(
+                    StaticEvaluate( target, rTarget ).ToString(),
+                    false,
+                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) );
+            }
+
+            target = target.MakeAddress( compilation );
+            rTarget = rTarget.MakeAddress( compilation );
 
             if ( target.IsPointer )
             {
@@ -72,6 +80,8 @@ namespace VisCPU.HL.Compiler.Relational
 
             return outputTarget;
         }
+
+        public abstract uint StaticEvaluate(ExpressionTarget a, ExpressionTarget b );
 
         #endregion
     }

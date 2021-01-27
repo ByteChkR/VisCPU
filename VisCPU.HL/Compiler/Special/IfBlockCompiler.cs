@@ -1,70 +1,96 @@
-﻿using VisCPU.HL.Parser.Tokens.Expressions;
+﻿using System.Collections.Generic;
+using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.Utility.Settings;
 
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class IfBlockCompiler : HlExpressionCompiler < HlIfOp >
+    public class IfBlockCompiler : HlExpressionCompiler<HlIfOp>
     {
         #region Public
 
-        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlIfOp expr )
+        public override ExpressionTarget ParseExpression(HlCompilation compilation, HlIfOp expr)
         {
-            string endLabel = HlCompilation.GetUniqueName( "if_end" );
-            string elseLabel = HlCompilation.GetUniqueName( "if_else" );
-            string blockLabels = HlCompilation.GetUniqueName( "if_b{0}" );
+            string endLabel = HlCompilation.GetUniqueName("if_end");
+            string elseLabel = HlCompilation.GetUniqueName("if_else");
+            string blockLabels = HlCompilation.GetUniqueName("if_b{0}");
 
-            for ( int i = 0; i < expr.ConditionMap.Count; i++ )
+            bool staticComputation = false;
+
+            compilation.EmitterResult.Store("; Start IF");
+
+            for (int i = 0; i < expr.ConditionMap.Count; i++)
             {
-                string thisLabel = string.Format( blockLabels, i );
+                string thisLabel = string.Format(blockLabels, i);
 
-                if ( i != 0 )
+                if (SettingsManager.GetSettings<HlCompilerSettings>().OptimizeIfConditionExpressions &&
+                    expr.ConditionMap[i].Item1.IsStatic())
                 {
-                    compilation.EmitterResult.Store( $".{thisLabel} linker:hide" );
+                    ExpressionTarget t = compilation.Parse(
+                        expr.ConditionMap[i].Item1
+                    );
+
+                    if ( t.StaticParse() != 0 )
+                    {
+                        staticComputation = true;
+
+                        foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
+                        {
+                            compilation.Parse( hlExpression );
+                        }
+
+                        break;
+                    }
+                    if (i != 0)
+                    {
+                        compilation.EmitterResult.Store($".{thisLabel} linker:hide");
+                    }
+                    continue;
                 }
-                else
+
+                if (i != 0)
                 {
-                    compilation.EmitterResult.Store( "; Start IF" );
+                    compilation.EmitterResult.Store($".{thisLabel} linker:hide");
                 }
 
                 ExpressionTarget exprTarget = compilation.Parse(
                                                               expr.ConditionMap[i].Item1
                                                           ).
-                                                          MakeAddress( compilation );
+                                                          MakeAddress(compilation);
 
                 string nextLabel;
 
-                if ( i < expr.ConditionMap.Count - 1 )
+                if (i < expr.ConditionMap.Count - 1)
                 {
-                    nextLabel = string.Format( blockLabels, i + 1 );
+                    nextLabel = string.Format(blockLabels, i + 1);
                 }
                 else
                 {
                     nextLabel = expr.ElseBranch != null ? elseLabel : endLabel;
                 }
 
-                compilation.EmitterResult.Emit( $"BEZ", exprTarget.ResultAddress, nextLabel );
+                compilation.EmitterResult.Emit($"BEZ", exprTarget.ResultAddress, nextLabel);
 
-                foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
+                foreach (HlExpression hlExpression in expr.ConditionMap[i].Item2)
                 {
-                    compilation.Parse( hlExpression );
+                    compilation.Parse(hlExpression);
                 }
 
-                compilation.EmitterResult.Emit( $"JMP", endLabel );
-                compilation.ReleaseTempVar( exprTarget.ResultAddress );
+                compilation.EmitterResult.Emit($"JMP", endLabel);
+                compilation.ReleaseTempVar(exprTarget.ResultAddress);
             }
 
-            if ( expr.ElseBranch != null )
+            if (!staticComputation && expr.ElseBranch != null)
             {
-                compilation.EmitterResult.Store( $".{elseLabel} linker:hide" );
+                compilation.EmitterResult.Store($".{elseLabel} linker:hide");
 
-                foreach ( HlExpression hlExpression in expr.ElseBranch )
+                foreach (HlExpression hlExpression in expr.ElseBranch)
                 {
-                    compilation.Parse( hlExpression );
+                    compilation.Parse(hlExpression);
                 }
             }
-
-            compilation.EmitterResult.Store( $".{endLabel} linker:hide" );
+            compilation.EmitterResult.Store($".{endLabel} linker:hide");
 
             return new ExpressionTarget();
         }

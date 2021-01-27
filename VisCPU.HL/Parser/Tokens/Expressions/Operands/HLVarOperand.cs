@@ -42,6 +42,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
             return Value.ToString();
         }
 
+        public override bool IsStatic()
+        {
+            return false;
+        }
+
         #endregion
 
         #region Protected

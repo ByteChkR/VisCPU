@@ -34,6 +34,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
             return new List < IHlToken > { Value };
         }
 
+        public override bool IsStatic()
+        {
+            return true;
+        }
+
         public override string ToString()
         {
             return Value.ToString();

@@ -56,6 +56,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
             return new List < IHlToken > { Left, Right };
         }
 
+        public override bool IsStatic()
+        {
+            return Left.IsStatic() && Right.IsStatic();
+        }
+
         public override string ToString()
         {
             return Left + $"({OperationType})" + Right;

@@ -50,6 +50,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             return ParameterList.Cast < IHlToken >().Concat( new[] { Left } ).ToList();
         }
 
+        public override bool IsStatic()
+        {
+            return false;
+        }
+
         #endregion
     }
 

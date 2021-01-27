@@ -14,8 +14,10 @@ namespace VisCPU.HL
 
         [field: Argument( Name = "compiler:optimize-const-expr" )]
         public bool OptimizeConstExpressions { get; set; }
-        [field: Argument( Name = "compiler:optimize-reduce-expr" )]
+        [field: Argument(Name = "compiler:optimize-reduce-expr")]
         public bool OptimizeReduceExpressions { get; set; }
+        [field: Argument(Name = "compiler:optimize-if-expr")]
+        public bool OptimizeIfConditionExpressions { get; set; }
 
         #region Private
 

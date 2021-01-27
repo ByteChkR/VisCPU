@@ -18,6 +18,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         public HlExpression MemberName { get; }
 
+        public override bool IsStatic()
+        {
+            return false;
+        }
+
         #region Public
 
         /// <summary>

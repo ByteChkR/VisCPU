@@ -63,6 +63,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
                                                                     ToList();
         }
 
+        public override bool IsStatic()
+        {
+            return false;
+        }
+
         #endregion
     }
 

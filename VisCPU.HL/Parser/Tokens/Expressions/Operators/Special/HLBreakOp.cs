@@ -27,6 +27,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             return new List < IHlToken >();
         }
 
+        public override bool IsStatic()
+        {
+            return false;
+        }
+
         #endregion
     }
 

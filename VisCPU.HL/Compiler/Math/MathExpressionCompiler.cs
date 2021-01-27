@@ -23,7 +23,9 @@ namespace VisCPU.HL.Compiler.Math
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
                  !target.IsAddress &&
-                 !rTarget.IsAddress )
+                 !rTarget.IsAddress &&
+                 target.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName &&
+                 rTarget.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName)
             {
                 return ComputeStatic( compilation, target, rTarget );
             }

@@ -20,6 +20,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         public HlExpression[] ParameterList { get; }
 
+        public override bool IsStatic()
+        {
+            return false;
+        }
+
         /// <summary>
         ///     Operation Type
         /// </summary>

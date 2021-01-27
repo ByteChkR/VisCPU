@@ -29,6 +29,8 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         /// <returns></returns>
         public abstract List < IHlToken > GetChildren();
 
+        public abstract bool IsStatic();
+
         #endregion
 
         #region Protected
