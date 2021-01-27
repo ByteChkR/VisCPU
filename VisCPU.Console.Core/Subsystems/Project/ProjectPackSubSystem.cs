@@ -169,6 +169,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
             Version v = Version.Parse( t.ProjectVersion );
 
             t.ProjectVersion = ChangeVersion( v, options.VersionString ).ToString();
+            ProjectConfig.Save(src, t);
 
             string temp = Path.Combine(
                 Path.GetDirectoryName( Directory.GetCurrentDirectory() ),
@@ -193,7 +194,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
             ZipFile.CreateFromDirectory( temp, Path.Combine( outDir, "module.zip" ) );
             Directory.Delete( temp, true );
             ProjectConfig.Save( Path.Combine( outDir, "module.json" ), t );
-            ProjectConfig.Save( src, t );
         }
 
         public static void WriteHelp()
