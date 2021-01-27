@@ -1,9 +1,9 @@
-﻿using VisCPU.Instructions.Math.Self.Float;
+﻿using VisCPU.Utility.Logging;
 
 namespace VisCPU.Instructions.Math.Float
 {
 
-    public class IncFInstruction : AddFSelfInstruction
+    public class InvertFSelfInstruction : Instruction
     {
         public override uint Cycles => 1;
 
@@ -11,7 +11,9 @@ namespace VisCPU.Instructions.Math.Float
 
         public override uint ArgumentCount => 1;
 
-        public override string Key => "INC.F";
+        public override string Key => "INV.F";
+
+        protected override LoggerSystems SubSystem => LoggerSystems.MathInstructions;
 
         #region Public
 
@@ -21,7 +23,7 @@ namespace VisCPU.Instructions.Math.Float
 
             uint a = cpu.MemoryBus.Read( addressA ); //Read Value From RAM
 
-            uint result = ( this as MathInstruction ).Calculate( a, 1 ); //Calculate Value
+            uint result = a ^ 0x80000000; //Access Bit Sign Directly (interpret UINT as float)
 
             cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }

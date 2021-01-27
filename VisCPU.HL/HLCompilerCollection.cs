@@ -54,6 +54,7 @@ namespace VisCPU.HL
                             { HlTokenType.OpReference, new ReferenceExpressionCompiler() },
                             { HlTokenType.OpDeReference, new DereferenceExpressionCompiler() },
                             { HlTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },
+                            { HlTokenType.OpMinus, new UnaryMinusExpressionCompiler() }
                         }
                     )
                 },

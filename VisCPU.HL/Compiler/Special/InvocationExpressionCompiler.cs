@@ -73,7 +73,7 @@ namespace VisCPU.HL.Compiler.Special
                 ExpressionTarget tempReturn = new ExpressionTarget(
                     compilation.GetTempVarPop(),
                     true,
-                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
+                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
                 );
 
                 return tempReturn;
@@ -106,7 +106,7 @@ namespace VisCPU.HL.Compiler.Special
                 ExpressionTarget tempReturn = new ExpressionTarget(
                     compilation.GetTempVarPop(),
                     true,
-                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
+                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
                 );
 
                 return tempReturn;

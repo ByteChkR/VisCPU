@@ -15,30 +15,36 @@ namespace VisCPU.HL.Compiler.Variables
         {
             string type;
             string value;
+
             switch ( expr.Value.Type )
             {
                 case HlTokenType.OpCharLiteral:
                     type = HLBaseTypeNames.s_UintTypeName;
                     value = $"'{expr.Value}'";
+
                     break;
+
                 case HlTokenType.OpDecimalNumber:
                     type = HLBaseTypeNames.s_FloatTypeName;
 
                     unsafe
                     {
-                        float val = float.Parse(expr.Value.ToString());
-                        value = (*(uint*)&val).ToString();
+                        float val = float.Parse( expr.Value.ToString() );
+                        value = ( *( uint* ) &val ).ToString();
                     }
+
                     break;
+
                 default:
                     type = HLBaseTypeNames.s_UintTypeName;
                     value = expr.Value.ToString();
+
                     break;
 
             }
-            
+
             ExpressionTarget tmp =
-                new ExpressionTarget( value, false, compilation.TypeSystem.GetType(type) );
+                new ExpressionTarget( value, false, compilation.TypeSystem.GetType( type ) );
 
             return tmp;
         }
@@ -50,12 +56,15 @@ namespace VisCPU.HL.Compiler.Variables
         {
             string type;
             string value;
-            switch (expr.Value.Type)
+
+            switch ( expr.Value.Type )
             {
                 case HlTokenType.OpCharLiteral:
                     type = HLBaseTypeNames.s_UintTypeName;
                     value = $"'{expr.Value}'";
+
                     break;
+
                 case HlTokenType.OpDecimalNumber:
                     type = HLBaseTypeNames.s_FloatTypeName;
 
@@ -64,17 +73,20 @@ namespace VisCPU.HL.Compiler.Variables
                         float val = float.Parse( expr.Value.ToString() );
                         value = ( *( uint* ) &val ).ToString();
                     }
+
                     break;
+
                 default:
                     type = HLBaseTypeNames.s_UintTypeName;
                     value = expr.Value.ToString();
+
                     break;
 
             }
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, value );
 
-            return outputTarget.Cast(compilation.TypeSystem.GetType(type));
+            return outputTarget.Cast( compilation.TypeSystem.GetType( type ) );
         }
 
         #endregion

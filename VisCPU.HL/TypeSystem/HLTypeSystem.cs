@@ -15,8 +15,8 @@ namespace VisCPU.HL.TypeSystem
 
         public HlTypeSystem()
         {
-            AddItem(new UIntTypeDefinition());
-            AddItem(new FloatTypeDefinition());
+            AddItem( new UIntTypeDefinition() );
+            AddItem( new FloatTypeDefinition() );
             AddItem( new StringTypeDefinition() );
         }
 

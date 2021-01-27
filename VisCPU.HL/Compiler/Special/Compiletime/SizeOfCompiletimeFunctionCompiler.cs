@@ -31,7 +31,10 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                     compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
                 );
 
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) );
+                return new ExpressionTarget(
+                    v,
+                    true,
+                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) );
             }
 
             if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
@@ -42,7 +45,10 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                 GetSize()
                 );
 
-                return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) );
+                return new ExpressionTarget(
+                    v,
+                    true,
+                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) );
             }
 
             EventManager < ErrorEvent >.SendEvent(

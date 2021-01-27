@@ -37,7 +37,6 @@ namespace VisCPU.HL.Compiler.Math
                     ? InstructionKey + ".F"
                     : InstructionKey;
 
-
             if ( target.IsPointer )
             {
                 ExpressionTarget et = new ExpressionTarget(

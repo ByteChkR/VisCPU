@@ -22,7 +22,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                 new ExpressionTarget(
                     compilation.GetTempVar( 0 ),
                     true,
-                    compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
+                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
                 )
             );
 

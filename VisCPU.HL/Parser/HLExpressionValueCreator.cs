@@ -26,7 +26,10 @@ namespace VisCPU.HL.Parser
         /// <returns>Parsed Expression</returns>
         public HlExpression CreateValue( HlExpressionParser parser )
         {
-            if ( parser.CurrentToken.Type == HlTokenType.OpBang || parser.CurrentToken.Type == HlTokenType.OpTilde )
+            if ( parser.CurrentToken.Type == HlTokenType.OpBang ||
+                 parser.CurrentToken.Type == HlTokenType.OpTilde ||
+                 parser.CurrentToken.Type == HlTokenType.OpPlus ||
+                 parser.CurrentToken.Type == HlTokenType.OpMinus )
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
@@ -181,7 +184,7 @@ namespace VisCPU.HL.Parser
                  parser.CurrentToken.Type == HlTokenType.OpStringLiteral ||
                  parser.CurrentToken.Type == HlTokenType.OpCharLiteral )
             {
-                
+
                 HlExpression token = new HlValueOperand( parser.CurrentToken );
                 parser.Eat( parser.CurrentToken.Type );
 

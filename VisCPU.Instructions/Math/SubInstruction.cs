@@ -13,7 +13,7 @@
 
         #region Public
 
-        public override uint Calculate(uint a, uint b)
+        public override uint Calculate( uint a, uint b )
         {
             return a - b;
         }

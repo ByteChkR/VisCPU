@@ -29,7 +29,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             uint off = type.GetOffset( expr.ParameterList[1].ToString() );
             string v = compilation.GetTempVar( off );
 
-            return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) );
+            return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) );
         }
 
         #endregion

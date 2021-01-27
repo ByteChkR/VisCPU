@@ -7,7 +7,7 @@ namespace VisCPU.HL.TypeSystem
     {
         #region Public
 
-        public UIntTypeDefinition() : base(HLBaseTypeNames.s_UintTypeName)
+        public UIntTypeDefinition() : base( HLBaseTypeNames.s_UintTypeName )
         {
         }
 

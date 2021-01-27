@@ -80,6 +80,8 @@ namespace VisCPU.Instructions
                 new SubFSelfInstruction(),
                 new IncFInstruction(),
                 new DecFInstruction(),
+                new InvertFInstruction(),
+                new InvertFSelfInstruction()
             },
             new NoOpInstruction()
         )

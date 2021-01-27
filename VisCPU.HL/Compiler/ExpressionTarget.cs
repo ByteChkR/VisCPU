@@ -35,10 +35,15 @@ namespace VisCPU.HL.Compiler
 
         public uint StaticParse()
         {
-            if (TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName && ResultAddress.TryParseUInt(out uint hret))
+            if ( TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName && ResultAddress.TryParseUInt( out uint hret ) )
             {
                 return hret;
             }
+
+            //if (TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName && float.TryParse(ResultAddress, out float fret))
+            //{
+            //    return fret;
+            //}
 
             if ( ResultAddress.StartsWith( "'" ) &&
                  ResultAddress.EndsWith( "'" ) &&

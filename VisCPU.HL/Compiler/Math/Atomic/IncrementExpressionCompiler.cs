@@ -16,6 +16,7 @@ namespace VisCPU.HL.Compiler.Math.Atomic
                 target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName
                     ? "INC.F"
                     : "INC";
+
             compilation.EmitterResult.Emit(
                 instrKey,
                 target.ResultAddress

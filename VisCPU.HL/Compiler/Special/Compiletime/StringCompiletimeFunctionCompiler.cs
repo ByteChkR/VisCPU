@@ -32,12 +32,16 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                   Select( x => x.ToString() ).
                                   Aggregate( ( input, elem ) => input + ' ' + elem );
 
-            compilation.CreateVariable( varName, content, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName), false );
+            compilation.CreateVariable(
+                varName,
+                content,
+                compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                false );
 
             return new ExpressionTarget(
                 compilation.GetFinalName( varName ),
                 true,
-                compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName)
+                compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
             );
         }
 

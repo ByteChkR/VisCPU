@@ -28,6 +28,22 @@ namespace VisCPU.Utility
             return val.StartsWith( "0x" ) ? ParseHexUInt( val ) : uint.Parse( val );
         }
 
+        public static uint RawConvert( this float val )
+        {
+            unsafe
+            {
+                return *( uint* ) &val;
+            }
+        }
+
+        public static float RawConvert( this uint val )
+        {
+            unsafe
+            {
+                return *( float* ) &val;
+            }
+        }
+
         public static byte[] ToBytes( this uint[] data )
         {
             return data.SelectMany( BitConverter.GetBytes ).ToArray();

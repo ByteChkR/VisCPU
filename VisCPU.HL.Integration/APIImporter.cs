@@ -57,23 +57,23 @@ namespace VisCPU.HL.Integration
                 data.GetFinalName(),
                 devAddr.ToHexString() );
 
-            sb.AppendFormat( "public {1} {0}(", data.GetFinalName(), HLBaseTypeNames.s_UintTypeName);
+            sb.AppendFormat( "public {1} {0}(", data.GetFinalName(), HLBaseTypeNames.s_UintTypeName );
 
             for ( int i = 0; i < data.ParameterCount; i++ )
             {
                 if ( i != 0 )
                 {
-                    sb.AppendFormat( ", {1} arg{0}", i , HLBaseTypeNames.s_UintTypeName);
+                    sb.AppendFormat( ", {1} arg{0}", i, HLBaseTypeNames.s_UintTypeName );
                 }
                 else
                 {
-                    sb.AppendFormat( "{1} arg{0}", i, HLBaseTypeNames.s_UintTypeName);
+                    sb.AppendFormat( "{1} arg{0}", i, HLBaseTypeNames.s_UintTypeName );
                 }
             }
 
             sb.Append( ")\n{\n" );
 
-            sb.AppendFormat( "\t{1} addr = {0};\n", devAddr, HLBaseTypeNames.s_UintTypeName);
+            sb.AppendFormat( "\t{1} addr = {0};\n", devAddr, HLBaseTypeNames.s_UintTypeName );
             sb.Append( "\treturn addr(" );
 
             for ( int i = 0; i < data.ParameterCount; i++ )

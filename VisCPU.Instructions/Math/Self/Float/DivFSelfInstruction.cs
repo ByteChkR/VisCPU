@@ -13,7 +13,7 @@
 
         #region Public
 
-        public override float Calculate(float a, float b)
+        public override float Calculate( float a, float b )
         {
             return a / b;
         }

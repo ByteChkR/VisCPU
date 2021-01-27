@@ -15,15 +15,15 @@ namespace VisCPU.Instructions.Math.Float
 
         #region Public
 
-        public override void Process(Cpu cpu)
+        public override void Process( Cpu cpu )
         {
-            uint addressA = cpu.DecodeArgument(0); //Number A Address
+            uint addressA = cpu.DecodeArgument( 0 ); //Number A Address
 
-            uint a = cpu.MemoryBus.Read(addressA); //Read Value From RAM
+            uint a = cpu.MemoryBus.Read( addressA ); //Read Value From RAM
 
-            uint result =(this as MathInstruction).Calculate(a, 1); //Calculate Value
+            uint result = ( this as MathInstruction ).Calculate( a, 1 ); //Calculate Value
 
-            cpu.MemoryBus.Write(addressA, result); //Write back Result
+            cpu.MemoryBus.Write( addressA, result ); //Write back Result
         }
 
         #endregion

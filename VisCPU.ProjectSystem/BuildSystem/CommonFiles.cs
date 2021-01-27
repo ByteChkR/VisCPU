@@ -94,6 +94,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["linker:no-hide"] = "true";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
             debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
+            debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "false";
 
             return debugBuildJob;
         }
@@ -112,7 +113,10 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugRunJob.Arguments["memory:read"] = "true";
             debugRunJob.Arguments["memory:write"] = "true";
             debugRunJob.Arguments["memory:persistent"] = "false";
-            debugRunJob.Arguments["memory:persistent.path"] = "%VISDIR%configs/cpu/peripherals/memory/states/default.bin";
+
+            debugRunJob.Arguments["memory:persistent.path"] =
+                "%VISDIR%configs/cpu/peripherals/memory/states/default.bin";
+
             debugRunJob.Arguments["memory:size"] = "262144";
 
             return debugRunJob;
@@ -166,8 +170,9 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["assembler:offset.global"] = "0";
             debugBuildJob.Arguments["linker:export"] = "true";
             debugBuildJob.Arguments["linker:no-hide"] = "false";
-            debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
-            debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
+            debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "true";
+            debugBuildJob.Arguments["compiler:optimize-const-expr"] = "true";
+            debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "true";
 
             return debugBuildJob;
         }

@@ -26,7 +26,10 @@ namespace VisCPU.HL.Compiler.Variables
         {
             if ( compilation.ConstValTypes.ContainsKey( expr.Value.ToString() ) )
             {
-                return new ExpressionTarget( expr.Value.ToString(), true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName) ).
+                return new ExpressionTarget(
+                        expr.Value.ToString(),
+                        true,
+                        compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) ).
                     CopyIfNotNull( compilation, outputTarget );
             }
 
@@ -36,14 +39,14 @@ namespace VisCPU.HL.Compiler.Variables
             {
                 VariableData v = compilation.GetVariable( expr.Value.ToString() );
                 varAddr = v.GetFinalName();
+
                 return new ExpressionTarget(
                     varAddr,
                     true,
                     v.TypeDefinition,
                     v.TypeDefinition.GetSize() != v.Size ||
-                    (v.TypeDefinition.Name != HLBaseTypeNames.s_UintTypeName &&
-                     v.TypeDefinition.Name != HLBaseTypeNames.s_FloatTypeName)
-
+                    v.TypeDefinition.Name != HLBaseTypeNames.s_UintTypeName &&
+                    v.TypeDefinition.Name != HLBaseTypeNames.s_FloatTypeName
                 ).CopyIfNotNull( compilation, outputTarget );
             }
 

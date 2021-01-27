@@ -11,10 +11,12 @@ namespace VisCPU.HL.Compiler.Math.Atomic
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlUnaryOp expr )
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
+
             string instrKey =
                 target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName
                     ? "DEC.F"
                     : "DEC";
+
             compilation.EmitterResult.Emit(
                 instrKey,
                 target.ResultAddress

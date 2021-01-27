@@ -20,11 +20,13 @@ namespace VisCPU.HL.Compiler.Math
                                                        expr.Right
                                                    ).
                                                    MakeAddress( compilation );
+
             string instrKey =
                 target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName ||
                 rTarget.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName
                     ? InstructionKey + ".F"
                     : InstructionKey;
+
             compilation.EmitterResult.Emit(
                 instrKey,
                 target.ResultAddress,

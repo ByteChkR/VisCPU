@@ -15,6 +15,8 @@
         public static readonly string s_PeripheralMemoryPathNotSet = "memory-path-not-set";
 
         public static readonly string s_LinkerDuplicateItem = "linker-duplicate-item";
+
+        public static readonly string s_InvertInvalidEvent = "hl-compiler-invalid-unary-minus";
     }
 
 }

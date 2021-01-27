@@ -11,6 +11,7 @@ namespace VisCPU.HL.DataTypes
         private string[] m_CompiledOutput;
 
         public int ParameterCount { get; }
+
         public string ReturnType { get; }
 
         public bool Public { get; }
