@@ -16,18 +16,35 @@ namespace VisCPU.Console.Core.Subsystems.Project
         public class PackOptions
         {
             [field: Argument( Name = "version" )]
-            public string VersionString { get; set; } = "{yyyy}.{MM}.{dd}.+";
+            public string VersionString { get; set; } = "(~){yyyy}.(~){MM}.(~){dd}.+";
         }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
 
+        private static void ApplyChangeReset( bool[] changeReset, int[] original, int[] versions )
+        {
+            for (int j = 0; j < changeReset.Length; j++)
+            {
+                if (changeReset[j] && versions[j] != original[j])
+                {
+                    for ( int i = j+1; i < versions.Length; i++ )
+                    {
+                        if ( !changeReset[i] )
+                            versions[i] = 0;
+                    }
+                }
+            }
+        }
+
         public static Version ChangeVersion( Version version, string changeStr )
         {
             string[] subVersions = changeStr.Split( '.' );
-            int[] wrapValues = { ushort.MaxValue, 9, 99, ushort.MaxValue };
+            int[] wrapValues = { ushort.MaxValue, ushort.MaxValue, ushort.MaxValue, ushort.MaxValue };
+            int[] original = { version.Major, version.Minor, version.Build, version.Revision };
             int[] versions = { version.Major, version.Minor, version.Build, version.Revision };
+            bool[] changeReset = new bool[4];
 
             for ( int i = 4 - 1; i >= 0; i-- )
             {
@@ -35,11 +52,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
                 if ( current.StartsWith( "(" ) )
                 {
-                    if ( i == 0 )
-                    {
-                        continue; //Can not wrap the last digit
-                    }
-
                     int j = 0;
 
                     for ( ; j < current.Length; j++ )
@@ -57,8 +69,16 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
                     string max = current.Substring( 1, j - 1 );
 
-                    if ( int.TryParse( max, out int newMax ) )
+                    if ( max == "~" )
                     {
+                        changeReset[i] = true;
+                    }
+                    else if ( int.TryParse( max, out int newMax ) )
+                    {
+                        if (i == 0)
+                        {
+                            continue; //Can not wrap the last digit
+                        }
                         wrapValues[i] = newMax;
                     }
 
@@ -81,6 +101,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
                 else if ( current == "-" && versions[i] != 0 )
                 {
                     versions[i]--;
+                    
                 }
                 else if ( current.ToLower( CultureInfo.InvariantCulture ) == "x" )
                 {
@@ -102,6 +123,9 @@ namespace VisCPU.Console.Core.Subsystems.Project
                     versions[i] = v;
                 }
             }
+
+
+            ApplyChangeReset(changeReset, original, versions);
 
             return new Version(
                 versions[0],
