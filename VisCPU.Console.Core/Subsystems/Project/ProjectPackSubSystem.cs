@@ -16,7 +16,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
         public class PackOptions
         {
             [field: Argument( Name = "version" )]
-            public string VersionString { get; set; } = "X.X.X.+";
+            public string VersionString { get; set; } = "{yyyy}.{MM}.{dd}.+";
         }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
