@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.Settings.Loader;
@@ -18,6 +19,24 @@ namespace VisCPU.HL
         public bool OptimizeReduceExpressions { get; set; }
         [field: Argument(Name = "compiler:optimize-if-expr")]
         public bool OptimizeIfConditionExpressions { get; set; }
+        [field: Argument(Name = "compiler:optimize-while-expr")]
+        public bool OptimizeWhileConditionExpressions { get; set; }
+
+        [JsonIgnore]
+        public bool OptimizeAll {
+            get =>
+                OptimizeTempVarUsage &&
+                OptimizeConstExpressions &&
+                OptimizeReduceExpressions &&
+                OptimizeIfConditionExpressions &&
+                OptimizeWhileConditionExpressions;
+            set =>
+                OptimizeReduceExpressions = 
+                    OptimizeWhileConditionExpressions = 
+                        OptimizeConstExpressions = 
+                            OptimizeIfConditionExpressions = 
+                                OptimizeTempVarUsage = value;
+        }
 
         #region Private
 

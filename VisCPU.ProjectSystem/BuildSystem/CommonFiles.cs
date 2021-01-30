@@ -96,6 +96,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-const-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "false";
+            debugBuildJob.Arguments["compiler:optimize-while-expr"] = "false";
 
             return debugBuildJob;
         }
@@ -175,6 +176,8 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-const-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "true";
+            debugBuildJob.Arguments["compiler:optimize-while-expr"] = "true";
+            
 
             return debugBuildJob;
         }

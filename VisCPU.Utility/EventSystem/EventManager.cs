@@ -1,17 +1,35 @@
 ﻿using System;
+using System.Linq;
+using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
+using VisCPU.Utility.Settings;
+using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Utility.EventSystem
 {
+    public class EventManagerSettings
+    {
+        [Argument(Name = "event-system:interactive")]
+        public bool Interactive;
 
+        [field: Argument( Name = "event-system:ignore" )]
+        public string[] IgnoredEvents { get; set; } = new string[0];
+        
+    }
     public static class EventManager
     {
         public static event Action < Event > OnEventReceive;
 
+        internal static EventManagerSettings Settings { get; private set; }
+
         #region Public
+
+        public static void SetSettings( EventManagerSettings settings ) => Settings = settings;
 
         public static void RegisterDefaultHandlers()
         {
+            if(Settings==null)
+            Settings = new EventManagerSettings();
             OnEventReceive += EventManagerOnEventReceive;
             EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
         }
@@ -27,7 +45,20 @@ namespace VisCPU.Utility.EventSystem
 
         private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
         {
-            if ( obj.CanContinue )
+            if ( SettingsManager.GetSettings < EventManagerSettings >().Interactive )
+            {
+                Console.Write( $"Encountered Error Event: {obj.EventKey} Do you want to continue? [Y/n]" );
+
+                if ( Console.ReadKey().Key == ConsoleKey.Y )
+                {
+                    throw new EventManagerException($"[{obj.EventKey}] {obj.Message}");
+                }
+
+                return;
+            }
+            if ( obj.CanContinue || 
+                 SettingsManager.GetSettings<EventManagerSettings>()
+                                .IgnoredEvents.Contains(obj.EventKey) )
             {
                 return;
             }
@@ -37,12 +68,23 @@ namespace VisCPU.Utility.EventSystem
 
         private static void EventManagerOnEventReceive( Event obj )
         {
+            if (SettingsManager.GetSettings<EventManagerSettings>().Interactive)
+            {
+                Console.Write($"Encountered Event: {obj.EventKey} Do you want to continue? [Y/n]");
+
+                if (Console.ReadKey().Key == ConsoleKey.Y)
+                {
+                    throw new EventManagerException($"[{obj.EventKey}]");
+                }
+
+                return;
+            }
+
             if ( obj is WarningEvent wrn )
             {
                 Console.WriteLine( $"[{wrn.EventKey}] {wrn.Message}" );
             }
-
-            if ( obj is ErrorEvent err )
+            else if ( obj is ErrorEvent err )
             {
                 Console.WriteLine( $"[{err.EventKey}] {err.Message}" );
             }

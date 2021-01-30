@@ -148,8 +148,10 @@ namespace VisCPU.Console.Core
 
             CliSettings s = SettingsManager.GetSettings < CliSettings >();
             EventManager.RegisterDefaultHandlers();
+            EventManagerSettings es = new EventManagerSettings();
             Logger.OnLogReceive += ( x, y ) => System.Console.WriteLine( $"[{x}] {y}" );
-            ArgumentSyntaxParser.Parse( args, s, Logger.s_Settings );
+            ArgumentSyntaxParser.Parse( args, s, Logger.s_Settings, es );
+            EventManager.SetSettings( es );
 
             Run(
                 args.Concat(
