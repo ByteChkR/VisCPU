@@ -13,6 +13,12 @@ namespace VisCPU.Peripherals
 
     public abstract class Peripheral : VisBase
     {
+
+        protected Cpu AttachedCpu { get; private set; }
+
+        internal void SetCpu( Cpu cpu ) => AttachedCpu = cpu;
+
+
         public static readonly SettingsCategory s_PeripheralCategory =
             CpuSettings.s_CpuCategory.AddCategory( "peripherals" );
 

@@ -46,10 +46,11 @@ namespace VisCPU.Compiler.Compiler
 
             LinkerResult linkResult = m_Linker.Link( linkTarget, this );
 
-            LinkerInfo = CreateFromResult( linkResult );
             LinkerResult = linkResult;
 
             ByteCode = m_AssemblyGenerator.Assemble( linkResult );
+
+            LinkerInfo = CreateFromResult(linkResult);
         }
 
         #endregion

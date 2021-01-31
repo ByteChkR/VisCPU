@@ -75,13 +75,13 @@ namespace VisCPU.Console.Core.Subsystems
 
                 if ( settings.LoadDebugSymbols )
                 {
-                    CpuDebugHelper.LoadSymbols( file );
+                    cpu.SymbolServer.LoadSymbols( file );
 
                     if ( settings.AdditionalSymbols != null )
                     {
                         foreach ( string symPath in settings.AdditionalSymbols )
                         {
-                            CpuDebugHelper.LoadSymbols( symPath );
+                            cpu.SymbolServer.LoadSymbols( symPath );
                         }
                     }
 
@@ -159,13 +159,13 @@ namespace VisCPU.Console.Core.Subsystems
 
                 if ( settings.LoadDebugSymbols )
                 {
-                    CpuDebugHelper.LoadSymbols( file );
+                    cpu.SymbolServer.LoadSymbols( file );
 
                     if ( settings.AdditionalSymbols != null )
                     {
                         foreach ( string symPath in settings.AdditionalSymbols )
                         {
-                            CpuDebugHelper.LoadSymbols( symPath );
+                            cpu.SymbolServer.LoadSymbols( symPath );
                         }
                     }
 
@@ -203,7 +203,7 @@ namespace VisCPU.Console.Core.Subsystems
         {
             List < (string Key, AddressItem Value) > mergedInfo = new List < (string, AddressItem) >();
 
-            foreach ( LinkerInfo linkerInfo in CpuDebugHelper.LoadedSymbols )
+            foreach ( LinkerInfo linkerInfo in cpu.SymbolServer.LoadedSymbols )
             {
                 foreach ( KeyValuePair < string, AddressItem > linkerInfoLabel in linkerInfo.Labels )
                 {

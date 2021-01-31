@@ -12,7 +12,7 @@ namespace VisCPU.Compiler.Linking
 
         [field: Argument( Name = "linker:export-info" )]
         [field: Argument( Name = "linker:export" )]
-        public bool ExportLinkerInfo { get; set; }
+        public bool ExportLinkerInfo { get; set; } = true;
 
         #region Private
 

@@ -46,17 +46,30 @@ namespace VisCPU.HL.Integration
             ProgramBuilder.Build( bs );
 
             string buildOut = Path.Combine(
-                Path.GetDirectoryName( file ),
-                Path.GetFileNameWithoutExtension( file ) + ".vbin" );
+                Path.GetDirectoryName(file),
+                Path.GetFileNameWithoutExtension(file) + ".vbin");
+            string buildInfo = Path.Combine(
+                Path.GetDirectoryName(file),
+                Path.GetFileNameWithoutExtension(file) + ".vbin.linkertext");
 
-            string buildTarget = Path.Combine( outputBuildFolder, Path.GetFileNameWithoutExtension( file ) + ".vbin" );
+            string buildTarget = Path.Combine(outputBuildFolder, Path.GetFileNameWithoutExtension(file) + ".vbin");
+            string infoTarget = Path.Combine(outputBuildFolder, Path.GetFileNameWithoutExtension(file) + ".vbin.linkertext");
 
-            if ( File.Exists( buildTarget ) )
+            if (File.Exists(buildTarget))
             {
-                File.Delete( buildTarget );
+                File.Delete(buildTarget);
+            }
+            if (File.Exists(infoTarget))
+            {
+                File.Delete(infoTarget);
             }
 
-            File.Move( buildOut, buildTarget );
+            File.Move(buildOut, buildTarget);
+
+            if ( File.Exists( buildInfo ) )
+            {
+                File.Move(buildInfo, infoTarget);
+            }
 
             return buildTarget;
         }

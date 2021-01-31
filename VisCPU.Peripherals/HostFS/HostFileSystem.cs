@@ -236,7 +236,7 @@ namespace VisCPU.Peripherals.HostFS
                     case HostFileSystemCommands.HfsLoadSymbols:
                         string target = GetPath( m_SbPath.ToString() );
                         m_SbPath.Clear();
-                        CpuDebugHelper.LoadSymbols( target );
+                        AttachedCpu.SymbolServer.LoadSymbols( target );
 
                         break;
 

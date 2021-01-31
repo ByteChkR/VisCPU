@@ -28,10 +28,16 @@ using VisCPU.Utility.UriResolvers;
 namespace VisCPU.HL
 {
 
+    internal class ConstantValueItem
+    {
+        public string Value;
+        public bool IsPublic;
+    }
+
     public class HlCompilation : VisBase
     {
         public readonly HlTypeSystem TypeSystem = new HlTypeSystem();
-        internal readonly Dictionary < string, string > ConstValTypes = new Dictionary < string, string >();
+        internal readonly Dictionary < string, ConstantValueItem> ConstValTypes = new Dictionary < string, ConstantValueItem>();
         internal readonly List < IExternalData > ExternalSymbols = new List < IExternalData >();
         internal readonly Dictionary < string, FunctionData > FunctionMap = new Dictionary < string, FunctionData >();
 
@@ -90,7 +96,7 @@ namespace VisCPU.HL
             OriginalText = parent.OriginalText;
             m_Directory = parent.m_Directory;
             m_VariableMap = new Dictionary < string, VariableData >( parent.m_VariableMap );
-            ConstValTypes = new Dictionary < string, string >( parent.ConstValTypes );
+            ConstValTypes = new Dictionary < string, ConstantValueItem >( parent.ConstValTypes );
             FunctionMap = new Dictionary < string, FunctionData >( parent.FunctionMap );
             ExternalSymbols = new List < IExternalData >( parent.ExternalSymbols );
             m_IncludedFiles = new List < string >( parent.m_IncludedFiles );
@@ -597,11 +603,12 @@ namespace VisCPU.HL
                 sb.AppendLine( "; ________________ CONST VALUES ________________" );
             }
 
-            foreach ( KeyValuePair < string, string > keyValuePair in ConstValTypes )
+            foreach ( KeyValuePair < string, ConstantValueItem > keyValuePair in ConstValTypes )
             {
                 if ( m_Parent == null )
                 {
-                    sb.AppendLine( $":const {keyValuePair.Key} {keyValuePair.Value} linker:hide" );
+                    sb.AppendLine(
+                        $":const {keyValuePair.Key} {keyValuePair.Value.Value} {( keyValuePair.Value.IsPublic ? "" : "linker:hide" )}" );
                 }
                 else if ( !m_Parent.ConstValTypes.ContainsKey( keyValuePair.Key ) )
                 {
@@ -950,8 +957,19 @@ namespace VisCPU.HL
                     );
 
                     File.WriteAllText( newInclude, comp.Parse() );
+
+                    ExternalSymbols.AddRange(
+                        comp.ConstValTypes.Where(x=>x.Value.IsPublic).Select(
+                                 x => new ConstantData(
+                                     x.Key,
+                                     x.Key,
+                                     x.Value.Value,
+                                     TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                     true ) ).
+                             Cast < IExternalData >() );
                     ExternalSymbols.AddRange( comp.FunctionMap.Values.Where( x => x.Public ) );
                     ExternalSymbols.AddRange( comp.ExternalSymbols );
+                    
                     includedFile = newInclude;
                 }
 

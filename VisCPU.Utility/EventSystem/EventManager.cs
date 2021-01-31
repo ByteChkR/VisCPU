@@ -20,7 +20,7 @@ namespace VisCPU.Utility.EventSystem
     {
         public static event Action < Event > OnEventReceive;
 
-        internal static EventManagerSettings Settings { get; private set; }
+        internal static EventManagerSettings Settings { get; private set; } = new EventManagerSettings();
 
         #region Public
 
@@ -45,7 +45,7 @@ namespace VisCPU.Utility.EventSystem
 
         private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
         {
-            if ( SettingsManager.GetSettings < EventManagerSettings >().Interactive )
+            if (Settings.Interactive )
             {
                 Console.Write( $"Encountered Error Event: {obj.EventKey} Do you want to continue? [Y/n]" );
 
@@ -56,8 +56,8 @@ namespace VisCPU.Utility.EventSystem
 
                 return;
             }
-            if ( obj.CanContinue || 
-                 SettingsManager.GetSettings<EventManagerSettings>()
+            if ( obj.CanContinue ||
+                 Settings
                                 .IgnoredEvents.Contains(obj.EventKey) )
             {
                 return;
@@ -68,7 +68,7 @@ namespace VisCPU.Utility.EventSystem
 
         private static void EventManagerOnEventReceive( Event obj )
         {
-            if (SettingsManager.GetSettings<EventManagerSettings>().Interactive)
+            if (Settings.Interactive)
             {
                 Console.Write($"Encountered Event: {obj.EventKey} Do you want to continue? [Y/n]");
 

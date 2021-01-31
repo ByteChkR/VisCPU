@@ -25,6 +25,8 @@ namespace VisCPU
 
         public readonly MemoryBus MemoryBus;
 
+        public readonly CpuSymbolServer SymbolServer = new CpuSymbolServer();
+
         private readonly struct CpuState : IEquatable < CpuState >
         {
             public readonly Flags Flags;
@@ -89,6 +91,7 @@ namespace VisCPU
         public Cpu( MemoryBus bus, uint resetAddress, uint interruptAddress )
         {
             MemoryBus = bus;
+            MemoryBus.SetCpu( this );
             m_IntAddress = interruptAddress;
             m_ResetAddress = resetAddress;
         }

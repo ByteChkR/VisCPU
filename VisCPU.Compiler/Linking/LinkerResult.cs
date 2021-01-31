@@ -46,6 +46,21 @@ namespace VisCPU.Compiler.Linking
             HiddenDataSectionItems = new Dictionary < (int, int), Dictionary < string, AddressItem > >();
         }
 
+        public void ApplyDataOffset( int off )
+        {
+            Dictionary < string, AddressItem > items = DataSectionHeader.ToDictionary( x => x.Key, x => x.Value );
+            DataSectionHeader.Clear();
+
+            foreach ( KeyValuePair < string, AddressItem > keyValuePair in items )
+            {
+                DataSectionHeader[keyValuePair.Key] = new AddressItem
+                {
+                    Address = ( uint ) ( keyValuePair.Value.Address + off ),
+                    LinkerArguments = keyValuePair.Value.LinkerArguments
+                };
+            }
+        }
+
         #endregion
     }
 

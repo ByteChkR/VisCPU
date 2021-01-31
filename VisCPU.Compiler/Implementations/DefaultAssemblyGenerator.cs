@@ -51,6 +51,8 @@ namespace VisCPU.Compiler.Implementations
                        ).
                        ToDictionary( x => x.Key, x => x.Value );
 
+            result.ApplyDataOffset( (int)(settings.GlobalOffset + result.LinkedBinary.Count * CpuSettings.InstructionSize));
+
             FileCompilation.ApplyToAllTokens( result.LinkedBinary, ds );
 
             foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
@@ -139,6 +141,8 @@ namespace VisCPU.Compiler.Implementations
             }
 
             instrBytes.AddRange( result.DataSection.SelectMany( BitConverter.GetBytes ) );
+
+            
 
             return instrBytes;
         }

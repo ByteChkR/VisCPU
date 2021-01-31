@@ -19,6 +19,8 @@ namespace VisCPU
 
         protected override LoggerSystems SubSystem => LoggerSystems.MemoryBus;
 
+        internal void SetCpu( Cpu cpu ) => m_Peripherals.ForEach( x => x.SetCpu( cpu ) );
+
         #region Unity Event Functions
 
         public void Reset()
