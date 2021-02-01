@@ -4,7 +4,7 @@ using VisCPU.HL.TypeSystem;
 namespace VisCPU.HL.DataTypes
 {
 
-    public struct VariableData : IExternalData, IEquatable < VariableData >
+    public struct ConstantData : IExternalData, IEquatable < ConstantData >
     {
         public ExternalDataType DataType => ExternalDataType.Variable;
 
@@ -21,39 +21,28 @@ namespace VisCPU.HL.DataTypes
         private readonly string m_Name;
         private readonly string m_FinalName;
         public readonly HlTypeDefinition TypeDefinition;
+        public readonly string Value;
         public readonly bool IsVisible;
-
-        public uint Size { get; }
 
         public readonly string InitContent;
 
-        public VariableData( string name, string finalName, uint dataSize, HlTypeDefinition tdef, bool isVisible )
+        public ConstantData( string name, string finalName, string value, HlTypeDefinition tdef, bool isVisible )
         {
             InitContent = null;
-            Size = dataSize;
+            Value = value;
             m_Name = name;
             m_FinalName = finalName;
             TypeDefinition = tdef;
             IsVisible = isVisible;
         }
 
-        public VariableData( string name, string finalName, string content, HlTypeDefinition tdef, bool isVisible )
-        {
-            m_Name = name;
-            m_FinalName = finalName;
-            Size = ( uint ) ( content?.Length ?? 1 );
-            InitContent = content;
-            TypeDefinition = tdef;
-            IsVisible = isVisible;
-        }
-
-        public bool Equals( VariableData other )
+        public bool Equals( ConstantData other )
         {
             return m_Name == other.m_Name &&
                    m_FinalName == other.m_FinalName &&
                    Equals( TypeDefinition, other.TypeDefinition ) &&
                    IsVisible == other.IsVisible &&
-                   Size == other.Size &&
+                   Value == other.Value &&
                    InitContent == other.InitContent;
         }
 
@@ -70,7 +59,7 @@ namespace VisCPU.HL.DataTypes
                 hashCode = ( hashCode * 397 ) ^ ( m_FinalName != null ? m_FinalName.GetHashCode() : 0 );
                 hashCode = ( hashCode * 397 ) ^ ( TypeDefinition != null ? TypeDefinition.GetHashCode() : 0 );
                 hashCode = ( hashCode * 397 ) ^ IsVisible.GetHashCode();
-                hashCode = ( hashCode * 397 ) ^ ( int ) Size;
+                hashCode = ( hashCode * 397 ) ^ Value.GetHashCode();
                 hashCode = ( hashCode * 397 ) ^ ( InitContent != null ? InitContent.GetHashCode() : 0 );
 
                 return hashCode;

@@ -50,7 +50,7 @@ namespace VisCPU.Compiler.Compiler
 
             ByteCode = m_AssemblyGenerator.Assemble( linkResult );
 
-            LinkerInfo = CreateFromResult(linkResult);
+            LinkerInfo = CreateFromResult( linkResult );
         }
 
         #endregion

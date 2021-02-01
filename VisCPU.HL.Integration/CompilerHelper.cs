@@ -28,7 +28,7 @@ namespace VisCPU.HL.Integration
 
             Logger.LogMessage(
                 LoggerSystems.HlIntegration,
-                "Current Working Dir: " + UnityIsAPieceOfShitHelper.AppRoot );
+                "Current Working Dir: " + AppRootHelper.AppRoot );
 
             Logger.LogMessage(
                 LoggerSystems.HlIntegration,
@@ -46,29 +46,34 @@ namespace VisCPU.HL.Integration
             ProgramBuilder.Build( bs );
 
             string buildOut = Path.Combine(
-                Path.GetDirectoryName(file),
-                Path.GetFileNameWithoutExtension(file) + ".vbin");
+                Path.GetDirectoryName( file ),
+                Path.GetFileNameWithoutExtension( file ) + ".vbin" );
+
             string buildInfo = Path.Combine(
-                Path.GetDirectoryName(file),
-                Path.GetFileNameWithoutExtension(file) + ".vbin.linkertext");
+                Path.GetDirectoryName( file ),
+                Path.GetFileNameWithoutExtension( file ) + ".vbin.linkertext" );
 
-            string buildTarget = Path.Combine(outputBuildFolder, Path.GetFileNameWithoutExtension(file) + ".vbin");
-            string infoTarget = Path.Combine(outputBuildFolder, Path.GetFileNameWithoutExtension(file) + ".vbin.linkertext");
+            string buildTarget = Path.Combine( outputBuildFolder, Path.GetFileNameWithoutExtension( file ) + ".vbin" );
 
-            if (File.Exists(buildTarget))
+            string infoTarget = Path.Combine(
+                outputBuildFolder,
+                Path.GetFileNameWithoutExtension( file ) + ".vbin.linkertext" );
+
+            if ( File.Exists( buildTarget ) )
             {
-                File.Delete(buildTarget);
-            }
-            if (File.Exists(infoTarget))
-            {
-                File.Delete(infoTarget);
+                File.Delete( buildTarget );
             }
 
-            File.Move(buildOut, buildTarget);
+            if ( File.Exists( infoTarget ) )
+            {
+                File.Delete( infoTarget );
+            }
+
+            File.Move( buildOut, buildTarget );
 
             if ( File.Exists( buildInfo ) )
             {
-                File.Move(buildInfo, infoTarget);
+                File.Move( buildInfo, infoTarget );
             }
 
             return buildTarget;

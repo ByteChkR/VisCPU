@@ -10,7 +10,7 @@ namespace VisCPU.HL.Importer
     {
         protected override LoggerSystems SubSystem => LoggerSystems.HlImporter;
 
-        protected string CacheDirectory => Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "cache" );
+        protected string CacheDirectory => Path.Combine( AppRootHelper.AppRoot, "cache" );
 
         #region Public
 

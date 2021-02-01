@@ -48,15 +48,15 @@ public class VisCpuInstanceProvider : MonoBehaviour
 #endif
         if (m_UsePersistentPath)
         {
-            UnityIsAPieceOfShitHelper.SetCustomBase(Path.Combine(Application.persistentDataPath, m_VisSubPath));
+            AppRootHelper.SetCustomBase(Path.Combine(Application.persistentDataPath, m_VisSubPath));
         }
         else
         {
-            UnityIsAPieceOfShitHelper.SetCustomBase(Path.GetFullPath(m_VisSubPath));
+            AppRootHelper.SetCustomBase(Path.GetFullPath(m_VisSubPath));
         }
-        if (!Directory.Exists(UnityIsAPieceOfShitHelper.AppRoot))
+        if (!Directory.Exists(AppRootHelper.AppRoot))
         {
-            Directory.CreateDirectory(UnityIsAPieceOfShitHelper.AppRoot);
+            Directory.CreateDirectory(AppRootHelper.AppRoot);
         }
     }
 
@@ -80,7 +80,7 @@ public class VisCpuInstanceProvider : MonoBehaviour
 
 
 
-        Debug.Log($"Vis App Root: {UnityIsAPieceOfShitHelper.AppRoot}");
+        Debug.Log($"Vis App Root: {AppRootHelper.AppRoot}");
 
 
         CpuSettings.FallbackSet = new DefaultSet();

@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Linq;
-using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Events;
-using VisCPU.Utility.Settings;
-using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU.Utility.EventSystem
 {
-    public class EventManagerSettings
-    {
-        [Argument(Name = "event-system:interactive")]
-        public bool Interactive;
 
-        [field: Argument( Name = "event-system:ignore" )]
-        public string[] IgnoredEvents { get; set; } = new string[0];
-        
-    }
     public static class EventManager
     {
         public static event Action < Event > OnEventReceive;
@@ -24,12 +13,13 @@ namespace VisCPU.Utility.EventSystem
 
         #region Public
 
-        public static void SetSettings( EventManagerSettings settings ) => Settings = settings;
-
         public static void RegisterDefaultHandlers()
         {
-            if(Settings==null)
-            Settings = new EventManagerSettings();
+            if ( Settings == null )
+            {
+                Settings = new EventManagerSettings();
+            }
+
             OnEventReceive += EventManagerOnEventReceive;
             EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
         }
@@ -39,26 +29,31 @@ namespace VisCPU.Utility.EventSystem
             OnEventReceive?.Invoke( eventItem );
         }
 
+        public static void SetSettings( EventManagerSettings settings )
+        {
+            Settings = settings;
+        }
+
         #endregion
 
         #region Private
 
         private static void EventManagerOnErrorEventReceive( ErrorEvent obj )
         {
-            if (Settings.Interactive )
+            if ( Settings.Interactive )
             {
                 Console.Write( $"Encountered Error Event: {obj.EventKey} Do you want to continue? [Y/n]" );
 
                 if ( Console.ReadKey().Key == ConsoleKey.Y )
                 {
-                    throw new EventManagerException($"[{obj.EventKey}] {obj.Message}");
+                    throw new EventManagerException( $"[{obj.EventKey}] {obj.Message}" );
                 }
 
                 return;
             }
+
             if ( obj.CanContinue ||
-                 Settings
-                                .IgnoredEvents.Contains(obj.EventKey) )
+                 Settings.IgnoredEvents.Contains( obj.EventKey ) )
             {
                 return;
             }
@@ -68,13 +63,13 @@ namespace VisCPU.Utility.EventSystem
 
         private static void EventManagerOnEventReceive( Event obj )
         {
-            if (Settings.Interactive)
+            if ( Settings.Interactive )
             {
-                Console.Write($"Encountered Event: {obj.EventKey} Do you want to continue? [Y/n]");
+                Console.Write( $"Encountered Event: {obj.EventKey} Do you want to continue? [Y/n]" );
 
-                if (Console.ReadKey().Key == ConsoleKey.Y)
+                if ( Console.ReadKey().Key == ConsoleKey.Y )
                 {
-                    throw new EventManagerException($"[{obj.EventKey}]");
+                    throw new EventManagerException( $"[{obj.EventKey}]" );
                 }
 
                 return;

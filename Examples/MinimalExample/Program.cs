@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
-using DynamicExample;
 using VisCPU;
+using VisCPU.Dynamic;
 using VisCPU.HL;
 using VisCPU.HL.Integration;
 using VisCPU.Instructions;
@@ -73,19 +73,19 @@ public void Loop()
 Do(); //Call Entry Point
 ";
 
-        private static string TempSrc => Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "src" );
+        private static string TempSrc => Path.Combine(AppRootHelper.AppRoot, "src" );
 
         private static string TempFile => Path.Combine( TempSrc, "file.vhl" );
 
-        private static string TempBuild => Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "build" );
+        private static string TempBuild => Path.Combine(AppRootHelper.AppRoot, "build" );
 
-        private static string TempInternalBuild => Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "internal" );
+        private static string TempInternalBuild => Path.Combine(AppRootHelper.AppRoot, "internal" );
 
         #region Private
 
         private static string Compile( ConsoleOutInterfaceSettings cOutSettings )
         {
-           
+
             //Compile
             return CompilerHelper.Compile(
                 TempFile,
@@ -96,13 +96,84 @@ Do(); //Call Entry Point
             );
         }
 
+        private static void DynamicConsole( string file, Cpu instance )
+        {
+            instance.LoadBinary( File.ReadAllBytes( file ).ToUInt() );
+
+            //Create Dynamic Wrapper
+            DynamicCpuWrapper wrapper = new( instance );
+
+            //List Available Functions
+            Console.WriteLine( "Available Functions: " );
+
+            foreach ( string dynamicMemberName in wrapper.GetDynamicMemberNames() )
+            {
+                Console.WriteLine( $"\t{dynamicMemberName}" );
+            }
+
+            //Command
+            string str = null;
+
+            //Exit Condition
+            while ( str != "exit" )
+            {
+                if ( str == "list" )
+                {
+                    //List Available Functions
+                    Console.WriteLine( "Available Members: " );
+
+                    foreach ( string dynamicMemberName in wrapper.GetDynamicMemberNames() )
+                    {
+                        Console.WriteLine( $"\t{dynamicMemberName}" );
+                    }
+                }
+                else if ( !string.IsNullOrEmpty( str ) )
+                {
+                    //Parse Commands
+                    string[] parts = str.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
+
+                    if ( wrapper.Constants.Contains( parts[0] ) )
+                    {
+                        Console.WriteLine(
+                            $"Constant Value '{parts[0]}' = {wrapper.GetConstantValue( parts[0] )}" );
+                    }
+                    else if ( wrapper.Data.Contains( parts[0] ) )
+                    {
+                        Console.WriteLine(
+                            $"Data Value '{parts[0]}' = {wrapper.GetDataValue( parts[0] )}" );
+                    }
+                    else if ( !wrapper.Labels.Contains( parts[0] ) )
+                    {
+                        Console.WriteLine( "Can not find Label: " + parts[0] );
+                    }
+                    else
+                    {
+                        object[] args = parts.Skip( 1 ).Select( uint.Parse ).Cast < object >().ToArray();
+
+                        //Invoke Function.
+                        //Note:
+                        //  If Function Name is known at compile time, the functions can be invoked by using default C# Syntax.
+                        //  wr.Clear(); or wr.Sleep(1000);
+
+                        uint ret = wrapper.InvokeLabel( parts[0], args );
+
+                        //Display Return value of function
+                        Console.WriteLine( $"Function {parts[0]} returned: {ret}" );
+                    }
+                }
+
+                //Read Command from Console Input
+                Console.Write( "Enter Function to Execute(<cmd> <arg0> <arg1>): " );
+                str = Console.ReadLine();
+            }
+        }
+
         private static void Main( string[] args )
         {
             int idx = args.ToList().IndexOf( "-r" );
-            bool useDynamic = args.Contains("-d");
+            bool useDynamic = args.Contains( "-d" );
 
-            UnityIsAPieceOfShitHelper.SetAppDomainBase(); //Set default Root Directory
-
+            AppRootHelper.SetAppDomainBase(); //Set default Root Directory
 
             //Process -o flag to enable optimizations
             HlCompilerSettings hlSettings = SettingsManager.GetSettings < HlCompilerSettings >();
@@ -112,7 +183,7 @@ Do(); //Call Entry Point
 
             //Setup Logging and Events
             EventManager.RegisterDefaultHandlers();
-            
+
             //Log to Console
             Logger.OnLogReceive +=
                 ( sys, str ) => Console.WriteLine( $"[{sys}]{str}" );
@@ -135,9 +206,9 @@ Do(); //Call Entry Point
                                                 WithExposedApi( SleepTime, "Sleep", 1 )
                 ;
 
-            if (idx != -1 && idx < args.Length - 1)
+            if ( idx != -1 && idx < args.Length - 1 )
             {
-                Run(args[idx + 1], useDynamic);
+                Run( args[idx + 1], useDynamic );
 
                 return;
             }
@@ -146,6 +217,7 @@ Do(); //Call Entry Point
                 if ( !File.Exists( TempFile ) )
                 {
                     Directory.CreateDirectory( TempSrc );
+
                     string src = s_Source.Replace( "{QUOT}", "\"" ).
                                           Replace( "{C_OUT_ADDR}", cOutSettings.WriteOutputAddress.ToString() ).
                                           Replace( "{C_CLEAR_ADDR}", cOutSettings.InterfaceClearPin.ToString() );
@@ -153,6 +225,7 @@ Do(); //Call Entry Point
                     File.WriteAllText( TempFile, src );
                 }
             }
+
             // The Output File(*.vbin)
             string buildOut = Compile( cOutSettings );
 
@@ -167,54 +240,7 @@ Do(); //Call Entry Point
 
             if ( dyn )
             {
-
-                instance.LoadBinary(File.ReadAllBytes(file).ToUInt());
-                //Create Dynamic Wrapper
-                HlProgramWrapper wrapper = new( instance );
-
-                //List Available Functions
-                Console.WriteLine( "Available Functions: " );
-
-                foreach ( string dynamicMemberName in wrapper.GetDynamicMemberNames() )
-                {
-                    Console.WriteLine( $"\t{dynamicMemberName}" );
-                }
-
-                //Command
-                string str = null;
-
-                //Exit Condition
-                while ( str != "exit" )
-                {
-                    if ( str == "list" )
-                    {
-                        //List Available Functions
-                        Console.WriteLine("Available Functions: ");
-
-                        foreach (string dynamicMemberName in wrapper.GetDynamicMemberNames())
-                        {
-                            Console.WriteLine($"\t{dynamicMemberName}");
-                        }
-                    }
-                    else if ( !string.IsNullOrEmpty(str) )
-                    {
-                        //Parse Commands
-                        string[] parts = str.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
-                        object[] args = parts.Skip( 1 ).Select( uint.Parse ).Cast < object >().ToArray();
-                        
-                        //Invoke Function.
-                        //Note:
-                        //  If Function Name is known at compile time, the functions can be invoked by using default C# Syntax.
-                        //  wr.Clear(); or wr.Sleep(1000);
-                        uint ret = wrapper.Invoke( parts[0], args );
-                        //Display Return value of function
-                        Console.WriteLine( $"Function {parts[0]} returned: {ret}" );
-                    }
-
-                    //Read Command from Console Input
-                    Console.Write( "Enter Function to Execute(<cmd> <arg0> <arg1>): " );
-                    str = Console.ReadLine();
-                }
+                DynamicConsole( file, instance );
             }
             else
             {

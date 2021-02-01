@@ -51,7 +51,8 @@ namespace VisCPU.Compiler.Implementations
                        ).
                        ToDictionary( x => x.Key, x => x.Value );
 
-            result.ApplyDataOffset( (int)(settings.GlobalOffset + result.LinkedBinary.Count * CpuSettings.InstructionSize));
+            result.ApplyDataOffset(
+                ( int ) ( settings.GlobalOffset + result.LinkedBinary.Count * CpuSettings.InstructionSize ) );
 
             FileCompilation.ApplyToAllTokens( result.LinkedBinary, ds );
 
@@ -141,8 +142,6 @@ namespace VisCPU.Compiler.Implementations
             }
 
             instrBytes.AddRange( result.DataSection.SelectMany( BitConverter.GetBytes ) );
-
-            
 
             return instrBytes;
         }

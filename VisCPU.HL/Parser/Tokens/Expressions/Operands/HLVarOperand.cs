@@ -37,14 +37,14 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
             return new List < IHlToken > { Value };
         }
 
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
-
         public override bool IsStatic()
         {
             return false;
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString();
         }
 
         #endregion

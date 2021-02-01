@@ -183,7 +183,7 @@ namespace VisCPU.ProjectSystem.Database.Implementations
             }
 
             return Path.Combine(
-                UnityIsAPieceOfShitHelper.AppRoot,
+                AppRootHelper.AppRoot,
                 moduleRoot
             );
         }

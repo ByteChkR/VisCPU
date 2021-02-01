@@ -23,21 +23,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
         #region Public
 
-        private static void ApplyChangeReset( bool[] changeReset, int[] original, int[] versions )
-        {
-            for (int j = 0; j < changeReset.Length; j++)
-            {
-                if (changeReset[j] && versions[j] != original[j])
-                {
-                    for ( int i = j+1; i < versions.Length; i++ )
-                    {
-                        if ( !changeReset[i] )
-                            versions[i] = 0;
-                    }
-                }
-            }
-        }
-
         public static Version ChangeVersion( Version version, string changeStr )
         {
             string[] subVersions = changeStr.Split( '.' );
@@ -75,10 +60,11 @@ namespace VisCPU.Console.Core.Subsystems.Project
                     }
                     else if ( int.TryParse( max, out int newMax ) )
                     {
-                        if (i == 0)
+                        if ( i == 0 )
                         {
                             continue; //Can not wrap the last digit
                         }
+
                         wrapValues[i] = newMax;
                     }
 
@@ -101,7 +87,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
                 else if ( current == "-" && versions[i] != 0 )
                 {
                     versions[i]--;
-                    
+
                 }
                 else if ( current.ToLower( CultureInfo.InvariantCulture ) == "x" )
                 {
@@ -124,8 +110,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
                 }
             }
 
-
-            ApplyChangeReset(changeReset, original, versions);
+            ApplyChangeReset( changeReset, original, versions );
 
             return new Version(
                 versions[0],
@@ -169,7 +154,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
             Version v = Version.Parse( t.ProjectVersion );
 
             t.ProjectVersion = ChangeVersion( v, options.VersionString ).ToString();
-            ProjectConfig.Save(src, t);
+            ProjectConfig.Save( src, t );
 
             string temp = Path.Combine(
                 Path.GetDirectoryName( Directory.GetCurrentDirectory() ),
@@ -211,6 +196,27 @@ namespace VisCPU.Console.Core.Subsystems.Project
             PackOptions op = new PackOptions();
             ArgumentSyntaxParser.Parse( args.Skip( 1 ).ToArray(), op );
             Pack( args.First(), op );
+        }
+
+        #endregion
+
+        #region Private
+
+        private static void ApplyChangeReset( bool[] changeReset, int[] original, int[] versions )
+        {
+            for ( int j = 0; j < changeReset.Length; j++ )
+            {
+                if ( changeReset[j] && versions[j] != original[j] )
+                {
+                    for ( int i = j + 1; i < versions.Length; i++ )
+                    {
+                        if ( !changeReset[i] )
+                        {
+                            versions[i] = 0;
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

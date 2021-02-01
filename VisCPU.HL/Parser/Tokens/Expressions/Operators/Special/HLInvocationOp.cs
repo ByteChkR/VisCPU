@@ -20,11 +20,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         public HlExpression[] ParameterList { get; }
 
-        public override bool IsStatic()
-        {
-            return false;
-        }
-
         /// <summary>
         ///     Operation Type
         /// </summary>
@@ -51,6 +46,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override List < IHlToken > GetChildren()
         {
             return ParameterList.Cast < IHlToken >().Concat( new[] { Left } ).ToList();
+        }
+
+        public override bool IsStatic()
+        {
+            return false;
         }
 
         public override string ToString()

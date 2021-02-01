@@ -102,8 +102,8 @@ namespace VisCPU.HL.Compiler.Variables
                     asmVarName,
                     new ConstantValueItem()
                     {
-                        Value = expr.VariableDefinition.InitializerExpression.FirstOrDefault()?.ToString() ,
-                        IsPublic = expr.VariableDefinition.Modifiers.Any(x=>x.Type==HlTokenType.OpPublicMod)
+                        Value = expr.VariableDefinition.InitializerExpression.FirstOrDefault()?.ToString(),
+                        IsPublic = expr.VariableDefinition.Modifiers.Any( x => x.Type == HlTokenType.OpPublicMod )
                     }
                 );
 

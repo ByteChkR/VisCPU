@@ -13,14 +13,16 @@ namespace VisCPU.HL.Compiler.Relational
 
         #region Public
 
+        public abstract uint StaticEvaluate( ExpressionTarget a, ExpressionTarget b );
+
         public override ExpressionTarget ParseExpression(
             HlCompilation compilation,
             HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                                                      expr.Left
-                                                  );
+                expr.Left
+            );
 
             ExpressionTarget rTarget = compilation.Parse(
                 expr.Right
@@ -28,7 +30,7 @@ namespace VisCPU.HL.Compiler.Relational
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
                  !target.IsAddress &&
-                 !rTarget.IsAddress)
+                 !rTarget.IsAddress )
             {
                 return new ExpressionTarget(
                     StaticEvaluate( target, rTarget ).ToString(),
@@ -80,8 +82,6 @@ namespace VisCPU.HL.Compiler.Relational
 
             return outputTarget;
         }
-
-        public abstract uint StaticEvaluate(ExpressionTarget a, ExpressionTarget b );
 
         #endregion
     }

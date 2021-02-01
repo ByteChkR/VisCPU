@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DynamicExample\DynamicExample.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="VisCPU">
       <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.dll</HintPath>
     </Reference>
@@ -22,6 +18,9 @@
     </Reference>
     <Reference Include="VisCPU.Console.Core">
       <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Console.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Dynamic">
+      <HintPath>..\..\VisCPU.Dynamic\bin\Debug\netstandard2.0\VisCPU.Dynamic.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Extensions">
       <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Extensions.dll</HintPath>

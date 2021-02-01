@@ -110,6 +110,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugRunJob.Arguments["run:cpu.interrupt"] = "0x00000000";
             debugRunJob.Arguments["run:cpu.reset"] = "0x00000000";
             debugRunJob.Arguments["run:working-dir"] = "%PROJDIR%";
+            debugRunJob.Arguments["run:trim"] = "false";
             debugRunJob.Arguments["memory-bus:devices"] = "%VISDIR%configs/cpu/peripherals/memory/default.json";
 
             debugRunJob.Arguments["memory:read"] = "true";
@@ -177,7 +178,6 @@ namespace VisCPU.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "true";
-            
 
             return debugBuildJob;
         }
@@ -191,6 +191,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
             runJob.Arguments["run:cpu.interrupt"] = "0x00000000";
             runJob.Arguments["run:cpu.reset"] = "0x00000000";
             runJob.Arguments["run:working-dir"] = "%PROJDIR%";
+            runJob.Arguments["run:trim"] = "false";
             runJob.Arguments["memory-bus:devices"] = "%VISDIR%configs/cpu/peripherals/memory/default.json";
 
             runJob.Arguments["memory:read"] = "true";
@@ -241,7 +242,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
 
         private static void GenerateCommonJobs()
         {
-            string dir = Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "common/jobs" );
+            string dir = Path.Combine( AppRootHelper.AppRoot, "common/jobs" );
             Directory.CreateDirectory( dir );
             ProjectBuildJob cleanJob = new ProjectBuildJob();
             cleanJob.BuildJobRunner = "clean";

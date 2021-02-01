@@ -17,11 +17,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         public HlExpression Condition { get; }
 
-        public override bool IsStatic()
-        {
-            return Condition.IsStatic();
-        }
-
         #region Public
 
         /// <summary>
@@ -44,6 +39,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override List < IHlToken > GetChildren()
         {
             return new List < IHlToken > { Condition }.Concat( Block ).ToList();
+        }
+
+        public override bool IsStatic()
+        {
+            return Condition.IsStatic();
         }
 
         public override string ToString()

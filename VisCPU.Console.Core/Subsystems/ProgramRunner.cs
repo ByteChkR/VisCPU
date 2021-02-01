@@ -69,6 +69,12 @@ namespace VisCPU.Console.Core.Subsystems
                 Logger.LogMessage( LoggerSystems.Console, "Run File: '{0}'", file );
                 uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
 
+                if ( settings.TrimMemoryToProgram )
+                {
+                    ms.Size = ( uint ) fileCode.Length;
+                    SettingsManager.SaveSettings( ms );
+                }
+
                 MemoryBus bus = CreateBus( mbs );
 
                 Cpu cpu = new Cpu( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
@@ -152,6 +158,12 @@ namespace VisCPU.Console.Core.Subsystems
 
                 Log( $"Run File: '{file}'" );
                 uint[] fileCode = File.ReadAllBytes( file ).ToUInt();
+
+                if ( settings.TrimMemoryToProgram )
+                {
+                    ms.Size = ( uint ) fileCode.Length;
+                    SettingsManager.SaveSettings( ms );
+                }
 
                 MemoryBus bus = CreateBus( mbs );
 

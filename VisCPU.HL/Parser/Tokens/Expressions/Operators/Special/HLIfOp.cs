@@ -26,8 +26,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 
         public override HlTokenType Type => OperationType;
 
-        public override bool IsStatic() => false;
-
         #region Public
 
         /// <summary>
@@ -56,6 +54,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
                                 Concat( ElseBranch ).
                                 Cast < IHlToken >().
                                 ToList();
+        }
+
+        public override bool IsStatic()
+        {
+            return false;
         }
 
         #endregion

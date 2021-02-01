@@ -13,7 +13,7 @@ namespace VisCPU.Utility.Settings
         private static readonly List < (string rootDir, SettingsCategory category) > s_RootCategories =
             new List < (string, SettingsCategory) >();
 
-        private static string DefaultConfigDir => UnityIsAPieceOfShitHelper.AppRoot;
+        private static string DefaultConfigDir => AppRootHelper.AppRoot;
 
         #region Public
 

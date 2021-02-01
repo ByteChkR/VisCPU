@@ -15,15 +15,16 @@ namespace VisCPU.HL
 
         [field: Argument( Name = "compiler:optimize-const-expr" )]
         public bool OptimizeConstExpressions { get; set; }
-        [field: Argument(Name = "compiler:optimize-reduce-expr")]
+        [field: Argument( Name = "compiler:optimize-reduce-expr" )]
         public bool OptimizeReduceExpressions { get; set; }
-        [field: Argument(Name = "compiler:optimize-if-expr")]
+        [field: Argument( Name = "compiler:optimize-if-expr" )]
         public bool OptimizeIfConditionExpressions { get; set; }
-        [field: Argument(Name = "compiler:optimize-while-expr")]
+        [field: Argument( Name = "compiler:optimize-while-expr" )]
         public bool OptimizeWhileConditionExpressions { get; set; }
 
         [JsonIgnore]
-        public bool OptimizeAll {
+        public bool OptimizeAll
+        {
             get =>
                 OptimizeTempVarUsage &&
                 OptimizeConstExpressions &&
@@ -31,10 +32,10 @@ namespace VisCPU.HL
                 OptimizeIfConditionExpressions &&
                 OptimizeWhileConditionExpressions;
             set =>
-                OptimizeReduceExpressions = 
-                    OptimizeWhileConditionExpressions = 
-                        OptimizeConstExpressions = 
-                            OptimizeIfConditionExpressions = 
+                OptimizeReduceExpressions =
+                    OptimizeWhileConditionExpressions =
+                        OptimizeConstExpressions =
+                            OptimizeIfConditionExpressions =
                                 OptimizeTempVarUsage = value;
         }
 

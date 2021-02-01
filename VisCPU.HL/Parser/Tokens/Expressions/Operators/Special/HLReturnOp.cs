@@ -15,11 +15,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 
         public override HlTokenType Type => HlTokenType.OpReturn;
 
-        public override bool IsStatic()
-        {
-            return Right.IsStatic();
-        }
-
         #region Public
 
         /// <summary>
@@ -39,6 +34,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override List < IHlToken > GetChildren()
         {
             return new List < IHlToken > { Right };
+        }
+
+        public override bool IsStatic()
+        {
+            return Right.IsStatic();
         }
 
         public override string ToString()

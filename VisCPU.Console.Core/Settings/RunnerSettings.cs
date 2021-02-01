@@ -25,7 +25,11 @@ namespace VisCPU.Console.Core.Settings
         private readonly string[] m_InputFolders = new string[0];
 
         [field: Argument( Name = "run:load-symbols" )]
-        public bool LoadDebugSymbols { get; } = true;
+        public bool LoadDebugSymbols { get; set; } = true;
+
+        [field: Argument( Name = "run:trim-memory" )]
+        [field: Argument( Name = "run:trim" )]
+        public bool TrimMemoryToProgram { get; set; } = false;
 
         [field: Argument( Name = "run:symbols" )]
         [XmlIgnore]

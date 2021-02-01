@@ -15,8 +15,8 @@ namespace VisCPU.Console.Core.Subsystems
 
         public override void Run( IEnumerable < string > args )
         {
-            string configDir = Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "config" );
-            string cacheDir = Path.Combine( UnityIsAPieceOfShitHelper.AppRoot, "cache" );
+            string configDir = Path.Combine( AppRootHelper.AppRoot, "config" );
+            string cacheDir = Path.Combine( AppRootHelper.AppRoot, "cache" );
 
             if ( Directory.Exists( configDir ) )
             {

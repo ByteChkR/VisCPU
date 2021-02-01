@@ -51,8 +51,8 @@ public class VisExampleScriptTest : MonoBehaviour
 
         string file = CompilerHelper.Compile(
             target,
-            Path.Combine(UnityIsAPieceOfShitHelper.AppRoot, "build"),
-            Path.Combine(UnityIsAPieceOfShitHelper.AppRoot, "temp"),
+            Path.Combine(AppRootHelper.AppRoot, "build"),
+            Path.Combine(AppRootHelper.AppRoot, "temp"),
             true,
             new[] { "HL-expr", "bin" });
 

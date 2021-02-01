@@ -173,7 +173,7 @@ namespace VisCPU.ProjectSystem.Data
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
             {
-                { "VISDIR", UnityIsAPieceOfShitHelper.AppRoot },
+                { "VISDIR", AppRootHelper.AppRoot },
                 {
                     "PROJDIR", rootDir.EndsWith( "\\" ) ||
                                rootDir.EndsWith( "/" )
@@ -201,7 +201,7 @@ namespace VisCPU.ProjectSystem.Data
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
             {
-                { "VISDIR", UnityIsAPieceOfShitHelper.AppRoot },
+                { "VISDIR", AppRootHelper.AppRoot },
                 {
                     "PROJDIR", rootDir.EndsWith( "\\" ) ||
                                rootDir.EndsWith( "/" )

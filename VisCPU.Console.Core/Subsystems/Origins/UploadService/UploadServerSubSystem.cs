@@ -30,7 +30,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins.UploadService
                 ProjectResolver.GetManager( args.First() ),
                 Port,
                 Path.Combine(
-                    UnityIsAPieceOfShitHelper.AppRoot,
+                    AppRootHelper.AppRoot,
                     "cache/upload_server"
                 )
             );

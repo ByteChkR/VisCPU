@@ -28,16 +28,11 @@ using VisCPU.Utility.UriResolvers;
 namespace VisCPU.HL
 {
 
-    internal class ConstantValueItem
-    {
-        public string Value;
-        public bool IsPublic;
-    }
-
     public class HlCompilation : VisBase
     {
         public readonly HlTypeSystem TypeSystem = new HlTypeSystem();
-        internal readonly Dictionary < string, ConstantValueItem> ConstValTypes = new Dictionary < string, ConstantValueItem>();
+        internal readonly Dictionary < string, ConstantValueItem > ConstValTypes =
+            new Dictionary < string, ConstantValueItem >();
         internal readonly List < IExternalData > ExternalSymbols = new List < IExternalData >();
         internal readonly Dictionary < string, FunctionData > FunctionMap = new Dictionary < string, FunctionData >();
 
@@ -959,7 +954,8 @@ namespace VisCPU.HL
                     File.WriteAllText( newInclude, comp.Parse() );
 
                     ExternalSymbols.AddRange(
-                        comp.ConstValTypes.Where(x=>x.Value.IsPublic).Select(
+                        comp.ConstValTypes.Where( x => x.Value.IsPublic ).
+                             Select(
                                  x => new ConstantData(
                                      x.Key,
                                      x.Key,
@@ -967,9 +963,10 @@ namespace VisCPU.HL
                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
                                      true ) ).
                              Cast < IExternalData >() );
+
                     ExternalSymbols.AddRange( comp.FunctionMap.Values.Where( x => x.Public ) );
                     ExternalSymbols.AddRange( comp.ExternalSymbols );
-                    
+
                     includedFile = newInclude;
                 }
 

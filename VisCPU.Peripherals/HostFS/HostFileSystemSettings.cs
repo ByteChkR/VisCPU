@@ -15,7 +15,7 @@ namespace VisCPU.Peripherals.HostFS
         public bool EnableDeleteFiles { get; set; }
 
         [field: Argument( Name = "hostfs:root" )]
-        public string RootPath { get; set; } = UnityIsAPieceOfShitHelper.AppRoot;
+        public string RootPath { get; set; } = AppRootHelper.AppRoot;
 
         [field: Argument( Name = "hostfs:pin.present" )]
         public uint PinPresent { get; set; } = 0xFFFF3000;
