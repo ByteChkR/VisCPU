@@ -75,7 +75,7 @@ LOAD my_function MyFunctionPointer ; Load Address of my_function into the pointe
 JSR my_function ; Jump to my_function
 JSREF MyFunctionPointer ; Jump to subroutine my_function using pointer
 ; JMP my_function ; Jump Directly without pushing processor state
-; JREF my_function ; Jump Directly without pushing processor state
+; JREF MyFunctionPointer ; Jump Directly without pushing processor state
 
 HLT ; Halt Execution 
 	; The Processor is falling through the label and starts executing my_function again if we dont Halt.
@@ -250,9 +250,10 @@ private const uint CONST_VAL = 0xFFFF1001;
 
 CONST_VAL = 123; //Writes 123 to address 0xFFFF1001
 
-private uint val = &CONST_VAL; //Writes 123 to variable val
+private uint val = &CONST_VAL; //Writes 0xFFFF1001 to variable val
 // the '&' operator is a short hand for the "addr_of()" compiletime function
 // the '*' operator is the dereference operator(implicitly used when variable is defined as const)
+// also available as "val_of()" compile time function
 
 ```
 
@@ -264,6 +265,7 @@ Strings have to be defined as `static`.
 Their length can be obtained with the `size_of(MyString)` Compiletime Function
 ```cs
 private static string MyString = "ABC";
+private uint str_length = size_of(MyString);
 ```
 
 
@@ -272,7 +274,68 @@ private static string MyString = "ABC";
 HL Implements the most common condition blocks.
 
 - If/Else/Else If
-- While/For
+- While/For 
+
+#### If conditions 
+If conditions are used to conditionally change the execution flow through the binary. 
+
+##### `if` keyword
+If blocks start with the keyword `if` followed by the condition in brackets, followed by the code block to execute if the condition evaluates to "true"
+
+```cs 
+uint a = 1;
+if ( a == 1 )
+{
+//a is equal to 1.
+//do stuff
+}
+```
+
+##### `else` keyword 
+The keyword `else` is always preceded by an `if` or `else if`. If none of the previous conditions were met, the else code block after the keyword is executing. 
+
+##### `else if` keyword 
+The combined keyword `else if` allows for extending if branches with multiple different conditions
+
+#### While Loops 
+When using a `while` loop, the CPU enters a code block that will execute until the specified condition will evaluate to false. 
+
+``` 
+private uint a = 0;
+while (a < 1000 )
+{
+a++; //Increment A
+}
+```
+
+#### For Loops 
+For loops are a variation of while loops that aim to make it easier to write repeating code. 
+A for loop enables writing simpler code with less likeliness to create an endless loop by introducing a counter variable. 
+It takes 3 expressions separated by semicolons. 
+The first expression is executed when entering the block, it typically declares the counter variable. 
+The second expression is evaluated before the code block is executed. If the second expression is true, the program flow will enter the code block. 
+If the expression is false, the execution continues after the for loop. 
+The third expression is executed after the code block. It is typically used to change the counter value. 
+
+```cs 
+for(uint i = 0; i < 100; i++)
+{
+//Do stuff 100 times. 
+}
+//if i >= 100 the execution continues here. 
+```
+
+For loops can be directly converted to while loops. 
+The following example exhibits the same behaviour as a for loop. 
+
+```cs 
+uint i = 0;
+while(i < 100)
+{
+//Do Stuff 100 times 
+i++;
+}
+```
 
 ### Compiletime Functions
 
@@ -312,7 +375,8 @@ I0_HLT();
 
 ### Optimizations
 
-All the Optimizations are applied during compilation from HL to VASM
+All the Optimizations are applied during compilation from HL to VASM. 
+All VASM examples are approximate handwritten code that omits details for clarity reasons. The actual compiled output could look different. 
 
 #### Constant Expression Elimination
 
