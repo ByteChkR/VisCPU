@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="VisCPU">
+      <HintPath>..\..\src\VisCPU\bin\Release\netstandard2.0\VisCPU.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Compiler">
+      <HintPath>..\..\src\VisCPU.Compiler\bin\Release\netstandard2.0\VisCPU.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Extensions">
+      <HintPath>..\..\src\VisCPU.Extensions\bin\Release\netstandard2.0\VisCPU.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.HL.Integration">
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Release\netstandard2.0\VisCPU.HL.Integration.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Instructions">
+      <HintPath>..\..\src\VisCPU.Instructions\bin\Release\netstandard2.0\VisCPU.Instructions.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Peripherals">
+      <HintPath>..\..\src\VisCPU.Peripherals\bin\Release\netstandard2.0\VisCPU.Peripherals.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.Utility">
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Release\netstandard2.0\VisCPU.Utility.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

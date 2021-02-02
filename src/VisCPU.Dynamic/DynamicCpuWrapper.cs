@@ -76,6 +76,11 @@ namespace VisCPU.Dynamic
 
         public uint InvokeLabel( string name, object[] args )
         {
+            if ( name == "Entry" )
+            {
+                return Run( 0 );
+            }
+
             if ( !Labels.Contains( name ) )
             {
                 return 0;

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Examples.Shared\Examples.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="VisCPU">
+      <HintPath>..\..\src\VisCPU\bin\Release\netstandard2.0\VisCPU.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
