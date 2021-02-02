@@ -23,7 +23,7 @@ The Assembler ajusts the Addresses so that the Linked assembly data can be merge
 ### Language Features
 The VASM Language is meant to be a close representation of the actual binary code.
 Instructions are selected by Specifying the Mnemonic followed by the arguments for the Instruction.
-```arm
+```asm
 :data MyData 0x01 ; MyData is a label that has a size of 1.
 
 LOAD 1 MyData ; Loads the Value 1 into the MyData Label
@@ -36,7 +36,7 @@ INC MyData ; Increments the MyData label by 1
 `:data` labels are used to define a section of memory that can be used by specifying the name of the data section.
 
 The Actual Memory Layout is handled by the Compiler. The Actual Addess in memory can be loaded by treating the label as "literal value"
-```arm
+```asm
 :data MyLabel 0x1 ; No Initialization
 
 :data MyData 0x1 0xFFFF ; MyData is Initialized with the Value 0xFFFF
@@ -49,7 +49,7 @@ LOAD MyLabel MyLabelPointer ; Loads the Address of MyLabel into MyLabelPointer
 
 Because of the abilty to load pointers and perform operations on them, the COPY/JUMP and JSR instructions have "reference" versions named: `CREF`/`JREF`/`JSREF` versions that work the same way, but work with pointers
 
-```arm
+```asm
 :data MyLabel 0x1
 :data MyLabelPointer 0x1
 :data MyDestination 0x1
@@ -64,7 +64,7 @@ CREF MyLabelPointer MyDestinationPointer ; Copy Value in MyLabel to MyDestinatio
 
 The Same operation can be performed with actual jump labels.
 This can be used to get the addresses of functions.
-```arm
+```asm
 :data MyFunctionPointer 0x1
 :data MyVariable 0x1
 
@@ -89,7 +89,7 @@ HLT ; Halt Execution
 Const labels are used to define constant values.
 The values are resolved during compilation and are not stored inside the binary as `:data` labels are.
 `:const` labels can be used to define address pins of devices or they can be used to define a fixed location in memory that can be written to(outside of the actual binary, as seen in the below example COPY instruction)
-```arm
+```asm
 :const MY_CONST 5000 ; Constant Value 5000
 :data MyVar 0x1 ; Variable with size 1
 
@@ -100,7 +100,7 @@ COPY MY_CONST MyVar ; Copies the value at Address 5000 into MyVar
 ### `:file` Labels
 `:data` labels but the content of the label is specified by the referenced file.
 Using `:file` will introduce a "hidden" variable that can be used to get the size of the `:file` label at runtime.
-```arm
+```asm
 :file MY_DATA "my_data.bin" ; Contains the Content of the File
 
 :data MyDataLength 0x1 ; Helper Variable
@@ -321,7 +321,7 @@ The HL Compiler will detect if an expression is entirely static and can be compu
 uint a = 5 + 5
 ```
 Unoptimized:
-```arm
+```asm
 :data __a 0x1
 :data temp0 0x1
 :data temp1 0x1
@@ -331,7 +331,7 @@ LOAD 5 temp1
 ADD temp0 temp1 __a
 ```
 Optimized:
-```arm
+```asm
 :data __a 0x1
 LOAD 10 __a ; The 5+5 got computed at compiletime
 ```
@@ -344,7 +344,7 @@ The HL Compiler will reuse temp variables that went out of scope.
 uint a = 5 + 5
 ```
 Unoptimized:
-```arm
+```asm
 :data __a 0x1
 :data temp0 0x1
 :data temp1 0x1
@@ -354,7 +354,7 @@ LOAD 5 temp1
 ADD temp0 temp1 __a
 ```
 Optimized:
-```arm
+```asm
 :data __a 0x1
 :data temp0 0x1
 
@@ -376,7 +376,7 @@ uint a = 1;
 uint b = a * 2;
 ```
 Unoptimized:
-```arm
+```asm
 :data __a 0x1
 :data __b 0x1
 :data temp0 0x1
@@ -386,7 +386,7 @@ LOAD 2 temp0
 MUL __a temp0 __b ; Multiply by 2
 ```
 Optimized:
-```arm
+```asm
 :data __a 0x1
 :data __b 0x1
 :data temp0 0x1
@@ -410,7 +410,7 @@ if(1)
 }
 ```
 Unoptimized:
-```arm
+```asm
 :data __a 0x1
 :data temp0 0x1
 
@@ -422,7 +422,7 @@ LOAD 2 __a ; Load 2 if we didnt jump
 .if_end
 ```
 Optimized:
-```arm
+```asm
 :data __a 0x1
 
 LOAD 1 __a
