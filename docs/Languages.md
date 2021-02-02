@@ -196,6 +196,33 @@ MyFunc(); //This is Global and will get executed if you start execution of the b
 ___
 
 Note: Variable Declarations in Global Level are not assigned the correct value until the Global Level Code ran or the variables got assigned from somewhere else.
+
+___
+
+Note: It is possible to invoke the Global scope with a const value pointer
+
+```cs
+//Import the JREF Instruction to be able to run the entry without returning
+//We need to use JREF instead of JMP because of the inner workings of the Importer.
+//The arguments that are passed into the I0_JREF function are copied to another variable.
+//Using JMP here would result in a segfault as we are directly jumping to the address of the argument variable.
+#import "vasm-bridge JREF"
+
+private const uint ENTRY_PTR = 0;
+
+
+private void BackToMainSubroutine()
+{
+	ENTRY_PTR(); //Jumps to Global Entry. Important: The Invocation will happen as subroutine. Once the Entry Point Finished, the program flow will return to here.
+}
+
+private void BackToMainDirect()
+{
+	I1_JREF(0); //Jump to Entry Pointer.
+	//This does not return. It will not write any processor state to the stack.
+}
+```
+
 ___
 
 ### Data Structures
@@ -286,8 +313,8 @@ If blocks start with the keyword `if` followed by the condition in brackets, fol
 uint a = 1;
 if ( a == 1 )
 {
-//a is equal to 1.
-//do stuff
+	//a is equal to 1.
+	//do stuff
 }
 ```
 
@@ -300,11 +327,11 @@ The combined keyword `else if` allows for extending if branches with multiple di
 #### While Loops 
 When using a `while` loop, the CPU enters a code block that will execute until the specified condition will evaluate to false. 
 
-``` 
+``` cs
 private uint a = 0;
 while (a < 1000 )
 {
-a++; //Increment A
+	a++; //Increment A
 }
 ```
 
@@ -320,7 +347,7 @@ The third expression is executed after the code block. It is typically used to c
 ```cs 
 for(uint i = 0; i < 100; i++)
 {
-//Do stuff 100 times. 
+	//Do stuff 100 times. 
 }
 //if i >= 100 the execution continues here. 
 ```
@@ -332,7 +359,7 @@ The following example exhibits the same behaviour as a for loop.
 uint i = 0;
 while(i < 100)
 {
-//Do Stuff 100 times 
+	//Do Stuff 100 times 
 i++;
 }
 ```
