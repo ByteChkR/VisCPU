@@ -15,9 +15,12 @@ namespace VisCPU.Dynamic
             m_Instance.SymbolServer.LoadedSymbols.SelectMany( x => x.Labels.Keys ).Distinct();
         public IEnumerable < string > Constants =>
             m_Instance.SymbolServer.LoadedSymbols.SelectMany( x => x.Constants.Keys ).Distinct();
-        public IEnumerable < string > Data => m_Instance.SymbolServer.LoadedSymbols.
-                                                         SelectMany( x => x.DataSectionHeader.Keys ).
-                                                         Distinct();
+
+        public IEnumerable < string > Data =>
+            m_Instance.SymbolServer.LoadedSymbols.
+                       SelectMany( x => x.DataSectionHeader.Keys ).
+                       Select( x => x.Remove( 0, 2 ) ).
+                       Distinct();
 
         #region Public
 
