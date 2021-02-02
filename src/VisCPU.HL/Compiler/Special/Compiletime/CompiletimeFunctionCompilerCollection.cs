@@ -18,7 +18,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             AddCompiler( new PointerOfCompiletimeFunctionCompiler() );
             AddCompiler( new StringCompiletimeFunctionCompiler() );
             AddCompiler( new StaticCastCompiletimeFunctionCompiler() );
-            AddCompiler( new OffsetOfCompiletimeFunctionCompiler() );
             AddCompiler( new InterruptCompiletimeFunctionCompiler() );
         }
 
