@@ -11,37 +11,37 @@
 
   <ItemGroup>
     <Reference Include="VisCPU">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Compiler">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Compiler.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Compiler.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Console.Core">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Console.Core.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Console.Core.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Dynamic">
-      <HintPath>..\..\VisCPU.Dynamic\bin\Debug\netstandard2.0\VisCPU.Dynamic.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.Dynamic\bin\Debug\netstandard2.0\VisCPU.Dynamic.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Extensions">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Extensions.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.HL">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.HL.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.HL.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.HL.Integration">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.HL.Integration.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.HL.Integration.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Instructions">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Instructions.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.Instructions\bin\Debug\netstandard2.0\VisCPU.Instructions.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Peripherals">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Peripherals.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.Peripherals\bin\Debug\netstandard2.0\VisCPU.Peripherals.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.ProjectSystem">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.ProjectSystem.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.ProjectSystem.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Utility">
-      <HintPath>..\..\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Utility.dll</HintPath>
+      <HintPath>..\..\src\VisCPU.HL.Integration\bin\Debug\netstandard2.0\VisCPU.Utility.dll</HintPath>
     </Reference>
   </ItemGroup>
 
