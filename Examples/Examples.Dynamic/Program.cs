@@ -4,9 +4,12 @@ using System.Linq;
 using Examples.Shared;
 
 using VisCPU;
+using VisCPU.Compiler.Linking;
 using VisCPU.Dynamic;
+using VisCPU.HL;
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace Examples.Dynamic
@@ -183,11 +186,32 @@ namespace Examples.Dynamic
 
         private static void Main( string[] args )
         {
+            if ( args.Length == 0 )
+            {
+                Console.WriteLine("Arguments:");
+                Console.WriteLine("\t-c : Compile Main File");
+                Console.WriteLine("\t-clean : Clean Build Directory");
+                Console.WriteLine("\t-r : Run Dynamic Commandline");
+                Console.WriteLine("\t-o : Optimize Assembly");
+                Console.WriteLine("\t-d : Debug(Make all labels and data sections visible)");
+                return;
+            }
+
             bool compile = args.Any( x => x == "-c" );
             bool clean = args.Any( x => x == "-clean" );
             bool run = args.Any( x => x == "-r" );
+            bool optimized = args.Any( x => x == "-o" );
+            bool debug = args.Any( x => x == "-d" );
 
             FirstSetup.Start();
+
+            LinkerSettings linkerSettings = SettingsManager.GetSettings < LinkerSettings >();
+            linkerSettings.NoHiddenItems = debug;
+            SettingsManager.SaveSettings( linkerSettings );
+
+            HlCompilerSettings settings = SettingsManager.GetSettings < HlCompilerSettings >();
+            settings.OptimizeAll = optimized;
+            SettingsManager.SaveSettings( settings );
 
             string output = null;
 

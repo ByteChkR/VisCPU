@@ -17,8 +17,14 @@
     <Reference Include="VisCPU">
       <HintPath>..\..\src\VisCPU\bin\Release\netstandard2.0\VisCPU.dll</HintPath>
     </Reference>
+    <Reference Include="VisCPU.Compiler">
+      <HintPath>..\..\src\VisCPU.Compiler\bin\Release\netstandard2.0\VisCPU.Compiler.dll</HintPath>
+    </Reference>
     <Reference Include="VisCPU.Dynamic">
       <HintPath>..\..\src\VisCPU.Dynamic\bin\Release\netstandard2.0\VisCPU.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="VisCPU.HL">
+      <HintPath>..\..\src\VisCPU.HL\bin\Release\netstandard2.0\VisCPU.HL.dll</HintPath>
     </Reference>
     <Reference Include="VisCPU.Utility">
       <HintPath>..\..\src\VisCPU.Utility\bin\Release\netstandard2.0\VisCPU.Utility.dll</HintPath>

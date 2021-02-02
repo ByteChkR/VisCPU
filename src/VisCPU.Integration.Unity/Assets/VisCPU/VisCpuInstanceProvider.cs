@@ -8,7 +8,6 @@ using UnityEngine.UI;
 using VisCPU;
 using VisCPU.HL.Importer;
 using VisCPU.Instructions;
-using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;

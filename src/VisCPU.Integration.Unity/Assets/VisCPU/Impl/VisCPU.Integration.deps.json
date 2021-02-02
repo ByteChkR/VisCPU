@@ -7,13 +7,13 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "VisCPU.HL.Integration/1.0.0": {
+      "VisCPU.Integration/1.0.0": {
         "dependencies": {
           "NETStandard.Library": "2.0.3",
           "VisCPU.Console.Core": "1.0.0"
         },
         "runtime": {
-          "VisCPU.HL.Integration.dll": {}
+          "VisCPU.Integration.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
@@ -32,7 +32,6 @@
       },
       "VisCPU/1.0.0": {
         "dependencies": {
-          "VisCPU.Extensions": "1.0.0",
           "VisCPU.Utility": "1.0.0"
         },
         "runtime": {
@@ -53,18 +52,10 @@
           "VisCPU": "1.0.0",
           "VisCPU.Compiler": "1.0.0",
           "VisCPU.HL": "1.0.0",
-          "VisCPU.Instructions": "1.0.0",
-          "VisCPU.Peripherals": "1.0.0",
-          "VisCPU.ProjectSystem": "1.0.0",
           "VisCPU.Utility": "1.0.0"
         },
         "runtime": {
           "VisCPU.Console.Core.dll": {}
-        }
-      },
-      "VisCPU.Extensions/1.0.0": {
-        "runtime": {
-          "VisCPU.Extensions.dll": {}
         }
       },
       "VisCPU.HL/1.0.0": {
@@ -74,32 +65,6 @@
         },
         "runtime": {
           "VisCPU.HL.dll": {}
-        }
-      },
-      "VisCPU.Instructions/1.0.0": {
-        "dependencies": {
-          "VisCPU": "1.0.0"
-        },
-        "runtime": {
-          "VisCPU.Instructions.dll": {}
-        }
-      },
-      "VisCPU.Peripherals/1.0.0": {
-        "dependencies": {
-          "VisCPU": "1.0.0",
-          "VisCPU.Utility": "1.0.0"
-        },
-        "runtime": {
-          "VisCPU.Peripherals.dll": {}
-        }
-      },
-      "VisCPU.ProjectSystem/1.0.0": {
-        "dependencies": {
-          "Newtonsoft.Json": "12.0.3",
-          "VisCPU.Utility": "1.0.0"
-        },
-        "runtime": {
-          "VisCPU.ProjectSystem.dll": {}
         }
       },
       "VisCPU.Utility/1.0.0": {
@@ -113,7 +78,7 @@
     }
   },
   "libraries": {
-    "VisCPU.HL.Integration/1.0.0": {
+    "VisCPU.Integration/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -121,14 +86,14 @@
     "Microsoft.NETCore.Platforms/1.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "sha512": "sha512-UztvKaMRycb8/EYNj5rxcvtYlZvcL9uSx3tzFYIZolhistnJsYq9ukFnBFVCr/emdXQjmLI7NFv57ICMF5y0Yg==",
       "path": "microsoft.netcore.platforms/1.1.0",
       "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
     },
     "NETStandard.Library/2.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
+      "sha512": "sha512-UUxuWUUxUjnJBYyD9+PORpWbKyg9qDDtGsXnPU34zu/Ckez8FDCk/mNZvT4QNT81HRsNtjzTcY/DO8Zj+wtaPg==",
       "path": "netstandard.library/2.0.3",
       "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
     },
@@ -154,27 +119,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "VisCPU.Extensions/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "VisCPU.HL/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "VisCPU.Instructions/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "VisCPU.Peripherals/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "VisCPU.ProjectSystem/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

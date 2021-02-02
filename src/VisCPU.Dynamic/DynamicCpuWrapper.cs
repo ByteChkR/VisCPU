@@ -19,7 +19,6 @@ namespace VisCPU.Dynamic
         public IEnumerable < string > Data =>
             m_Instance.SymbolServer.LoadedSymbols.
                        SelectMany( x => x.DataSectionHeader.Keys ).
-                       Select( x => x.Remove( 0, 2 ) ).
                        Distinct();
 
         #region Public
@@ -50,19 +49,18 @@ namespace VisCPU.Dynamic
         {
             return m_Instance.SymbolServer.LoadedSymbols.
                               First( x => x.DataSectionHeader.ContainsKey( name ) ).
-                              DataSectionHeader[name];
+                              DataSectionHeader[ name];
         }
 
         public uint GetDataValue( string name )
         {
-            string n = "__" + name;
 
-            if ( !Data.Contains( n ) )
+            if ( !Data.Contains(name) )
             {
                 return 0;
             }
 
-            return m_Instance.MemoryBus.Read( GetData( n ).Address );
+            return m_Instance.MemoryBus.Read( GetData(name).Address );
         }
 
         public override IEnumerable < string > GetDynamicMemberNames()
@@ -111,14 +109,13 @@ namespace VisCPU.Dynamic
 
         public void SetDataValue( string name, uint value )
         {
-            string n = "__" + name;
 
-            if ( !Data.Contains( n ) )
+            if ( !Data.Contains(name) )
             {
                 return;
             }
 
-            m_Instance.MemoryBus.Write( GetData( n ).Address, value );
+            m_Instance.MemoryBus.Write( GetData(name).Address, value );
         }
 
         public override bool TryGetMember( GetMemberBinder binder, out object result )
