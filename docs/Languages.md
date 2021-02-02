@@ -213,7 +213,8 @@ private const uint ENTRY_PTR = 0;
 
 private void BackToMainSubroutine()
 {
-	ENTRY_PTR(); //Jumps to Global Entry. Important: The Invocation will happen as subroutine. Once the Entry Point Finished, the program flow will return to here.
+	ENTRY_PTR(); //Jumps to Global Entry. Important: The Invocation will happen as subroutine. 
+	//Once the Entry Point Finished, the program flow will return to here.
 }
 
 private void BackToMainDirect()
