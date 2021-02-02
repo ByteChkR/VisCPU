@@ -7,12 +7,6 @@ using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Console.Core.Subsystems.Project;
-using VisCPU.Instructions;
-using VisCPU.Peripherals;
-using VisCPU.Peripherals.Benchmarking;
-using VisCPU.Peripherals.Console;
-using VisCPU.Peripherals.Console.IO;
-using VisCPU.Peripherals.HostFS;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
@@ -66,18 +60,6 @@ namespace VisCPU.Console.Core
 
         public static void RunConsole( string[] args )
         {
-            CpuSettings.FallbackSet = new DefaultSet();
-
-#if DEBUG
-            Peripheral.DebugPeripherals = new Peripheral[]
-            {
-                new BenchmarkDevice(),
-                new ConsoleInInterface(),
-                new ConsoleOutInterface(),
-                new HostFileSystem(),
-                new ConsoleInterface()
-            };
-#endif
 
             VisConsole vs = new VisConsole();
             vs.Run( args );

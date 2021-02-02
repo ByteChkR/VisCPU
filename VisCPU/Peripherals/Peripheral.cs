@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using VisCPU.Extensions;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
-
-#if !DEBUG
-using VisCPU.Extensions;
-#endif
 
 namespace VisCPU.Peripherals
 {
@@ -28,16 +25,10 @@ namespace VisCPU.Peripherals
 
         protected override LoggerSystems SubSystem => LoggerSystems.Peripherals;
 
-#if DEBUG
-        public static Peripheral[] DebugPeripherals;
-        public static IEnumerable < Peripheral > GetExtensionPeripherals()
-        {
-            return DebugPeripherals;
-        }
-#else
+
         public static IEnumerable < Peripheral > GetExtensionPeripherals() =>
             ExtensionLoader.LoadFrom < Peripheral >(s_PeripheralExtensions.GetCategoryDirectory(), true );
-#endif
+
 
         #region Unity Event Functions
 

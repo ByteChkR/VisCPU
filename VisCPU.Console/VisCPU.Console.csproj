@@ -93,5 +93,29 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-
+	<ItemGroup>
+    <PeripheralExt Include="..\VisCPU.Peripherals\bin\$(Configuration)\netstandard2.0\VisCPU.Peripherals.dll"/>
+    <InstructionExt Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.dll"/>
+    <PeripheralPdb Include="..\VisCPU.Peripherals\bin\$(Configuration)\netstandard2.0\VisCPU.Peripherals.pdb"/>
+    <InstructionPdb Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.pdb"/>
+  	</ItemGroup>
+	<Target Name="CopyExtensions" AfterTargets="Build">
+    	<Message Text="Copy Default Extensions"></Message>
+    	<Copy
+    		SourceFiles="@(PeripheralExt)"
+    		DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions"
+    	/>
+    	<Copy
+    		SourceFiles="@(InstructionExt)"
+    		DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals"
+    	/>
+    	<Copy
+    		SourceFiles="@(PeripheralPdb)"
+    		DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions"
+    	/>
+    	<Copy
+    		SourceFiles="@(InstructionPdb)"
+    		DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals"
+    	/>
+  	</Target>
 </Project>
