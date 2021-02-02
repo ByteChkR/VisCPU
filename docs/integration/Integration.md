@@ -23,6 +23,8 @@ CpuInstanceBuilder builder = new CpuInstanceBuilder()
 ```
 The Instance Builder follows the Factory Pattern.
 A new CPU Instance can be built by calling `builder.Build()` after all peripherals were set up.
+C# Code can be Exposed with the `WithExposedApi` function, taking the function, exposed name and argument count.
+The Exposed Function has to be imported with `#import "integration <Funcname>` to be able to use it.
 
 6. Compile a Script with the `CompilerHelper.Compile` method.
 ```cs
@@ -46,46 +48,4 @@ instance.LoadBinary( binary );
 
 //Run the Compiled Binary
 instance.Run();
-```
-
-## Integration Helper Library with Dynamic Language Runtime
-To make use of the DLR Support, reference `VisCPU.Dynamic`.
-Follow the Integration Helper Library Setup until step 6.
-Then prepare the CPU Instance and Create a Dynamic Wrapper.
-The Dynamic Helper Library allows for simple and effortless access to functions and variables in compiled binaries.
-
-___
-
-Note: Make sure that the flag `-linker:export` is set. The Debug Symbols are needed in order to find the correct data in the binary.
-
-Note: All functions have a return value by default. If a function is not returning explicitly, the returned value is undefined
-
-___
-
-```cs
-Cpu instance = builder.Build(); //Create CPU Instance
-
-//Load Compiled Binary from File
-uint[] binary = File.ReadAllBytes( file ).ToUInt();
-
-//Write to CPU Memory Bus
-instance.LoadBinary( binary );
-
-//Instance Setup Finished
-
-dynamic wrapper = new DynamicCpuWrapper( instance ); //Create Dynamic Wrapper
-
-//Call Entry Point of Loaded Binary
-wrapper(); //Invoke directly
-
-//Call Function inside the Binary(has to be public)
-uint funcReturn = wrapper.MyFunction();
-
-//Call Function with argument
-uint funcArgReturn = wrapper.MyArgFunction(1337);
-
-//Access and set Variable inside the Binary
-uint myVariable = wrapper.MyVariable;
-wrapper.MyVariable = 100;
-
 ```

@@ -68,27 +68,3 @@ Note: if no version is specified the newest version will be taken.
 ____
 
 Once the reference has been added, the dependency can be resolved with the command `vis project restore`, the Referenced project will now be available in the project root and can be included by the code.
-
-
-# VisSDK Configuration
-The VisSDK has a common configuration directory that can be used by the core implementation as well as extensions.
-The config directory is structured by `sdk` and `cpu` configs.
-
-- sdk
-	+ compiler
-		* Vasm and HL Compiler Settings
-	+ module
-		* Resolver Settings/Origins
-	+ projects
-		* Local Repository Data
-	+ cli.json
-		* Commandline Settings
-- cpu
-	+ cpu.json
-		* General CPU Settings
-	+ memory-bus.json
-		* Memory Bus Settings/Memory Device List
-	+ peripherals
-		* Configuration directory for peripheral settings
-	+ extensions
-		* Directory containing additional instructions and peripherals that can be used.
