@@ -43,7 +43,7 @@ Build Targets have a Name and Dependencies that are required to run before the c
 Targets consist out of one or more jobs that will be carried out in order.
 
 #### Build Target Jobs
-Jobs that make up Build Targets have a Name and a list of Depending Targets that have to be ran beforehand.
+Jobs that make up Build Targets have a Name and a list of Depending Targets that have to be completed beforehand.
 Each job is referencing a BuildRunner by name. The Build runner then gets executed with the arguments specified in the Job Settings.
 
 ____
@@ -67,7 +67,7 @@ Note: if no version is specified the newest version will be taken.
 
 ____
 
-Once the reference has been added, the dependency can be resolved with the command `vis project restore`, the Referenced project will now be available in the project root and can be referenced.
+Once the reference has been added, the dependency can be resolved with the command `vis project restore`, the Referenced project will now be available in the project root and can be included by the code.
 
 
 # VisSDK Configuration
@@ -76,7 +76,7 @@ The config directory is structured by `sdk` and `cpu` configs.
 
 - sdk
 	+ compiler
-		Vasm and HL Compiler Settings
+		* Vasm and HL Compiler Settings
 	+ module
 		* Resolver Settings/Origins
 	+ projects

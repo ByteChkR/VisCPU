@@ -52,7 +52,7 @@ instance.Run();
 To make use of the DLR Support, reference `VisCPU.Dynamic`.
 Follow the Integration Helper Library Setup until step 6.
 Then prepare the CPU Instance and Create a Dynamic Wrapper.
-Allows for simple and effortless access to functions and variables in compiled binaries.
+The Dynamic Helper Library allows for simple and effortless access to functions and variables in compiled binaries.
 
 ___
 
