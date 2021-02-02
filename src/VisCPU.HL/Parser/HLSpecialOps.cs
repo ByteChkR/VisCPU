@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
@@ -12,6 +13,7 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public static class HlSpecialOps
     {
+
         #region Public
 
         /// <summary>
@@ -157,6 +159,7 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
+
     }
 
 }

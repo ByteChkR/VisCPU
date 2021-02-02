@@ -1,9 +1,10 @@
 ﻿using System;
+
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler
@@ -11,17 +12,18 @@ namespace VisCPU.HL.Compiler
 
     public readonly struct ExpressionTarget : IEquatable < ExpressionTarget >
     {
+
         public readonly string ResultAddress;
         public readonly bool IsAddress;
         public readonly bool IsPointer;
         public readonly HlTypeDefinition TypeDefinition;
 
         public ExpressionTarget( string resultAddress, bool isAddress, HlTypeDefinition def ) : this(
-            resultAddress,
-            isAddress,
-            def,
-            false
-        )
+             resultAddress,
+             isAddress,
+             def,
+             false
+            )
         {
         }
 
@@ -76,11 +78,11 @@ namespace VisCPU.HL.Compiler
             }
 
             ExpressionTarget tmpVal = new ExpressionTarget(
-                c.GetTempVarLoad( ResultAddress ),
-                true,
-                TypeDefinition,
-                IsPointer
-            );
+                                                           c.GetTempVarLoad( ResultAddress ),
+                                                           true,
+                                                           TypeDefinition,
+                                                           IsPointer
+                                                          );
 
             return tmpVal;
         }
@@ -145,6 +147,7 @@ namespace VisCPU.HL.Compiler
                 return hashCode;
             }
         }
+
     }
 
 }

@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace VisCPU.Extensions
+namespace VisCPU.Utility.Extensions
 {
 
     internal class ExtensionLoadResult < T > : IEnumerable < T >
     {
+
         private readonly string[] m_Files;
 
         #region Public
@@ -17,10 +18,10 @@ namespace VisCPU.Extensions
         public ExtensionLoadResult( string directory, bool recursive )
         {
             m_Files = Directory.GetFiles(
-                Path.GetFullPath( directory ),
-                "*.dll",
-                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
-            );
+                                         Path.GetFullPath( directory ),
+                                         "*.dll",
+                                         recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
+                                        );
         }
 
         public ExtensionLoadResult( string[] files )
@@ -89,6 +90,7 @@ namespace VisCPU.Extensions
         }
 
         #endregion
+
     }
 
 }

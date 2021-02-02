@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace VisCPU.Utility.Settings.Loader
+namespace VisCPU.Utility.IO.Settings.Loader
 {
 
     public class XmlSettingsLoader : SettingsLoader
     {
+
         private readonly Dictionary < Type, XmlSerializer > m_Serializers = new Dictionary < Type, XmlSerializer >();
 
         #region Public
@@ -47,6 +48,7 @@ namespace VisCPU.Utility.Settings.Loader
         }
 
         #endregion
+
     }
 
 }

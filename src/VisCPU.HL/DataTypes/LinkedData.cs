@@ -5,6 +5,7 @@ namespace VisCPU.HL.DataTypes
 
     public class LinkedData : IExternalData
     {
+
         private readonly string m_Name;
 
         public AddressItem Info { get; }
@@ -31,6 +32,7 @@ namespace VisCPU.HL.DataTypes
         }
 
         #endregion
+
     }
 
 }

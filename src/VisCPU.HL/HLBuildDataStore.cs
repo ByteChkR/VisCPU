@@ -1,11 +1,13 @@
 ﻿using System.IO;
-using VisCPU.Utility.IO;
+
+using VisCPU.Utility.IO.DataStore;
 
 namespace VisCPU.HL
 {
 
     public class HlBuildDataStore : IBuildDataStoreType
     {
+
         public string TypeName => "HL2VASM";
 
         #region Public
@@ -13,9 +15,9 @@ namespace VisCPU.HL
         public string GetStoreDirectory( string rootDir, string file )
         {
             return Path.Combine(
-                Directory.CreateDirectory( Path.Combine( rootDir, TypeName ) ).FullName,
-                $"{( uint ) Path.GetDirectoryName( file ).GetHashCode()}_{Path.GetFileName( file )}.vasm"
-            );
+                                Directory.CreateDirectory( Path.Combine( rootDir, TypeName ) ).FullName,
+                                $"{( uint ) Path.GetDirectoryName( file ).GetHashCode()}_{Path.GetFileName( file )}.vasm"
+                               );
         }
 
         public void Initialize( string rootDir )
@@ -29,6 +31,7 @@ namespace VisCPU.HL
         }
 
         #endregion
+
     }
 
 }

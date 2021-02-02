@@ -11,6 +11,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
     /// </summary>
     public class HlBinaryOp : HlExpression
     {
+
         /// <summary>
         ///     Left side of the Expression
         /// </summary>
@@ -53,7 +54,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// <returns></returns>
         public override List < IHlToken > GetChildren()
         {
-            return new List < IHlToken > { Left, Right };
+            return new List < IHlToken >
+                   {
+                       Left,
+                       Right
+                   };
         }
 
         public override bool IsStatic()
@@ -67,6 +72,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         }
 
         #endregion
+
     }
 
 }

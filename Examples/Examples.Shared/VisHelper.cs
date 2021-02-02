@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
 using VisCPU;
-using VisCPU.HL.Integration;
+using VisCPU.Integration;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Console.IO;
 using VisCPU.Peripherals.Memory;

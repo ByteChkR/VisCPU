@@ -3,7 +3,7 @@ using System.Linq;
 
 using Examples.Shared;
 
-namespace MinimalExample
+namespace Examples.Minimal
 {
 
     internal class Program
@@ -29,6 +29,7 @@ namespace MinimalExample
                 {
                     Console.WriteLine( $"Output file '{output}' not found." );
                 }
+
                 VisHelper.Default( output ).Run();
             }
 

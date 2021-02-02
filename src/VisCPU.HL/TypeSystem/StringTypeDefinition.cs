@@ -5,6 +5,7 @@ namespace VisCPU.HL.TypeSystem
 
     public class StringTypeDefinition : HlTypeDefinition
     {
+
         #region Public
 
         public StringTypeDefinition() : base( HLBaseTypeNames.s_StringTypeName )
@@ -17,6 +18,7 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
     }
 
 }

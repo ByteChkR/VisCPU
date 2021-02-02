@@ -3,17 +3,19 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Xml.Serialization;
+
 using Newtonsoft.Json;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Implementations;
 using VisCPU.Compiler.Linking;
 using VisCPU.HL;
 using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.IO;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.DataStore;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Console.Core.Settings
@@ -21,6 +23,7 @@ namespace VisCPU.Console.Core.Settings
 
     public class BuilderSettings
     {
+
         private static readonly Dictionary < string, BuildSteps > s_AllBuildSteps =
             new Dictionary < string, BuildSteps >
             {
@@ -110,17 +113,18 @@ namespace VisCPU.Console.Core.Settings
             comp.Compile( lastStepFile );
 
             string newFile = Path.Combine(
-                                 Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
-                                 Path.GetFileNameWithoutExtension( originalFile )
-                             ) +
+                                          Path.GetDirectoryName( Path.GetFullPath( originalFile ) ),
+                                          Path.GetFileNameWithoutExtension( originalFile )
+                                         ) +
                              ".vbin";
 
             if ( SettingsManager.GetSettings < LinkerSettings >().ExportLinkerInfo )
             {
                 comp.LinkerInfo.Save(
-                    newFile,
-                    LinkerInfo.LinkerInfoFormat.Text,
-                    SettingsManager.GetSettings < AssemblyGeneratorSettings >().GlobalOffset );
+                                     newFile,
+                                     LinkerInfo.LinkerInfoFormat.Text,
+                                     SettingsManager.GetSettings < AssemblyGeneratorSettings >().GlobalOffset
+                                    );
             }
 
             File.WriteAllBytes( newFile, comp.ByteCode.ToArray() );
@@ -141,24 +145,26 @@ namespace VisCPU.Console.Core.Settings
             string file = File.ReadAllText( lastStepFile );
 
             BuildDataStore ds = new BuildDataStore(
-                BuildTempDirectory ?? Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ),
-                new HlBuildDataStore()
-            );
+                                                   BuildTempDirectory ??
+                                                   Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ),
+                                                   new HlBuildDataStore()
+                                                  );
 
             string newFile = ds.GetStorePath(
-                "HL2VASM",
-                Path.GetFileNameWithoutExtension( Path.GetFullPath( lastStepFile ) )
-            );
+                                             "HL2VASM",
+                                             Path.GetFileNameWithoutExtension( Path.GetFullPath( lastStepFile ) )
+                                            );
 
             File.WriteAllText(
-                newFile,
-                p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ), ds ).Parse()
-            );
+                              newFile,
+                              p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ), ds ).Parse()
+                             );
 
             return newFile;
         }
 
         #endregion
+
     }
 
 }

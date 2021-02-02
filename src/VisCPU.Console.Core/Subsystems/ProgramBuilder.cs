@@ -1,22 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.HL.Importer;
 using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core.Subsystems
 {
 
     public class ProgramBuilder : ConsoleSubsystem
     {
+
         #region Public
 
         public static void Build( Dictionary < string, string > args )
@@ -27,12 +29,12 @@ namespace VisCPU.Console.Core.Subsystems
             HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
-                args,
-                settings,
-                asettings,
-                ls,
-                hls
-            );
+                                       args,
+                                       settings,
+                                       asettings,
+                                       ls,
+                                       hls
+                                      );
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
@@ -48,12 +50,12 @@ namespace VisCPU.Console.Core.Subsystems
             HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
-                args.ToArray(),
-                settings,
-                asettings,
-                ls,
-                hls
-            );
+                                       args.ToArray(),
+                                       settings,
+                                       asettings,
+                                       ls,
+                                       hls
+                                      );
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
@@ -78,8 +80,8 @@ namespace VisCPU.Console.Core.Subsystems
                 if ( !File.Exists( file ) )
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                        new FileNotFoundEvent( Path.GetFullPath( file ), true )
-                    );
+                                                          new FileNotFoundEvent( Path.GetFullPath( file ), true )
+                                                         );
 
                     continue;
                 }
@@ -94,9 +96,9 @@ namespace VisCPU.Console.Core.Subsystems
                     }
 
                     Logger.LogMessage(
-                        LoggerSystems.Console,
-                        $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'"
-                    );
+                                      LoggerSystems.Console,
+                                      $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'"
+                                     );
 
                     file = newFile;
                 }
@@ -120,6 +122,7 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
+
     }
 
 }

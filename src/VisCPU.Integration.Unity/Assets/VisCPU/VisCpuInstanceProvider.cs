@@ -1,19 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using VisCPU;
-using VisCPU.HL.Importer;
 using VisCPU.Instructions;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
-using VisCPU.HL.Integration;
+using VisCPU.Integration;
 using Logger = VisCPU.Utility.Logging.Logger;
 
 public class VisCpuInstanceProvider : MonoBehaviour

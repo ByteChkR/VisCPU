@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using VisCPU.ProjectSystem.BuildSystem;
-using VisCPU.ProjectSystem.Data;
-using VisCPU.ProjectSystem.Resolvers;
+
+using VisCPU.Utility.ProjectSystem.BuildSystem;
+using VisCPU.Utility.ProjectSystem.Data;
+using VisCPU.Utility.ProjectSystem.Resolvers;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 {
 
     public class BuildJobGetDependency : BuildJobRunner
     {
+
         public override string RunnerName => "get-dependency";
 
         #region Public
@@ -27,6 +29,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
+
     }
 
 }

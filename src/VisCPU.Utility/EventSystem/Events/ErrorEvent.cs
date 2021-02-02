@@ -1,8 +1,9 @@
-﻿namespace VisCPU.Utility.Events
+﻿namespace VisCPU.Utility.EventSystem.Events
 {
 
     public class ErrorEvent : Event
     {
+
         public string Message { get; }
 
         public override string EventKey { get; }
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

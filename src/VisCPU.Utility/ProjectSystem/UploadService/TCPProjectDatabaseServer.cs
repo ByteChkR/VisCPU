@@ -4,16 +4,18 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using VisCPU.ProjectSystem.Data;
-using VisCPU.ProjectSystem.Database;
+
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.ProjectSystem.Data;
+using VisCPU.Utility.ProjectSystem.Database;
 using VisCPU.Utility.SharedBase;
 
-namespace VisCPU.ProjectSystem.UploadService
+namespace VisCPU.Utility.ProjectSystem.UploadService
 {
 
     public class TcpProjectDatabaseServer : VisBase
     {
+
         private readonly string m_TempStagingDirectory;
         private readonly ProjectDatabase m_Manager;
 
@@ -124,6 +126,7 @@ namespace VisCPU.ProjectSystem.UploadService
         }
 
         #endregion
+
     }
 
 }

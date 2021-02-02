@@ -1,5 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Math.Full
@@ -7,6 +7,7 @@ namespace VisCPU.HL.Compiler.Math.Full
 
     public class DivExpressionCompiler : MathExpressionCompiler
     {
+
         protected override string InstructionKey => "DIV";
 
         #region Public
@@ -39,15 +40,14 @@ namespace VisCPU.HL.Compiler.Math.Full
 
                 if ( amount != 0 )
                 {
-
                     string tmp = compilation.GetTempVarLoad( amount.ToString() );
 
                     compilation.EmitterResult.Emit(
-                        "SHR",
-                        baseExpr.ResultAddress,
-                        tmp,
-                        outputTarget.ResultAddress
-                    );
+                                                   "SHR",
+                                                   baseExpr.ResultAddress,
+                                                   tmp,
+                                                   outputTarget.ResultAddress
+                                                  );
 
                     compilation.ReleaseTempVar( tmp );
 
@@ -67,17 +67,17 @@ namespace VisCPU.HL.Compiler.Math.Full
             if ( target.IsPointer )
             {
                 ExpressionTarget et = new ExpressionTarget(
-                    compilation.GetTempVarDref( target.ResultAddress ),
-                    true,
-                    target.TypeDefinition
-                );
+                                                           compilation.GetTempVarDref( target.ResultAddress ),
+                                                           true,
+                                                           target.TypeDefinition
+                                                          );
 
                 compilation.EmitterResult.Emit(
-                    instrKey,
-                    et.ResultAddress,
-                    rTarget.ResultAddress,
-                    outputTarget.ResultAddress
-                );
+                                               instrKey,
+                                               et.ResultAddress,
+                                               rTarget.ResultAddress,
+                                               outputTarget.ResultAddress
+                                              );
 
                 compilation.ReleaseTempVar( et.ResultAddress );
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
@@ -87,11 +87,11 @@ namespace VisCPU.HL.Compiler.Math.Full
             }
 
             compilation.EmitterResult.Emit(
-                instrKey,
-                target.ResultAddress,
-                rTarget.ResultAddress,
-                outputTarget.ResultAddress
-            );
+                                           instrKey,
+                                           target.ResultAddress,
+                                           rTarget.ResultAddress,
+                                           outputTarget.ResultAddress
+                                          );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
             compilation.ReleaseTempVar( target.ResultAddress );
@@ -141,6 +141,7 @@ namespace VisCPU.HL.Compiler.Math.Full
         }
 
         #endregion
+
     }
 
 }

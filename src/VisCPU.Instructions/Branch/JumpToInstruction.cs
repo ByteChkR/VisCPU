@@ -5,6 +5,7 @@ namespace VisCPU.Instructions.Branch
 
     public class JumpToInstruction : UnconditionalBranchInstruction
     {
+
         public override uint Cycles => 1;
 
         public override uint InstructionSize => 4;
@@ -23,6 +24,7 @@ namespace VisCPU.Instructions.Branch
         }
 
         #endregion
+
     }
 
 }

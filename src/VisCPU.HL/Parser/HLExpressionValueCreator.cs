@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;
@@ -6,8 +7,8 @@ using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.HL.Parser
 {
@@ -17,6 +18,7 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HlExpressionValueCreator
     {
+
         #region Public
 
         /// <summary>
@@ -121,9 +123,9 @@ namespace VisCPU.HL.Parser
                  parser.CurrentToken.Type == HlTokenType.OpBase )
             {
                 HlExpression token = new HlVarOperand(
-                    parser.CurrentToken,
-                    parser.CurrentToken.SourceIndex
-                );
+                                                      parser.CurrentToken,
+                                                      parser.CurrentToken.SourceIndex
+                                                     );
 
                 parser.Eat( parser.CurrentToken.Type );
 
@@ -171,10 +173,10 @@ namespace VisCPU.HL.Parser
 
                 HlExpression token =
                     new HlFuncDefOperand(
-                        fToken,
-                        HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
-                                           Parse()
-                    );
+                                         fToken,
+                                         HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
+                                                            Parse()
+                                        );
 
                 return token;
             }
@@ -184,7 +186,6 @@ namespace VisCPU.HL.Parser
                  parser.CurrentToken.Type == HlTokenType.OpStringLiteral ||
                  parser.CurrentToken.Type == HlTokenType.OpCharLiteral )
             {
-
                 HlExpression token = new HlValueOperand( parser.CurrentToken );
                 parser.Eat( parser.CurrentToken.Type );
 
@@ -197,6 +198,7 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
+
     }
 
 }

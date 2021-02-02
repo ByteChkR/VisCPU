@@ -1,8 +1,9 @@
 ﻿using System.Linq;
+
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Importer
@@ -10,6 +11,7 @@ namespace VisCPU.HL.Importer
 
     public class LinkerImporter : AImporter, IDataImporter
     {
+
         #region Public
 
         public override bool CanImport( string input )
@@ -34,20 +36,26 @@ namespace VisCPU.HL.Importer
 
             return info.Labels.
                         Select(
-                            x => ( IExternalData ) new LinkedData(
-                                x.Key,
-                                x.Value,
-                                ExternalDataType.Function ) ).
+                               x => ( IExternalData ) new LinkedData(
+                                                                     x.Key,
+                                                                     x.Value,
+                                                                     ExternalDataType.Function
+                                                                    )
+                              ).
                         Concat(
-                            info.DataSectionHeader.Select(
-                                x => ( IExternalData ) new LinkedData(
-                                    x.Key,
-                                    x.Value,
-                                    ExternalDataType.Variable ) ) ).
+                               info.DataSectionHeader.Select(
+                                                             x => ( IExternalData ) new LinkedData(
+                                                                  x.Key,
+                                                                  x.Value,
+                                                                  ExternalDataType.Variable
+                                                                 )
+                                                            )
+                              ).
                         ToArray();
         }
 
         #endregion
+
     }
 
 }

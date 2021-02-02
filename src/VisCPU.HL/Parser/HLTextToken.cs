@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.HL.Parser.Tokens;
 
 /// <summary>
@@ -12,6 +13,7 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HlTextToken : IHlToken
     {
+
         /// <summary>
         ///     The Token Value
         /// </summary>
@@ -61,6 +63,7 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
+
     }
 
 }

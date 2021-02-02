@@ -1,14 +1,16 @@
 ﻿using System.IO;
+
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
-namespace VisCPU.HL.Integration
+namespace VisCPU.Integration
 {
 
     public static class CompilerHelper
     {
+
         #region Public
 
         public static string Compile(
@@ -18,7 +20,6 @@ namespace VisCPU.HL.Integration
             bool cleanOutput,
             string[] buildSteps )
         {
-
             BuilderSettings.BuildTempDirectory = Path.GetFullPath( tempBuildFolder );
 
             if ( !Directory.Exists( outputBuildFolder ) )
@@ -27,12 +28,14 @@ namespace VisCPU.HL.Integration
             }
 
             Logger.LogMessage(
-                LoggerSystems.HlIntegration,
-                "Current Working Dir: " + AppRootHelper.AppRoot );
+                              LoggerSystems.HlIntegration,
+                              "Current Working Dir: " + AppRootHelper.AppRoot
+                             );
 
             Logger.LogMessage(
-                LoggerSystems.HlIntegration,
-                "Vis API Build Result Directory: " + Path.GetFullPath( outputBuildFolder ) );
+                              LoggerSystems.HlIntegration,
+                              "Vis API Build Result Directory: " + Path.GetFullPath( outputBuildFolder )
+                             );
 
             if ( !Directory.Exists( outputBuildFolder ) )
             {
@@ -46,18 +49,21 @@ namespace VisCPU.HL.Integration
             ProgramBuilder.Build( bs );
 
             string buildOut = Path.Combine(
-                Path.GetDirectoryName( file ),
-                Path.GetFileNameWithoutExtension( file ) + ".vbin" );
+                                           Path.GetDirectoryName( file ),
+                                           Path.GetFileNameWithoutExtension( file ) + ".vbin"
+                                          );
 
             string buildInfo = Path.Combine(
-                Path.GetDirectoryName( file ),
-                Path.GetFileNameWithoutExtension( file ) + ".vbin.linkertext" );
+                                            Path.GetDirectoryName( file ),
+                                            Path.GetFileNameWithoutExtension( file ) + ".vbin.linkertext"
+                                           );
 
             string buildTarget = Path.Combine( outputBuildFolder, Path.GetFileNameWithoutExtension( file ) + ".vbin" );
 
             string infoTarget = Path.Combine(
-                outputBuildFolder,
-                Path.GetFileNameWithoutExtension( file ) + ".vbin.linkertext" );
+                                             outputBuildFolder,
+                                             Path.GetFileNameWithoutExtension( file ) + ".vbin.linkertext"
+                                            );
 
             if ( File.Exists( buildTarget ) )
             {
@@ -80,6 +86,7 @@ namespace VisCPU.HL.Integration
         }
 
         #endregion
+
     }
 
 }

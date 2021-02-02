@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.Parser
@@ -6,6 +7,7 @@ namespace VisCPU.HL.Parser
 
     public class EofToken : IHlToken
     {
+
         public HlTokenType Type => HlTokenType.Eof;
 
         public int SourceIndex { get; }
@@ -18,6 +20,7 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
+
     }
 
 }

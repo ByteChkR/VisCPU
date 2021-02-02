@@ -2,7 +2,8 @@
 using System.Net;
 using UnityEngine;
 using UnityEngine.UI;
-using VisCPU.HL.Integration;
+
+using VisCPU.Integration;
 using VisCPU.Utility;
 
 public class VisExampleScriptTest : MonoBehaviour

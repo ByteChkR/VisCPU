@@ -3,6 +3,7 @@
 
     public class AddExpressionCompiler : MathExpressionCompiler
     {
+
         protected override string InstructionKey => "ADD";
 
         #region Protected
@@ -16,6 +17,7 @@
         }
 
         #endregion
+
     }
 
 }

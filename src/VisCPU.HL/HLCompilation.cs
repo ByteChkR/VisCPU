@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using VisCPU.HL.Compiler;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
@@ -17,22 +18,25 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Instructions.Emit;
 using VisCPU.Utility;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.IO;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.DataStore;
+using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.IO.UriResolvers;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
-using VisCPU.Utility.UriResolvers;
 
 namespace VisCPU.HL
 {
 
     public class HlCompilation : VisBase
     {
+
         public readonly HlTypeSystem TypeSystem = new HlTypeSystem();
+
         internal readonly Dictionary < string, ConstantValueItem > ConstValTypes =
             new Dictionary < string, ConstantValueItem >();
+
         internal readonly List < IExternalData > ExternalSymbols = new List < IExternalData >();
         internal readonly Dictionary < string, FunctionData > FunctionMap = new Dictionary < string, FunctionData >();
 
@@ -66,13 +70,13 @@ namespace VisCPU.HL
         #region Public
 
         public HlCompilation( string originalText, string directory ) : this(
-            originalText,
-            directory,
-            new BuildDataStore(
-                directory,
-                new HlBuildDataStore()
-            )
-        )
+                                                                             originalText,
+                                                                             directory,
+                                                                             new BuildDataStore(
+                                                                                  directory,
+                                                                                  new HlBuildDataStore()
+                                                                                 )
+                                                                            )
         {
         }
 
@@ -238,11 +242,11 @@ namespace VisCPU.HL
                     if ( endQuote == -1 || endQuote > idx )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                            new HlTokenReadEvent(
-                                HlTokenType.OpSingleQuote,
-                                HlTokenType.OpNewLine
-                            )
-                        );
+                                                              new HlTokenReadEvent(
+                                                                   HlTokenType.OpSingleQuote,
+                                                                   HlTokenType.OpNewLine
+                                                                  )
+                                                             );
 
                         return;
                     }
@@ -252,17 +256,17 @@ namespace VisCPU.HL
                         List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                         return OriginalText.Substring(
-                            content.First().SourceIndex,
-                            tokens[i + 1 + content.Count].SourceIndex -
-                            content.First().SourceIndex
-                        );
+                                                      content.First().SourceIndex,
+                                                      tokens[i + 1 + content.Count].SourceIndex -
+                                                      content.First().SourceIndex
+                                                     );
                     }
 
                     IHlToken newToken = new HlTextToken(
-                        HlTokenType.OpCharLiteral,
-                        ConcatContent(),
-                        tokens[i].SourceIndex
-                    );
+                                                        HlTokenType.OpCharLiteral,
+                                                        ConcatContent(),
+                                                        tokens[i].SourceIndex
+                                                       );
 
                     tokens.RemoveRange( i, endQuote - i + 1 );
                     tokens.Insert( i, newToken );
@@ -277,11 +281,11 @@ namespace VisCPU.HL
                 if ( tokens[i].Type == HlTokenType.OpBlockToken )
                 {
                     if ( !HlParsingTools.ReadOneOrNone(
-                        tokens,
-                        i - 1,
-                        HlTokenType.OpBracketClose,
-                        out IHlToken bClose
-                    ) )
+                                                       tokens,
+                                                       i - 1,
+                                                       HlTokenType.OpBracketClose,
+                                                       out IHlToken bClose
+                                                      ) )
                     {
                         continue;
                     }
@@ -291,10 +295,10 @@ namespace VisCPU.HL
                     argPart.AddRange( args );
 
                     IHlToken argOpenBracket = HlParsingTools.ReadOne(
-                        tokens,
-                        i - 2 - args.Length,
-                        HlTokenType.OpBracketOpen
-                    );
+                                                                     tokens,
+                                                                     i - 2 - args.Length,
+                                                                     HlTokenType.OpBracketOpen
+                                                                    );
 
                     argPart.Add( argOpenBracket );
                     argPart.Reverse();
@@ -315,19 +319,19 @@ namespace VisCPU.HL
                            tokens[funcIdx - 1].Type == HlTokenType.OpTypeVoid ) )
                     {
                         typeName = HlParsingTools.ReadOneOfAny(
-                            tokens,
-                            funcIdx - 1,
-                            new[] { HlTokenType.OpWord, HlTokenType.OpTypeVoid }
-                        );
+                                                               tokens,
+                                                               funcIdx - 1,
+                                                               new[] { HlTokenType.OpWord, HlTokenType.OpTypeVoid }
+                                                              );
 
                         int modStart = funcIdx - 1 - 1;
 
                         IHlToken[] mods = HlParsingTools.ReadNoneOrManyOf(
-                                                             tokens,
-                                                             modStart,
-                                                             -1,
-                                                             settings.MemberModifiers.Values.ToArray()
-                                                         ).
+                                                                          tokens,
+                                                                          modStart,
+                                                                          -1,
+                                                                          settings.MemberModifiers.Values.ToArray()
+                                                                         ).
                                                          Reverse().
                                                          ToArray();
 
@@ -337,16 +341,16 @@ namespace VisCPU.HL
                         tokens.RemoveRange( start, end - start + 1 );
 
                         tokens.Insert(
-                            start,
-                            new FunctionDefinitionToken(
-                                funcName,
-                                typeName,
-                                ParseArgumentList( args.Reverse().ToList() ),
-                                mods,
-                                block.GetChildren().ToArray(),
-                                start
-                            )
-                        );
+                                      start,
+                                      new FunctionDefinitionToken(
+                                                                  funcName,
+                                                                  typeName,
+                                                                  ParseArgumentList( args.Reverse().ToList() ),
+                                                                  mods,
+                                                                  block.GetChildren().ToArray(),
+                                                                  start
+                                                                 )
+                                     );
 
                         i = start;
                     }
@@ -403,11 +407,11 @@ namespace VisCPU.HL
                     if ( endQuote == -1 || endQuote > idx )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                            new HlTokenReadEvent(
-                                HlTokenType.OpDoubleQuote,
-                                HlTokenType.OpNewLine
-                            )
-                        );
+                                                              new HlTokenReadEvent(
+                                                                   HlTokenType.OpDoubleQuote,
+                                                                   HlTokenType.OpNewLine
+                                                                  )
+                                                             );
 
                         return;
                     }
@@ -417,17 +421,17 @@ namespace VisCPU.HL
                         List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
                         return OriginalText.Substring(
-                            content.First().SourceIndex,
-                            tokens[i + 1 + content.Count].SourceIndex -
-                            content.First().SourceIndex
-                        );
+                                                      content.First().SourceIndex,
+                                                      tokens[i + 1 + content.Count].SourceIndex -
+                                                      content.First().SourceIndex
+                                                     );
                     }
 
                     IHlToken newToken = new HlTextToken(
-                        HlTokenType.OpStringLiteral,
-                        ConcatContent(),
-                        tokens[i].SourceIndex
-                    );
+                                                        HlTokenType.OpStringLiteral,
+                                                        ConcatContent(),
+                                                        tokens[i].SourceIndex
+                                                       );
 
                     tokens.RemoveRange( i, endQuote - i + 1 );
                     tokens.Insert( i, newToken );
@@ -442,17 +446,17 @@ namespace VisCPU.HL
                 if ( tokens[i].Type == HlTokenType.OpWord || settings.MemberModifiers.ContainsValue( tokens[i].Type ) )
                 {
                     List < IHlToken > line = HlParsingTools.ReadUntilAny(
-                                                                tokens,
-                                                                i,
-                                                                1,
-                                                                new[]
-                                                                {
-                                                                    HlTokenType.OpSemicolon,
-                                                                    HlTokenType.Eof,
-                                                                    HlTokenType.OpBlockBracketOpen,
-                                                                    HlTokenType.OpBlockBracketClose
-                                                                }
-                                                            ).
+                                                                         tokens,
+                                                                         i,
+                                                                         1,
+                                                                         new[]
+                                                                         {
+                                                                             HlTokenType.OpSemicolon,
+                                                                             HlTokenType.Eof,
+                                                                             HlTokenType.OpBlockBracketOpen,
+                                                                             HlTokenType.OpBlockBracketClose
+                                                                         }
+                                                                        ).
                                                             ToList();
 
                     IHlToken[] mods =
@@ -512,16 +516,16 @@ namespace VisCPU.HL
                         }
 
                         tokens.Insert(
-                            i,
-                            new VariableDefinitionToken(
-                                name,
-                                type,
-                                mods,
-                                line.ToArray(),
-                                init,
-                                null
-                            )
-                        );
+                                      i,
+                                      new VariableDefinitionToken(
+                                                                  name,
+                                                                  type,
+                                                                  mods,
+                                                                  line.ToArray(),
+                                                                  init,
+                                                                  null
+                                                                 )
+                                     );
 
                         continue;
                     }
@@ -603,7 +607,8 @@ namespace VisCPU.HL
                 if ( m_Parent == null )
                 {
                     sb.AppendLine(
-                        $":const {keyValuePair.Key} {keyValuePair.Value.Value} {( keyValuePair.Value.IsPublic ? "" : "linker:hide" )}" );
+                                  $":const {keyValuePair.Key} {keyValuePair.Value.Value} {( keyValuePair.Value.IsPublic ? "" : "linker:hide" )}"
+                                 );
                 }
                 else if ( !m_Parent.ConstValTypes.ContainsKey( keyValuePair.Key ) )
                 {
@@ -624,14 +629,14 @@ namespace VisCPU.HL
                     if ( keyValuePair.Value.InitContent != null )
                     {
                         sb.AppendLine(
-                            $":data {keyValuePair.Value.GetFinalName()} \"{keyValuePair.Value.InitContent}\" linker:hide"
-                        );
+                                      $":data {keyValuePair.Value.GetFinalName()} \"{keyValuePair.Value.InitContent}\" linker:hide"
+                                     );
                     }
                     else
                     {
                         sb.AppendLine(
-                            $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {( keyValuePair.Value.IsVisible ? "" : "linker:hide" )}"
-                        );
+                                      $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {( keyValuePair.Value.IsVisible ? "" : "linker:hide" )}"
+                                     );
                     }
                 }
                 else if ( !m_Parent.m_VariableMap.ContainsKey( keyValuePair.Key ) )
@@ -704,14 +709,14 @@ namespace VisCPU.HL
                 Eat( HlTokenType.OpWord );
 
                 ret.Add(
-                    new VariableDefinitionToken(
-                        varName,
-                        typeName,
-                        new IHlToken[0],
-                        new[] { typeName, varName },
-                        null
-                    )
-                );
+                        new VariableDefinitionToken(
+                                                    varName,
+                                                    typeName,
+                                                    new IHlToken[0],
+                                                    new[] { typeName, varName },
+                                                    null
+                                                   )
+                       );
 
                 if ( current.Type == HlTokenType.Eof )
                 {
@@ -786,11 +791,12 @@ namespace VisCPU.HL
             }
 
             return m_VariableMap[name] = new VariableData(
-                name,
-                name,
-                1,
-                TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                false );
+                                                          name,
+                                                          name,
+                                                          1,
+                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
+                                                          false
+                                                         );
         }
 
         private VariableData GetFreeTempVarCopy( string initValue )
@@ -808,11 +814,12 @@ namespace VisCPU.HL
             EmitterResult.Emit( $"COPY", initValue, name );
 
             return m_VariableMap[name] = new VariableData(
-                name,
-                name,
-                1,
-                TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                false );
+                                                          name,
+                                                          name,
+                                                          1,
+                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
+                                                          false
+                                                         );
         }
 
         private VariableData GetFreeTempVarDref( string initValue )
@@ -830,11 +837,12 @@ namespace VisCPU.HL
             EmitterResult.Emit( $"DREF", initValue, name );
 
             return m_VariableMap[name] = new VariableData(
-                name,
-                name,
-                1,
-                TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                false );
+                                                          name,
+                                                          name,
+                                                          1,
+                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
+                                                          false
+                                                         );
         }
 
         private VariableData GetFreeTempVarLoad( string initValue )
@@ -852,11 +860,12 @@ namespace VisCPU.HL
             EmitterResult.Emit( $"LOAD", name, initValue );
 
             return m_VariableMap[name] = new VariableData(
-                name,
-                name,
-                1,
-                TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                false );
+                                                          name,
+                                                          name,
+                                                          1,
+                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
+                                                          false
+                                                         );
         }
 
         private VariableData GetFreeTempVarPop()
@@ -874,11 +883,12 @@ namespace VisCPU.HL
             EmitterResult.Emit( "POP", name );
 
             return m_VariableMap[name] = new VariableData(
-                name,
-                name,
-                1,
-                TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                false );
+                                                          name,
+                                                          name,
+                                                          1,
+                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
+                                                          false
+                                                         );
         }
 
         private string GetPrefix()
@@ -909,16 +919,16 @@ namespace VisCPU.HL
                     Log( $"Importing File: {includedFile}" );
 
                     string name = Path.GetFullPath(
-                        includedFile.StartsWith( m_Directory )
-                            ? includedFile.Remove( includedFile.Length - 4, 4 )
-                            : m_Directory +
-                              "/" +
-                              includedFile.Remove( includedFile.Length - 4, 4 )
-                    );
+                                                   includedFile.StartsWith( m_Directory )
+                                                       ? includedFile.Remove( includedFile.Length - 4, 4 )
+                                                       : m_Directory +
+                                                         "/" +
+                                                         includedFile.Remove( includedFile.Length - 4, 4 )
+                                                  );
 
                     UriKind kind = includedFile.StartsWith( "/" ) || includedFile.StartsWith( "\\" )
-                        ? UriKind.Absolute
-                        : UriKind.RelativeOrAbsolute;
+                                       ? UriKind.Absolute
+                                       : UriKind.RelativeOrAbsolute;
 
                     Log( "Detected Uri Kind: {0}", kind );
                     Uri import = null;
@@ -946,23 +956,28 @@ namespace VisCPU.HL
                     string file = Path.GetFullPath( name + ".vhl" );
 
                     HlCompilation comp = exP.Parse(
-                        File.ReadAllText( file ),
-                        Path.GetDirectoryName( file ),
-                        m_DataStore
-                    );
+                                                   File.ReadAllText( file ),
+                                                   Path.GetDirectoryName( file ),
+                                                   m_DataStore
+                                                  );
 
                     File.WriteAllText( newInclude, comp.Parse() );
 
                     ExternalSymbols.AddRange(
-                        comp.ConstValTypes.Where( x => x.Value.IsPublic ).
-                             Select(
-                                 x => new ConstantData(
-                                     x.Key,
-                                     x.Key,
-                                     x.Value.Value,
-                                     TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
-                                     true ) ).
-                             Cast < IExternalData >() );
+                                             comp.ConstValTypes.Where( x => x.Value.IsPublic ).
+                                                  Select(
+                                                         x => new ConstantData(
+                                                                               x.Key,
+                                                                               x.Key,
+                                                                               x.Value.Value,
+                                                                               TypeSystem.GetType(
+                                                                                    HLBaseTypeNames.s_UintTypeName
+                                                                                   ),
+                                                                               true
+                                                                              )
+                                                        ).
+                                                  Cast < IExternalData >()
+                                            );
 
                     ExternalSymbols.AddRange( comp.FunctionMap.Values.Where( x => x.Public ) );
                     ExternalSymbols.AddRange( comp.ExternalSymbols );
@@ -971,9 +986,9 @@ namespace VisCPU.HL
                 }
 
                 OnCompiledIncludedScript?.Invoke(
-                    Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i] ),
-                    includedFile
-                );
+                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i] ),
+                                                 includedFile
+                                                );
 
                 m_IncludedFiles[i] = includedFile;
             }
@@ -988,10 +1003,10 @@ namespace VisCPU.HL
                 if ( token.Type == HlTokenType.OpWord && settings.ReservedKeys.ContainsKey( token.ToString() ) )
                 {
                     tokens[i] = new HlTextToken(
-                        settings.ReservedKeys[token.ToString()],
-                        token.ToString(),
-                        token.SourceIndex
-                    );
+                                                settings.ReservedKeys[token.ToString()],
+                                                token.ToString(),
+                                                token.SourceIndex
+                                               );
                 }
             }
         }
@@ -1013,27 +1028,27 @@ namespace VisCPU.HL
                     if ( t.VariableDefinition.Size != null )
                     {
                         tt = new ArrayTypeDefintion(
-                            tt,
-                            t.VariableDefinition.Size.ToString().ParseUInt()
-                        );
+                                                    tt,
+                                                    t.VariableDefinition.Size.ToString().ParseUInt()
+                                                   );
                     }
 
                     HlPropertyDefinition pdef = new HlPropertyDefinition(
-                        t.VariableDefinition.Name.ToString(),
-                        tt,
-                        t.VariableDefinition.Modifiers
-                    );
+                                                                         t.VariableDefinition.Name.ToString(),
+                                                                         tt,
+                                                                         t.VariableDefinition.Modifiers
+                                                                        );
 
                     tdef.AddMember( pdef );
                 }
                 else
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                        new HlTokenReadEvent(
-                            HlTokenType.OpVariableDefinition,
-                            hlToken.Type
-                        )
-                    );
+                                                          new HlTokenReadEvent(
+                                                                               HlTokenType.OpVariableDefinition,
+                                                                               hlToken.Type
+                                                                              )
+                                                         );
                 }
             }
         }
@@ -1053,11 +1068,11 @@ namespace VisCPU.HL
                     IHlToken name = HlParsingTools.ReadOne( tokens, i + 1, HlTokenType.OpWord );
 
                     IHlToken[] mods = HlParsingTools.ReadNoneOrManyOf(
-                                                         tokens,
-                                                         i - 1,
-                                                         -1,
-                                                         settings.ClassModifiers.Values.ToArray()
-                                                     ).
+                                                                      tokens,
+                                                                      i - 1,
+                                                                      -1,
+                                                                      settings.ClassModifiers.Values.ToArray()
+                                                                     ).
                                                      Reverse().
                                                      ToArray();
 
@@ -1065,11 +1080,11 @@ namespace VisCPU.HL
                     int offset = 2;
 
                     if ( HlParsingTools.ReadOneOrNone(
-                        tokens,
-                        i + offset,
-                        HlTokenType.OpColon,
-                        out IHlToken inhColon
-                    ) )
+                                                      tokens,
+                                                      i + offset,
+                                                      HlTokenType.OpColon,
+                                                      out IHlToken inhColon
+                                                     ) )
                     {
                         baseClass = HlParsingTools.ReadOne( tokens, i + offset + 1, HlTokenType.OpWord );
                         Log( "Found base class: {0}", baseClass );
@@ -1077,10 +1092,10 @@ namespace VisCPU.HL
                     }
 
                     IHlToken block = HlParsingTools.ReadOne(
-                        tokens,
-                        i + offset,
-                        HlTokenType.OpBlockToken
-                    );
+                                                            tokens,
+                                                            i + offset,
+                                                            HlTokenType.OpBlockToken
+                                                           );
 
                     int start = i - mods.Length;
                     int end = i + offset + 1;
@@ -1146,6 +1161,7 @@ namespace VisCPU.HL
         }
 
         #endregion
+
     }
 
 }

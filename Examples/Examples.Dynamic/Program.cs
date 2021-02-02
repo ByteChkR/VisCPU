@@ -8,8 +8,7 @@ using VisCPU.Compiler.Linking;
 using VisCPU.Dynamic;
 using VisCPU.HL;
 using VisCPU.Utility;
-using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace Examples.Dynamic
@@ -188,12 +187,13 @@ namespace Examples.Dynamic
         {
             if ( args.Length == 0 )
             {
-                Console.WriteLine("Arguments:");
-                Console.WriteLine("\t-c : Compile Main File");
-                Console.WriteLine("\t-clean : Clean Build Directory");
-                Console.WriteLine("\t-r : Run Dynamic Commandline");
-                Console.WriteLine("\t-o : Optimize Assembly");
-                Console.WriteLine("\t-d : Debug(Make all labels and data sections visible)");
+                Console.WriteLine( "Arguments:" );
+                Console.WriteLine( "\t-c : Compile Main File" );
+                Console.WriteLine( "\t-clean : Clean Build Directory" );
+                Console.WriteLine( "\t-r : Run Dynamic Commandline" );
+                Console.WriteLine( "\t-o : Optimize Assembly" );
+                Console.WriteLine( "\t-d : Debug(Make all labels and data sections visible)" );
+
                 return;
             }
 

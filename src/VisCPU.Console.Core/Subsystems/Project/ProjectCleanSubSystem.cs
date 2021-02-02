@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using VisCPU.Console.Core.Subsystems.Project.Events;
-using VisCPU.ProjectSystem.Data;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.ProjectSystem.Data;
 
 namespace VisCPU.Console.Core.Subsystems.Project
 {
 
     public class ProjectCleanSubSystem : ConsoleSubsystem
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
 
         #region Public
@@ -73,6 +75,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
         }
 
         #endregion
+
     }
 
 }

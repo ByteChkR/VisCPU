@@ -3,6 +3,7 @@
 
     public class ArrayTypeDefintion : HlTypeDefinition
     {
+
         public HlTypeDefinition ElementType { get; }
 
         public uint Size { get; }
@@ -21,6 +22,7 @@
         }
 
         #endregion
+
     }
 
 }

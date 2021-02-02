@@ -2,8 +2,8 @@
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.HL.Parser.Operators
 {
@@ -13,6 +13,7 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class AssignmentByOperators : HlExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -113,11 +114,11 @@ namespace VisCPU.HL.Parser.Operators
 
                 default:
                     EventManager < ErrorEvent >.SendEvent(
-                        new HlTokenReadEvent(
-                            HlTokenType.Any,
-                            parser.CurrentToken.Type
-                        )
-                    );
+                                                          new HlTokenReadEvent(
+                                                                               HlTokenType.Any,
+                                                                               parser.CurrentToken.Type
+                                                                              )
+                                                         );
 
                     tt = HlTokenType.Unknown;
 
@@ -131,6 +132,7 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
+
     }
 
 }

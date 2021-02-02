@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
@@ -6,6 +7,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class CompiletimeFunctionCompilerCollection
     {
+
         private readonly Dictionary < string, ICompiletimeFunctionCompiler > m_Compilers =
             new Dictionary < string, ICompiletimeFunctionCompiler >();
 
@@ -37,6 +39,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
         }
 
         #endregion
+
     }
 
 }

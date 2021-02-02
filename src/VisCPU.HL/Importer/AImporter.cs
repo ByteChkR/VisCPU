@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
@@ -8,6 +9,7 @@ namespace VisCPU.HL.Importer
 
     public abstract class AImporter : VisBase, IImporter
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.HlImporter;
 
         protected string CacheDirectory => Path.Combine( AppRootHelper.AppRoot, "cache" );
@@ -26,6 +28,7 @@ namespace VisCPU.HL.Importer
         }
 
         #endregion
+
     }
 
 }

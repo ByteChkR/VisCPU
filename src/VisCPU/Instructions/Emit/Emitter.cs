@@ -6,6 +6,7 @@ namespace VisCPU.Instructions.Emit
 
     public abstract class Emitter < TEmitType > : VisBase, IEmitter
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.Emit;
 
         #region Public
@@ -22,6 +23,7 @@ namespace VisCPU.Instructions.Emit
         }
 
         #endregion
+
     }
 
 }

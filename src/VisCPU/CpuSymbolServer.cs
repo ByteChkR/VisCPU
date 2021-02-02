@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU
@@ -6,6 +7,7 @@ namespace VisCPU
 
     public class CpuSymbolServer
     {
+
         private readonly List < LinkerInfo > s_Infos = new List < LinkerInfo >();
 
         public IEnumerable < LinkerInfo > LoadedSymbols => s_Infos;
@@ -23,6 +25,7 @@ namespace VisCPU
         }
 
         #endregion
+
     }
 
 }

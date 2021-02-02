@@ -1,14 +1,16 @@
 ﻿using System;
+
 using VisCPU.Peripherals.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Peripherals.Console
 {
 
     public class ConsoleInterface : Peripheral
     {
+
         private readonly ConsoleInterfaceSettings m_Settings;
 
         #region Unity Event Functions
@@ -38,7 +40,6 @@ namespace VisCPU.Peripherals.Console
 
         public override uint ReadData( uint address )
         {
-
             if ( address == m_Settings.InterfacePresentPin )
             {
                 return 1;
@@ -116,6 +117,7 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
+
     }
 
 }

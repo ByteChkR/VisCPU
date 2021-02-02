@@ -1,10 +1,11 @@
-﻿using VisCPU.ProjectSystem.Data;
+﻿using VisCPU.Utility.ProjectSystem.Data;
 
-namespace VisCPU.ProjectSystem.BuildSystem
+namespace VisCPU.Utility.ProjectSystem.BuildSystem
 {
 
     public abstract class BuildJobRunner
     {
+
         public abstract string RunnerName { get; }
 
         #region Public
@@ -16,6 +17,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
             ProjectBuildJob job );
 
         #endregion
+
     }
 
 }

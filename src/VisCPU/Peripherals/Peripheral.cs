@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using VisCPU.Extensions;
+
+using VisCPU.Utility.Extensions;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Peripherals
@@ -10,12 +11,6 @@ namespace VisCPU.Peripherals
 
     public abstract class Peripheral : VisBase
     {
-        protected Cpu AttachedCpu { get; private set; }
-
-        internal void SetCpu( Cpu cpu )
-        {
-            AttachedCpu = cpu;
-        }
 
         public static readonly SettingsCategory s_PeripheralCategory =
             CpuSettings.s_CpuCategory.AddCategory( "peripherals" );
@@ -23,12 +18,9 @@ namespace VisCPU.Peripherals
         public static readonly SettingsCategory s_PeripheralExtensions =
             CpuSettings.s_CpuExtensionsCategory.AddCategory( "peripherals" );
 
+        protected Cpu AttachedCpu { get; private set; }
+
         protected override LoggerSystems SubSystem => LoggerSystems.Peripherals;
-
-
-        public static IEnumerable < Peripheral > GetExtensionPeripherals() =>
-            ExtensionLoader.LoadFrom < Peripheral >(s_PeripheralExtensions.GetCategoryDirectory(), true );
-
 
         #region Unity Event Functions
 
@@ -37,6 +29,11 @@ namespace VisCPU.Peripherals
         #endregion
 
         #region Public
+
+        public static IEnumerable < Peripheral > GetExtensionPeripherals()
+        {
+            return ExtensionLoader.LoadFrom < Peripheral >( s_PeripheralExtensions.GetCategoryDirectory(), true );
+        }
 
         public abstract bool CanRead( uint address );
 
@@ -54,7 +51,13 @@ namespace VisCPU.Peripherals
         {
         }
 
+        internal void SetCpu( Cpu cpu )
+        {
+            AttachedCpu = cpu;
+        }
+
         #endregion
+
     }
 
 }

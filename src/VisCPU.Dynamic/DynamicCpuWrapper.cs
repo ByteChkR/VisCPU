@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+
 using VisCPU.Utility;
 using VisCPU.Utility.SharedBase;
 
@@ -10,9 +11,12 @@ namespace VisCPU.Dynamic
 
     public class DynamicCpuWrapper : DynamicObject
     {
+
         private readonly Cpu m_Instance;
+
         public IEnumerable < string > Labels =>
             m_Instance.SymbolServer.LoadedSymbols.SelectMany( x => x.Labels.Keys ).Distinct();
+
         public IEnumerable < string > Constants =>
             m_Instance.SymbolServer.LoadedSymbols.SelectMany( x => x.Constants.Keys ).Distinct();
 
@@ -49,18 +53,17 @@ namespace VisCPU.Dynamic
         {
             return m_Instance.SymbolServer.LoadedSymbols.
                               First( x => x.DataSectionHeader.ContainsKey( name ) ).
-                              DataSectionHeader[ name];
+                              DataSectionHeader[name];
         }
 
         public uint GetDataValue( string name )
         {
-
-            if ( !Data.Contains(name) )
+            if ( !Data.Contains( name ) )
             {
                 return 0;
             }
 
-            return m_Instance.MemoryBus.Read( GetData(name).Address );
+            return m_Instance.MemoryBus.Read( GetData( name ).Address );
         }
 
         public override IEnumerable < string > GetDynamicMemberNames()
@@ -104,18 +107,16 @@ namespace VisCPU.Dynamic
             }
 
             return Run( GetLabel( name ).Address );
-
         }
 
         public void SetDataValue( string name, uint value )
         {
-
-            if ( !Data.Contains(name) )
+            if ( !Data.Contains( name ) )
             {
                 return;
             }
 
-            m_Instance.MemoryBus.Write( GetData(name).Address, value );
+            m_Instance.MemoryBus.Write( GetData( name ).Address, value );
         }
 
         public override bool TryGetMember( GetMemberBinder binder, out object result )
@@ -210,6 +211,7 @@ namespace VisCPU.Dynamic
         }
 
         #endregion
+
     }
 
 }

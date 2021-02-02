@@ -5,6 +5,7 @@ namespace VisCPU.Utility.SharedBase
 
     public abstract class VisBase
     {
+
         protected abstract LoggerSystems SubSystem { get; }
 
         #region Public
@@ -15,6 +16,7 @@ namespace VisCPU.Utility.SharedBase
         }
 
         #endregion
+
     }
 
 }

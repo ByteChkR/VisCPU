@@ -1,14 +1,16 @@
 ﻿using System;
+
 using VisCPU.Peripherals.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Peripherals.Console.IO
 {
 
     public class ConsoleInInterface : Peripheral
     {
+
         private readonly ConsoleInInterfaceSettings m_Settings;
 
         public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
@@ -17,7 +19,6 @@ namespace VisCPU.Peripherals.Console.IO
 
         public override void Reset()
         {
-
         }
 
         #endregion
@@ -62,6 +63,7 @@ namespace VisCPU.Peripherals.Console.IO
         }
 
         #endregion
+
     }
 
 }

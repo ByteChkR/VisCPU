@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
-using VisCPU.ProjectSystem.BuildSystem;
-using VisCPU.ProjectSystem.Data;
+
+using VisCPU.Utility.ProjectSystem.BuildSystem;
+using VisCPU.Utility.ProjectSystem.Data;
 
 namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 {
 
     public class BuildJobMergedJobs : BuildJobRunner
     {
+
         public override string RunnerName => "merged";
 
         #region Public
@@ -31,6 +33,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
+
     }
 
 }

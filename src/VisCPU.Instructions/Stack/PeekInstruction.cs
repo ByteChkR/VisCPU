@@ -3,6 +3,7 @@
 
     public class PeekInstruction : StackInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "PEEK";
@@ -22,6 +23,7 @@
         }
 
         #endregion
+
     }
 
 }

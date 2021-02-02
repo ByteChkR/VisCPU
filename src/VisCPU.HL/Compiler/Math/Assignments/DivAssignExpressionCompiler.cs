@@ -1,5 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Math.Assignments
@@ -7,6 +7,7 @@ namespace VisCPU.HL.Compiler.Math.Assignments
 
     public class DivAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
+
         protected override string InstructionKey => "DIV";
 
         #region Public
@@ -18,8 +19,8 @@ namespace VisCPU.HL.Compiler.Math.Assignments
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             ExpressionTarget rTarget = compilation.Parse(
-                expr.Right
-            );
+                                                         expr.Right
+                                                        );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeReduceExpressions &&
                  IsReducable( rTarget ) )
@@ -28,10 +29,10 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                 string tmp = compilation.GetTempVarLoad( amount.ToString() );
 
                 compilation.EmitterResult.Emit(
-                    "SHR",
-                    target.MakeAddress( compilation ).ResultAddress,
-                    tmp
-                );
+                                               "SHR",
+                                               target.MakeAddress( compilation ).ResultAddress,
+                                               tmp
+                                              );
 
                 compilation.ReleaseTempVar( tmp );
 
@@ -47,10 +48,10 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                     : InstructionKey;
 
             compilation.EmitterResult.Emit(
-                instrKey,
-                target.ResultAddress,
-                rTarget.ResultAddress
-            );
+                                           instrKey,
+                                           target.ResultAddress,
+                                           rTarget.ResultAddress
+                                          );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
 
@@ -87,6 +88,7 @@ namespace VisCPU.HL.Compiler.Math.Assignments
         }
 
         #endregion
+
     }
 
 }

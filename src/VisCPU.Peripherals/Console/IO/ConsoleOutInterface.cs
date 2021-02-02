@@ -1,14 +1,16 @@
 ﻿using System;
+
 using VisCPU.Peripherals.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Peripherals.Console.IO
 {
 
     public class ConsoleOutInterface : Peripheral
     {
+
         private readonly ConsoleOutInterfaceSettings m_Settings;
 
         public Action < char > WriteConsoleChar { get; set; } = System.Console.Write;
@@ -76,6 +78,7 @@ namespace VisCPU.Peripherals.Console.IO
         }
 
         #endregion
+
     }
 
 }

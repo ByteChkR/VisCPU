@@ -6,6 +6,7 @@ namespace VisCPU.HL.Compiler.Math.Atomic
 
     public class IncrementExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
+
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlUnaryOp expr )
@@ -18,14 +19,15 @@ namespace VisCPU.HL.Compiler.Math.Atomic
                     : "INC";
 
             compilation.EmitterResult.Emit(
-                instrKey,
-                target.ResultAddress
-            );
+                                           instrKey,
+                                           target.ResultAddress
+                                          );
 
             return target;
         }
 
         #endregion
+
     }
 
 }

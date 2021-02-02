@@ -7,6 +7,7 @@ namespace VisCPU.HL.Compiler.Variables
 
     public class ConstExpressionCompiler : HlExpressionCompiler < HlValueOperand >
     {
+
         protected override bool AllImplementations => true;
 
         #region Public
@@ -40,7 +41,6 @@ namespace VisCPU.HL.Compiler.Variables
                     value = expr.Value.ToString();
 
                     break;
-
             }
 
             ExpressionTarget tmp =
@@ -81,7 +81,6 @@ namespace VisCPU.HL.Compiler.Variables
                     value = expr.Value.ToString();
 
                     break;
-
             }
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, value );
@@ -90,6 +89,7 @@ namespace VisCPU.HL.Compiler.Variables
         }
 
         #endregion
+
     }
 
 }

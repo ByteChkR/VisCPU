@@ -1,11 +1,12 @@
-﻿using VisCPU.Utility.Settings;
-using VisCPU.Utility.Settings.Loader;
+﻿using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.IO.Settings.Loader;
 
 namespace VisCPU.Peripherals.Console
 {
 
     public class ConsoleInterfaceSettings
     {
+
         public uint InterfacePresentPin { get; set; } = 0xFFFF1006;
 
         public uint WidthAddr { get; set; } = 0xFFFF1007;
@@ -45,14 +46,15 @@ namespace VisCPU.Peripherals.Console
             SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                coutCategory,
-                "management.json",
-                new ConsoleInterfaceSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  coutCategory,
+                                                  "management.json",
+                                                  new ConsoleInterfaceSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

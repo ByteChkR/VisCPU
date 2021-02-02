@@ -1,12 +1,13 @@
 ﻿using System.IO;
-using VisCPU.ProjectSystem.Data;
-using VisCPU.Utility;
 
-namespace VisCPU.ProjectSystem.BuildSystem
+using VisCPU.Utility.ProjectSystem.Data;
+
+namespace VisCPU.Utility.ProjectSystem.BuildSystem
 {
 
     public static class CommonFiles
     {
+
         #region Public
 
         public static void GenerateCommonFiles()
@@ -71,9 +72,9 @@ namespace VisCPU.ProjectSystem.BuildSystem
             if ( !File.Exists( Path.Combine( rootDir, "Program.vhl" ) ) )
             {
                 File.WriteAllText(
-                    Path.Combine( rootDir, "Program.vhl" ),
-                    @"//Entry Point of Project"
-                );
+                                  Path.Combine( rootDir, "Program.vhl" ),
+                                  @"//Entry Point of Project"
+                                 );
             }
         }
 
@@ -280,6 +281,7 @@ namespace VisCPU.ProjectSystem.BuildSystem
         }
 
         #endregion
+
     }
 
 }

@@ -1,12 +1,13 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.HL.Compiler.Special
 {
 
     public class WhileExpressionCompiler : HlExpressionCompiler < HlWhileOp >
     {
+
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlWhileOp expr )
@@ -65,6 +66,7 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
+
     }
 
 }

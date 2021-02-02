@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Console.Core.Subsystems.Project;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
 
 namespace VisCPU.Console.Core
 {
 
     public class VisConsole : ConsoleSystem
     {
+
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {
@@ -60,7 +62,6 @@ namespace VisCPU.Console.Core
 
         public static void RunConsole( string[] args )
         {
-
             VisConsole vs = new VisConsole();
             vs.Run( args );
         }
@@ -137,20 +138,21 @@ namespace VisCPU.Console.Core
 
             Run(
                 args.Concat(
-                    s.Configs.SelectMany(
-                        x => File.Exists( x )
-                            ? File.ReadAllText( x ).
-                                   Split(
-                                       new[] { '\n', '\r', ' ' },
-                                       StringSplitOptions.RemoveEmptyEntries
-                                   )
-                            : new string[0]
-                    )
-                )
-            );
+                            s.Configs.SelectMany(
+                                                 x => File.Exists( x )
+                                                          ? File.ReadAllText( x ).
+                                                                 Split(
+                                                                       new[] { '\n', '\r', ' ' },
+                                                                       StringSplitOptions.RemoveEmptyEntries
+                                                                      )
+                                                          : new string[0]
+                                                )
+                           )
+               );
         }
 
         #endregion
+
     }
 
 }

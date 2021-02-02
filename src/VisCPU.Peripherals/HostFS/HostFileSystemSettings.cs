@@ -1,13 +1,14 @@
 ﻿using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.Settings;
-using VisCPU.Utility.Settings.Loader;
+using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.IO.Settings.Loader;
 
 namespace VisCPU.Peripherals.HostFS
 {
 
     public class HostFileSystemSettings
     {
+
         [field: Argument( Name = "hostfs:root.use" )]
         public bool UseRootPath { get; set; }
 
@@ -36,14 +37,15 @@ namespace VisCPU.Peripherals.HostFS
             SettingsCategory hfsCategory = Peripheral.s_PeripheralCategory.AddCategory( "host-fs" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                hfsCategory,
-                "default.json",
-                new HostFileSystemSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  hfsCategory,
+                                                  "default.json",
+                                                  new HostFileSystemSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

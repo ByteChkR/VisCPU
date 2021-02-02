@@ -11,6 +11,7 @@ namespace VisCPU.HL.Parser.Tokens
     /// </summary>
     public interface IHlToken
     {
+
         /// <summary>
         ///     Returns the Child Tokens
         /// </summary>
@@ -26,6 +27,7 @@ namespace VisCPU.HL.Parser.Tokens
         ///     The Token Type
         /// </summary>
         HlTokenType Type { get; }
+
     }
 
 }

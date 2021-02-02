@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VisCPU.ProjectSystem.Data;
-using VisCPU.ProjectSystem.Database;
-using VisCPU.ProjectSystem.Database.Implementations;
-using VisCPU.Utility.Settings;
 
-namespace VisCPU.ProjectSystem.Resolvers
+using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.ProjectSystem.Data;
+using VisCPU.Utility.ProjectSystem.Database;
+using VisCPU.Utility.ProjectSystem.Database.Implementations;
+
+namespace VisCPU.Utility.ProjectSystem.Resolvers
 {
 
     public static class ProjectResolver
     {
+
         private static Dictionary < string, ProjectDatabase > s_Managers;
 
         public static ProjectResolverSettings ResolverSettings { get; set; }
@@ -101,6 +103,7 @@ namespace VisCPU.ProjectSystem.Resolvers
         }
 
         #endregion
+
     }
 
 }

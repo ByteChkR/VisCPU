@@ -6,8 +6,8 @@ using VisCPU.Compiler.Linking;
 using VisCPU.Instructions;
 using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
 
 namespace Examples.Shared
 {
@@ -16,11 +16,6 @@ namespace Examples.Shared
     {
 
         private static bool s_IsStarted = false;
-
-        internal static string SourceDirectory => Path.Combine(AppRootHelper.AppRoot, "src");
-        internal static string OutputDirectory => Path.Combine(AppRootHelper.AppRoot, "build");
-        internal static string InternalDirectory => Path.Combine(AppRootHelper.AppRoot, "internal");
-
 
         public static string DefaultFile
         {
@@ -35,29 +30,15 @@ namespace Examples.Shared
 
                 if ( !File.Exists( ret ) )
                 {
-                    File.WriteAllText( ret, DefaultSource);
+                    File.WriteAllText( ret, DefaultSource );
                 }
 
                 return ret;
             }
         }
 
-        internal static string DefaultOutput
-        {
-            get
-            {
-                if ( !s_IsStarted )
-                {
-                    return null;
-                }
-
-                string ret = Path.Combine( OutputDirectory, "main.vbin" );
-
-                return !File.Exists( ret ) ? null : ret;
-            }
-        }
-
-        public static string DefaultSource => @"
+        public static string DefaultSource =>
+            @"
 //Entry Script
 public const uint CONSOLE_OUT_PIN = 0xFFFF1001;
 public const uint CONSOLE_NUM_OUT_PIN = 0xFFFF1002;
@@ -116,6 +97,28 @@ HelloWorld();
 
 ";
 
+        internal static string SourceDirectory => Path.Combine( AppRootHelper.AppRoot, "src" );
+
+        internal static string OutputDirectory => Path.Combine( AppRootHelper.AppRoot, "build" );
+
+        internal static string InternalDirectory => Path.Combine( AppRootHelper.AppRoot, "internal" );
+
+        internal static string DefaultOutput
+        {
+            get
+            {
+                if ( !s_IsStarted )
+                {
+                    return null;
+                }
+
+                string ret = Path.Combine( OutputDirectory, "main.vbin" );
+
+                return !File.Exists( ret ) ? null : ret;
+            }
+        }
+
+        #region Unity Event Functions
 
         public static void Start( InstructionSet set )
         {
@@ -138,19 +141,19 @@ HelloWorld();
 
             Logger.OnLogReceive += ( tag, msg ) => Console.WriteLine( $"[{tag}]{msg}" );
 
-
             //Set Linker Export Flag
             //Useful for Debugging and Required for DLR Wrapper.
             LinkerSettings settings = SettingsManager.GetSettings < LinkerSettings >();
             settings.ExportLinkerInfo = true;
             SettingsManager.SaveSettings( settings );
-
         }
 
         public static void Start()
         {
             Start( new DefaultSet() );
         }
+
+        #endregion
 
         #region Public
 
@@ -163,17 +166,17 @@ HelloWorld();
 
             if ( ( endOptions & EndOptions.CleanOutput ) != 0 )
             {
-                Directory.Delete( OutputDirectory , true);
+                Directory.Delete( OutputDirectory, true );
             }
 
             if ( ( endOptions & EndOptions.CleanInternal ) != 0 )
             {
-                Directory.Delete( InternalDirectory, true);
+                Directory.Delete( InternalDirectory, true );
             }
 
             if ( ( endOptions & EndOptions.CleanSource ) != 0 )
             {
-                Directory.Delete( SourceDirectory, true);
+                Directory.Delete( SourceDirectory, true );
             }
         }
 

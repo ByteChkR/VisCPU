@@ -1,8 +1,8 @@
 ﻿using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
@@ -10,6 +10,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class OffsetOfCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
+
         public string FuncName => "offset_of";
 
         #region Public
@@ -19,10 +20,10 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 2 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                    new FunctionArgumentMismatchEvent(
-                        "Invalid Arguments. Expected offset_of(type, member)"
-                    )
-                );
+                                                      new FunctionArgumentMismatchEvent(
+                                                           "Invalid Arguments. Expected offset_of(type, member)"
+                                                          )
+                                                     );
             }
 
             HlTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
@@ -33,6 +34,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
         }
 
         #endregion
+
     }
 
 }

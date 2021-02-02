@@ -5,6 +5,7 @@ namespace VisCPU.HL.DataTypes
 
     public class FunctionData : IExternalData
     {
+
         private readonly Func < string[] > m_FunctionCompiler;
 
         private readonly string m_Name;
@@ -56,6 +57,7 @@ namespace VisCPU.HL.DataTypes
         }
 
         #endregion
+
     }
 
 }

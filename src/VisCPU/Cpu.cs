@@ -4,23 +4,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using VisCPU.Instructions;
 using VisCPU.Utility;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
 
 namespace VisCPU
 {
 
     public class Cpu
     {
+
         [Flags]
         public enum Flags
         {
+
             None = 0,
             Break = 1,
             Interrupt = 2,
             Halt = 4
+
         }
 
         public readonly MemoryBus MemoryBus;
@@ -29,6 +33,7 @@ namespace VisCPU
 
         private readonly struct CpuState : IEquatable < CpuState >
         {
+
             public readonly Flags Flags;
             public readonly uint Pc;
 
@@ -55,6 +60,7 @@ namespace VisCPU
                     return ( ( int ) Flags * 397 ) ^ ( int ) Pc;
                 }
             }
+
         }
 
         private Action < Cpu, uint > m_InterruptHandler;
@@ -152,7 +158,6 @@ namespace VisCPU
 
         public void FireInterrupt( uint intCode )
         {
-
             if ( m_InterruptHandler != null )
             {
                 Set( Flags.Interrupt );
@@ -223,8 +228,8 @@ namespace VisCPU
         public void PushState( uint pc, Flags flags )
         {
             m_CpuStack.Push(
-                new CpuState( ProcessorFlags, ProgramCounter )
-            );
+                            new CpuState( ProcessorFlags, ProgramCounter )
+                           );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -325,6 +330,7 @@ namespace VisCPU
         }
 
         #endregion
+
     }
 
 }

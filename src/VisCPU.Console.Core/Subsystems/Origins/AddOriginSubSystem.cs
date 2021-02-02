@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using VisCPU.ProjectSystem.Resolvers;
-using VisCPU.Utility.Settings;
+
+using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.ProjectSystem.Resolvers;
 
 namespace VisCPU.Console.Core.Subsystems.Origins
 {
 
     public class AddOriginSubSystem : ConsoleSubsystem
     {
+
         #region Public
 
         public static void AddOrigin( string name, string uri )
@@ -31,6 +33,7 @@ namespace VisCPU.Console.Core.Subsystems.Origins
         }
 
         #endregion
+
     }
 
 }

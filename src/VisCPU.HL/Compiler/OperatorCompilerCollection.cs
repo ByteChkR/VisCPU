@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens.Expressions;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.HL.Compiler
 {
@@ -11,6 +12,7 @@ namespace VisCPU.HL.Compiler
     public class OperatorCompilerCollection < T > : HlExpressionCompiler < T >
         where T : HlExpression
     {
+
         private readonly Dictionary < HlTokenType, HlExpressionCompiler < T > > m_OpCompilers =
             new Dictionary < HlTokenType, HlExpressionCompiler < T > >();
 
@@ -44,6 +46,7 @@ namespace VisCPU.HL.Compiler
         }
 
         #endregion
+
     }
 
 }

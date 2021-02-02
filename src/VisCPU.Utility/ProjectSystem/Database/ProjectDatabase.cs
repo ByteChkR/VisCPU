@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+
 using Newtonsoft.Json;
-using VisCPU.ProjectSystem.Data;
-using VisCPU.ProjectSystem.Database.Events;
-using VisCPU.Utility.Events;
+
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.Logging;
+using VisCPU.Utility.ProjectSystem.Data;
+using VisCPU.Utility.ProjectSystem.Database.Events;
 using VisCPU.Utility.SharedBase;
 
-namespace VisCPU.ProjectSystem.Database
+namespace VisCPU.Utility.ProjectSystem.Database
 {
 
     public abstract class ProjectDatabase : VisBase
     {
+
         public static readonly string s_ModuleList = "index.json";
         public static readonly string s_ModuleData = "module.zip";
         public static readonly string s_ModuleTarget = "module.json";
@@ -81,16 +84,16 @@ namespace VisCPU.ProjectSystem.Database
         protected static string GetPackageListPath( string root )
         {
             return Path.Combine(
-                root,
-                s_ModuleList
-            );
+                                root,
+                                s_ModuleList
+                               );
         }
 
         protected string GetPackageListPath()
         {
             return GetPackageListPath(
-                ModuleRoot.OriginalString
-            );
+                                      ModuleRoot.OriginalString
+                                     );
         }
 
         protected List < ProjectPackage > LoadPackageList()
@@ -98,8 +101,8 @@ namespace VisCPU.ProjectSystem.Database
             string modListPath = GetPackageListPath();
 
             List < ProjectPackage > ret = JsonConvert.DeserializeObject < List < ProjectPackage > >(
-                File.ReadAllText( modListPath )
-            );
+                 File.ReadAllText( modListPath )
+                );
 
             ret.ForEach( x => x.Manager = this );
 
@@ -111,8 +114,8 @@ namespace VisCPU.ProjectSystem.Database
             string modListPath = GetPackageListPath( root );
 
             List < ProjectPackage > ret = JsonConvert.DeserializeObject < List < ProjectPackage > >(
-                File.ReadAllText( modListPath )
-            );
+                 File.ReadAllText( modListPath )
+                );
 
             ret.ForEach( x => x.Manager = this );
 
@@ -124,12 +127,13 @@ namespace VisCPU.ProjectSystem.Database
             string modListPath = GetPackageListPath();
 
             File.WriteAllText(
-                modListPath,
-                JsonConvert.SerializeObject( packageList, Formatting.Indented )
-            );
+                              modListPath,
+                              JsonConvert.SerializeObject( packageList, Formatting.Indented )
+                             );
         }
 
         #endregion
+
     }
 
 }

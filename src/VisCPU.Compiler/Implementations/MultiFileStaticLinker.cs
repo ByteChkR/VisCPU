@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Compiler.Linking.Events;
 using VisCPU.Utility;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Implementations
@@ -15,6 +16,7 @@ namespace VisCPU.Compiler.Implementations
 
     public class MultiFileStaticLinker : Linker
     {
+
         #region Public
 
         public override LinkerResult Link( LinkerTarget target, Compilation compilation )
@@ -56,8 +58,8 @@ namespace VisCPU.Compiler.Implementations
                 else if ( dst.ContainsKey( fileCompilationConstant.Key ) )
                 {
                     EventManager < WarningEvent >.SendEvent(
-                        new DuplicateLinkerItemEvent( fileCompilationConstant.Key )
-                    );
+                                                            new DuplicateLinkerItemEvent( fileCompilationConstant.Key )
+                                                           );
 
                     duplicatedItems++;
                 }
@@ -71,17 +73,17 @@ namespace VisCPU.Compiler.Implementations
             Log(
                 "Hidden Items: {0}",
                 hiddenItems
-            );
+               );
 
             Log(
                 "Duplicated Items: {0}",
                 duplicatedItems
-            );
+               );
 
             Log(
                 "Exported Items: {0}",
                 exportedItems
-            );
+               );
         }
 
         private void PerformLinking( LinkerResult result, List < LinkerTarget > references, bool enableHide )
@@ -92,12 +94,12 @@ namespace VisCPU.Compiler.Implementations
                 JoinDefinitions( result.Constants, linkerTarget.FileCompilation.Constants, enableHide );
 
                 JoinDefinitions(
-                    result.DataSectionHeader,
-                    linkerTarget.FileCompilation.DataSectionHeader.ApplyOffset(
-                        ( uint ) result.DataSection.Count
-                    ),
-                    enableHide
-                );
+                                result.DataSectionHeader,
+                                linkerTarget.FileCompilation.DataSectionHeader.ApplyOffset(
+                                     ( uint ) result.DataSection.Count
+                                    ),
+                                enableHide
+                               );
 
                 (int, int) k = ( result.LinkedBinary.Count, linkerTarget.FileCompilation.Tokens.Count );
 
@@ -109,8 +111,8 @@ namespace VisCPU.Compiler.Implementations
                 result.HiddenLabelItems[k] =
                     SelectHidden( linkerTarget.FileCompilation.Labels.ToArray() ).
                         ApplyOffset(
-                            ( uint ) result.LinkedBinary.Count * CpuSettings.InstructionSize
-                        ).
+                                    ( uint ) result.LinkedBinary.Count * CpuSettings.InstructionSize
+                                   ).
                         ToDictionary( x => x.Key, x => x.Value );
 
                 result.HiddenConstantItems[k] = SelectHidden( linkerTarget.FileCompilation.Constants.ToArray() );
@@ -118,13 +120,13 @@ namespace VisCPU.Compiler.Implementations
                 result.DataSection.AddRange( linkerTarget.FileCompilation.DataSection );
 
                 JoinDefinitions(
-                    result.Labels,
-                    linkerTarget.FileCompilation.Labels.ApplyOffset(
-                        ( uint ) result.LinkedBinary.Count *
-                        CpuSettings.InstructionSize
-                    ),
-                    enableHide
-                );
+                                result.Labels,
+                                linkerTarget.FileCompilation.Labels.ApplyOffset(
+                                                                                ( uint ) result.LinkedBinary.Count *
+                                                                                CpuSettings.InstructionSize
+                                                                               ),
+                                enableHide
+                               );
 
                 result.LinkedBinary.AddRange( linkerTarget.FileCompilation.Tokens );
             }
@@ -139,13 +141,13 @@ namespace VisCPU.Compiler.Implementations
                 new Stack < FileReference >( mapping.Keys.Where( x => x.File != root.FileCompilation.Reference.File ) );
 
             LinkerResult result = new LinkerResult(
-                mapping.Values.ToArray(),
-                new Dictionary < string, AddressItem >(),
-                new Dictionary < string, AddressItem >(),
-                new Dictionary < string, AddressItem >(),
-                new List < AToken[] >(),
-                new uint[0]
-            );
+                                                   mapping.Values.ToArray(),
+                                                   new Dictionary < string, AddressItem >(),
+                                                   new Dictionary < string, AddressItem >(),
+                                                   new Dictionary < string, AddressItem >(),
+                                                   new List < AToken[] >(),
+                                                   new uint[0]
+                                                  );
 
             PerformLinking( result, new List < LinkerTarget > { root }, enableHide );
 
@@ -197,6 +199,7 @@ namespace VisCPU.Compiler.Implementations
         }
 
         #endregion
+
     }
 
 }

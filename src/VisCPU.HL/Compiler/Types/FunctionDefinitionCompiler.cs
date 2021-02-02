@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;
@@ -10,6 +11,7 @@ namespace VisCPU.HL.Compiler.Types
 
     public class FunctionDefinitionCompiler : HlExpressionCompiler < HlFuncDefOperand >
     {
+
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlFuncDefOperand expr )
@@ -19,49 +21,50 @@ namespace VisCPU.HL.Compiler.Types
             HlCompilation fComp = new HlCompilation( compilation, expr.FunctionDefinition.FunctionName.ToString() );
 
             compilation.FunctionMap[expr.FunctionDefinition.FunctionName.ToString()] = new FunctionData(
-                expr.FunctionDefinition.FunctionName.ToString(),
-                isPublic,
-                () =>
-                {
-                    Log( $"Importing Function: {expr.FunctionDefinition.FunctionName}" );
+                 expr.FunctionDefinition.FunctionName.ToString(),
+                 isPublic,
+                 () =>
+                 {
+                     Log( $"Importing Function: {expr.FunctionDefinition.FunctionName}" );
 
-                    foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
-                    {
-                        VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
-                        string key = vdef.Name.ToString();
+                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
+                     {
+                         VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
+                         string key = vdef.Name.ToString();
 
-                        fComp.CreateVariable(
-                            key,
-                            1,
-                            compilation.TypeSystem.GetType( vdef.TypeName.ToString() ),
-                            false
-                        );
-                    }
+                         fComp.CreateVariable(
+                                              key,
+                                              1,
+                                              compilation.TypeSystem.GetType( vdef.TypeName.ToString() ),
+                                              false
+                                             );
+                     }
 
-                    List < string > parsedVal =
-                        fComp.Parse( expr.Block, false, null ).Replace( "\r", "" ).Split( '\n' ).ToList();
+                     List < string > parsedVal =
+                         fComp.Parse( expr.Block, false, null ).Replace( "\r", "" ).Split( '\n' ).ToList();
 
-                    foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
-                    {
-                        parsedVal.Insert(
-                            0,
-                            $"POP {fComp.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
-                        );
-                    }
+                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
+                     {
+                         parsedVal.Insert(
+                                          0,
+                                          $"POP {fComp.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                                         );
+                     }
 
-                    parsedVal.Add( "PUSH 0 ; Push anything. Will not be used anyway." );
-                    parsedVal.Add( "RET ; Compiler Safeguard." );
+                     parsedVal.Add( "PUSH 0 ; Push anything. Will not be used anyway." );
+                     parsedVal.Add( "RET ; Compiler Safeguard." );
 
-                    return parsedVal.ToArray();
-                },
-                expr.FunctionDefinition.Arguments.Length,
-                expr.FunctionDefinition.FunctionReturnType.ToString()
-            );
+                     return parsedVal.ToArray();
+                 },
+                 expr.FunctionDefinition.Arguments.Length,
+                 expr.FunctionDefinition.FunctionReturnType.ToString()
+                );
 
             return new ExpressionTarget();
         }
 
         #endregion
+
     }
 
 }

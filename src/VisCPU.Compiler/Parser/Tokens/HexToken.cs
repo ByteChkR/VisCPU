@@ -1,13 +1,15 @@
 ﻿using System.Globalization;
+
 using VisCPU.Compiler.Parser.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
 
     public class HexToken : ValueToken
     {
+
         public override uint Value
         {
             get
@@ -37,6 +39,7 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
+
     }
 
 }

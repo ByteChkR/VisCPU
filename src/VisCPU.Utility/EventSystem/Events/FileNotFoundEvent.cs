@@ -1,17 +1,16 @@
-﻿using VisCPU.Utility.EventSystem;
-
-namespace VisCPU.Utility.Events
+﻿namespace VisCPU.Utility.EventSystem.Events
 {
 
     public class FileNotFoundEvent : ErrorEvent
     {
+
         #region Public
 
         public FileNotFoundEvent( string file, bool canContinue ) : base(
-            $"The file '{file}' could not be found.",
-            ErrorEventKeys.s_GenericFileNotFound,
-            canContinue
-        )
+                                                                         $"The file '{file}' could not be found.",
+                                                                         ErrorEventKeys.s_GenericFileNotFound,
+                                                                         canContinue
+                                                                        )
         {
         }
 
@@ -21,6 +20,7 @@ namespace VisCPU.Utility.Events
         }
 
         #endregion
+
     }
 
 }

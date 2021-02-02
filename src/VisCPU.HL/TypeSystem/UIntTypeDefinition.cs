@@ -5,6 +5,7 @@ namespace VisCPU.HL.TypeSystem
 
     public class UIntTypeDefinition : HlTypeDefinition
     {
+
         #region Public
 
         public UIntTypeDefinition() : base( HLBaseTypeNames.s_UintTypeName )
@@ -17,6 +18,7 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
     }
 
 }

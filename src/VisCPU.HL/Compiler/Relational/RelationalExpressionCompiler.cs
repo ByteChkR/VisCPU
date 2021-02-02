@@ -1,5 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Relational
@@ -7,6 +7,7 @@ namespace VisCPU.HL.Compiler.Relational
 
     public abstract class RelationalExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
+
         protected override bool NeedsOutput => true;
 
         protected abstract string InstructionKey { get; }
@@ -21,21 +22,22 @@ namespace VisCPU.HL.Compiler.Relational
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                expr.Left
-            );
+                                                        expr.Left
+                                                       );
 
             ExpressionTarget rTarget = compilation.Parse(
-                expr.Right
-            );
+                                                         expr.Right
+                                                        );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
                  !target.IsAddress &&
                  !rTarget.IsAddress )
             {
                 return new ExpressionTarget(
-                    StaticEvaluate( target, rTarget ).ToString(),
-                    false,
-                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) );
+                                            StaticEvaluate( target, rTarget ).ToString(),
+                                            false,
+                                            compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
+                                           );
             }
 
             target = target.MakeAddress( compilation );
@@ -44,10 +46,12 @@ namespace VisCPU.HL.Compiler.Relational
             if ( target.IsPointer )
             {
                 ExpressionTarget tmp = new ExpressionTarget(
-                    compilation.GetTempVarDref( target.ResultAddress ),
-                    true,
-                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
-                );
+                                                            compilation.GetTempVarDref( target.ResultAddress ),
+                                                            true,
+                                                            compilation.TypeSystem.GetType(
+                                                                 HLBaseTypeNames.s_UintTypeName
+                                                                )
+                                                           );
 
                 compilation.ReleaseTempVar( target.ResultAddress );
                 target = tmp;
@@ -56,10 +60,12 @@ namespace VisCPU.HL.Compiler.Relational
             if ( rTarget.IsPointer )
             {
                 ExpressionTarget tmp = new ExpressionTarget(
-                    compilation.GetTempVarDref( rTarget.ResultAddress ),
-                    true,
-                    compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
-                );
+                                                            compilation.GetTempVarDref( rTarget.ResultAddress ),
+                                                            true,
+                                                            compilation.TypeSystem.GetType(
+                                                                 HLBaseTypeNames.s_UintTypeName
+                                                                )
+                                                           );
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
                 rTarget = tmp;
@@ -72,8 +78,8 @@ namespace VisCPU.HL.Compiler.Relational
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "1" );
 
             compilation.EmitterResult.Store(
-                $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress} {label}"
-            );
+                                            $"{InstructionKey} {target.ResultAddress} {rTarget.ResultAddress} {label}"
+                                           );
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "0" );
             compilation.EmitterResult.Store( $".{label} linker:hide" );
@@ -84,6 +90,7 @@ namespace VisCPU.HL.Compiler.Relational
         }
 
         #endregion
+
     }
 
 }

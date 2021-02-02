@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace VisCPU.Utility.Settings
+namespace VisCPU.Utility.IO.Settings
 {
 
     public class SettingsCategory : IEnumerable < SettingsCategory >
     {
+
         private readonly List < SettingsCategory > m_SubCategories = new List < SettingsCategory >();
 
         public SettingsCategory Parent { get; }
@@ -77,6 +78,7 @@ namespace VisCPU.Utility.Settings
         }
 
         #endregion
+
     }
 
 }

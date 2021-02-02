@@ -5,6 +5,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
 
     public class HlFuncDefOperand : HlVarOperand
     {
+
         public HlExpression[] Block { get; }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         }
 
         #endregion
+
     }
 
 }

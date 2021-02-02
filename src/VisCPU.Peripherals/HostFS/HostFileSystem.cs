@@ -1,16 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+
 using VisCPU.Peripherals.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Peripherals.HostFS
 {
 
     public class HostFileSystem : Peripheral
     {
+
         private HostFileSystemStatus m_Status = HostFileSystemStatus.HfsStatusReady;
         private readonly HostFileSystemSettings m_Settings;
         private readonly StringBuilder m_SbPath = new StringBuilder();
@@ -101,7 +103,10 @@ namespace VisCPU.Peripherals.HostFS
                     if ( read != sizeof( uint ) )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                            new HostFileSystemReadFailureEvent( "Did not read full uint size." ) );
+                                                              new HostFileSystemReadFailureEvent(
+                                                                   "Did not read full uint size."
+                                                                  )
+                                                             );
                     }
 
                     return BitConverter.ToUInt32( buf, 0 );
@@ -263,6 +268,7 @@ namespace VisCPU.Peripherals.HostFS
         }
 
         #endregion
+
     }
 
 }

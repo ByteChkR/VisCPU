@@ -1,13 +1,15 @@
 ﻿using System.Text.RegularExpressions;
+
 using VisCPU.Compiler.Parser.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.Compiler.Parser.Tokens
 {
 
     public class CharToken : ValueToken
     {
+
         public override uint Value
         {
             get
@@ -15,9 +17,9 @@ namespace VisCPU.Compiler.Parser.Tokens
                 string val = GetValue();
 
                 if ( char.TryParse(
-                    Regex.Unescape( val ),
-                    out char chr
-                ) )
+                                   Regex.Unescape( val ),
+                                   out char chr
+                                  ) )
                 {
                     return chr;
                 }
@@ -40,6 +42,7 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
+
     }
 
 }

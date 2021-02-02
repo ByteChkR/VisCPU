@@ -6,6 +6,7 @@ namespace VisCPU.HL.Compiler.Types
 
     public class MemberAccessCompiler : HlExpressionCompiler < HlMemberAccessOp >
     {
+
         protected override bool AllImplementations => true;
 
         #region Public
@@ -19,11 +20,11 @@ namespace VisCPU.HL.Compiler.Types
             ExpressionTarget lType = compilation.Parse( expr.Left );
 
             uint off = HlTypeDefinition.RecursiveGetOffset(
-                lType.TypeDefinition,
-                0,
-                0,
-                expr.MemberName.ToString().Split( '.' )
-            );
+                                                           lType.TypeDefinition,
+                                                           0,
+                                                           0,
+                                                           expr.MemberName.ToString().Split( '.' )
+                                                          );
 
             string tmpOff = compilation.GetTempVar( off );
 
@@ -50,10 +51,10 @@ namespace VisCPU.HL.Compiler.Types
 
             HlMemberDefinition mdef =
                 HlTypeDefinition.RecursiveGetPublicMember(
-                    lType.TypeDefinition,
-                    0,
-                    expr.MemberName.ToString().Split( '.' )
-                );
+                                                          lType.TypeDefinition,
+                                                          0,
+                                                          expr.MemberName.ToString().Split( '.' )
+                                                         );
 
             if ( mdef is HlPropertyDefinition pdef )
             {
@@ -74,6 +75,7 @@ namespace VisCPU.HL.Compiler.Types
         }
 
         #endregion
+
     }
 
 }

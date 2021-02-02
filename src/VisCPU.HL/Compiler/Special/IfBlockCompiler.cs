@@ -1,12 +1,13 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
-using VisCPU.Utility.Settings;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.HL.Compiler.Special
 {
 
     public class IfBlockCompiler : HlExpressionCompiler < HlIfOp >
     {
+
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlIfOp expr )
@@ -27,8 +28,8 @@ namespace VisCPU.HL.Compiler.Special
                      expr.ConditionMap[i].Item1.IsStatic() )
                 {
                     ExpressionTarget t = compilation.Parse(
-                        expr.ConditionMap[i].Item1
-                    );
+                                                           expr.ConditionMap[i].Item1
+                                                          );
 
                     if ( t.StaticParse() != 0 )
                     {
@@ -56,8 +57,8 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 ExpressionTarget exprTarget = compilation.Parse(
-                                                              expr.ConditionMap[i].Item1
-                                                          ).
+                                                                expr.ConditionMap[i].Item1
+                                                               ).
                                                           MakeAddress( compilation );
 
                 string nextLabel;
@@ -98,6 +99,7 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
+
     }
 
 }

@@ -1,7 +1,7 @@
 ﻿using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Math.Atomic
@@ -9,6 +9,7 @@ namespace VisCPU.HL.Compiler.Math.Atomic
 
     public class UnaryMinusExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
+
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlUnaryOp expr )
@@ -22,15 +23,17 @@ namespace VisCPU.HL.Compiler.Math.Atomic
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                                                      expr.Left
-                                                  ).
+                                                        expr.Left
+                                                       ).
                                                   MakeAddress( compilation );
 
             if ( target.TypeDefinition.Name != HLBaseTypeNames.s_FloatTypeName )
             {
                 EventManager < WarningEvent >.SendEvent(
-                    new UnaryMinusExpressionInvalidEvent(
-                        "Unary inversion is only possible with signed types and floats, performing this instruction on other types may yield undefined results." ) );
+                                                        new UnaryMinusExpressionInvalidEvent(
+                                                             "Unary inversion is only possible with signed types and floats, performing this instruction on other types may yield undefined results."
+                                                            )
+                                                       );
             }
 
             if ( outputTarget.ResultAddress == target.ResultAddress )
@@ -45,10 +48,10 @@ namespace VisCPU.HL.Compiler.Math.Atomic
 
                 return target.CopyIfNotNull( compilation, outputTarget );
             }
-
         }
 
         #endregion
+
     }
 
 }

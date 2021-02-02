@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.TypeSystem.Events;
-using VisCPU.Utility.Events;
 using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.HL.TypeSystem
 {
 
     public class HlTypeDefinition : IHlTypeSystemInstance
     {
+
         private readonly List < HlMemberDefinition > m_Members = new List < HlMemberDefinition >();
 
         public string Name { get; }
@@ -37,11 +39,11 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetOffset(
-                start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
-                ret,
-                current + 1,
-                parts
-            );
+                                      start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
+                                      ret,
+                                      current + 1,
+                                      parts
+                                     );
         }
 
         public static HlMemberDefinition RecursiveGetPrivateOrPublicMember(
@@ -57,10 +59,10 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetPrivateOrPublicMember(
-                start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
-                current + 1,
-                parts
-            );
+                                                     start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
+                                                     current + 1,
+                                                     parts
+                                                    );
         }
 
         public static HlMemberDefinition RecursiveGetPublicMember( HlTypeDefinition start, int current, string[] parts )
@@ -73,10 +75,10 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetPublicMember(
-                start.GetType( start.GetPublicMember( parts[current] ) ),
-                current + 1,
-                parts
-            );
+                                            start.GetType( start.GetPublicMember( parts[current] ) ),
+                                            current + 1,
+                                            parts
+                                           );
         }
 
         public void AddMember( HlMemberDefinition member )
@@ -145,6 +147,7 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
     }
 
 }

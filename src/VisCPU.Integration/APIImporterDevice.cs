@@ -1,11 +1,13 @@
 ﻿using System;
+
 using VisCPU.Peripherals;
 
-namespace VisCPU.HL.Integration
+namespace VisCPU.Integration
 {
 
     public class ApiImporterDevice : Peripheral
     {
+
         private Cpu m_ExecutingCpu;
         private readonly uint m_ListenAddr;
         private readonly Func < Cpu, uint > m_InvokeExec;
@@ -14,7 +16,6 @@ namespace VisCPU.HL.Integration
 
         public override void Reset()
         {
-
         }
 
         #endregion
@@ -54,6 +55,7 @@ namespace VisCPU.HL.Integration
         }
 
         #endregion
+
     }
 
 }

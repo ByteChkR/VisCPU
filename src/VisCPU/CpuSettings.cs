@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using VisCPU.Extensions;
+
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
+using VisCPU.Utility.Extensions;
+using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.IO.Settings.Loader;
 using VisCPU.Utility.Logging;
-using VisCPU.Utility.Settings;
-using VisCPU.Utility.Settings.Loader;
 
 namespace VisCPU
 {
 
     public class CpuSettings
     {
+
         public static readonly SettingsCategory s_CpuCategory = SettingsCategories.Get( "cpu", true );
 
         public static readonly SettingsCategory s_CpuExtensionsCategory =
@@ -38,26 +39,26 @@ namespace VisCPU
                 }
 
                 Logger.LogMessage(
-                    LoggerSystems.Console,
-                    "Loading Instruction Set: {0}",
-                    SettingsManager.GetSettings < CpuSettings >().InstructionSetName );
+                                  LoggerSystems.Console,
+                                  "Loading Instruction Set: {0}",
+                                  SettingsManager.GetSettings < CpuSettings >().InstructionSetName
+                                 );
 
                 IEnumerable < InstructionSet > extensions =
                     ExtensionLoader.LoadFrom < InstructionSet >(
-                        s_CpuInstructionExtensionsCategory.
-                            GetCategoryDirectory(),
-                        true
-                    );
-
-                
-
+                                                                s_CpuInstructionExtensionsCategory.
+                                                                    GetCategoryDirectory(),
+                                                                true
+                                                               );
 
                 foreach ( InstructionSet instructionSet in extensions )
                 {
                     Logger.LogMessage(
-                        LoggerSystems.Console,
-                        "Found Instruction Set: {0}",
-                        instructionSet.SetKey);
+                                      LoggerSystems.Console,
+                                      "Found Instruction Set: {0}",
+                                      instructionSet.SetKey
+                                     );
+
                     if ( instructionSet.SetKey == SettingsManager.GetSettings < CpuSettings >().InstructionSetName )
                     {
                         s_CachedInstructionSet = instructionSet;
@@ -90,14 +91,15 @@ namespace VisCPU
         static CpuSettings()
         {
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                s_CpuCategory,
-                "cpu.json",
-                new CpuSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  s_CpuCategory,
+                                                  "cpu.json",
+                                                  new CpuSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }
