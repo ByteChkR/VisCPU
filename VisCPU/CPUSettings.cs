@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using VisCPU.Extensions;
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
+using VisCPU.Utility.Logging;
 using VisCPU.Utility.Settings;
 using VisCPU.Utility.Settings.Loader;
 
@@ -35,6 +37,11 @@ namespace VisCPU
                     return s_CachedInstructionSet;
                 }
 
+                Logger.LogMessage(
+                    LoggerSystems.Console,
+                    "Loading Instruction Set: {0}",
+                    SettingsManager.GetSettings < CpuSettings >().InstructionSetName );
+
                 IEnumerable < InstructionSet > extensions =
                     ExtensionLoader.LoadFrom < InstructionSet >(
                         s_CpuInstructionExtensionsCategory.
@@ -42,8 +49,15 @@ namespace VisCPU
                         true
                     );
 
+                
+
+
                 foreach ( InstructionSet instructionSet in extensions )
                 {
+                    Logger.LogMessage(
+                        LoggerSystems.Console,
+                        "Found Instruction Set: {0}",
+                        instructionSet.SetKey);
                     if ( instructionSet.SetKey == SettingsManager.GetSettings < CpuSettings >().InstructionSetName )
                     {
                         s_CachedInstructionSet = instructionSet;

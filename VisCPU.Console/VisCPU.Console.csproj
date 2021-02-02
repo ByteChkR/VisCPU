@@ -103,19 +103,19 @@
     	<Message Text="Copy Default Extensions"></Message>
     	<Copy
     		SourceFiles="@(PeripheralExt)"
-    		DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions"
+    		DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals"
     	/>
     	<Copy
     		SourceFiles="@(InstructionExt)"
-    		DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals"
-    	/>
-    	<Copy
-    		SourceFiles="@(PeripheralPdb)"
     		DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions"
     	/>
     	<Copy
-    		SourceFiles="@(InstructionPdb)"
+    		SourceFiles="@(PeripheralPdb)"
     		DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals"
+    	/>
+    	<Copy
+    		SourceFiles="@(InstructionPdb)"
+    		DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions"
     	/>
   	</Target>
 </Project>
