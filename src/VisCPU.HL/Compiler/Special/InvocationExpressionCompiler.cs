@@ -29,7 +29,7 @@ namespace VisCPU.HL.Compiler.Special
                 return m_CtFuncCollection.Compile( target, compilation, expr );
             }
 
-            bool isInternalFunc = compilation.FunctionMap.ContainsKey( target );
+            bool isInternalFunc = compilation.FunctionMap.Contains( target );
 
             IExternalData externalSymbol =
                 compilation.ExternalSymbols.FirstOrDefault(
@@ -42,7 +42,7 @@ namespace VisCPU.HL.Compiler.Special
                 string funcEmit = externalSymbol is LinkedData l ? l.Info.Address.ToString() : target;
 
                 int targetLength = isInternalFunc
-                                       ? compilation.FunctionMap[target].ParameterCount
+                                       ? compilation.FunctionMap.Get(target).ParameterCount
                                        : ( externalSymbol as FunctionData )?.ParameterCount ??
                                          expr.ParameterList.Length;
 
@@ -53,6 +53,16 @@ namespace VisCPU.HL.Compiler.Special
                                                                $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
                                                               )
                                                          );
+                }
+
+                if ( expr.Instance != null )
+                {
+                    
+                    compilation.EmitterResult.Emit(
+                                                   $"PUSH",
+                                                   expr.Instance
+                                                  );
+                    
                 }
 
                 foreach ( HlExpression parameter in expr.ParameterList )

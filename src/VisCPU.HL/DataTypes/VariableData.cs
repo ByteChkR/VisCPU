@@ -24,12 +24,13 @@ namespace VisCPU.HL.DataTypes
         private readonly string m_FinalName;
         public readonly HlTypeDefinition TypeDefinition;
         public readonly bool IsVisible;
+        public readonly bool IsPointer;
 
         public uint Size { get; }
 
         public readonly string InitContent;
 
-        public VariableData( string name, string finalName, uint dataSize, HlTypeDefinition tdef, bool isVisible )
+        public VariableData( string name, string finalName, uint dataSize, HlTypeDefinition tdef, bool isVisible, bool isPointer )
         {
             InitContent = null;
             Size = dataSize;
@@ -37,9 +38,10 @@ namespace VisCPU.HL.DataTypes
             m_FinalName = finalName;
             TypeDefinition = tdef;
             IsVisible = isVisible;
+            IsPointer = isPointer;
         }
 
-        public VariableData( string name, string finalName, string content, HlTypeDefinition tdef, bool isVisible )
+        public VariableData( string name, string finalName, string content, HlTypeDefinition tdef, bool isVisible, bool isPointer)
         {
             m_Name = name;
             m_FinalName = finalName;
@@ -47,6 +49,7 @@ namespace VisCPU.HL.DataTypes
             InitContent = content;
             TypeDefinition = tdef;
             IsVisible = isVisible;
+            IsPointer = isPointer;
         }
 
         public bool Equals( VariableData other )

@@ -41,7 +41,7 @@ namespace VisCPU.HL.Importer
                 if ( label.Key.StartsWith( "FUN_" ) )
                 {
                     string[] lblParts = label.Key.Remove(0, "FUN_".Length).Split( '_' );
-                    HlTypeDefinition tdef= compilation.TypeSystem.GetOrAdd(lblParts[0], true);
+                    HlTypeDefinition tdef= compilation.TypeSystem.GetOrAdd(lblParts[0], true, false);
                     tdef.AddMember( new HlExternalFunctionDefinition( lblParts[1], label.Key ) );
                 }
             }

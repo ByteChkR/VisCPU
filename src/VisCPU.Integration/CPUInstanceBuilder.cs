@@ -52,7 +52,7 @@ namespace VisCPU.Integration
         {
             m_Importer.AddApi(
                               m_NextApiAddr,
-                              new FunctionData( name, false, null, argC, HLBaseTypeNames.s_UintTypeName )
+                              new FunctionData( name, false, true, null, argC, HLBaseTypeNames.s_UintTypeName )
                              );
 
             m_ApiDevs.Add( new ApiImporterDevice( m_NextApiAddr, api ) );

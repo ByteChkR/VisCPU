@@ -21,7 +21,7 @@ namespace VisCPU.HL.TypeSystem
             AddItem( new UIntTypeDefinition() );
             AddItem( new FloatTypeDefinition() );
             AddItem( new StringTypeDefinition() );
-            AddItem( new HlTypeDefinition( "void", true ) );
+            AddItem( new HlTypeDefinition( "void", true, true) );
         }
 
         public void Import( HlTypeSystem other )
@@ -33,7 +33,7 @@ namespace VisCPU.HL.TypeSystem
             }
         }
 
-        public HlTypeDefinition CreateEmptyType( string name, bool isPublic )
+        public HlTypeDefinition CreateEmptyType( string name, bool isPublic, bool isValueType )
         {
             if ( m_DefinedTypes.Any( x => x.Name == name ) )
             {
@@ -42,16 +42,16 @@ namespace VisCPU.HL.TypeSystem
                 return null;
             }
 
-            HlTypeDefinition def = new HlTypeDefinition( name, isPublic );
+            HlTypeDefinition def = new HlTypeDefinition( name, isPublic, isValueType);
 
             AddItem( def );
 
             return def;
         }
 
-        public HlTypeDefinition GetOrAdd( string name, bool isPublic )
+        public HlTypeDefinition GetOrAdd( string name, bool isPublic, bool isValueType)
         {
-            return m_DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name, isPublic);
+            return m_DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name, isPublic, isValueType);
         }
 
         public HlTypeDefinition GetType( string name )

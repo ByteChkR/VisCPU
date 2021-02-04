@@ -162,6 +162,7 @@ namespace VisCPU.HL.Importer
                              new FunctionData(
                                               $"I{instruction.ArgumentCount}_{instruction.Key}",
                                               false,
+                                              true,
                                               null,
                                               ( int ) instruction.ArgumentCount,
                                               HLBaseTypeNames.s_UintTypeName
@@ -174,6 +175,7 @@ namespace VisCPU.HL.Importer
 
             IExternalData d = new FunctionData(
                                                $"I{target.ArgumentCount}_{target.Key}",
+                                               true,
                                                true,
                                                null,
                                                ( int ) target.ArgumentCount,

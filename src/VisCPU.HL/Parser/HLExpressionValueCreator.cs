@@ -9,6 +9,7 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.Parser
 {
@@ -44,7 +45,7 @@ namespace VisCPU.HL.Parser
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HlExpression token = new HlUnaryOp( CreateValue( parser ), HlTokenType.OpReference );
+                HlExpression token = new HlUnaryOp(parser.ParseExpr(2), HlTokenType.OpReference );
 
                 return token;
             }
@@ -53,7 +54,7 @@ namespace VisCPU.HL.Parser
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HlExpression token = new HlUnaryOp( CreateValue( parser ), HlTokenType.OpDeReference );
+                HlExpression token = new HlUnaryOp(parser.ParseExpr(2), HlTokenType.OpDeReference );
 
                 return token;
             }

@@ -16,6 +16,7 @@ namespace VisCPU.HL.Parser
         private readonly string m_BreakKey = "break";
         private readonly string m_CatchKey = "catch";
         private readonly string m_ClassKey = "class";
+        private readonly string m_StructKey = "struct";
         private readonly string m_ContinueKey = "continue";
         private readonly string m_DoKey = "do";
         private readonly string m_ElseKey = "else";
@@ -94,6 +95,7 @@ namespace VisCPU.HL.Parser
                 { m_UsingKey, HlTokenType.OpUsing },
                 { m_NamespaceKey, HlTokenType.OpNamespace },
                 { m_ClassKey, HlTokenType.OpClass },
+                { m_StructKey, HlTokenType.OpClass },
                 { m_ContinueKey, HlTokenType.OpContinue },
                 { m_BreakKey, HlTokenType.OpBreak },
                 { m_NewKey, HlTokenType.OpNew },

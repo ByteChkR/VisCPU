@@ -10,7 +10,7 @@
 
         #region Public
 
-        public ArrayTypeDefintion( HlTypeDefinition elementType, uint size) : base( elementType.Name + "[]" , true)
+        public ArrayTypeDefintion( HlTypeDefinition elementType, uint size) : base( elementType.Name + "[]" , true, false)
         {
             Size = size;
             ElementType = elementType;

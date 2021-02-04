@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text;
 
+using VisCPU.HL.TypeSystem;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -15,6 +17,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Left side Expression
         /// </summary>
         public HlExpression Left { get; private set; }
+
+        public string Instance { get; private set; }
+        public HlTypeDefinition InstanceType { get; private set; }
 
         /// <summary>
         ///     Invocation Arguments
@@ -40,7 +45,12 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             ParameterList = parameterList;
         }
 
-        public void Redirect( HlExpression left ) => Left = left;
+        public void Redirect( HlExpression left, string instance, HlTypeDefinition instanceType )
+        {
+            Left = left;
+            InstanceType = instanceType;
+            Instance = instance;
+        }
         /// <summary>
         ///     Returns Child Tokens of this Token
         /// </summary>

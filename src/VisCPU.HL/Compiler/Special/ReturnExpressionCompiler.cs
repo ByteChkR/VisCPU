@@ -15,7 +15,7 @@ namespace VisCPU.HL.Compiler.Special
                 ExpressionTarget pt = compilation.Parse(
                                                         expr.Right
                                                        ).
-                                                  MakeAddress( compilation );
+                                                  MakeAddress( compilation ).Dereference(compilation);
 
                 compilation.EmitterResult.Emit( $"PUSH", pt.ResultAddress );
 

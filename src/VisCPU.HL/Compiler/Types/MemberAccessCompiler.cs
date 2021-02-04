@@ -1,4 +1,7 @@
-﻿using VisCPU.HL.DataTypes;
+﻿using System;
+using System.Diagnostics;
+
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
@@ -23,16 +26,63 @@ namespace VisCPU.HL.Compiler.Types
             string tmpVar;
             ExpressionTarget lType = compilation.Parse( expr.Left );
 
-            if ( lType.ResultAddress == "%%TYPE%%" && expr.MemberName is HlInvocationOp invoc )
+            if ( lType.ResultAddress == "%%TYPE%%" )
             {
-                string funcName = $"FUN_{lType.TypeDefinition.Name}_{invoc.Left}";
+                if (expr.MemberName is HlInvocationOp invoc)
+                {
 
-                invoc.Redirect( new HlValueOperand( new HlTextToken( HlTokenType.OpWord, funcName, 0 ) ) );
+                    HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember(invoc.Left.ToString());
 
-                ExpressionTarget t= compilation.Parse( invoc, outputTarget ).CopyIfNotNull(compilation, outputTarget);
+                    string funcName = $"FUN_{lType.TypeDefinition.Name}_{invoc.Left}";
+
+
+                    if ( !data.IsStatic )
+                    {
+                        Log( "AAAAAAA" );
+                    }
+                    invoc.Redirect( new HlValueOperand( new HlTextToken( HlTokenType.OpWord, funcName, 0 ) ), null , null);
+
+                    ExpressionTarget t = compilation.Parse( invoc, outputTarget ).
+                                                     CopyIfNotNull( compilation, outputTarget );
+
+
+
+                    return t;
+                }
+                else
+                {
+                    HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember(expr.MemberName.ToString());
+                    string funcName = $"FUN_{lType.TypeDefinition.Name}_{expr.MemberName}";
+
+                    if (!data.IsStatic)
+                    {
+                        Log("AAAAAAA");
+                    }
+                    if ( outputTarget.ResultAddress != null )
+                    {
+                        compilation.EmitterResult.Emit("LOAD", funcName, outputTarget.ResultAddress);
+                        return outputTarget;
+                    }
+
+                    return new ExpressionTarget(
+                                                funcName,
+                                                true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName), false
+                                               );
+                }
+            }
+
+            if ( expr.MemberName is HlInvocationOp inv )
+            {
+                string funcName = $"FUN_{lType.TypeDefinition.Name}_{inv.Left}";
+                inv.Redirect(new HlValueOperand(new HlTextToken(HlTokenType.OpWord, funcName, 0)), lType.ResultAddress, lType.TypeDefinition);
+
+                ExpressionTarget t = compilation.Parse(inv, outputTarget).
+                                                 CopyIfNotNull(compilation, outputTarget);
 
                 return t;
             }
+            
+            
 
             uint off = HlTypeDefinition.RecursiveGetOffset(
                                                            lType.TypeDefinition,

@@ -50,7 +50,7 @@ namespace VisCPU.HL.Compiler.Variables
                                            vdef,
                                            expr.VariableDefinition.Modifiers.Any(
                                                 x => x.Type == HlTokenType.OpPublicMod
-                                               )
+                                               ), false
                                           );
 
                 HlExpression init = expr.Initializer.FirstOrDefault();
@@ -67,7 +67,7 @@ namespace VisCPU.HL.Compiler.Variables
                                                                     );
 
                         string content = vOp.Value.ToString();
-                        compilation.CreateVariable( asmVarName, content, vdef, false );
+                        compilation.CreateVariable( asmVarName, content, vdef, false, false);
 
                         return new ExpressionTarget(
                                                      svar.ResultAddress ,

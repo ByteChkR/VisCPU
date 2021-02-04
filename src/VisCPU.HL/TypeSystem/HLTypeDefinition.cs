@@ -22,12 +22,15 @@ namespace VisCPU.HL.TypeSystem
 
         public int SourceIndex { get; }
 
+        public bool IsValueType { get; }
+
         public HlTokenType Type => HlTokenType.OpClassDefinition;
 
         #region Public
 
-        public HlTypeDefinition( string name, bool isPublic )
+        public HlTypeDefinition( string name, bool isPublic, bool isValueType )
         {
+            IsValueType = isValueType;
             IsPublic = isPublic;
             Name = name;
         }

@@ -42,6 +42,7 @@ namespace VisCPU.Compiler.Compiler
             Constants = info.Constants;
             Labels = info.Labels;
             DataSectionHeader = info.DataSectionHeader;
+            Tokens = new List < AToken[] >();
         }
 
         public FileCompilation( FileReference file )

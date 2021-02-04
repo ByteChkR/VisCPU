@@ -47,13 +47,12 @@ namespace VisCPU.HL.Compiler.Variables
                                             varAddr,
                                             true,
                                             v.TypeDefinition,
-                                            v.TypeDefinition.GetSize() != v.Size ||
-                                            v.TypeDefinition.Name != HLBaseTypeNames.s_UintTypeName &&
-                                            v.TypeDefinition.Name != HLBaseTypeNames.s_FloatTypeName
+                                            !v.TypeDefinition.IsValueType ||
+                                            v.IsPointer
                                            ).CopyIfNotNull( compilation, outputTarget );
             }
 
-            if ( compilation.FunctionMap.ContainsKey( expr.Value.ToString() ) )
+            if ( compilation.FunctionMap.Contains( expr.Value.ToString() ) )
             {
                 varAddr = expr.Value.ToString();
 
