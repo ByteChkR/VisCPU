@@ -1,6 +1,7 @@
 ﻿using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
+using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
@@ -25,7 +26,7 @@ namespace VisCPU.HL.Compiler.Variables
             HlVarOperand expr,
             ExpressionTarget outputTarget )
         {
-            if ( compilation.ConstValTypes.ContainsKey( expr.Value.ToString() ) )
+            if ( compilation.ConstValTypes.Contains( expr.Value.ToString() ) )
             {
                 return new ExpressionTarget(
                                             expr.Value.ToString(),
@@ -57,6 +58,13 @@ namespace VisCPU.HL.Compiler.Variables
                 varAddr = expr.Value.ToString();
 
                 return new ExpressionTarget( varAddr, true, null );
+            }
+
+            if ( compilation.TypeSystem.HasType( expr.Value.ToString() ) )
+            {
+                HlTypeDefinition tdef = compilation.TypeSystem.GetType( expr.Value.ToString() );
+
+                return new ExpressionTarget( "%%TYPE%%", false, tdef, false );
             }
 
             EventManager < ErrorEvent >.SendEvent( new HlVariableNotFoundEvent( expr.Value.ToString(), false ) );

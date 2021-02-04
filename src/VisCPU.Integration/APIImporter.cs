@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using VisCPU.HL;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer;
 using VisCPU.Utility;
@@ -112,7 +113,7 @@ namespace VisCPU.Integration
             return target;
         }
 
-        IExternalData[] IDataImporter.ProcessImport( string input )
+        IExternalData[] IDataImporter.ProcessImport(HlCompilation compilation,  string input )
         {
             string name = input.Remove( 0, "api-integration ".Length );
             KeyValuePair < uint, FunctionData > api = m_ExposedApis.First( x => x.Value.GetFinalName() == name );

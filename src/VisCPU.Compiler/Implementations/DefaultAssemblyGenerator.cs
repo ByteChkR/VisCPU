@@ -11,6 +11,7 @@ using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.IO.Settings;
+using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Implementations
@@ -26,13 +27,16 @@ namespace VisCPU.Compiler.Implementations
             List < byte > instrBytes = new List < byte >();
 
             AssemblyGeneratorSettings settings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            Logger.s_Settings.EnableAll = true;
+            Log( "Using format: {0}", settings.Format );
 
-            if ( settings.GlobalOffset != 0 )
+
+            if(settings.Format == "v2")
             {
-                instrBytes.AddRange( BitConverter.GetBytes( ( uint ) 0 ) );
-                instrBytes.AddRange( BitConverter.GetBytes( ( uint ) 1 ) );
-                instrBytes.AddRange( BitConverter.GetBytes( settings.GlobalOffset ) );
-                instrBytes.AddRange( BitConverter.GetBytes( ( uint ) 0 ) );
+                instrBytes.AddRange(BitConverter.GetBytes((uint)0));
+                instrBytes.AddRange(BitConverter.GetBytes((uint)1));
+                instrBytes.AddRange(BitConverter.GetBytes(settings.GlobalOffset));
+                instrBytes.AddRange(BitConverter.GetBytes((uint)0));
             }
 
             Dictionary < string, AddressItem > consts =
@@ -41,9 +45,13 @@ namespace VisCPU.Compiler.Implementations
             Dictionary < string, AddressItem > labels =
                 result.Labels.ApplyOffset( settings.GlobalOffset ).ToDictionary( x => x.Key, x => x.Value );
 
-            FileCompilation.ApplyToAllTokens( result.LinkedBinary, consts ); //Apply global constants
 
-            FileCompilation.ApplyToAllTokens( result.LinkedBinary, labels );
+            FileCompilation.ApplyToAllTokens( result.LinkedBinary, consts, new List < uint >()); //Apply global constants
+
+
+            List<uint> indexList = new List<uint>();
+
+            FileCompilation.ApplyToAllTokens( result.LinkedBinary, labels, indexList);
 
             Dictionary < string, AddressItem > ds =
                 result.DataSectionHeader.
@@ -58,14 +66,14 @@ namespace VisCPU.Compiler.Implementations
                                              result.LinkedBinary.Count * CpuSettings.InstructionSize )
                                   );
 
-            FileCompilation.ApplyToAllTokens( result.LinkedBinary, ds );
+            FileCompilation.ApplyToAllTokens( result.LinkedBinary, ds, indexList);
 
             foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
                 HiddenConstantItems )
             {
                 FileCompilation.ApplyToTokens(
                                               result.LinkedBinary,
-                                              resultHiddenAddressItem.Value,
+                                              resultHiddenAddressItem.Value, new List < uint >(),
                                               resultHiddenAddressItem.Key.Item1,
                                               resultHiddenAddressItem.Key.Item2
                                              ); //Apply global constants
@@ -80,7 +88,7 @@ namespace VisCPU.Compiler.Implementations
 
                 FileCompilation.ApplyToTokens(
                                               result.LinkedBinary,
-                                              hiddenLabels,
+                                              hiddenLabels, indexList,
                                               resultHiddenAddressItem.Key.Item1,
                                               resultHiddenAddressItem.Key.Item2
                                              ); //Apply global constants
@@ -101,7 +109,7 @@ namespace VisCPU.Compiler.Implementations
 
                 FileCompilation.ApplyToTokens(
                                               result.LinkedBinary,
-                                              hds,
+                                              hds, indexList,
                                               resultHiddenAddressItem.Key.Item1,
                                               resultHiddenAddressItem.Key.Item2
                                              ); //Apply global constants
@@ -146,6 +154,15 @@ namespace VisCPU.Compiler.Implementations
             }
 
             instrBytes.AddRange( result.DataSection.SelectMany( BitConverter.GetBytes ) );
+
+            if ( settings.Format == "v3" )
+            {
+                instrBytes.InsertRange( 0, indexList.SelectMany( BitConverter.GetBytes ) );
+                instrBytes.InsertRange(0, BitConverter.GetBytes(0u));
+                instrBytes.InsertRange(0, BitConverter.GetBytes((uint)indexList.Count));
+                instrBytes.InsertRange(0, BitConverter.GetBytes(2u));
+                instrBytes.InsertRange(0, BitConverter.GetBytes(0u));
+            }
 
             return instrBytes;
         }

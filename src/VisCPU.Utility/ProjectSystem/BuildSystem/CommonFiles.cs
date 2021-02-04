@@ -91,6 +91,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["build:steps"] = "HL-expr bin";
             debugBuildJob.Arguments["build:clean"] = "false";
             debugBuildJob.Arguments["assembler:offset.global"] = "0";
+            debugBuildJob.Arguments["assembler:format"] = "v1";
             debugBuildJob.Arguments["linker:export"] = "true";
             debugBuildJob.Arguments["linker:no-hide"] = "true";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "false";
@@ -172,6 +173,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["build:steps"] = "HL-expr bin";
             debugBuildJob.Arguments["build:clean"] = "false";
             debugBuildJob.Arguments["assembler:offset.global"] = "0";
+            debugBuildJob.Arguments["assembler:format"] = "v2";
             debugBuildJob.Arguments["linker:export"] = "true";
             debugBuildJob.Arguments["linker:no-hide"] = "false";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "true";

@@ -84,7 +84,7 @@ namespace VisCPU.HL.Compiler.Special
             }
 
             if ( compilation.ContainsVariable( target ) ||
-                 compilation.ConstValTypes.ContainsKey( target ) )
+                 compilation.ConstValTypes.Contains( target ) )
             {
                 foreach ( HlExpression parameter in expr.ParameterList )
                 {

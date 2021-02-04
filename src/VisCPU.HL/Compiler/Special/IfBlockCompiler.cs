@@ -16,20 +16,24 @@ namespace VisCPU.HL.Compiler.Special
             string elseLabel = HlCompilation.GetUniqueName( "if_else" );
             string blockLabels = HlCompilation.GetUniqueName( "if_b{0}" );
 
+
             bool staticComputation = false;
 
             compilation.EmitterResult.Store( "; Start IF" );
 
             for ( int i = 0; i < expr.ConditionMap.Count; i++ )
             {
+
+
                 string thisLabel = string.Format( blockLabels, i );
+                HlCompilation subIf = new HlCompilation( compilation, HlCompilation.GetUniqueName(thisLabel));
 
                 if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeIfConditionExpressions &&
                      expr.ConditionMap[i].Item1.IsStatic() )
                 {
-                    ExpressionTarget t = compilation.Parse(
-                                                           expr.ConditionMap[i].Item1
-                                                          );
+                    ExpressionTarget t = subIf.Parse(
+                                                     expr.ConditionMap[i].Item1
+                                                    );
 
                     if ( t.StaticParse() != 0 )
                     {
@@ -37,7 +41,7 @@ namespace VisCPU.HL.Compiler.Special
 
                         foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
                         {
-                            compilation.Parse( hlExpression );
+                            subIf.Parse( hlExpression );
                         }
 
                         break;
@@ -45,7 +49,7 @@ namespace VisCPU.HL.Compiler.Special
 
                     if ( i != 0 )
                     {
-                        compilation.EmitterResult.Store( $".{thisLabel} linker:hide" );
+                        subIf.EmitterResult.Store( $".{thisLabel} linker:hide" );
                     }
 
                     continue;
@@ -53,13 +57,13 @@ namespace VisCPU.HL.Compiler.Special
 
                 if ( i != 0 )
                 {
-                    compilation.EmitterResult.Store( $".{thisLabel} linker:hide" );
+                    subIf.EmitterResult.Store( $".{thisLabel} linker:hide" );
                 }
 
-                ExpressionTarget exprTarget = compilation.Parse(
-                                                                expr.ConditionMap[i].Item1
-                                                               ).
-                                                          MakeAddress( compilation );
+                ExpressionTarget exprTarget = subIf.Parse(
+                                                          expr.ConditionMap[i].Item1
+                                                         ).
+                                                    MakeAddress(subIf);
 
                 string nextLabel;
 
@@ -72,25 +76,32 @@ namespace VisCPU.HL.Compiler.Special
                     nextLabel = expr.ElseBranch != null ? elseLabel : endLabel;
                 }
 
-                compilation.EmitterResult.Emit( $"BEZ", exprTarget.ResultAddress, nextLabel );
+                subIf.EmitterResult.Emit( $"BEZ", exprTarget.ResultAddress, nextLabel );
 
                 foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
                 {
-                    compilation.Parse( hlExpression );
+                    subIf.Parse( hlExpression );
                 }
 
-                compilation.EmitterResult.Emit( $"JMP", endLabel );
-                compilation.ReleaseTempVar( exprTarget.ResultAddress );
+                subIf.EmitterResult.Emit( $"JMP", endLabel );
+                subIf.ReleaseTempVar( exprTarget.ResultAddress );
+
+
+                compilation.EmitterResult.Store(subIf.EmitVariables(false));
+                compilation.EmitterResult.Store(subIf.EmitterResult.Get());
             }
 
             if ( !staticComputation && expr.ElseBranch != null )
             {
-                compilation.EmitterResult.Store( $".{elseLabel} linker:hide" );
+                HlCompilation subIf = new HlCompilation(compilation, elseLabel);
+                subIf.EmitterResult.Store( $".{elseLabel} linker:hide" );
 
                 foreach ( HlExpression hlExpression in expr.ElseBranch )
                 {
-                    compilation.Parse( hlExpression );
+                    subIf.Parse( hlExpression );
                 }
+                compilation.EmitterResult.Store(subIf.EmitVariables(false));
+                compilation.EmitterResult.Store(subIf.EmitterResult.Get());
             }
 
             compilation.EmitterResult.Store( $".{endLabel} linker:hide" );

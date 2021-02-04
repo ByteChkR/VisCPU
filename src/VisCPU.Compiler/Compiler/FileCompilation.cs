@@ -55,7 +55,7 @@ namespace VisCPU.Compiler.Compiler
             ProcessLabels();
         }
 
-        public static void ApplyToAllTokens( List < AToken[] > tokens, IDictionary < string, AddressItem > header )
+        public static void ApplyToAllTokens( List < AToken[] > tokens, IDictionary < string, AddressItem > header, List <uint> indexList )
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -65,6 +65,7 @@ namespace VisCPU.Compiler.Compiler
 
                     if ( header.ContainsKey( w ) )
                     {
+                        indexList.Add((uint)(i * 4 + j));
                         tokens[i][j] = new ValToken(
                                                     tokens[i][j].OriginalText,
                                                     tokens[i][j].Start,
@@ -79,6 +80,7 @@ namespace VisCPU.Compiler.Compiler
         public static void ApplyToTokens(
             List < AToken[] > tokens,
             IDictionary < string, AddressItem > header,
+            List <uint> indexList,
             int start,
             int length )
         {
@@ -90,6 +92,7 @@ namespace VisCPU.Compiler.Compiler
 
                     if ( header.ContainsKey( w ) )
                     {
+                        indexList.Add((uint)(i * 4 + j));
                         tokens[i][j] = new ValToken(
                                                     tokens[i][j].OriginalText,
                                                     tokens[i][j].Start,
@@ -310,7 +313,7 @@ namespace VisCPU.Compiler.Compiler
                 }
             }
 
-            ApplyToAllTokens( Tokens, Constants );
+            ApplyToAllTokens( Tokens, Constants, new List < uint >() );
         }
 
         #endregion

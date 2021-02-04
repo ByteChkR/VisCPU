@@ -44,6 +44,15 @@ namespace VisCPU.HL.Compiler.Variables
                     vdef = new ArrayTypeDefintion( vdef, arrSize );
                 }
 
+                compilation.CreateVariable(
+                                           asmVarName,
+                                           arrSize,
+                                           vdef,
+                                           expr.VariableDefinition.Modifiers.Any(
+                                                x => x.Type == HlTokenType.OpPublicMod
+                                               )
+                                          );
+
                 HlExpression init = expr.Initializer.FirstOrDefault();
 
                 if ( init != null )
@@ -61,7 +70,7 @@ namespace VisCPU.HL.Compiler.Variables
                         compilation.CreateVariable( asmVarName, content, vdef, false );
 
                         return new ExpressionTarget(
-                                                    compilation.GetFinalName( svar.ResultAddress ),
+                                                     svar.ResultAddress ,
                                                     true,
                                                     vdef
                                                    );
@@ -74,14 +83,7 @@ namespace VisCPU.HL.Compiler.Variables
                                                              vdef
                                                             );
 
-                compilation.CreateVariable(
-                                           asmVarName,
-                                           arrSize,
-                                           vdef,
-                                           expr.VariableDefinition.Modifiers.Any(
-                                                x => x.Type == HlTokenType.OpPublicMod
-                                               )
-                                          );
+               
 
                 if ( init != null )
                 {
@@ -95,12 +97,12 @@ namespace VisCPU.HL.Compiler.Variables
             {
                 string asmVarName = expr.VariableDefinition.Name.ToString();
 
-                if ( compilation.ConstValTypes.ContainsKey( asmVarName ) )
+                if ( compilation.ConstValTypes.Contains( asmVarName ) )
                 {
                     EventManager < ErrorEvent >.SendEvent( new DuplicateConstVarDefinitionEvent( asmVarName ) );
                 }
 
-                compilation.ConstValTypes.Add(
+                compilation.ConstValTypes.Set(
                                               asmVarName,
                                               new ConstantValueItem()
                                               {

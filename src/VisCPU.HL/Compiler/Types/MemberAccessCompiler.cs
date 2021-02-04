@@ -1,5 +1,9 @@
-﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+﻿using VisCPU.HL.DataTypes;
+using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens.Expressions.Operands;
+using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Types
 {
@@ -18,6 +22,17 @@ namespace VisCPU.HL.Compiler.Types
         {
             string tmpVar;
             ExpressionTarget lType = compilation.Parse( expr.Left );
+
+            if ( lType.ResultAddress == "%%TYPE%%" && expr.MemberName is HlInvocationOp invoc )
+            {
+                string funcName = $"FUN_{lType.TypeDefinition.Name}_{invoc.Left}";
+
+                invoc.Redirect( new HlValueOperand( new HlTextToken( HlTokenType.OpWord, funcName, 0 ) ) );
+
+                ExpressionTarget t= compilation.Parse( invoc, outputTarget ).CopyIfNotNull(compilation, outputTarget);
+
+                return t;
+            }
 
             uint off = HlTypeDefinition.RecursiveGetOffset(
                                                            lType.TypeDefinition,

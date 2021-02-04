@@ -15,8 +15,9 @@ namespace VisCPU.HL.Compiler.Special
             string startLabel = HlCompilation.GetUniqueName( "while_start" );
             string endLabel = HlCompilation.GetUniqueName( "while_end" );
 
-            compilation.EmitterResult.Store( $".{startLabel} linker:hide" );
-            ExpressionTarget target = compilation.Parse( expr.Condition );
+            HlCompilation whileComp = new HlCompilation( compilation, HlCompilation.GetUniqueName( "while" ) );
+            whileComp.EmitterResult.Store( $".{startLabel} linker:hide" );
+            ExpressionTarget target = whileComp.Parse( expr.Condition );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeWhileConditionExpressions &&
                  !target.IsAddress )
@@ -26,20 +27,26 @@ namespace VisCPU.HL.Compiler.Special
                     //If True we parse body without check and directly jump to condition
                     //If False we omit the whole loop entirely
                 {
-                    ParseBody( compilation, expr, startLabel, endLabel );
+                    ParseBody(whileComp, expr, startLabel, endLabel );
                 }
+                compilation.EmitterResult.Store(whileComp.EmitVariables(false));
+                compilation.EmitterResult.Store(whileComp.EmitterResult.Get());
 
                 return new ExpressionTarget();
             }
 
-            target = target.MakeAddress( compilation ); //Make sure we have an address and not a static value
 
-            compilation.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
-            ParseBody( compilation, expr, startLabel, endLabel );
+            target = target.MakeAddress(whileComp); //Make sure we have an address and not a static value
 
-            compilation.ReleaseTempVar( target.ResultAddress );
+            whileComp.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
+            ParseBody(whileComp, expr, startLabel, endLabel );
+
+            whileComp.ReleaseTempVar( target.ResultAddress );
+
+            compilation.EmitterResult.Store(whileComp.EmitVariables(false));
+            compilation.EmitterResult.Store(whileComp.EmitterResult.Get());
             //.while_start
             //LOAD tmp_condition_var 0x00
             //<PARSE CONDITION EXPR HERE>

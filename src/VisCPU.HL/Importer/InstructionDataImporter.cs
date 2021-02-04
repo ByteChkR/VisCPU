@@ -148,7 +148,7 @@ namespace VisCPU.HL.Importer
             return path;
         }
 
-        IExternalData[] IDataImporter.ProcessImport( string input )
+        IExternalData[] IDataImporter.ProcessImport(HlCompilation compilation, string input )
         {
             Instruction target = Parse( input );
 

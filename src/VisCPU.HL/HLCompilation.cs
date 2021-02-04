@@ -9,6 +9,7 @@ using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Importer;
 using VisCPU.HL.Importer.Events;
+using VisCPU.HL.Lifetime;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
@@ -34,8 +35,8 @@ namespace VisCPU.HL
 
         public readonly HlTypeSystem TypeSystem = new HlTypeSystem();
 
-        internal readonly Dictionary < string, ConstantValueItem > ConstValTypes =
-            new Dictionary < string, ConstantValueItem >();
+        internal readonly Scope <  ConstantValueItem > ConstValTypes =
+            new Scope<  ConstantValueItem >();
 
         internal readonly List < IExternalData > ExternalSymbols = new List < IExternalData >();
         internal readonly Dictionary < string, FunctionData > FunctionMap = new Dictionary < string, FunctionData >();
@@ -54,11 +55,10 @@ namespace VisCPU.HL
         private readonly List < string > m_IncludedFiles = new List < string >();
         private readonly List < string > m_ImportedItems = new List < string >();
         private readonly HlCompilation m_Parent;
-        private readonly string m_ScopeId = "_";
 
         private readonly Queue < string > m_UnusedTempVars = new Queue < string >();
         private readonly List < string > m_UsedTempVars = new List < string >();
-        private readonly Dictionary < string, VariableData > m_VariableMap = new Dictionary < string, VariableData >();
+        private readonly Scope < VariableData > m_VariableMap = new Scope < VariableData >( );
         private string m_ParsedText;
 
         private readonly BuildDataStore m_DataStore;
@@ -91,11 +91,10 @@ namespace VisCPU.HL
         public HlCompilation( HlCompilation parent, string id )
         {
             m_DataStore = parent.m_DataStore;
-            m_ScopeId = id;
             OriginalText = parent.OriginalText;
             m_Directory = parent.m_Directory;
-            m_VariableMap = new Dictionary < string, VariableData >( parent.m_VariableMap );
-            ConstValTypes = new Dictionary < string, ConstantValueItem >( parent.ConstValTypes );
+            m_VariableMap = new Scope < VariableData >( parent.m_VariableMap, id );
+            ConstValTypes = new Scope< ConstantValueItem >( parent.ConstValTypes, id );
             FunctionMap = new Dictionary < string, FunctionData >( parent.FunctionMap );
             ExternalSymbols = new List < IExternalData >( parent.ExternalSymbols );
             m_IncludedFiles = new List < string >( parent.m_IncludedFiles );
@@ -109,6 +108,15 @@ namespace VisCPU.HL
             s_Counter = 0;
         }
 
+        public string GetFinalName( string name )
+        {
+            if ( m_VariableMap.Contains( name ) )
+            {
+                return m_VariableMap.Get( name ).GetFinalName();
+            }
+            return m_VariableMap.GetFinalName( name );
+        }
+
         internal static string GetUniqueName( string prefix = null )
         {
             return ( prefix == null ? "" : prefix + "_" ) + s_Counter++;
@@ -116,46 +124,45 @@ namespace VisCPU.HL
 
         public bool ContainsLocalVariable( string var )
         {
-            return m_VariableMap.ContainsKey( GetFinalName( var ) );
+            return m_VariableMap.ContainsLocal(  var  );
         }
 
         public bool ContainsVariable( string var )
         {
-            return m_VariableMap.ContainsKey( GetFinalName( var ) ) ||
-                   m_Parent != null && m_Parent.ContainsVariable( var );
+            return m_VariableMap.Contains(  var  );
         }
 
         public void CreateVariable( string name, uint size, HlTypeDefinition tdef, bool isVisible )
         {
-            m_VariableMap[GetFinalName( name )] = new VariableData( name, GetFinalName( name ), size, tdef, isVisible );
+            m_VariableMap.Set(
+                              name ,
+                              new VariableData(
+                                               name,
+                                               m_VariableMap.GetFinalName( name ),
+                                               size,
+                                               tdef,
+                                               isVisible
+                                              )
+                             );
         }
 
         public void CreateVariable( string name, string content, HlTypeDefinition tdef, bool isVisible )
         {
-            m_VariableMap[GetFinalName( name )] =
-                new VariableData( name, GetFinalName( name ), content, tdef, isVisible );
+            m_VariableMap.Set(
+                               name ,
+                              new VariableData( name, m_VariableMap.GetFinalName(name) , content, tdef, isVisible )
+                             );
         }
-
-        public string GetFinalName( string name )
-        {
-            return GetPrefix() + name;
-        }
-
+        
         public VariableData GetVariable( string name )
         {
-            if ( m_VariableMap.ContainsKey( GetFinalName( name ) ) )
+            if ( m_VariableMap.Contains(  name  ) )
             {
-                return m_VariableMap[GetFinalName( name )];
+                return m_VariableMap.Get( name );
             }
+            EventManager<ErrorEvent>.SendEvent(new HlVariableNotFoundEvent(name, false));
 
-            if ( m_Parent == null )
-            {
-                EventManager < ErrorEvent >.SendEvent( new HlVariableNotFoundEvent( name, false ) );
-
-                return new VariableData();
-            }
-
-            return m_Parent.GetVariable( name );
+            return new VariableData();
         }
 
         public string Parse( bool printHead = true, string appendAfterProg = "HLT" )
@@ -181,6 +188,18 @@ namespace VisCPU.HL
 
             ParseFunctionToken( tokens, hlpS );
             ParseTypeDefinitions( TypeSystem, hlpS, tokens );
+
+            //foreach ( HlTypeDefinition type in TypeSystem )
+            //{
+            //    foreach ( HlMemberDefinition member in type )
+            //    {
+            //        if ( member is HlFunctionDefinition fdef )
+            //        {
+            //            string name = $"{type}_{member.Name}";
+            //            FunctionMap[name] = new FunctionData()
+            //        }
+            //    }
+            //}
 
             HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( tokens ) );
             ProcessImports();
@@ -274,7 +293,7 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseFunctionToken( List < IHlToken > tokens, HlParserSettings settings )
+        public void ParseFunctionToken( List < IHlToken > tokens, HlParserSettings settings, HlTypeDefinition tdef=null)
         {
             for ( int i = 0; i < tokens.Count; i++ )
             {
@@ -348,7 +367,8 @@ namespace VisCPU.HL
                                                                   ParseArgumentList( args.Reverse().ToList() ),
                                                                   mods,
                                                                   block.GetChildren().ToArray(),
-                                                                  start
+                                                                  start,
+                                                                  tdef
                                                                  )
                                      );
 
@@ -604,46 +624,14 @@ namespace VisCPU.HL
 
             foreach ( KeyValuePair < string, ConstantValueItem > keyValuePair in ConstValTypes )
             {
-                if ( m_Parent == null )
-                {
                     sb.AppendLine(
                                   $":const {keyValuePair.Key} {keyValuePair.Value.Value} {( keyValuePair.Value.IsPublic ? "" : "linker:hide" )}"
                                  );
-                }
-                else if ( !m_Parent.ConstValTypes.ContainsKey( keyValuePair.Key ) )
-                {
-                    m_Parent.ConstValTypes[keyValuePair.Key] = keyValuePair.Value;
-                }
+                
             }
 
-            if ( printHead )
-
-            {
-                sb.AppendLine( "; ________________ VARIABLE FIELDS ________________" );
-            }
-
-            foreach ( KeyValuePair < string, VariableData > keyValuePair in m_VariableMap )
-            {
-                if ( m_Parent == null )
-                {
-                    if ( keyValuePair.Value.InitContent != null )
-                    {
-                        sb.AppendLine(
-                                      $":data {keyValuePair.Value.GetFinalName()} \"{keyValuePair.Value.InitContent}\" linker:hide"
-                                     );
-                    }
-                    else
-                    {
-                        sb.AppendLine(
-                                      $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {( keyValuePair.Value.IsVisible ? "" : "linker:hide" )}"
-                                     );
-                    }
-                }
-                else if ( !m_Parent.m_VariableMap.ContainsKey( keyValuePair.Key ) )
-                {
-                    m_Parent.m_VariableMap[keyValuePair.Key] = keyValuePair.Value;
-                }
-            }
+            EmitVariables( printHead).ForEach(x=>sb.AppendLine(x));
+            
 
             if ( printHead )
             {
@@ -665,6 +653,33 @@ namespace VisCPU.HL
             sb.Append( funcCode );
 
             return m_ParsedText = sb.ToString();
+        }
+
+        public List <string> EmitVariables( bool printHead)
+        {
+            List < string > sb = new List < string >();
+            if (printHead)
+            {
+                sb.Add("; ________________ VARIABLE FIELDS ________________");
+            }
+
+            foreach (KeyValuePair<string, VariableData> keyValuePair in m_VariableMap)
+            {
+                if (keyValuePair.Value.InitContent != null)
+                {
+                    sb.Add(
+                           $":data {keyValuePair.Value.GetFinalName()} \"{keyValuePair.Value.InitContent}\" linker:hide"
+                          );
+                }
+                else
+                {
+                    sb.Add(
+                           $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {(keyValuePair.Value.IsVisible ? "" : "linker:hide")}"
+                          );
+                }
+            }
+
+            return sb;
         }
 
         internal ExpressionTarget Parse( HlExpression expr, ExpressionTarget outputTarget = default )
@@ -780,7 +795,7 @@ namespace VisCPU.HL
 
                 EmitterResult.Emit( "LOAD", oldName, initValue.ToString() );
 
-                return m_VariableMap[oldName];
+                return m_VariableMap.Get(oldName);
             }
 
             string name = GetUniqueName( "tmp" );
@@ -790,13 +805,18 @@ namespace VisCPU.HL
                 EmitterResult.Emit( $"LOAD", name, initValue.ToString() );
             }
 
-            return m_VariableMap[name] = new VariableData(
-                                                          name,
-                                                          name,
-                                                          1,
-                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                                                          false
-                                                         );
+
+
+            return m_VariableMap.Set(
+                                     name,
+                                     new VariableData(
+                                                      name,
+                                                      name,
+                                                      1,
+                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      false
+                                                     )
+                                    );
         }
 
         private VariableData GetFreeTempVarCopy( string initValue )
@@ -806,20 +826,25 @@ namespace VisCPU.HL
                 string oldName = m_UnusedTempVars.Dequeue();
                 EmitterResult.Emit( $"COPY", initValue, oldName );
 
-                return m_VariableMap[oldName];
+                return m_VariableMap.Get(oldName);
             }
 
             string name = GetUniqueName( "tmp" );
 
             EmitterResult.Emit( $"COPY", initValue, name );
 
-            return m_VariableMap[name] = new VariableData(
-                                                          name,
-                                                          name,
-                                                          1,
-                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                                                          false
-                                                         );
+
+
+            return m_VariableMap.Set(
+                                     name,
+                                     new VariableData(
+                                                      name,
+                                                      name,
+                                                      1,
+                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      false
+                                                     )
+                                    );
         }
 
         private VariableData GetFreeTempVarDref( string initValue )
@@ -829,20 +854,25 @@ namespace VisCPU.HL
                 string oldName = m_UnusedTempVars.Dequeue();
                 EmitterResult.Emit( $"DREF", initValue, oldName );
 
-                return m_VariableMap[oldName];
+                return m_VariableMap.Get(oldName);
             }
 
             string name = GetUniqueName( "tmp" );
 
             EmitterResult.Emit( $"DREF", initValue, name );
 
-            return m_VariableMap[name] = new VariableData(
-                                                          name,
-                                                          name,
-                                                          1,
-                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                                                          false
-                                                         );
+
+
+            return m_VariableMap.Set(
+                                     name,
+                                     new VariableData(
+                                                      name,
+                                                      name,
+                                                      1,
+                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      false
+                                                     )
+                                    );
         }
 
         private VariableData GetFreeTempVarLoad( string initValue )
@@ -852,20 +882,24 @@ namespace VisCPU.HL
                 string oldName = m_UnusedTempVars.Dequeue();
                 EmitterResult.Emit( $"LOAD", oldName, initValue );
 
-                return m_VariableMap[oldName];
+                return m_VariableMap.Get(oldName);
             }
 
             string name = GetUniqueName( "tmp" );
 
             EmitterResult.Emit( $"LOAD", name, initValue );
 
-            return m_VariableMap[name] = new VariableData(
-                                                          name,
-                                                          name,
-                                                          1,
-                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                                                          false
-                                                         );
+
+           return m_VariableMap.Set(
+                              name,
+                              new VariableData(
+                                               name,
+                                               name,
+                                               1,
+                                               TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                               false
+                                              )
+                             );
         }
 
         private VariableData GetFreeTempVarPop()
@@ -875,31 +909,25 @@ namespace VisCPU.HL
                 string oldName = m_UnusedTempVars.Dequeue();
                 EmitterResult.Emit( "POP", oldName );
 
-                return m_VariableMap[oldName];
+                return m_VariableMap.Get(oldName);
             }
 
             string name = GetUniqueName( "tmp" );
 
             EmitterResult.Emit( "POP", name );
 
-            return m_VariableMap[name] = new VariableData(
-                                                          name,
-                                                          name,
-                                                          1,
-                                                          TypeSystem.GetOrAdd( HLBaseTypeNames.s_UintTypeName ),
-                                                          false
-                                                         );
+         return   m_VariableMap.Set(
+                              name,
+                              new VariableData(
+                                               name,
+                                               name,
+                                               1,
+                                               TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                               false
+                                              )
+                             );
         }
 
-        private string GetPrefix()
-        {
-            if ( m_Parent == null )
-            {
-                return m_ScopeId + "_";
-            }
-
-            return m_Parent.GetPrefix() + m_ScopeId + "_";
-        }
 
         private void ParseDependencies()
         {
@@ -963,6 +991,8 @@ namespace VisCPU.HL
 
                     File.WriteAllText( newInclude, comp.Parse() );
 
+                    TypeSystem.Import( comp.TypeSystem );
+
                     ExternalSymbols.AddRange(
                                              comp.ConstValTypes.Where( x => x.Value.IsPublic ).
                                                   Select(
@@ -1014,8 +1044,9 @@ namespace VisCPU.HL
         private void ParseTypeDefinitionBody(
             HlTypeSystem ts,
             HlTypeDefinition tdef,
-            List < IHlToken > block )
+            List < IHlToken > block, HlParserSettings settings )
         {
+            ParseFunctionToken( block, settings, tdef );
             HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( block ) );
             HlExpression[] exprs = p.Parse();
 
@@ -1023,7 +1054,7 @@ namespace VisCPU.HL
             {
                 if ( hlToken is HlVarDefOperand t )
                 {
-                    HlTypeDefinition tt = ts.GetOrAdd( t.VariableDefinition.TypeName.ToString() );
+                    HlTypeDefinition tt = ts.GetType( t.VariableDefinition.TypeName.ToString() );
 
                     if ( t.VariableDefinition.Size != null )
                     {
@@ -1041,7 +1072,69 @@ namespace VisCPU.HL
 
                     tdef.AddMember( pdef );
                 }
-                else
+                else if ( hlToken is HlFuncDefOperand fdef )
+                {
+                    if(tdef.HasMember(fdef.FunctionDefinition.FunctionName.ToString()))
+                        continue;
+
+                    tdef.AddMember(
+                                   new HlFunctionDefinition(
+                                                            fdef.FunctionDefinition.FunctionName.ToString(),
+                                                            ts.GetType(
+                                                                       fdef.FunctionDefinition.FunctionReturnType.
+                                                                            ToString()
+                                                                      ),
+                                                            fdef.FunctionDefinition.Arguments.
+                                                                 Select( x => ts.GetType(x.GetChildren().First().ToString() ) ).
+                                                                 ToArray(),
+                                                            fdef.FunctionDefinition.Mods
+                                                           )
+                                  );
+
+                    string funcName = $"FUN_{tdef.Name}_{fdef.FunctionDefinition.FunctionName}";
+                    HlCompilation fComp = new HlCompilation(this, funcName);
+
+                    FunctionMap[funcName] = new FunctionData(
+                                                                 funcName,
+                                                                 fdef.FunctionDefinition.Mods.Any(x=>x.Type==HlTokenType.OpPublicMod),
+                                                                 () =>
+                                                                 {
+                                                                     Log($"Importing Function: {funcName}");
+
+                                                                     foreach (IHlToken valueArgument in fdef.FunctionDefinition.Arguments)
+                                                                     {
+                                                                         VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
+                                                                         string key = vdef.Name.ToString();
+
+                                                                         fComp.CreateVariable(
+                                                                              key,
+                                                                              1,
+                                                                              TypeSystem.GetType(vdef.TypeName.ToString()),
+                                                                              false
+                                                                             );
+                                                                     }
+
+                                                                     List<string> parsedVal =
+                                                                         fComp.Parse(fdef.Block, false, null).Replace("\r", "").Split('\n').ToList();
+
+                                                                     foreach (IHlToken valueArgument in fdef.FunctionDefinition.Arguments)
+                                                                     {
+                                                                         parsedVal.Insert(
+                                                                              0,
+                                                                              $"POP {fComp.GetFinalName((valueArgument as VariableDefinitionToken).Name.ToString())}"
+                                                                             );
+                                                                     }
+
+                                                                     parsedVal.Add("PUSH 0 ; Push anything. Will not be used anyway.");
+                                                                     parsedVal.Add("RET ; Compiler Safeguard.");
+
+                                                                     return parsedVal.ToArray();
+                                                                 },
+                                                                 fdef.FunctionDefinition.Arguments.Length,
+                                                                 fdef.FunctionDefinition.FunctionReturnType.ToString()
+                                                                );
+                }
+                else 
                 {
                     EventManager < ErrorEvent >.SendEvent(
                                                           new HlTokenReadEvent(
@@ -1100,8 +1193,12 @@ namespace VisCPU.HL
                     int start = i - mods.Length;
                     int end = i + offset + 1;
                     tokens.RemoveRange( start, end - start );
-                    HlTypeDefinition def = ts.CreateEmptyType( name.ToString() );
-                    ParseTypeDefinitionBody( ts, def, block.GetChildren() );
+
+                    HlTypeDefinition def = ts.CreateEmptyType(
+                                                              name.ToString(),
+                                                              mods.Any( x => x.Type == HlTokenType.OpPublicMod )
+                                                             );
+                    ParseTypeDefinitionBody( ts, def, block.GetChildren(), settings );
                     i = start;
                 }
             }
@@ -1123,7 +1220,7 @@ namespace VisCPU.HL
                 if ( imp is IDataImporter dimp )
                 {
                     error = false;
-                    IExternalData[] data = dimp.ProcessImport( m_ImportedItems[i] );
+                    IExternalData[] data = dimp.ProcessImport(this,  m_ImportedItems[i] );
 
                     ExternalSymbols.AddRange( data );
                 }

@@ -14,7 +14,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <summary>
         ///     Left side Expression
         /// </summary>
-        public HlExpression Left { get; }
+        public HlExpression Left { get; private set; }
 
         /// <summary>
         ///     Invocation Arguments
@@ -40,6 +40,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             ParameterList = parameterList;
         }
 
+        public void Redirect( HlExpression left ) => Left = left;
         /// <summary>
         ///     Returns Child Tokens of this Token
         /// </summary>

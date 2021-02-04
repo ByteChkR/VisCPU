@@ -1,4 +1,6 @@
-﻿namespace VisCPU.HL.Parser.Tokens.Combined
+﻿using VisCPU.HL.TypeSystem;
+
+namespace VisCPU.HL.Parser.Tokens.Combined
 {
 
     public class FunctionDefinitionToken : CombinedToken
@@ -14,6 +16,8 @@
 
         public IHlToken[] Mods { get; }
 
+        public HlTypeDefinition Parent { get; }
+
         #region Public
 
         public FunctionDefinitionToken(
@@ -22,12 +26,14 @@
             IHlToken[] args,
             IHlToken[] mods,
             IHlToken[] subtokens,
-            int start ) : base(
+            int start,
+            HlTypeDefinition parent=null) : base(
                                HlTokenType.OpFunctionDefinition,
                                subtokens,
                                start
                               )
         {
+            Parent = parent;
             FunctionName = name;
             FunctionReturnType = retType;
             Mods = mods;

@@ -18,47 +18,51 @@ namespace VisCPU.HL.Compiler.Types
         {
             bool isPublic = expr.FunctionDefinition.Mods.Any( x => x.ToString() == "public" );
 
-            HlCompilation fComp = new HlCompilation( compilation, expr.FunctionDefinition.FunctionName.ToString() );
+            string funcName = expr.FunctionDefinition.Parent == null
+                                  ? expr.FunctionDefinition.FunctionName.ToString()
+                                  : $"{expr.FunctionDefinition.Parent.Name}_{expr.FunctionDefinition.FunctionName}";
 
-            compilation.FunctionMap[expr.FunctionDefinition.FunctionName.ToString()] = new FunctionData(
-                 expr.FunctionDefinition.FunctionName.ToString(),
-                 isPublic,
-                 () =>
-                 {
-                     Log( $"Importing Function: {expr.FunctionDefinition.FunctionName}" );
+            HlCompilation fComp = new HlCompilation( compilation, funcName);
 
-                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
-                     {
-                         VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
-                         string key = vdef.Name.ToString();
+            compilation.FunctionMap[funcName] = new FunctionData(
+                                                                 funcName,
+                                                                 isPublic,
+                                                                 () =>
+                                                                 {
+                                                                     Log( $"Importing Function: {funcName}" );
 
-                         fComp.CreateVariable(
-                                              key,
-                                              1,
-                                              compilation.TypeSystem.GetType( vdef.TypeName.ToString() ),
-                                              false
-                                             );
-                     }
+                                                                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
+                                                                     {
+                                                                         VariableDefinitionToken vdef = valueArgument as VariableDefinitionToken;
+                                                                         string key = vdef.Name.ToString();
 
-                     List < string > parsedVal =
-                         fComp.Parse( expr.Block, false, null ).Replace( "\r", "" ).Split( '\n' ).ToList();
+                                                                         fComp.CreateVariable(
+                                                                              key,
+                                                                              1,
+                                                                              compilation.TypeSystem.GetType( vdef.TypeName.ToString() ),
+                                                                              false
+                                                                             );
+                                                                     }
 
-                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
-                     {
-                         parsedVal.Insert(
-                                          0,
-                                          $"POP {fComp.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
-                                         );
-                     }
+                                                                     List < string > parsedVal =
+                                                                         fComp.Parse( expr.Block, false, null ).Replace( "\r", "" ).Split( '\n' ).ToList();
 
-                     parsedVal.Add( "PUSH 0 ; Push anything. Will not be used anyway." );
-                     parsedVal.Add( "RET ; Compiler Safeguard." );
+                                                                     foreach ( IHlToken valueArgument in expr.FunctionDefinition.Arguments )
+                                                                     {
+                                                                         parsedVal.Insert(
+                                                                              0,
+                                                                              $"POP {fComp.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                                                                             );
+                                                                     }
 
-                     return parsedVal.ToArray();
-                 },
-                 expr.FunctionDefinition.Arguments.Length,
-                 expr.FunctionDefinition.FunctionReturnType.ToString()
-                );
+                                                                     parsedVal.Add( "PUSH 0 ; Push anything. Will not be used anyway." );
+                                                                     parsedVal.Add( "RET ; Compiler Safeguard." );
+
+                                                                     return parsedVal.ToArray();
+                                                                 },
+                                                                 expr.FunctionDefinition.Arguments.Length,
+                                                                 expr.FunctionDefinition.FunctionReturnType.ToString()
+                                                                );
 
             return new ExpressionTarget();
         }

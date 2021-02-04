@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 using VisCPU.HL.Events;
@@ -11,8 +12,9 @@ using VisCPU.Utility.EventSystem.Events;
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HlTypeDefinition : IHlTypeSystemInstance
+    public class HlTypeDefinition : IHlTypeSystemInstance, IEnumerable <HlMemberDefinition>
     {
+        public bool IsPublic { get; }
 
         private readonly List < HlMemberDefinition > m_Members = new List < HlMemberDefinition >();
 
@@ -24,8 +26,9 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public HlTypeDefinition( string name )
+        public HlTypeDefinition( string name, bool isPublic )
         {
+            IsPublic = isPublic;
             Name = name;
         }
 
@@ -117,6 +120,8 @@ namespace VisCPU.HL.TypeSystem
             return 0;
         }
 
+        public bool HasMember( string memberName ) => m_Members.Any( x => x.Name == memberName );
+
         public HlMemberDefinition GetPrivateOrPublicMember( string memberName )
         {
             return m_Members.First( x => x.Name == memberName );
@@ -147,6 +152,16 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
+        public IEnumerator < HlMemberDefinition > GetEnumerator()
+        {
+            return m_Members.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ( ( IEnumerable ) m_Members ).GetEnumerator();
+        }
 
     }
 
