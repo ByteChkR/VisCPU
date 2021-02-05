@@ -3,8 +3,11 @@
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Compiler.Special.Compiletime;
 using VisCPU.HL.DataTypes;
+using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens.Expressions;
+using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
@@ -36,6 +39,36 @@ namespace VisCPU.HL.Compiler.Special
                                                            x => x.GetName() == target &&
                                                                 x.DataType == ExternalDataType.Function
                                                           );
+
+            if (compilation.TypeSystem.HasType(target))
+            {
+                HlTypeDefinition tdef = compilation.TypeSystem.GetType( target );
+                string var = HlCompilation.GetUniqueName( "static_alloc" );
+                compilation.CreateVariable( var, tdef.GetSize(), tdef, false, false );
+                string finalName = compilation.GetFinalName( var );
+
+                ExpressionTarget ret= new ExpressionTarget(compilation.GetTempVarLoad(finalName), true, tdef, true);
+                if ( tdef.Constructor != null )
+                {
+                    HlInvocationOp op = new HlInvocationOp(
+                                                           new HlValueOperand(
+                                                                              new HlTextToken(
+                                                                                   HlTokenType.OpWord,
+                                                                                   $"FUN_{tdef.Name}_{tdef.Constructor.Name}",
+                                                                                   0
+                                                                                  )
+                                                                             ),
+                                                           expr.ParameterList
+                                                          );
+                    op.Redirect(op.Left, ret.ResultAddress, tdef);
+                    ParseExpression(
+                                           compilation,
+                                           op
+                                          );
+                }
+
+                return ret;
+            }
 
             if ( isInternalFunc || externalSymbol != null )
             {
@@ -92,6 +125,7 @@ namespace VisCPU.HL.Compiler.Special
 
                 return tempReturn;
             }
+
 
             if ( compilation.ContainsVariable( target ) ||
                  compilation.ConstValTypes.Contains( target ) )

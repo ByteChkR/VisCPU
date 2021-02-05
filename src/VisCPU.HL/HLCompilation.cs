@@ -337,39 +337,100 @@ namespace VisCPU.HL
 
                     IHlToken typeName = null;
 
-                    if ( funcIdx > 0 &&
-                         ( tokens[funcIdx - 1].Type == HlTokenType.OpWord ||
-                           tokens[funcIdx - 1].Type == HlTokenType.OpTypeVoid ) )
+                    if ( funcIdx > 0 )
                     {
-                        typeName = HlParsingTools.ReadOneOfAny(
-                                                               tokens,
-                                                               funcIdx - 1,
-                                                               new[] { HlTokenType.OpWord, HlTokenType.OpTypeVoid }
-                                                              );
 
-                        int modStart = funcIdx - 1 - 1;
+                        if ( settings.MemberModifiers.ContainsValue( tokens[funcIdx - 1].Type ) )
+                        {
 
-                        IHlToken[] mods = HlParsingTools.ReadNoneOrManyOf(
-                                                                          tokens,
-                                                                          modStart,
-                                                                          -1,
-                                                                          settings.MemberModifiers.Values.ToArray()
-                                                                         ).
-                                                         Reverse().
-                                                         ToArray();
+                            int modStart = funcIdx-1;
 
-                        int start = modStart - mods.Length + 1;
+                            IHlToken[] mods = HlParsingTools.ReadNoneOrManyOf(
+                                                                              tokens,
+                                                                              modStart,
+                                                                              -1,
+                                                                              settings.MemberModifiers.Values.ToArray()
+                                                                             ).
+                                                             Reverse().
+                                                             ToArray();
+
+                            int start = funcIdx - mods.Length;
+                            int end = i;
+                            IHlToken block = tokens[i];
+                            tokens.RemoveRange(start, end - start+1);
+
+                            
+                            tokens.Insert(
+                                          start,
+                                          new FunctionDefinitionToken(
+                                                                      funcName,
+                                                                      new HlTextToken(HlTokenType.OpTypeVoid, "void",0),
+                                                                      ParseArgumentList(args.Reverse().ToList()),
+                                                                      mods,
+                                                                      block.GetChildren().ToArray(),
+                                                                      start,
+                                                                      tdef
+                                                                     )
+                                         );
+
+                            i = start;
+                        }
+                        else if (tokens[funcIdx - 1].Type == HlTokenType.OpWord ||
+                            tokens[funcIdx - 1].Type == HlTokenType.OpTypeVoid)
+                        {
+                            typeName = HlParsingTools.ReadOneOfAny(
+                                                                   tokens,
+                                                                   funcIdx - 1,
+                                                                   new[] { HlTokenType.OpWord, HlTokenType.OpTypeVoid }
+                                                                  );
+
+                            int modStart = funcIdx - 1 - 1;
+
+                            IHlToken[] mods = HlParsingTools.ReadNoneOrManyOf(
+                                                                              tokens,
+                                                                              modStart,
+                                                                              -1,
+                                                                              settings.MemberModifiers.Values.ToArray()
+                                                                             ).
+                                                             Reverse().
+                                                             ToArray();
+
+                            int start = modStart - mods.Length + 1;
+                            int end = i;
+                            IHlToken block = tokens[i];
+                            tokens.RemoveRange( start, end - start + 1 );
+
+                            tokens.Insert(
+                                          start,
+                                          new FunctionDefinitionToken(
+                                                                      funcName,
+                                                                      typeName,
+                                                                      ParseArgumentList( args.Reverse().ToList() ),
+                                                                      mods,
+                                                                      block.GetChildren().ToArray(),
+                                                                      start,
+                                                                      tdef
+                                                                     )
+                                         );
+
+                            i = start;
+                        }
+                    }
+                    else
+                    {
+
+                        int start = funcIdx;
                         int end = i;
                         IHlToken block = tokens[i];
-                        tokens.RemoveRange( start, end - start + 1 );
+                        tokens.RemoveRange(start, end - start);
 
                         tokens.Insert(
                                       start,
                                       new FunctionDefinitionToken(
                                                                   funcName,
-                                                                  typeName,
-                                                                  ParseArgumentList( args.Reverse().ToList() ),
-                                                                  mods,
+                                                                  new HlTextToken(HlTokenType.OpTypeVoid, "void", 0),
+                                                                  ParseArgumentList(args.Reverse().ToList()),
+                                                                  new IHlToken[0],
                                                                   block.GetChildren().ToArray(),
                                                                   start,
                                                                   tdef

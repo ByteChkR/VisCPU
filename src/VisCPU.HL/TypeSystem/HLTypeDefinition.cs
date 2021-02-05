@@ -26,6 +26,8 @@ namespace VisCPU.HL.TypeSystem
 
         public HlTokenType Type => HlTokenType.OpClassDefinition;
 
+        public HlMemberDefinition Constructor => m_Members.FirstOrDefault(x=>x.Type== HlTokenType.OpFunctionDefinition && x.Name==Name);
+
         #region Public
 
         public HlTypeDefinition( string name, bool isPublic, bool isValueType )
