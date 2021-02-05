@@ -120,7 +120,7 @@ namespace VisCPU.HL.TypeSystem
                 ret += hlMemberDefinition.GetSize();
             }
 
-            EventManager < ErrorEvent >.SendEvent( new HlMemberNotFoundEvent( name ) );
+            EventManager < ErrorEvent >.SendEvent( new HlMemberNotFoundEvent(this , name ) );
 
             return 0;
         }
@@ -129,12 +129,24 @@ namespace VisCPU.HL.TypeSystem
 
         public HlMemberDefinition GetPrivateOrPublicMember( string memberName )
         {
-            return m_Members.First( x => x.Name == memberName );
+            HlMemberDefinition ret = m_Members.FirstOrDefault( x => x.Name == memberName );
+            if (ret == null)
+            {
+                EventManager<ErrorEvent>.SendEvent(new HlMemberNotFoundEvent(this, memberName));
+            }
+
+            return ret;
         }
 
         public HlMemberDefinition GetPublicMember( string memberName )
         {
-            return m_Members.First( x => x.IsPublic && x.Name == memberName );
+            HlMemberDefinition ret= m_Members.FirstOrDefault( x => x.IsPublic && x.Name == memberName );
+            if(ret== null)
+            {
+                EventManager < ErrorEvent >.SendEvent( new HlMemberNotFoundEvent( this, memberName ) );
+            }
+
+            return ret;
         }
 
         public virtual uint GetSize()

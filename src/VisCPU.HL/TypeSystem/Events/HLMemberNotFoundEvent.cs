@@ -9,8 +9,8 @@ namespace VisCPU.HL.TypeSystem.Events
 
         #region Public
 
-        public HlMemberNotFoundEvent( string name ) : base(
-                                                           $"Can not Find Member: {name}",
+        public HlMemberNotFoundEvent(HlTypeDefinition type, string name ) : base(
+                                                           $"Can not Find Member '{name}' in type '{type.Name}'",
                                                            ErrorEventKeys.s_HlMemberNotFound,
                                                            false
                                                           )

@@ -5,6 +5,7 @@ using VisCPU.Integration;
 using VisCPU.Peripherals.Console;
 using VisCPU.Peripherals.Console.IO;
 using VisCPU.Peripherals.Memory;
+using VisCPU.Peripherals.Time;
 using VisCPU.Utility;
 
 namespace Examples.Shared
@@ -61,7 +62,8 @@ namespace Examples.Shared
                                                                   new Memory(),
                                                                   new ConsoleInInterface(),
                                                                   new ConsoleInterface(),
-                                                                  new ConsoleOutInterface()
+                                                                  new ConsoleOutInterface(),
+                                                                  new TimeDevice()
                                                                  );
         }
 

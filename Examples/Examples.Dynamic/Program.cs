@@ -4,6 +4,7 @@ using System.Linq;
 using Examples.Shared;
 
 using VisCPU;
+using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Dynamic;
 using VisCPU.HL;
@@ -208,6 +209,10 @@ namespace Examples.Dynamic
             LinkerSettings linkerSettings = SettingsManager.GetSettings < LinkerSettings >();
             linkerSettings.NoHiddenItems = debug;
             SettingsManager.SaveSettings( linkerSettings );
+
+            AssemblyGeneratorSettings gsettings = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            gsettings.Format = "v1"; //Set Raw Assembly Mode
+            SettingsManager.SaveSettings( gsettings );
 
             HlCompilerSettings settings = SettingsManager.GetSettings < HlCompilerSettings >();
             settings.OptimizeAll = optimized;
