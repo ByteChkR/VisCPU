@@ -15,6 +15,9 @@ namespace VisCPU.HL.TypeSystem
         public bool IsStatic { get; }
 
         public bool IsConstant { get; }
+        public bool IsVirtual { get; }
+        public bool IsOverride { get; }
+        public bool IsAbstract { get; }
 
         public string Name { get; }
 
@@ -41,7 +44,10 @@ namespace VisCPU.HL.TypeSystem
 
             IsConstant = mods.Any( x => x.Type == HlTokenType.OpConstMod );
             IsStatic = mods.Any( x => x.Type == HlTokenType.OpStaticMod );
-            IsPublic = mods.Any( x => x.Type == HlTokenType.OpPublicMod );
+            IsPublic = mods.Any(x => x.Type == HlTokenType.OpPublicMod);
+            IsVirtual = mods.Any(x => x.Type == HlTokenType.OpVirtualMod);
+            IsOverride = mods.Any(x => x.Type == HlTokenType.OpOverrideMod);
+            IsAbstract = mods.Any(x => x.Type == HlTokenType.OpAbstractMod);
         }
 
         #endregion

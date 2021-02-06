@@ -43,6 +43,13 @@ namespace VisCPU.HL.DataTypes
         {
             if ( m_CompiledOutput == null )
             {
+                if ( m_FunctionCompiler == null )
+                {
+                    m_CompiledOutput = new string[0];
+
+                    return m_CompiledOutput;
+                }
+
                 m_CompiledOutput = m_FunctionCompiler();
             }
 

@@ -3,6 +3,8 @@ using System.Linq;
 
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
+using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -21,6 +23,8 @@ namespace VisCPU.HL.Importer
             return input.StartsWith( "link" );
         }
 
+
+
         public IExternalData[] ProcessImport(HlCompilation compilation, string input )
         {
             int tagLen = "link".Length + 1;
@@ -38,12 +42,54 @@ namespace VisCPU.HL.Importer
 
             foreach ( KeyValuePair < string, AddressItem > label in info.Labels )
             {
-                if ( label.Key.StartsWith( "FUN_" ) )
+                if (label.Key.StartsWith("SFUN_"))
                 {
-                    string[] lblParts = label.Key.Remove(0, "FUN_".Length).Split( '_' );
-                    HlTypeDefinition tdef= compilation.TypeSystem.GetOrAdd(lblParts[0], true, false);
-                    tdef.AddMember( new HlExternalFunctionDefinition( lblParts[1], label.Key ) );
+                    string raw = label.Key.Remove(0, "SFUN_".Length);
+                    int idx = raw.IndexOf("_");
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.GetOrAdd(raw.Substring(0, idx), true, false);
+                    tdef.AddMember(new HlExternalFunctionDefinition(raw.Remove(0, idx + 1), label.Key, new List<IHlToken>
+                                                                        {
+                                                                            new HlTextToken(HlTokenType.OpPublicMod, "public", 0),
+                                                                            new HlTextToken(HlTokenType.OpStaticMod, "static", 0)
+                                                                        }));
                 }
+                else if (label.Key.StartsWith("ADFUN_"))
+                {
+                    string raw = label.Key.Remove(0, "ADFUN_".Length);
+                    int idx = raw.IndexOf("_");
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.GetOrAdd(raw.Substring(0, idx), true, false);
+                    tdef.AddMember(new HlExternalFunctionDefinition(raw.Remove(0, idx + 1), label.Key, new List<IHlToken>
+                                                                        {
+                                                                            new HlTextToken(HlTokenType.OpPublicMod, "public", 0),
+                                                                            new HlTextToken(HlTokenType.OpAbstractMod, "abstract", 0),
+                                                                        }));
+                }
+                else if (label.Key.StartsWith("DFUN_"))
+                {
+                    string raw = label.Key.Remove(0, "DFUN_".Length);
+                    int idx = raw.IndexOf("_");
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.GetOrAdd(raw.Substring(0, idx), true, false);
+                    tdef.AddMember(new HlExternalFunctionDefinition(raw.Remove(0, idx + 1), label.Key, new List<IHlToken>
+                                                                        {
+                                                                            new HlTextToken(HlTokenType.OpPublicMod, "public", 0),
+                                                                        }));
+                }
+                else if (label.Key.StartsWith("VDFUN_"))
+                {
+                    string raw = label.Key.Remove(0, "VDFUN_".Length);
+                    int idx = raw.IndexOf("_");
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.GetOrAdd(raw.Substring(0, idx), true, false);
+                    tdef.AddMember(new HlExternalFunctionDefinition(raw.Remove(0, idx+1), label.Key, new List<IHlToken>
+                                                                        {
+                                                                            new HlTextToken(HlTokenType.OpPublicMod, "public", 0),
+                                                                            new HlTextToken(HlTokenType.OpVirtualMod, "virtual", 0)
+                                                                        }));
+                }
+
             }
 
             return info.Labels.

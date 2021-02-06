@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Compiler.Special.Compiletime;
@@ -15,6 +16,15 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.HL.Compiler.Special
 {
 
+    public class MemberNotImplementedEvent : ErrorEvent
+    {
+
+        public MemberNotImplementedEvent( HlTypeDefinition type, HlMemberDefinition member ) : base($"Type '{type.Name}' does not implement member '{member.Name}'", ErrorEventKeys.s_HlMemberNotImplemented, false )
+        {
+        }
+
+    }
+
     public class InvocationExpressionCompiler : HlExpressionCompiler < HlInvocationOp >
     {
 
@@ -22,6 +32,60 @@ namespace VisCPU.HL.Compiler.Special
             new CompiletimeFunctionCompilerCollection();
 
         #region Public
+
+        public static ExpressionTarget ParseFunctionInvocation( HlCompilation compilation, HlInvocationOp expr, int targetLength, string functionName, string jumpInstruction )
+        {
+            if (expr.ParameterList.Length != targetLength)
+            {
+                if (!(expr.MemberDefinition != null &&
+                       (expr.MemberDefinition == expr.InstanceType.StaticConstructor ||
+                        expr.MemberDefinition == expr.InstanceType.DynamicConstructor)))
+                {
+                    EventManager<ErrorEvent>.SendEvent(
+                                                          new FunctionArgumentMismatchEvent(
+                                                               $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
+                                                              )
+                                                         );
+                }
+            }
+
+            if (expr.Instance != null)
+            {
+
+                compilation.EmitterResult.Emit(
+                                               $"PUSH",
+                                               expr.Instance
+                                              );
+
+            }
+
+            foreach (HlExpression parameter in expr.ParameterList)
+            {
+                ExpressionTarget arg = compilation.Parse(
+                                                         parameter
+                                                        ).
+                                                   MakeAddress(compilation);
+
+                compilation.EmitterResult.Emit(
+                                               $"PUSH",
+                                               arg.ResultAddress
+                                              );
+
+                compilation.ReleaseTempVar(arg.ResultAddress);
+            }
+
+            compilation.EmitterResult.Emit(jumpInstruction, functionName);
+
+            ExpressionTarget tempReturn = new ExpressionTarget(
+                                                               compilation.GetTempVarPop(),
+                                                               true,
+                                                               compilation.TypeSystem.GetType(
+                                                                    HLBaseTypeNames.s_UintTypeName
+                                                                   )
+                                                              );
+
+            return tempReturn;
+        }
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlInvocationOp expr )
         {
@@ -44,30 +108,72 @@ namespace VisCPU.HL.Compiler.Special
             {
                 HlTypeDefinition tdef = compilation.TypeSystem.GetType( target );
                 string var = HlCompilation.GetUniqueName( "static_alloc" );
-                compilation.CreateVariable( var, tdef.GetSize(), tdef, false, false );
+                uint size = tdef.GetSize();
+                compilation.CreateVariable( var, size, tdef, false, false );
                 string finalName = compilation.GetFinalName( var );
 
                 ExpressionTarget ret= new ExpressionTarget(compilation.GetTempVarLoad(finalName), true, tdef, true);
-                if ( tdef.Constructor != null )
+
+                foreach ( HlFunctionDefinition tdefAbstractFunction in tdef.OverridableFunctions )
                 {
-                    HlInvocationOp op = new HlInvocationOp(
-                                                           new HlValueOperand(
-                                                                              new HlTextToken(
-                                                                                   HlTokenType.OpWord,
-                                                                                   $"FUN_{tdef.Name}_{tdef.Constructor.Name}",
-                                                                                   0
-                                                                                  )
-                                                                             ),
-                                                           expr.ParameterList
-                                                          );
-                    op.Redirect(op.Left, ret.ResultAddress, tdef);
+                    HlFunctionDefinition test = (HlFunctionDefinition)tdef.GetPrivateOrPublicMember( tdefAbstractFunction.Name );
+
+                    if ( !test.IsAbstract )
+                    {
+                        uint off = tdef.GetOffset( x => x == tdefAbstractFunction );
+                        string tmp =
+                            compilation.GetTempVarLoad(off.ToString());
+
+                        string implementingFunction = tdef.GetFinalMemberName( test );
+                        string func =
+                            compilation.GetTempVarLoad(implementingFunction);
+
+                        compilation.EmitterResult.Emit("ADD", tmp, ret.ResultAddress);
+                        string tmpPtr = compilation.GetTempVarLoad( func );
+                        compilation.EmitterResult.Emit("CREF", tmpPtr, tmp);
+                        compilation.ReleaseTempVar(tmp);
+                        compilation.ReleaseTempVar(func);
+                        compilation.ReleaseTempVar(tmpPtr);
+
+                    }
+                    else
+                    {
+                        EventManager < ErrorEvent >.SendEvent(
+                                                              new MemberNotImplementedEvent(
+                                                                   tdef,
+                                                                   tdefAbstractFunction
+                                                                  )
+                                                             );
+                    }
+                }
+
+                if ( tdef.StaticConstructor != null )
+                {
+                   
+                    expr.Redirect(ret.ResultAddress, tdef, tdef.StaticConstructor);
                     ParseExpression(
                                            compilation,
-                                           op
+                                           expr
                                           );
                 }
 
                 return ret;
+            }
+
+            if (expr.Instance!=null && expr.MemberDefinition is HlFunctionDefinition fdef && (fdef.IsVirtual|| fdef.IsAbstract) )
+            {
+                string init = expr.InstanceType.GetOffset( x=>x==fdef ).ToString();
+                string tmp = compilation.GetTempVarLoad( init );
+
+                compilation.EmitterResult.Emit("ADD", tmp, expr.Instance);
+                compilation.EmitterResult.Emit("DREF", tmp, tmp);
+                int targetLength = fdef.ParameterTypes!=null?fdef.ParameterTypes.Length:expr.ParameterList.Length;
+                                      
+
+                ExpressionTarget t = ParseFunctionInvocation( compilation, expr, targetLength, tmp, "JSREF" );
+                compilation.ReleaseTempVar( tmp );
+
+                return t;
             }
 
             if ( isInternalFunc || externalSymbol != null )
@@ -79,52 +185,9 @@ namespace VisCPU.HL.Compiler.Special
                                        : ( externalSymbol as FunctionData )?.ParameterCount ??
                                          expr.ParameterList.Length;
 
-                if ( expr.ParameterList.Length != targetLength )
-                {
-                    EventManager < ErrorEvent >.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
-                                                              )
-                                                         );
-                }
-
-                if ( expr.Instance != null )
-                {
-                    
-                    compilation.EmitterResult.Emit(
-                                                   $"PUSH",
-                                                   expr.Instance
-                                                  );
-                    
-                }
-
-                foreach ( HlExpression parameter in expr.ParameterList )
-                {
-                    ExpressionTarget arg = compilation.Parse(
-                                                             parameter
-                                                            ).
-                                                       MakeAddress( compilation );
-
-                    compilation.EmitterResult.Emit(
-                                                   $"PUSH",
-                                                   arg.ResultAddress
-                                                  );
-
-                    compilation.ReleaseTempVar( arg.ResultAddress );
-                }
-
-                compilation.EmitterResult.Emit( $"JSR", funcEmit );
-
-                ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVarPop(),
-                                                                   true,
-                                                                   compilation.TypeSystem.GetType(
-                                                                        HLBaseTypeNames.s_UintTypeName
-                                                                       )
-                                                                  );
-
-                return tempReturn;
+                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" );
             }
+
 
 
             if ( compilation.ContainsVariable( target ) ||
@@ -132,7 +195,7 @@ namespace VisCPU.HL.Compiler.Special
             {
                 foreach ( HlExpression parameter in expr.ParameterList )
                 {
-                    ExpressionTarget tt = compilation.Parse( parameter );
+                    ExpressionTarget tt = compilation.Parse( parameter ).MakeAddress(compilation);
 
                     compilation.EmitterResult.Emit(
                                                    $"PUSH",

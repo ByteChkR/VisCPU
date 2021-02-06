@@ -13,6 +13,7 @@
         public static readonly string s_HlMemberDuplicateDef = "hl-member-duplicate-definition";
         public static readonly string s_HlInvalidMemberModifiers = "hl-invalid-member-modifiers";
         public static readonly string s_HlMemberNotFound = "hl-member-not-found";
+        public static readonly string s_HlMemberNotImplemented = "hl-member-not-implemented";
         public static readonly string s_HlTypeDuplicateDef = "hl-type-duplicate-definition";
         public static readonly string s_HlFunctionArgumentMismatch = "hl-function-argument-mismatch";
         public static readonly string s_HlFunctionNotFound = "hl-function-not-found";

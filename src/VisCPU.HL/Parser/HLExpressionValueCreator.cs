@@ -36,7 +36,7 @@ namespace VisCPU.HL.Parser
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HlExpression token = new HlUnaryOp( CreateValue( parser ), t );
+                HlExpression token = new HlUnaryOp(parser.ParseExpr(), t );
 
                 return token;
             }
@@ -172,11 +172,17 @@ namespace VisCPU.HL.Parser
                 FunctionDefinitionToken fToken = ( FunctionDefinitionToken ) parser.CurrentToken;
                 parser.Eat( HlTokenType.OpFunctionDefinition );
 
+                HlExpression[] expressionBlock = null;
+
+                if ( fToken.Mods.All( x => x.Type != HlTokenType.OpAbstractMod ) )
+                {
+                  expressionBlock=  HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
+                                       Parse();
+                }
                 HlExpression token =
                     new HlFuncDefOperand(
                                          fToken,
-                                         HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
-                                                            Parse()
+                                         expressionBlock
                                         );
 
                 return token;

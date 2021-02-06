@@ -19,15 +19,22 @@ namespace VisCPU.HL.TypeSystem
             string name,
             HlTypeDefinition returnType,
             HlTypeDefinition[] parameters,
-            IHlToken[] mods ) : base( name, mods )
+            IHlToken[] mods) : base(name, mods)
         {
             ReturnType = returnType;
             ParameterTypes = parameters;
         }
 
+        public HlFunctionDefinition(
+            string name,
+            IHlToken[] mods) : base(name, mods)
+        {
+            ReturnType = new UIntTypeDefinition();
+        }
+
         public override uint GetSize()
         {
-            return 0;
+            return (IsVirtual|| IsAbstract) ? 1u:0u;
         }
 
         #endregion

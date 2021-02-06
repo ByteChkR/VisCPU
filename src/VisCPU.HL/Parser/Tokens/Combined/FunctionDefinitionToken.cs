@@ -17,6 +17,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         public IHlToken[] Mods { get; }
 
         public HlTypeDefinition Parent { get; }
+        public HlFunctionType Type { get; }
 
         #region Public
 
@@ -27,12 +28,13 @@ namespace VisCPU.HL.Parser.Tokens.Combined
             IHlToken[] mods,
             IHlToken[] subtokens,
             int start,
-            HlTypeDefinition parent=null) : base(
+            HlTypeDefinition parent=null, HlFunctionType type = HlFunctionType.Function) : base(
                                HlTokenType.OpFunctionDefinition,
                                subtokens,
                                start
                               )
         {
+            Type = type;
             Parent = parent;
             FunctionName = name;
             FunctionReturnType = retType;

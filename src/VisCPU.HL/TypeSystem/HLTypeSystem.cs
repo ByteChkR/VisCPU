@@ -24,6 +24,11 @@ namespace VisCPU.HL.TypeSystem
             AddItem( new HlTypeDefinition( "void", true, true) );
         }
 
+        public void Finalize( HlCompilation compilation )
+        {
+            m_DefinedTypes.ForEach( x => x.Finalize( compilation ) );
+        }
+
         public void Import( HlTypeSystem other )
         {
             foreach ( HlTypeDefinition otherDef in other )

@@ -1,23 +1,20 @@
-﻿using VisCPU.HL.Parser;
+﻿using System.Collections.Generic;
+
+using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HlExternalFunctionDefinition: HlMemberDefinition
+    public class HlExternalFunctionDefinition: HlFunctionDefinition
     {
 
         public readonly string TranslatedFunctionName;
-        public HlExternalFunctionDefinition( string name, string translated) : base( name, new []{new HlTextToken(HlTokenType.OpPublicMod, "public",0)} )
+        public HlExternalFunctionDefinition( string name, string translated, List <IHlToken> mods) : base( name, mods.ToArray())
         {
             TranslatedFunctionName = translated;
         }
 
-        public override HlTokenType Type => HlTokenType.OpFunctionDefinition;
-
-        public override uint GetSize()
-        {
-            return 0;
-        }
 
     }
 

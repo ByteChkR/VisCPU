@@ -28,6 +28,7 @@ namespace VisCPU.HL.Parser
         private readonly string m_IsKey = "is";
         private readonly string m_NamespaceKey = "namespace";
         private readonly string m_NewKey = "new";
+        private readonly string m_DeleteKey = "delete";
         private readonly char m_OperatorAnd = '&';
         private readonly char m_OperatorAsterisk = '*';
         private readonly char m_OperatorBackSlash = '\\';
@@ -99,6 +100,7 @@ namespace VisCPU.HL.Parser
                 { m_ContinueKey, HlTokenType.OpContinue },
                 { m_BreakKey, HlTokenType.OpBreak },
                 { m_NewKey, HlTokenType.OpNew },
+                {m_DeleteKey, HlTokenType.OpDelete },
                 { m_BaseKey, HlTokenType.OpBase },
                 { m_ThisKey, HlTokenType.OpThis },
                 { m_PublicModifier, HlTokenType.OpPublicMod },
@@ -123,6 +125,8 @@ namespace VisCPU.HL.Parser
                 { m_ConstModifier, HlTokenType.OpConstMod },
                 { m_StaticModifier, HlTokenType.OpStaticMod },
                 { m_PublicModifier, HlTokenType.OpPublicMod },
+                { m_AbstractModifier, HlTokenType.OpAbstractMod },
+                { m_VirtualModifier, HlTokenType.OpVirtualMod },
                 { m_PrivateModifier, HlTokenType.OpPrivateMod }
             };
 

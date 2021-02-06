@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 
+using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
@@ -20,6 +21,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 
         public string Instance { get; private set; }
         public HlTypeDefinition InstanceType { get; private set; }
+        public HlMemberDefinition MemberDefinition { get; private set; }
 
         /// <summary>
         ///     Invocation Arguments
@@ -45,10 +47,20 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             ParameterList = parameterList;
         }
 
-        public void Redirect( HlExpression left, string instance, HlTypeDefinition instanceType )
+        public void Redirect( string instance, HlTypeDefinition instanceType, HlMemberDefinition memberDef )
         {
-            Left = left;
             InstanceType = instanceType;
+            MemberDefinition = memberDef;
+
+            Left = new HlValueOperand(
+                                      new HlTextToken(
+                                                      HlTokenType.OpWord,
+                                                      InstanceType.GetFinalMemberName(
+                                                           memberDef
+                                                          ), //$"FUN_{tdef.Name}_{tdef.Constructor.Name}",
+                                                      0
+                                                     )
+                                     );
             Instance = instance;
         }
         /// <summary>

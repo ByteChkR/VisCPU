@@ -17,7 +17,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <summary>
         ///     The Child Tokens
         /// </summary>
-        public List < IHlToken > SubTokens { get; }
+        public IHlToken[] SubTokens { get; }
 
         /// <summary>
         ///     Start index in the source
@@ -37,7 +37,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         public List < IHlToken > GetChildren()
         {
-            return SubTokens;
+            return SubTokens?.ToList()??new List < IHlToken >();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         public string GetValue()
         {
-            return Unpack( SubTokens.ToArray() );
+            return Unpack( SubTokens );
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <param name="start">Start index in the source</param>
         protected CombinedToken( HlTokenType type, IHlToken[] subtokens, int start )
         {
-            SubTokens = subtokens.ToList();
+            SubTokens = subtokens;
             SourceIndex = start;
             Type = type;
         }
@@ -82,6 +82,9 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         protected static string Unpack( IHlToken[] t )
         {
+            if ( t == null )
+                return "";
+
             StringBuilder sb = new StringBuilder();
 
             foreach ( IHlToken token in t )

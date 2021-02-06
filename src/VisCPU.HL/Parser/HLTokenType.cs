@@ -72,6 +72,7 @@ namespace VisCPU.HL.Parser
         OpContinue,
         OpBreak,
         OpNew,
+        OpDelete,
         OpBase,
         OpThis,
         OpPublicMod,
