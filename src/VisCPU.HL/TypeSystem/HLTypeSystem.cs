@@ -3,42 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 
 using VisCPU.HL.Events;
+using VisCPU.HL.Namespaces;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.HL.TypeSystem
 {
 
-    public class HlTypeSystem: IEnumerable <HlTypeDefinition>
+    public class HlTypeSystem : IEnumerable < HlTypeDefinition >
     {
 
         private readonly List < HlTypeDefinition > m_DefinedTypes = new List < HlTypeDefinition >();
 
         #region Public
 
-        public HlTypeSystem()
+        private HlTypeSystem()
         {
-            AddItem( new UIntTypeDefinition() );
-            AddItem( new FloatTypeDefinition() );
-            AddItem( new StringTypeDefinition() );
-            AddItem( new HlTypeDefinition( "void", true, true) );
         }
 
-        public void Finalize( HlCompilation compilation )
+        public static HlTypeSystem Create( HlNamespace root )
         {
-            m_DefinedTypes.ForEach( x => x.Finalize( compilation ) );
+            HlTypeSystem ret = new HlTypeSystem();
+            ret.AddItem(new UIntTypeDefinition(root));
+            ret.AddItem(new FloatTypeDefinition(root));
+            ret.AddItem(new StringTypeDefinition(root));
+            ret.AddItem(new HlTypeDefinition(root,"void", true, true));
+
+            return ret;
         }
 
-        public void Import( HlTypeSystem other )
-        {
-            foreach ( HlTypeDefinition otherDef in other )
-            {
-                if ( otherDef.IsPublic && !HasType( otherDef.Name ) )
-                    AddItem( otherDef );
-            }
-        }
-
-        public HlTypeDefinition CreateEmptyType( string name, bool isPublic, bool isValueType )
+        public HlTypeDefinition CreateEmptyType(HlNamespace ns, string name, bool isPublic, bool isValueType )
         {
             if ( m_DefinedTypes.Any( x => x.Name == name ) )
             {
@@ -47,26 +41,48 @@ namespace VisCPU.HL.TypeSystem
                 return null;
             }
 
-            HlTypeDefinition def = new HlTypeDefinition( name, isPublic, isValueType);
+            HlTypeDefinition def = new HlTypeDefinition(ns, name, isPublic, isValueType );
 
             AddItem( def );
 
             return def;
         }
 
-        public HlTypeDefinition GetOrAdd( string name, bool isPublic, bool isValueType)
+        public void Finalize( HlCompilation compilation )
         {
-            return m_DefinedTypes.FirstOrDefault( x => x.Name == name ) ?? CreateEmptyType( name, isPublic, isValueType);
+            m_DefinedTypes.ForEach( x => x.Finalize( compilation ) );
         }
 
-        public HlTypeDefinition GetType( string name )
+        public IEnumerator < HlTypeDefinition > GetEnumerator()
         {
-            return m_DefinedTypes.First( x => x.Name == name );
+            return m_DefinedTypes.GetEnumerator();
         }
 
-        public bool HasType( string name )
+        //public HlTypeDefinition GetOrAdd(HlNamespace ns, string name, bool isPublic, bool isValueType )
+        //{
+        //    return m_DefinedTypes.FirstOrDefault( x => x.Name == name) ??
+        //           CreateEmptyType(ns, name, isPublic, isValueType );
+        //}
+
+        public HlTypeDefinition GetType(HlNamespace caller, string name )
         {
-            return m_DefinedTypes.Any( x => x.Name == name );
+            return m_DefinedTypes.First( x => x.Name == name && x.Namespace.IsVisibleTo(caller));
+        }
+
+        public bool HasType(HlNamespace caller, string name )
+        {
+            return m_DefinedTypes.Any( x => x.Name == name && x.Namespace.IsVisibleTo(caller) );
+        }
+
+        public void Import(HlNamespace caller, HlTypeSystem other )
+        {
+            foreach ( HlTypeDefinition otherDef in other )
+            {
+                if ( otherDef.IsPublic && !HasType(caller, otherDef.Name ) )
+                {
+                    AddItem( otherDef );
+                }
+            }
         }
 
         #endregion
@@ -78,17 +94,12 @@ namespace VisCPU.HL.TypeSystem
             m_DefinedTypes.Add( def );
         }
 
-        #endregion
-
-        public IEnumerator < HlTypeDefinition > GetEnumerator()
-        {
-            return m_DefinedTypes.GetEnumerator();
-        }
-
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ( ( IEnumerable ) m_DefinedTypes ).GetEnumerator();
         }
+
+        #endregion
 
     }
 

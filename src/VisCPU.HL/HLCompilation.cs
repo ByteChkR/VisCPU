@@ -10,6 +10,7 @@ using VisCPU.HL.Events;
 using VisCPU.HL.Importer;
 using VisCPU.HL.Importer.Events;
 using VisCPU.HL.Lifetime;
+using VisCPU.HL.Namespaces;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
@@ -30,19 +31,38 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.HL
 {
 
-    public enum HlFunctionType
+    public static class HlCompilerCache
     {
 
-        Constructor,
-        Function,
-        Destructor
+        private static readonly Dictionary < string, HlCompilation > m_Compilations =
+            new Dictionary < string, HlCompilation >();
+
+        #region Public
+
+        public static void Add( string src, HlCompilation comp )
+        {
+            m_Compilations[src] = comp;
+        }
+
+        public static HlCompilation Get( string src )
+        {
+            return m_Compilations[src];
+        }
+
+        public static bool HasCached( string src )
+        {
+            return m_Compilations.ContainsKey( src );
+        }
+
+        #endregion
 
     }
 
     public class HlCompilation : VisBase
     {
 
-        public readonly HlTypeSystem TypeSystem = new HlTypeSystem();
+        public readonly HlTypeSystem TypeSystem;
+        public readonly HlNamespace Root = new RootNamespace();
 
         internal readonly Scope < ConstantValueItem > ConstValTypes =
             new Scope < ConstantValueItem >();
@@ -104,23 +124,37 @@ namespace VisCPU.HL
         {
         }
 
-        public HlCompilation( string originalText, string directory, BuildDataStore dataStore )
+        public HlCompilation(
+            string originalText,
+            string directory,
+            BuildDataStore dataStore,
+            HlNamespace root = null )
         {
+            if ( root != null )
+            {
+                Root = root;
+            }
+
             m_DataStore = dataStore;
             OriginalText = originalText;
             m_Directory = directory;
+
+            TypeSystem = HlTypeSystem.Create( Root );
             TypeMap = new HlCompilerCollection( TypeSystem );
         }
 
-        public HlCompilation( HlCompilation parent, string id )
+        public HlCompilation( HlCompilation parent, string id, HlNamespace root = null )
         {
+            Root = root ?? parent.Root;
+            TypeSystem = parent.TypeSystem;
             m_DataStore = parent.m_DataStore;
             OriginalText = parent.OriginalText;
             m_Directory = parent.m_Directory;
             m_VariableMap = new Scope < VariableData >( parent.m_VariableMap, id );
             ConstValTypes = new Scope < ConstantValueItem >( parent.ConstValTypes, id );
             FunctionMap = new Scope < FunctionData >( parent.FunctionMap, id );
-            m_IncludedFiles = new List < string >( parent.m_IncludedFiles );
+
+            //m_IncludedFiles = new List < string >( parent.m_IncludedFiles );
             TypeSystem = parent.TypeSystem;
             m_Parent = parent;
             TypeMap = new HlCompilerCollection( TypeSystem );
@@ -246,16 +280,14 @@ namespace VisCPU.HL
             tokens = tokens.Where( x => x.Type != HlTokenType.OpNewLine ).ToList();
             ParseVarDefToken( tokens, hlpS );
             ParseBlocks( tokens );
-
-            ParseFunctionToken( tokens, hlpS );
-
-            ParseTypeDefinitions( TypeSystem, hlpS, tokens );
-
-            HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( tokens ) );
             ProcessImports();
             ParseDependencies();
-
+            ParseFunctionToken( tokens, hlpS );
+            ParseNamespaces( Root, tokens );
+            ParseTypeDefinitions( TypeSystem, hlpS, tokens, Root );
             TypeSystem.Finalize( this );
+
+            HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( tokens ) );
 
             return Parse( p.Parse(), printHead, appendAfterProg );
         }
@@ -506,8 +538,11 @@ namespace VisCPU.HL
                         int start = funcIdx;
                         int end = i;
                         IHlToken block = tokens[i];
-                        if(block.Type== HlTokenType.OpSemicolon)
+
+                        if ( block.Type == HlTokenType.OpSemicolon )
+                        {
                             continue;
+                        }
 
                         tokens.RemoveRange( start, end - start );
 
@@ -557,6 +592,53 @@ namespace VisCPU.HL
                         m_IncludedFiles.Add( c ?? tokens[i + 2].ToString() );
                         tokens.RemoveRange( i, 3 );
                     }
+                }
+            }
+        }
+
+        public void ParseNamespaces( HlNamespace root, List < IHlToken > tokens )
+        {
+            for ( int i = tokens.Count - 1; i >= 0; i-- )
+            {
+                if ( tokens[i].Type == HlTokenType.OpBlockToken )
+                {
+                    if ( i == 0 )
+                    {
+                        continue;
+                    }
+
+                    int nsIndex = tokens.FindLastIndex( i - 1, x => x.Type == HlTokenType.OpNamespace );
+
+                    if ( nsIndex == -1 )
+                    {
+                        continue;
+                    }
+
+                    int read = HlParsingTools.ReadList(
+                                                       tokens,
+                                                       i - 1,
+                                                       HlTokenType.OpWord,
+                                                       HlTokenType.OpNamespaceSeparator,
+                                                       out IHlToken[] nameParts
+                                                      );
+
+                    if ( nsIndex != i - 1 - read )
+                    {
+                        continue;
+                    }
+
+                    HlNamespace ns = root.AddRecursive( nameParts.Select( x => x.ToString() ).ToArray() );
+
+                    int start = tokens[i - 1 - read].SourceIndex;
+                    IHlToken block = tokens[i];
+                    tokens.RemoveRange( i - 1 - read, read + 2 );
+
+                    tokens.Insert(
+                                  i - 1 - read,
+                                  new NamespaceDefinitionToken( ns, block.GetChildren().ToArray(), start )
+                                 );
+
+                    i = i - 2 - read;
                 }
             }
         }
@@ -841,7 +923,6 @@ namespace VisCPU.HL
             HlTypeDefinition tdef,
             HlFuncDefOperand fdef )
         {
-            compilation.Log( $"Importing Function: {funcName}" );
 
             if ( !isStatic || type != HlFunctionType.Function )
             {
@@ -865,7 +946,10 @@ namespace VisCPU.HL
                 subCompilation.CreateVariable(
                                               key,
                                               1,
-                                              compilation.TypeSystem.GetType( vdef.TypeName.ToString() ),
+                                              compilation.TypeSystem.GetType(
+                                                                             compilation.Root,
+                                                                             vdef.TypeName.ToString()
+                                                                            ),
                                               false,
                                               false
                                              );
@@ -1005,7 +1089,7 @@ namespace VisCPU.HL
                                                       name,
                                                       name,
                                                       1,
-                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
                                                       false,
                                                       false
                                                      )
@@ -1032,7 +1116,7 @@ namespace VisCPU.HL
                                                       name,
                                                       name,
                                                       1,
-                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
                                                       false,
                                                       false
                                                      )
@@ -1059,7 +1143,7 @@ namespace VisCPU.HL
                                                       name,
                                                       name,
                                                       1,
-                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
                                                       false,
                                                       false
                                                      )
@@ -1086,7 +1170,7 @@ namespace VisCPU.HL
                                                       name,
                                                       name,
                                                       1,
-                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
                                                       false,
                                                       false
                                                      )
@@ -1113,7 +1197,7 @@ namespace VisCPU.HL
                                                       name,
                                                       name,
                                                       1,
-                                                      TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ),
+                                                      TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
                                                       false,
                                                       false
                                                      )
@@ -1122,8 +1206,6 @@ namespace VisCPU.HL
 
         private void ParseDependencies()
         {
-            ExpressionParser exP = new ExpressionParser();
-
             for ( int i = 0; i < m_IncludedFiles.Count; i++ )
             {
                 string includedFile = m_IncludedFiles[i];
@@ -1135,7 +1217,6 @@ namespace VisCPU.HL
 
                 if ( includedFile.EndsWith( ".vhl" ) )
                 {
-                    Log( $"Importing File: {includedFile}" );
 
                     string name = Path.GetFullPath(
                                                    includedFile.StartsWith( m_Directory )
@@ -1148,8 +1229,7 @@ namespace VisCPU.HL
                     UriKind kind = includedFile.StartsWith( "/" ) || includedFile.StartsWith( "\\" )
                                        ? UriKind.Absolute
                                        : UriKind.RelativeOrAbsolute;
-
-                    Log( "Detected Uri Kind: {0}", kind );
+                    
                     Uri import = null;
 
                     if ( kind == UriKind.Absolute )
@@ -1165,24 +1245,34 @@ namespace VisCPU.HL
 
                     if ( import.IsAbsoluteUri )
                     {
-                        Log( $"Relative Base Path: {dir.OriginalString}" );
                         name = dir.MakeRelativeUri( import ).OriginalString;
                         name = name.Remove( name.Length - 4, 4 );
-                        Log( $"Fixed Path to File: {includedFile} => {name}" );
                     }
 
                     string newInclude = m_DataStore.GetStorePath( "HL2VASM", name );
                     string file = Path.GetFullPath( name + ".vhl" );
+                    string srcContent = File.ReadAllText(file);
 
-                    HlCompilation comp = exP.Parse(
-                                                   File.ReadAllText( file ),
-                                                   Path.GetDirectoryName( file ),
-                                                   m_DataStore
-                                                  );
+                    HlCompilation comp = null;
+                    bool cached = false;
 
-                    File.WriteAllText( newInclude, comp.Parse() );
+                    if ( File.Exists( newInclude ) && HlCompilerCache.HasCached( srcContent ) )
+                    {
+                        comp = HlCompilerCache.Get( srcContent );
+                        cached = true;
+                    }
+                    else
+                    {
+                        comp = new HlCompilation(
+                                                 srcContent,
+                                                 Path.GetDirectoryName( file ),
+                                                 m_DataStore
+                                                );
 
-                    TypeSystem.Import( comp.TypeSystem );
+                        File.WriteAllText( newInclude, comp.Parse() );
+                    }
+
+                    TypeSystem.Import( Root, comp.TypeSystem );
 
                     externalSymbols.AddRange(
                                              comp.ConstValTypes.Where( x => x.Value.IsPublic ).
@@ -1192,6 +1282,7 @@ namespace VisCPU.HL
                                                                                x.Key,
                                                                                x.Value.Value,
                                                                                TypeSystem.GetType(
+                                                                                    Root,
                                                                                     HLBaseTypeNames.s_UintTypeName
                                                                                    ),
                                                                                true
@@ -1200,10 +1291,40 @@ namespace VisCPU.HL
                                                   Cast < IExternalData >()
                                             );
 
-                    externalSymbols.AddRange( comp.FunctionMap.Where( x => x.Value.Public ).Select( x => x.Value ) );
-                    externalSymbols.AddRange( comp.ExternalSymbols );
+                    externalSymbols.AddRange(
+                                             comp.FunctionMap.
+                                                  Where(
+                                                        x => x.Value.Public &&
+                                                             externalSymbols.All(
+                                                                  y => y.GetFinalName() != x.Value.GetFinalName()
+                                                                 )
+                                                       ).
+                                                  Select( x => x.Value )
+                                            );
+
+                    externalSymbols.AddRange(
+                                             comp.externalSymbols.Where(
+                                                                        x => externalSymbols.All(
+                                                                             y => y.GetFinalName() != x.GetFinalName()
+                                                                            )
+                                                                       )
+                                            );
 
                     includedFile = newInclude;
+
+                    foreach ( string compIncludedFile in comp.m_IncludedFiles )
+                    {
+                        if ( !m_IncludedFiles.Contains( compIncludedFile ) )
+                        {
+                            m_IncludedFiles.Insert( 0, compIncludedFile );
+                            i++;
+                        }
+                    }
+
+                    if ( !cached )
+                    {
+                        HlCompilerCache.Add( srcContent, comp );
+                    }
                 }
 
                 OnCompiledIncludedScript?.Invoke(
@@ -1246,11 +1367,12 @@ namespace VisCPU.HL
             {
                 if ( hlToken is HlVarDefOperand t )
                 {
-                    HlTypeDefinition tt = ts.GetType( t.VariableDefinition.TypeName.ToString() );
+                    HlTypeDefinition tt = ts.GetType( Root, t.VariableDefinition.TypeName.ToString() );
 
                     if ( t.VariableDefinition.Size != null )
                     {
                         tt = new ArrayTypeDefintion(
+                                                    Root,
                                                     tt,
                                                     t.VariableDefinition.Size.ToString().ParseUInt()
                                                    );
@@ -1270,6 +1392,7 @@ namespace VisCPU.HL
                                                                             fdef.FunctionDefinition.FunctionName.
                                                                                 ToString(),
                                                                             ts.GetType(
+                                                                                 Root,
                                                                                  fdef.FunctionDefinition.
                                                                                      FunctionReturnType.
                                                                                      ToString()
@@ -1277,6 +1400,7 @@ namespace VisCPU.HL
                                                                             fdef.FunctionDefinition.Arguments.
                                                                                 Select(
                                                                                      x => ts.GetType(
+                                                                                          Root,
                                                                                           x.GetChildren().
                                                                                               First().
                                                                                               ToString()
@@ -1293,7 +1417,7 @@ namespace VisCPU.HL
                     string funcName =
                         tdef.GetFinalMemberName( funcDef ); //$"FUN_{tdef.Name}_{fdef.FunctionDefinition.FunctionName}";
 
-                    HlCompilation fComp = new HlCompilation( this, funcName );
+                    HlCompilation fComp = new HlCompilation( this, funcName, tdef.Namespace );
 
                     bool isStatic = fdef.FunctionDefinition.Mods.Any(
                                                                      x => x.Type == HlTokenType.OpStaticMod
@@ -1344,14 +1468,38 @@ namespace VisCPU.HL
             }
         }
 
-        private void ParseTypeDefinitions( HlTypeSystem ts, HlParserSettings settings, List < IHlToken > tokens )
+        private void ParseTypeDefinitions(
+            HlTypeSystem ts,
+            HlParserSettings settings,
+            List < IHlToken > tokens,
+            HlNamespace current )
         {
             for ( int i = tokens.Count - 1; i >= 0; i-- )
             {
-                if ( tokens[i].Type == HlTokenType.OpBlockToken ||
-                     tokens[i].Type == HlTokenType.OpNamespaceDefinition )
+                if ( i >= tokens.Count )
                 {
-                    ParseTypeDefinitions( ts, settings, tokens[i].GetChildren() );
+                    continue;
+                }
+
+                if ( tokens[i].Type == HlTokenType.OpBlockToken )
+                {
+                    ParseTypeDefinitions( ts, settings, tokens[i].GetChildren(), current );
+
+                    continue;
+                }
+
+                if ( tokens[i].Type == HlTokenType.OpNamespaceDefinition )
+                {
+                    ParseTypeDefinitions(
+                                         ts,
+                                         settings,
+                                         tokens[i].GetChildren(),
+                                         ( tokens[i] as NamespaceDefinitionToken ).Namespace
+                                        );
+
+                    tokens.RemoveAt( i );
+
+                    continue;
                 }
 
                 if ( tokens[i].Type == HlTokenType.OpClass )
@@ -1399,7 +1547,13 @@ namespace VisCPU.HL
                     int end = i + offset + 1;
                     tokens.RemoveRange( start, end - start );
 
+                    if ( m_Parent != null && m_Parent.TypeSystem.HasType( Root, name.ToString() ) )
+                    {
+                        continue;
+                    }
+
                     HlTypeDefinition def = ts.CreateEmptyType(
+                                                              current,
                                                               name.ToString(),
                                                               mods.Any( x => x.Type == HlTokenType.OpPublicMod ),
                                                               classType.ToString() == "struct"

@@ -20,6 +20,7 @@
 	<ItemGroup>
 		<Folder Include="Compiler\Math\Assignments\" />
 		<Folder Include="Lifetime\" />
+		<Folder Include="Namespaces\" />
 	</ItemGroup>
 
 </Project>

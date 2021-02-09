@@ -31,7 +31,7 @@ namespace VisCPU.HL.Compiler.Variables
                 return new ExpressionTarget(
                                             expr.Value.ToString(),
                                             true,
-                                            compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
+                                            compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName )
                                            ).
                     CopyIfNotNull( compilation, outputTarget );
             }
@@ -59,9 +59,9 @@ namespace VisCPU.HL.Compiler.Variables
                 return new ExpressionTarget( varAddr, true, null );
             }
 
-            if ( compilation.TypeSystem.HasType( expr.Value.ToString() ) )
+            if ( compilation.TypeSystem.HasType(compilation.Root, expr.Value.ToString() ) )
             {
-                HlTypeDefinition tdef = compilation.TypeSystem.GetType( expr.Value.ToString() );
+                HlTypeDefinition tdef = compilation.TypeSystem.GetType(compilation.Root, expr.Value.ToString() );
 
                 return new ExpressionTarget( "%%TYPE%%", false, tdef, false );
             }

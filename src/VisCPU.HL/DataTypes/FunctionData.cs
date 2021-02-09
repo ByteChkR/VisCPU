@@ -16,6 +16,7 @@ namespace VisCPU.HL.DataTypes
         public string ReturnType { get; }
 
         public bool Public { get; }
+
         public bool Static { get; }
 
         public ExternalDataType DataType => ExternalDataType.Function;

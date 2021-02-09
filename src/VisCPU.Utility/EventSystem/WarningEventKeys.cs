@@ -18,6 +18,7 @@
         public static readonly string s_LinkerDuplicateItem = "linker-duplicate-item";
 
         public static readonly string s_InvertInvalidEvent = "hl-compiler-invalid-unary-minus";
+        public static readonly string s_StaticInstanceMemberAccess = "hl-compiler-static-instance-member-access";
 
     }
 

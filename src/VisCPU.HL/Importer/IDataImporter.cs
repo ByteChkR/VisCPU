@@ -6,7 +6,7 @@ namespace VisCPU.HL.Importer
     public interface IDataImporter : IImporter
     {
 
-        IExternalData[] ProcessImport(HlCompilation compilation, string input );
+        IExternalData[] ProcessImport( HlCompilation compilation, string input );
 
     }
 

@@ -69,21 +69,7 @@ namespace VisCPU.Compiler.Implementations
                     exportedItems++;
                 }
             }
-
-            Log(
-                "Hidden Items: {0}",
-                hiddenItems
-               );
-
-            Log(
-                "Duplicated Items: {0}",
-                duplicatedItems
-               );
-
-            Log(
-                "Exported Items: {0}",
-                exportedItems
-               );
+            
         }
 
         private void PerformLinking( LinkerResult result, List < LinkerTarget > references, bool enableHide )

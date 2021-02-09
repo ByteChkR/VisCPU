@@ -68,6 +68,7 @@ namespace VisCPU.HL.Parser
         OpFinally,
         OpUsing,
         OpNamespace,
+        OpNamespaceSeparator,
         OpClass,
         OpContinue,
         OpBreak,

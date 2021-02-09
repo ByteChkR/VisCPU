@@ -16,23 +16,23 @@ namespace VisCPU.HL.Compiler
         public readonly string ResultAddress;
         public readonly bool IsAddress;
 
-        public  readonly bool IsPointer;
+        public readonly bool IsPointer;
         public readonly HlTypeDefinition TypeDefinition;
 
         public ExpressionTarget( string resultAddress, bool isAddress, HlTypeDefinition def )
             : this(
-             resultAddress,
-             isAddress,
-             def,
-             false
-            )
+                   resultAddress,
+                   isAddress,
+                   def,
+                   false
+                  )
         {
             //ResultAddress = resultAddress;
             //IsAddress = isAddress;
             //TypeDefinition = def;
         }
 
-        public ExpressionTarget(string resultAddress, bool isAddress, HlTypeDefinition def, bool isPointer)
+        public ExpressionTarget( string resultAddress, bool isAddress, HlTypeDefinition def, bool isPointer )
         {
             ResultAddress = resultAddress;
             IsAddress = isAddress;
@@ -75,15 +75,15 @@ namespace VisCPU.HL.Compiler
             return new ExpressionTarget( ResultAddress, isAddress, TypeDefinition );
         }
 
-        public ExpressionTarget Dereference(HlCompilation c)
+        public ExpressionTarget Dereference( HlCompilation c )
         {
-            if (!IsPointer)
+            if ( !IsPointer )
             {
                 return this;
             }
 
             ExpressionTarget tmpVal = new ExpressionTarget(
-                                                           c.GetTempVarDref(ResultAddress),
+                                                           c.GetTempVarDref( ResultAddress ),
                                                            true,
                                                            TypeDefinition
                                                           );

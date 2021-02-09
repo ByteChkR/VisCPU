@@ -113,7 +113,7 @@ namespace VisCPU.Integration
             return target;
         }
 
-        IExternalData[] IDataImporter.ProcessImport(HlCompilation compilation,  string input )
+        IExternalData[] IDataImporter.ProcessImport( HlCompilation compilation, string input )
         {
             string name = input.Remove( 0, "api-integration ".Length );
             KeyValuePair < uint, FunctionData > api = m_ExposedApis.First( x => x.Value.GetFinalName() == name );

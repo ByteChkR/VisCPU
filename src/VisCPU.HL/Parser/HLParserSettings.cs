@@ -100,7 +100,7 @@ namespace VisCPU.HL.Parser
                 { m_ContinueKey, HlTokenType.OpContinue },
                 { m_BreakKey, HlTokenType.OpBreak },
                 { m_NewKey, HlTokenType.OpNew },
-                {m_DeleteKey, HlTokenType.OpDelete },
+                { m_DeleteKey, HlTokenType.OpDelete },
                 { m_BaseKey, HlTokenType.OpBase },
                 { m_ThisKey, HlTokenType.OpThis },
                 { m_PublicModifier, HlTokenType.OpPublicMod },
@@ -127,6 +127,7 @@ namespace VisCPU.HL.Parser
                 { m_PublicModifier, HlTokenType.OpPublicMod },
                 { m_AbstractModifier, HlTokenType.OpAbstractMod },
                 { m_VirtualModifier, HlTokenType.OpVirtualMod },
+                { m_OverrideModifier, HlTokenType.OpOverrideMod },
                 { m_PrivateModifier, HlTokenType.OpPrivateMod }
             };
 

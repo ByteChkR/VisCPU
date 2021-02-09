@@ -25,7 +25,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             }
 
             return compilation.Parse( expr.ParameterList[0] ).
-                               Cast( compilation.TypeSystem.GetType( expr.ParameterList[1].ToString() ) );
+                               Cast( compilation.TypeSystem.GetType(compilation.Root, expr.ParameterList[1].ToString() ) );
         }
 
         #endregion

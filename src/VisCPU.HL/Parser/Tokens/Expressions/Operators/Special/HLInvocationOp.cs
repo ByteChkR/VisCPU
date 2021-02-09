@@ -20,7 +20,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public HlExpression Left { get; private set; }
 
         public string Instance { get; private set; }
+
         public HlTypeDefinition InstanceType { get; private set; }
+
         public HlMemberDefinition MemberDefinition { get; private set; }
 
         /// <summary>
@@ -47,22 +49,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             ParameterList = parameterList;
         }
 
-        public void Redirect( string instance, HlTypeDefinition instanceType, HlMemberDefinition memberDef )
-        {
-            InstanceType = instanceType;
-            MemberDefinition = memberDef;
-
-            Left = new HlValueOperand(
-                                      new HlTextToken(
-                                                      HlTokenType.OpWord,
-                                                      InstanceType.GetFinalMemberName(
-                                                           memberDef
-                                                          ), //$"FUN_{tdef.Name}_{tdef.Constructor.Name}",
-                                                      0
-                                                     )
-                                     );
-            Instance = instance;
-        }
         /// <summary>
         ///     Returns Child Tokens of this Token
         /// </summary>
@@ -75,6 +61,25 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override bool IsStatic()
         {
             return false;
+        }
+
+        public void Redirect( string instance, HlTypeDefinition instanceType, HlMemberDefinition memberDef )
+        {
+            InstanceType = instanceType;
+            MemberDefinition = memberDef;
+
+            if(memberDef!=null)
+            Left = new HlValueOperand(
+                                      new HlTextToken(
+                                                      HlTokenType.OpWord,
+                                                      InstanceType.GetFinalMemberName(
+                                                           memberDef
+                                                          ), //$"FUN_{tdef.Name}_{tdef.Constructor.Name}",
+                                                      0
+                                                     )
+                                     );
+
+            Instance = instance;
         }
 
         public override string ToString()

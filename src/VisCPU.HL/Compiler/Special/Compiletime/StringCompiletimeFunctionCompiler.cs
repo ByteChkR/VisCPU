@@ -37,14 +37,15 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             compilation.CreateVariable(
                                        varName,
                                        content,
-                                       compilation.TypeSystem.GetType( HLBaseTypeNames.s_StringTypeName ),
-                                       false, false
+                                       compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_StringTypeName ),
+                                       false,
+                                       false
                                       );
 
             return new ExpressionTarget(
                                         compilation.GetFinalName( varName ),
                                         true,
-                                        compilation.TypeSystem.GetType( HLBaseTypeNames.s_StringTypeName)
+                                        compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_StringTypeName )
                                        );
         }
 

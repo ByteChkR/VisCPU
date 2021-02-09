@@ -37,7 +37,7 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         /// <returns></returns>
         public List < IHlToken > GetChildren()
         {
-            return SubTokens?.ToList()??new List < IHlToken >();
+            return SubTokens?.ToList() ?? new List < IHlToken >();
         }
 
         /// <summary>
@@ -83,7 +83,9 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         protected static string Unpack( IHlToken[] t )
         {
             if ( t == null )
+            {
                 return "";
+            }
 
             StringBuilder sb = new StringBuilder();
 

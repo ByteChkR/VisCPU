@@ -52,7 +52,7 @@ namespace VisCPU.HL.Compiler.Logic
                                                                            rTarget.ResultAddress
                                                                           ),
                                                                       true,
-                                                                      compilation.TypeSystem.GetType(
+                                                                      compilation.TypeSystem.GetType( compilation.Root,
                                                                            HLBaseTypeNames.s_UintTypeName
                                                                           )
                                                                      );
@@ -75,7 +75,7 @@ namespace VisCPU.HL.Compiler.Logic
                                                                            target.ResultAddress
                                                                           ),
                                                                       true,
-                                                                      compilation.TypeSystem.GetType(
+                                                                      compilation.TypeSystem.GetType(compilation.Root,
                                                                            HLBaseTypeNames.s_UintTypeName
                                                                           )
                                                                      );

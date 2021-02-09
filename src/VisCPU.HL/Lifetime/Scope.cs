@@ -27,20 +27,20 @@ namespace VisCPU.HL.Lifetime
         {
             m_Parent = parent;
         }
-        
+
         public bool Contains( string key )
         {
-            return m_Data.ContainsKey(  key  ) || m_Parent != null && m_Parent.Contains( key );
+            return m_Data.ContainsKey( key ) || m_Parent != null && m_Parent.Contains( key );
         }
 
         public bool ContainsLocal( string key )
         {
-            return m_Data.ContainsKey(key);
+            return m_Data.ContainsKey( key );
         }
 
         public V Get( string key )
         {
-            if ( m_Data.ContainsKey(key) )
+            if ( m_Data.ContainsKey( key ) )
             {
                 return m_Data[key];
             }
@@ -62,6 +62,11 @@ namespace VisCPU.HL.Lifetime
             return m_Data.GetEnumerator();
         }
 
+        public IEnumerable < KeyValuePair < string, V > > GetFinalEnumerator()
+        {
+            return m_Data.Select( x => new KeyValuePair < string, V >( GetFinalName( x.Key ), x.Value ) );
+        }
+
         public string GetFinalName( string name )
         {
             return GetPrefix() + name;
@@ -69,15 +74,12 @@ namespace VisCPU.HL.Lifetime
 
         public V Set( string key, V value )
         {
-            return  m_Data[key] = value;
+            return m_Data[key] = value;
         }
 
         #endregion
 
         #region Private
-
-        public IEnumerable< KeyValuePair < string, V > > GetFinalEnumerator() =>
-            m_Data.Select( x => new KeyValuePair < string, V >( GetFinalName( x.Key ), x.Value ) );
 
         IEnumerator IEnumerable.GetEnumerator()
         {

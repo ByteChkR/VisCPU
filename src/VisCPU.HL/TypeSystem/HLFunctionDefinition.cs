@@ -1,5 +1,7 @@
-﻿using VisCPU.HL.Parser;
+﻿using VisCPU.HL.Namespaces;
+using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.TypeSystem
 {
@@ -19,22 +21,24 @@ namespace VisCPU.HL.TypeSystem
             string name,
             HlTypeDefinition returnType,
             HlTypeDefinition[] parameters,
-            IHlToken[] mods) : base(name, mods)
+            IHlToken[] mods ) : base( name, mods )
         {
             ReturnType = returnType;
             ParameterTypes = parameters;
         }
 
         public HlFunctionDefinition(
+            HlTypeSystem ts,
+            HlNamespace root,
             string name,
-            IHlToken[] mods) : base(name, mods)
+            IHlToken[] mods ) : base( name, mods )
         {
-            ReturnType = new UIntTypeDefinition();
+            ReturnType = ts.GetType(root, HLBaseTypeNames.s_UintTypeName );
         }
 
         public override uint GetSize()
         {
-            return (IsVirtual|| IsAbstract) ? 1u:0u;
+            return IsVirtual || IsAbstract ? 1u : 0u;
         }
 
         #endregion

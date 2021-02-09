@@ -21,7 +21,6 @@ namespace VisCPU.Instructions.Emit
             m_Store.Clear();
         }
 
-
         public void Emit( string instructionKey, params string[] arguments )
         {
             m_Store.Add( m_Emitter.Emit( instructionKey, arguments ) );
@@ -32,24 +31,24 @@ namespace VisCPU.Instructions.Emit
             return m_Store.ToArray();
         }
 
-        public void Store(T data)
+        public void Store( T data )
         {
-            m_Store.Add(data);
+            m_Store.Add( data );
         }
 
-        public void Store(T data, int index)
+        public void Store( T data, int index )
         {
-            m_Store.Insert(index, data);
+            m_Store.Insert( index, data );
         }
 
-        public void Store(IEnumerable <T> data)
+        public void Store( IEnumerable < T > data )
         {
             m_Store.AddRange( data );
         }
 
-        public void Store(IEnumerable<T> data, int index)
+        public void Store( IEnumerable < T > data, int index )
         {
-            m_Store.InsertRange(index, data);
+            m_Store.InsertRange( index, data );
         }
 
         #endregion

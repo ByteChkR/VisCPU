@@ -1,4 +1,5 @@
-﻿using VisCPU.Utility.SharedBase;
+﻿using VisCPU.HL.Namespaces;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.TypeSystem
 {
@@ -8,7 +9,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public FloatTypeDefinition() : base( HLBaseTypeNames.s_FloatTypeName, true, true )
+        public FloatTypeDefinition(HlNamespace root) : base(root, HLBaseTypeNames.s_FloatTypeName, true, true )
         {
         }
 

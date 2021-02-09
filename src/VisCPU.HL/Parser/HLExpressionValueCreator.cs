@@ -9,7 +9,6 @@ using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
-using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.Parser
 {
@@ -27,7 +26,7 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="parser">The Parser</param>
         /// <returns>Parsed Expression</returns>
-        public HlExpression CreateValue( HlExpressionParser parser )
+        public HlExpression CreateValue( HlExpressionParser parser, uint maxPrecedence )
         {
             if ( parser.CurrentToken.Type == HlTokenType.OpBang ||
                  parser.CurrentToken.Type == HlTokenType.OpTilde ||
@@ -36,7 +35,7 @@ namespace VisCPU.HL.Parser
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HlExpression token = new HlUnaryOp(parser.ParseExpr(), t );
+                HlExpression token = new HlUnaryOp( parser.ParseExpr(), t );
 
                 return token;
             }
@@ -45,7 +44,7 @@ namespace VisCPU.HL.Parser
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HlExpression token = new HlUnaryOp(parser.ParseExpr(2), HlTokenType.OpReference );
+                HlExpression token = new HlUnaryOp( parser.ParseExpr( 2 ), HlTokenType.OpReference );
 
                 return token;
             }
@@ -54,15 +53,15 @@ namespace VisCPU.HL.Parser
             {
                 HlTokenType t = parser.CurrentToken.Type;
                 parser.Eat( t );
-                HlExpression token = new HlUnaryOp(parser.ParseExpr(2), HlTokenType.OpDeReference );
+                HlExpression token = new HlUnaryOp( parser.ParseExpr( 2 ), HlTokenType.OpDeReference );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HlTokenType.OpNew )
+            if ( parser.CurrentToken.Type == HlTokenType.OpNew && maxPrecedence >= 3)
             {
                 parser.Eat( parser.CurrentToken.Type );
-                HlExpression token = new HlUnaryOp( parser.ParseExpr(), HlTokenType.OpNew );
+                HlExpression token = new HlUnaryOp( parser.ParseExpr(2), HlTokenType.OpNew );
 
                 return token;
             }
@@ -133,7 +132,7 @@ namespace VisCPU.HL.Parser
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HlTokenType.OpWord )
+            if ( parser.CurrentToken.Type == HlTokenType.OpWord || parser.CurrentToken.Type == HlTokenType.OpNew)
             {
                 IHlToken item = parser.CurrentToken;
                 parser.Eat( parser.CurrentToken.Type );
@@ -176,9 +175,10 @@ namespace VisCPU.HL.Parser
 
                 if ( fToken.Mods.All( x => x.Type != HlTokenType.OpAbstractMod ) )
                 {
-                  expressionBlock=  HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
-                                       Parse();
+                    expressionBlock = HlExpressionParser.Create( new HlExpressionReader( fToken.Block.ToList() ) ).
+                                                         Parse();
                 }
+
                 HlExpression token =
                     new HlFuncDefOperand(
                                          fToken,

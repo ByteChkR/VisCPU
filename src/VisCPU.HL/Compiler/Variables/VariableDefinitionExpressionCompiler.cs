@@ -36,12 +36,12 @@ namespace VisCPU.HL.Compiler.Variables
                     EventManager < ErrorEvent >.SendEvent( new DuplicateVarDefinitionEvent( asmVarName ) );
                 }
 
-                HlTypeDefinition vdef = m_TypeSystem.GetType( expr.VariableDefinition.TypeName.ToString() );
+                HlTypeDefinition vdef = m_TypeSystem.GetType(compilation.Root, expr.VariableDefinition.TypeName.ToString() );
                 uint arrSize = expr.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
 
                 if ( arrSize != 1 )
                 {
-                    vdef = new ArrayTypeDefintion( vdef, arrSize );
+                    vdef = new ArrayTypeDefintion(compilation.Root, vdef, arrSize );
                 }
 
                 compilation.CreateVariable(
@@ -50,7 +50,8 @@ namespace VisCPU.HL.Compiler.Variables
                                            vdef,
                                            expr.VariableDefinition.Modifiers.Any(
                                                 x => x.Type == HlTokenType.OpPublicMod
-                                               ), false
+                                               ),
+                                           false
                                           );
 
                 HlExpression init = expr.Initializer.FirstOrDefault();
@@ -67,10 +68,10 @@ namespace VisCPU.HL.Compiler.Variables
                                                                     );
 
                         string content = vOp.Value.ToString();
-                        compilation.CreateVariable( asmVarName, content, vdef, false, false);
+                        compilation.CreateVariable( asmVarName, content, vdef, false, false );
 
                         return new ExpressionTarget(
-                                                     svar.ResultAddress ,
+                                                    svar.ResultAddress,
                                                     true,
                                                     vdef
                                                    );
@@ -82,8 +83,6 @@ namespace VisCPU.HL.Compiler.Variables
                                                              true,
                                                              vdef
                                                             );
-
-               
 
                 if ( init != null )
                 {
@@ -118,7 +117,7 @@ namespace VisCPU.HL.Compiler.Variables
                 return new ExpressionTarget(
                                             asmVarName,
                                             true,
-                                            compilation.TypeSystem.GetType(
+                                            compilation.TypeSystem.GetType(compilation.Root,
                                                                            expr.VariableDefinition.TypeName.ToString()
                                                                           )
                                            );

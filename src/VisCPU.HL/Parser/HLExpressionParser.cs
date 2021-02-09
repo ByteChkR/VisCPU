@@ -165,7 +165,7 @@ namespace VisCPU.HL.Parser
                 stopAt = m_OpCollection.Highest;
             }
 
-            HlExpression node = ValueCreator.CreateValue( this );
+            HlExpression node = ValueCreator.CreateValue( this, (uint)stopAt );
 
             if ( CurrentToken.Type == HlTokenType.OpSemicolon )
             {

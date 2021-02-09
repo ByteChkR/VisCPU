@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using VisCPU.HL.Parser.Tokens.Expressions;
+﻿using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 
 namespace VisCPU.HL.Compiler.Special
@@ -19,19 +15,18 @@ namespace VisCPU.HL.Compiler.Special
             string condLabel = HlCompilation.GetUniqueName( "for_eval_condition" );
             string endLabel = HlCompilation.GetUniqueName( "for_end" );
 
-            HlCompilation subFor = new HlCompilation(compilation, HlCompilation.GetUniqueName("for"));
+            HlCompilation subFor = new HlCompilation( compilation, HlCompilation.GetUniqueName( "for" ) );
+
             subFor.EmitterResult.Store(
                                        $".{startLabel} linker:hide"
                                       ); //Unused, makes clear where the for compiler started emitting code.
 
-
-
             ExpressionTarget
-                target = subFor.Parse( expr.VDecl ).MakeAddress(subFor); //Declare Variable(left)
+                target = subFor.Parse( expr.VDecl ).MakeAddress( subFor ); //Declare Variable(left)
 
             subFor.EmitterResult.Store( $".{condLabel} linker:hide" ); //Label to jumpto
 
-            ExpressionTarget cond = subFor.Parse( expr.Condition ).MakeAddress(subFor); //Check Condition
+            ExpressionTarget cond = subFor.Parse( expr.Condition ).MakeAddress( subFor ); //Check Condition
 
             subFor.EmitterResult.Emit(
                                       $"BEZ",
@@ -47,7 +42,7 @@ namespace VisCPU.HL.Compiler.Special
                                      ); //Parse block and clean up any temp variables that were emitted.
             }
 
-            subFor.ReleaseTempVar(subFor.Parse( expr.VInc ).ResultAddress ); //Compute Increment Expression
+            subFor.ReleaseTempVar( subFor.Parse( expr.VInc ).ResultAddress ); //Compute Increment Expression
 
             subFor.EmitterResult.Emit( $"JMP", condLabel ); //Jump back up if we executed the body.
 
@@ -60,6 +55,7 @@ namespace VisCPU.HL.Compiler.Special
 
             compilation.EmitterResult.Store( subFor.EmitVariables( false ) );
             compilation.EmitterResult.Store( subFor.EmitterResult.Get() );
+
             return new ExpressionTarget();
         }
 

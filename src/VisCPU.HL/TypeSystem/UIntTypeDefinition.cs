@@ -1,4 +1,5 @@
-﻿using VisCPU.Utility.SharedBase;
+﻿using VisCPU.HL.Namespaces;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.TypeSystem
 {
@@ -8,7 +9,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public UIntTypeDefinition() : base( HLBaseTypeNames.s_UintTypeName, true, true )
+        public UIntTypeDefinition(HlNamespace root) : base(root, HLBaseTypeNames.s_UintTypeName, true, true )
         {
         }
 

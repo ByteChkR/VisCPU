@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 using VisCPU.Utility.IO.Settings;
 
@@ -9,19 +7,27 @@ namespace VisCPU.Peripherals.Time
 
     public class TimeDevice : Peripheral
     {
+
         private readonly TimeDeviceSettings m_Settings;
 
-        public TimeDevice()
-        {
-            m_Settings = SettingsManager.GetSettings<TimeDeviceSettings>();
-        }
-        public TimeDevice(TimeDeviceSettings settings)
-        {
-            m_Settings = settings;
-        }
+        #region Unity Event Functions
 
         public override void Reset()
         {
+        }
+
+        #endregion
+
+        #region Public
+
+        public TimeDevice()
+        {
+            m_Settings = SettingsManager.GetSettings < TimeDeviceSettings >();
+        }
+
+        public TimeDevice( TimeDeviceSettings settings )
+        {
+            m_Settings = settings;
         }
 
         public override bool CanRead( uint address )
@@ -43,7 +49,7 @@ namespace VisCPU.Peripherals.Time
 
             if ( address == m_Settings.TimePin )
             {
-                return ( uint )DateTimeOffset.Now.ToUnixTimeSeconds();
+                return ( uint ) DateTimeOffset.Now.ToUnixTimeSeconds();
             }
 
             return 0;
@@ -53,5 +59,8 @@ namespace VisCPU.Peripherals.Time
         {
         }
 
+        #endregion
+
     }
+
 }

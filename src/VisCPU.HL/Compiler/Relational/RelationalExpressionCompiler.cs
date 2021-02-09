@@ -36,7 +36,7 @@ namespace VisCPU.HL.Compiler.Relational
                 return new ExpressionTarget(
                                             StaticEvaluate( target, rTarget ).ToString(),
                                             false,
-                                            compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
+                                            compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName )
                                            );
             }
 
@@ -48,7 +48,7 @@ namespace VisCPU.HL.Compiler.Relational
                 ExpressionTarget tmp = new ExpressionTarget(
                                                             compilation.GetTempVarDref( target.ResultAddress ),
                                                             true,
-                                                            compilation.TypeSystem.GetType(
+                                                            compilation.TypeSystem.GetType(compilation.Root,
                                                                  HLBaseTypeNames.s_UintTypeName
                                                                 )
                                                            );
@@ -62,7 +62,7 @@ namespace VisCPU.HL.Compiler.Relational
                 ExpressionTarget tmp = new ExpressionTarget(
                                                             compilation.GetTempVarDref( rTarget.ResultAddress ),
                                                             true,
-                                                            compilation.TypeSystem.GetType(
+                                                            compilation.TypeSystem.GetType(compilation.Root,
                                                                  HLBaseTypeNames.s_UintTypeName
                                                                 )
                                                            );

@@ -29,7 +29,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
                 }
             }
 
-            project.RunJob( projectRoot, target, includeJob, true );
+            project.RunJob( projectRoot, target, includeJob );
         }
 
         #endregion

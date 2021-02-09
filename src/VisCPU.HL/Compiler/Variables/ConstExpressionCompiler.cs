@@ -44,7 +44,7 @@ namespace VisCPU.HL.Compiler.Variables
             }
 
             ExpressionTarget tmp =
-                new ExpressionTarget( value, false, compilation.TypeSystem.GetType( type ) );
+                new ExpressionTarget( value, false, compilation.TypeSystem.GetType(compilation.Root, type ) );
 
             return tmp;
         }
@@ -85,7 +85,7 @@ namespace VisCPU.HL.Compiler.Variables
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, value );
 
-            return outputTarget.Cast( compilation.TypeSystem.GetType( type ) );
+            return outputTarget.Cast( compilation.TypeSystem.GetType(compilation.Root, type ) );
         }
 
         #endregion

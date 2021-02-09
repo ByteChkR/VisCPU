@@ -34,33 +34,6 @@ namespace VisCPU.HL.Parser
             return ret;
         }
 
-        public static int ReadList(
-            List < IHlToken > tokens,
-            int start,
-            HlTokenType item,
-            HlTokenType separator, out IHlToken[] items )
-        {
-            List<IHlToken> list = new List<IHlToken>();
-            int i = start;
-            while ( i < tokens.Count && tokens[i].Type== item )
-            {
-                list.Add( tokens[i] );
-
-                i++;
-                if (i >= tokens.Count || tokens[i].Type != separator )
-                {
-                    items = list.ToArray();
-                    return i-start;
-                }
-                i++;
-            }
-            EventManager<ErrorEvent>.SendEvent(
-                                               new HlTokenReadEvent(tokens, item, tokens[i].Type, start)
-                                              );
-            items = list.ToArray();
-            return i-start;
-        }
-
         /// <summary>
         ///     Reads Any token or none if the token stream reached the end
         /// </summary>
@@ -80,6 +53,41 @@ namespace VisCPU.HL.Parser
             result = new EofToken();
 
             return false;
+        }
+
+        public static int ReadList(
+            List < IHlToken > tokens,
+            int start,
+            HlTokenType item,
+            HlTokenType separator,
+            out IHlToken[] items )
+        {
+            List < IHlToken > list = new List < IHlToken >();
+            int i = start;
+
+            while ( i < tokens.Count && tokens[i].Type == item )
+            {
+                list.Add( tokens[i] );
+
+                i++;
+
+                if ( i >= tokens.Count || tokens[i].Type != separator )
+                {
+                    items = list.ToArray();
+
+                    return i - start;
+                }
+
+                i++;
+            }
+
+            EventManager < ErrorEvent >.SendEvent(
+                                                  new HlTokenReadEvent( tokens, item, tokens[i].Type, start )
+                                                 );
+
+            items = list.ToArray();
+
+            return i - start;
         }
 
         /// <summary>

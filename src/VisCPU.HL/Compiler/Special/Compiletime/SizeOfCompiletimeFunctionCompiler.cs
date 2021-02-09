@@ -35,22 +35,22 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                 return new ExpressionTarget(
                                             v,
                                             true,
-                                            compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
+                                            compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName )
                                            );
             }
 
-            if ( compilation.TypeSystem.HasType( expr.ParameterList[0].ToString() ) )
+            if ( compilation.TypeSystem.HasType(compilation.Root, expr.ParameterList[0].ToString() ) )
             {
                 string v = compilation.GetTempVar(
                                                   compilation.TypeSystem.
-                                                              GetType( expr.ParameterList[0].ToString() ).
+                                                              GetType(compilation.Root, expr.ParameterList[0].ToString() ).
                                                               GetSize()
                                                  );
 
                 return new ExpressionTarget(
                                             v,
                                             true,
-                                            compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
+                                            compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName )
                                            );
             }
 

@@ -50,7 +50,7 @@ namespace VisCPU.HL.Compiler
                     target = new ExpressionTarget(
                                                   compilation.GetTempVar( 0 ),
                                                   true,
-                                                  compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName )
+                                                  compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName )
                                                  );
                 }
 

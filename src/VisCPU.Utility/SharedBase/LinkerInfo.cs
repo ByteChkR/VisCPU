@@ -11,7 +11,6 @@ using VisCPU.Utility.Logging;
 namespace VisCPU.Utility.SharedBase
 {
 
-
     [Serializable]
     public struct LinkerInfo : IEquatable < LinkerInfo >
     {

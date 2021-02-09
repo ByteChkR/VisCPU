@@ -27,26 +27,26 @@ namespace VisCPU.HL.Compiler.Special
                     //If True we parse body without check and directly jump to condition
                     //If False we omit the whole loop entirely
                 {
-                    ParseBody(whileComp, expr, startLabel, endLabel );
+                    ParseBody( whileComp, expr, startLabel, endLabel );
                 }
-                compilation.EmitterResult.Store(whileComp.EmitVariables(false));
-                compilation.EmitterResult.Store(whileComp.EmitterResult.Get());
+
+                compilation.EmitterResult.Store( whileComp.EmitVariables( false ) );
+                compilation.EmitterResult.Store( whileComp.EmitterResult.Get() );
 
                 return new ExpressionTarget();
             }
 
-
-
-            target = target.MakeAddress(whileComp); //Make sure we have an address and not a static value
+            target = target.MakeAddress( whileComp ); //Make sure we have an address and not a static value
 
             whileComp.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
-            ParseBody(whileComp, expr, startLabel, endLabel );
+            ParseBody( whileComp, expr, startLabel, endLabel );
 
             whileComp.ReleaseTempVar( target.ResultAddress );
 
-            compilation.EmitterResult.Store(whileComp.EmitVariables(false));
-            compilation.EmitterResult.Store(whileComp.EmitterResult.Get());
+            compilation.EmitterResult.Store( whileComp.EmitVariables( false ) );
+            compilation.EmitterResult.Store( whileComp.EmitterResult.Get() );
+
             //.while_start
             //LOAD tmp_condition_var 0x00
             //<PARSE CONDITION EXPR HERE>

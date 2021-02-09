@@ -3,6 +3,7 @@ using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.TypeSystem
 {
+
     public class HlPropertyDefinition : HlMemberDefinition
     {
 

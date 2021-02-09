@@ -141,7 +141,6 @@ namespace VisCPU.Console.Core.Settings
                 return lastStepFile;
             }
 
-            ExpressionParser p = new ExpressionParser();
             string file = File.ReadAllText( lastStepFile );
 
             BuildDataStore ds = new BuildDataStore(
@@ -157,7 +156,8 @@ namespace VisCPU.Console.Core.Settings
 
             File.WriteAllText(
                               newFile,
-                              p.Parse( file, Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ), ds ).Parse()
+                              new HlCompilation( file, Path.GetDirectoryName( Path.GetFullPath( lastStepFile ) ), ds ).
+                                  Parse()
                              );
 
             return newFile;

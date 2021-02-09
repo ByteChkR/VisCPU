@@ -26,11 +26,11 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                                      );
             }
 
-            HlTypeDefinition type = compilation.TypeSystem.GetType( expr.ParameterList[0].ToString() );
+            HlTypeDefinition type = compilation.TypeSystem.GetType(compilation.Root, expr.ParameterList[0].ToString() );
             uint off = type.GetOffset( expr.ParameterList[1].ToString() );
             string v = compilation.GetTempVar( off );
 
-            return new ExpressionTarget( v, true, compilation.TypeSystem.GetType( HLBaseTypeNames.s_UintTypeName ) );
+            return new ExpressionTarget( v, true, compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName ) );
         }
 
         #endregion

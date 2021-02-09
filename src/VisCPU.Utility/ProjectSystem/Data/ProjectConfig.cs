@@ -110,8 +110,7 @@ namespace VisCPU.Utility.ProjectSystem.Data
         public void RunJob(
             string rootDir,
             ProjectBuildTarget buildTarget,
-            ProjectBuildJob job,
-            bool writeDebug )
+            ProjectBuildJob job)
         {
             if ( !s_BuildJobRunners.ContainsKey( job.BuildJobRunner ) )
             {
@@ -121,11 +120,7 @@ namespace VisCPU.Utility.ProjectSystem.Data
             }
 
             ResolveBuildJobItems( rootDir, buildTarget, job );
-
-            if ( writeDebug )
-            {
-                Logger.LogMessage( LoggerSystems.ModuleSystem, "Running Job: {0}", job.JobName );
-            }
+            
 
             s_BuildJobRunners[job.BuildJobRunner].RunJob( rootDir, this, buildTarget, job );
         }
@@ -160,9 +155,10 @@ namespace VisCPU.Utility.ProjectSystem.Data
                 }
             }
 
+            Logger.LogMessage( LoggerSystems.ModuleSystem, $"Running {buildTarget.Jobs.Count} Jobs..." );
             foreach ( ProjectBuildJob buildTargetJob in buildTarget.Jobs )
             {
-                RunJob( rootDir, buildTarget, buildTargetJob, true );
+                RunJob( rootDir, buildTarget, buildTargetJob );
             }
         }
 

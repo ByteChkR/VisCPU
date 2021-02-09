@@ -38,11 +38,7 @@ namespace VisCPU
                     return s_CachedInstructionSet;
                 }
 
-                Logger.LogMessage(
-                                  LoggerSystems.Console,
-                                  "Loading Instruction Set: {0}",
-                                  SettingsManager.GetSettings < CpuSettings >().InstructionSetName
-                                 );
+                
 
                 IEnumerable < InstructionSet > extensions =
                     ExtensionLoader.LoadFrom < InstructionSet >(
@@ -55,8 +51,8 @@ namespace VisCPU
                 {
                     Logger.LogMessage(
                                       LoggerSystems.Console,
-                                      "Found Instruction Set: {0}",
-                                      instructionSet.SetKey
+                                      "Using Instruction Set: {0}",
+                                      SettingsManager.GetSettings<CpuSettings>().InstructionSetName
                                      );
 
                     if ( instructionSet.SetKey == SettingsManager.GetSettings < CpuSettings >().InstructionSetName )

@@ -24,7 +24,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                                                     new ExpressionTarget(
                                                                          compilation.GetTempVar( 0 ),
                                                                          true,
-                                                                         compilation.TypeSystem.GetType(
+                                                                         compilation.TypeSystem.GetType(compilation.Root,
                                                                               HLBaseTypeNames.s_UintTypeName
                                                                              )
                                                                         )

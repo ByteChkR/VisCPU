@@ -1,15 +1,20 @@
-﻿using System;
-using System.Diagnostics;
-
-using VisCPU.HL.DataTypes;
-using VisCPU.HL.Parser;
-using VisCPU.HL.Parser.Tokens.Expressions.Operands;
-using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.EventSystem;
+using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Types
 {
+
+    public class StaticInstanceMemberAccessEvent:WarningEvent
+    {
+
+        public StaticInstanceMemberAccessEvent( HlTypeDefinition type, HlMemberDefinition member) : base( $"Accessing Instance Function '{member.Name}' in type '{type.Namespace.FullName}::{type.Name}' as static function. Passing an instance of '{type.Namespace.FullName}::{type.Name}' is required", WarningEventKeys.s_StaticInstanceMemberAccess )
+        {
+        }
+
+    }
 
     public class MemberAccessCompiler : HlExpressionCompiler < HlMemberAccessOp >
     {
@@ -28,60 +33,82 @@ namespace VisCPU.HL.Compiler.Types
 
             if ( lType.ResultAddress == "%%TYPE%%" )
             {
-                if (expr.MemberName is HlInvocationOp invoc)
+                if ( expr.MemberName is HlInvocationOp invoc )
                 {
-
-                    HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember(invoc.Left.ToString());
-
-                    string funcName = lType.TypeDefinition.GetFinalMemberName( data );//$"FUN_{lType.TypeDefinition.Name}_{invoc.Left}";
-
-
-                    if ( !data.IsStatic )
+                    HlMemberDefinition data = null;
+                    if ( invoc.Left.ToString() == "new" )
                     {
-                        Log( "AAAAAAA" );
+                        data = lType.TypeDefinition.StaticConstructor;
+                    }else
+                        data= lType.TypeDefinition.GetPrivateOrPublicMember( invoc.Left.ToString() );
+
+                    
+
+
+                    if ( data!=null&& !data.IsStatic )
+                    {
+                        EventManager < WarningEvent >.SendEvent(
+                                                                new StaticInstanceMemberAccessEvent(
+                                                                     lType.TypeDefinition,
+                                                                     data
+                                                                    )
+                                                               );
                     }
-                    invoc.Redirect( null , lType.TypeDefinition, data);
+
+                    invoc.Redirect( null, lType.TypeDefinition, data );
 
                     ExpressionTarget t = compilation.Parse( invoc, outputTarget ).
                                                      CopyIfNotNull( compilation, outputTarget );
-
-
 
                     return t;
                 }
                 else
                 {
-                    HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember(expr.MemberName.ToString());
-                    string funcName = lType.TypeDefinition.GetFinalMemberName(data);//$"FUN_{lType.TypeDefinition.Name}_{expr.MemberName}";
+                    HlMemberDefinition data =
+                        lType.TypeDefinition.GetPrivateOrPublicMember( expr.MemberName.ToString() );
 
-                    if (!data.IsStatic)
+                    string funcName =
+                        lType.TypeDefinition.
+                              GetFinalMemberName( data ); //$"FUN_{lType.TypeDefinition.Name}_{expr.MemberName}";
+
+                    if ( !data.IsStatic )
                     {
-                        Log("AAAAAAA");
+                        EventManager<WarningEvent>.SendEvent(
+                                                             new StaticInstanceMemberAccessEvent(
+                                                                  lType.TypeDefinition,
+                                                                  data
+                                                                 )
+                                                            );
                     }
+
                     if ( outputTarget.ResultAddress != null )
                     {
-                        compilation.EmitterResult.Emit("LOAD", funcName, outputTarget.ResultAddress);
+                        compilation.EmitterResult.Emit( "LOAD", funcName, outputTarget.ResultAddress );
+
                         return outputTarget;
                     }
 
                     return new ExpressionTarget(
                                                 funcName,
-                                                true, compilation.TypeSystem.GetType(HLBaseTypeNames.s_UintTypeName), false
+                                                true,
+                                                compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName ),
+                                                false
                                                );
                 }
             }
 
             string containerName = expr.MemberName.ToString();
+
             if ( expr.MemberName is HlInvocationOp inv )
             {
-                if(lType.TypeDefinition.HasMember(inv.Left.ToString()) && lType.TypeDefinition.GetPrivateOrPublicMember(inv.Left.ToString()) is HlPropertyDefinition)
+                if ( lType.TypeDefinition.HasMember( inv.Left.ToString() ) &&
+                     lType.TypeDefinition.GetPrivateOrPublicMember( inv.Left.ToString() ) is HlPropertyDefinition )
                 {
                     containerName = inv.Left.ToString();
                 }
                 else
                 {
-
-                    HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember(inv.Left.ToString());
+                    HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember( inv.Left.ToString() );
 
                     inv.Redirect(
                                  lType.ResultAddress,
@@ -94,16 +121,12 @@ namespace VisCPU.HL.Compiler.Types
 
                     return t;
                 }
-
             }
-            else if ( expr.MemberName is HlArrayAccessorOp arr && lType.TypeDefinition.GetPrivateOrPublicMember(arr.Left.ToString()) is HlPropertyDefinition)
+            else if ( expr.MemberName is HlArrayAccessorOp arr &&
+                      lType.TypeDefinition.GetPrivateOrPublicMember( arr.Left.ToString() ) is HlPropertyDefinition )
             {
-
                 containerName = arr.Left.ToString();
-
             }
-
-
 
             uint off = HlTypeDefinition.RecursiveGetOffset(
                                                            lType.TypeDefinition,
@@ -140,21 +163,18 @@ namespace VisCPU.HL.Compiler.Types
             if ( expr.Left.ToString() == "this" )
             {
                 mdef = HlTypeDefinition.RecursiveGetPrivateOrPublicMember(
-                                                                 lType.TypeDefinition,
-                                                                 0,
-                                                                 containerName.Split('.')
-                                                                );
-
+                                                                          lType.TypeDefinition,
+                                                                          0,
+                                                                          containerName.Split( '.' )
+                                                                         );
             }
             else
             {
-
-            mdef  =  HlTypeDefinition.RecursiveGetPublicMember(
-                                                          lType.TypeDefinition,
-                                                          0,
-                                                          containerName.Split('.')
-                                                         );
-
+                mdef = HlTypeDefinition.RecursiveGetPublicMember(
+                                                                 lType.TypeDefinition,
+                                                                 0,
+                                                                 containerName.Split( '.' )
+                                                                );
             }
 
             if ( mdef is HlPropertyDefinition pdef )

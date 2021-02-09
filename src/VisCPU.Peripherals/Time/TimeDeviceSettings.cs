@@ -8,11 +8,14 @@ namespace VisCPU.Peripherals.Time
     {
 
         public uint PresentPin { get; set; } = 0xFFFF5000;
+
         public uint TimePin { get; set; } = 0xFFFF5001;
+
+        #region Private
 
         static TimeDeviceSettings()
         {
-            SettingsCategory timeCategory = Peripheral.s_PeripheralCategory.AddCategory("time");
+            SettingsCategory timeCategory = Peripheral.s_PeripheralCategory.AddCategory( "time" );
 
             SettingsManager.RegisterDefaultLoader(
                                                   new JsonSettingsLoader(),
@@ -21,6 +24,9 @@ namespace VisCPU.Peripherals.Time
                                                   new TimeDeviceSettings()
                                                  );
         }
+
+        #endregion
+
     }
 
 }
