@@ -284,8 +284,9 @@ namespace VisCPU.HL
             ParseDependencies();
             ParseFunctionToken( tokens, hlpS );
             ParseNamespaces( Root, tokens );
+            TypeSystem.Finalize(this);
             ParseTypeDefinitions( TypeSystem, hlpS, tokens, Root );
-            TypeSystem.Finalize( this );
+            TypeSystem.Finalize(this);
 
             HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( tokens ) );
 

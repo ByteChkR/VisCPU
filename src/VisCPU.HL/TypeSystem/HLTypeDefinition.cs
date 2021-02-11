@@ -10,6 +10,7 @@ using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.TypeSystem.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.TypeSystem
 {
@@ -30,6 +31,7 @@ namespace VisCPU.HL.TypeSystem
                            m_Members.Where( x => ( x.IsVirtual || x.IsAbstract ) && x is HlFunctionDefinition ).
                                      Cast < HlFunctionDefinition >()
                           );
+
         public HlNamespace Namespace { get; }
 
         public string Name { get; }
@@ -58,7 +60,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public HlTypeDefinition(HlNamespace ns, string name, bool isPublic, bool isValueType )
+        public HlTypeDefinition( HlNamespace ns, string name, bool isPublic, bool isValueType )
         {
             Namespace = ns;
             IsValueType = isValueType;
@@ -66,7 +68,6 @@ namespace VisCPU.HL.TypeSystem
             Name = name;
             m_BaseTypes = new List < IHlToken >();
         }
-        
 
         public static uint RecursiveGetOffset( HlTypeDefinition start, uint value, int current, string[] parts )
         {
@@ -74,6 +75,7 @@ namespace VisCPU.HL.TypeSystem
 
             if ( current == parts.Length - 1 )
             {
+                Logger.LogMessage(LoggerSystems.Debug, $"{start.Name}.{parts[current]} : {ret}");
                 return ret;
             }
 
@@ -143,7 +145,7 @@ namespace VisCPU.HL.TypeSystem
 
             foreach ( IHlToken baseType in m_BaseTypes )
             {
-                HlTypeDefinition def = compilation.TypeSystem.GetType(compilation.Root, baseType.ToString() );
+                HlTypeDefinition def = compilation.TypeSystem.GetType( compilation.Root, baseType.ToString() );
                 m_Types.Add( def );
             }
         }
@@ -234,13 +236,19 @@ namespace VisCPU.HL.TypeSystem
             return $"SFLD_{Name}_{name}";
         }
 
-        public uint GetOffset( Func < HlMemberDefinition, bool > condition )
+        private uint GetOffset( Func < HlMemberDefinition, bool > condition )
         {
-            uint ret = ( uint ) m_Types.Sum( x => x.GetSize() );
 
-            foreach ( HlMemberDefinition hlMemberDefinition in m_Members )
+            if ( FindOffsetInBase( condition, out uint ret ) )
             {
-                if ( condition( hlMemberDefinition ) )
+                return ret;
+            }
+
+            ret = (uint)m_Types.Sum( x => x.GetSize() );
+
+            foreach (HlMemberDefinition hlMemberDefinition in m_Members)
+            {
+                if (condition(hlMemberDefinition))
                 {
                     return ret;
                 }
@@ -248,12 +256,7 @@ namespace VisCPU.HL.TypeSystem
                 ret += hlMemberDefinition.GetSize();
             }
 
-            if ( FindOffsetInBase( condition, out ret ) )
-            {
-                return ret;
-            }
-
-            EventManager < ErrorEvent >.SendEvent( new HlMemberNotFoundEvent( this ) );
+            EventManager<ErrorEvent>.SendEvent(new HlMemberNotFoundEvent(this));
 
             return GetSize();
         }

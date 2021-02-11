@@ -55,6 +55,7 @@ namespace VisCPU.HL.Compiler.Types
                                                                );
                     }
 
+
                     invoc.Redirect( null, lType.TypeDefinition, data );
 
                     ExpressionTarget t = compilation.Parse( invoc, outputTarget ).
@@ -150,13 +151,7 @@ namespace VisCPU.HL.Compiler.Types
 
             compilation.ReleaseTempVar( tmpOff );
 
-            if ( outputTarget.ResultAddress != null )
-            {
-                compilation.EmitterResult.Emit( $"DREF", tmpVar, outputTarget.ResultAddress );
-                compilation.ReleaseTempVar( tmpVar );
-
-                return outputTarget;
-            }
+            
 
             HlMemberDefinition mdef = null;
 
@@ -179,11 +174,26 @@ namespace VisCPU.HL.Compiler.Types
 
             if ( mdef is HlPropertyDefinition pdef )
             {
+                if (outputTarget.ResultAddress != null)
+                {
+                    compilation.EmitterResult.Emit($"DREF", tmpVar, outputTarget.ResultAddress);
+                    compilation.ReleaseTempVar(tmpVar);
+
+                    return outputTarget;
+                }
                 return new ExpressionTarget( tmpVar, true, pdef.PropertyType, true );
             }
 
             if ( mdef is HlFunctionDefinition fdef )
             {
+                if (outputTarget.ResultAddress != null)
+                {
+                    
+                    compilation.EmitterResult.Emit($"DREF", tmpVar, outputTarget.ResultAddress);
+                    compilation.ReleaseTempVar(tmpVar);
+
+                    return outputTarget;
+                }
                 return new ExpressionTarget( tmpVar, true, fdef.ReturnType, true );
             }
 
