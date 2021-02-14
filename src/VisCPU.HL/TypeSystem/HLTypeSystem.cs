@@ -58,12 +58,6 @@ namespace VisCPU.HL.TypeSystem
             return m_DefinedTypes.GetEnumerator();
         }
 
-        //public HlTypeDefinition GetOrAdd(HlNamespace ns, string name, bool isPublic, bool isValueType )
-        //{
-        //    return m_DefinedTypes.FirstOrDefault( x => x.Name == name) ??
-        //           CreateEmptyType(ns, name, isPublic, isValueType );
-        //}
-
         public HlTypeDefinition GetType(HlNamespace caller, string name )
         {
             return m_DefinedTypes.First( x => x.Name == name && x.Namespace.IsVisibleTo(caller));

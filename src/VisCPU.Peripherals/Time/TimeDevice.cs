@@ -49,7 +49,10 @@ namespace VisCPU.Peripherals.Time
 
             if ( address == m_Settings.TimePin )
             {
-                return ( uint ) DateTimeOffset.Now.ToUnixTimeSeconds();
+                DateTimeOffset o=DateTimeOffset.Now;
+                if(!TimeZoneInfo.Local.IsDaylightSavingTime(o))
+                    return (uint)DateTimeOffset.Now.ToUnixTimeSeconds() + 3600; //Add 1 hour because of Time Shift
+                return (uint)DateTimeOffset.Now.ToUnixTimeSeconds();
             }
 
             return 0;

@@ -98,7 +98,7 @@ namespace VisCPU.Integration
             return sb.ToString();
         }
 
-        string IFileImporter.ProcessImport( string input )
+        IncludedItem IFileImporter.ProcessImport( string input )
         {
             string name = input.Remove( 0, "api-integration ".Length );
             KeyValuePair < uint, FunctionData > api = m_ExposedApis.First( x => x.Value.GetFinalName() == name );
@@ -110,7 +110,7 @@ namespace VisCPU.Integration
 
             Log( "Including Device Driver: {0} :: {1}", name, target );
 
-            return target;
+            return new IncludedItem(target, false);
         }
 
         IExternalData[] IDataImporter.ProcessImport( HlCompilation compilation, string input )

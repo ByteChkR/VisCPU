@@ -106,9 +106,9 @@ namespace VisCPU.HL.Compiler.Special
 
                     string instanceFuncPtr = tmp;//compilation.GetTempVarLoad( tmp );
 
-                    string check = compilation.GetTempVarDref( tmp );
-                    string endLbl = HlCompilation.GetUniqueName( $"{tdef.Name}_prolog" );
-                    compilation.EmitterResult.Emit( $"BNZ", check, endLbl );
+                    //string check = compilation.GetTempVarDref( tmp );
+                    //string endLbl = HlCompilation.GetUniqueName( $"{tdef.Name}_prolog" );
+                    //compilation.EmitterResult.Emit( $"BNZ", check, endLbl );
 
 
 
@@ -120,7 +120,7 @@ namespace VisCPU.HL.Compiler.Special
                     compilation.ReleaseTempVar(instanceFuncPtr);
                     compilation.ReleaseTempVar(func);
                     compilation.ReleaseTempVar(tmpPtr);
-                    compilation.EmitterResult.Store( $".{endLbl}" );
+                    //compilation.EmitterResult.Store( $".{endLbl}" );
                 }
                 else
                 {

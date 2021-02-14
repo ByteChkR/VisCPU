@@ -57,6 +57,38 @@ namespace VisCPU.HL
         #endregion
 
     }
+    
+    public readonly struct IncludedItem : IEquatable <IncludedItem>
+    {
+
+        public readonly string Data;
+        public readonly bool IsInline;
+
+        public IncludedItem( string data, bool isInline )
+        {
+            Data = data;
+            IsInline = isInline;
+        }
+
+        public bool Equals( IncludedItem other )
+        {
+            return Data == other.Data && IsInline == other.IsInline;
+        }
+
+        public override bool Equals( object obj )
+        {
+            return obj is IncludedItem other && Equals( other );
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ( ( Data != null ? Data.GetHashCode() : 0 ) * 397 ) ^ IsInline.GetHashCode();
+            }
+        }
+
+    }
 
     public class HlCompilation : VisBase
     {
@@ -82,8 +114,8 @@ namespace VisCPU.HL
         private readonly HlCompilerSettings m_Settings = SettingsManager.GetSettings < HlCompilerSettings >();
         private readonly string m_Directory;
 
-        private readonly List < string > m_IncludedFiles = new List < string >();
-        private readonly List < string > m_ImportedItems = new List < string >();
+        private readonly List <IncludedItem> m_IncludedFiles = new List <IncludedItem>();
+        private readonly List<string> m_ImportedItems = new List<string>();
         private readonly HlCompilation m_Parent;
 
         private readonly Queue < string > m_UnusedTempVars = new Queue < string >();
@@ -270,16 +302,7 @@ namespace VisCPU.HL
             HlParserSettings hlpS = new HlParserSettings();
             HlParserBaseReader br = new HlParserBaseReader( hlpS, OriginalText );
 
-            List < IHlToken > tokens = br.ReadToEnd();
-            ParseOneLineStrings( tokens );
-            ParseCharTokens( tokens );
-            RemoveComments( tokens );
-            ParseImports( tokens );
-            ParseIncludes( tokens );
-            ParseReservedKeys( tokens, hlpS );
-            tokens = tokens.Where( x => x.Type != HlTokenType.OpNewLine ).ToList();
-            ParseVarDefToken( tokens, hlpS );
-            ParseBlocks( tokens );
+            List < IHlToken > tokens = PrepareForInline();
             ProcessImports();
             ParseDependencies();
             ParseFunctionToken( tokens, hlpS );
@@ -291,6 +314,97 @@ namespace VisCPU.HL
             HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( tokens ) );
 
             return Parse( p.Parse(), printHead, appendAfterProg );
+        }
+
+        public List <IHlToken> PrepareForInline()
+        {
+            HlParserSettings hlpS = new HlParserSettings();
+            HlParserBaseReader br = new HlParserBaseReader(hlpS, OriginalText);
+
+            List<IHlToken> tokens = br.ReadToEnd();
+            ParseOneLineStrings(tokens);
+            ParseCharTokens(tokens);
+            RemoveComments(tokens);
+            ParseImports(tokens);
+            ParseIncludes(tokens);
+            ParseReservedKeys(tokens, hlpS);
+            tokens = tokens.Where(x => x.Type != HlTokenType.OpNewLine).ToList();
+            ParseVarDefToken(tokens, hlpS);
+            ParseBlocks(tokens);
+
+            ParseInLineScripts(tokens);
+            
+            return tokens;
+        }
+
+        private void ParseInLineScripts(List <IHlToken> tokens)
+        {
+            for (int i = m_IncludedFiles.Count - 1; i >= 0; i-- )
+            {
+                IncludedItem includedFile = m_IncludedFiles[i];
+
+                if (m_Parent != null && m_Parent.m_IncludedFiles.Contains(includedFile))
+                {
+                    continue;
+                }
+
+                if (includedFile.IsInline && includedFile.Data.EndsWith(".vhl"))
+                {
+                    Log("Inlining file: {0}", m_IncludedFiles[i].Data);
+
+                    string name = Path.GetFullPath(
+                                                   includedFile.Data.StartsWith(m_Directory)
+                                                       ? includedFile.Data.Remove(includedFile.Data.Length - 4, 4)
+                                                       : m_Directory +
+                                                         "/" +
+                                                         includedFile.Data.Remove(includedFile.Data.Length - 4, 4)
+                                                  );
+
+                    UriKind kind = includedFile.Data.StartsWith("/") || includedFile.Data.StartsWith("\\")
+                                       ? UriKind.Absolute
+                                       : UriKind.RelativeOrAbsolute;
+
+                    Uri import = null;
+
+                    if (kind == UriKind.Absolute)
+                    {
+                        import = new Uri("file://" + includedFile, kind);
+                    }
+                    else
+                    {
+                        import = new Uri(includedFile.Data, kind);
+                    }
+
+                    Uri dir = new Uri("file://" + Directory.GetCurrentDirectory() + "/", UriKind.Absolute);
+
+                    if (import.IsAbsoluteUri)
+                    {
+                        name = dir.MakeRelativeUri(import).OriginalString;
+                        name = name.Remove(name.Length - 4, 4);
+                    }
+
+
+                    string file = Path.GetFullPath(name + ".vhl");
+                    string srcContent = File.ReadAllText(file);
+
+                    HlCompilation comp = new HlCompilation(
+                                                           srcContent,
+                                                           Path.GetDirectoryName(file),
+                                                           m_DataStore
+                                                          );
+
+                    tokens.AddRange( comp.PrepareForInline() );
+
+                    m_IncludedFiles.RemoveAt(i);
+
+                }
+
+                OnCompiledIncludedScript?.Invoke(
+                                                 Path.GetFullPath(m_Directory + "/" + m_IncludedFiles[i].Data),
+                                                 includedFile.Data
+                                                );
+
+            }
         }
 
         public void ParseBlocks( List < IHlToken > tokens )
@@ -566,20 +680,21 @@ namespace VisCPU.HL
             }
         }
 
-        public void ParseImports( List < IHlToken > tokens )
+        public void ParseImports(List<IHlToken> tokens)
         {
-            for ( int i = 0; i < tokens.Count; i++ )
+            for (int i = 0; i < tokens.Count; i++)
             {
-                if ( tokens[i].Type == HlTokenType.OpNumSign && tokens.Count > i + 2 )
+                if (tokens[i].Type == HlTokenType.OpNumSign && tokens.Count > i + 2)
                 {
-                    if ( tokens[i + 1].ToString() == "import" && tokens[i + 2].Type == HlTokenType.OpStringLiteral )
+                    if (tokens[i + 1].ToString() == "import" && tokens[i + 2].Type == HlTokenType.OpStringLiteral)
                     {
-                        m_ImportedItems.Add( tokens[i + 2].ToString() );
-                        tokens.RemoveRange( i, 3 );
+                        m_ImportedItems.Add(tokens[i + 2].ToString());
+                        tokens.RemoveRange(i, 3);
                     }
                 }
             }
         }
+        
 
         public void ParseIncludes( List < IHlToken > tokens )
         {
@@ -587,11 +702,17 @@ namespace VisCPU.HL
             {
                 if ( tokens[i].Type == HlTokenType.OpNumSign && tokens.Count > i + 2 )
                 {
-                    if ( tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HlTokenType.OpStringLiteral )
+                    if (tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HlTokenType.OpStringLiteral)
                     {
-                        string c = UriResolver.GetFilePath( m_Directory, tokens[i + 2].ToString() );
-                        m_IncludedFiles.Add( c ?? tokens[i + 2].ToString() );
-                        tokens.RemoveRange( i, 3 );
+                        string c = UriResolver.GetFilePath(m_Directory, tokens[i + 2].ToString());
+                        m_IncludedFiles.Add(new IncludedItem(c ?? tokens[i + 2].ToString(), false));
+                        tokens.RemoveRange(i, 3);
+                    }
+                    else if (tokens[i + 1].ToString() == "inline" && tokens[i + 2].Type == HlTokenType.OpStringLiteral)
+                    {
+                        string c = UriResolver.GetFilePath(m_Directory, tokens[i + 2].ToString());
+                        m_IncludedFiles.Add(new IncludedItem(c ?? tokens[i + 2].ToString(), true));
+                        tokens.RemoveRange(i, 3);
                     }
                 }
             }
@@ -847,9 +968,9 @@ namespace VisCPU.HL
                 sb.AppendLine( "; ________________ Includes ________________" );
             }
 
-            foreach ( string includedFile in m_IncludedFiles )
+            foreach ( IncludedItem includedFile in m_IncludedFiles )
             {
-                sb.AppendLine( $":include \"{includedFile}\"" );
+                sb.AppendLine( $":include \"{includedFile.Data}\"" );
             }
 
             if ( printHead )
@@ -1209,25 +1330,25 @@ namespace VisCPU.HL
         {
             for ( int i = 0; i < m_IncludedFiles.Count; i++ )
             {
-                string includedFile = m_IncludedFiles[i];
+                IncludedItem includedFile = m_IncludedFiles[i];
 
-                if ( m_Parent != null && m_Parent.m_IncludedFiles.Contains( includedFile ) )
+                if ( m_Parent != null && m_Parent.m_IncludedFiles.Contains( includedFile) )
                 {
                     continue;
                 }
 
-                if ( includedFile.EndsWith( ".vhl" ) )
+                if ( includedFile.Data.EndsWith( ".vhl" ) )
                 {
 
                     string name = Path.GetFullPath(
-                                                   includedFile.StartsWith( m_Directory )
-                                                       ? includedFile.Remove( includedFile.Length - 4, 4 )
+                                                   includedFile.Data.StartsWith( m_Directory )
+                                                       ? includedFile.Data.Remove( includedFile.Data.Length - 4, 4 )
                                                        : m_Directory +
                                                          "/" +
-                                                         includedFile.Remove( includedFile.Length - 4, 4 )
+                                                         includedFile.Data.Remove( includedFile.Data.Length - 4, 4 )
                                                   );
 
-                    UriKind kind = includedFile.StartsWith( "/" ) || includedFile.StartsWith( "\\" )
+                    UriKind kind = includedFile.Data.StartsWith( "/" ) || includedFile.Data.StartsWith( "\\" )
                                        ? UriKind.Absolute
                                        : UriKind.RelativeOrAbsolute;
                     
@@ -1239,7 +1360,7 @@ namespace VisCPU.HL
                     }
                     else
                     {
-                        import = new Uri( includedFile, kind );
+                        import = new Uri( includedFile.Data, kind );
                     }
 
                     Uri dir = new Uri( "file://" + Directory.GetCurrentDirectory() + "/", UriKind.Absolute );
@@ -1311,11 +1432,11 @@ namespace VisCPU.HL
                                                                        )
                                             );
 
-                    includedFile = newInclude;
+                    includedFile = new IncludedItem( newInclude, includedFile.IsInline );
 
-                    foreach ( string compIncludedFile in comp.m_IncludedFiles )
+                    foreach (IncludedItem compIncludedFile in comp.m_IncludedFiles )
                     {
-                        if ( !m_IncludedFiles.Contains( compIncludedFile ) )
+                        if ( !m_IncludedFiles.Contains(compIncludedFile ) )
                         {
                             m_IncludedFiles.Insert( 0, compIncludedFile );
                             i++;
@@ -1329,8 +1450,8 @@ namespace VisCPU.HL
                 }
 
                 OnCompiledIncludedScript?.Invoke(
-                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i] ),
-                                                 includedFile
+                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i].Data),
+                                                 includedFile.Data
                                                 );
 
                 m_IncludedFiles[i] = includedFile;

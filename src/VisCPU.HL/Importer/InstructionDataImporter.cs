@@ -113,7 +113,7 @@ namespace VisCPU.HL.Importer
             return argCount != -1 ? iis.First( x => x.ArgumentCount == argCount ) : iis.First();
         }
 
-        string IFileImporter.ProcessImport( string input )
+        IncludedItem IFileImporter.ProcessImport( string input )
         {
             Instruction target = Parse( input );
 
@@ -135,7 +135,7 @@ namespace VisCPU.HL.Importer
                     File.WriteAllLines( allPath, data );
                 }
 
-                return allPath;
+                return new IncludedItem(allPath, false);
             }
 
             string path = Path.Combine( InstructionDirectory, $"{target.Key}_{target.ArgumentCount}.vasm" );
@@ -145,7 +145,7 @@ namespace VisCPU.HL.Importer
                 File.WriteAllLines( path, GenerateInstructionData( target ) );
             }
 
-            return path;
+            return new IncludedItem(path, false);
         }
 
         IExternalData[] IDataImporter.ProcessImport( HlCompilation compilation, string input )

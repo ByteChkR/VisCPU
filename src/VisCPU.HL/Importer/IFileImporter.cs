@@ -4,7 +4,7 @@
     public interface IFileImporter : IImporter
     {
 
-        string ProcessImport( string input );
+        IncludedItem ProcessImport( string input );
 
     }
 
