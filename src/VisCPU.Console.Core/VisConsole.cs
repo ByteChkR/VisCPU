@@ -73,44 +73,65 @@ namespace VisCPU.Console.Core
         {
             do
             {
-                string[] subSystemKeys = { args[0] };
-
-                if ( args[0].StartsWith( "[" ) && args[0].EndsWith( "]" ) )
+                try
                 {
-                    subSystemKeys = args[0].
-                                    Remove( args[0].Length - 1, 1 ).
-                                    Remove( 0, 1 ).
-                                    Split( new[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
-                }
+                    string[] subSystemKeys = { args[0] };
 
-                foreach ( string subSystemKey in subSystemKeys )
-                {
-                    if ( !subsystems.TryGetValue( subSystemKey, out ConsoleSubsystem subsystem ) )
+                    if (args[0].StartsWith("[") && args[0].EndsWith("]"))
                     {
-                        System.Console.WriteLine( "Invalid Argument" );
-
-                        continue;
+                        subSystemKeys = args[0].
+                                        Remove(args[0].Length - 1, 1).
+                                        Remove(0, 1).
+                                        Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
                     }
 
-                    subsystem.Run( args.Skip( 1 ) );
-                }
-
-                if ( settings.Continuous )
-                {
-                    System.Console.WriteLine( "Type 'exit' to close console" );
-                    System.Console.Write( "cli>" );
-                    string cmd = System.Console.ReadLine().ToUpper();
-
-                    if ( cmd == "EXIT" )
+                    foreach (string subSystemKey in subSystemKeys)
                     {
-                        return;
+                        if (!subsystems.TryGetValue(subSystemKey, out ConsoleSubsystem subsystem))
+                        {
+                            System.Console.WriteLine("Invalid Argument");
+
+                            continue;
+                        }
+
+                        subsystem.Run(args.Skip(1));
+                    }
+
+                    if (settings.Continuous)
+                    {
+                        System.Console.WriteLine("Type 'exit' to close console");
+                        System.Console.Write("cli>");
+                        string cmd = System.Console.ReadLine().ToUpper();
+
+                        if (cmd == "EXIT")
+                        {
+                            return;
+                        }
+                    }
+
+                    if (settings.WaitOnExit)
+                    {
+                        System.Console.WriteLine("Press any key to exit");
+                        System.Console.ReadLine();
                     }
                 }
-
-                if ( settings.WaitOnExit )
+                catch ( Exception e )
                 {
-                    System.Console.WriteLine( "Press any key to exit" );
-                    System.Console.ReadLine();
+                    System.Console.WriteLine( e );
+
+                    if ( !settings.Continuous )
+                        throw;
+                    else
+                    {
+                        System.Console.WriteLine("Type 'exit' to close console");
+                        System.Console.Write("cli>");
+                        string cmd = System.Console.ReadLine().ToUpper();
+
+                        if (cmd == "EXIT")
+                        {
+                            return;
+                        }
+                    }
                 }
             }
             while ( settings.Continuous );
