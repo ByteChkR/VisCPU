@@ -75,7 +75,6 @@ namespace VisCPU.HL.TypeSystem
 
             if ( current == parts.Length - 1 )
             {
-                Logger.LogMessage(LoggerSystems.Debug, $"{start.Name}.{parts[current]} : {ret}");
                 return ret;
             }
 

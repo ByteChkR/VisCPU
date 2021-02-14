@@ -350,7 +350,6 @@ namespace VisCPU.HL
 
                 if (includedFile.IsInline && includedFile.Data.EndsWith(".vhl"))
                 {
-                    Log("Inlining file: {0}", m_IncludedFiles[i].Data);
 
                     string name = Path.GetFullPath(
                                                    includedFile.Data.StartsWith(m_Directory)

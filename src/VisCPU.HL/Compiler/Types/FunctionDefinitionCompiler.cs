@@ -23,10 +23,6 @@ namespace VisCPU.HL.Compiler.Types
             bool isStatic = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpStaticMod );
             bool isAbstract = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpAbstractMod );
 
-            if ( !isStatic )
-            {
-                Logger.LogMessage( LoggerSystems.Debug, "{0} not Static", expr.FunctionDefinition.FunctionName );
-            }
 
             string funcName = expr.FunctionDefinition.Parent == null
                                   ? expr.FunctionDefinition.FunctionName.ToString()

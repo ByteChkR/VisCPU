@@ -95,8 +95,6 @@ namespace VisCPU.HL.Compiler.Special
 
 
                     uint off = tdef.GetOffset(tdefAbstractFunction.Name);
-
-                    Logger.LogMessage(LoggerSystems.Debug, $"{tdef.Name}.{test.Name} : {off}");
                     compilation.EmitterResult.Store($"; Applying Function Pointer: {test.Name} Offset from Begin: {off}");
                     string tmp =
                         compilation.GetTempVarLoad(off.ToString());
@@ -235,7 +233,7 @@ namespace VisCPU.HL.Compiler.Special
                  (fdef.IsVirtual || fdef.IsAbstract || fdef.IsOverride))
             {
                 uint i = expr.InstanceType.GetOffset(fdef.Name);
-                Logger.LogMessage( LoggerSystems.Debug, $"{expr.InstanceType.Name}.{fdef.Name} : {i}" );
+
                 string init = i.ToString();
                 string tmp = compilation.GetTempVarLoad(init);
 
