@@ -24,6 +24,7 @@ namespace VisCPU.HL.TypeSystem
         private List < HlTypeDefinition > m_Types;
 
         public bool IsPublic { get; }
+        public bool IsAbstract { get; }
 
         public IEnumerable < HlFunctionDefinition > OverridableFunctions =>
             m_Types.SelectMany( x => x.OverridableFunctions ).
@@ -60,13 +61,19 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public HlTypeDefinition( HlNamespace ns, string name, bool isPublic, bool isValueType )
+        public HlTypeDefinition( HlNamespace ns, string name, bool isPublic, bool isAbstract, bool isValueType )
         {
             Namespace = ns;
             IsValueType = isValueType;
             IsPublic = isPublic;
+            IsAbstract = isAbstract;
             Name = name;
             m_BaseTypes = new List < IHlToken >();
+        }
+
+        public string GetInternalConstructor( HlCompilation compilation )
+        {
+            return "__HL_0ctor_" + Name ;
         }
 
         public static uint RecursiveGetOffset( HlTypeDefinition start, uint value, int current, string[] parts )
@@ -188,6 +195,7 @@ namespace VisCPU.HL.TypeSystem
 
             return $"{prefix}_{Name}_{name}";
         }
+        
 
         public string GetFinalMemberName( HlMemberDefinition member )
         {

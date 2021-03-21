@@ -11,6 +11,12 @@ namespace VisCPU.Peripherals.Console
     public class ConsoleInterface : Peripheral
     {
 
+        public override string PeripheralName => "Console Management Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.ConsoleManagement;
+
+        public override uint PresentPin => m_Settings.InterfacePresentPin;
+
         private readonly ConsoleInterfaceSettings m_Settings;
 
         #region Unity Event Functions

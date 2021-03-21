@@ -9,7 +9,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public StringTypeDefinition(HlNamespace root) : base(root, HLBaseTypeNames.s_StringTypeName, true, false )
+        public StringTypeDefinition(HlNamespace root) : base(root, HLBaseTypeNames.s_StringTypeName, true, false, false )
         {
         }
 

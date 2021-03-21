@@ -9,8 +9,25 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.Peripherals
 {
 
+    public enum PeripheralType
+    {
+
+        MemoryBusDriver,
+        ConsoleOutput,
+        ConsoleInput,
+        ConsoleManagement,
+        Memory,
+        Drive,
+        Time,
+        Custom
+
+    }
+
     public abstract class Peripheral : VisBase
     {
+        public abstract string PeripheralName { get; }
+        public abstract PeripheralType PeripheralType { get; }
+        public abstract uint PresentPin { get; }
 
         public static readonly SettingsCategory s_PeripheralCategory =
             CpuSettings.s_CpuCategory.AddCategory( "peripherals" );
@@ -21,6 +38,7 @@ namespace VisCPU.Peripherals
         protected Cpu AttachedCpu { get; private set; }
 
         protected override LoggerSystems SubSystem => LoggerSystems.Peripherals;
+        
 
         #region Unity Event Functions
 

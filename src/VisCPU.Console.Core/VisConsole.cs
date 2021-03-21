@@ -6,8 +6,10 @@ using System.Text;
 
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
+using VisCPU.Console.Core.Subsystems.FileSystemBuilder;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Console.Core.Subsystems.Project;
+using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.IO.Settings;
@@ -19,6 +21,13 @@ namespace VisCPU.Console.Core
     public class VisConsole : ConsoleSystem
     {
 
+        public static string GetCacheDirectory( LoggerSystems system )
+        {
+            string dir = Path.Combine( AppRootHelper.AppRoot, "cache", "subsystems", system.ToString() );
+            Directory.CreateDirectory( dir );
+            return dir;
+        }
+
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {
@@ -26,7 +35,8 @@ namespace VisCPU.Console.Core
                 { "build", new ProgramBuilder() },
                 { "project", new ProjectSubSystem() },
                 { "origin", new OriginSubSystem() },
-                { "reset", new ConsoleReset() }
+                { "reset", new ConsoleReset() },
+                {"drive", new DriveImageSubsystem() }
             };
 
         #region Public

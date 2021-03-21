@@ -32,6 +32,9 @@ namespace VisCPU.Utility.Logging
         HlIntegration = 2097152,
         StackTrace = 4194304,
         Debug = 8388608,
+        DriveImageBuilder = 16777216,
+
+        DriveImageSystems = DriveImageBuilder,
 
         AllInstructions = MathInstructions |
                           LogicInstructions |
@@ -45,7 +48,7 @@ namespace VisCPU.Utility.Logging
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console | ModuleSystem | StackTrace | Debug | Hl | Compiler
+        Default = UriResolver | Console | ModuleSystem | StackTrace | Debug | Hl | Compiler | DriveImageSystems
 
     }
 

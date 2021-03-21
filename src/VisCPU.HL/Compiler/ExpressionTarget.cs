@@ -15,7 +15,6 @@ namespace VisCPU.HL.Compiler
 
         public readonly string ResultAddress;
         public readonly bool IsAddress;
-
         public readonly bool IsPointer;
         public readonly HlTypeDefinition TypeDefinition;
 
@@ -107,7 +106,13 @@ namespace VisCPU.HL.Compiler
 
             return tmpVal;
         }
+        public ExpressionTarget LoadIfNotNull(HlCompilation compilation, string value)
+        {
+            if (value == null) return this;
+            compilation.EmitterResult.Emit($"LOAD", ResultAddress, value);
 
+            return this;
+        }
         public ExpressionTarget LoadIfNotNull( HlCompilation compilation, ExpressionTarget target )
         {
             if ( target.ResultAddress == null || target.ResultAddress == ResultAddress )

@@ -17,7 +17,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
         public override void Help()
         {
-            Log( "vis project create <projectRoot>" );
+            Log( "vis project new <projectRoot>" );
         }
 
         public override void Run( IEnumerable < string > args )

@@ -11,7 +11,7 @@ namespace VisCPU
     public class MemoryBusSettings
     {
 
-        [field: Argument( Name = "memory-bus:devices" )]
+        [field: Argument(Name = "memory-bus:devices.memory")]
         public string[] MemoryDevices { get; set; } =
             {
                 Path.Combine(

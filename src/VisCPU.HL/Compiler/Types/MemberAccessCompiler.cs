@@ -1,4 +1,7 @@
-﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+﻿using System;
+
+using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -36,14 +39,20 @@ namespace VisCPU.HL.Compiler.Types
                 if ( expr.MemberName is HlInvocationOp invoc )
                 {
                     HlMemberDefinition data = null;
-                    if ( invoc.Left.ToString() == "new" )
+                    bool writeProlog = invoc.Left.ToString() == "new";
+                    if ( invoc.Left.ToString() == "new" || invoc.Left.ToString() == "base")
                     {
                         data = lType.TypeDefinition.StaticConstructor;
                     }else
                         data= lType.TypeDefinition.GetPrivateOrPublicMember( invoc.Left.ToString() );
 
-                    
 
+                    if (lType.TypeDefinition.IsAbstract&& writeProlog && data == lType.TypeDefinition.StaticConstructor )
+                    {
+                        EventManager<ErrorEvent>.SendEvent(
+                                                             new AbstractConstructorCallEvent(lType.TypeDefinition)
+                                                            );
+                    }
 
                     if ( data!=null&& !data.IsStatic )
                     {
@@ -56,7 +65,7 @@ namespace VisCPU.HL.Compiler.Types
                     }
 
 
-                    invoc.Redirect( null, lType.TypeDefinition, data );
+                    invoc.Redirect( null, lType.TypeDefinition, data , writeProlog);
 
                     ExpressionTarget t = compilation.Parse( invoc, outputTarget ).
                                                      CopyIfNotNull( compilation, outputTarget );
@@ -71,6 +80,11 @@ namespace VisCPU.HL.Compiler.Types
                     string funcName =
                         lType.TypeDefinition.
                               GetFinalMemberName( data ); //$"FUN_{lType.TypeDefinition.Name}_{expr.MemberName}";
+
+                    if ( data.IsStatic && data is HlPropertyDefinition propDef )
+                    {
+                        funcName = compilation.GetFinalName( funcName );
+                    }
 
                     if ( !data.IsStatic )
                     {

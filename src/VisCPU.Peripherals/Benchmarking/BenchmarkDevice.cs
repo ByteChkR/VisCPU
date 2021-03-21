@@ -13,6 +13,12 @@ namespace VisCPU.Peripherals.Benchmarking
     public class BenchmarkDevice : Peripheral
     {
 
+        public override string PeripheralName => "Benchmark Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.Custom;
+
+        public override uint PresentPin =>DevicePresent;
+        
         public class BenchmarkResultEvent : Event
         {
 

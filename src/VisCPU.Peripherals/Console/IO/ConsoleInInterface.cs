@@ -10,6 +10,11 @@ namespace VisCPU.Peripherals.Console.IO
 
     public class ConsoleInInterface : Peripheral
     {
+        public override string PeripheralName => "Console Input Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.ConsoleInput;
+
+        public override uint PresentPin => m_Settings.InterfacePresentPin;
 
         private readonly ConsoleInInterfaceSettings m_Settings;
 

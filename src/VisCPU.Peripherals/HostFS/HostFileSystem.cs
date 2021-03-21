@@ -13,6 +13,13 @@ namespace VisCPU.Peripherals.HostFS
     public class HostFileSystem : Peripheral
     {
 
+
+        public override string PeripheralName => "Benchmark Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.Custom;
+
+        public override uint PresentPin => m_Settings.PinPresent;
+
         private HostFileSystemStatus m_Status = HostFileSystemStatus.HfsStatusReady;
         private readonly HostFileSystemSettings m_Settings;
         private readonly StringBuilder m_SbPath = new StringBuilder();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Events;
 using VisCPU.HL.Namespaces;
 using VisCPU.Utility.EventSystem;
@@ -27,12 +28,12 @@ namespace VisCPU.HL.TypeSystem
             ret.AddItem(new UIntTypeDefinition(root));
             ret.AddItem(new FloatTypeDefinition(root));
             ret.AddItem(new StringTypeDefinition(root));
-            ret.AddItem(new HlTypeDefinition(root,"void", true, true));
+            ret.AddItem(new HlTypeDefinition(root,"void", false, true, true));
 
             return ret;
         }
 
-        public HlTypeDefinition CreateEmptyType(HlNamespace ns, string name, bool isPublic, bool isValueType )
+        public HlTypeDefinition CreateEmptyType(HlNamespace ns, string name, bool isPublic, bool isAbstract, bool isValueType )
         {
             if ( m_DefinedTypes.Any( x => x.Name == name ) )
             {
@@ -41,7 +42,7 @@ namespace VisCPU.HL.TypeSystem
                 return null;
             }
 
-            HlTypeDefinition def = new HlTypeDefinition(ns, name, isPublic, isValueType );
+            HlTypeDefinition def = new HlTypeDefinition(ns, name, isPublic, isAbstract, isValueType );
 
             AddItem( def );
 
@@ -60,6 +61,9 @@ namespace VisCPU.HL.TypeSystem
 
         public HlTypeDefinition GetType(HlNamespace caller, string name )
         {
+            if ( !m_DefinedTypes.Any( x => x.Name == name && x.Namespace.IsVisibleTo( caller ) ) )
+                EventManager < ErrorEvent >.SendEvent( new TypeNotFoundEvent( name ) );
+
             return m_DefinedTypes.First( x => x.Name == name && x.Namespace.IsVisibleTo(caller));
         }
 

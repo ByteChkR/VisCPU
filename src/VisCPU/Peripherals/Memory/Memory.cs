@@ -16,9 +16,16 @@ namespace VisCPU.Peripherals.Memory
 
         private readonly MemorySettings m_Settings;
 
-        public uint EndAddress => m_Settings.Start + ( uint ) m_InternalMemory.Length;
+        public uint EndAddress => m_Settings.Start + (uint)m_InternalMemory.Length;
+        public uint StartAddress => m_Settings.Start;
 
         #region Unity Event Functions
+        
+        public override string PeripheralName => "Mapped Array Memory";
+
+        public override PeripheralType PeripheralType => PeripheralType.Memory;
+
+        public override uint PresentPin => StartAddress;
 
         public override void Reset()
         {
@@ -72,6 +79,8 @@ namespace VisCPU.Peripherals.Memory
                 //Not persistent or persistent path not set
             }
         }
+
+        public uint[] GetInternalBuffer() => m_InternalMemory;
 
         public override bool CanRead( uint address )
         {

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\VisCPU\VisCPU.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Drive\" />
+  </ItemGroup>
+
 </Project>

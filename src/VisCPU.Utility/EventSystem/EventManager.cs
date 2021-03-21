@@ -11,6 +11,8 @@ namespace VisCPU.Utility.EventSystem
 
         public static event Action < Event > OnEventReceive;
 
+        public static void ResetEventHandler() => OnEventReceive = null;
+
         internal static EventManagerSettings Settings { get; private set; } = new EventManagerSettings();
 
         #region Public
@@ -99,6 +101,8 @@ namespace VisCPU.Utility.EventSystem
     {
 
         public static event Action < T > OnEventReceive;
+
+        public static void ResetEventHandler() => OnEventReceive = null;
 
         #region Public
 

@@ -5,6 +5,8 @@ namespace VisCPU.Utility.Logging
 
     public class LoggerSettings
     {
+        [field: Argument(Name = "core:debug")]
+        public bool DebugCore { get; set; }
 
         [field: Argument( Name = "log" )]
         private LoggerSystems m_EnabledSystems = LoggerSystems.Default;

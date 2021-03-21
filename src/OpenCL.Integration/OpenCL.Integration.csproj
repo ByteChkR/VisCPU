@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenCL.Wrapper\OpenCL.Wrapper.csproj" />
+    <ProjectReference Include="..\VisCPU.HL\VisCPU.HL.csproj" />
+    <ProjectReference Include="..\VisCPU.Utility\VisCPU.Utility.csproj" />
+  </ItemGroup>
+
+</Project>

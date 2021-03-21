@@ -45,7 +45,16 @@ namespace VisCPU.HL.Importer
                     string raw = label.Key.Remove(0, "SFUN_".Length);
                     int idx = raw.IndexOf("_");
                     string name = raw.Substring(0, idx);
-                    HlTypeDefinition tdef = compilation.TypeSystem.HasType(compilation.Root, name) ? compilation.TypeSystem.GetType(compilation.Root, name) : compilation.TypeSystem.CreateEmptyType(compilation.Root, name, true, false);
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
                                    new HlExternalFunctionDefinition(compilation.TypeSystem,
@@ -73,7 +82,16 @@ namespace VisCPU.HL.Importer
                     string raw = label.Key.Remove(0, "ADFUN_".Length);
                     int idx = raw.IndexOf("_");
                     string name = raw.Substring(0, idx);
-                    HlTypeDefinition tdef = compilation.TypeSystem.HasType(compilation.Root, name) ? compilation.TypeSystem.GetType(compilation.Root, name) : compilation.TypeSystem.CreateEmptyType(compilation.Root, name, true, false);
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
                                    new HlExternalFunctionDefinition(compilation.TypeSystem,
@@ -101,7 +119,16 @@ namespace VisCPU.HL.Importer
                     string raw = label.Key.Remove(0, "DFUN_".Length);
                     int idx = raw.IndexOf("_");
                     string name = raw.Substring(0, idx);
-                    HlTypeDefinition tdef = compilation.TypeSystem.HasType(compilation.Root, name) ? compilation.TypeSystem.GetType(compilation.Root, name) : compilation.TypeSystem.CreateEmptyType(compilation.Root, name, true, false);
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
                                    new HlExternalFunctionDefinition(compilation.TypeSystem,
@@ -124,7 +151,16 @@ namespace VisCPU.HL.Importer
                     string raw = label.Key.Remove(0, "VDFUN_".Length);
                     int idx = raw.IndexOf("_");
                     string name = raw.Substring(0, idx);
-                    HlTypeDefinition tdef = compilation.TypeSystem.HasType(compilation.Root, name) ? compilation.TypeSystem.GetType(compilation.Root, name) : compilation.TypeSystem.CreateEmptyType(compilation.Root, name, true, false);
+
+                    HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
 
                     tdef.AddMember(

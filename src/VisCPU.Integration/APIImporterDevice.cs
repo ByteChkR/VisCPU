@@ -8,6 +8,11 @@ namespace VisCPU.Integration
     public class ApiImporterDevice : Peripheral
     {
 
+        public override string PeripheralName => "__API_IMPORTER_"+PresentPin;
+
+        public override PeripheralType PeripheralType => PeripheralType.Custom;
+
+        public override uint PresentPin => m_ListenAddr;
         private Cpu m_ExecutingCpu;
         private readonly uint m_ListenAddr;
         private readonly Func < Cpu, uint > m_InvokeExec;

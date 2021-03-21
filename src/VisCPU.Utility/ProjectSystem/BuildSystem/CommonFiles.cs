@@ -99,6 +99,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "false";
+            debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Outline";
 
             return debugBuildJob;
         }
@@ -181,6 +182,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "true";
+            debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Outline";
 
             return debugBuildJob;
         }

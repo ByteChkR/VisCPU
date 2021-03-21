@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 
 using VisCPU.HL.Compiler;
+using VisCPU.HL.Compiler.Special;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Importer;
@@ -41,7 +42,14 @@ namespace VisCPU.HL
 
         public static void Add( string src, HlCompilation comp )
         {
-            m_Compilations[src] = comp;
+            if ( SettingsManager.GetSettings < HlCompilerSettings >().EnableCompilationCaching )
+            {
+                m_Compilations[src] = comp;
+            }
+            else
+            {
+                comp.Unload();
+            }
         }
 
         public static HlCompilation Get( string src )
@@ -57,8 +65,8 @@ namespace VisCPU.HL
         #endregion
 
     }
-    
-    public readonly struct IncludedItem : IEquatable <IncludedItem>
+
+    public readonly struct IncludedItem : IEquatable < IncludedItem >
     {
 
         public readonly string Data;
@@ -101,7 +109,7 @@ namespace VisCPU.HL
 
         internal readonly Scope < FunctionData > FunctionMap = new Scope < FunctionData >();
 
-        internal readonly string OriginalText;
+        internal string OriginalText;
 
         internal readonly EmitterResult < string > EmitterResult = new EmitterResult < string >( new TextEmitter() );
 
@@ -114,8 +122,8 @@ namespace VisCPU.HL
         private readonly HlCompilerSettings m_Settings = SettingsManager.GetSettings < HlCompilerSettings >();
         private readonly string m_Directory;
 
-        private readonly List <IncludedItem> m_IncludedFiles = new List <IncludedItem>();
-        private readonly List<string> m_ImportedItems = new List<string>();
+        private readonly List < IncludedItem > m_IncludedFiles = new List < IncludedItem >();
+        private readonly List < string > m_ImportedItems = new List < string >();
         private readonly HlCompilation m_Parent;
 
         private readonly Queue < string > m_UnusedTempVars = new Queue < string >();
@@ -300,110 +308,19 @@ namespace VisCPU.HL
             }
 
             HlParserSettings hlpS = new HlParserSettings();
-            HlParserBaseReader br = new HlParserBaseReader( hlpS, OriginalText );
 
             List < IHlToken > tokens = PrepareForInline();
             ProcessImports();
             ParseDependencies();
             ParseFunctionToken( tokens, hlpS );
             ParseNamespaces( Root, tokens );
-            TypeSystem.Finalize(this);
+            TypeSystem.Finalize( this );
             ParseTypeDefinitions( TypeSystem, hlpS, tokens, Root );
-            TypeSystem.Finalize(this);
+            TypeSystem.Finalize( this );
 
             HlExpressionParser p = HlExpressionParser.Create( new HlExpressionReader( tokens ) );
 
             return Parse( p.Parse(), printHead, appendAfterProg );
-        }
-
-        public List <IHlToken> PrepareForInline()
-        {
-            HlParserSettings hlpS = new HlParserSettings();
-            HlParserBaseReader br = new HlParserBaseReader(hlpS, OriginalText);
-
-            List<IHlToken> tokens = br.ReadToEnd();
-            ParseOneLineStrings(tokens);
-            ParseCharTokens(tokens);
-            RemoveComments(tokens);
-            ParseImports(tokens);
-            ParseIncludes(tokens);
-            ParseReservedKeys(tokens, hlpS);
-            tokens = tokens.Where(x => x.Type != HlTokenType.OpNewLine).ToList();
-            ParseVarDefToken(tokens, hlpS);
-            ParseBlocks(tokens);
-
-            ParseInLineScripts(tokens);
-            
-            return tokens;
-        }
-
-        private void ParseInLineScripts(List <IHlToken> tokens)
-        {
-            for (int i = m_IncludedFiles.Count - 1; i >= 0; i-- )
-            {
-                IncludedItem includedFile = m_IncludedFiles[i];
-
-                if (m_Parent != null && m_Parent.m_IncludedFiles.Contains(includedFile))
-                {
-                    continue;
-                }
-
-                if (includedFile.IsInline && includedFile.Data.EndsWith(".vhl"))
-                {
-
-                    string name = Path.GetFullPath(
-                                                   includedFile.Data.StartsWith(m_Directory)
-                                                       ? includedFile.Data.Remove(includedFile.Data.Length - 4, 4)
-                                                       : m_Directory +
-                                                         "/" +
-                                                         includedFile.Data.Remove(includedFile.Data.Length - 4, 4)
-                                                  );
-
-                    UriKind kind = includedFile.Data.StartsWith("/") || includedFile.Data.StartsWith("\\")
-                                       ? UriKind.Absolute
-                                       : UriKind.RelativeOrAbsolute;
-
-                    Uri import = null;
-
-                    if (kind == UriKind.Absolute)
-                    {
-                        import = new Uri("file://" + includedFile, kind);
-                    }
-                    else
-                    {
-                        import = new Uri(includedFile.Data, kind);
-                    }
-
-                    Uri dir = new Uri("file://" + Directory.GetCurrentDirectory() + "/", UriKind.Absolute);
-
-                    if (import.IsAbsoluteUri)
-                    {
-                        name = dir.MakeRelativeUri(import).OriginalString;
-                        name = name.Remove(name.Length - 4, 4);
-                    }
-
-
-                    string file = Path.GetFullPath(name + ".vhl");
-                    string srcContent = File.ReadAllText(file);
-
-                    HlCompilation comp = new HlCompilation(
-                                                           srcContent,
-                                                           Path.GetDirectoryName(file),
-                                                           m_DataStore
-                                                          );
-
-                    tokens.AddRange( comp.PrepareForInline() );
-
-                    m_IncludedFiles.RemoveAt(i);
-
-                }
-
-                OnCompiledIncludedScript?.Invoke(
-                                                 Path.GetFullPath(m_Directory + "/" + m_IncludedFiles[i].Data),
-                                                 includedFile.Data
-                                                );
-
-            }
         }
 
         public void ParseBlocks( List < IHlToken > tokens )
@@ -677,23 +594,23 @@ namespace VisCPU.HL
                     }
                 }
             }
+
         }
 
-        public void ParseImports(List<IHlToken> tokens)
+        public void ParseImports( List < IHlToken > tokens )
         {
-            for (int i = 0; i < tokens.Count; i++)
+            for ( int i = 0; i < tokens.Count; i++ )
             {
-                if (tokens[i].Type == HlTokenType.OpNumSign && tokens.Count > i + 2)
+                if ( tokens[i].Type == HlTokenType.OpNumSign && tokens.Count > i + 2 )
                 {
-                    if (tokens[i + 1].ToString() == "import" && tokens[i + 2].Type == HlTokenType.OpStringLiteral)
+                    if ( tokens[i + 1].ToString() == "import" && tokens[i + 2].Type == HlTokenType.OpStringLiteral )
                     {
-                        m_ImportedItems.Add(tokens[i + 2].ToString());
-                        tokens.RemoveRange(i, 3);
+                        m_ImportedItems.Add( tokens[i + 2].ToString() );
+                        tokens.RemoveRange( i, 3 );
                     }
                 }
             }
         }
-        
 
         public void ParseIncludes( List < IHlToken > tokens )
         {
@@ -701,17 +618,18 @@ namespace VisCPU.HL
             {
                 if ( tokens[i].Type == HlTokenType.OpNumSign && tokens.Count > i + 2 )
                 {
-                    if (tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HlTokenType.OpStringLiteral)
+                    if ( tokens[i + 1].ToString() == "include" && tokens[i + 2].Type == HlTokenType.OpStringLiteral )
                     {
-                        string c = UriResolver.GetFilePath(m_Directory, tokens[i + 2].ToString());
-                        m_IncludedFiles.Add(new IncludedItem(c ?? tokens[i + 2].ToString(), false));
-                        tokens.RemoveRange(i, 3);
+                        string c = UriResolver.GetFilePath( m_Directory, tokens[i + 2].ToString() );
+                        m_IncludedFiles.Add( new IncludedItem( c ?? tokens[i + 2].ToString(), false ) );
+                        tokens.RemoveRange( i, 3 );
                     }
-                    else if (tokens[i + 1].ToString() == "inline" && tokens[i + 2].Type == HlTokenType.OpStringLiteral)
+                    else if ( tokens[i + 1].ToString() == "inline" &&
+                              tokens[i + 2].Type == HlTokenType.OpStringLiteral )
                     {
-                        string c = UriResolver.GetFilePath(m_Directory, tokens[i + 2].ToString());
-                        m_IncludedFiles.Add(new IncludedItem(c ?? tokens[i + 2].ToString(), true));
-                        tokens.RemoveRange(i, 3);
+                        string c = UriResolver.GetFilePath( m_Directory, tokens[i + 2].ToString() );
+                        m_IncludedFiles.Add( new IncludedItem( c ?? tokens[i + 2].ToString(), true ) );
+                        tokens.RemoveRange( i, 3 );
                     }
                 }
             }
@@ -910,6 +828,37 @@ namespace VisCPU.HL
             }
         }
 
+        public List < IHlToken > PrepareForInline()
+        {
+            HlParserSettings hlpS = new HlParserSettings();
+            HlParserBaseReader br = new HlParserBaseReader( hlpS, OriginalText );
+
+            List < IHlToken > tokens = br.ReadToEnd();
+            ParseOneLineStrings( tokens );
+            ParseCharTokens( tokens );
+            RemoveComments( tokens );
+            ParseImports( tokens );
+            ParseIncludes( tokens );
+            ParseReservedKeys( tokens, hlpS );
+            tokens = tokens.Where( x => x.Type != HlTokenType.OpNewLine ).ToList();
+            ParseVarDefToken( tokens, hlpS );
+            ParseBlocks( tokens );
+
+            ParseInLineScripts( tokens );
+
+            return tokens;
+        }
+
+        public void Unload()
+        {
+            OriginalText = null;
+            externalSymbols.Clear();
+            m_IncludedFiles.Clear();
+            m_UnusedTempVars.Clear();
+            m_UsedTempVars.Clear();
+            m_ParsedText = null;
+        }
+
         internal string GetTempVar( uint initValue )
         {
             VariableData tmp = GetFreeTempVar( initValue );
@@ -1044,7 +993,6 @@ namespace VisCPU.HL
             HlTypeDefinition tdef,
             HlFuncDefOperand fdef )
         {
-
             if ( !isStatic || type != HlFunctionType.Function )
             {
                 subCompilation.CreateVariable(
@@ -1076,34 +1024,66 @@ namespace VisCPU.HL
                                              );
             }
 
+            if ( fdef.FunctionDefinition.Type == HlFunctionType.Constructor )
+            {
+                subCompilation.EmitterResult.Store(
+                                                   "." +
+                                                   tdef.GetInternalConstructor( compilation ) +
+                                                   ( fdef.FunctionDefinition.Mods.Any(
+                                                          x => x.Type == HlTokenType.OpPublicMod
+                                                         )
+                                                         ? ""
+                                                         : " linker:hide" )
+                                                  );
+            }
+
+            if ( fdef.FunctionDefinition.Type == HlFunctionType.Constructor &&
+                 SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
+                 HlTypeConstructorPrologMode.Inline )
+
+            {
+                InvocationExpressionCompiler.WriteInlineConstructorInvocationProlog(subCompilation, tdef, fdef);
+            }
+
+            subCompilation.EmitterResult.Store(
+                                               "." +
+                                               funcName +
+                                               ( fdef.FunctionDefinition.Mods.Any(
+                                                      x => x.Type == HlTokenType.OpPublicMod
+                                                     )
+                                                     ? ""
+                                                     : " linker:hide" )
+                                              );
+
+            for ( int i = fdef.FunctionDefinition.
+                               Arguments.Length -
+                          1;
+                  i >= 0;
+                  i-- )
+            {
+                IHlToken valueArgument = fdef.FunctionDefinition.
+                                              Arguments[i];
+
+                subCompilation.EmitterResult.Emit(
+                                                  $"POP",
+                                                  $"{subCompilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                                                 );
+            }
+
+            if ( !isStatic || type != HlFunctionType.Function )
+            {
+                subCompilation.EmitterResult.Emit( $"POP", $"{subCompilation.GetFinalName( "this" )}" );
+            }
+
             List < string > parsedVal =
                 subCompilation.Parse( fdef.Block, false, null ).
                                Replace( "\r", "" ).
                                Split( '\n' ).
                                ToList();
 
-            if ( !isStatic || type != HlFunctionType.Function )
-            {
-                parsedVal.Insert(
-                                 0,
-                                 $"POP {subCompilation.GetFinalName( "this" )}"
-                                );
-            }
+            parsedVal.Add( $"PUSH 0" );
 
-            foreach ( IHlToken valueArgument in fdef.FunctionDefinition.
-                                                     Arguments )
-            {
-                parsedVal.Insert(
-                                 0,
-                                 $"POP {subCompilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
-                                );
-            }
-
-            parsedVal.Add(
-                          "PUSH 0 ; Push anything. Will not be used anyway."
-                         );
-
-            parsedVal.Add( "RET ; Compiler Safeguard." );
+            parsedVal.Add( "RET" );
 
             return parsedVal.ToArray();
         }
@@ -1169,12 +1149,10 @@ namespace VisCPU.HL
 
                 if ( m_Parent == null )
                 {
-                    sb.AppendLine( "." + keyValuePair.Key + ( keyValuePair.Value.Public ? "" : " linker:hide" ) );
-                }
+                    //sb.AppendLine("." + keyValuePair.Key + (keyValuePair.Value.Public ? "" : " linker:hide"));
+                    string[] outp = keyValuePair.Value.GetCompiledOutput();
 
-                if ( m_Parent == null )
-                {
-                    foreach ( string s in keyValuePair.Value.GetCompiledOutput() )
+                    foreach ( string s in outp )
                     {
                         sb.AppendLine( s );
                     }
@@ -1331,13 +1309,14 @@ namespace VisCPU.HL
             {
                 IncludedItem includedFile = m_IncludedFiles[i];
 
-                if ( m_Parent != null && m_Parent.m_IncludedFiles.Contains( includedFile) )
+                if ( m_Parent != null && m_Parent.m_IncludedFiles.Contains( includedFile ) )
                 {
                     continue;
                 }
 
                 if ( includedFile.Data.EndsWith( ".vhl" ) )
                 {
+                    Log( "Including File: {0}", includedFile.Data );
 
                     string name = Path.GetFullPath(
                                                    includedFile.Data.StartsWith( m_Directory )
@@ -1350,7 +1329,7 @@ namespace VisCPU.HL
                     UriKind kind = includedFile.Data.StartsWith( "/" ) || includedFile.Data.StartsWith( "\\" )
                                        ? UriKind.Absolute
                                        : UriKind.RelativeOrAbsolute;
-                    
+
                     Uri import = null;
 
                     if ( kind == UriKind.Absolute )
@@ -1372,7 +1351,7 @@ namespace VisCPU.HL
 
                     string newInclude = m_DataStore.GetStorePath( "HL2VASM", name );
                     string file = Path.GetFullPath( name + ".vhl" );
-                    string srcContent = File.ReadAllText(file);
+                    string srcContent = File.ReadAllText( file );
 
                     HlCompilation comp = null;
                     bool cached = false;
@@ -1433,9 +1412,9 @@ namespace VisCPU.HL
 
                     includedFile = new IncludedItem( newInclude, includedFile.IsInline );
 
-                    foreach (IncludedItem compIncludedFile in comp.m_IncludedFiles )
+                    foreach ( IncludedItem compIncludedFile in comp.m_IncludedFiles )
                     {
-                        if ( !m_IncludedFiles.Contains(compIncludedFile ) )
+                        if ( !m_IncludedFiles.Contains( compIncludedFile ) )
                         {
                             m_IncludedFiles.Insert( 0, compIncludedFile );
                             i++;
@@ -1446,14 +1425,87 @@ namespace VisCPU.HL
                     {
                         HlCompilerCache.Add( srcContent, comp );
                     }
+                    else
+                    {
+                        comp.Unload();
+                    }
                 }
 
                 OnCompiledIncludedScript?.Invoke(
-                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i].Data),
+                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i].Data ),
                                                  includedFile.Data
                                                 );
 
                 m_IncludedFiles[i] = includedFile;
+            }
+        }
+
+        private void ParseInLineScripts( List < IHlToken > tokens )
+        {
+            for ( int i = m_IncludedFiles.Count - 1; i >= 0; i-- )
+            {
+                IncludedItem includedFile = m_IncludedFiles[i];
+
+                if ( m_Parent != null && m_Parent.m_IncludedFiles.Contains( includedFile ) )
+                {
+                    continue;
+                }
+
+                if ( includedFile.IsInline && includedFile.Data.EndsWith( ".vhl" ) )
+                {
+                    Log( "Inlining File: {0}", includedFile.Data );
+
+                    string name = Path.GetFullPath(
+                                                   includedFile.Data.StartsWith( m_Directory )
+                                                       ? includedFile.Data.Remove( includedFile.Data.Length - 4, 4 )
+                                                       : m_Directory +
+                                                         "/" +
+                                                         includedFile.Data.Remove( includedFile.Data.Length - 4, 4 )
+                                                  );
+
+                    UriKind kind = includedFile.Data.StartsWith( "/" ) || includedFile.Data.StartsWith( "\\" )
+                                       ? UriKind.Absolute
+                                       : UriKind.RelativeOrAbsolute;
+
+                    Uri import = null;
+
+                    if ( kind == UriKind.Absolute )
+                    {
+                        import = new Uri( "file://" + includedFile, kind );
+                    }
+                    else
+                    {
+                        import = new Uri( includedFile.Data, kind );
+                    }
+
+                    Uri dir = new Uri( "file://" + Directory.GetCurrentDirectory() + "/", UriKind.Absolute );
+
+                    if ( import.IsAbsoluteUri )
+                    {
+                        name = dir.MakeRelativeUri( import ).OriginalString;
+                        name = name.Remove( name.Length - 4, 4 );
+                    }
+
+                    string file = Path.GetFullPath( name + ".vhl" );
+                    string srcContent = File.ReadAllText( file );
+
+                    HlCompilation comp = new HlCompilation(
+                                                           srcContent,
+                                                           Path.GetDirectoryName( file ),
+                                                           m_DataStore
+                                                          );
+
+                    tokens.AddRange( comp.PrepareForInline() );
+
+                    comp.Unload();
+
+                    m_IncludedFiles.RemoveAt( i );
+                }
+
+                OnCompiledIncludedScript?.Invoke(
+                                                 Path.GetFullPath( m_Directory + "/" + m_IncludedFiles[i].Data ),
+                                                 includedFile.Data
+                                                );
             }
         }
 
@@ -1490,6 +1542,8 @@ namespace VisCPU.HL
                 {
                     HlTypeDefinition tt = ts.GetType( Root, t.VariableDefinition.TypeName.ToString() );
 
+                    uint arrSize = t.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
+
                     if ( t.VariableDefinition.Size != null )
                     {
                         tt = new ArrayTypeDefintion(
@@ -1506,6 +1560,36 @@ namespace VisCPU.HL
                                                                         );
 
                     tdef.AddMember( pdef );
+
+                    if ( t.VariableDefinition.Modifiers.Any(
+                                                            x => x.Type == HlTokenType.OpStaticMod ||
+                                                                 x.Type == HlTokenType.OpConstMod
+                                                           ) )
+                    {
+                        string asmVarName = tdef.GetFinalStaticProperty( t.VariableDefinition.Name.ToString() );
+
+                        CreateVariable(
+                                       asmVarName,
+                                       arrSize,
+                                       tt,
+                                       t.VariableDefinition.Modifiers.Any(
+                                                                          x => x.Type == HlTokenType.OpPublicMod
+                                                                         ),
+                                       false
+                                      );
+
+                        HlExpression init = t.Initializer.FirstOrDefault();
+
+                        if ( init != null )
+                        {
+                            if ( init is HlValueOperand vOp &&
+                                 vOp.Value.Type == HlTokenType.OpStringLiteral )
+                            {
+                                string content = vOp.Value.ToString();
+                                CreateVariable( asmVarName, content, tt, false, false );
+                            }
+                        }
+                    }
                 }
                 else if ( hlToken is HlFuncDefOperand fdef )
                 {
@@ -1586,6 +1670,72 @@ namespace VisCPU.HL
                                                                               )
                                                          );
                 }
+            }
+
+            if ( tdef.StaticConstructor == null )
+            {
+                HlFunctionDefinition sctor = new HlFunctionDefinition(
+                                                                      tdef.Name,
+                                                                      TypeSystem.GetType( Root, "void" ),
+                                                                      new HlTypeDefinition[0],
+                                                                      new[]
+                                                                      {
+                                                                          new HlTextToken(
+                                                                               HlTokenType.OpPublicMod,
+                                                                               "public",
+                                                                               -1
+                                                                              ),
+                                                                          new HlTextToken(
+                                                                               HlTokenType.OpStaticMod,
+                                                                               "static",
+                                                                               -1
+                                                                              )
+                                                                      }
+                                                                     );
+                tdef.AddMember(sctor);
+
+                string funcName = tdef.GetFinalMemberName(sctor);
+                HlCompilation fComp = new HlCompilation(this, funcName, tdef.Namespace);
+
+                Func < string[] > compiler = () =>
+                                             {
+                                                 fComp.CreateVariable(
+                                                                     "this",
+                                                                     1,
+                                                                     tdef,
+                                                                     false,
+                                                                     true
+                                                                    );
+
+                                                 fComp.EmitterResult.Emit( "POP", fComp.GetFinalName( "this" ) );
+                                                 InvocationExpressionCompiler.WriteConstructorInvocationProlog(
+                                                      fComp,
+                                                      tdef,
+                                                      fComp.GetFinalName("this")
+                                                     );
+                                                 List < string > parsedVal = fComp.EmitterResult.Get().ToList();
+                                                 parsedVal.Insert(0, "." + tdef.GetInternalConstructor(fComp));
+                                                 parsedVal.InsertRange( 0, fComp.EmitVariables( false ) );
+
+
+
+                                                 parsedVal.Add("." + funcName);
+                                                 parsedVal.Add("PUSH 0");
+                                                 parsedVal.Add("RET");
+                                                 return parsedVal.ToArray();
+                                             };
+
+                FunctionMap.Set(
+                                funcName,
+                                new FunctionData(
+                                                 funcName,
+                                                 true,
+                                                 true,
+                                                 compiler,
+                                                 1,
+                                                 "void"
+                                                )
+                               );
             }
         }
 
@@ -1677,6 +1827,7 @@ namespace VisCPU.HL
                                                               current,
                                                               name.ToString(),
                                                               mods.Any( x => x.Type == HlTokenType.OpPublicMod ),
+                                                              mods.Any( x => x.Type == HlTokenType.OpAbstractMod ),
                                                               classType.ToString() == "struct"
                                                              );
 

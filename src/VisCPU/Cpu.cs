@@ -143,6 +143,25 @@ namespace VisCPU
                 Dump();
             }
 
+            if ( Logger.s_Settings.DebugCore )
+            {
+                uint a0= DecodeArgument(0);
+                uint a1 = DecodeArgument(1);
+                uint a2 = DecodeArgument(2);
+
+                Logger.LogMessage(
+                                  LoggerSystems.Debug,
+                                  "Instruction: {0} {1}({4}) {2}({5}) {3}({6})",
+                                  instruction.Key,
+                                  a0,
+                                  a1,
+                                  a2,
+                                  MemoryBus.Read( a0 ),
+                                  MemoryBus.Read( a1 ),
+                                  MemoryBus.Read( a2 )
+                                 );
+            }
+
             m_RemainingCycles = instruction.Cycles - 1;
             instruction.Process( this );
             ProgramCounter += instruction.InstructionSize;

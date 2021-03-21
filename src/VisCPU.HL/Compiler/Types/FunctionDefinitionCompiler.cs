@@ -23,6 +23,7 @@ namespace VisCPU.HL.Compiler.Types
             bool isStatic = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpStaticMod );
             bool isAbstract = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpAbstractMod );
 
+            
 
             string funcName = expr.FunctionDefinition.Parent == null
                                   ? expr.FunctionDefinition.FunctionName.ToString()
@@ -35,7 +36,7 @@ namespace VisCPU.HL.Compiler.Types
             {
                 compiler = () =>
                            {
-
+                               fComp.EmitterResult.Store( "." + funcName + ( isPublic ? "" : " linker:hide" ) );
                                foreach ( IHlToken valueArgument in expr.
                                                                    FunctionDefinition.Arguments )
                                {

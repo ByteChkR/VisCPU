@@ -9,11 +9,21 @@ using VisCPU.Utility.IO.Settings.Loader;
 namespace VisCPU.HL
 {
 
+    public enum HlTypeConstructorPrologMode
+    {
+
+        Outline,
+        Inline,
+
+    }
+
     [Serializable]
     public class HlCompilerSettings
     {
+        [field: Argument(Name = "compiler:enable-caching")]
+        public bool EnableCompilationCaching { get; set; } = true;
 
-        [field: Argument( Name = "compiler:optimize-temp-vars" )]
+        [field: Argument(Name = "compiler:optimize-temp-vars")]
         public bool OptimizeTempVarUsage { get; set; } = true;
 
         [field: Argument( Name = "compiler:optimize-const-expr" )]
@@ -25,8 +35,11 @@ namespace VisCPU.HL
         [field: Argument( Name = "compiler:optimize-if-expr" )]
         public bool OptimizeIfConditionExpressions { get; set; }
 
-        [field: Argument( Name = "compiler:optimize-while-expr" )]
+        [field: Argument(Name = "compiler:optimize-while-expr")]
         public bool OptimizeWhileConditionExpressions { get; set; }
+
+        [field: Argument(Name = "compiler:constructor-prolog-mode")]
+        public HlTypeConstructorPrologMode ConstructorPrologMode { get; set; }
 
         [JsonIgnore]
         public bool OptimizeAll

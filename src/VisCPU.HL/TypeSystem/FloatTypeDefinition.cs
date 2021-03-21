@@ -9,7 +9,7 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public FloatTypeDefinition(HlNamespace root) : base(root, HLBaseTypeNames.s_FloatTypeName, true, true )
+        public FloatTypeDefinition(HlNamespace root) : base(root, HLBaseTypeNames.s_FloatTypeName, true, false, true )
         {
         }
 

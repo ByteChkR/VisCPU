@@ -9,6 +9,8 @@ namespace VisCPU.Instructions.Emit
         private readonly Emitter < T > m_Emitter;
         private readonly List < T > m_Store = new List < T >();
 
+        public int StoreCount => m_Store.Count;
+
         #region Public
 
         public EmitterResult( Emitter < T > emitter )

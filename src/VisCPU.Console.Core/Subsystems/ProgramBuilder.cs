@@ -2,6 +2,8 @@
 using System.IO;
 using System.Linq;
 
+using OpenCL.Integration;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
@@ -65,7 +67,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Build( BuilderSettings settings )
         {
-            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter() );
+            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter(), new OpenCLKernelImporter() );
 
             if ( settings.InputFiles == null )
             {
@@ -88,6 +90,10 @@ namespace VisCPU.Console.Core.Subsystems
 
                 foreach ( ( string stepName, BuildSteps step ) in settings.InstanceBuildSteps )
                 {
+                    Logger.LogMessage(
+                                      LoggerSystems.Console,
+                                      $"Running Build Step '{stepName}'"
+                                     );
                     string newFile = step( original, file );
 
                     if ( settings.CleanBuildOutput && file != original )
@@ -97,7 +103,7 @@ namespace VisCPU.Console.Core.Subsystems
 
                     Logger.LogMessage(
                                       LoggerSystems.Console,
-                                      $"Running Build Step '{stepName}' File: '{file}' => '{newFile}'"
+                                      $"'{file}' => '{newFile}'"
                                      );
 
                     file = newFile;

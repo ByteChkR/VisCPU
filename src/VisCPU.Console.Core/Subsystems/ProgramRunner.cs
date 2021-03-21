@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using OpenCL.Integration;
+
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Instructions;
@@ -77,7 +79,7 @@ namespace VisCPU.Console.Core.Subsystems
                     SettingsManager.SaveSettings( ms );
                 }
 
-                MemoryBus bus = CreateBus( mbs );
+                MemoryBus bus = CreateBus( mbs , new OpenCLPeripheral());
 
                 Cpu cpu = new Cpu( bus, cpuSettings.CpuResetAddr, cpuSettings.CpuIntAddr );
 

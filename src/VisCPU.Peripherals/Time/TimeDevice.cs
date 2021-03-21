@@ -7,6 +7,11 @@ namespace VisCPU.Peripherals.Time
 
     public class TimeDevice : Peripheral
     {
+        public override string PeripheralName => "Time Provider Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.Time;
+
+        public override uint PresentPin => m_Settings.PresentPin;
 
         private readonly TimeDeviceSettings m_Settings;
 

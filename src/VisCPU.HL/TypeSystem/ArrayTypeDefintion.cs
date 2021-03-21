@@ -12,9 +12,10 @@ namespace VisCPU.HL.TypeSystem
 
         #region Public
 
-        public ArrayTypeDefintion(HlNamespace root, HlTypeDefinition elementType, uint size ) : base(root,
+        public ArrayTypeDefintion(HlNamespace root, HlTypeDefinition elementType, uint size ) :base(root,
              elementType.Name + "[]",
              true,
+             false,
              false
             )
         {

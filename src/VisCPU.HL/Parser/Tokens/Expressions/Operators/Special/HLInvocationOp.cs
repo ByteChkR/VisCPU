@@ -21,6 +21,8 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 
         public string Instance { get; private set; }
 
+        public bool WriteProlog { get; private set; }
+
         public HlTypeDefinition InstanceType { get; private set; }
 
         public HlMemberDefinition MemberDefinition { get; private set; }
@@ -63,8 +65,9 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             return false;
         }
 
-        public void Redirect( string instance, HlTypeDefinition instanceType, HlMemberDefinition memberDef )
+        public void Redirect( string instance, HlTypeDefinition instanceType, HlMemberDefinition memberDef , bool writeProlog = true)
         {
+            WriteProlog = writeProlog;
             InstanceType = instanceType;
             MemberDefinition = memberDef;
 
