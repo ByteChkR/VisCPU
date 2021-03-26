@@ -9,6 +9,7 @@ using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.FileSystemBuilder;
 using VisCPU.Console.Core.Subsystems.Origins;
 using VisCPU.Console.Core.Subsystems.Project;
+using VisCPU.Console.Core.Subsystems.VM;
 using VisCPU.Utility;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
@@ -36,7 +37,8 @@ namespace VisCPU.Console.Core
                 { "project", new ProjectSubSystem() },
                 { "origin", new OriginSubSystem() },
                 { "reset", new ConsoleReset() },
-                {"drive", new DriveImageSubsystem() }
+                {"drive", new DriveImageSubsystem() },
+                {"vm", new VMSubsystem() }
             };
 
         #region Public

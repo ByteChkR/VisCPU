@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <Folder Include="Subsystems\FileSystemBuilder\" />
+    <Folder Include="Subsystems\VM\" />
   </ItemGroup>
 
 </Project>
