@@ -8,7 +8,6 @@ namespace VisCPU.HL.TypeSystem
 
     public class HlFunctionDefinition : HlMemberDefinition
     {
-
         public HlTypeDefinition ReturnType { get; }
 
         public HlTypeDefinition[] ParameterTypes { get; }
@@ -33,7 +32,7 @@ namespace VisCPU.HL.TypeSystem
             string name,
             IHlToken[] mods ) : base( name, mods )
         {
-            ReturnType = ts.GetType(root, HLBaseTypeNames.s_UintTypeName );
+            ReturnType = ts.GetType( root, HLBaseTypeNames.s_UintTypeName );
         }
 
         public override uint GetSize()
@@ -42,7 +41,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

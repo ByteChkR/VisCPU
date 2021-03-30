@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
 
     public class BitwiseXOrExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
-
         protected override bool NeedsOutput => true;
 
         #region Public
@@ -18,28 +17,28 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
+                                                       expr.Right
+                                                   ).
                                                    MakeAddress( compilation );
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
             {
                 compilation.EmitterResult.Emit(
-                                               $"XOR",
-                                               target.ResultAddress,
-                                               rTarget.ResultAddress
-                                              );
+                    $"XOR",
+                    target.ResultAddress,
+                    rTarget.ResultAddress
+                );
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
             }
             else
             {
                 compilation.EmitterResult.Emit(
-                                               $"XOR",
-                                               target.ResultAddress,
-                                               rTarget.ResultAddress,
-                                               outputTarget.ResultAddress
-                                              );
+                    $"XOR",
+                    target.ResultAddress,
+                    rTarget.ResultAddress,
+                    outputTarget.ResultAddress
+                );
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
                 compilation.ReleaseTempVar( target.ResultAddress );
@@ -51,7 +50,6 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
         }
 
         #endregion
-
     }
 
 }

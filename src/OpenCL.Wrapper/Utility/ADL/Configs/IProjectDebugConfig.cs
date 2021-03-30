@@ -1,23 +1,23 @@
 ﻿namespace Utility.ADL.Configs
 {
+
     public interface IProjectDebugConfig
     {
-
-        string GetProjectName();
+        int GetAcceptMask();
 
         int GetMinSeverity();
 
-        int GetAcceptMask();
-
         PrefixLookupSettings GetPrefixLookupSettings();
 
-        void SetProjectName(string projectName);
+        string GetProjectName();
 
-        void SetMinSeverity(int severity);
+        void SetAcceptMask( int mask );
 
-        void SetAcceptMask(int mask);
+        void SetMinSeverity( int severity );
 
-        void SetPrefixLookupSettings(PrefixLookupSettings settings);
+        void SetPrefixLookupSettings( PrefixLookupSettings settings );
 
+        void SetProjectName( string projectName );
     }
+
 }

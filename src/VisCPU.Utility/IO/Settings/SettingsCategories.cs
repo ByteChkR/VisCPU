@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.IO.Settings.Events;
@@ -11,7 +10,6 @@ namespace VisCPU.Utility.IO.Settings
 
     public static class SettingsCategories
     {
-
         private static readonly List < (string rootDir, SettingsCategory category) > s_RootCategories =
             new List < (string, SettingsCategory) >();
 
@@ -96,7 +94,6 @@ namespace VisCPU.Utility.IO.Settings
         }
 
         #endregion
-
     }
 
 }

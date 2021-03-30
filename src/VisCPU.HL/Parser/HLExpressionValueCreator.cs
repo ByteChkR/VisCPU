@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.Parser.Tokens.Combined;
@@ -18,7 +17,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HlExpressionValueCreator
     {
-
         #region Public
 
         /// <summary>
@@ -58,10 +56,10 @@ namespace VisCPU.HL.Parser
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HlTokenType.OpNew && maxPrecedence >= 3)
+            if ( parser.CurrentToken.Type == HlTokenType.OpNew && maxPrecedence >= 3 )
             {
                 parser.Eat( parser.CurrentToken.Type );
-                HlExpression token = new HlUnaryOp( parser.ParseExpr(2), HlTokenType.OpNew );
+                HlExpression token = new HlUnaryOp( parser.ParseExpr( 2 ), HlTokenType.OpNew );
 
                 return token;
             }
@@ -123,16 +121,16 @@ namespace VisCPU.HL.Parser
                  parser.CurrentToken.Type == HlTokenType.OpBase )
             {
                 HlExpression token = new HlVarOperand(
-                                                      parser.CurrentToken,
-                                                      parser.CurrentToken.SourceIndex
-                                                     );
+                    parser.CurrentToken,
+                    parser.CurrentToken.SourceIndex
+                );
 
                 parser.Eat( parser.CurrentToken.Type );
 
                 return token;
             }
 
-            if ( parser.CurrentToken.Type == HlTokenType.OpWord || parser.CurrentToken.Type == HlTokenType.OpNew)
+            if ( parser.CurrentToken.Type == HlTokenType.OpWord || parser.CurrentToken.Type == HlTokenType.OpNew )
             {
                 IHlToken item = parser.CurrentToken;
                 parser.Eat( parser.CurrentToken.Type );
@@ -181,9 +179,9 @@ namespace VisCPU.HL.Parser
 
                 HlExpression token =
                     new HlFuncDefOperand(
-                                         fToken,
-                                         expressionBlock
-                                        );
+                        fToken,
+                        expressionBlock
+                    );
 
                 return token;
             }
@@ -205,7 +203,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

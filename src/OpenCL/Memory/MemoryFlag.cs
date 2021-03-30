@@ -6,13 +6,13 @@ using System;
 
 namespace OpenCL.NET.Memory
 {
+
     /// <summary>
     ///     Represents the memory flags, that are used to create memory buffers.
     /// </summary>
     [Flags]
     public enum MemoryFlag : ulong
     {
-
         /// <summary>
         ///     This flag specifies that the memory object will be read and written by a kernel. This is the default.
         /// </summary>
@@ -84,6 +84,6 @@ namespace OpenCL.NET.Memory
         ///     Can be used to get a list of supported image formats that can be both read from and written to by a kernel.
         /// </summary>
         KernelReadAndWrite = 1 << 12
-
     }
+
 }

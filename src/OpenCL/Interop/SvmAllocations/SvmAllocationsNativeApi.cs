@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.SvmAllocations
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL SVM Allocations API.
     /// </summary>
     public static class SvmAllocationsNativeApi
     {
-
-        #region Public Static Methods
+        #region Public
 
         /// <summary>
         ///     Allocates a shared virtual memory (SVM) buffer that can be shared by the host and all devices in an OpenCL context
@@ -45,18 +45,13 @@ namespace OpenCL.NET.Interop.SvmAllocations
         ///     alignment for at least one device in <see cref="context" />
         ///     - There was a failure to allocate resources
         /// </returns>
-        [IntroducedInOpenCl(2, 0)]
-        [DllImport("OpenCL", EntryPoint = "clSVMAlloc")]
+        [IntroducedInOpenCl( 2, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clSVMAlloc" )]
         public static extern IntPtr SvmAllocate(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs(UnmanagedType.U8)]
-            SvmMemoryFlag flags,
-            [In]
-            UIntPtr size,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            uint alignment
-        );
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )] SvmMemoryFlag flags,
+            [In] UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint alignment );
 
         /// <summary>
         ///     Frees a shared virtual memory buffer allocated using <see cref="SvmAllocate" />. Note that <see cref="SvmFree" />
@@ -69,16 +64,13 @@ namespace OpenCL.NET.Interop.SvmAllocations
         ///     Must be the value returned by a call to <see cref="SvmAllocate" />. If a <c>null</c> pointer
         ///     is passed in <see cref="svmPointer" />, no action occurs.
         /// </param>
-        [IntroducedInOpenCl(2, 0)]
-        [DllImport("OpenCL", EntryPoint = "clSVMFree")]
+        [IntroducedInOpenCl( 2, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clSVMFree" )]
         public static extern void SvmFree(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr svmPointer
-        );
+            [In] IntPtr context,
+            [In] IntPtr svmPointer );
 
         #endregion
-
     }
+
 }

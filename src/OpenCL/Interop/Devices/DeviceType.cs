@@ -6,13 +6,13 @@ using System;
 
 namespace OpenCL.NET.Interop.Devices
 {
+
     /// <summary>
     ///     Represents the different device types that can be supported by an OpenCL platform.
     /// </summary>
     [Flags]
     public enum DeviceType : ulong
     {
-
         /// <summary>
         ///     The default OpenCL device in the system. The default device cannot be a <c>DeviceType.Custom</c> device.
         /// </summary>
@@ -45,6 +45,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     All OpenCL devices available in the system except <c>DeviceType.Custom</c> devices.
         /// </summary>
         All = 0xFFFFFFFF
-
     }
+
 }

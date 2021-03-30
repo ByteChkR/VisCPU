@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
 
@@ -13,7 +12,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HlInvocationOp : HlExpression
     {
-
         /// <summary>
         ///     Left side Expression
         /// </summary>
@@ -65,22 +63,28 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             return false;
         }
 
-        public void Redirect( string instance, HlTypeDefinition instanceType, HlMemberDefinition memberDef , bool writeProlog = true)
+        public void Redirect(
+            string instance,
+            HlTypeDefinition instanceType,
+            HlMemberDefinition memberDef,
+            bool writeProlog = true )
         {
             WriteProlog = writeProlog;
             InstanceType = instanceType;
             MemberDefinition = memberDef;
 
-            if(memberDef!=null)
-            Left = new HlValueOperand(
-                                      new HlTextToken(
-                                                      HlTokenType.OpWord,
-                                                      InstanceType.GetFinalMemberName(
-                                                           memberDef
-                                                          ), //$"FUN_{tdef.Name}_{tdef.Constructor.Name}",
-                                                      0
-                                                     )
-                                     );
+            if ( memberDef != null )
+            {
+                Left = new HlValueOperand(
+                    new HlTextToken(
+                        HlTokenType.OpWord,
+                        InstanceType.GetFinalMemberName(
+                            memberDef
+                        ), //$"FUN_{tdef.Name}_{tdef.Constructor.Name}",
+                        0
+                    )
+                );
+            }
 
             Instance = instance;
         }
@@ -106,7 +110,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

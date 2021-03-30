@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-
 using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.Utility.EventSystem
@@ -8,10 +7,7 @@ namespace VisCPU.Utility.EventSystem
 
     public static class EventManager
     {
-
         public static event Action < Event > OnEventReceive;
-
-        public static void ResetEventHandler() => OnEventReceive = null;
 
         internal static EventManagerSettings Settings { get; private set; } = new EventManagerSettings();
 
@@ -26,6 +22,11 @@ namespace VisCPU.Utility.EventSystem
 
             OnEventReceive += EventManagerOnEventReceive;
             EventManager < ErrorEvent >.OnEventReceive += EventManagerOnErrorEventReceive;
+        }
+
+        public static void ResetEventHandler()
+        {
+            OnEventReceive = null;
         }
 
         public static void SendEvent( Event eventItem )
@@ -94,17 +95,18 @@ namespace VisCPU.Utility.EventSystem
         }
 
         #endregion
-
     }
 
     public static class EventManager < T > where T : Event
     {
-
         public static event Action < T > OnEventReceive;
 
-        public static void ResetEventHandler() => OnEventReceive = null;
-
         #region Public
+
+        public static void ResetEventHandler()
+        {
+            OnEventReceive = null;
+        }
 
         public static void SendEvent( T eventItem )
         {
@@ -113,7 +115,6 @@ namespace VisCPU.Utility.EventSystem
         }
 
         #endregion
-
     }
 
 }

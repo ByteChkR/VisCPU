@@ -7,7 +7,6 @@ namespace VisCPU.HL.Compiler.Special
 
     public class WhileExpressionCompiler : HlExpressionCompiler < HlWhileOp >
     {
-
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlWhileOp expr )
@@ -73,7 +72,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

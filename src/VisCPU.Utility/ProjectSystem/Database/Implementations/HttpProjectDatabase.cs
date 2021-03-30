@@ -4,7 +4,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.ProjectSystem.Data;
 using VisCPU.Utility.ProjectSystem.Resolvers;
@@ -14,7 +13,6 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
 
     public class HttpProjectDatabase : ProjectDatabase
     {
-
         private readonly string m_LocalTempCache;
         private List < ProjectPackage > m_PList;
 
@@ -52,7 +50,7 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
                 Get(
                     ProjectResolver.Resolve( this, targetDependency ),
                     Path.Combine( targetDir, targetDependency.ProjectName )
-                   );
+                );
             }
         }
 
@@ -98,7 +96,7 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
                 Get(
                     ProjectResolver.Resolve( this, targetDependency ),
                     Path.Combine( rootDir, targetDependency.ProjectName )
-                   );
+                );
             }
         }
 
@@ -192,14 +190,14 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
                     }
 
                     string dir = GetTargetDataPath(
-                                                   m_LocalTempCache,
-                                                   modulePackage.ModuleName,
-                                                   modulePackageModuleVersion
-                                                  );
+                        m_LocalTempCache,
+                        modulePackage.ModuleName,
+                        modulePackageModuleVersion
+                    );
 
                     Directory.CreateDirectory(
-                                              dir
-                                             );
+                        dir
+                    );
 
                     using ( WebClient wc = new WebClient() )
                     {
@@ -211,7 +209,6 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
         }
 
         #endregion
-
     }
 
 }

@@ -1,19 +1,19 @@
 ﻿namespace Utility.ExtPP.Base.Interfaces
 {
+
     public interface IFileContent
     {
-
-        bool HasValidFilepath { get; }
-
-        bool TryGetLines(out string[] lines);
-
-        string GetKey();
-
-        void SetKey(string key);
+        string GetDefinedName();
 
         string GetFilePath();
 
-        string GetDefinedName();
+        string GetKey();
 
+        bool HasValidFilepath { get; }
+
+        void SetKey( string key );
+
+        bool TryGetLines( out string[] lines );
     }
+
 }

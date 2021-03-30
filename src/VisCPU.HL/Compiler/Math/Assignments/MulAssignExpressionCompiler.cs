@@ -7,7 +7,6 @@ namespace VisCPU.HL.Compiler.Math.Assignments
 
     public class MulAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
-
         protected override string InstructionKey => "MUL";
 
         #region Public
@@ -19,8 +18,8 @@ namespace VisCPU.HL.Compiler.Math.Assignments
             ExpressionTarget target = compilation.Parse( expr.Left );
 
             ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        );
+                expr.Right
+            );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeReduceExpressions &&
                  IsReducable( rTarget ) )
@@ -29,10 +28,10 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                 string tmp = compilation.GetTempVarLoad( amount.ToString() );
 
                 compilation.EmitterResult.Emit(
-                                               "SHL",
-                                               target.MakeAddress( compilation ).ResultAddress,
-                                               tmp
-                                              );
+                    "SHL",
+                    target.MakeAddress( compilation ).ResultAddress,
+                    tmp
+                );
 
                 compilation.ReleaseTempVar( tmp );
 
@@ -48,10 +47,10 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                     : InstructionKey;
 
             compilation.EmitterResult.Emit(
-                                           instrKey,
-                                           target.ResultAddress,
-                                           rTarget.ResultAddress
-                                          );
+                instrKey,
+                target.ResultAddress,
+                rTarget.ResultAddress
+            );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
 
@@ -88,7 +87,6 @@ namespace VisCPU.HL.Compiler.Math.Assignments
         }
 
         #endregion
-
     }
 
 }

@@ -2,7 +2,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-
 using OpenCL.NET.CommandQueues;
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Events;
@@ -11,6 +10,7 @@ using OpenCL.NET.Interop.Events;
 
 namespace OpenCL.NET.Events
 {
+
     /// <summary>
     ///     Represents an event, which is returned by all OpenCL methods, that take longer. They can be used await asynchronous
     ///     API calls. This class is awaitable and can be used with the C# <c>await</c> keyword. Please not, that when
@@ -19,175 +19,18 @@ namespace OpenCL.NET.Events
     /// </summary>
     public class AwaitableEvent : HandleBase
     {
-
-        #region Constructors
-
-        /// <summary>
-        ///     Initializes a new <see cref="AwaitableEvent" /> instance.
-        /// </summary>
-        /// <param name="handle">The handle to the OpenCL event.</param>
-        public AwaitableEvent(IntPtr handle)
-            : base(handle, "AwaitableEvent", true)
-        {
-            // Subscribes to the event callbacks of the OpenCL event, so that a CLR event can be raised
-            EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             (int) CommandExecutionStatus.Queued,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData) =>
-                                                                                 OnQueued
-                                                                                     ?.Invoke(
-                                                                                          this,
-                                                                                          new
-                                                                                              EventArgs()
-                                                                                         )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
-            EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             (int) CommandExecutionStatus.Submitted,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData) =>
-                                                                                 OnSubmitted
-                                                                                     ?.Invoke(
-                                                                                          this,
-                                                                                          new
-                                                                                              EventArgs()
-                                                                                         )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
-            EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             (int) CommandExecutionStatus.Running,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData) =>
-                                                                                 OnRunning
-                                                                                     ?.Invoke(
-                                                                                          this,
-                                                                                          new
-                                                                                              EventArgs()
-                                                                                         )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
-            EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             (int) CommandExecutionStatus.Complete,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData) =>
-                                                                                 OnCompleted
-                                                                                     ?.Invoke(
-                                                                                          this,
-                                                                                          new
-                                                                                              EventArgs()
-                                                                                         )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        ///     Retrieves the specified information about the OpenCL event.
-        /// </summary>
-        /// <typeparam name="T">
-        ///     The type of the data that is to be returned.</param>
-        ///     <param name="eventInformation">The kind of information that is to be retrieved.</param>
-        ///     <exception cref="OpenClException">
-        ///         If the information could not be retrieved, then an <see cref="OpenClException" />
-        ///         is thrown.
-        ///     </exception>
-        ///     <returns>Returns the specified information.</returns>
-        private T GetEventInformation<T>(EventInformation eventInformation)
-        {
-            // Retrieves the size of the return value in bytes, this is used to later get the full information
-            UIntPtr returnValueSize;
-            Result result =
-                EventsNativeApi.GetEventInformation(Handle, eventInformation, UIntPtr.Zero, null, out returnValueSize);
-            if (result != Result.Success)
-            {
-                throw new OpenClException("The event information could not be retrieved.", result);
-            }
-
-            // Allocates enough memory for the return value and retrieves it
-            byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = EventsNativeApi.GetEventInformation(
-                                                         Handle,
-                                                         eventInformation,
-                                                         new UIntPtr((uint) output.Length),
-                                                         output,
-                                                         out returnValueSize
-                                                        );
-            if (result != Result.Success)
-            {
-                throw new OpenClException("The event information could not be retrieved.", result);
-            }
-
-            // Returns the output
-            return InteropConverter.To<T>(output);
-        }
-
-        #endregion
-
-        #region IDisposable Implementation
-
-        /// <summary>
-        ///     Disposes of the resources that have been acquired by the event.
-        /// </summary>
-        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
-        public override void Dispose()
-        {
-            // Checks if the event has already been disposed of, if not, then it is disposed of
-            if (!IsDisposed)
-            {
-                EventsNativeApi.ReleaseEvent(Handle);
-            }
-
-            // Makes sure that the base class can execute its dispose logic
-            base.Dispose();
-        }
-
-        #endregion
-
-        #region Private Delegates
-
         /// <summary>
         ///     A delegate for the callback of wait event.
         /// </summary>
         /// <param name="waitEvent">A pointer to the OpenCL event object.</param>
         /// <param name="userData">User-defined data that can be passed to the event subscription.</param>
-        private delegate void AwaitableEventCallback(IntPtr waitEvent, IntPtr userData);
-
-        #endregion
-
-        #region Public Properties
+        private delegate void AwaitableEventCallback( IntPtr waitEvent, IntPtr userData );
 
         /// <summary>
         ///     Gets the current command execution status code. This is the raw numeric status code, which can be helpful, when the
         ///     command raised an error, to retrieve more information about the type of error that was returned.
         /// </summary>
-        public int CommandExecutionStatusCode => GetEventInformation<int>(EventInformation.CommandExecutionStatus);
+        public int CommandExecutionStatusCode => GetEventInformation < int >( EventInformation.CommandExecutionStatus );
 
         /// <summary>
         ///     Gets the current command execution status.
@@ -197,18 +40,15 @@ namespace OpenCL.NET.Events
             get
             {
                 int commandExecutionStatusCode = CommandExecutionStatusCode;
-                if (commandExecutionStatusCode >= 0)
+
+                if ( commandExecutionStatusCode >= 0 )
                 {
-                    return (CommandExecutionStatus) commandExecutionStatusCode;
+                    return ( CommandExecutionStatus ) commandExecutionStatusCode;
                 }
 
                 return CommandExecutionStatus.Error;
             }
         }
-
-        #endregion
-
-        #region Public Events
 
         /// <summary>
         ///     An event, which is raised, when the command gets enqueued to a command-queue.
@@ -230,7 +70,159 @@ namespace OpenCL.NET.Events
         /// </summary>
         public event EventHandler OnCompleted;
 
+        #region Public
+
+        /// <summary>
+        ///     Initializes a new <see cref="AwaitableEvent" /> instance.
+        /// </summary>
+        /// <param name="handle">The handle to the OpenCL event.</param>
+        public AwaitableEvent( IntPtr handle )
+            : base( handle, "AwaitableEvent", true )
+        {
+            // Subscribes to the event callbacks of the OpenCL event, so that a CLR event can be raised
+            EventsNativeApi.SetEventCallback(
+                Handle,
+                ( int ) CommandExecutionStatus.Queued,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnQueued?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
+
+            EventsNativeApi.SetEventCallback(
+                Handle,
+                ( int ) CommandExecutionStatus.Submitted,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnSubmitted?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
+
+            EventsNativeApi.SetEventCallback(
+                Handle,
+                ( int ) CommandExecutionStatus.Running,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnRunning?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
+
+            EventsNativeApi.SetEventCallback(
+                Handle,
+                ( int ) CommandExecutionStatus.Complete,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnCompleted?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
+        }
+
+        /// <summary>
+        ///     Disposes of the resources that have been acquired by the event.
+        /// </summary>
+        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
+        public override void Dispose()
+        {
+            // Checks if the event has already been disposed of, if not, then it is disposed of
+            if ( !IsDisposed )
+            {
+                EventsNativeApi.ReleaseEvent( Handle );
+            }
+
+            // Makes sure that the base class can execute its dispose logic
+            base.Dispose();
+        }
+
         #endregion
 
+        #region Private
+
+        /// <summary>
+        ///     Retrieves the specified information about the OpenCL event.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The type of the data that is to be returned.</param>
+        ///     <param name="eventInformation">The kind of information that is to be retrieved.</param>
+        ///     <exception cref="OpenClException">
+        ///         If the information could not be retrieved, then an <see cref="OpenClException" />
+        ///         is thrown.
+        ///     </exception>
+        ///     <returns>Returns the specified information.</returns>
+        private T GetEventInformation < T >( EventInformation eventInformation )
+        {
+            // Retrieves the size of the return value in bytes, this is used to later get the full information
+            UIntPtr returnValueSize;
+
+            Result result =
+                EventsNativeApi.GetEventInformation(
+                    Handle,
+                    eventInformation,
+                    UIntPtr.Zero,
+                    null,
+                    out returnValueSize );
+
+            if ( result != Result.Success )
+            {
+                throw new OpenClException( "The event information could not be retrieved.", result );
+            }
+
+            // Allocates enough memory for the return value and retrieves it
+            byte[] output = new byte[returnValueSize.ToUInt32()];
+
+            result = EventsNativeApi.GetEventInformation(
+                Handle,
+                eventInformation,
+                new UIntPtr( ( uint ) output.Length ),
+                output,
+                out returnValueSize
+            );
+
+            if ( result != Result.Success )
+            {
+                throw new OpenClException( "The event information could not be retrieved.", result );
+            }
+
+            // Returns the output
+            return InteropConverter.To < T >( output );
+        }
+
+        #endregion
     }
+
 }

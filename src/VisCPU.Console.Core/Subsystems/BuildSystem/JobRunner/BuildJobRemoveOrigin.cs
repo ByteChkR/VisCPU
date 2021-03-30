@@ -7,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobRemoveOrigin : BuildJobRunner
     {
-
         public override string RunnerName => "remove-origins";
 
         #region Public
@@ -25,7 +24,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
-
     }
 
 }

@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.CommandQueues
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL Command Queues API.
     /// </summary>
     public static class CommandQueuesNativeApi
     {
-
-        #region Deprecated Public methods
+        #region Public
 
         /// <summary>
         ///     Create a command-queue on a specific device.
@@ -45,23 +45,14 @@ namespace OpenCL.NET.Interop.CommandQueues
         ///     command-queue is created successfully. Otherwise, it returns a <c>null</c> value with an error values returned in
         ///     <see cref="errorCode" />.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clCreateCommandQueue")]
-        [Obsolete("This is a deprecated OpenCL 1.2 method, please use CreateCommandQueueWithProperties instead.")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateCommandQueue" )]
+        [Obsolete( "This is a deprecated OpenCL 1.2 method, please use CreateCommandQueueWithProperties instead." )]
         public static extern IntPtr CreateCommandQueue(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr device,
-            [In] [MarshalAs(UnmanagedType.U8)]
-            CommandQueueProperty properties,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
-
-        #endregion
-
-        #region Public Static methods
+            [In] IntPtr context,
+            [In] IntPtr device,
+            [In] [MarshalAs( UnmanagedType.U8 )] CommandQueueProperty properties,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Create a host or device command-queue on a specific device.
@@ -85,57 +76,48 @@ namespace OpenCL.NET.Interop.CommandQueues
         ///     returned.
         /// </param>
         /// <returns>Returns the created command queue.</returns>
-        [IntroducedInOpenCl(2, 0)]
-        [DllImport("OpenCL", EntryPoint = "clCreateCommandQueueWithProperties")]
+        [IntroducedInOpenCl( 2, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateCommandQueueWithProperties" )]
         public static extern IntPtr CreateCommandQueueWithProperties(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr device,
-            [In]
-            IntPtr properties,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
+            [In] IntPtr context,
+            [In] IntPtr device,
+            [In] IntPtr properties,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
-        ///     Increments the command queue reference count.
+        ///     Blocks until all previously queued OpenCL commands in a command-queue are issued to the associated device and have
+        ///     completed.
         /// </summary>
-        /// <param name="commandQueue">Specifies the command-queue to retain.</param>
+        /// <param name="commandQueue">The command queue that is to be finished.</param>
         /// <returns>
-        ///     Returns <c>Result.Success</c> if the function executed successfully, or one of the errors below:
-        ///     <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue" /> is not a valid command-queue.
+        ///     Returns <c>Result.Success</c> if the function call was executed successfully. Otherwise, it returns one of the
+        ///     following errors:
+        ///     <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue" /> is not a valid host command-queue.
         ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the device.
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clRetainCommandQueue")]
-        public static extern Result RetainCommandQueue(
-            [In]
-            IntPtr commandQueue
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clFinish" )]
+        public static extern Result Finish( [In] IntPtr commandQueue );
 
         /// <summary>
-        ///     Decrements the commandQueue reference count.
+        ///     Issues all previously queued OpenCL commands in a command-queue to the device associated with the command-queue.
         /// </summary>
-        /// <param name="commandQueue">Specifies the command-queue to release.</param>
+        /// <param name="commandQueue">The command queue that is to flushed.</param>
         /// <returns>
-        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
-        ///     errors:
-        ///     <c>Result.InvalidContext</c> if <see cref="context" /> is not a valid command queue.
+        ///     Returns <c>Result.Success</c> if the function call was executed successfully. Otherwise, it returns one of the
+        ///     following errors:
+        ///     <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue" /> is not a valid host command-queue.
         ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the device.
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clReleaseCommandQueue")]
-        public static extern Result ReleaseCommandQueue(
-            [In]
-            IntPtr commandQueue
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clFlush" )]
+        public static extern Result Flush( [In] IntPtr commandQueue );
 
         /// <summary>
         ///     Query information about a command-queue.
@@ -163,63 +145,49 @@ namespace OpenCL.NET.Interop.CommandQueues
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetCommandQueueInfo")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetCommandQueueInfo" )]
         public static extern Result GetCommandQueueInfo(
-            [In]
-            IntPtr commandQueue,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            CommandQueueInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned
-        );
+            [In] IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )] CommandQueueInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
-        ///     Issues all previously queued OpenCL commands in a command-queue to the device associated with the command-queue.
+        ///     Decrements the commandQueue reference count.
         /// </summary>
-        /// <param name="commandQueue">The command queue that is to flushed.</param>
+        /// <param name="commandQueue">Specifies the command-queue to release.</param>
         /// <returns>
-        ///     Returns <c>Result.Success</c> if the function call was executed successfully. Otherwise, it returns one of the
-        ///     following errors:
-        ///     <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue" /> is not a valid host command-queue.
+        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        ///     errors:
+        ///     <c>Result.InvalidContext</c> if <see cref="context" /> is not a valid command queue.
         ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the device.
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clFlush")]
-        public static extern Result Flush(
-            [In]
-            IntPtr commandQueue
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clReleaseCommandQueue" )]
+        public static extern Result ReleaseCommandQueue( [In] IntPtr commandQueue );
 
         /// <summary>
-        ///     Blocks until all previously queued OpenCL commands in a command-queue are issued to the associated device and have
-        ///     completed.
+        ///     Increments the command queue reference count.
         /// </summary>
-        /// <param name="commandQueue">The command queue that is to be finished.</param>
+        /// <param name="commandQueue">Specifies the command-queue to retain.</param>
         /// <returns>
-        ///     Returns <c>Result.Success</c> if the function call was executed successfully. Otherwise, it returns one of the
-        ///     following errors:
-        ///     <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue" /> is not a valid host command-queue.
+        ///     Returns <c>Result.Success</c> if the function executed successfully, or one of the errors below:
+        ///     <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue" /> is not a valid command-queue.
         ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the device.
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clFinish")]
-        public static extern Result Finish(
-            [In]
-            IntPtr commandQueue
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clRetainCommandQueue" )]
+        public static extern Result RetainCommandQueue( [In] IntPtr commandQueue );
 
         #endregion
-
     }
+
 }

@@ -6,13 +6,13 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.Memory
 {
+
     /// <summary>
     ///     Represents the image format descriptor structure.
     /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout( LayoutKind.Sequential )]
     public struct ImageFormat
     {
-
         #region Public Properties
 
         /// <summary>
@@ -28,6 +28,6 @@ namespace OpenCL.NET.Interop.Memory
         public ChannelType ChannelDataType;
 
         #endregion
-
     }
+
 }

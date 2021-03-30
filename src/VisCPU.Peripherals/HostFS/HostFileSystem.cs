@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -12,14 +11,6 @@ namespace VisCPU.Peripherals.HostFS
 
     public class HostFileSystem : Peripheral
     {
-
-
-        public override string PeripheralName => "Benchmark Device";
-
-        public override PeripheralType PeripheralType => PeripheralType.Custom;
-
-        public override uint PresentPin => m_Settings.PinPresent;
-
         private HostFileSystemStatus m_Status = HostFileSystemStatus.HfsStatusReady;
         private readonly HostFileSystemSettings m_Settings;
         private readonly StringBuilder m_SbPath = new StringBuilder();
@@ -27,6 +18,12 @@ namespace VisCPU.Peripherals.HostFS
         private FileStream m_CurrentFileStream;
         private bool m_ReadFileSize;
         private bool m_ReadFileExists;
+
+        public override string PeripheralName => "Benchmark Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.Custom;
+
+        public override uint PresentPin => m_Settings.PinPresent;
 
         #region Unity Event Functions
 
@@ -110,10 +107,10 @@ namespace VisCPU.Peripherals.HostFS
                     if ( read != sizeof( uint ) )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                                                              new HostFileSystemReadFailureEvent(
-                                                                   "Did not read full uint size."
-                                                                  )
-                                                             );
+                            new HostFileSystemReadFailureEvent(
+                                "Did not read full uint size."
+                            )
+                        );
                     }
 
                     return BitConverter.ToUInt32( buf, 0 );
@@ -275,7 +272,6 @@ namespace VisCPU.Peripherals.HostFS
         }
 
         #endregion
-
     }
 
 }

@@ -1,0 +1,16 @@
+#include "../System/System.vhl"
+
+public static void DisplayTimeTest()
+{
+	TIMEDRV time = TIMEDRV(0xFFFF5000);
+
+	uint t = time.GetTime();
+
+	//Display Time in format hh:mm::ss
+	Console.WriteNumber(Time.GetHourInDay(t));
+	Console.WriteChar(':');
+	Console.WriteNumber(Time.GetMinuteInHour(t));
+	Console.WriteChar(':');
+	Console.WriteNumberLine(Time.GetSecondInMinute(t));
+
+}

@@ -2,20 +2,10 @@
 
 namespace Utility.ADL.Configs
 {
+
     public class ProjectDebugConfig : IProjectDebugConfig
     {
-
         private int? minSeverity;
-
-        public ProjectDebugConfig(
-            string projectName, int acceptMask,
-            PrefixLookupSettings lookupSettings)
-        {
-            ProjectName = projectName;
-            AcceptMask = acceptMask;
-            PrefixLookupSettings = lookupSettings;
-            Debug.ConfigCreated(this);
-        }
 
         public string ProjectName { get; set; }
 
@@ -29,14 +19,17 @@ namespace Utility.ADL.Configs
 
         public PrefixLookupSettings PrefixLookupSettings { get; set; }
 
-        public virtual string GetProjectName()
-        {
-            return ProjectName;
-        }
+        #region Public
 
-        public virtual int GetMinSeverity()
+        public ProjectDebugConfig(
+            string projectName,
+            int acceptMask,
+            PrefixLookupSettings lookupSettings )
         {
-            return MinSeverity;
+            ProjectName = projectName;
+            AcceptMask = acceptMask;
+            PrefixLookupSettings = lookupSettings;
+            Debug.ConfigCreated( this );
         }
 
         public virtual int GetAcceptMask()
@@ -44,30 +37,39 @@ namespace Utility.ADL.Configs
             return AcceptMask;
         }
 
+        public virtual int GetMinSeverity()
+        {
+            return MinSeverity;
+        }
+
         public virtual PrefixLookupSettings GetPrefixLookupSettings()
         {
             return PrefixLookupSettings;
         }
 
-
-        public virtual void SetProjectName(string projectName)
+        public virtual string GetProjectName()
         {
-            ProjectName = projectName;
+            return ProjectName;
         }
 
-        public virtual void SetMinSeverity(int severity)
-        {
-            MinSeverity = severity;
-        }
-
-        public virtual void SetAcceptMask(int mask)
+        public virtual void SetAcceptMask( int mask )
         {
             AcceptMask = mask;
         }
 
-        public virtual void SetPrefixLookupSettings(PrefixLookupSettings settings)
+        public virtual void SetMinSeverity( int severity )
+        {
+            MinSeverity = severity;
+        }
+
+        public virtual void SetPrefixLookupSettings( PrefixLookupSettings settings )
         {
             PrefixLookupSettings = settings;
+        }
+
+        public virtual void SetProjectName( string projectName )
+        {
+            ProjectName = projectName;
         }
 
         public override string ToString()
@@ -75,24 +77,14 @@ namespace Utility.ADL.Configs
             return ProjectName;
         }
 
+        #endregion
     }
 
-    public class ProjectDebugConfig<MaskType, SeverityType> : IProjectDebugConfig
+    public class ProjectDebugConfig < MaskType, SeverityType > : IProjectDebugConfig
         where MaskType : Enum
         where SeverityType : Enum
     {
-
         private int? minSeverity;
-
-        public ProjectDebugConfig(
-            string projectName, MaskType acceptMask,
-            PrefixLookupSettings lookupSettings)
-        {
-            ProjectName = projectName;
-            AcceptMask = acceptMask;
-            PrefixLookupSettings = lookupSettings;
-            Debug.ConfigCreated(this);
-        }
 
         public string ProjectName { get; set; }
 
@@ -102,16 +94,29 @@ namespace Utility.ADL.Configs
         {
             get =>
                 minSeverity != null
-                    ? (SeverityType) Enum.ToObject(typeof(SeverityType), minSeverity)
-                    : (SeverityType) Enum.ToObject(typeof(SeverityType), Debug.DefaultSeverity);
-            set => minSeverity = Convert.ToInt32(value);
+                    ? ( SeverityType ) Enum.ToObject( typeof( SeverityType ), minSeverity )
+                    : ( SeverityType ) Enum.ToObject( typeof( SeverityType ), Debug.DefaultSeverity );
+            set => minSeverity = Convert.ToInt32( value );
         }
 
         public PrefixLookupSettings PrefixLookupSettings { get; set; }
 
-        public virtual string GetProjectName()
+        #region Public
+
+        public ProjectDebugConfig(
+            string projectName,
+            MaskType acceptMask,
+            PrefixLookupSettings lookupSettings )
         {
-            return ProjectName;
+            ProjectName = projectName;
+            AcceptMask = acceptMask;
+            PrefixLookupSettings = lookupSettings;
+            Debug.ConfigCreated( this );
+        }
+
+        public virtual int GetAcceptMask()
+        {
+            return Convert.ToInt32( AcceptMask );
         }
 
         public virtual int GetMinSeverity()
@@ -119,34 +124,34 @@ namespace Utility.ADL.Configs
             return minSeverity ?? Debug.DefaultSeverity;
         }
 
-        public virtual int GetAcceptMask()
-        {
-            return Convert.ToInt32(AcceptMask);
-        }
-
         public virtual PrefixLookupSettings GetPrefixLookupSettings()
         {
             return PrefixLookupSettings;
         }
 
-        public virtual void SetProjectName(string projectName)
+        public virtual string GetProjectName()
         {
-            ProjectName = projectName;
+            return ProjectName;
         }
 
-        public virtual void SetMinSeverity(int severity)
+        public virtual void SetAcceptMask( int mask )
+        {
+            AcceptMask = ( MaskType ) Enum.ToObject( typeof( MaskType ), mask );
+        }
+
+        public virtual void SetMinSeverity( int severity )
         {
             minSeverity = severity;
         }
 
-        public virtual void SetAcceptMask(int mask)
-        {
-            AcceptMask = (MaskType) Enum.ToObject(typeof(MaskType), mask);
-        }
-
-        public virtual void SetPrefixLookupSettings(PrefixLookupSettings settings)
+        public virtual void SetPrefixLookupSettings( PrefixLookupSettings settings )
         {
             PrefixLookupSettings = settings;
+        }
+
+        public virtual void SetProjectName( string projectName )
+        {
+            ProjectName = projectName;
         }
 
         public override string ToString()
@@ -154,5 +159,7 @@ namespace Utility.ADL.Configs
             return ProjectName;
         }
 
+        #endregion
     }
+
 }

@@ -1,12 +1,12 @@
 namespace OpenCL.NET.Interop.Kernels
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from an OpenCL kernel work
     ///     group.
     /// </summary>
     public enum KernelWorkGroupInformation : uint
     {
-
         /// <summary>
         ///     This provides a mechanism for the application to query the maximum work-group size that can be used to execute the
         ///     kernel on a specific device. The OpenCL implementation uses the resource requirements of the kernel (register usage
@@ -57,6 +57,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     built-in kernel, <see cref="GetKernelWorkGroupInformation" /> returns the error <c>Result.InvalidValue</c>.
         /// </summary>
         GlobalWorkSize = 0x11B5
-
     }
+
 }

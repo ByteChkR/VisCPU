@@ -1,12 +1,17 @@
 ﻿namespace Utility.ExtPP.Base.Interfaces
 {
+
     /// <summary>
     ///     An object that contains the script source and other information
     /// </summary>
     public interface ISourceScript
     {
-
-        bool IsInline { get; }
+        /// <summary>
+        ///     Adds a value to the plugin cache to be read later during the processing
+        /// </summary>
+        /// <param name="key">the key</param>
+        /// <param name="value">the value</param>
+        void AddValueToCache( string key, object value );
 
         /// <summary>
         ///     Returns the full filepath of this script.
@@ -28,18 +33,12 @@
         string[] GetSource();
 
         /// <summary>
-        ///     Sets the cached version of the source
+        ///     Returns the value of type T with key.
         /// </summary>
-        /// <param name="source">the updated source</param>
-        void SetSource(string[] source);
-
-
-        /// <summary>
-        ///     Adds a value to the plugin cache to be read later during the processing
-        /// </summary>
-        /// <param name="key">the key</param>
-        /// <param name="value">the value</param>
-        void AddValueToCache(string key, object value);
+        /// <typeparam name="T">The typy of the value</typeparam>
+        /// <param name="key">the key of the corresponding value</param>
+        /// <returns>the value casted to type t</returns>
+        T GetValueFromCache < T >( string key );
 
         /// <summary>
         ///     Returns true if the plugin cache contains an item of type T with key
@@ -47,15 +46,15 @@
         /// <typeparam name="T">The type to be checked for</typeparam>
         /// <param name="key">the key that is checked.</param>
         /// <returns>false if nonexsistant or not the specified type</returns>
-        bool HasValueOfType<T>(string key);
+        bool HasValueOfType < T >( string key );
+
+        bool IsInline { get; }
 
         /// <summary>
-        ///     Returns the value of type T with key.
+        ///     Sets the cached version of the source
         /// </summary>
-        /// <typeparam name="T">The typy of the value</typeparam>
-        /// <param name="key">the key of the corresponding value</param>
-        /// <returns>the value casted to type t</returns>
-        T GetValueFromCache<T>(string key);
-
+        /// <param name="source">the updated source</param>
+        void SetSource( string[] source );
     }
+
 }

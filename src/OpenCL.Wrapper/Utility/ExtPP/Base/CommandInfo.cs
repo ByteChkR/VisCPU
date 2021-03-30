@@ -2,75 +2,12 @@
 
 namespace Utility.ExtPP.Base
 {
+
     /// <summary>
     ///     A struct that is used to define custom commands.
     /// </summary>
     public class CommandInfo
     {
-
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="command">primary command prefix</param>
-        /// <param name="shortcut">shortcut command prefix</param>
-        /// <param name="field">the property info of the corresponding field</param>
-        /// <param name="helpText">the help text of the command</param>
-        /// <param name="defaultIfNotSpecified">the default value</param>
-        /// <param name="global">a flag if this command can be invoked with a global prefix</param>
-        public CommandInfo(
-            string command, string shortcut, PropertyInfo field, string helpText,
-            object defaultIfNotSpecified, bool global)
-        {
-            Field = field;
-            Meta = new CommandMetaData(command, shortcut, helpText, global);
-            DefaultIfNotSpecified = defaultIfNotSpecified;
-        }
-
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="command">primary command prefix</param>
-        /// <param name="shortcut">shortcut command prefix</param>
-        /// <param name="field">the property info of the corresponding field</param>
-        /// <param name="helpText">the help text of the command</param>
-        public CommandInfo(string command, string shortcut, PropertyInfo field, string helpText) : this(
-             command,
-             shortcut,
-             field,
-             helpText,
-             null,
-             false
-            )
-        {
-        }
-
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="command">primary command prefix</param>
-        /// <param name="shortcut">shortcut command prefix</param>
-        /// <param name="field">the property info of the corresponding field</param>
-        /// <param name="defaultIfNotSpecified">the default value</param>
-        public CommandInfo(
-            string command, string shortcut, PropertyInfo field, string helpText,
-            object defaultIfNotSpecified) : this(command, shortcut, field, helpText, defaultIfNotSpecified, false)
-        {
-        }
-
-
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="command">primary command prefix</param>
-        /// <param name="shortcut">shortcut command prefix</param>
-        /// <param name="field">the property info of the corresponding field</param>
-        /// <param name="global">a flag if this command can be invoked with a global prefix</param>
-        public CommandInfo(
-            string command, string shortcut, PropertyInfo field, string helpText,
-            bool global) : this(command, shortcut, field, helpText, null, global)
-        {
-        }
-
         /// <summary>
         ///     The help text of the command
         /// </summary>
@@ -108,6 +45,79 @@ namespace Utility.ExtPP.Base
         /// </summary>
         public object DefaultIfNotSpecified { get; }
 
+        #region Public
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="command">primary command prefix</param>
+        /// <param name="shortcut">shortcut command prefix</param>
+        /// <param name="field">the property info of the corresponding field</param>
+        /// <param name="helpText">the help text of the command</param>
+        /// <param name="defaultIfNotSpecified">the default value</param>
+        /// <param name="global">a flag if this command can be invoked with a global prefix</param>
+        public CommandInfo(
+            string command,
+            string shortcut,
+            PropertyInfo field,
+            string helpText,
+            object defaultIfNotSpecified,
+            bool global )
+        {
+            Field = field;
+            Meta = new CommandMetaData( command, shortcut, helpText, global );
+            DefaultIfNotSpecified = defaultIfNotSpecified;
+        }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="command">primary command prefix</param>
+        /// <param name="shortcut">shortcut command prefix</param>
+        /// <param name="field">the property info of the corresponding field</param>
+        /// <param name="helpText">the help text of the command</param>
+        public CommandInfo( string command, string shortcut, PropertyInfo field, string helpText ) : this(
+            command,
+            shortcut,
+            field,
+            helpText,
+            null,
+            false
+        )
+        {
+        }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="command">primary command prefix</param>
+        /// <param name="shortcut">shortcut command prefix</param>
+        /// <param name="field">the property info of the corresponding field</param>
+        /// <param name="defaultIfNotSpecified">the default value</param>
+        public CommandInfo(
+            string command,
+            string shortcut,
+            PropertyInfo field,
+            string helpText,
+            object defaultIfNotSpecified ) : this( command, shortcut, field, helpText, defaultIfNotSpecified, false )
+        {
+        }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="command">primary command prefix</param>
+        /// <param name="shortcut">shortcut command prefix</param>
+        /// <param name="field">the property info of the corresponding field</param>
+        /// <param name="global">a flag if this command can be invoked with a global prefix</param>
+        public CommandInfo(
+            string command,
+            string shortcut,
+            PropertyInfo field,
+            string helpText,
+            bool global ) : this( command, shortcut, field, helpText, null, global )
+        {
+        }
 
         /// <summary>
         ///     Writes the information as readable text.
@@ -118,5 +128,7 @@ namespace Utility.ExtPP.Base
             return Meta.ToString();
         }
 
+        #endregion
     }
+
 }

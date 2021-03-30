@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Peripherals;
 
 namespace VisCPU.Integration
@@ -7,15 +6,14 @@ namespace VisCPU.Integration
 
     public class ApiImporterDevice : Peripheral
     {
+        private readonly uint m_ListenAddr;
+        private readonly Func < Cpu, uint > m_InvokeExec;
 
-        public override string PeripheralName => "__API_IMPORTER_"+PresentPin;
+        public override string PeripheralName => "__API_IMPORTER_" + PresentPin;
 
         public override PeripheralType PeripheralType => PeripheralType.Custom;
 
         public override uint PresentPin => m_ListenAddr;
-        private Cpu m_ExecutingCpu;
-        private readonly uint m_ListenAddr;
-        private readonly Func < Cpu, uint > m_InvokeExec;
 
         #region Unity Event Functions
 
@@ -45,14 +43,9 @@ namespace VisCPU.Integration
 
         public override uint ReadData( uint address )
         {
-            m_ExecutingCpu.Push( m_InvokeExec( m_ExecutingCpu ) );
+            AttachedCpu.Push( m_InvokeExec( AttachedCpu ) );
 
             return CpuSettings.InstructionSet.GetInstruction( CpuSettings.InstructionSet.GetInstruction( "RET", 0 ) );
-        }
-
-        public void SetExecutingCpu( Cpu executingCpu )
-        {
-            m_ExecutingCpu = executingCpu;
         }
 
         public override void WriteData( uint address, uint data )
@@ -60,7 +53,6 @@ namespace VisCPU.Integration
         }
 
         #endregion
-
     }
 
 }

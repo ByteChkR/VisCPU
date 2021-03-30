@@ -3,7 +3,6 @@
 
     public abstract class MathSelfInstruction : MathInstruction
     {
-
         #region Public
 
         public override void Process( Cpu cpu )
@@ -20,7 +19,6 @@
         }
 
         #endregion
-
     }
 
 }

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-
 using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -10,22 +9,22 @@ namespace VisCPU.Peripherals.Memory
 
     public class Memory : Peripheral
     {
-
         private readonly uint[] m_InternalMemory;
         private readonly string m_FullPersistentPath;
 
         private readonly MemorySettings m_Settings;
 
-        public uint EndAddress => m_Settings.Start + (uint)m_InternalMemory.Length;
+        public uint EndAddress => m_Settings.Start + ( uint ) m_InternalMemory.Length;
+
         public uint StartAddress => m_Settings.Start;
 
-        #region Unity Event Functions
-        
         public override string PeripheralName => "Mapped Array Memory";
 
         public override PeripheralType PeripheralType => PeripheralType.Memory;
 
         public override uint PresentPin => StartAddress;
+
+        #region Unity Event Functions
 
         public override void Reset()
         {
@@ -80,8 +79,6 @@ namespace VisCPU.Peripherals.Memory
             }
         }
 
-        public uint[] GetInternalBuffer() => m_InternalMemory;
-
         public override bool CanRead( uint address )
         {
             return m_Settings.EnableRead && address < EndAddress && address >= m_Settings.Start;
@@ -95,6 +92,11 @@ namespace VisCPU.Peripherals.Memory
         public override void Dump( Stream str )
         {
             str.Write( m_InternalMemory.ToBytes(), 0, m_InternalMemory.Length * sizeof( uint ) );
+        }
+
+        public uint[] GetInternalBuffer()
+        {
+            return m_InternalMemory;
         }
 
         public override uint ReadData( uint address )
@@ -116,7 +118,6 @@ namespace VisCPU.Peripherals.Memory
         }
 
         #endregion
-
     }
 
 }

@@ -1,0 +1,15 @@
+#include "../System/System.vhl" //Include System Library
+
+public static void TestBenchmark()
+{
+	BENCHDRV dev = BENCHDRV(0xFFFF4000);
+	string testName = "Test Benchmark";
+	dev.SetName(&testName, size_of(testName));
+	dev.StartRun();
+	for(uint i = 0; i < 10000; i++)
+	{
+		uint v = i*i;
+	}
+	dev.EndRun();
+	dev.ClearName();
+}

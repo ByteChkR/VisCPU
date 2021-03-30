@@ -1,5 +1,6 @@
 ﻿namespace Utility.ADL.Streams
 {
+
     /// <summary>
     ///     PipeStream is a thread-safe read/write data stream for use between two threads in a
     ///     single-producer/single-consumer type problem.
@@ -23,8 +24,8 @@
     ///     OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     ///     OTHER DEALINGS IN THE SOFTWARE.
     /// </summary>
-    public class PipeStream : GenPipeStream<byte>
+    public class PipeStream : GenPipeStream < byte >
     {
-
     }
+
 }

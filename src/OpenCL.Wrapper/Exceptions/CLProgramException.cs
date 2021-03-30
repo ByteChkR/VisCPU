@@ -1,20 +1,21 @@
 ﻿using System;
 
-
 namespace OpenCL.Wrapper.Exceptions
 {
+
     /// <summary>
     ///     This Exception occurs when the CL Implementation is not able to compile a CLProgram
     /// </summary>
     public class CLProgramException : Exception
     {
+        #region Public
 
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="errorMessage">The message why this exception occurred</param>
         /// <param name="inner">Inner exeption</param>
-        public CLProgramException(string errorMessage, Exception inner) : base(errorMessage, inner)
+        public CLProgramException( string errorMessage, Exception inner ) : base( errorMessage, inner )
         {
         }
 
@@ -22,9 +23,11 @@ namespace OpenCL.Wrapper.Exceptions
         ///     Constructor
         /// </summary>
         /// <param name="errorMessage">The message why this exception occurred</param>
-        public CLProgramException(string errorMessage) : base(errorMessage)
+        public CLProgramException( string errorMessage ) : base( errorMessage )
         {
         }
 
+        #endregion
     }
+
 }

@@ -1,23 +1,10 @@
-﻿using VisCPU.HL.Namespaces;
-using VisCPU.HL.TypeSystem;
+﻿using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.Parser.Tokens.Combined
 {
 
-    public class NamespaceDefinitionToken:CombinedToken
-    {
-        public HlNamespace Namespace { get; }
-
-        public NamespaceDefinitionToken(HlNamespace ns, IHlToken[] subtokens, int start ) : base( HlTokenType.OpNamespaceDefinition, subtokens, start )
-        {
-            Namespace = ns;
-        }
-
-    }
-
     public class FunctionDefinitionToken : CombinedToken
     {
-
         public IHlToken[] Arguments { get; }
 
         public IHlToken[] Block { get; }
@@ -43,10 +30,10 @@ namespace VisCPU.HL.Parser.Tokens.Combined
             int start,
             HlTypeDefinition parent = null,
             HlFunctionType type = HlFunctionType.Function ) : base(
-                                                                   HlTokenType.OpFunctionDefinition,
-                                                                   subtokens,
-                                                                   start
-                                                                  )
+            HlTokenType.OpFunctionDefinition,
+            subtokens,
+            start
+        )
         {
             Type = type;
             Parent = parent;
@@ -58,7 +45,6 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         }
 
         #endregion
-
     }
 
 }

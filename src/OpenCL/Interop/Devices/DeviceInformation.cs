@@ -6,12 +6,12 @@ using System;
 
 namespace OpenCL.NET.Interop.Devices
 {
+
     /// <summary>
     ///     Represents an enumeration that identifies the device information that can be queried from a device.
     /// </summary>
     public enum DeviceInformation : uint
     {
-
         /// <summary>
         ///     The OpenCL device type.
         /// </summary>
@@ -179,7 +179,7 @@ namespace OpenCL.NET.Interop.Devices
         /// <summary>
         ///     The smallest alignment in bytes which can be used for any data type.
         /// </summary>
-        [Obsolete("MinimumDataTypeAlignmentSize is a deprecated OpenCL 1.1 property.")]
+        [Obsolete( "MinimumDataTypeAlignmentSize is a deprecated OpenCL 1.1 property." )]
         MinimumDataTypeAlignmentSize = 0x101A,
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace OpenCL.NET.Interop.Devices
         ///     Describes the command-queue properties supported by the device. The mandated minimum capability is
         ///     <c>CommandQueueProperty.ProfilingEnable</c>.
         /// </summary>
-        [Obsolete("QueueProperties is a deprecated OpenCL 1.2 property, please use QueueOnHostProperties.")]
+        [Obsolete( "QueueProperties is a deprecated OpenCL 1.2 property, please use QueueOnHostProperties." )]
         QueueProperties = 0x102A,
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace OpenCL.NET.Interop.Devices
         /// <summary>
         ///     Is <c>true</c> if the device and the host have a unified memory subsystem and is <c>false</c> otherwise.
         /// </summary>
-        [Obsolete("HostUnifiedMemory is a deprecated OpenCL 1.2 property.")]
+        [Obsolete( "HostUnifiedMemory is a deprecated OpenCL 1.2 property." )]
         HostUnifiedMemory = 0x1035,
 
         /// <summary>
@@ -658,6 +658,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     implementation.
         /// </summary>
         SpirVersion = 0x40E0
-
     }
+
 }

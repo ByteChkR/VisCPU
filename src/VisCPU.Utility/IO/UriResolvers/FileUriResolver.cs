@@ -5,7 +5,6 @@ namespace VisCPU.Utility.IO.UriResolvers
 
     public class FileUriResolver : UriResolver
     {
-
         #region Protected
 
         protected override bool CanResolve( string uri )
@@ -32,7 +31,6 @@ namespace VisCPU.Utility.IO.UriResolvers
         }
 
         #endregion
-
     }
 
 }

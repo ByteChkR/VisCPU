@@ -6,7 +6,6 @@ namespace VisCPU.HL.Compiler.Special
 
     public class ForExpressionCompiler : HlExpressionCompiler < HlForOp >
     {
-
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlForOp expr )
@@ -18,8 +17,8 @@ namespace VisCPU.HL.Compiler.Special
             HlCompilation subFor = new HlCompilation( compilation, HlCompilation.GetUniqueName( "for" ) );
 
             subFor.EmitterResult.Store(
-                                       $".{startLabel} linker:hide"
-                                      ); //Unused, makes clear where the for compiler started emitting code.
+                $".{startLabel} linker:hide"
+            ); //Unused, makes clear where the for compiler started emitting code.
 
             ExpressionTarget
                 target = subFor.Parse( expr.VDecl ).MakeAddress( subFor ); //Declare Variable(left)
@@ -29,17 +28,17 @@ namespace VisCPU.HL.Compiler.Special
             ExpressionTarget cond = subFor.Parse( expr.Condition ).MakeAddress( subFor ); //Check Condition
 
             subFor.EmitterResult.Emit(
-                                      $"BEZ",
-                                      cond.ResultAddress,
-                                      endLabel
-                                     ); //Check if Expression "Equal to Zero" => jump to end if it is
+                $"BEZ",
+                cond.ResultAddress,
+                endLabel
+            ); //Check if Expression "Equal to Zero" => jump to end if it is
 
             foreach ( HlExpression hlExpression in expr.ExprBody )
             {
                 subFor.ReleaseTempVar(
-                                      subFor.Parse( hlExpression ).
-                                             ResultAddress
-                                     ); //Parse block and clean up any temp variables that were emitted.
+                    subFor.Parse( hlExpression ).
+                           ResultAddress
+                ); //Parse block and clean up any temp variables that were emitted.
             }
 
             subFor.ReleaseTempVar( subFor.Parse( expr.VInc ).ResultAddress ); //Compute Increment Expression
@@ -47,8 +46,8 @@ namespace VisCPU.HL.Compiler.Special
             subFor.EmitterResult.Emit( $"JMP", condLabel ); //Jump back up if we executed the body.
 
             subFor.EmitterResult.Store(
-                                       $".{endLabel} linker:hide"
-                                      ); //End label that we jump to if we exit the loop
+                $".{endLabel} linker:hide"
+            ); //End label that we jump to if we exit the loop
 
             subFor.ReleaseTempVar( target.ResultAddress );
             subFor.ReleaseTempVar( cond.ResultAddress );
@@ -60,7 +59,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

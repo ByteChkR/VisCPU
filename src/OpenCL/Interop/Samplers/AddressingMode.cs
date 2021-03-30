@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Samplers
 {
+
     /// <summary>
     ///     Represents an enumeration for the different addressing modes that can be used for samplers.
     /// </summary>
     public enum AddressingMode : uint
     {
-
         /// <summary>
         ///     No addressing mode.
         /// </summary>
@@ -30,6 +30,6 @@ namespace OpenCL.NET.Interop.Samplers
         ///     Repeats the image mirrored.
         /// </summary>
         MirroredRepeat = 0x1134
-
     }
+
 }

@@ -3,7 +3,6 @@
 
     public abstract class MathFInstruction : MathInstruction
     {
-
         #region Public
 
         public abstract float Calculate( float a, float b );
@@ -21,7 +20,6 @@
         }
 
         #endregion
-
     }
 
 }

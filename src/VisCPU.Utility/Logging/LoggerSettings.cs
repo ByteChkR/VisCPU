@@ -5,11 +5,10 @@ namespace VisCPU.Utility.Logging
 
     public class LoggerSettings
     {
-        [field: Argument(Name = "core:debug")]
-        public bool DebugCore { get; set; }
-
         [field: Argument( Name = "log" )]
         private LoggerSystems m_EnabledSystems = LoggerSystems.Default;
+        [field: Argument( Name = "core:debug" )]
+        public bool DebugCore { get; set; }
 
         [field: Argument( Name = "log-all" )]
         public bool EnableAll { get; set; }
@@ -24,7 +23,6 @@ namespace VisCPU.Utility.Logging
         }
 
         #endregion
-
     }
 
 }

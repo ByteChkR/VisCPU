@@ -3,16 +3,32 @@ using Utility.ExtPP.Base.settings;
 
 namespace Utility.ExtPP.Base.Plugins
 {
+
     /// <summary>
     ///     Abstract Plugin but with OnLoad_FullScriptStage and OnMain_FullScriptStage overriden and fixed plugin type toggle
     /// </summary>
     public abstract class AbstractFullScriptPlugin : AbstractPlugin
     {
-
         /// <summary>
         ///     Specifies the plugin type. Fullscript or Line Script
         /// </summary>
         public override PluginType PluginTypeToggle { get; } = PluginType.FullScriptPlugin;
+
+        #region Public
+
+        /// <summary>
+        ///     Gets called once on each file.
+        ///     Looping Through All the Files
+        ///     Looping Through All the plugins
+        /// </summary>
+        /// <param name="script">the current source script</param>
+        /// <param name="sourceManager">the current source manager</param>
+        /// <param name="defTable">the current definitions</param>
+        /// <returns>state of the process(if false will abort processing)</returns>
+        public abstract bool FullScriptStage(
+            ISourceScript script,
+            ISourceManager sourceManager,
+            IDefinitions defTable );
 
         /// <summary>
         ///     Gets called once on each file.
@@ -24,10 +40,11 @@ namespace Utility.ExtPP.Base.Plugins
         /// <param name="defTable">the current definitions</param>
         /// <returns>state of the process(if false will abort processing)</returns>
         public override bool OnLoad_FullScriptStage(
-            ISourceScript script, ISourceManager sourceManager,
-            IDefinitions defTable)
+            ISourceScript script,
+            ISourceManager sourceManager,
+            IDefinitions defTable )
         {
-            return FullScriptStage(script, sourceManager, defTable);
+            return FullScriptStage( script, sourceManager, defTable );
         }
 
         /// <summary>
@@ -40,24 +57,14 @@ namespace Utility.ExtPP.Base.Plugins
         /// <param name="defTable">the current definitions</param>
         /// <returns>state of the process(if false will abort processing)</returns>
         public override bool OnMain_FullScriptStage(
-            ISourceScript script, ISourceManager sourceManager,
-            IDefinitions defTable)
+            ISourceScript script,
+            ISourceManager sourceManager,
+            IDefinitions defTable )
         {
-            return FullScriptStage(script, sourceManager, defTable);
+            return FullScriptStage( script, sourceManager, defTable );
         }
 
-        /// <summary>
-        ///     Gets called once on each file.
-        ///     Looping Through All the Files
-        ///     Looping Through All the plugins
-        /// </summary>
-        /// <param name="script">the current source script</param>
-        /// <param name="sourceManager">the current source manager</param>
-        /// <param name="defTable">the current definitions</param>
-        /// <returns>state of the process(if false will abort processing)</returns>
-        public abstract bool FullScriptStage(
-            ISourceScript script, ISourceManager sourceManager,
-            IDefinitions defTable);
-
+        #endregion
     }
+
 }

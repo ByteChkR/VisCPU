@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\VisCPU.Console.Core\VisCPU.Console.Core.csproj" />
+		<ProjectReference Include="..\VisCPU.Integration\VisCPU.Integration.csproj" />
 		<ProjectReference Include="..\VisCPU.Utility\VisCPU.Utility.csproj" />
 	</ItemGroup>
 
@@ -96,8 +97,9 @@
 	<ItemGroup>
     <PeripheralExt Include="..\VisCPU.Peripherals\bin\$(Configuration)\netstandard2.0\VisCPU.Peripherals.dll" />
     <InstructionExt Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.dll" />
+    <SimdExt Include="..\VisCPU.SIMD\bin\$(Configuration)\netstandard2.0\VisCPU.SIMD.dll" />
     <PeripheralPdb Include="..\VisCPU.Peripherals\bin\$(Configuration)\netstandard2.0\VisCPU.Peripherals.pdb" />
-    <InstructionPdb Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.pdb" />
+    <InstructionPdb Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.pdb" /><SimdPdb Include="..\VisCPU.SIMD\bin\$(Configuration)\netstandard2.0\VisCPU.SIMD.pdb" />
   	</ItemGroup>
 	<Target Name="CopyExtensions" AfterTargets="Build">
     	<Message Text="Copy Default Extensions"></Message>
@@ -105,5 +107,7 @@
     	<Copy SourceFiles="@(InstructionExt)" DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions" />
     	<Copy SourceFiles="@(PeripheralPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />
     	<Copy SourceFiles="@(InstructionPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions" />
+    	<Copy SourceFiles="@(SimdPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />
+    	<Copy SourceFiles="@(SimdExt)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />
   	</Target>
 </Project>

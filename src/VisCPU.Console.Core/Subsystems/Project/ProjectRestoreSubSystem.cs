@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.ProjectSystem.Data;
@@ -12,14 +11,11 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
     public class ProjectRestoreSubSystem : ConsoleSubsystem
     {
-
         private class RestoreOptions
         {
-
             [field: Argument( Name = "origin" )]
             [field: Argument( Name = "o" )]
             public string Origin { get; set; } = "local";
-
         }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
@@ -46,8 +42,8 @@ namespace VisCPU.Console.Core.Subsystems.Project
             string[] a = args.ToArray();
 
             string root = a.Length > 1
-                              ? Path.GetFullPath( a[1] )
-                              : Directory.GetCurrentDirectory();
+                ? Path.GetFullPath( a[1] )
+                : Directory.GetCurrentDirectory();
 
             RestoreOptions options = new RestoreOptions();
             ArgumentSyntaxParser.Parse( a.Skip( 1 ).ToArray(), options );
@@ -58,7 +54,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
         }
 
         #endregion
-
     }
 
 }

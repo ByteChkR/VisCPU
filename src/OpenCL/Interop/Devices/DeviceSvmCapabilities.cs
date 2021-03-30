@@ -6,13 +6,13 @@ using System;
 
 namespace OpenCL.NET.Interop.Devices
 {
+
     /// <summary>
     ///     Represents an enumration for the different SVM capabilities a device may have.
     /// </summary>
     [Flags]
     public enum DeviceSvmCapabilities : ulong
     {
-
         /// <summary>
         ///     Support for coarse-grain buffer sharing using <see cref="SvmAllocate" />. Memory consistency is guaranteed at
         ///     synchronization points and the host must use calls to <see cref="EnqueueMapBuffer" /> and
@@ -38,6 +38,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     supporting fine-grain SVM allocations.
         /// </summary>
         Atomics = 1 << 3
-
     }
+
 }

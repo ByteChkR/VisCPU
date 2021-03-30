@@ -1,5 +1,4 @@
 ﻿using System.IO;
-
 using VisCPU.Utility.ProjectSystem.Data;
 
 namespace VisCPU.Utility.ProjectSystem.BuildSystem
@@ -7,7 +6,6 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
 
     public static class CommonFiles
     {
-
         #region Public
 
         public static void GenerateCommonFiles()
@@ -72,9 +70,9 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             if ( !File.Exists( Path.Combine( rootDir, "Program.vhl" ) ) )
             {
                 File.WriteAllText(
-                                  Path.Combine( rootDir, "Program.vhl" ),
-                                  @"//Entry Point of Project"
-                                 );
+                    Path.Combine( rootDir, "Program.vhl" ),
+                    @"//Entry Point of Project"
+                );
             }
         }
 
@@ -99,7 +97,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "false";
-            debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Outline";
+            debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Inline";
 
             return debugBuildJob;
         }
@@ -174,7 +172,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["build:steps"] = "HL-expr bin";
             debugBuildJob.Arguments["build:clean"] = "false";
             debugBuildJob.Arguments["assembler:offset.global"] = "0";
-            debugBuildJob.Arguments["assembler:format"] = "v2";
+            debugBuildJob.Arguments["assembler:format"] = "v1";
             debugBuildJob.Arguments["linker:export"] = "true";
             debugBuildJob.Arguments["linker:no-hide"] = "false";
             debugBuildJob.Arguments["compiler:optimize-temp-vars"] = "true";
@@ -182,7 +180,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "true";
-            debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Outline";
+            debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Inline";
 
             return debugBuildJob;
         }
@@ -285,7 +283,6 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
         }
 
         #endregion
-
     }
 
 }

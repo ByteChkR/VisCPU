@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.Profiling
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL Profiling API.
     /// </summary>
     public static class ProfilingNativeApi
     {
-
-        #region Public Static Methods
+        #region Public
 
         /// <summary>
         ///     Returns profiling information for the command associated with <see cref="event" /> if profiling is enabled.
@@ -44,22 +44,16 @@ namespace OpenCL.NET.Interop.Profiling
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetEventProfilingInfo")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetEventProfilingInfo" )]
         public static extern Result GetEventProfilingInformation(
-            [In]
-            IntPtr eventHandle,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            ProfilingInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned
-        );
+            [In] IntPtr eventHandle,
+            [In] [MarshalAs( UnmanagedType.U4 )] ProfilingInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         #endregion
-
     }
+
 }

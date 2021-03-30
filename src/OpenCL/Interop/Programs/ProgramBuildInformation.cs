@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Programs
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from a program build.
     /// </summary>
     public enum ProgramBuildInformation : uint
     {
-
         /// <summary>
         ///     The build, compile, or link status.
         /// </summary>
@@ -30,6 +30,6 @@ namespace OpenCL.NET.Interop.Programs
         ///     The total amount of storage, in bytes, used by program variables in the global address space.
         /// </summary>
         GlobalVariableTotalSize = 0x1185
-
     }
+
 }

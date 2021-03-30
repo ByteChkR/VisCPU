@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.FileSystemBuilder;
@@ -21,14 +20,6 @@ namespace VisCPU.Console.Core
 
     public class VisConsole : ConsoleSystem
     {
-
-        public static string GetCacheDirectory( LoggerSystems system )
-        {
-            string dir = Path.Combine( AppRootHelper.AppRoot, "cache", "subsystems", system.ToString() );
-            Directory.CreateDirectory( dir );
-            return dir;
-        }
-
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {
@@ -37,11 +28,19 @@ namespace VisCPU.Console.Core
                 { "project", new ProjectSubSystem() },
                 { "origin", new OriginSubSystem() },
                 { "reset", new ConsoleReset() },
-                {"drive", new DriveImageSubsystem() },
-                {"vm", new VMSubsystem() }
+                { "drive", new DriveImageSubsystem() },
+                { "vm", new VMSubsystem() }
             };
 
         #region Public
+
+        public static string GetCacheDirectory( LoggerSystems system )
+        {
+            string dir = Path.Combine( AppRootHelper.AppRoot, "cache", "subsystems", system.ToString() );
+            Directory.CreateDirectory( dir );
+
+            return dir;
+        }
 
         public static StringBuilder ListSubsystems(
             Dictionary < string, ConsoleSubsystem > ss,
@@ -89,41 +88,41 @@ namespace VisCPU.Console.Core
                 {
                     string[] subSystemKeys = { args[0] };
 
-                    if (args[0].StartsWith("[") && args[0].EndsWith("]"))
+                    if ( args[0].StartsWith( "[" ) && args[0].EndsWith( "]" ) )
                     {
                         subSystemKeys = args[0].
-                                        Remove(args[0].Length - 1, 1).
-                                        Remove(0, 1).
-                                        Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                                        Remove( args[0].Length - 1, 1 ).
+                                        Remove( 0, 1 ).
+                                        Split( new[] { ';' }, StringSplitOptions.RemoveEmptyEntries );
                     }
 
-                    foreach (string subSystemKey in subSystemKeys)
+                    foreach ( string subSystemKey in subSystemKeys )
                     {
-                        if (!subsystems.TryGetValue(subSystemKey, out ConsoleSubsystem subsystem))
+                        if ( !subsystems.TryGetValue( subSystemKey, out ConsoleSubsystem subsystem ) )
                         {
-                            System.Console.WriteLine("Invalid Argument");
+                            System.Console.WriteLine( "Invalid Argument" );
 
                             continue;
                         }
 
-                        subsystem.Run(args.Skip(1));
+                        subsystem.Run( args.Skip( 1 ) );
                     }
 
-                    if (settings.Continuous)
+                    if ( settings.Continuous )
                     {
-                        System.Console.WriteLine("Type 'exit' to close console");
-                        System.Console.Write("cli>");
+                        System.Console.WriteLine( "Type 'exit' to close console" );
+                        System.Console.Write( "cli>" );
                         string cmd = System.Console.ReadLine().ToUpper();
 
-                        if (cmd == "EXIT")
+                        if ( cmd == "EXIT" )
                         {
                             return;
                         }
                     }
 
-                    if (settings.WaitOnExit)
+                    if ( settings.WaitOnExit )
                     {
-                        System.Console.WriteLine("Press any key to exit");
+                        System.Console.WriteLine( "Press any key to exit" );
                         System.Console.ReadLine();
                     }
                 }
@@ -132,14 +131,16 @@ namespace VisCPU.Console.Core
                     System.Console.WriteLine( e );
 
                     if ( !settings.Continuous )
+                    {
                         throw;
+                    }
                     else
                     {
-                        System.Console.WriteLine("Type 'exit' to close console");
-                        System.Console.Write("cli>");
+                        System.Console.WriteLine( "Type 'exit' to close console" );
+                        System.Console.Write( "cli>" );
                         string cmd = System.Console.ReadLine().ToUpper();
 
-                        if (cmd == "EXIT")
+                        if ( cmd == "EXIT" )
                         {
                             return;
                         }
@@ -171,21 +172,20 @@ namespace VisCPU.Console.Core
 
             Run(
                 args.Concat(
-                            s.Configs.SelectMany(
-                                                 x => File.Exists( x )
-                                                          ? File.ReadAllText( x ).
-                                                                 Split(
-                                                                       new[] { '\n', '\r', ' ' },
-                                                                       StringSplitOptions.RemoveEmptyEntries
-                                                                      )
-                                                          : new string[0]
-                                                )
-                           )
-               );
+                    s.Configs.SelectMany(
+                        x => File.Exists( x )
+                            ? File.ReadAllText( x ).
+                                   Split(
+                                       new[] { '\n', '\r', ' ' },
+                                       StringSplitOptions.RemoveEmptyEntries
+                                   )
+                            : new string[0]
+                    )
+                )
+            );
         }
 
         #endregion
-
     }
 
 }

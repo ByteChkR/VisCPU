@@ -1,6 +1,4 @@
-﻿using System;
-
-using VisCPU.HL.Compiler.Events;
+﻿using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.EventSystem;
@@ -10,18 +8,8 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.HL.Compiler.Types
 {
 
-    public class StaticInstanceMemberAccessEvent:WarningEvent
-    {
-
-        public StaticInstanceMemberAccessEvent( HlTypeDefinition type, HlMemberDefinition member) : base( $"Accessing Instance Function '{member.Name}' in type '{type.Namespace.FullName}::{type.Name}' as static function. Passing an instance of '{type.Namespace.FullName}::{type.Name}' is required", WarningEventKeys.s_StaticInstanceMemberAccess )
-        {
-        }
-
-    }
-
     public class MemberAccessCompiler : HlExpressionCompiler < HlMemberAccessOp >
     {
-
         protected override bool AllImplementations => true;
 
         #region Public
@@ -40,32 +28,36 @@ namespace VisCPU.HL.Compiler.Types
                 {
                     HlMemberDefinition data = null;
                     bool writeProlog = invoc.Left.ToString() == "new";
-                    if ( invoc.Left.ToString() == "new" || invoc.Left.ToString() == "base")
+
+                    if ( invoc.Left.ToString() == "new" || invoc.Left.ToString() == "base" )
                     {
                         data = lType.TypeDefinition.StaticConstructor;
-                    }else
-                        data= lType.TypeDefinition.GetPrivateOrPublicMember( invoc.Left.ToString() );
-
-
-                    if (lType.TypeDefinition.IsAbstract&& writeProlog && data == lType.TypeDefinition.StaticConstructor )
+                    }
+                    else
                     {
-                        EventManager<ErrorEvent>.SendEvent(
-                                                             new AbstractConstructorCallEvent(lType.TypeDefinition)
-                                                            );
+                        data = lType.TypeDefinition.GetPrivateOrPublicMember( invoc.Left.ToString() );
                     }
 
-                    if ( data!=null&& !data.IsStatic )
+                    if ( lType.TypeDefinition.IsAbstract &&
+                         writeProlog &&
+                         data == lType.TypeDefinition.StaticConstructor )
+                    {
+                        EventManager < ErrorEvent >.SendEvent(
+                            new AbstractConstructorCallEvent( lType.TypeDefinition )
+                        );
+                    }
+
+                    if ( data != null && !data.IsStatic )
                     {
                         EventManager < WarningEvent >.SendEvent(
-                                                                new StaticInstanceMemberAccessEvent(
-                                                                     lType.TypeDefinition,
-                                                                     data
-                                                                    )
-                                                               );
+                            new StaticInstanceMemberAccessEvent(
+                                lType.TypeDefinition,
+                                data
+                            )
+                        );
                     }
 
-
-                    invoc.Redirect( null, lType.TypeDefinition, data , writeProlog);
+                    invoc.Redirect( null, lType.TypeDefinition, data, writeProlog );
 
                     ExpressionTarget t = compilation.Parse( invoc, outputTarget ).
                                                      CopyIfNotNull( compilation, outputTarget );
@@ -88,12 +80,12 @@ namespace VisCPU.HL.Compiler.Types
 
                     if ( !data.IsStatic )
                     {
-                        EventManager<WarningEvent>.SendEvent(
-                                                             new StaticInstanceMemberAccessEvent(
-                                                                  lType.TypeDefinition,
-                                                                  data
-                                                                 )
-                                                            );
+                        EventManager < WarningEvent >.SendEvent(
+                            new StaticInstanceMemberAccessEvent(
+                                lType.TypeDefinition,
+                                data
+                            )
+                        );
                     }
 
                     if ( outputTarget.ResultAddress != null )
@@ -104,11 +96,11 @@ namespace VisCPU.HL.Compiler.Types
                     }
 
                     return new ExpressionTarget(
-                                                funcName,
-                                                true,
-                                                compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName ),
-                                                false
-                                               );
+                        funcName,
+                        true,
+                        compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_UintTypeName ),
+                        false
+                    );
                 }
             }
 
@@ -126,10 +118,10 @@ namespace VisCPU.HL.Compiler.Types
                     HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember( inv.Left.ToString() );
 
                     inv.Redirect(
-                                 lType.ResultAddress,
-                                 lType.TypeDefinition,
-                                 data
-                                );
+                        lType.ResultAddress,
+                        lType.TypeDefinition,
+                        data
+                    );
 
                     ExpressionTarget t = compilation.Parse( inv, outputTarget ).
                                                      CopyIfNotNull( compilation, outputTarget );
@@ -144,11 +136,11 @@ namespace VisCPU.HL.Compiler.Types
             }
 
             uint off = HlTypeDefinition.RecursiveGetOffset(
-                                                           lType.TypeDefinition,
-                                                           0,
-                                                           0,
-                                                           containerName.Split( '.' )
-                                                          );
+                lType.TypeDefinition,
+                0,
+                0,
+                containerName.Split( '.' )
+            );
 
             string tmpOff = compilation.GetTempVar( off );
 
@@ -165,49 +157,49 @@ namespace VisCPU.HL.Compiler.Types
 
             compilation.ReleaseTempVar( tmpOff );
 
-            
-
             HlMemberDefinition mdef = null;
 
             if ( expr.Left.ToString() == "this" )
             {
                 mdef = HlTypeDefinition.RecursiveGetPrivateOrPublicMember(
-                                                                          lType.TypeDefinition,
-                                                                          0,
-                                                                          containerName.Split( '.' )
-                                                                         );
+                    lType.TypeDefinition,
+                    0,
+                    containerName.Split( '.' )
+                );
             }
             else
             {
                 mdef = HlTypeDefinition.RecursiveGetPublicMember(
-                                                                 lType.TypeDefinition,
-                                                                 0,
-                                                                 containerName.Split( '.' )
-                                                                );
+                    lType.TypeDefinition,
+                    0,
+                    containerName.Split( '.' )
+                );
             }
 
             if ( mdef is HlPropertyDefinition pdef )
             {
-                if (outputTarget.ResultAddress != null)
+                if ( outputTarget.ResultAddress != null )
                 {
-                    compilation.EmitterResult.Emit($"DREF", tmpVar, outputTarget.ResultAddress);
-                    compilation.ReleaseTempVar(tmpVar);
+                    compilation.EmitterResult.Emit( $"DREF", tmpVar, outputTarget.ResultAddress );
+                    compilation.ReleaseTempVar( tmpVar );
 
                     return outputTarget;
                 }
+
                 return new ExpressionTarget( tmpVar, true, pdef.PropertyType, true );
             }
 
             if ( mdef is HlFunctionDefinition fdef )
             {
-                if (outputTarget.ResultAddress != null)
+                if ( outputTarget.ResultAddress != null )
                 {
-                    
-                    compilation.EmitterResult.Emit($"DREF", tmpVar, outputTarget.ResultAddress);
-                    compilation.ReleaseTempVar(tmpVar);
+
+                    compilation.EmitterResult.Emit( $"DREF", tmpVar, outputTarget.ResultAddress );
+                    compilation.ReleaseTempVar( tmpVar );
 
                     return outputTarget;
                 }
+
                 return new ExpressionTarget( tmpVar, true, fdef.ReturnType, true );
             }
 
@@ -220,7 +212,6 @@ namespace VisCPU.HL.Compiler.Types
         }
 
         #endregion
-
     }
 
 }

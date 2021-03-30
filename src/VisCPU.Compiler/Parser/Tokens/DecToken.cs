@@ -7,7 +7,6 @@ namespace VisCPU.Compiler.Parser.Tokens
 
     public class DecToken : ValueToken
     {
-
         public override uint Value
         {
             get
@@ -37,7 +36,6 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
-
     }
 
 }

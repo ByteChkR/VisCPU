@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.CommandQueues
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from a command queue.
     /// </summary>
     public enum CommandQueueInformation : uint
     {
-
         /// <summary>
         ///     The context specified when the command-queue is created.
         /// </summary>
@@ -36,6 +36,6 @@ namespace OpenCL.NET.Interop.CommandQueues
         ///     The current default command queue for the underlying device.
         /// </summary>
         DeviceDefault = 0x1095
-
     }
+
 }

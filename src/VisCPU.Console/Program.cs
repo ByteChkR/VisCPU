@@ -17,7 +17,7 @@ namespace VisCPU.Console
             {
                 int i = args.ToList().IndexOf( "--root" );
                 AppRootHelper.SetCustomBase( Path.GetFullPath( args[i + 1] ) );
-                List<string> a = new List<string>(args);
+                List < string > a = new List < string >( args );
                 a.RemoveRange( i, 2 );
                 args = a.ToArray();
             }

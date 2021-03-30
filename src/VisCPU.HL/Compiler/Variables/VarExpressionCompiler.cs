@@ -1,4 +1,5 @@
-﻿using VisCPU.HL.DataTypes;
+﻿using System.Linq;
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
@@ -11,7 +12,6 @@ namespace VisCPU.HL.Compiler.Variables
 
     public class VarExpressionCompiler : HlExpressionCompiler < HlVarOperand >
     {
-
         protected override bool AllImplementations => true;
 
         #region Public
@@ -29,10 +29,10 @@ namespace VisCPU.HL.Compiler.Variables
             if ( compilation.ConstValTypes.Contains( expr.Value.ToString() ) )
             {
                 return new ExpressionTarget(
-                                            expr.Value.ToString(),
-                                            true,
-                                            compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName )
-                                           ).
+                        expr.Value.ToString(),
+                        true,
+                        compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_UintTypeName )
+                    ).
                     CopyIfNotNull( compilation, outputTarget );
             }
 
@@ -44,12 +44,12 @@ namespace VisCPU.HL.Compiler.Variables
                 varAddr = v.GetFinalName();
 
                 return new ExpressionTarget(
-                                            varAddr,
-                                            true,
-                                            v.TypeDefinition,
-                                            !v.TypeDefinition.IsValueType ||
-                                            v.IsPointer
-                                           ).CopyIfNotNull( compilation, outputTarget );
+                    varAddr,
+                    true,
+                    v.TypeDefinition,
+                    !v.TypeDefinition.IsValueType ||
+                    v.IsPointer
+                ).CopyIfNotNull( compilation, outputTarget );
             }
 
             if ( compilation.FunctionMap.Contains( expr.Value.ToString() ) )
@@ -59,11 +59,19 @@ namespace VisCPU.HL.Compiler.Variables
                 return new ExpressionTarget( varAddr, true, null );
             }
 
-            if ( compilation.TypeSystem.HasType(compilation.Root, expr.Value.ToString() ) )
+            if ( compilation.TypeSystem.HasType( compilation.Root, expr.Value.ToString() ) )
             {
-                HlTypeDefinition tdef = compilation.TypeSystem.GetType(compilation.Root, expr.Value.ToString() );
+                HlTypeDefinition tdef = compilation.TypeSystem.GetType( compilation.Root, expr.Value.ToString() );
 
                 return new ExpressionTarget( "%%TYPE%%", false, tdef, false );
+            }
+
+            if ( compilation.ExternalSymbols.Any( x => x.GetName() == expr.Value.ToString() ) )
+            {
+                return new ExpressionTarget(
+                    compilation.ExternalSymbols.First( x => x.GetName() == expr.Value.ToString() ).GetFinalName(),
+                    false,
+                    compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_UintTypeName ) );
             }
 
             EventManager < ErrorEvent >.SendEvent( new HlVariableNotFoundEvent( expr.Value.ToString(), false ) );
@@ -72,7 +80,6 @@ namespace VisCPU.HL.Compiler.Variables
         }
 
         #endregion
-
     }
 
 }

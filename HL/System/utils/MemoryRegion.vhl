@@ -1,0 +1,63 @@
+
+//Include Memory Utility
+#include "Console.vhl"
+#include "SIMD/SIMD.vhl"
+
+public class MemoryRegion
+{
+	private uint m_Pointer;
+	private uint m_Length;
+	public static MemoryRegion(uint ptr, uint length)
+	{
+		this.m_Pointer = ptr;
+		this.m_Length = length;
+	}
+
+	public uint Get(uint index)
+	{
+		uint p = this.Start();
+		uint r = p[index];
+		return r;
+	}
+
+	public void Set(uint index, uint value)
+	{
+		uint p = this.Start();
+		p[index] = value;
+	}
+
+	public uint Start()
+	{
+		uint v = this.m_Pointer;
+		return v;
+	}
+
+	public uint Length()
+	{
+		uint v = this.m_Length;
+		return v;
+	}
+
+	public void SetAll(uint value)
+	{
+		SIMD.Set(this.Start(), value, this.Length());
+	}
+
+	public void CopyTo(MemoryRegion dst)
+	{
+		uint ts = this.Start();
+		uint ds = dst.Start();
+		uint tl = this.Length();
+		SIMD.Copy(this.Start(), dst.Start(), this.Length());
+	}
+
+	public void MoveTo(MemoryRegion dst)
+	{
+		SIMD.Move(this.Start(), dst.Start(), this.Length());
+	}
+
+	public void Swap(MemoryRegion dst)
+	{
+		SIMD.Swap(this.Start(), dst.Start(), this.Length());
+	}
+}

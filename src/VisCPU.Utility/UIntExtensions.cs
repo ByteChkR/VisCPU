@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Utility
@@ -10,7 +9,6 @@ namespace VisCPU.Utility
 
     public static class UIntExtensions
     {
-
         #region Public
 
         public static IDictionary < string, AddressItem > ApplyOffset(
@@ -86,7 +84,6 @@ namespace VisCPU.Utility
         }
 
         #endregion
-
     }
 
 }

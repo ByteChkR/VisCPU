@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop
 {
+
     /// <summary>
     ///     Represents an enumeration for the result codes that are returned by the native OpenCL functions.
     /// </summary>
     public enum Result
     {
-
         #region OpenCL Error Codes
 
         /// <summary>
@@ -263,6 +263,6 @@ namespace OpenCL.NET.Interop
         InvalidPartitionNameExt = -1059
 
         #endregion
-
     }
+
 }

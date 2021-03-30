@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.EnqueuedCommands
 {
+
     /// <summary>
     ///     Represents an enumeration for the status of the execution of a command.
     /// </summary>
     public enum CommandExecutionStatus
     {
-
         /// <summary>
         ///     The command has completed.
         /// </summary>
@@ -25,6 +25,6 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         ///     The command has been enqueued in the command-queue.
         /// </summary>
         Queued = 0x3
-
     }
+
 }

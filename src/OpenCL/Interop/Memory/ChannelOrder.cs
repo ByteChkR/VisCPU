@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Memory
 {
+
     /// <summary>
     ///     Represents an enumeration for the different ways color channels can be ordered in a pixel of an image.
     /// </summary>
     public enum ChannelOrder : uint
     {
-
         /// <summary>
         ///     Only a red channel.
         /// </summary>
@@ -130,6 +130,6 @@ namespace OpenCL.NET.Interop.Memory
         ///     <c>ChannelType.UnsignedInteger8</c>.
         /// </summary>
         Abgr = 0x10C3
-
     }
+
 }

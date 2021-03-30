@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Profiling
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried for profiling purposes.
     /// </summary>
     public enum ProfilingInformation : uint
     {
-
         /// <summary>
         ///     A 64-bit value that describes the current device time counter in nanoseconds when the command identified by the
         ///     event is enqueued in a command-queue by the host.
@@ -35,6 +35,6 @@ namespace OpenCL.NET.Interop.Profiling
         ///     event and any child commands enqueued by this command on the device have finished execution.
         /// </summary>
         CommandComplete = 0x1284
-
     }
+
 }

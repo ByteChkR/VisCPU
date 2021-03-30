@@ -3,7 +3,6 @@
 
     public class LoadInstruction : MemoryInstruction
     {
-
         public override string Key => "LOAD";
 
         public override uint Cycles => 1;
@@ -23,7 +22,6 @@
         }
 
         #endregion
-
     }
 
 }

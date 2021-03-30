@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
@@ -12,16 +11,8 @@ namespace VisCPU.Peripherals.Benchmarking
 
     public class BenchmarkDevice : Peripheral
     {
-
-        public override string PeripheralName => "Benchmark Device";
-
-        public override PeripheralType PeripheralType => PeripheralType.Custom;
-
-        public override uint PresentPin =>DevicePresent;
-        
         public class BenchmarkResultEvent : Event
         {
-
             private readonly string m_Name;
             private TimeSpan m_Time;
 
@@ -41,7 +32,6 @@ namespace VisCPU.Peripherals.Benchmarking
             }
 
             #endregion
-
         }
 
         private const uint DevicePresent = 0xFFFF4000;
@@ -52,6 +42,12 @@ namespace VisCPU.Peripherals.Benchmarking
 
         private readonly StringBuilder m_BenchmarkName = new StringBuilder();
         private readonly Stopwatch m_StopWatch = new Stopwatch();
+
+        public override string PeripheralName => "Benchmark Device";
+
+        public override PeripheralType PeripheralType => PeripheralType.Custom;
+
+        public override uint PresentPin => DevicePresent;
 
         #region Unity Event Functions
 
@@ -106,10 +102,10 @@ namespace VisCPU.Peripherals.Benchmarking
             else
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new InvalidBenchmarkDeviceUsageEvent(
-                                                           $"Unrecognized Address: {address.ToHexString()}"
-                                                          )
-                                                     );
+                    new InvalidBenchmarkDeviceUsageEvent(
+                        $"Unrecognized Address: {address.ToHexString()}"
+                    )
+                );
             }
         }
 
@@ -122,10 +118,10 @@ namespace VisCPU.Peripherals.Benchmarking
             if ( m_StopWatch.IsRunning )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new InvalidBenchmarkDeviceUsageEvent(
-                                                           "Benchmark Run Already Running, Finish the Benchmark to start the next one"
-                                                          )
-                                                     );
+                    new InvalidBenchmarkDeviceUsageEvent(
+                        "Benchmark Run Already Running, Finish the Benchmark to start the next one"
+                    )
+                );
 
                 return;
             }
@@ -143,10 +139,10 @@ namespace VisCPU.Peripherals.Benchmarking
             if ( !m_StopWatch.IsRunning )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new InvalidBenchmarkDeviceUsageEvent(
-                                                           "No Benchmark Run running."
-                                                          )
-                                                     );
+                    new InvalidBenchmarkDeviceUsageEvent(
+                        "No Benchmark Run running."
+                    )
+                );
 
                 return;
             }
@@ -156,7 +152,6 @@ namespace VisCPU.Peripherals.Benchmarking
         }
 
         #endregion
-
     }
 
 }

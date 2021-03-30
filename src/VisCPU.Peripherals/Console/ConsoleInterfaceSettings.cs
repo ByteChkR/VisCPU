@@ -6,7 +6,6 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleInterfaceSettings
     {
-
         public uint InterfacePresentPin { get; set; } = 0xFFFF1006;
 
         public uint WidthAddr { get; set; } = 0xFFFF1007;
@@ -23,6 +22,10 @@ namespace VisCPU.Peripherals.Console
 
         public uint ResetColorAddr { get; set; } = 0xFFFF100D;
 
+        public uint BufWidthAddr { get; set; } = 0xFFFF100E;
+
+        public uint BufHeightAddr { get; set; } = 0xFFFF100F;
+
         #region Public
 
         public bool Any( uint addr )
@@ -34,7 +37,9 @@ namespace VisCPU.Peripherals.Console
                    addr == CursorTopAddr ||
                    addr == BackColorAddr ||
                    addr == ForeColorAddr ||
-                   addr == ResetColorAddr;
+                   addr == ResetColorAddr ||
+                   addr == BufHeightAddr ||
+                   addr == BufWidthAddr;
         }
 
         #endregion
@@ -46,15 +51,14 @@ namespace VisCPU.Peripherals.Console
             SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
-                                                  new JsonSettingsLoader(),
-                                                  coutCategory,
-                                                  "management.json",
-                                                  new ConsoleInterfaceSettings()
-                                                 );
+                new JsonSettingsLoader(),
+                coutCategory,
+                "management.json",
+                new ConsoleInterfaceSettings()
+            );
         }
 
         #endregion
-
     }
 
 }

@@ -10,7 +10,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public enum HlTokenType
     {
-
         Any,
         Unknown,
         OpNone,
@@ -125,7 +124,6 @@ namespace VisCPU.HL.Parser
 
         //End Of File
         Eof
-
     }
 
 }

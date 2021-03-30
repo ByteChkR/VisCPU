@@ -1,16 +1,24 @@
 ﻿namespace Utility.ExtPP.Base.Interfaces
 {
+
     /// <summary>
     ///     Interface that contains all methods for loading and managing source code.
     /// </summary>
     public interface ISourceManager
     {
+        /// <summary>
+        ///     Adds a script to the to do list of the source manager.
+        ///     Will do nothing if already included
+        /// </summary>
+        /// <param name="script"></param>
+        void AddToTodo( ISourceScript script );
 
         /// <summary>
-        ///     Sets the computing scheme to a custom scheme that will then be used to assign keys to scripts
+        ///     Fixes the order of the file tree if a script was being loaded and is now referenced (again)
+        ///     by removing it from the lower position and readding it at the top
         /// </summary>
-        /// <param name="scheme"></param>
-        void SetComputingScheme(DelKeyComputingScheme scheme);
+        /// <param name="script"></param>
+        void FixOrder( ISourceScript script );
 
         /// <summary>
         ///     Returns the computing scheme
@@ -19,33 +27,25 @@
         DelKeyComputingScheme GetComputingScheme();
 
         /// <summary>
-        ///     Fixes the order of the file tree if a script was being loaded and is now referenced (again)
-        ///     by removing it from the lower position and readding it at the top
+        ///     Returns the index of the file with the matching key
+        ///     returns -1 when the key is not present
         /// </summary>
-        /// <param name="script"></param>
-        void FixOrder(ISourceScript script);
+        /// <param name="key"></param>
+        /// <returns></returns>
+        int IndexOfFile( string key );
 
         /// <summary>
         ///     Returns true if the scripts key is contained in the manager
         /// </summary>
         /// <param name="script"></param>
         /// <returns></returns>
-        bool IsIncluded(ISourceScript script);
+        bool IsIncluded( ISourceScript script );
 
         /// <summary>
-        ///     Adds a script to the to do list of the source manager.
-        ///     Will do nothing if already included
+        ///     Sets the computing scheme to a custom scheme that will then be used to assign keys to scripts
         /// </summary>
-        /// <param name="script"></param>
-        void AddToTodo(ISourceScript script);
-
-        /// <summary>
-        ///     Returns the index of the file with the matching key
-        ///     returns -1 when the key is not present
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        int IndexOfFile(string key);
+        /// <param name="scheme"></param>
+        void SetComputingScheme( DelKeyComputingScheme scheme );
 
         /// <summary>
         ///     Convenience wrapper to create a source script without knowing the actual type of the script.
@@ -56,8 +56,11 @@
         /// <param name="pluginCache"></param>
         /// <returns></returns>
         bool TryCreateScript(
-            out ISourceScript script, string separator, IFileContent file,
-            ImportResult importInfo, bool isInline);
-
+            out ISourceScript script,
+            string separator,
+            IFileContent file,
+            ImportResult importInfo,
+            bool isInline );
     }
+
 }

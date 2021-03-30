@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
+﻿using System.Linq;
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Compiler.Special.Compiletime;
 using VisCPU.HL.DataTypes;
@@ -13,15 +11,13 @@ using VisCPU.HL.TypeSystem;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.IO.Settings;
-using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special
 {
 
-    public class InvocationExpressionCompiler : HlExpressionCompiler<HlInvocationOp>
+    public class InvocationExpressionCompiler : HlExpressionCompiler < HlInvocationOp >
     {
-
         private readonly CompiletimeFunctionCompilerCollection m_CtFuncCollection =
             new CompiletimeFunctionCompilerCollection();
 
@@ -32,183 +28,186 @@ namespace VisCPU.HL.Compiler.Special
             HlInvocationOp expr,
             int targetLength,
             string functionName,
-            string jumpInstruction)
+            string jumpInstruction )
         {
-            if (expr.ParameterList.Length != targetLength)
+            if ( expr.ParameterList.Length != targetLength )
             {
-                if (!(expr.MemberDefinition != null &&
-                        (expr.MemberDefinition == expr.InstanceType.StaticConstructor ||
+                if ( !( expr.MemberDefinition != null &&
+                        ( expr.MemberDefinition == expr.InstanceType.StaticConstructor ||
                           expr.MemberDefinition == expr.InstanceType.DynamicConstructor ||
-                          expr.Instance == null)))
+                          expr.Instance == null ) ) )
                 {
-                    EventManager<ErrorEvent>.SendEvent(
-                                                          new FunctionArgumentMismatchEvent(
-                                                               $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
-                                                              )
-                                                         );
+                    EventManager < ErrorEvent >.SendEvent(
+                        new FunctionArgumentMismatchEvent(
+                            $"Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
+                        )
+                    );
                 }
             }
 
-            if (expr.Instance != null)
+            if ( expr.Instance != null )
             {
                 compilation.EmitterResult.Emit(
-                                               $"PUSH",
-                                               expr.Instance
-                                              );
+                    $"PUSH",
+                    expr.Instance
+                );
             }
 
-            foreach (HlExpression parameter in expr.ParameterList)
+            foreach ( HlExpression parameter in expr.ParameterList )
             {
                 ExpressionTarget arg = compilation.Parse(
-                                                         parameter
-                                                        ).
-                                                   MakeAddress(compilation);
+                                                       parameter
+                                                   ).
+                                                   MakeAddress( compilation );
 
                 compilation.EmitterResult.Emit(
-                                               $"PUSH",
-                                               arg.ResultAddress
-                                              );
+                    $"PUSH",
+                    arg.ResultAddress
+                );
 
-                compilation.ReleaseTempVar(arg.ResultAddress);
+                compilation.ReleaseTempVar( arg.ResultAddress );
             }
 
-            compilation.EmitterResult.Emit(jumpInstruction, functionName);
+            compilation.EmitterResult.Emit( jumpInstruction, functionName );
 
             ExpressionTarget tempReturn = new ExpressionTarget(
-                                                               compilation.GetTempVarPop(),
-                                                               true,
-                                                               compilation.TypeSystem.GetType(compilation.Root,
-                                                                    HLBaseTypeNames.s_UintTypeName
-                                                                   )
-                                                              );
+                compilation.GetTempVarPop(),
+                true,
+                compilation.TypeSystem.GetType(
+                    compilation.Root,
+                    HLBaseTypeNames.s_UintTypeName
+                )
+            );
 
             return tempReturn;
         }
 
-        public static void WriteInlineConstructorInvocationProlog(
-            HlCompilation compilation,
-            HlTypeDefinition tdef, HlFuncDefOperand fdef)
-        {
-            for (int i = fdef.FunctionDefinition.
-                                   Arguments.Length -
-                              1;
-                      i >= 0;
-                      i--)
-            {
-                IHlToken valueArgument = fdef.FunctionDefinition.
-                                              Arguments[i];
-
-                compilation.EmitterResult.Emit(
-                                               $"POP",
-                                               $"{compilation.GetFinalName((valueArgument as VariableDefinitionToken).Name.ToString())}"
-                                              );
-            }
-
-            compilation.EmitterResult.Emit($"POP", $"{compilation.GetFinalName("this")}");
-
-            WriteConstructorInvocationProlog(
-                                                                          compilation,
-                                                                          tdef,
-                                                                          compilation.GetFinalName("this")
-                                                                         );
-
-            compilation.EmitterResult.Emit($"PUSH", $"{compilation.GetFinalName("this")}");
-
-            for (int i = 0;
-                  i <
-                  fdef.FunctionDefinition.
-                       Arguments.Length;
-                  i++)
-            {
-                IHlToken valueArgument = fdef.FunctionDefinition.
-                                              Arguments[i];
-
-                compilation.EmitterResult.Emit(
-                                               $"PUSH",
-                                               $"{compilation.GetFinalName((valueArgument as VariableDefinitionToken).Name.ToString())}"
-                                              );
-            }
-        }
-
         public static void WriteConstructorInvocationProlog(
             HlCompilation compilation,
-            HlTypeDefinition tdef, string ret )
+            HlTypeDefinition tdef,
+            string ret )
         {
 
-            foreach (HlFunctionDefinition tdefAbstractFunction in tdef.OverridableFunctions)
+            foreach ( HlFunctionDefinition tdefAbstractFunction in tdef.OverridableFunctions )
             {
                 HlFunctionDefinition test =
-                    (HlFunctionDefinition)tdef.GetPrivateOrPublicMember(tdefAbstractFunction.Name);
+                    ( HlFunctionDefinition ) tdef.GetPrivateOrPublicMember( tdefAbstractFunction.Name );
 
-                if (test.IsVirtual || test.IsOverride)
+                if ( test.IsVirtual || test.IsOverride )
                 {
 
+                    uint off = tdef.GetOffset( tdefAbstractFunction.Name );
 
-                    uint off = tdef.GetOffset(tdefAbstractFunction.Name);
-                    compilation.EmitterResult.Store($"; Applying Function Pointer: {test.Name} Offset from Begin: {off}");
+                    compilation.EmitterResult.Store(
+                        $"; Applying Function Pointer: {test.Name} Offset from Begin: {off}" );
+
                     string tmp =
-                        compilation.GetTempVarLoad(off.ToString());
+                        compilation.GetTempVarLoad( off.ToString() );
 
-                    string implementingFunction = tdef.GetFinalMemberName(test);
-                    compilation.EmitterResult.Emit("ADD", tmp, ret);
+                    string implementingFunction = tdef.GetFinalMemberName( test );
+                    compilation.EmitterResult.Emit( "ADD", tmp, ret );
 
-                    string instanceFuncPtr = tmp;//compilation.GetTempVarLoad( tmp );
+                    string instanceFuncPtr = tmp; //compilation.GetTempVarLoad( tmp );
 
                     //string check = compilation.GetTempVarDref( tmp );
                     //string endLbl = HlCompilation.GetUniqueName( $"{tdef.Name}_prolog" );
                     //compilation.EmitterResult.Emit( $"BNZ", check, endLbl );
 
-
-
                     string func =
-                        compilation.GetTempVarLoad(implementingFunction);
+                        compilation.GetTempVarLoad( implementingFunction );
 
-                    string tmpPtr = compilation.GetTempVarLoad(func);
-                    compilation.EmitterResult.Emit("CREF", tmpPtr, instanceFuncPtr);
-                    compilation.ReleaseTempVar(instanceFuncPtr);
-                    compilation.ReleaseTempVar(func);
-                    compilation.ReleaseTempVar(tmpPtr);
+                    string tmpPtr = compilation.GetTempVarLoad( func );
+                    compilation.EmitterResult.Emit( "CREF", tmpPtr, instanceFuncPtr );
+                    compilation.ReleaseTempVar( instanceFuncPtr );
+                    compilation.ReleaseTempVar( func );
+                    compilation.ReleaseTempVar( tmpPtr );
+
                     //compilation.EmitterResult.Store( $".{endLbl}" );
                 }
-                else if(!tdef.IsAbstract)
+                else if ( !tdef.IsAbstract )
                 {
-                    EventManager<ErrorEvent>.SendEvent(
-                                                          new MemberNotImplementedErrorEvent(
-                                                               tdef,
-                                                               tdefAbstractFunction
-                                                              )
-                                                         );
+                    EventManager < ErrorEvent >.SendEvent(
+                        new MemberNotImplementedErrorEvent(
+                            tdef,
+                            tdefAbstractFunction
+                        )
+                    );
                 }
                 else
                 {
-                    EventManager<WarningEvent>.SendEvent(
-                                                       new MemberNotImplementedWarningEvent(
-                                                            tdef,
-                                                            tdefAbstractFunction
-                                                           )
-                                                      );
+                    EventManager < WarningEvent >.SendEvent(
+                        new MemberNotImplementedWarningEvent(
+                            tdef,
+                            tdefAbstractFunction
+                        )
+                    );
                 }
             }
-            
 
         }
 
-        public override ExpressionTarget ParseExpression(HlCompilation compilation, HlInvocationOp expr)
+        public static void WriteInlineConstructorInvocationProlog(
+            HlCompilation compilation,
+            HlTypeDefinition tdef,
+            HlFuncDefOperand fdef )
+        {
+            for ( int i = fdef.FunctionDefinition.
+                               Arguments.Length -
+                          1;
+                  i >= 0;
+                  i-- )
+            {
+                IHlToken valueArgument = fdef.FunctionDefinition.
+                                              Arguments[i];
+
+                compilation.EmitterResult.Emit(
+                    $"POP",
+                    $"{compilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                );
+            }
+
+            compilation.EmitterResult.Emit( $"POP", $"{compilation.GetFinalName( "this" )}" );
+
+            WriteConstructorInvocationProlog(
+                compilation,
+                tdef,
+                compilation.GetFinalName( "this" )
+            );
+
+            compilation.EmitterResult.Emit( $"PUSH", $"{compilation.GetFinalName( "this" )}" );
+
+            for ( int i = 0;
+                  i <
+                  fdef.FunctionDefinition.
+                       Arguments.Length;
+                  i++ )
+            {
+                IHlToken valueArgument = fdef.FunctionDefinition.
+                                              Arguments[i];
+
+                compilation.EmitterResult.Emit(
+                    $"PUSH",
+                    $"{compilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                );
+            }
+        }
+
+        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlInvocationOp expr )
         {
             string target = expr.Left.ToString();
 
-            if (m_CtFuncCollection.IsCompiletimeFunction(target))
+            if ( m_CtFuncCollection.IsCompiletimeFunction( target ) )
             {
-                return m_CtFuncCollection.Compile(target, compilation, expr);
+                return m_CtFuncCollection.Compile( target, compilation, expr );
             }
 
-            bool isInternalFunc = compilation.FunctionMap.Contains(target);
+            bool isInternalFunc = compilation.FunctionMap.Contains( target );
 
             IExternalData externalSymbol =
                 compilation.ExternalSymbols.FirstOrDefault(
-                                                           x => x.GetName() == target &&
-                                                                x.DataType == ExternalDataType.Function
-                                                          );
+                    x => x.GetName() == target &&
+                         x.DataType == ExternalDataType.Function
+                );
 
             //if (expr.Instance == null &&
             //    expr.MemberDefinition == null &&
@@ -229,85 +228,120 @@ namespace VisCPU.HL.Compiler.Special
             //    if(SettingsManager.GetSettings<HlCompilerSettings>().ConstructorPrologMode == HlTypeConstructorPrologMode.Outline)
             //    WriteConstructorInvocationProlog(compilation, tdef, ret.ResultAddress);
 
-
             //    return ret;
             //}
-            if (expr.Instance == null &&
-                expr.InstanceType != null &&
-                expr.MemberDefinition == expr.InstanceType.StaticConstructor)
+            if ( expr.Instance == null &&
+                 expr.InstanceType != null)
             {
-                ExpressionTarget instance = compilation.Parse(expr.ParameterList[0]);
-
-                HlTypeDefinition tdef = expr.InstanceType;
-
-                ExpressionTarget ret = new ExpressionTarget(
-                                                            instance.ResultAddress,
-                                                            true,
-                                                            tdef,
-                                                            true
-                                                           );
-
-                if (expr.WriteProlog && SettingsManager.GetSettings<HlCompilerSettings>().ConstructorPrologMode == HlTypeConstructorPrologMode.Outline)
-                    WriteConstructorInvocationProlog(compilation, tdef, ret.ResultAddress);
-
-                expr.Redirect(ret.ResultAddress, tdef, tdef.StaticConstructor, expr.WriteProlog);
-
-                ParseExpression(
-                                compilation,
-                                expr
-                                );
-
-                return ret;
-            }
-
-            if (compilation.TypeSystem.HasType(compilation.Root, target))
-            {
-                string var = HlCompilation.GetUniqueName( "static_alloc" );
-                HlTypeDefinition tdef = compilation.TypeSystem.GetType(compilation.Root, target);
-                uint size = tdef.GetSize();
-                compilation.CreateVariable(var, size, tdef, false, false);
-                string finalName = compilation.GetFinalName(var);
-
-                ExpressionTarget ret = new ExpressionTarget(
-                                                            compilation.GetTempVarLoad( finalName ),
-                                                            true,
-                                                            tdef,
-                                                            true
-                                                           );
-
-
-                if (SettingsManager.GetSettings<HlCompilerSettings>().ConstructorPrologMode == HlTypeConstructorPrologMode.Outline)
-                    WriteConstructorInvocationProlog( compilation, tdef, ret.ResultAddress);
-
-                if (tdef.StaticConstructor != null)
+                if(expr.MemberDefinition == expr.InstanceType.StaticConstructor)
                 {
-                    expr.Redirect(ret.ResultAddress, tdef, tdef.StaticConstructor);
+                    ExpressionTarget instance = compilation.Parse( expr.ParameterList[0] );
+
+                    HlTypeDefinition tdef = expr.InstanceType;
+
+                    ExpressionTarget ret = new ExpressionTarget(
+                        instance.ResultAddress,
+                        true,
+                        tdef,
+                        true
+                    );
+
+                    if ( expr.WriteProlog &&
+                         SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
+                         HlTypeConstructorPrologMode.Outline )
+                    {
+                        WriteConstructorInvocationProlog( compilation, tdef, ret.ResultAddress );
+                    }
+
+                    expr.Redirect( ret.ResultAddress, tdef, tdef.StaticConstructor, expr.WriteProlog );
 
                     ParseExpression(
-                                    compilation,
-                                    expr
-                                   );
+                        compilation,
+                        expr
+                    );
+
+                    return ret;
                 }
+                else
+                {
+                    int l = ( expr.MemberDefinition as HlFunctionDefinition ).ParameterTypes.Length;
+                    return ParseFunctionInvocation(compilation, expr, l, target, "JSR");
+                }
+            }
+
+            if ( compilation.TypeSystem.HasType( compilation.Root, target ) )
+            {
+                string var = HlCompilation.GetUniqueName( "static_alloc" );
+                HlTypeDefinition tdef = compilation.TypeSystem.GetType( compilation.Root, target );
+                uint size = tdef.GetSize();
+                compilation.CreateVariable( var, size, tdef, false, false );
+                string finalName = compilation.GetFinalName( var );
+
+                ExpressionTarget ret = new ExpressionTarget(
+                    compilation.GetTempVarLoad( finalName ),
+                    true,
+                    tdef,
+                    true
+                );
+
+                if ( SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
+                     HlTypeConstructorPrologMode.Outline )
+                {
+                    WriteConstructorInvocationProlog( compilation, tdef, ret.ResultAddress );
+                }
+
+                if ( tdef.StaticConstructor != null )
+                {
+                    expr.Redirect( ret.ResultAddress, tdef, tdef.StaticConstructor );
+
+                    ParseExpression(
+                        compilation,
+                        expr
+                    );
+                }
+
                 return ret;
             }
 
-            if (expr.Instance != null &&
-                 expr.MemberDefinition is HlFunctionDefinition fdef &&
-                 (fdef.IsVirtual || fdef.IsAbstract || fdef.IsOverride))
+            if ( expr.Instance != null &&
+                 expr.MemberDefinition is HlFunctionDefinition fdef)
             {
-                uint i = expr.InstanceType.GetOffset(fdef.Name);
+                if(fdef.IsVirtual || fdef.IsAbstract || fdef.IsOverride)
+                {
+                    uint i = expr.InstanceType.GetOffset( fdef.Name );
 
-                string init = i.ToString();
-                string tmp = compilation.GetTempVarLoad(init);
+                    string init = i.ToString();
+                    string tmp = compilation.GetTempVarLoad( init );
 
-                compilation.EmitterResult.Emit("ADD", tmp, expr.Instance);
-                compilation.EmitterResult.Emit("DREF", tmp, tmp);
-                int targetLength = fdef.ParameterTypes != null ? fdef.ParameterTypes.Length : expr.ParameterList.Length;
+                    compilation.EmitterResult.Emit( "ADD", tmp, expr.Instance );
+                    compilation.EmitterResult.Emit( "DREF", tmp, tmp );
 
-                ExpressionTarget t = ParseFunctionInvocation(compilation, expr, targetLength, tmp, "JSREF");
-                compilation.ReleaseTempVar(tmp);
+                    int targetLength = fdef.ParameterTypes != null
+                        ? fdef.ParameterTypes.Length
+                        : expr.ParameterList.Length;
 
-                return t;
+                    ExpressionTarget t = ParseFunctionInvocation( compilation, expr, targetLength, tmp, "JSREF" );
+                    compilation.ReleaseTempVar( tmp );
+
+                    return t;
+                }
+                else if(!isInternalFunc && externalSymbol==null)
+                {
+                    string funcEmit = target;
+
+                    int targetLength = fdef.ParameterTypes?.Length ?? expr.ParameterList.Length;
+
+                    if (expr.InstanceType != null &&
+                        expr.InstanceType.StaticConstructor == expr.MemberDefinition &&
+                        expr.WriteProlog &&
+                        SettingsManager.GetSettings<HlCompilerSettings>().ConstructorPrologMode ==
+                        HlTypeConstructorPrologMode.Inline)
+                    {
+                        funcEmit = expr.InstanceType.GetInternalConstructor(compilation);
+                    }
+
+                    return ParseFunctionInvocation(compilation, expr, targetLength, funcEmit, "JSR");
+                }
             }
 
             if ( isInternalFunc )
@@ -322,30 +356,34 @@ namespace VisCPU.HL.Compiler.Special
                 //    funcEmit = expr.MemberDefinition.
                 //}
 
-                if (expr.InstanceType != null &&
-                    expr.InstanceType.StaticConstructor== expr.MemberDefinition &&
+                if ( expr.InstanceType != null &&
+                     expr.InstanceType.StaticConstructor == expr.MemberDefinition &&
                      expr.WriteProlog &&
-                     SettingsManager.GetSettings<HlCompilerSettings>().ConstructorPrologMode ==
-                     HlTypeConstructorPrologMode.Inline)
-                    funcEmit = expr.InstanceType.GetInternalConstructor(compilation);
+                     SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
+                     HlTypeConstructorPrologMode.Inline )
+                {
+                    funcEmit = expr.InstanceType.GetInternalConstructor( compilation );
+                }
 
-                return ParseFunctionInvocation(compilation, expr, targetLength, funcEmit, "JSR");
+                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" );
             }
 
             if ( externalSymbol != null )
             {
-                string funcEmit = (externalSymbol as LinkedData)?.Info.Address.ToString() ?? target;
+                string funcEmit = ( externalSymbol as LinkedData )?.Info.Address.ToString() ?? target;
 
-                int targetLength = (externalSymbol as FunctionData)?.ParameterCount?? expr.ParameterList.Length;
+                int targetLength = ( externalSymbol as FunctionData )?.ParameterCount ?? expr.ParameterList.Length;
 
-                if (expr.InstanceType != null &&
-                    expr.InstanceType.StaticConstructor == expr.MemberDefinition &&
+                if ( expr.InstanceType != null &&
+                     expr.InstanceType.StaticConstructor == expr.MemberDefinition &&
                      expr.WriteProlog &&
-                     SettingsManager.GetSettings<HlCompilerSettings>().ConstructorPrologMode ==
-                     HlTypeConstructorPrologMode.Inline)
-                    funcEmit = expr.InstanceType.GetInternalConstructor(compilation);
+                     SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
+                     HlTypeConstructorPrologMode.Inline )
+                {
+                    funcEmit = expr.InstanceType.GetInternalConstructor( compilation );
+                }
 
-                return ParseFunctionInvocation(compilation, expr, targetLength, funcEmit, "JSR");
+                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" );
             }
 
             //if (isInternalFunc || externalSymbol != null)
@@ -366,48 +404,48 @@ namespace VisCPU.HL.Compiler.Special
             //    return ParseFunctionInvocation(compilation, expr, targetLength, funcEmit, "JSR");
             //}
 
-            if (compilation.ContainsVariable(target) ||
-                 compilation.ConstValTypes.Contains(target))
+            if ( compilation.ContainsVariable( target ) ||
+                 compilation.ConstValTypes.Contains( target ) )
             {
-                foreach (HlExpression parameter in expr.ParameterList)
+                foreach ( HlExpression parameter in expr.ParameterList )
                 {
-                    ExpressionTarget tt = compilation.Parse(parameter).MakeAddress(compilation);
+                    ExpressionTarget tt = compilation.Parse( parameter ).MakeAddress( compilation );
 
                     compilation.EmitterResult.Emit(
-                                                   $"PUSH",
-                                                   tt.ResultAddress
-                                                  );
+                        $"PUSH",
+                        tt.ResultAddress
+                    );
 
-                    compilation.ReleaseTempVar(tt.ResultAddress);
+                    compilation.ReleaseTempVar( tt.ResultAddress );
                 }
 
-                if (compilation.ContainsVariable(target))
+                if ( compilation.ContainsVariable( target ) )
                 {
-                    compilation.EmitterResult.Emit($"JSREF", compilation.GetFinalName(target));
+                    compilation.EmitterResult.Emit( $"JSREF", compilation.GetFinalName( target ) );
                 }
                 else
                 {
-                    compilation.EmitterResult.Emit($"JSREF", target);
+                    compilation.EmitterResult.Emit( $"JSREF", target );
                 }
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                                                                   compilation.GetTempVarPop(),
-                                                                   true,
-                                                                   compilation.TypeSystem.GetType(compilation.Root,
-                                                                        HLBaseTypeNames.s_UintTypeName
-                                                                       )
-                                                                  );
+                    compilation.GetTempVarPop(),
+                    true,
+                    compilation.TypeSystem.GetType(
+                        compilation.Root,
+                        HLBaseTypeNames.s_UintTypeName
+                    )
+                );
 
                 return tempReturn;
             }
 
-            EventManager<ErrorEvent>.SendEvent(new FunctionNotFoundEvent(target));
+            EventManager < ErrorEvent >.SendEvent( new FunctionNotFoundEvent( target ) );
 
             return new ExpressionTarget();
         }
 
         #endregion
-
     }
 
 }

@@ -2,20 +2,19 @@
 
 using System;
 using System.Runtime.InteropServices;
-
 using OpenCL.NET.Interop.Devices;
 
 #endregion
 
 namespace OpenCL.NET.Interop.Contexts
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL Contexts API.
     /// </summary>
     public static class ContextsNativeApi
     {
-
-        #region Public Static Methods
+        #region Public
 
         /// <summary>
         ///     Creates an OpenCL context.
@@ -60,22 +59,16 @@ namespace OpenCL.NET.Interop.Contexts
         ///     created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
         ///     <see cref="errorCode" />.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clCreateContext")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateContext" )]
         public static extern IntPtr CreateContext(
-            [In]
-            IntPtr properties,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            uint numberOfDevices,
-            [In] [MarshalAs(UnmanagedType.LPArray)]
+            [In] IntPtr properties,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
+            [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] devices,
-            [In]
-            IntPtr notificationCallback,
-            [In]
-            IntPtr userData,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Create an OpenCL context from a device type that identifies the specific device(s) to use.
@@ -109,20 +102,14 @@ namespace OpenCL.NET.Interop.Contexts
         ///     returned.
         /// </param>
         /// <returns>Returns the created context.</returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clCreateContextFromType")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateContextFromType" )]
         public static extern IntPtr CreateContextFromType(
-            [In]
-            IntPtr properties,
-            [In] [MarshalAs(UnmanagedType.U8)]
-            DeviceType deviceType,
-            [In]
-            IntPtr notificationCallback,
-            [In]
-            IntPtr userData,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
+            [In] IntPtr properties,
+            [In] [MarshalAs( UnmanagedType.U8 )] DeviceType deviceType,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Increment the context reference count.
@@ -137,32 +124,9 @@ namespace OpenCL.NET.Interop.Contexts
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clRetainContext")]
-        public static extern Result CreateContextFromType(
-            [In]
-            IntPtr context
-        );
-
-        /// <summary>
-        ///     Decrement the context reference count.
-        /// </summary>
-        /// <param name="context">The context to release.</param>
-        /// <returns>
-        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
-        ///     errors:
-        ///     <c>Result.InvalidContext</c> if <see cref="context" /> is not a valid OpenCL context.
-        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the device.
-        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the host.
-        /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
-        public static extern Result ReleaseContext(
-            [In]
-            IntPtr context
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clRetainContext" )]
+        public static extern Result CreateContextFromType( [In] IntPtr context );
 
         /// <summary>
         ///     Query information about a context.
@@ -190,22 +154,33 @@ namespace OpenCL.NET.Interop.Contexts
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetContextInfo")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetContextInfo" )]
         public static extern Result GetContextInformation(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            ContextInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned
-        );
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] ContextInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
+
+        /// <summary>
+        ///     Decrement the context reference count.
+        /// </summary>
+        /// <param name="context">The context to release.</param>
+        /// <returns>
+        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        ///     errors:
+        ///     <c>Result.InvalidContext</c> if <see cref="context" /> is not a valid OpenCL context.
+        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the device.
+        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the host.
+        /// </returns>
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clReleaseContext" )]
+        public static extern Result ReleaseContext( [In] IntPtr context );
 
         #endregion
-
     }
+
 }

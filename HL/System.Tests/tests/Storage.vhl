@@ -1,0 +1,32 @@
+#include "../System/System.vhl" //Include System Library
+
+public static void TestStorage()
+{
+	STOREDRV drive = STOREDRV(0xFFFF6000);
+
+	uint driveSize = drive.GetSize();
+
+	for(uint i = 0; i < driveSize; i++)
+	{
+		if( i % 20000 == 0 )
+		{
+			Console.WriteChar('.');
+		}
+		drive.Write(i, i);
+	}
+
+	for(uint i = 0; i < driveSize; i++)
+	{
+		if( i % 20000 == 0 )
+		{
+			Console.WriteChar('.');
+		}
+		if(drive.Read(i) != i)
+		{
+			interrupt(1);
+		}
+	}
+
+	Console.WriteChar('\n');
+
+}

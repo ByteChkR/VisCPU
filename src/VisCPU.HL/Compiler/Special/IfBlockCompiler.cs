@@ -7,7 +7,6 @@ namespace VisCPU.HL.Compiler.Special
 
     public class IfBlockCompiler : HlExpressionCompiler < HlIfOp >
     {
-
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlIfOp expr )
@@ -29,8 +28,8 @@ namespace VisCPU.HL.Compiler.Special
                      expr.ConditionMap[i].Item1.IsStatic() )
                 {
                     ExpressionTarget t = subIf.Parse(
-                                                     expr.ConditionMap[i].Item1
-                                                    );
+                        expr.ConditionMap[i].Item1
+                    );
 
                     if ( t.StaticParse() != 0 )
                     {
@@ -58,8 +57,8 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 ExpressionTarget exprTarget = subIf.Parse(
-                                                          expr.ConditionMap[i].Item1
-                                                         ).
+                                                        expr.ConditionMap[i].Item1
+                                                    ).
                                                     MakeAddress( subIf );
 
                 string nextLabel;
@@ -107,7 +106,6 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
-
     }
 
 }

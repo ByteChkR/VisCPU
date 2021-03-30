@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Parser.Tokens
@@ -7,7 +6,6 @@ namespace VisCPU.Compiler.Parser.Tokens
 
     public class WordToken : AToken
     {
-
         #region Public
 
         public WordToken( string originalText, int start, int length ) : base( originalText, start, length )
@@ -30,7 +28,6 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
-
     }
 
 }

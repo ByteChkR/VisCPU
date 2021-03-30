@@ -1,5 +1,4 @@
 ﻿using System.IO;
-
 using VisCPU.Utility.ProjectSystem.BuildSystem;
 using VisCPU.Utility.ProjectSystem.Data;
 
@@ -8,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobMoveContent : BuildJobRunner
     {
-
         public override string RunnerName => "move";
 
         #region Public
@@ -57,7 +55,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
-
     }
 
 }

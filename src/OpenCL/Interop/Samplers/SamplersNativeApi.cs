@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.Samplers
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL Samplers API.
     /// </summary>
     public static class SamplersNativeApi
     {
-
-        #region Deprecated Static Methods
+        #region Public
 
         /// <summary>
         ///     Creates a sampler object. A sampler object describes how to sample an image when the image is read in the kernel.
@@ -45,25 +45,15 @@ namespace OpenCL.NET.Interop.Samplers
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clCreateSampler")]
-        [Obsolete("This is a deprecated OpenCL 1.2 method, please use CreateImage instead.")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateSampler" )]
+        [Obsolete( "This is a deprecated OpenCL 1.2 method, please use CreateImage instead." )]
         public static extern IntPtr CreateSampler(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            uint normalizedCoordinates,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            AddressingMode addressingMode,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            FilterMode filterMode,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
-
-        #endregion
-
-        #region Public Static Methods
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint normalizedCoordinates,
+            [In] [MarshalAs( UnmanagedType.U4 )] AddressingMode addressingMode,
+            [In] [MarshalAs( UnmanagedType.U4 )] FilterMode filterMode,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates a sampler object. A sampler object describes how to sample an image when the image is read in the kernel.
@@ -100,56 +90,12 @@ namespace OpenCL.NET.Interop.Samplers
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(2, 0)]
-        [DllImport("OpenCL", EntryPoint = "clCreateSamplerWithProperties")]
+        [IntroducedInOpenCl( 2, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateSamplerWithProperties" )]
         public static extern IntPtr CreateSamplerWithProperties(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr samplerProperties,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
-
-        /// <summary>
-        ///     Increments the sampler reference count.
-        /// </summary>
-        /// <param name="sampler">Specifies the sampler being retained.</param>
-        /// <returns>
-        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
-        ///     errors:
-        ///     <c>Result.InvalidSampler</c> if <see cref="sampler" /> is not a valid sampler object.
-        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the device.
-        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the host.
-        /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clRetainSampler")]
-        public static extern Result RetainSample(
-            [In]
-            IntPtr sampler
-        );
-
-        /// <summary>
-        ///     Decrements the sampler reference count.
-        /// </summary>
-        /// <param name="sampler">Specifies the sampler being retained.</param>
-        /// <returns>
-        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
-        ///     errors:
-        ///     <c>Result.InvalidSampler</c> if <see cref="sampler" /> is not a valid sampler object.
-        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the device.
-        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the host.
-        /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clReleaseSampler")]
-        public static extern Result ReleaseSampler(
-            [In]
-            IntPtr sampler
-        );
+            [In] IntPtr context,
+            [In] IntPtr samplerProperties,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Returns information about the sampler object.
@@ -180,22 +126,50 @@ namespace OpenCL.NET.Interop.Samplers
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetSamplerInfo")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetSamplerInfo" )]
         public static extern Result GetSamplerInformation(
-            [In]
-            IntPtr sampler,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            SamplerInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned
-        );
+            [In] IntPtr sampler,
+            [In] [MarshalAs( UnmanagedType.U4 )] SamplerInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
+
+        /// <summary>
+        ///     Decrements the sampler reference count.
+        /// </summary>
+        /// <param name="sampler">Specifies the sampler being retained.</param>
+        /// <returns>
+        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        ///     errors:
+        ///     <c>Result.InvalidSampler</c> if <see cref="sampler" /> is not a valid sampler object.
+        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the device.
+        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the host.
+        /// </returns>
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clReleaseSampler" )]
+        public static extern Result ReleaseSampler( [In] IntPtr sampler );
+
+        /// <summary>
+        ///     Increments the sampler reference count.
+        /// </summary>
+        /// <param name="sampler">Specifies the sampler being retained.</param>
+        /// <returns>
+        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        ///     errors:
+        ///     <c>Result.InvalidSampler</c> if <see cref="sampler" /> is not a valid sampler object.
+        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the device.
+        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the host.
+        /// </returns>
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clRetainSampler" )]
+        public static extern Result RetainSample( [In] IntPtr sampler );
 
         #endregion
-
     }
+
 }

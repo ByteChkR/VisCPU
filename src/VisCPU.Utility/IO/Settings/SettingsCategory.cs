@@ -8,7 +8,6 @@ namespace VisCPU.Utility.IO.Settings
 
     public class SettingsCategory : IEnumerable < SettingsCategory >
     {
-
         private readonly List < SettingsCategory > m_SubCategories = new List < SettingsCategory >();
 
         public SettingsCategory Parent { get; }
@@ -78,7 +77,6 @@ namespace VisCPU.Utility.IO.Settings
         }
 
         #endregion
-
     }
 
 }

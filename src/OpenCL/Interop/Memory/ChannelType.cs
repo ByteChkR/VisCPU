@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Memory
 {
+
     /// <summary>
     ///     Represents an enumeration for the different data types that can be used for color channels in an image.
     /// </summary>
     public enum ChannelType : uint
     {
-
         /// <summary>
         ///     Each channel component is a normalized signed 8-bit integer value.
         /// </summary>
@@ -94,6 +94,6 @@ namespace OpenCL.NET.Interop.Memory
         ///     <c>ChannelOrder.Rgb</c> or <c>ChannelOrder.Rgbx</c>.
         /// </summary>
         NormalizedUnsignedInteger101010Version2 = 0x10E0
-
     }
+
 }

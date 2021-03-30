@@ -7,13 +7,13 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.Platforms
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL Platforms API.
     /// </summary>
     public static class PlatformsNativeApi
     {
-
-        #region Public Static Methods
+        #region Public
 
         /// <summary>
         ///     Obtain the list of platforms available.
@@ -43,16 +43,13 @@ namespace OpenCL.NET.Interop.Platforms
         ///     the host.
         ///     <c>Result.PlatformNotFoundKhr</c> if the cl_khr_icd extension is enabled and no platforms are found.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetPlatformIDs")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetPlatformIDs" )]
         public static extern Result GetPlatformIds(
-            [In] [MarshalAs(UnmanagedType.U4)]
-            uint numberOfEntries,
-            [Out] [MarshalAs(UnmanagedType.LPArray)]
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEntries,
+            [Out] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] platforms,
-            [Out] [MarshalAs(UnmanagedType.U4)]
-            out uint numberOfPlatforms
-        );
+            [Out] [MarshalAs( UnmanagedType.U4 )] out uint numberOfPlatforms );
 
         /// <summary>
         ///     Get specific information about the OpenCL platform.
@@ -85,22 +82,16 @@ namespace OpenCL.NET.Interop.Platforms
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetPlatformInfo")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetPlatformInfo" )]
         public static extern Result GetPlatformInformation(
-            [In]
-            IntPtr platform,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            PlatformInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned
-        );
+            [In] IntPtr platform,
+            [In] [MarshalAs( UnmanagedType.U4 )] PlatformInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         #endregion
-
     }
+
 }

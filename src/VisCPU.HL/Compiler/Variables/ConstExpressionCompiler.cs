@@ -7,7 +7,6 @@ namespace VisCPU.HL.Compiler.Variables
 
     public class ConstExpressionCompiler : HlExpressionCompiler < HlValueOperand >
     {
-
         protected override bool AllImplementations => true;
 
         #region Public
@@ -44,7 +43,7 @@ namespace VisCPU.HL.Compiler.Variables
             }
 
             ExpressionTarget tmp =
-                new ExpressionTarget( value, false, compilation.TypeSystem.GetType(compilation.Root, type ) );
+                new ExpressionTarget( value, false, compilation.TypeSystem.GetType( compilation.Root, type ) );
 
             return tmp;
         }
@@ -85,11 +84,10 @@ namespace VisCPU.HL.Compiler.Variables
 
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, value );
 
-            return outputTarget.Cast( compilation.TypeSystem.GetType(compilation.Root, type ) );
+            return outputTarget.Cast( compilation.TypeSystem.GetType( compilation.Root, type ) );
         }
 
         #endregion
-
     }
 
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.Instructions.Emit.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -11,7 +10,6 @@ namespace VisCPU.Instructions.Emit
 
     public class BinaryEmitter : Emitter < byte[] >
     {
-
         #region Public
 
         public override byte[] Emit( string instructionKey, params string[] arguments )
@@ -19,21 +17,21 @@ namespace VisCPU.Instructions.Emit
             List < byte > bytes = new List < byte >();
 
             Instruction instr = CpuSettings.InstructionSet.GetInstruction(
-                                                                          instructionKey,
-                                                                          arguments.Length
-                                                                         );
+                instructionKey,
+                arguments.Length
+            );
 
             if ( arguments.Length > instr.ArgumentCount )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new InvalidArgumentCountEvent( instructionKey, arguments.Length )
-                                                     );
+                    new InvalidArgumentCountEvent( instructionKey, arguments.Length )
+                );
             }
 
             uint opCode =
                 CpuSettings.InstructionSet.GetInstruction(
-                                                          instr
-                                                         );
+                    instr
+                );
 
             bytes.AddRange( BitConverter.GetBytes( opCode ) );
 
@@ -45,11 +43,11 @@ namespace VisCPU.Instructions.Emit
             if ( bytes.Count > CpuSettings.ByteSize )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new InvalidInstructionArgumentCountEvent(
-                                                           instructionKey,
-                                                           arguments.Length
-                                                          )
-                                                     );
+                    new InvalidInstructionArgumentCountEvent(
+                        instructionKey,
+                        arguments.Length
+                    )
+                );
             }
 
             bytes.AddRange( Enumerable.Repeat( ( byte ) 0, ( int ) CpuSettings.ByteSize - bytes.Count ) );
@@ -58,7 +56,6 @@ namespace VisCPU.Instructions.Emit
         }
 
         #endregion
-
     }
 
 }

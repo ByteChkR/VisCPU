@@ -3,41 +3,47 @@ using System.Linq;
 
 namespace Utility.FastString
 {
+
     public static class PathTools
     {
+        #region Public
 
-        public static string CleanPath(string path)
+        public static string CleanPath( string path )
         {
-            List<string> p = path.Replace("\\", "/").Split('/').ToList();
-            for (int i = p.Count - 1; i >= 0; i--)
+            List < string > p = path.Replace( "\\", "/" ).Split( '/' ).ToList();
+
+            for ( int i = p.Count - 1; i >= 0; i-- )
             {
-                if (p[i] == "..")
+                if ( p[i] == ".." )
                 {
-                    p.RemoveAt(i); //Remove the ..
-                    if (i != 0)
+                    p.RemoveAt( i ); //Remove the ..
+
+                    if ( i != 0 )
                     {
-                        if (p[i - 1] != "..")
+                        if ( p[i - 1] != ".." )
                         {
-                            p.RemoveAt(i - 1); //Remove the previous part
+                            p.RemoveAt( i - 1 ); //Remove the previous part
                         }
                         else
                         {
                             int remamount = 1;
-                            for (int j = i - 1; j > 0; j--)
+
+                            for ( int j = i - 1; j > 0; j-- )
                             {
-                                if (p[j] == "..")
+                                if ( p[j] == ".." )
                                 {
                                     remamount++;
-                                    p.RemoveAt(j);
+                                    p.RemoveAt( j );
                                 }
                                 else
                                 {
-                                    for (int k = j; k > j - remamount; k--)
+                                    for ( int k = j; k > j - remamount; k-- )
                                     {
-                                        p.RemoveAt(k);
+                                        p.RemoveAt( k );
                                     }
 
                                     i -= remamount;
+
                                     break;
                                 }
                             }
@@ -45,17 +51,20 @@ namespace Utility.FastString
                     }
 
                     i--;
+
                     continue;
                 }
 
-                if (p[i] == ".")
+                if ( p[i] == "." )
                 {
-                    p.RemoveAt(i);
+                    p.RemoveAt( i );
                 }
             }
 
-            return p.Unpack("/");
+            return p.Unpack( "/" );
         }
 
+        #endregion
     }
+
 }

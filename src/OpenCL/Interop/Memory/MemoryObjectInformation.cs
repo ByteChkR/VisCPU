@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Memory
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from an memory object.
     /// </summary>
     public enum MemoryObjectInformation : uint
     {
-
         /// <summary>
         ///     The type of the memory object.
         /// </summary>
@@ -59,6 +59,6 @@ namespace OpenCL.NET.Interop.Memory
         ///     host pointer specified when the buffer object was created is a SVM pointer. Otherwise <c>false</c>.
         /// </summary>
         UsesSvmPointer = 0x1109
-
     }
+
 }

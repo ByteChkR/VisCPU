@@ -1,12 +1,12 @@
 namespace OpenCL.NET.Interop.Kernels
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from an OpenCL kernel sub
     ///     group.
     /// </summary>
     public enum KernelSubGroupInformation : uint
     {
-
         /// <summary>
         ///     Returns the maximum sub-group size for the kernel. All subgroups must be the same size, while the last sub-group in
         ///     any work-group (i.e. the sub-group with the maximum index) could be the same or smaller size. The input value must
@@ -36,6 +36,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     element of the return array.
         /// </summary>
         LocalSizeForSubGroupCount = 0x11B8
-
     }
+
 }

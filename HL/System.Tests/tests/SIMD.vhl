@@ -1,0 +1,171 @@
+#include "../System/System.vhl" //Include System Library
+
+private static uint TEST_SIZE = 100000;
+
+//Strings
+private static string TEST_HW = "Running Hardware Accelerator Tests...";
+private static string TEST_SW = "Running Software Accelerator Tests...";
+private static string TEST_DONE = " DONE!";
+
+private uint IsCorrect(uint a, uint l, uint expected)
+{
+	for(uint i = 0; i < l; i++)
+	{
+		uint v = a[i];
+		if(v != expected)
+		{
+			interrupt(1);
+			return 0;
+		}
+	}
+	return 1;
+}
+
+
+private uint TestAdd()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(3);
+	testRegion2.SetAll(2);
+	
+	SIMD.Add(testRegion1.Start(), testRegion2.Start(), testRegion1.Start(), testRegion1.Length());
+
+	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 5);
+}
+
+private uint TestSub()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(7);
+	testRegion2.SetAll(1);
+	
+	SIMD.Sub(testRegion1.Start(), testRegion2.Start(), testRegion1.Start(), testRegion1.Length());
+
+	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 6);
+}
+
+
+private uint TestDiv()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(15);
+	testRegion2.SetAll(2);
+	
+	SIMD.Div(testRegion1.Start(), testRegion2.Start(), testRegion1.Start(), testRegion1.Length());
+
+	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 7);
+}
+
+private uint TestMul()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(2);
+	testRegion2.SetAll(4);
+	
+	SIMD.Mul(testRegion1.Start(), testRegion2.Start(), testRegion1.Start(), testRegion1.Length());
+
+	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 8);
+}
+
+
+private uint TestMod()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(19);
+	testRegion2.SetAll(10);
+	
+	SIMD.Mod(testRegion1.Start(), testRegion2.Start(), testRegion1.Start(), testRegion1.Length());
+
+	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 9);
+}
+
+private uint TestSet()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	testRegion1.SetAll(0);
+	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 0);
+}
+
+private uint TestCopy()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(1);
+	testRegion2.SetAll(0);
+	
+	testRegion1.CopyTo(testRegion2);
+
+	return IsCorrect(testRegion2.Start(), testRegion2.Length(), 1);
+}
+
+private uint TestMove()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(2);
+	testRegion2.SetAll(1);
+	
+	testRegion1.MoveTo(testRegion2);
+
+	return 
+		IsCorrect(testRegion2.Start(), testRegion2.Length(), 2) &&
+		IsCorrect(testRegion1.Start(), testRegion1.Length(), 0);
+}
+
+private uint TestSwap()
+{
+	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	testRegion1.SetAll(4);
+	testRegion2.SetAll(3);
+	
+	testRegion1.Swap(testRegion2);
+
+	return 
+		IsCorrect(testRegion1.Start(), testRegion1.Length(), 3) &&
+		IsCorrect(testRegion2.Start(), testRegion2.Length(), 4);
+}
+
+
+
+private static void RunTests()
+{
+	TestSet();
+	TestCopy();
+	TestMove();
+	TestSwap();
+	TestAdd();
+	TestSub();
+	TestDiv();
+	TestMul();
+	TestMod();
+}
+
+
+private static void RunSIMD_HWTests()
+{
+	SIMD.Initialize(SIMDBackend.Hardware()); //Enable Hardware SIMD Acceleration
+	Console.Write(&TEST_HW, size_of(TEST_HW));
+	RunTests();
+	Console.WriteLine(&TEST_DONE, size_of(TEST_DONE));
+}
+
+private static void RunSIMD_SWTests()
+{
+	SIMD.Initialize(SIMDBackend.Software()); //Disable Hardware SIMD Acceleration
+	Console.Write(&TEST_SW, size_of(TEST_SW));
+	RunTests();
+	Console.WriteLine(&TEST_DONE, size_of(TEST_DONE));
+}
+
+public static void RunSIMDTests(uint sz)
+{
+	TEST_SIZE = sz;
+	RunSIMD_SWTests();
+	RunSIMD_HWTests();
+}

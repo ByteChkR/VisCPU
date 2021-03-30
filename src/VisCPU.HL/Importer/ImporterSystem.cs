@@ -6,7 +6,6 @@ namespace VisCPU.HL.Importer
 
     public static class ImporterSystem
     {
-
         private static List < IImporter > s_Importer = new List < IImporter >();
 
         #region Public
@@ -22,7 +21,6 @@ namespace VisCPU.HL.Importer
         }
 
         #endregion
-
     }
 
 }

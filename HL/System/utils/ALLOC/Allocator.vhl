@@ -1,0 +1,5 @@
+public abstract class Allocator
+{
+	public abstract uint Allocate(uint size);
+	public abstract uint Free(uint ptr);
+}

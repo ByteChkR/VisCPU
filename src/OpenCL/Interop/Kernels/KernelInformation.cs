@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Kernels
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from an OpenCL kernel.
     /// </summary>
     public enum KernelInformation : uint
     {
-
         /// <summary>
         ///     The kernel function name.
         /// </summary>
@@ -57,6 +57,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     0 is returned.
         /// </summary>
         CompileNumberOfSubGroups = 0x11BA
-
     }
+
 }

@@ -1,12 +1,12 @@
 namespace OpenCL.NET.Interop.Kernels
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from an OpenCL kernel
     ///     parameter.
     /// </summary>
     public enum KernelArgumentInformation : uint
     {
-
         /// <summary>
         ///     The address qualifier specified for the argument.
         /// </summary>
@@ -34,6 +34,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     The name specified for the argument.
         /// </summary>
         Name = 0x119A
-
     }
+
 }

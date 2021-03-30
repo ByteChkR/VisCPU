@@ -1,0 +1,38 @@
+#include "../System/System.vhl" //Include System Library
+
+
+private static string S_DEV_COUNT = "Device Count: ";
+private static string S_DEV_TYPE = "Device Type: ";
+private static string S_DEV_NAME = "Device Name: ";
+private static string S_DEV_ADDR = "Device Address: ";
+
+public static void TestDeviceDetection()
+{
+	MBUSDRV busDevice = MBUSDRV();
+	Console.Write(&S_DEV_COUNT, size_of(S_DEV_COUNT));
+
+	uint c = busDevice.GetDeviceCount();
+	Console.WriteNumberLine(c);
+
+	for(uint i = 0; i < c; i++)
+	{
+
+		Console.Write(&S_DEV_NAME, size_of(S_DEV_NAME));
+		uint nl = busDevice.GetDeviceNameLength(i);
+		for(uint j = 0; j < nl; j++)
+		{
+			Console.WriteChar(busDevice.GetDeviceNameChar(i, j));
+		}
+		Console.WriteChar('\n');
+
+		Console.WriteChar('\t');
+		Console.Write(&S_DEV_ADDR, size_of(S_DEV_ADDR));
+		uint addr = busDevice.GetDeviceAddress(i);
+		Console.WriteNumberLine(addr);
+
+		Console.WriteChar('\t');
+		Console.Write(&S_DEV_TYPE, size_of(S_DEV_TYPE));
+		uint type = busDevice.GetDeviceType(i);
+		Console.WriteNumberLine(type);
+	}
+}

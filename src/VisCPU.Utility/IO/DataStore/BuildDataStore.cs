@@ -6,7 +6,6 @@ namespace VisCPU.Utility.IO.DataStore
 
     public class BuildDataStore
     {
-
         private readonly string m_RootDir;
         private readonly IBuildDataStoreType[] m_Types;
 
@@ -29,7 +28,6 @@ namespace VisCPU.Utility.IO.DataStore
         }
 
         #endregion
-
     }
 
 }

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Events;
 using VisCPU.HL.Namespaces;
@@ -13,27 +12,27 @@ namespace VisCPU.HL.TypeSystem
 
     public class HlTypeSystem : IEnumerable < HlTypeDefinition >
     {
-
         private readonly List < HlTypeDefinition > m_DefinedTypes = new List < HlTypeDefinition >();
 
         #region Public
 
-        private HlTypeSystem()
-        {
-        }
-
         public static HlTypeSystem Create( HlNamespace root )
         {
             HlTypeSystem ret = new HlTypeSystem();
-            ret.AddItem(new UIntTypeDefinition(root));
-            ret.AddItem(new FloatTypeDefinition(root));
-            ret.AddItem(new StringTypeDefinition(root));
-            ret.AddItem(new HlTypeDefinition(root,"void", false, true, true));
+            ret.AddItem( new UIntTypeDefinition( root ) );
+            ret.AddItem( new FloatTypeDefinition( root ) );
+            ret.AddItem( new StringTypeDefinition( root ) );
+            ret.AddItem( new HlTypeDefinition( root, "void", false, true, true ) );
 
             return ret;
         }
 
-        public HlTypeDefinition CreateEmptyType(HlNamespace ns, string name, bool isPublic, bool isAbstract, bool isValueType )
+        public HlTypeDefinition CreateEmptyType(
+            HlNamespace ns,
+            string name,
+            bool isPublic,
+            bool isAbstract,
+            bool isValueType )
         {
             if ( m_DefinedTypes.Any( x => x.Name == name ) )
             {
@@ -42,7 +41,7 @@ namespace VisCPU.HL.TypeSystem
                 return null;
             }
 
-            HlTypeDefinition def = new HlTypeDefinition(ns, name, isPublic, isAbstract, isValueType );
+            HlTypeDefinition def = new HlTypeDefinition( ns, name, isPublic, isAbstract, isValueType );
 
             AddItem( def );
 
@@ -59,24 +58,26 @@ namespace VisCPU.HL.TypeSystem
             return m_DefinedTypes.GetEnumerator();
         }
 
-        public HlTypeDefinition GetType(HlNamespace caller, string name )
+        public HlTypeDefinition GetType( HlNamespace caller, string name )
         {
             if ( !m_DefinedTypes.Any( x => x.Name == name && x.Namespace.IsVisibleTo( caller ) ) )
+            {
                 EventManager < ErrorEvent >.SendEvent( new TypeNotFoundEvent( name ) );
+            }
 
-            return m_DefinedTypes.First( x => x.Name == name && x.Namespace.IsVisibleTo(caller));
+            return m_DefinedTypes.First( x => x.Name == name && x.Namespace.IsVisibleTo( caller ) );
         }
 
-        public bool HasType(HlNamespace caller, string name )
+        public bool HasType( HlNamespace caller, string name )
         {
-            return m_DefinedTypes.Any( x => x.Name == name && x.Namespace.IsVisibleTo(caller) );
+            return m_DefinedTypes.Any( x => x.Name == name && x.Namespace.IsVisibleTo( caller ) );
         }
 
-        public void Import(HlNamespace caller, HlTypeSystem other )
+        public void Import( HlNamespace caller, HlTypeSystem other )
         {
             foreach ( HlTypeDefinition otherDef in other )
             {
-                if ( otherDef.IsPublic && !HasType(caller, otherDef.Name ) )
+                if ( otherDef.IsPublic && !HasType( caller, otherDef.Name ) )
                 {
                     AddItem( otherDef );
                 }
@@ -86,6 +87,10 @@ namespace VisCPU.HL.TypeSystem
         #endregion
 
         #region Private
+
+        private HlTypeSystem()
+        {
+        }
 
         private void AddItem( HlTypeDefinition def )
         {
@@ -98,7 +103,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

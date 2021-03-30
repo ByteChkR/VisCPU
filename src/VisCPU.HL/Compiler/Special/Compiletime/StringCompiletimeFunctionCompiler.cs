@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.EventSystem;
@@ -11,7 +10,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class StringCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
-
         public string FuncName => "string";
 
         #region Public
@@ -21,10 +19,10 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 2 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new FunctionArgumentMismatchEvent(
-                                                           "Invalid Arguments. Expected string(varname, string value)"
-                                                          )
-                                                     );
+                    new FunctionArgumentMismatchEvent(
+                        "Invalid Arguments. Expected string(varname, string value)"
+                    )
+                );
             }
 
             string varName = expr.ParameterList[0].ToString();
@@ -35,22 +33,21 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                   Aggregate( ( input, elem ) => input + ' ' + elem );
 
             compilation.CreateVariable(
-                                       varName,
-                                       content,
-                                       compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_StringTypeName ),
-                                       false,
-                                       false
-                                      );
+                varName,
+                content,
+                compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_StringTypeName ),
+                false,
+                false
+            );
 
             return new ExpressionTarget(
-                                        compilation.GetFinalName( varName ),
-                                        true,
-                                        compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_StringTypeName )
-                                       );
+                compilation.GetFinalName( varName ),
+                true,
+                compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_StringTypeName )
+            );
         }
 
         #endregion
-
     }
 
 }

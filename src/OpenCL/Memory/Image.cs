@@ -6,24 +6,24 @@ using System;
 
 namespace OpenCL.NET.Memory
 {
+
     /// <summary>
     ///     Represents an OpenCL image.
     /// </summary>
     public class Image : MemoryObject
     {
-
-        #region Constructors
+        #region Public
 
         /// <summary>
         ///     Initializes a new <see cref="Image" /> instance.
         /// </summary>
         /// <param name="handle">The handle to the OpenCL image.</param>
-        public Image(IntPtr handle, object handleIdentifier)
-            : base(handle, handleIdentifier)
+        public Image( IntPtr handle, object handleIdentifier )
+            : base( handle, handleIdentifier )
         {
         }
 
         #endregion
-
     }
+
 }

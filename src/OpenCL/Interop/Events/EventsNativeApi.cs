@@ -7,43 +7,43 @@ using System.Runtime.InteropServices;
 
 namespace OpenCL.NET.Interop.Events
 {
+
     /// <summary>
     ///     Represents a wrapper for the native methods of the OpenCL Events API.
     /// </summary>
     public static class EventsNativeApi
     {
-
-        #region Public Static Methods
+        #region Public
 
         /// <summary>
-        ///     Waits on the host thread for commands identified by event objects in <see cref="eventList" /> to complete. A
-        ///     command is considered complete if its execution status is <c>CommandExecutionState.Complete</c> or a negative
-        ///     value. The
-        ///     events specified in <see cref="eventList" /> act as synchronization points.
+        ///     Creates a user event object. User events allow applications to enqueue commands that wait on a user event to finish
+        ///     before the command is executed by the device. The execution status of the user event object created is set to
+        ///     <c>CommandExecutionStatus.Submitted</c>.
         /// </summary>
-        /// <param name="numberOfEvents">The number of event contained in <see cref="eventList" />.</param>
-        /// <param name="eventList">A list of event on which is to be waited on the host thread.</param>
+        /// <param name="context">A valid OpenCL context.</param>
+        /// <param name="errorCode">
+        ///     Returns an appropriate error code. If <see cref="errorCode" /> is <c>null</c>, no error code is
+        ///     returned.
+        /// </param>
         /// <returns>
-        ///     Returns <c>Result.Success</c> if the execution status of all events in <see cref="eventList" /> is
-        ///     <c>CommandExecutionState.Complete</c>. Otherwise, it returns one of the following errors:
-        ///     <c>Result.InvalidValue</c> if <see cref="numberOfEvents" /> is zero or <see cref="eventList" /> is <c>null</c>.
-        ///     <c>Result.InvalidContext</c> if events specified in <see cref="eventList" /> do not belong to the same context.
-        ///     <c>Result.InvalidEvent</c> if event objects specified in <see cref="eventList" /> are not valid event objects.
-        ///     <c>Result.ExecutionStatusErrorForEventsInWaitList</c> if the execution status of any of the events in
-        ///     <see cref="eventList" /> is a negative integer value.
-        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the device.
-        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the host.
+        ///     Returns a valid non-zero event object and <see cref="errorCode" /> is set to
+        ///     <c>
+        ///         CommandExecutionStatus.Complete
+        ///         <c>
+        ///             if the user event object is created successfully. Otherwise, it returns a <c>null</c> value with one of the
+        ///             following
+        ///             error values returned in <see cref="errorCode"/ :
+        ///             <c>Result.InvalidContext</c> if <see cref="context" /> is not a valid context.
+        ///             <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL
+        ///             implementation on the device.
+        ///             <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL
+        ///             implementation on the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clWaitForEvents")]
-        public static extern Result WaitForEvents(
-            [In] [MarshalAs(UnmanagedType.U4)]
-            uint numberOfEvents,
-            [In] [MarshalAs(UnmanagedType.LPArray)]
-            IntPtr[] eventList
-        );
+        [IntroducedInOpenCl( 1, 1 )]
+        [DllImport( "OpenCL", EntryPoint = "clCreateUserEvent" )]
+        public static extern IntPtr CreateUserEvent(
+            [In] IntPtr context,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Returns information about the event object.
@@ -76,72 +76,14 @@ namespace OpenCL.NET.Interop.Events
         ///         <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation
         ///         on the host.
         ///     </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clGetEventInfo")]
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clGetEventInfo" )]
         public static extern Result GetEventInformation(
-            [In]
-            IntPtr eventPointer,
-            [In] [MarshalAs(UnmanagedType.U4)]
-            EventInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned
-        );
-
-        /// <summary>
-        ///     Creates a user event object. User events allow applications to enqueue commands that wait on a user event to finish
-        ///     before the command is executed by the device. The execution status of the user event object created is set to
-        ///     <c>CommandExecutionStatus.Submitted</c>.
-        /// </summary>
-        /// <param name="context">A valid OpenCL context.</param>
-        /// <param name="errorCode">
-        ///     Returns an appropriate error code. If <see cref="errorCode" /> is <c>null</c>, no error code is
-        ///     returned.
-        /// </param>
-        /// <returns>
-        ///     Returns a valid non-zero event object and <see cref="errorCode" /> is set to
-        ///     <c>
-        ///         CommandExecutionStatus.Complete
-        ///         <c>
-        ///             if the user event object is created successfully. Otherwise, it returns a <c>null</c> value with one of the
-        ///             following
-        ///             error values returned in <see cref="errorCode"/ :
-        ///             <c>Result.InvalidContext</c> if <see cref="context" /> is not a valid context.
-        ///             <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL
-        ///             implementation on the device.
-        ///             <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL
-        ///             implementation on the host.
-        /// </returns>
-        [IntroducedInOpenCl(1, 1)]
-        [DllImport("OpenCL", EntryPoint = "clCreateUserEvent")]
-        public static extern IntPtr CreateUserEvent(
-            [In]
-            IntPtr context,
-            [Out] [MarshalAs(UnmanagedType.I4)]
-            out Result errorCode
-        );
-
-        /// <summary>
-        ///     Increments the event reference count. The OpenCL commands that return an event perform an implicit retain.
-        /// </summary>
-        /// <param name="eventPointer">Event object being retained.</param>
-        /// <returns>
-        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
-        ///     <c>Result.InvalidEvent</c> if <see cref="event" /> is not a valid event object.
-        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the device.
-        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
-        ///     the host.
-        /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clRetainEvent")]
-        public static extern Result RetainEvent(
-            [In]
-            IntPtr eventPointer
-        );
+            [In] IntPtr eventPointer,
+            [In] [MarshalAs( UnmanagedType.U4 )] EventInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Decrements the event reference count. The event object is deleted once the reference count becomes zero, the
@@ -172,47 +114,25 @@ namespace OpenCL.NET.Interop.Events
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 0)]
-        [DllImport("OpenCL", EntryPoint = "clReleaseEvent")]
-        public static extern Result ReleaseEvent(
-            [In]
-            IntPtr eventPointer
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clReleaseEvent" )]
+        public static extern Result ReleaseEvent( [In] IntPtr eventPointer );
 
         /// <summary>
-        ///     Sets the execution status of a user event object. If there are enqueued commands with user events in the
-        ///     <see cref="eventWaitList" /> argument of Enqueue*** commands, the user must ensure that the status of these user
-        ///     events being waited
-        ///     on are set using <see cref="SetUserEventStatus" /> before any OpenCL APIs that release OpenCL objects except for
-        ///     event objects are called, otherwise the behavior is undefined.
+        ///     Increments the event reference count. The OpenCL commands that return an event perform an implicit retain.
         /// </summary>
-        /// <param name="eventPointer">A user event object created using <see cref="CreateUserEvent" />.</param>
-        /// <param name="executionStatus">
-        ///     Specifies the new execution status to be set and can be <c>CommandExecutionStatus.Complete</c> or a negative
-        ///     integer value to indicate an error. A negative integer value causes all enqueued commands that wait on this user
-        ///     event to be
-        ///     terminated. <see cref="SetUserEventStatus" /> can only be called once to change the execution status of event.
-        /// </param>
+        /// <param name="eventPointer">Event object being retained.</param>
         /// <returns>
         ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
-        ///     <c>Result.InvalidEvent</c> if <see cref="event" /> is not a valid user event object.
-        ///     <c>Result.InvalidValue</c> if <see cref="executionStatus" /> is not <c>CommandExecutionStatus.Complete</c> or a
-        ///     negative integer value.
-        ///     <c>Result.InvalidOperation</c> if the <see cref="executionStatus" /> for <see cref="event" /> has already been
-        ///     changed by a previous call to <see cref="SetUserEventStatus" />.
+        ///     <c>Result.InvalidEvent</c> if <see cref="event" /> is not a valid event object.
         ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the device.
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 1)]
-        [DllImport("OpenCL", EntryPoint = "clSetUserEventStatus")]
-        public static extern Result SetUserEventStatus(
-            [In]
-            IntPtr eventPointer,
-            [In] [MarshalAs(UnmanagedType.I4)]
-            int executionStatus
-        );
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clRetainEvent" )]
+        public static extern Result RetainEvent( [In] IntPtr eventPointer );
 
         /// <summary>
         ///     Registers a user callback function for a specific command execution status.
@@ -260,20 +180,75 @@ namespace OpenCL.NET.Interop.Events
         ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
         ///     the host.
         /// </returns>
-        [IntroducedInOpenCl(1, 1)]
-        [DllImport("OpenCL", EntryPoint = "clSetEventCallback")]
+        [IntroducedInOpenCl( 1, 1 )]
+        [DllImport( "OpenCL", EntryPoint = "clSetEventCallback" )]
         public static extern Result SetEventCallback(
-            [In]
-            IntPtr eventPointer,
-            [In] [MarshalAs(UnmanagedType.I4)]
-            int commandExecutionCallbackType,
-            [In]
-            IntPtr notificationCallback,
-            [In]
-            IntPtr userData
-        );
+            [In] IntPtr eventPointer,
+            [In] [MarshalAs( UnmanagedType.I4 )] int commandExecutionCallbackType,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData );
+
+        /// <summary>
+        ///     Sets the execution status of a user event object. If there are enqueued commands with user events in the
+        ///     <see cref="eventWaitList" /> argument of Enqueue*** commands, the user must ensure that the status of these user
+        ///     events being waited
+        ///     on are set using <see cref="SetUserEventStatus" /> before any OpenCL APIs that release OpenCL objects except for
+        ///     event objects are called, otherwise the behavior is undefined.
+        /// </summary>
+        /// <param name="eventPointer">A user event object created using <see cref="CreateUserEvent" />.</param>
+        /// <param name="executionStatus">
+        ///     Specifies the new execution status to be set and can be <c>CommandExecutionStatus.Complete</c> or a negative
+        ///     integer value to indicate an error. A negative integer value causes all enqueued commands that wait on this user
+        ///     event to be
+        ///     terminated. <see cref="SetUserEventStatus" /> can only be called once to change the execution status of event.
+        /// </param>
+        /// <returns>
+        ///     Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        ///     <c>Result.InvalidEvent</c> if <see cref="event" /> is not a valid user event object.
+        ///     <c>Result.InvalidValue</c> if <see cref="executionStatus" /> is not <c>CommandExecutionStatus.Complete</c> or a
+        ///     negative integer value.
+        ///     <c>Result.InvalidOperation</c> if the <see cref="executionStatus" /> for <see cref="event" /> has already been
+        ///     changed by a previous call to <see cref="SetUserEventStatus" />.
+        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the device.
+        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the host.
+        /// </returns>
+        [IntroducedInOpenCl( 1, 1 )]
+        [DllImport( "OpenCL", EntryPoint = "clSetUserEventStatus" )]
+        public static extern Result SetUserEventStatus(
+            [In] IntPtr eventPointer,
+            [In] [MarshalAs( UnmanagedType.I4 )] int executionStatus );
+
+        /// <summary>
+        ///     Waits on the host thread for commands identified by event objects in <see cref="eventList" /> to complete. A
+        ///     command is considered complete if its execution status is <c>CommandExecutionState.Complete</c> or a negative
+        ///     value. The
+        ///     events specified in <see cref="eventList" /> act as synchronization points.
+        /// </summary>
+        /// <param name="numberOfEvents">The number of event contained in <see cref="eventList" />.</param>
+        /// <param name="eventList">A list of event on which is to be waited on the host thread.</param>
+        /// <returns>
+        ///     Returns <c>Result.Success</c> if the execution status of all events in <see cref="eventList" /> is
+        ///     <c>CommandExecutionState.Complete</c>. Otherwise, it returns one of the following errors:
+        ///     <c>Result.InvalidValue</c> if <see cref="numberOfEvents" /> is zero or <see cref="eventList" /> is <c>null</c>.
+        ///     <c>Result.InvalidContext</c> if events specified in <see cref="eventList" /> do not belong to the same context.
+        ///     <c>Result.InvalidEvent</c> if event objects specified in <see cref="eventList" /> are not valid event objects.
+        ///     <c>Result.ExecutionStatusErrorForEventsInWaitList</c> if the execution status of any of the events in
+        ///     <see cref="eventList" /> is a negative integer value.
+        ///     <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the device.
+        ///     <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on
+        ///     the host.
+        /// </returns>
+        [IntroducedInOpenCl( 1, 0 )]
+        [DllImport( "OpenCL", EntryPoint = "clWaitForEvents" )]
+        public static extern Result WaitForEvents(
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEvents,
+            [In] [MarshalAs( UnmanagedType.LPArray )]
+            IntPtr[] eventList );
 
         #endregion
-
     }
+
 }

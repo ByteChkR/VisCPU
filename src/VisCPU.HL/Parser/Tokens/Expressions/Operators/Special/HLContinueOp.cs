@@ -8,7 +8,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
     /// </summary>
     public class HlContinueOp : HlExpression
     {
-
         #region Public
 
         /// <summary>
@@ -34,7 +33,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
-
     }
 
 }

@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Events
 {
+
     /// <summary>
     ///     Represents an enumeration that identifies the event information that can be queried from an event.
     /// </summary>
     public enum EventInformation : uint
     {
-
         /// <summary>
         ///     The command-queue associated with the event. For user event objects, a <c>null</c> value is returned. If the
         ///     cl_khr_gl_sharing extension is enabled, the command queue of a linked event <c>null</c>, because the event is not
@@ -35,6 +35,6 @@ namespace OpenCL.NET.Interop.Events
         ///     The context associated with the event.
         /// </summary>
         Context = 0x11D4
-
     }
+
 }

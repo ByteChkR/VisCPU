@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner;
 using VisCPU.Utility.ProjectSystem.BuildSystem;
 using VisCPU.Utility.ProjectSystem.Data;
@@ -12,7 +11,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
 
     public class BuildJobSystem : ConsoleSubsystem
     {
-
         #region Public
 
         public override void Help()
@@ -27,8 +25,8 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             string[] a = args.ToArray();
 
             string root = a.Length != 0
-                              ? Path.GetFullPath( a[0] )
-                              : Directory.GetCurrentDirectory();
+                ? Path.GetFullPath( a[0] )
+                : Directory.GetCurrentDirectory();
 
             string src = Path.Combine( root, "project.json" );
 
@@ -58,7 +56,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
         }
 
         #endregion
-
     }
 
 }

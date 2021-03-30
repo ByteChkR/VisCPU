@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
 using VisCPU.Instructions;
 using VisCPU.Utility;
 using VisCPU.Utility.IO.Settings;
@@ -15,16 +14,13 @@ namespace VisCPU
 
     public class Cpu
     {
-
         [Flags]
         public enum Flags
         {
-
             None = 0,
             Break = 1,
             Interrupt = 2,
             Halt = 4
-
         }
 
         public readonly MemoryBus MemoryBus;
@@ -33,7 +29,6 @@ namespace VisCPU
 
         private readonly struct CpuState : IEquatable < CpuState >
         {
-
             public readonly Flags Flags;
             public readonly uint Pc;
 
@@ -60,7 +55,6 @@ namespace VisCPU
                     return ( ( int ) Flags * 397 ) ^ ( int ) Pc;
                 }
             }
-
         }
 
         private Action < Cpu, uint > m_InterruptHandler;
@@ -145,21 +139,21 @@ namespace VisCPU
 
             if ( Logger.s_Settings.DebugCore )
             {
-                uint a0= DecodeArgument(0);
-                uint a1 = DecodeArgument(1);
-                uint a2 = DecodeArgument(2);
+                uint a0 = DecodeArgument( 0 );
+                uint a1 = DecodeArgument( 1 );
+                uint a2 = DecodeArgument( 2 );
 
                 Logger.LogMessage(
-                                  LoggerSystems.Debug,
-                                  "Instruction: {0} {1}({4}) {2}({5}) {3}({6})",
-                                  instruction.Key,
-                                  a0,
-                                  a1,
-                                  a2,
-                                  MemoryBus.Read( a0 ),
-                                  MemoryBus.Read( a1 ),
-                                  MemoryBus.Read( a2 )
-                                 );
+                    LoggerSystems.Debug,
+                    "Instruction: {0} {1}({4}) {2}({5}) {3}({6})",
+                    instruction.Key,
+                    a0,
+                    a1,
+                    a2,
+                    MemoryBus.Read( a0 ),
+                    MemoryBus.Read( a1 ),
+                    MemoryBus.Read( a2 )
+                );
             }
 
             m_RemainingCycles = instruction.Cycles - 1;
@@ -247,8 +241,8 @@ namespace VisCPU
         public void PushState( uint pc, Flags flags )
         {
             m_CpuStack.Push(
-                            new CpuState( ProcessorFlags, ProgramCounter )
-                           );
+                new CpuState( ProcessorFlags, ProgramCounter )
+            );
 
             ProcessorFlags = flags;
             ProgramCounter = pc;
@@ -349,7 +343,6 @@ namespace VisCPU
         }
 
         #endregion
-
     }
 
 }

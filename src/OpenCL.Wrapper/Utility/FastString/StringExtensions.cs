@@ -5,45 +5,29 @@ using System.Text;
 
 namespace Utility.FastString
 {
+
     public static class StringExtensions
     {
-
         /// <summary>
         ///     String builder to be able to concat long arrays faster
         /// </summary>
         private static readonly StringBuilder Sb = new StringBuilder();
 
+        #region Public
 
         /// <summary>
-        ///     Concats the array into a string separated by the separator
+        ///     Smart way to determine if a char sequence contains only digits
         /// </summary>
-        /// <param name="arr">The array to be unpacked</param>
-        /// <param name="separator">the separator that will be used when unpacking</param>
-        /// <returns></returns>
-        public static string Unpack(this IEnumerable<object> arr, string separator)
+        /// <param name="str">string to be checked</param>
+        /// <returns>true if the string only contains chars from '0' to '9'</returns>
+        public static bool IsAllDigits( this string str )
         {
-            if (arr == null || !arr.Any())
+            if ( string.IsNullOrEmpty( str ) )
             {
-                return string.Empty;
+                return false;
             }
 
-            Sb.Clear();
-            object[] enumerable = arr as object[] ?? arr.ToArray();
-            if (enumerable.Length == 0)
-            {
-                return string.Empty;
-            }
-
-            for (int i = 0; i < enumerable.Count(); i++)
-            {
-                Sb.Append(enumerable.ElementAt(i));
-                if (i < enumerable.Count() - 1)
-                {
-                    Sb.Append(separator);
-                }
-            }
-
-            return Sb.ToString();
+            return str.All( char.IsDigit );
         }
 
         /// <summary>
@@ -52,26 +36,46 @@ namespace Utility.FastString
         /// <param name="arr">The array to be packed</param>
         /// <param name="separator">the separator that will be used when packing</param>
         /// <returns></returns>
-        public static IEnumerable<string> Pack(this string arr, string separator)
+        public static IEnumerable < string > Pack( this string arr, string separator )
         {
-            return arr.Split(new[] { separator }, StringSplitOptions.None);
+            return arr.Split( new[] { separator }, StringSplitOptions.None );
         }
-
 
         /// <summary>
-        ///     Smart way to determine if a char sequence contains only digits
+        ///     Concats the array into a string separated by the separator
         /// </summary>
-        /// <param name="str">string to be checked</param>
-        /// <returns>true if the string only contains chars from '0' to '9'</returns>
-        public static bool IsAllDigits(this string str)
+        /// <param name="arr">The array to be unpacked</param>
+        /// <param name="separator">the separator that will be used when unpacking</param>
+        /// <returns></returns>
+        public static string Unpack( this IEnumerable < object > arr, string separator )
         {
-            if (string.IsNullOrEmpty(str))
+            if ( arr == null || !arr.Any() )
             {
-                return false;
+                return string.Empty;
             }
 
-            return str.All(char.IsDigit);
+            Sb.Clear();
+            object[] enumerable = arr as object[] ?? arr.ToArray();
+
+            if ( enumerable.Length == 0 )
+            {
+                return string.Empty;
+            }
+
+            for ( int i = 0; i < enumerable.Count(); i++ )
+            {
+                Sb.Append( enumerable.ElementAt( i ) );
+
+                if ( i < enumerable.Count() - 1 )
+                {
+                    Sb.Append( separator );
+                }
+            }
+
+            return Sb.ToString();
         }
 
+        #endregion
     }
+
 }

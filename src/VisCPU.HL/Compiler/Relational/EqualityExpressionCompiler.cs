@@ -3,7 +3,6 @@
 
     public class EqualityExpressionCompiler : RelationalExpressionCompiler
     {
-
         protected override string InstructionKey => "BEQ";
 
         #region Public
@@ -14,7 +13,6 @@
         }
 
         #endregion
-
     }
 
 }

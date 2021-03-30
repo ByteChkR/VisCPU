@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Peripherals.Time
@@ -7,13 +6,13 @@ namespace VisCPU.Peripherals.Time
 
     public class TimeDevice : Peripheral
     {
+        private readonly TimeDeviceSettings m_Settings;
+
         public override string PeripheralName => "Time Provider Device";
 
         public override PeripheralType PeripheralType => PeripheralType.Time;
 
         public override uint PresentPin => m_Settings.PresentPin;
-
-        private readonly TimeDeviceSettings m_Settings;
 
         #region Unity Event Functions
 
@@ -54,10 +53,15 @@ namespace VisCPU.Peripherals.Time
 
             if ( address == m_Settings.TimePin )
             {
-                DateTimeOffset o=DateTimeOffset.Now;
-                if(!TimeZoneInfo.Local.IsDaylightSavingTime(o))
-                    return (uint)DateTimeOffset.Now.ToUnixTimeSeconds() + 3600; //Add 1 hour because of Time Shift
-                return (uint)DateTimeOffset.Now.ToUnixTimeSeconds();
+                DateTimeOffset o = DateTimeOffset.Now;
+
+                if ( !TimeZoneInfo.Local.IsDaylightSavingTime( o ) )
+                {
+                    return ( uint ) ( DateTimeOffset.Now + DateTimeOffset.Now.Offset ).ToUnixTimeSeconds() +
+                           3600; //Add 2 hour because of Time Shift
+                }
+
+                return ( uint ) ( DateTimeOffset.Now + DateTimeOffset.Now.Offset ).ToUnixTimeSeconds();
             }
 
             return 0;
@@ -68,7 +72,6 @@ namespace VisCPU.Peripherals.Time
         }
 
         #endregion
-
     }
 
 }

@@ -3,32 +3,13 @@ using System.Xml.Serialization;
 
 namespace Utility.ExtPP.Base
 {
+
     /// <summary>
     ///     A Struct that contains all the information about the plugin
     /// </summary>
     [Serializable]
     public class CommandMetaData
     {
-
-        public CommandMetaData()
-        {
-        }
-
-        /// <summary>
-        ///     Constructor
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="shortcut"></param>
-        /// <param name="helpText"></param>
-        /// <param name="global"></param>
-        public CommandMetaData(string command, string shortcut, string helpText, bool global)
-        {
-            Command = command;
-            HelpText = helpText;
-            ShortCut = shortcut;
-            IncludeGlobal = global;
-        }
-
         /// <summary>
         ///     The help text of the Command
         /// </summary>
@@ -55,6 +36,27 @@ namespace Utility.ExtPP.Base
         [XmlElement]
         public string Command { get; set; }
 
+        #region Public
+
+        public CommandMetaData()
+        {
+        }
+
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="shortcut"></param>
+        /// <param name="helpText"></param>
+        /// <param name="global"></param>
+        public CommandMetaData( string command, string shortcut, string helpText, bool global )
+        {
+            Command = command;
+            HelpText = helpText;
+            ShortCut = shortcut;
+            IncludeGlobal = global;
+        }
+
         /// <summary>
         ///     Writes the meta data as readable text.
         /// </summary>
@@ -64,5 +66,7 @@ namespace Utility.ExtPP.Base
             return Command + "(" + ShortCut + "): " + HelpText;
         }
 
+        #endregion
     }
+
 }

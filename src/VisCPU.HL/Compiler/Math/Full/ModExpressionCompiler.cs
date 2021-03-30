@@ -3,7 +3,6 @@
 
     public class ModExpressionCompiler : MathExpressionCompiler
     {
-
         protected override string InstructionKey => "MOD";
 
         #region Protected
@@ -17,7 +16,6 @@
         }
 
         #endregion
-
     }
 
 }

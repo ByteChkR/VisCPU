@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Events;
 using VisCPU.HL.Namespaces;
 using VisCPU.HL.Parser;
@@ -10,28 +9,30 @@ using VisCPU.HL.Parser.Tokens;
 using VisCPU.HL.TypeSystem.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
-using VisCPU.Utility.Logging;
 
 namespace VisCPU.HL.TypeSystem
 {
 
     public class HlTypeDefinition : IHlTypeSystemInstance, IEnumerable < HlMemberDefinition >
     {
-
         private readonly List < HlMemberDefinition > m_Members = new List < HlMemberDefinition >();
 
         private readonly List < IHlToken > m_BaseTypes;
         private List < HlTypeDefinition > m_Types;
 
         public bool IsPublic { get; }
+
         public bool IsAbstract { get; }
 
-        public IEnumerable < HlFunctionDefinition > OverridableFunctions =>
-            m_Types.SelectMany( x => x.OverridableFunctions ).
-                    Concat(
-                           m_Members.Where( x => ( x.IsVirtual || x.IsAbstract ) && x is HlFunctionDefinition ).
-                                     Cast < HlFunctionDefinition >()
-                          );
+        public IEnumerable < HlFunctionDefinition > OverridableFunctions => m_Types.
+                                                                            SelectMany( x => x.OverridableFunctions ).
+                                                                            Concat(
+                                                                                m_Members.Where(
+                                                                                        x => ( x.IsVirtual ||
+                                                                                                x.IsAbstract ) &&
+                                                                                            x is HlFunctionDefinition ).
+                                                                                    Cast < HlFunctionDefinition >()
+                                                                            );
 
         public HlNamespace Namespace { get; }
 
@@ -43,21 +44,19 @@ namespace VisCPU.HL.TypeSystem
 
         public HlTokenType Type => HlTokenType.OpClassDefinition;
 
-        public HlMemberDefinition StaticConstructor =>
-            m_Members.FirstOrDefault( x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic );
+        public HlMemberDefinition StaticConstructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic );
 
-        public HlMemberDefinition StaticDestructor =>
-            m_Members.FirstOrDefault( x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic );
+        public HlMemberDefinition StaticDestructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic );
 
-        public HlMemberDefinition DynamicConstructor =>
-            m_Members.FirstOrDefault(
-                                     x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
-                                    );
+        public HlMemberDefinition DynamicConstructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
+        );
 
-        public HlMemberDefinition DynamicDestructor =>
-            m_Members.FirstOrDefault(
-                                     x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
-                                    );
+        public HlMemberDefinition DynamicDestructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
+        );
 
         #region Public
 
@@ -71,11 +70,6 @@ namespace VisCPU.HL.TypeSystem
             m_BaseTypes = new List < IHlToken >();
         }
 
-        public string GetInternalConstructor( HlCompilation compilation )
-        {
-            return "__HL_0ctor_" + Name ;
-        }
-
         public static uint RecursiveGetOffset( HlTypeDefinition start, uint value, int current, string[] parts )
         {
             uint ret = value + start.GetOffset( parts[current] );
@@ -86,11 +80,11 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetOffset(
-                                      start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
-                                      ret,
-                                      current + 1,
-                                      parts
-                                     );
+                start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
+                ret,
+                current + 1,
+                parts
+            );
         }
 
         public static HlMemberDefinition RecursiveGetPrivateOrPublicMember(
@@ -106,10 +100,10 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetPrivateOrPublicMember(
-                                                     start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
-                                                     current + 1,
-                                                     parts
-                                                    );
+                start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
+                current + 1,
+                parts
+            );
         }
 
         public static HlMemberDefinition RecursiveGetPublicMember( HlTypeDefinition start, int current, string[] parts )
@@ -122,10 +116,10 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetPublicMember(
-                                            start.GetType( start.GetPublicMember( parts[current] ) ),
-                                            current + 1,
-                                            parts
-                                           );
+                start.GetType( start.GetPublicMember( parts[current] ) ),
+                current + 1,
+                parts
+            );
         }
 
         public void AddBaseType( IHlToken token )
@@ -195,7 +189,6 @@ namespace VisCPU.HL.TypeSystem
 
             return $"{prefix}_{Name}_{name}";
         }
-        
 
         public string GetFinalMemberName( HlMemberDefinition member )
         {
@@ -243,29 +236,9 @@ namespace VisCPU.HL.TypeSystem
             return $"SFLD_{Name}_{name}";
         }
 
-        private uint GetOffset( Func < HlMemberDefinition, bool > condition )
+        public string GetInternalConstructor( HlCompilation compilation )
         {
-
-            if ( FindOffsetInBase( condition, out uint ret ) )
-            {
-                return ret;
-            }
-
-            ret = (uint)m_Types.Sum( x => x.GetSize() );
-
-            foreach (HlMemberDefinition hlMemberDefinition in m_Members)
-            {
-                if (condition(hlMemberDefinition))
-                {
-                    return ret;
-                }
-
-                ret += hlMemberDefinition.GetSize();
-            }
-
-            EventManager<ErrorEvent>.SendEvent(new HlMemberNotFoundEvent(this));
-
-            return GetSize();
+            return "__HL_0ctor_" + Name;
         }
 
         public uint GetOffset( string name )
@@ -360,6 +333,31 @@ namespace VisCPU.HL.TypeSystem
             return ( ( IEnumerable ) m_Members ).GetEnumerator();
         }
 
+        private uint GetOffset( Func < HlMemberDefinition, bool > condition )
+        {
+
+            if ( FindOffsetInBase( condition, out uint ret ) )
+            {
+                return ret;
+            }
+
+            ret = ( uint ) m_Types.Sum( x => x.GetSize() );
+
+            foreach ( HlMemberDefinition hlMemberDefinition in m_Members )
+            {
+                if ( condition( hlMemberDefinition ) )
+                {
+                    return ret;
+                }
+
+                ret += hlMemberDefinition.GetSize();
+            }
+
+            EventManager < ErrorEvent >.SendEvent( new HlMemberNotFoundEvent( this ) );
+
+            return GetSize();
+        }
+
         private HlTypeDefinition GetType( HlMemberDefinition def )
         {
             if ( def is HlPropertyDefinition pdef )
@@ -376,7 +374,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

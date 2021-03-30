@@ -59,7 +59,6 @@
 
         public static readonly string s_HfsReadFailure = "hfs-read-failure";
         public static readonly string s_OriginUrlSchemeUnsupported = "origin-url-scheme-unsupported";
-
     }
 
 }

@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Contexts
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from a context.
     /// </summary>
     public enum ContextInformation : uint
     {
-
         /// <summary>
         ///     The context reference count. The reference count returned should be considered immediately stale. It is unsuitable
         ///     for general use in applications. This feature is provided for identifying memory leaks.
@@ -26,6 +26,6 @@ namespace OpenCL.NET.Interop.Contexts
         ///     The number of devices in context.
         /// </summary>
         NumberOfDevices = 0x1083
-
     }
+
 }

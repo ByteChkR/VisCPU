@@ -2,48 +2,29 @@
 
 namespace Utility.ExtPP.API
 {
+
     /// <summary>
     ///     File Content that is used as an abstraction to files
     /// </summary>
     public class FileContent : IFileContent
     {
-
         private readonly string extension;
         private readonly string incDir;
         private readonly string[] lines;
 
-        public FileContent(string[] lines, string incDir, string ext)
-        {
-            this.lines = lines;
-            this.incDir = incDir;
-            extension = ext;
-        }
+        public bool HasValidFilepath => false;
 
         private string Key => incDir + "/memoryFile" + extension;
 
         private string Path => incDir + "/memoryFile" + extension;
 
-        public bool HasValidFilepath => false;
+        #region Public
 
-        public bool TryGetLines(out string[] lines)
+        public FileContent( string[] lines, string incDir, string ext )
         {
-            lines = this.lines;
-            return true;
-        }
-
-        public string GetKey()
-        {
-            return Key;
-        }
-
-        public void SetKey(string key)
-        {
-            //Nothing
-        }
-
-        public string GetFilePath()
-        {
-            return Path;
+            this.lines = lines;
+            this.incDir = incDir;
+            extension = ext;
         }
 
         public string GetDefinedName()
@@ -51,10 +32,34 @@ namespace Utility.ExtPP.API
             return Key;
         }
 
+        public string GetFilePath()
+        {
+            return Path;
+        }
+
+        public string GetKey()
+        {
+            return Key;
+        }
+
+        public void SetKey( string key )
+        {
+            //Nothing
+        }
+
         public override string ToString()
         {
             return Key;
         }
 
+        public bool TryGetLines( out string[] lines )
+        {
+            lines = this.lines;
+
+            return true;
+        }
+
+        #endregion
     }
+
 }

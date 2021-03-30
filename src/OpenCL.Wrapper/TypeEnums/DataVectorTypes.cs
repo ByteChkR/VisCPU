@@ -1,11 +1,11 @@
 ﻿namespace OpenCL.Wrapper.TypeEnums
 {
+
     /// <summary>
     ///     An Enum containing all possible data types that plain OpenCL can handle
     /// </summary>
     public enum DataVectorTypes
     {
-
         Unknown = 0,
         Float1 = 1,
         Float2 = 2,
@@ -61,6 +61,6 @@
         Ulong4 = 52,
         Ulong8 = 53,
         Ulong16 = 54
-
     }
+
 }

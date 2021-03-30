@@ -1,25 +1,26 @@
 ﻿using System;
 
-
 namespace OpenCL.Wrapper.Exceptions
 {
+
     /// <summary>
     ///     This exception gets thrown when the specified file was not found.
     /// </summary>
     public class InvalidFolderPathException : Exception
     {
+        #region Public
 
         /// <summary>
         ///     Constructor
         /// </summary>
         /// <param name="folderpath">The Folder that was not found</param>
         /// <param name="inner">Inner exeption</param>
-        public InvalidFolderPathException(string folderpath, Exception inner) : base(
-             "The folder " +
-             folderpath +
-             " could not be found.",
-             inner
-            )
+        public InvalidFolderPathException( string folderpath, Exception inner ) : base(
+            "The folder " +
+            folderpath +
+            " could not be found.",
+            inner
+        )
         {
         }
 
@@ -27,9 +28,11 @@ namespace OpenCL.Wrapper.Exceptions
         ///     Constructor
         /// </summary>
         /// <param name="folderpath">The Folder that was not found</param>
-        public InvalidFolderPathException(string folderpath) : this(folderpath, null)
+        public InvalidFolderPathException( string folderpath ) : this( folderpath, null )
         {
         }
 
+        #endregion
     }
+
 }

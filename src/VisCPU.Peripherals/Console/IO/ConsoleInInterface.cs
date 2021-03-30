@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -10,13 +9,13 @@ namespace VisCPU.Peripherals.Console.IO
 
     public class ConsoleInInterface : Peripheral
     {
+        private readonly ConsoleInInterfaceSettings m_Settings;
+
         public override string PeripheralName => "Console Input Device";
 
         public override PeripheralType PeripheralType => PeripheralType.ConsoleInput;
 
         public override uint PresentPin => m_Settings.InterfacePresentPin;
-
-        private readonly ConsoleInInterfaceSettings m_Settings;
 
         public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
 
@@ -68,7 +67,6 @@ namespace VisCPU.Peripherals.Console.IO
         }
 
         #endregion
-
     }
 
 }

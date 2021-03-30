@@ -3,7 +3,6 @@
 
     public class InEqualityExpressionCompiler : RelationalExpressionCompiler
     {
-
         protected override string InstructionKey => "BNE";
 
         #region Public
@@ -14,7 +13,6 @@
         }
 
         #endregion
-
     }
 
 }

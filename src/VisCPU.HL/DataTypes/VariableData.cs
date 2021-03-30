@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.DataTypes
@@ -7,8 +6,7 @@ namespace VisCPU.HL.DataTypes
 
     public struct VariableData : IExternalData, IEquatable < VariableData >
     {
-
-        public ExternalDataType DataType => ExternalDataType.Variable;
+        public ExternalDataType DataType { get; }
 
         public string GetName()
         {
@@ -36,8 +34,10 @@ namespace VisCPU.HL.DataTypes
             uint dataSize,
             HlTypeDefinition tdef,
             bool isVisible,
-            bool isPointer )
+            bool isPointer,
+            ExternalDataType dt = ExternalDataType.Variable )
         {
+            DataType = dt;
             InitContent = null;
             Size = dataSize;
             m_Name = name;
@@ -55,6 +55,7 @@ namespace VisCPU.HL.DataTypes
             bool isVisible,
             bool isPointer )
         {
+            DataType = ExternalDataType.Variable;
             m_Name = name;
             m_FinalName = finalName;
             Size = ( uint ) ( content?.Length ?? 1 );
@@ -93,7 +94,6 @@ namespace VisCPU.HL.DataTypes
                 return hashCode;
             }
         }
-
     }
 
 }

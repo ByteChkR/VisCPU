@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Base.settings;
-
 using Utils = Utility.ExtPP.Base.Utils;
 
 namespace Utility.ExtPP.Plugins
 {
+
     public class IncludePlugin : AbstractFullScriptPlugin
     {
-
         public override string[] Cleanup => new[] { IncludeKeyword };
 
         public override ProcessStage ProcessStages => ProcessStage.OnMain;
@@ -27,60 +25,56 @@ namespace Utility.ExtPP.Plugins
 
         public string Separator { get; set; } = " ";
 
-        public override List<CommandInfo> Info { get; } = new List<CommandInfo>
-                                                          {
-                                                              new CommandInfo(
-                                                                              "set-include",
-                                                                              "i",
-                                                                              PropertyHelper.GetPropertyInfo(
-                                                                                   typeof(
-                                                                                       IncludePlugin
-                                                                                   ),
-                                                                                   nameof(
-                                                                                       IncludeKeyword
-                                                                                   )
-                                                                                  ),
-                                                                              "Sets the keyword that is used to include other files into the build process."
-                                                                             ),
-                                                              new CommandInfo(
-                                                                              "set-include-inline",
-                                                                              "ii",
-                                                                              PropertyHelper.GetPropertyInfo(
-                                                                                   typeof(
-                                                                                       IncludePlugin
-                                                                                   ),
-                                                                                   nameof(
-                                                                                       IncludeInlineKeyword
-                                                                                   )
-                                                                                  ),
-                                                                              "Sets the keyword that is used to insert other files directly into the current file"
-                                                                             ),
-                                                              new CommandInfo(
-                                                                              "set-separator",
-                                                                              "s",
-                                                                              PropertyHelper.GetPropertyInfo(
-                                                                                   typeof(
-                                                                                       IncludePlugin
-                                                                                   ),
-                                                                                   nameof(
-                                                                                       Separator
-                                                                                   )
-                                                                                  ),
-                                                                              "Sets the separator that is used to separate the include statement from the filepath"
-                                                                             )
-                                                          };
-
-        public override void Initialize(Settings settings, ISourceManager sourceManager, IDefinitions defTable)
+        public override List < CommandInfo > Info { get; } = new List < CommandInfo >
         {
-            settings.ApplySettings(Info, this);
-        }
+            new CommandInfo(
+                "set-include",
+                "i",
+                PropertyHelper.GetPropertyInfo(
+                    typeof(
+                        IncludePlugin
+                    ),
+                    nameof(
+                        IncludeKeyword
+                    )
+                ),
+                "Sets the keyword that is used to include other files into the build process."
+            ),
+            new CommandInfo(
+                "set-include-inline",
+                "ii",
+                PropertyHelper.GetPropertyInfo(
+                    typeof(
+                        IncludePlugin
+                    ),
+                    nameof(
+                        IncludeInlineKeyword
+                    )
+                ),
+                "Sets the keyword that is used to insert other files directly into the current file"
+            ),
+            new CommandInfo(
+                "set-separator",
+                "s",
+                PropertyHelper.GetPropertyInfo(
+                    typeof(
+                        IncludePlugin
+                    ),
+                    nameof(
+                        Separator
+                    )
+                ),
+                "Sets the separator that is used to separate the include statement from the filepath"
+            )
+        };
 
+        #region Public
 
-        public override bool FullScriptStage(ISourceScript script, ISourceManager sourceManager, IDefinitions defs)
+        public override bool FullScriptStage( ISourceScript script, ISourceManager sourceManager, IDefinitions defs )
         {
-            Logger.Log(LogType.Log, "Disovering Include Statments...", PLUGIN_MIN_SEVERITY);
-            List<string> source = script.GetSource().ToList();
-            string currentPath = Path.GetDirectoryName(script.GetFileInterface().GetFilePath());
+            Logger.Log( LogType.Log, "Disovering Include Statments...", PLUGIN_MIN_SEVERITY );
+            List < string > source = script.GetSource().ToList();
+            string currentPath = Path.GetDirectoryName( script.GetFileInterface().GetFilePath() );
 
             //bool hasIncludedInline;
             //do
@@ -117,71 +111,36 @@ namespace Utility.ExtPP.Plugins
             //    script.SetSource(source.ToArray());
             //} while (hasIncludedInline);
 
+            string[] inlIncs = Utils.FindStatements( source.ToArray(), IncludeInlineKeyword );
 
-            string[] inlIncs = Utils.FindStatements(source.ToArray(), IncludeInlineKeyword);
-
-            foreach (string inlInc in inlIncs)
+            foreach ( string inlInc in inlIncs )
             {
-                Logger.Log(LogType.Log, $"Processing Statement: {inlInc}", PLUGIN_MIN_SEVERITY + 1);
-                bool tmp = GetISourceScript(sourceManager, inlInc, currentPath, true, out List<ISourceScript> sources);
+                Logger.Log( LogType.Log, $"Processing Statement: {inlInc}", PLUGIN_MIN_SEVERITY + 1 );
 
-                if (tmp)
-                {
-                    foreach (ISourceScript sourceScript in sources)
-                    {
-                        Logger.Log(
-                                   LogType.Log,
-                                   $"Processing Inline Include: {Path.GetFileName(sourceScript.GetFileInterface().GetKey())}",
-                                   PLUGIN_MIN_SEVERITY + 2
-                                  );
-
-                        if (!sourceManager.IsIncluded(sourceScript))
-                        {
-                            sourceManager.AddToTodo(sourceScript);
-                        }
-                        else
-                        {
-                            sourceManager.FixOrder(sourceScript);
-                        }
-                    }
-                }
-                else
-                {
-                    return
-                        false; //We crash if we didnt find the file. but if the user forgets to specify the path we will just log the error
-                }
-            }
-
-            string[] incs = Utils.FindStatements(source.ToArray(), IncludeKeyword)
-                                 .Where(x => !Utils.IsStatement(x, IncludeInlineKeyword)).ToArray();
-
-            foreach (string includes in incs)
-            {
-                Logger.Log(LogType.Log, $"Processing Statement: {includes}", PLUGIN_MIN_SEVERITY + 1);
                 bool tmp = GetISourceScript(
-                                            sourceManager,
-                                            includes,
-                                            currentPath,
-                                            false,
-                                            out List<ISourceScript> sources
-                                           );
-                if (tmp)
+                    sourceManager,
+                    inlInc,
+                    currentPath,
+                    true,
+                    out List < ISourceScript > sources );
+
+                if ( tmp )
                 {
-                    foreach (ISourceScript sourceScript in sources)
+                    foreach ( ISourceScript sourceScript in sources )
                     {
                         Logger.Log(
-                                   LogType.Log,
-                                   $"Processing Include: {Path.GetFileName(sourceScript.GetFileInterface().GetKey())}",
-                                   PLUGIN_MIN_SEVERITY + 2
-                                  );
+                            LogType.Log,
+                            $"Processing Inline Include: {Path.GetFileName( sourceScript.GetFileInterface().GetKey() )}",
+                            PLUGIN_MIN_SEVERITY + 2
+                        );
 
-                        if (!sourceManager.IsIncluded(sourceScript))
+                        if ( !sourceManager.IsIncluded( sourceScript ) )
                         {
-                            sourceManager.AddToTodo(sourceScript);
+                            sourceManager.AddToTodo( sourceScript );
                         }
                         else
                         {
-                            sourceManager.FixOrder(sourceScript);
+                            sourceManager.FixOrder( sourceScript );
                         }
                     }
                 }
@@ -192,61 +151,119 @@ namespace Utility.ExtPP.Plugins
                 }
             }
 
-            Logger.Log(LogType.Log, "Inclusion of Files Finished", PLUGIN_MIN_SEVERITY);
+            string[] incs = Utils.FindStatements( source.ToArray(), IncludeKeyword ).
+                                  Where( x => !Utils.IsStatement( x, IncludeInlineKeyword ) ).
+                                  ToArray();
+
+            foreach ( string includes in incs )
+            {
+                Logger.Log( LogType.Log, $"Processing Statement: {includes}", PLUGIN_MIN_SEVERITY + 1 );
+
+                bool tmp = GetISourceScript(
+                    sourceManager,
+                    includes,
+                    currentPath,
+                    false,
+                    out List < ISourceScript > sources
+                );
+
+                if ( tmp )
+                {
+                    foreach ( ISourceScript sourceScript in sources )
+                    {
+                        Logger.Log(
+                            LogType.Log,
+                            $"Processing Include: {Path.GetFileName( sourceScript.GetFileInterface().GetKey() )}",
+                            PLUGIN_MIN_SEVERITY + 2
+                        );
+
+                        if ( !sourceManager.IsIncluded( sourceScript ) )
+                        {
+                            sourceManager.AddToTodo( sourceScript );
+                        }
+                        else
+                        {
+                            sourceManager.FixOrder( sourceScript );
+                        }
+                    }
+                }
+                else
+                {
+                    return
+                        false; //We crash if we didnt find the file. but if the user forgets to specify the path we will just log the error
+                }
+            }
+
+            Logger.Log( LogType.Log, "Inclusion of Files Finished", PLUGIN_MIN_SEVERITY );
+
             return true;
         }
 
+        public override void Initialize( Settings settings, ISourceManager sourceManager, IDefinitions defTable )
+        {
+            settings.ApplySettings( Info, this );
+        }
+
+        #endregion
+
+        #region Private
 
         private bool GetISourceScript(
-            ISourceManager manager, string statement, string currentPath, bool isInline,
-            out List<ISourceScript> scripts)
+            ISourceManager manager,
+            string statement,
+            string currentPath,
+            bool isInline,
+            out List < ISourceScript > scripts )
         {
-            string[] vars = Utils.SplitAndRemoveFirst(statement, Separator);
+            string[] vars = Utils.SplitAndRemoveFirst( statement, Separator );
 
-            scripts = new List<ISourceScript>();
-            if (vars.Length != 0)
+            scripts = new List < ISourceScript >();
+
+            if ( vars.Length != 0 )
             {
-                ImportResult importInfo = manager.GetComputingScheme()(vars, currentPath);
-                if (!importInfo)
+                ImportResult importInfo = manager.GetComputingScheme()( vars, currentPath );
+
+                if ( !importInfo )
                 {
-                    Logger.Log(LogType.Error, "Invalid Include Statement", 1);
+                    Logger.Log( LogType.Error, "Invalid Include Statement", 1 );
+
                     return false;
                 }
 
-                string filepath = importInfo.GetString("filename");
-                importInfo.RemoveEntry("filename");
-                string key = importInfo.GetString("key");
-                importInfo.RemoveEntry("key");
-                string originalDefinedName = importInfo.GetString("definedname");
-                importInfo.RemoveEntry("definedname");
+                string filepath = importInfo.GetString( "filename" );
+                importInfo.RemoveEntry( "filename" );
+                string key = importInfo.GetString( "key" );
+                importInfo.RemoveEntry( "key" );
+                string originalDefinedName = importInfo.GetString( "definedname" );
+                importInfo.RemoveEntry( "definedname" );
 
+                IFileContent cont = new FilePathContent( filepath, originalDefinedName );
+                cont.SetKey( key );
 
-                IFileContent cont = new FilePathContent(filepath, originalDefinedName);
-                cont.SetKey(key);
-                if (manager.TryCreateScript(out ISourceScript iss, Separator, cont, importInfo, isInline))
+                if ( manager.TryCreateScript( out ISourceScript iss, Separator, cont, importInfo, isInline ) )
                 {
-                    scripts.Add(iss);
+                    scripts.Add( iss );
                 }
 
-
-                for (int index = scripts.Count - 1; index >= 0; index--)
+                for ( int index = scripts.Count - 1; index >= 0; index-- )
                 {
                     ISourceScript sourceScript = scripts[index];
-                    if (sourceScript.GetFileInterface().HasValidFilepath &&
-                        !Utils.FileExistsRelativeTo(currentPath, sourceScript.GetFileInterface()))
+
+                    if ( sourceScript.GetFileInterface().HasValidFilepath &&
+                         !Utils.FileExistsRelativeTo( currentPath, sourceScript.GetFileInterface() ) )
                     {
-                        Logger.Log(LogType.Error, $"Could not find File: {sourceScript.GetFileInterface()}", 1);
-                        scripts.RemoveAt(index);
+                        Logger.Log( LogType.Error, $"Could not find File: {sourceScript.GetFileInterface()}", 1 );
+                        scripts.RemoveAt( index );
                     }
                 }
-
 
                 return true;
             }
 
-
             return false;
         }
 
+        #endregion
     }
+
 }

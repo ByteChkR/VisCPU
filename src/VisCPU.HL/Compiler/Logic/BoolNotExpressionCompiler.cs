@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Logic
 
     public class BoolNotExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
-
         protected override bool NeedsOutput => true;
 
         #region Public
@@ -16,8 +15,8 @@ namespace VisCPU.HL.Compiler.Logic
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
+                                                      expr.Left
+                                                  ).
                                                   MakeAddress( compilation );
 
             //BNE target rTarget if_b0_fail
@@ -34,7 +33,6 @@ namespace VisCPU.HL.Compiler.Logic
         }
 
         #endregion
-
     }
 
 }

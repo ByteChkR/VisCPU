@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
 using VisCPU.Instructions;
@@ -15,7 +14,6 @@ namespace VisCPU.HL.Importer
 
     public class InstructionDataImporter : AImporter, IDataImporter, IFileImporter
     {
-
         private string InstructionDirectory => Path.Combine( CacheDirectory, "instruction-src" );
 
         #region Public
@@ -128,14 +126,14 @@ namespace VisCPU.HL.Importer
                     foreach ( Instruction instruction in CpuSettings.InstructionSet.GetInstructions() )
                     {
                         data.Add(
-                                 $":include {( this as IFileImporter ).ProcessImport( $"vasm-bridge {instruction.Key} {instruction.ArgumentCount}" )}"
-                                );
+                            $":include {( this as IFileImporter ).ProcessImport( $"vasm-bridge {instruction.Key} {instruction.ArgumentCount}" )}"
+                        );
                     }
 
                     File.WriteAllLines( allPath, data );
                 }
 
-                return new IncludedItem(allPath, false);
+                return new IncludedItem( allPath, false );
             }
 
             string path = Path.Combine( InstructionDirectory, $"{target.Key}_{target.ArgumentCount}.vasm" );
@@ -145,7 +143,7 @@ namespace VisCPU.HL.Importer
                 File.WriteAllLines( path, GenerateInstructionData( target ) );
             }
 
-            return new IncludedItem(path, false);
+            return new IncludedItem( path, false );
         }
 
         IExternalData[] IDataImporter.ProcessImport( HlCompilation compilation, string input )
@@ -159,34 +157,33 @@ namespace VisCPU.HL.Importer
                 foreach ( Instruction instruction in CpuSettings.InstructionSet.GetInstructions() )
                 {
                     data.Add(
-                             new FunctionData(
-                                              $"I{instruction.ArgumentCount}_{instruction.Key}",
-                                              false,
-                                              true,
-                                              null,
-                                              ( int ) instruction.ArgumentCount,
-                                              HLBaseTypeNames.s_UintTypeName
-                                             )
-                            );
+                        new FunctionData(
+                            $"I{instruction.ArgumentCount}_{instruction.Key}",
+                            false,
+                            true,
+                            null,
+                            ( int ) instruction.ArgumentCount,
+                            HLBaseTypeNames.s_UintTypeName
+                        )
+                    );
                 }
 
                 return data.ToArray();
             }
 
             IExternalData d = new FunctionData(
-                                               $"I{target.ArgumentCount}_{target.Key}",
-                                               true,
-                                               true,
-                                               null,
-                                               ( int ) target.ArgumentCount,
-                                               HLBaseTypeNames.s_UintTypeName
-                                              );
+                $"I{target.ArgumentCount}_{target.Key}",
+                true,
+                true,
+                null,
+                ( int ) target.ArgumentCount,
+                HLBaseTypeNames.s_UintTypeName
+            );
 
             return new[] { d };
         }
 
         #endregion
-
     }
 
 }

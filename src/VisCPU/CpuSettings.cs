@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Instructions;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Extensions;
@@ -12,7 +11,6 @@ namespace VisCPU
 
     public class CpuSettings
     {
-
         public static readonly SettingsCategory s_CpuCategory = SettingsCategories.Get( "cpu", true );
 
         public static readonly SettingsCategory s_CpuExtensionsCategory =
@@ -38,22 +36,20 @@ namespace VisCPU
                     return s_CachedInstructionSet;
                 }
 
-                
-
                 IEnumerable < InstructionSet > extensions =
                     ExtensionLoader.LoadFrom < InstructionSet >(
-                                                                s_CpuInstructionExtensionsCategory.
-                                                                    GetCategoryDirectory(),
-                                                                true
-                                                               );
+                        s_CpuInstructionExtensionsCategory.
+                            GetCategoryDirectory(),
+                        true
+                    );
 
                 foreach ( InstructionSet instructionSet in extensions )
                 {
                     Logger.LogMessage(
-                                      LoggerSystems.Console,
-                                      "Using Instruction Set: {0}",
-                                      SettingsManager.GetSettings<CpuSettings>().InstructionSetName
-                                     );
+                        LoggerSystems.Console,
+                        "Using Instruction Set: {0}",
+                        SettingsManager.GetSettings < CpuSettings >().InstructionSetName
+                    );
 
                     if ( instructionSet.SetKey == SettingsManager.GetSettings < CpuSettings >().InstructionSetName )
                     {
@@ -87,15 +83,14 @@ namespace VisCPU
         static CpuSettings()
         {
             SettingsManager.RegisterDefaultLoader(
-                                                  new JsonSettingsLoader(),
-                                                  s_CpuCategory,
-                                                  "cpu.json",
-                                                  new CpuSettings()
-                                                 );
+                new JsonSettingsLoader(),
+                s_CpuCategory,
+                "cpu.json",
+                new CpuSettings()
+            );
         }
 
         #endregion
-
     }
 
 }

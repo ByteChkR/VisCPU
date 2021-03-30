@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Devices
 {
+
     /// <summary>
     ///     Represents an enumeration for the different device partition properties.
     /// </summary>
     public enum DevicePartitionProperty : uint
     {
-
         /// <summary>
         ///     Partitions the device equally among sub-devices.
         /// </summary>
@@ -25,6 +25,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     Partitions the device among sub-devices along a cache line.
         /// </summary>
         PartitionByAffinityDomain = 0x1088
-
     }
+
 }

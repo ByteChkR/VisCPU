@@ -5,7 +5,6 @@ namespace VisCPU.Instructions.Emit
 
     public class EmitterResult < T >
     {
-
         private readonly Emitter < T > m_Emitter;
         private readonly List < T > m_Store = new List < T >();
 
@@ -54,7 +53,6 @@ namespace VisCPU.Instructions.Emit
         }
 
         #endregion
-
     }
 
 }

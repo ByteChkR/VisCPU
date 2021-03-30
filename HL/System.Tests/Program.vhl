@@ -1,0 +1,52 @@
+#include "System/System.vhl" //Include System Library
+
+//Tests
+#include "tests/SIMD.vhl"
+#include "tests/Time.vhl"
+#include "tests/Storage.vhl"
+#include "tests/Allocator.vhl"
+#include "tests/DeviceDetection.vhl"
+#include "tests/Bench.vhl"
+
+//Strings
+private static string S_TESTING_DEV = "Testing Device Detection...";
+private static string S_TESTING_BENCH = "Testing Benchmark Device...";
+private static string S_TESTING_SIMD = "Testing SIMD Features...";
+private static string S_TESTING_TIME = "Testing Time Features...";
+private static string S_TESTING_STORAGE = "Testing Storage Features";
+private static string S_TESTING_ALLOC = "Testing Allocator Features";
+private static string S_READY = "Testing Completed.";
+
+
+private static void Main()
+{
+
+	Console.Clear();
+
+	Console.SetForegroundColor(Colors.White());
+	Console.SetBackgroundColor(Colors.Black());
+
+	Console.Clear();
+	Console.SetForegroundColor(Colors.Green());
+	Console.SetBackgroundColor(Colors.Red());
+
+	Console.WriteLine(&S_TESTING_BENCH, size_of(S_TESTING_BENCH));
+	TestBenchmark();
+
+	Console.WriteLine(&S_TESTING_DEV, size_of(S_TESTING_DEV));
+	TestDeviceDetection();
+
+	Console.WriteLine(&S_TESTING_ALLOC, size_of(S_TESTING_ALLOC));
+	TestAllocator();
+
+	Console.WriteLine(&S_TESTING_TIME, size_of(S_TESTING_TIME));
+	DisplayTimeTest();
+
+	Console.Write(&S_TESTING_STORAGE, size_of(S_TESTING_STORAGE));
+	TestStorage();
+
+	Console.WriteLine(&S_TESTING_SIMD, size_of(S_TESTING_SIMD));
+	RunSIMDTests(1000);
+	Console.WriteLine(&S_READY, size_of(S_READY));
+}
+Main();

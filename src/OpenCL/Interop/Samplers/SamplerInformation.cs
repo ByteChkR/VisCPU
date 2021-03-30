@@ -1,11 +1,11 @@
 namespace OpenCL.NET.Interop.Samplers
 {
+
     /// <summary>
     ///     Represents an enumeration for the different types of information that can be queried from a sampler object.
     /// </summary>
     public enum SamplerInformation : uint
     {
-
         /// <summary>
         ///     Retrieves the sampler reference count. The reference count returned should be considered immediately stale. It is
         ///     unsuitable for general use in applications. This feature is provided for identifying memory leaks.
@@ -46,6 +46,6 @@ namespace OpenCL.NET.Interop.Samplers
         ///     Retrieves the LOD maximum.
         /// </summary>
         LodMaximum = 0x1157
-
     }
+
 }

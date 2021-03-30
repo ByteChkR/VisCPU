@@ -6,13 +6,13 @@ using System;
 
 namespace OpenCL.NET.Interop.EnqueuedCommands
 {
+
     /// <summary>
     ///     Represents an enumeration for the different flags, that can be used when migrating memory.
     /// </summary>
     [Flags]
     public enum MemoryMigrationFlag : ulong
     {
-
         /// <summary>
         ///     This flag indicates that the specified set of memory objects are to be migrated to the host, regardless of the
         ///     target command-queue.
@@ -25,6 +25,6 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         ///     migrating their contents.
         /// </summary>
         ContentUndefined = 1 << 1
-
     }
+
 }
