@@ -1,7 +1,12 @@
 
 //Include Memory Utility
 #include "Console.vhl"
+#include "ExceptionHandler.vhl"
+#include "OutOfBoundsException.vhl"
 #include "SIMD/SIMD.vhl"
+
+//If set to 1 range checks will be performed and the CPU will halt if a "OutOfBoundsAccess" is Detected.
+private static uint MEMORY_REGION_ENABLE_RANGE_CHECK;
 
 public class MemoryRegion
 {
@@ -13,8 +18,29 @@ public class MemoryRegion
 		this.m_Length = length;
 	}
 
+	private uint CheckRange(uint addr)
+	{
+		uint tl = this.Length();
+		return tl > addr;
+	}
+
+	private uint IsInRange(MemoryRegion other)
+	{
+		uint tl = this.Length();
+		uint ol = other.Length();
+		return ol >= tl;
+	}
+
 	public uint Get(uint index)
 	{
+		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		{
+			if(!this.CheckRange(index))
+			{
+				ExceptionHandler.Throw(OutOfBoundsException());
+			}
+		}
+
 		uint p = this.Start();
 		uint r = p[index];
 		return r;
@@ -22,6 +48,13 @@ public class MemoryRegion
 
 	public void Set(uint index, uint value)
 	{
+		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		{
+			if(!this.CheckRange(index))
+			{
+				ExceptionHandler.Throw(OutOfBoundsException());
+			}
+		}
 		uint p = this.Start();
 		p[index] = value;
 	}
@@ -45,6 +78,13 @@ public class MemoryRegion
 
 	public void CopyTo(MemoryRegion dst)
 	{
+		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		{
+			if(!this.IsInRange(dst))
+			{
+				ExceptionHandler.Throw(OutOfBoundsException());
+			}
+		}
 		uint ts = this.Start();
 		uint ds = dst.Start();
 		uint tl = this.Length();
@@ -53,11 +93,30 @@ public class MemoryRegion
 
 	public void MoveTo(MemoryRegion dst)
 	{
+		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		{
+			if(!this.IsInRange(dst))
+			{
+				ExceptionHandler.Throw(OutOfBoundsException());
+			}
+		}
 		SIMD.Move(this.Start(), dst.Start(), this.Length());
 	}
 
 	public void Swap(MemoryRegion dst)
 	{
+		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		{
+			if(!this.IsInRange(dst))
+			{
+				ExceptionHandler.Throw(OutOfBoundsException());
+			}
+		}
 		SIMD.Swap(this.Start(), dst.Start(), this.Length());
+	}
+
+	public static void EnableRangeCheck(uint toggle)
+	{
+		MEMORY_REGION_ENABLE_RANGE_CHECK = toggle;
 	}
 }

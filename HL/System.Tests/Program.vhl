@@ -49,4 +49,5 @@ private static void Main()
 	RunSIMDTests(1000);
 	Console.WriteLine(&S_READY, size_of(S_READY));
 }
+
 Main();

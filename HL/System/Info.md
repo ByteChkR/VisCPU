@@ -228,3 +228,6 @@ Helper Class that uses SIMD to accelerate IO operations
 
 #### void Swap(MemoryRegion other)
 > Swaps all values between this Region and the `other` Region.
+
+#### void EnableRangeCheck(uint toggle)
+> Enables or Disables Range Checking.
