@@ -28,7 +28,7 @@ namespace VisCPU.Peripherals.Benchmarking
 
             public override string ToString()
             {
-                return $"{m_Name}: {m_Time.Milliseconds} ms";
+                return $"{m_Name}: {m_Time.TotalMilliseconds} ms";
             }
 
             #endregion
@@ -53,7 +53,7 @@ namespace VisCPU.Peripherals.Benchmarking
 
         public override void Reset()
         {
-            m_StopWatch.Reset();
+            m_StopWatch.Stop();
             m_BenchmarkName.Clear();
         }
 
@@ -115,7 +115,7 @@ namespace VisCPU.Peripherals.Benchmarking
 
         private void BeginTimer()
         {
-            if ( m_StopWatch.IsRunning )
+            if (m_StopWatch.IsRunning)
             {
                 EventManager < ErrorEvent >.SendEvent(
                     new InvalidBenchmarkDeviceUsageEvent(
@@ -131,12 +131,12 @@ namespace VisCPU.Peripherals.Benchmarking
 
         private void PrintResult()
         {
-            EventManager.SendEvent( new BenchmarkResultEvent( m_BenchmarkName.ToString(), m_StopWatch.Elapsed ) );
+            EventManager.SendEvent( new BenchmarkResultEvent( m_BenchmarkName.ToString(), m_StopWatch.Elapsed) );
         }
 
         private void StopTimer()
         {
-            if ( !m_StopWatch.IsRunning )
+            if ( !m_StopWatch.IsRunning)
             {
                 EventManager < ErrorEvent >.SendEvent(
                     new InvalidBenchmarkDeviceUsageEvent(

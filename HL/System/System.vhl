@@ -8,6 +8,7 @@
 #include "System/Thread.vhl"
 #include "System/Time.vhl"
 #include "System/SIMD/SIMD.vhl"
+#include "System/Math.vhl"
 
 //Allocator Implementation
 #include "System/ALLOC/Allocator.vhl"

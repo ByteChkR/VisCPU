@@ -1,7 +1,12 @@
 {
-  "ProjectName": "System",
-  "ProjectVersion": "2021.4.1.1",
-  "Dependencies": [],
+  "ProjectName": "Prime",
+  "ProjectVersion": "0.0.0.1",
+  "Dependencies": [
+    {
+      "ProjectName": "System",
+      "ProjectVersion": "ANY"
+    }
+  ],
   "DefaultTarget": "Debug",
   "BuildTargets": {
     "Debug": {
@@ -20,7 +25,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_build.json",
-            "build:input": "System.vhl"
+            "build:input": "Program.vhl"
           }
         }
       ]
@@ -49,7 +54,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_run.json",
-            "run:input": "System.vbin"
+            "run:input": "Program.vbin"
           }
         }
       ]
@@ -70,7 +75,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_build.json",
-            "build:input": "System.vhl"
+            "build:input": "Program.vhl"
           }
         }
       ]
@@ -86,7 +91,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_run.json",
-            "run:input": "System.vbin"
+            "run:input": "Program.vbin"
           }
         }
       ]
