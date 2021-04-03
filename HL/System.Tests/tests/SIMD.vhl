@@ -24,8 +24,8 @@ private uint IsCorrect(uint a, uint l, uint expected)
 
 private uint TestAdd()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(3);
 	testRegion2.SetAll(2);
 	
@@ -36,8 +36,8 @@ private uint TestAdd()
 
 private uint TestSub()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(7);
 	testRegion2.SetAll(1);
 	
@@ -49,8 +49,8 @@ private uint TestSub()
 
 private uint TestDiv()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(15);
 	testRegion2.SetAll(2);
 	
@@ -61,8 +61,8 @@ private uint TestDiv()
 
 private uint TestMul()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(2);
 	testRegion2.SetAll(4);
 	
@@ -74,8 +74,8 @@ private uint TestMul()
 
 private uint TestMod()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(19);
 	testRegion2.SetAll(10);
 	
@@ -86,15 +86,15 @@ private uint TestMod()
 
 private uint TestSet()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
 	testRegion1.SetAll(0);
 	return IsCorrect(testRegion1.Start(), testRegion1.Length(), 0);
 }
 
 private uint TestCopy()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(1);
 	testRegion2.SetAll(0);
 	
@@ -105,8 +105,8 @@ private uint TestCopy()
 
 private uint TestMove()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(2);
 	testRegion2.SetAll(1);
 	
@@ -119,8 +119,8 @@ private uint TestMove()
 
 private uint TestSwap()
 {
-	MemoryRegion testRegion1 = MemoryRegion(30000, TEST_SIZE);
-	MemoryRegion testRegion2 = MemoryRegion(130000, TEST_SIZE);
+	Array testRegion1 = Array(30000, TEST_SIZE);
+	Array testRegion2 = Array(130000, TEST_SIZE);
 	testRegion1.SetAll(4);
 	testRegion2.SetAll(3);
 	

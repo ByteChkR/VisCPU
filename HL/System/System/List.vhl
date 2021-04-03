@@ -1,0 +1,11 @@
+public abstract class List
+{
+	public abstract uint Count();
+	public abstract void Add(uint v);
+	public abstract void Insert(uint i, uint v);
+	public abstract void RemoveAt(uint i);
+	public abstract void Remove(uint v);
+	public abstract uint Get(uint i);
+	public abstract void Set(uint i, uint v);
+	public abstract void Clear();
+}

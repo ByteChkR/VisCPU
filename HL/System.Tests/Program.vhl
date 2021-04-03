@@ -7,9 +7,11 @@
 #include "tests/Allocator.vhl"
 #include "tests/DeviceDetection.vhl"
 #include "tests/Bench.vhl"
+#include "tests/LinkedList.vhl"
 
 //Strings
 private static string S_TESTING_DEV = "Testing Device Detection...";
+private static string S_TESTING_LL = "Testing Linked List...";
 private static string S_TESTING_BENCH = "Testing Benchmark Device...";
 private static string S_TESTING_SIMD = "Testing SIMD Features...";
 private static string S_TESTING_TIME = "Testing Time Features...";
@@ -47,6 +49,9 @@ private static void Main()
 
 	Console.WriteLine(&S_TESTING_SIMD, size_of(S_TESTING_SIMD));
 	RunSIMDTests(1000);
+
+	Console.WriteLine(&S_TESTING_LL, size_of(S_TESTING_LL));
+	RunLLTests();
 	Console.WriteLine(&S_READY, size_of(S_READY));
 }
 

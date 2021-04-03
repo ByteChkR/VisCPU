@@ -80,7 +80,7 @@ namespace VisCPU.Utility.Extensions
 
                 return true;
             }
-            catch ( Exception e )
+            catch ( Exception)
             {
                 asm = null;
 

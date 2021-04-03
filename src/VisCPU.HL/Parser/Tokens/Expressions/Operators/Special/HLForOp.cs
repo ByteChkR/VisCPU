@@ -38,7 +38,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// <param name="vDecl">Variable Declaration</param>
         /// <param name="condition">For Continue Condition</param>
         /// <param name="vInc">Variable Change Expression</param>
-        /// <param name="operationType">Operation Type</param>
+        /// <param name="operationType">Operation FunctionType</param>
         /// <param name="exprBody">The Expression Body</param>
         public HlForOp(
             HlExpression vDecl,

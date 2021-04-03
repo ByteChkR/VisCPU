@@ -17,7 +17,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         public HlExpression Left { get; }
 
         /// <summary>
-        ///     The Operation Type
+        ///     The Operation FunctionType
         /// </summary>
         public HlTokenType OperationType { get; }
 
@@ -35,7 +35,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="left">Left Side</param>
-        /// <param name="operationType">Operation Type</param>
+        /// <param name="operationType">Operation FunctionType</param>
         /// <param name="right">Right Side</param>
         public HlBinaryOp(
             HlExpression left,

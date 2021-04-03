@@ -32,7 +32,7 @@ namespace VisCPU.HL.Parser
         /// <summary>
         ///     Public Constructor
         /// </summary>
-        /// <param name="type">Token Type</param>
+        /// <param name="type">Token FunctionType</param>
         /// <param name="value">Token Value</param>
         /// <param name="startIndex">Start index in the source stream</param>
         public HlTextToken( HlTokenType type, string value, int startIndex )

@@ -10,7 +10,7 @@ namespace VisCPU.HL.Importer.Events
         #region Public
 
         public ImporterTypeInvalidEvent( Type item ) : base(
-            $"Invalid Importer Type: '{item}'",
+            $"Invalid Importer FunctionType: '{item}'",
             ErrorEventKeys.s_ImporterInvalidType,
             false
         )

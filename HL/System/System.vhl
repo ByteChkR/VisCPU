@@ -1,14 +1,17 @@
 
 //System Structures
-#include "System/Exception.vhl"
-#include "System/ExceptionHandler.vhl"
+#include "System/Array.vhl"
 #include "System/Colors.vhl"
 #include "System/Console.vhl"
-#include "System/MemoryRegion.vhl"
+#include "System/Exception.vhl"
+#include "System/ExceptionHandler.vhl"
+#include "System/List.vhl"
+#include "System/LinkedList.vhl"
+#include "System/Math.vhl"
+#include "System/SIMD/SIMD.vhl"
+#include "System/Stack.vhl"
 #include "System/Thread.vhl"
 #include "System/Time.vhl"
-#include "System/SIMD/SIMD.vhl"
-#include "System/Math.vhl"
 
 //Allocator Implementation
 #include "System/ALLOC/Allocator.vhl"
@@ -25,3 +28,5 @@
 #include "System/ALLOC/BlockNotMappedException.vhl"
 #include "System/ALLOC/OutOfMemoryException.vhl"
 #include "System/DEVS/DeviceNotFoundException.vhl"
+#include "System/StackEmptyException.vhl"
+#include "System/StackOverflowException.vhl"

@@ -6,7 +6,7 @@ namespace VisCPU.HL.Parser
 {
 
     /// <summary>
-    ///     Token Type Enum containing all tokens used inside XL
+    ///     Token FunctionType Enum containing all tokens used inside XL
     /// </summary>
     public enum HlTokenType
     {

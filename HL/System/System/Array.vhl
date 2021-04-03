@@ -6,13 +6,13 @@
 #include "SIMD/SIMD.vhl"
 
 //If set to 1 range checks will be performed and the CPU will halt if a "OutOfBoundsAccess" is Detected.
-private static uint MEMORY_REGION_ENABLE_RANGE_CHECK;
+private static uint ARRAY_ENABLE_RANGE_CHECK;
 
-public class MemoryRegion
+public class Array
 {
 	private uint m_Pointer;
 	private uint m_Length;
-	public static MemoryRegion(uint ptr, uint length)
+	public static Array(uint ptr, uint length)
 	{
 		this.m_Pointer = ptr;
 		this.m_Length = length;
@@ -24,7 +24,7 @@ public class MemoryRegion
 		return tl > addr;
 	}
 
-	private uint IsInRange(MemoryRegion other)
+	private uint IsInRange(Array other)
 	{
 		uint tl = this.Length();
 		uint ol = other.Length();
@@ -33,7 +33,7 @@ public class MemoryRegion
 
 	public uint Get(uint index)
 	{
-		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		if(ARRAY_ENABLE_RANGE_CHECK)
 		{
 			if(!this.CheckRange(index))
 			{
@@ -48,7 +48,7 @@ public class MemoryRegion
 
 	public void Set(uint index, uint value)
 	{
-		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		if(ARRAY_ENABLE_RANGE_CHECK)
 		{
 			if(!this.CheckRange(index))
 			{
@@ -76,9 +76,9 @@ public class MemoryRegion
 		SIMD.Set(this.Start(), value, this.Length());
 	}
 
-	public void CopyTo(MemoryRegion dst)
+	public void CopyTo(Array dst)
 	{
-		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		if(ARRAY_ENABLE_RANGE_CHECK)
 		{
 			if(!this.IsInRange(dst))
 			{
@@ -91,9 +91,9 @@ public class MemoryRegion
 		SIMD.Copy(this.Start(), dst.Start(), this.Length());
 	}
 
-	public void MoveTo(MemoryRegion dst)
+	public void MoveTo(Array dst)
 	{
-		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		if(ARRAY_ENABLE_RANGE_CHECK)
 		{
 			if(!this.IsInRange(dst))
 			{
@@ -103,9 +103,9 @@ public class MemoryRegion
 		SIMD.Move(this.Start(), dst.Start(), this.Length());
 	}
 
-	public void Swap(MemoryRegion dst)
+	public void Swap(Array dst)
 	{
-		if(MEMORY_REGION_ENABLE_RANGE_CHECK)
+		if(ARRAY_ENABLE_RANGE_CHECK)
 		{
 			if(!this.IsInRange(dst))
 			{
@@ -117,6 +117,6 @@ public class MemoryRegion
 
 	public static void EnableRangeCheck(uint toggle)
 	{
-		MEMORY_REGION_ENABLE_RANGE_CHECK = toggle;
+		ARRAY_ENABLE_RANGE_CHECK = toggle;
 	}
 }

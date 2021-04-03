@@ -95,7 +95,7 @@ namespace VisCPU.HL.Parser
         ///     Consumes the Specified Token
         ///     Throws an Error if a different token was found
         /// </summary>
-        /// <param name="type">Expected Token Type</param>
+        /// <param name="type">Expected Token FunctionType</param>
         public void Eat( HlTokenType type )
         {
             if ( CurrentToken.Type == type )

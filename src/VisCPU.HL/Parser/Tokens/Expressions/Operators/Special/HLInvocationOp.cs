@@ -31,7 +31,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public HlExpression[] ParameterList { get; }
 
         /// <summary>
-        ///     Operation Type
+        ///     Operation FunctionType
         /// </summary>
         public override HlTokenType Type => HlTokenType.OpInvocation;
 

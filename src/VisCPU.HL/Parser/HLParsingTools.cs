@@ -126,7 +126,7 @@ namespace VisCPU.HL.Parser
         /// <param name="tokens">Token Stream</param>
         /// <param name="start">Start Index</param>
         /// <param name="step">Step per read token</param>
-        /// <param name="type">Accepted Type</param>
+        /// <param name="type">Accepted FunctionType</param>
         /// <returns>Read Tokens</returns>
         public static IHlToken[] ReadNoneOrMany( List < IHlToken > tokens, int start, int step, HlTokenType type )
         {
@@ -174,7 +174,7 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="tokens">Token Stream</param>
         /// <param name="start">Start Index</param>
-        /// <param name="type">Accepted Type</param>
+        /// <param name="type">Accepted FunctionType</param>
         /// <returns></returns>
         public static IHlToken ReadOne( List < IHlToken > tokens, int start, HlTokenType type )
         {
@@ -240,7 +240,7 @@ namespace VisCPU.HL.Parser
         /// </summary>
         /// <param name="tokens">Token Stream</param>
         /// <param name="start">Start index</param>
-        /// <param name="type">Token Type</param>
+        /// <param name="type">Token FunctionType</param>
         /// <param name="result">Read Token</param>
         /// <returns>True if token was read.</returns>
         public static bool ReadOneOrNone( List < IHlToken > tokens, int start, HlTokenType type, out IHlToken result )

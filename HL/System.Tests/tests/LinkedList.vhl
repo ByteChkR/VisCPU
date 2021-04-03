@@ -1,0 +1,33 @@
+#include "../System/System.vhl"
+
+public static void RunLLTests()
+{
+
+	RawAllocator a = RawAllocator(100000, 100000);
+	a.SetOptimizationLevel(2);
+
+	LinkedList ll = LinkedList(a);
+
+	for(uint i = 0; i < 10; i++)
+	{
+		ll.Add(i % 5);
+	}
+
+	//Write Allocation Table with items in the list
+	a.WriteDebugData();
+
+	ll.Remove(0); //Remove all Instances of Value 0
+
+	//Print all Values
+	for(uint i = 0; i < ll.Count(); i++)
+	{
+		uint v = ll.Get(i);
+		Console.WriteNumberLine(v);
+	}
+
+	//Clear Linked List
+	ll.Clear();
+
+	//Print Allocation Table(should be empty after clear)
+	a.WriteDebugData();
+}

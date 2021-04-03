@@ -10,7 +10,7 @@ namespace VisCPU.HL.Compiler.Special
         #region Public
 
         public MemberNotImplementedErrorEvent( HlTypeDefinition type, HlMemberDefinition member ) : base(
-            $"Type '{type.Name}' does not implement member '{member.Name}'",
+            $"FunctionType '{type.Name}' does not implement member '{member.Name}'",
             ErrorEventKeys.s_HlMemberNotImplemented,
             false
         )

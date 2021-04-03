@@ -23,7 +23,7 @@ namespace VisCPU.HL.Parser.Tokens
         int SourceIndex { get; }
 
         /// <summary>
-        ///     The Token Type
+        ///     The Token FunctionType
         /// </summary>
         HlTokenType Type { get; }
     }

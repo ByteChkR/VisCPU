@@ -24,7 +24,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         /// </summary>
         /// <param name="context">XL Context</param>
         /// <param name="condition">Continue Condition</param>
-        /// <param name="operationType">Operation Type</param>
+        /// <param name="operationType">Operation FunctionType</param>
         /// <param name="exprBody">Expression Body</param>
         public HlWhileOp( HlExpression condition, HlExpression[] block, int sourceIdx ) : base( sourceIdx )
         {

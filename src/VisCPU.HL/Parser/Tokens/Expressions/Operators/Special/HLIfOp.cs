@@ -20,7 +20,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public HlExpression[] ElseBranch { get; }
 
         /// <summary>
-        ///     Operation Type
+        ///     Operation FunctionType
         /// </summary>
         public HlTokenType OperationType { get; } = HlTokenType.OpIf;
 
@@ -32,7 +32,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Public Constructor
         /// </summary>
         /// <param name="context">XL Context</param>
-        /// <param name="operationType">Operation Type</param>
+        /// <param name="operationType">Operation FunctionType</param>
         /// <param name="conditionMap">Condition Map</param>
         /// <param name="elseBranch">Else Branch Block</param>
         public HlIfOp(

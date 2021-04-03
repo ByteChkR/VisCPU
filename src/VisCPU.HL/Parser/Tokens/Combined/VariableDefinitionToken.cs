@@ -24,7 +24,7 @@
         public IHlToken Size { get; }
 
         /// <summary>
-        ///     Variable Type Name
+        ///     Variable FunctionType Name
         /// </summary>
         public IHlToken TypeName { get; }
 
@@ -50,7 +50,7 @@
         ///     Public Constructor
         /// </summary>
         /// <param name="name">Variable name</param>
-        /// <param name="typeName">Variable Type Name</param>
+        /// <param name="typeName">Variable FunctionType Name</param>
         /// <param name="modifiers">Variable Modifiers</param>
         /// <param name="subtokens">Child Tokens</param>
         /// <param name="initializerExpression">Initializer Expression</param>

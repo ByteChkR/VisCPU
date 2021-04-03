@@ -967,7 +967,7 @@ namespace VisCPU.HL
                 );
             }
 
-            if ( fdef.FunctionDefinition.Type == HlFunctionType.Constructor )
+            if ( fdef.FunctionDefinition.FunctionType == HlFunctionType.Constructor )
             {
                 subCompilation.EmitterResult.Store(
                     "." +
@@ -980,7 +980,7 @@ namespace VisCPU.HL
                 );
             }
 
-            if ( fdef.FunctionDefinition.Type == HlFunctionType.Constructor &&
+            if ( fdef.FunctionDefinition.FunctionType == HlFunctionType.Constructor &&
                  SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
                  HlTypeConstructorPrologMode.Inline )
 
@@ -1637,7 +1637,7 @@ namespace VisCPU.HL
                         compiler = () => CompileMemberFunction(
                             this,
                             fComp,
-                            fdef.FunctionDefinition.Type,
+                            fdef.FunctionDefinition.FunctionType,
                             funcName,
                             isStatic,
                             tdef,

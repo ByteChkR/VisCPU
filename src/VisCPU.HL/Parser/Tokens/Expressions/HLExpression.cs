@@ -17,7 +17,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         public int SourceIndex { get; }
 
         /// <summary>
-        ///     The Token Type (OpExpression)
+        ///     The Token FunctionType (OpExpression)
         /// </summary>
         public virtual HlTokenType Type => HlTokenType.OpExpression;
 
