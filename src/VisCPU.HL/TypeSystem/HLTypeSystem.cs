@@ -21,7 +21,8 @@ namespace VisCPU.HL.TypeSystem
             HlTypeSystem ret = new HlTypeSystem();
             ret.AddItem( new UIntTypeDefinition( root ) );
             ret.AddItem( new FloatTypeDefinition( root ) );
-            ret.AddItem( new StringTypeDefinition( root ) );
+            ret.AddItem(new StringTypeDefinition(root));
+            ret.AddItem(new CStringTypeDefinition(root));
             ret.AddItem( new HlTypeDefinition( root, "void", false, true, true ) );
 
             return ret;

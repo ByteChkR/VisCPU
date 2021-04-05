@@ -10,6 +10,7 @@
 #include "System/Math.vhl"
 #include "System/SIMD/SIMD.vhl"
 #include "System/Stack.vhl"
+#include "System/String.vhl"
 #include "System/Thread.vhl"
 #include "System/Time.vhl"
 
@@ -30,3 +31,15 @@
 #include "System/DEVS/DeviceNotFoundException.vhl"
 #include "System/StackEmptyException.vhl"
 #include "System/StackOverflowException.vhl"
+
+//Include Global System Library Settings.
+#include "System/Settings.vhl"
+
+//Global System Library Setup
+//Example Configuration (Most Safety, Least Performance):
+SET_ENABLE_THROW_ERRORS(1); //Enable Throwing Exceptions
+SET_ENABLE_RANGE_CHECK(1); //Enable Range Checking on Arrays and LinkedLists
+
+//Example: Checking Global Setup
+uint ethrow = ENABLE_THROW_ERRORS();
+uint erange = ENABLE_RANGE_CHECK();

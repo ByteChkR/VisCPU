@@ -65,6 +65,7 @@ namespace VisCPU.HL.Parser
         private readonly string m_ReturnKey = "return";
         private readonly string m_StaticModifier = "static";
         private readonly string m_ConstModifier = "const";
+        private readonly string m_PackedModifier = "packed";
         private readonly string m_SwitchKey = "switch";
         private readonly string m_ThisKey = "this";
         private readonly string m_TryKey = "try";
@@ -101,6 +102,7 @@ namespace VisCPU.HL.Parser
             { m_DeleteKey, HlTokenType.OpDelete },
             { m_BaseKey, HlTokenType.OpBase },
             { m_ThisKey, HlTokenType.OpThis },
+            { m_PackedModifier, HlTokenType.OpPackedMod },
             { m_PublicModifier, HlTokenType.OpPublicMod },
             { m_PrivateModifier, HlTokenType.OpPrivateMod },
             { m_ProtectedModifier, HlTokenType.OpProtectedMod },
@@ -120,6 +122,7 @@ namespace VisCPU.HL.Parser
         public Dictionary < string, HlTokenType > MemberModifiers => new Dictionary < string, HlTokenType >
         {
             { m_ConstModifier, HlTokenType.OpConstMod },
+            { m_PackedModifier, HlTokenType.OpPackedMod },
             { m_StaticModifier, HlTokenType.OpStaticMod },
             { m_PublicModifier, HlTokenType.OpPublicMod },
             { m_AbstractModifier, HlTokenType.OpAbstractMod },

@@ -3,10 +3,21 @@ using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.DataTypes
 {
+    [Flags]
+    public enum VariableDataEmitFlags
+    {
+        None = 0,
+        CStyle = 1,
+        Packed = 2,
+        Visible = 4,
+        Pointer = 8,
+    }
 
     public struct VariableData : IExternalData, IEquatable < VariableData >
     {
         public ExternalDataType DataType { get; }
+
+        private readonly VariableDataEmitFlags m_EmitFlags;
 
         public string GetName()
         {
@@ -21,8 +32,9 @@ namespace VisCPU.HL.DataTypes
         private readonly string m_Name;
         private readonly string m_FinalName;
         public readonly HlTypeDefinition TypeDefinition;
-        public readonly bool IsVisible;
-        public readonly bool IsPointer;
+
+        public bool IsVisible => ( m_EmitFlags & VariableDataEmitFlags.Visible ) != 0;
+        public  bool IsPointer => (m_EmitFlags & VariableDataEmitFlags.Pointer) != 0;
 
         public uint Size { get; }
 
@@ -33,8 +45,7 @@ namespace VisCPU.HL.DataTypes
             string finalName,
             uint dataSize,
             HlTypeDefinition tdef,
-            bool isVisible,
-            bool isPointer,
+            VariableDataEmitFlags emFlags,
             ExternalDataType dt = ExternalDataType.Variable )
         {
             DataType = dt;
@@ -43,8 +54,7 @@ namespace VisCPU.HL.DataTypes
             m_Name = name;
             m_FinalName = finalName;
             TypeDefinition = tdef;
-            IsVisible = isVisible;
-            IsPointer = isPointer;
+            m_EmitFlags = emFlags;
         }
 
         public VariableData(
@@ -52,8 +62,7 @@ namespace VisCPU.HL.DataTypes
             string finalName,
             string content,
             HlTypeDefinition tdef,
-            bool isVisible,
-            bool isPointer )
+            VariableDataEmitFlags emFlags)
         {
             DataType = ExternalDataType.Variable;
             m_Name = name;
@@ -61,8 +70,7 @@ namespace VisCPU.HL.DataTypes
             Size = ( uint ) ( content?.Length ?? 1 );
             InitContent = content;
             TypeDefinition = tdef;
-            IsVisible = isVisible;
-            IsPointer = isPointer;
+            m_EmitFlags = emFlags;
         }
 
         public bool Equals( VariableData other )
@@ -93,6 +101,30 @@ namespace VisCPU.HL.DataTypes
 
                 return hashCode;
             }
+
+            
+        }
+        public string EmitVasm()
+        {
+
+            string linkerArgs = "";
+
+            if (IsVisible)
+                linkerArgs += "linker:hide ";
+            if ((m_EmitFlags & VariableDataEmitFlags.CStyle)!=0)
+                linkerArgs += "string:c-style ";
+            if ((m_EmitFlags & VariableDataEmitFlags.Packed) != 0)
+                linkerArgs += "string:packed ";
+
+            if ( InitContent != null )
+                {
+                    return
+                        $":data {GetFinalName()} \"{InitContent}\" {linkerArgs}";
+                }
+
+
+                return
+                    $":data {GetFinalName()} {Size} {linkerArgs}";
         }
     }
 

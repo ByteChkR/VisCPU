@@ -1,0 +1,75 @@
+#include "../System/System.vhl"
+
+
+private static string defaultString = "ABC"; //Saved as 3 Uint Values
+private static cstring cStyleString = "ABC"; //Saved as 4 Uint Values
+private static packed string packedDefaultString = "ABC"; //Saved as 2 uint values
+private static packed cstring packedCStyleString = "ABC"; //Saved as 2 uint values
+
+
+private static void PrintDefaultString(uint str, uint len)
+{
+	for(uint i = 0; i < len; i++)
+	{
+		uint v = str[i];
+		Console.WriteChar(v);
+	}
+	Console.WriteChar('\n');
+}
+
+private static void PrintCString(uint str)
+{
+	uint i = 0;
+	uint c = str[i];
+	while(c)
+	{
+		Console.WriteChar(c);
+		i++;
+		c = str[i];
+	}
+	Console.WriteChar('\n');
+}
+
+public static void StringTests()
+{
+	Allocator a = RawAllocator(100000, 100000);
+
+	//Print Unpacked String Versions
+	PrintDefaultString(&defaultString, size_of(defaultString));
+	PrintCString(&cStyleString);
+
+	//Print Packed Default String
+
+	//Allocate Memory to unpack to
+	uint defStr = a.Allocate(size_of(packedDefaultString));
+
+	//Unpack String
+	String.Unpack(&packedDefaultString, size_of(packedDefaultString), defStr);
+
+	//Print Unpacked String as Default
+	PrintDefaultString(defStr, size_of(packedDefaultString));
+
+	//Free Allocated Memory
+	a.Free(defStr);
+
+
+	//Print Packed C-Style String
+
+	//Get String Size + Null Byte
+	uint unpackedSize = size_of(packedCStyleString) + 1;
+	//Allocate Memory to unpack to
+	defStr = a.Allocate(unpackedSize);
+
+	//Unpack String
+	String.Unpack(&packedCStyleString, unpackedSize, defStr);
+
+	//Add Nullbyte to unpacked string
+	//	explicitly write it because allocated memory is not cleared after usage.
+	defStr[size_of(packedCStyleString)] = 0;
+
+	//Print Unpacked C-Style String
+	PrintCString(defStr);
+
+	//Free Allocated Memory
+	a.Free(defStr);
+}

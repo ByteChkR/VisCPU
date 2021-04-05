@@ -46,8 +46,7 @@ namespace VisCPU.HL.Compiler.Types
                                 compilation.Root,
                                 vdef.TypeName.ToString()
                             ),
-                            false,
-                            false
+                            VariableDataEmitFlags.None
                         );
                     }
 

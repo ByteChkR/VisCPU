@@ -4,9 +4,7 @@
 #include "ExceptionHandler.vhl"
 #include "OutOfBoundsException.vhl"
 #include "SIMD/SIMD.vhl"
-
-//If set to 1 range checks will be performed and the CPU will halt if a "OutOfBoundsAccess" is Detected.
-private static uint ARRAY_ENABLE_RANGE_CHECK;
+#include "Settings.vhl"
 
 public class Array
 {
@@ -33,11 +31,15 @@ public class Array
 
 	public uint Get(uint index)
 	{
-		if(ARRAY_ENABLE_RANGE_CHECK)
+		if(ENABLE_RANGE_CHECK())
 		{
 			if(!this.CheckRange(index))
 			{
-				ExceptionHandler.Throw(OutOfBoundsException());
+				if(ENABLE_THROW_ERRORS())
+				{
+					ExceptionHandler.Throw(OutOfBoundsException());
+				}
+				return 0;
 			}
 		}
 
@@ -48,11 +50,15 @@ public class Array
 
 	public void Set(uint index, uint value)
 	{
-		if(ARRAY_ENABLE_RANGE_CHECK)
+		if(ENABLE_RANGE_CHECK())
 		{
 			if(!this.CheckRange(index))
 			{
-				ExceptionHandler.Throw(OutOfBoundsException());
+				if(ENABLE_THROW_ERRORS())
+				{
+					ExceptionHandler.Throw(OutOfBoundsException());
+				}
+				return 0;
 			}
 		}
 		uint p = this.Start();
@@ -78,11 +84,15 @@ public class Array
 
 	public void CopyTo(Array dst)
 	{
-		if(ARRAY_ENABLE_RANGE_CHECK)
+		if(ENABLE_RANGE_CHECK())
 		{
 			if(!this.IsInRange(dst))
 			{
-				ExceptionHandler.Throw(OutOfBoundsException());
+				if(ENABLE_THROW_ERRORS())
+				{
+					ExceptionHandler.Throw(OutOfBoundsException());
+				}
+				return 0;
 			}
 		}
 		uint ts = this.Start();
@@ -93,11 +103,15 @@ public class Array
 
 	public void MoveTo(Array dst)
 	{
-		if(ARRAY_ENABLE_RANGE_CHECK)
+		if(ENABLE_RANGE_CHECK())
 		{
 			if(!this.IsInRange(dst))
 			{
-				ExceptionHandler.Throw(OutOfBoundsException());
+				if(ENABLE_THROW_ERRORS())
+				{
+					ExceptionHandler.Throw(OutOfBoundsException());
+				}
+				return 0;
 			}
 		}
 		SIMD.Move(this.Start(), dst.Start(), this.Length());
@@ -105,18 +119,17 @@ public class Array
 
 	public void Swap(Array dst)
 	{
-		if(ARRAY_ENABLE_RANGE_CHECK)
+		if(ENABLE_RANGE_CHECK())
 		{
 			if(!this.IsInRange(dst))
 			{
-				ExceptionHandler.Throw(OutOfBoundsException());
+				if(ENABLE_THROW_ERRORS())
+				{
+					ExceptionHandler.Throw(OutOfBoundsException());
+				}
+				return 0;
 			}
 		}
 		SIMD.Swap(this.Start(), dst.Start(), this.Length());
-	}
-
-	public static void EnableRangeCheck(uint toggle)
-	{
-		ARRAY_ENABLE_RANGE_CHECK = toggle;
 	}
 }

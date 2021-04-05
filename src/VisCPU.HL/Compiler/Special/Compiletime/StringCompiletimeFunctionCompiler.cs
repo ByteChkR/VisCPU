@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -36,8 +37,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                 varName,
                 content,
                 compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_StringTypeName ),
-                false,
-                false
+                VariableDataEmitFlags.None
             );
 
             return new ExpressionTarget(

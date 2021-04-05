@@ -152,7 +152,7 @@ namespace VisCPU.HL
             return m_VariableMap.Contains( var );
         }
 
-        public void CreateVariable( string name, uint size, HlTypeDefinition tdef, bool isVisible, bool isPointer )
+        public void CreateVariable( string name, uint size, HlTypeDefinition tdef, VariableDataEmitFlags emFlags )
         {
             m_VariableMap.Set(
                 name,
@@ -161,13 +161,12 @@ namespace VisCPU.HL
                     m_VariableMap.GetFinalName( name ),
                     size,
                     tdef,
-                    isVisible,
-                    isPointer
+                    emFlags
                 )
             );
         }
 
-        public void CreateVariable( string name, string content, HlTypeDefinition tdef, bool isVisible, bool isPointer )
+        public void CreateVariable( string name, string content, HlTypeDefinition tdef, VariableDataEmitFlags emFlags )
         {
             m_VariableMap.Set(
                 name,
@@ -176,8 +175,7 @@ namespace VisCPU.HL
                     m_VariableMap.GetFinalName( name ),
                     content,
                     tdef,
-                    isVisible,
-                    isPointer
+                    emFlags
                 )
             );
         }
@@ -193,18 +191,7 @@ namespace VisCPU.HL
 
             foreach ( KeyValuePair < string, VariableData > keyValuePair in m_VariableMap )
             {
-                if ( keyValuePair.Value.InitContent != null )
-                {
-                    sb.Add(
-                        $":data {keyValuePair.Value.GetFinalName()} \"{keyValuePair.Value.InitContent}\" linker:hide"
-                    );
-                }
-                else
-                {
-                    sb.Add(
-                        $":data {keyValuePair.Value.GetFinalName()} {keyValuePair.Value.Size} {( keyValuePair.Value.IsVisible ? "" : "linker:hide" )}"
-                    );
-                }
+                sb.Add(keyValuePair.Value.EmitVasm());
             }
 
             return sb;
@@ -942,8 +929,7 @@ namespace VisCPU.HL
                     "this",
                     1,
                     tdef,
-                    false,
-                    true
+                    VariableDataEmitFlags.Pointer
                 );
             }
 
@@ -962,8 +948,7 @@ namespace VisCPU.HL
                         compilation.Root,
                         vdef.TypeName.ToString()
                     ),
-                    false,
-                    false
+                    VariableDataEmitFlags.None
                 );
             }
 
@@ -1132,8 +1117,7 @@ namespace VisCPU.HL
                     name,
                     1,
                     TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
-                    false,
-                    false
+                    VariableDataEmitFlags.None
                 )
             );
         }
@@ -1159,8 +1143,7 @@ namespace VisCPU.HL
                     name,
                     1,
                     TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
-                    false,
-                    false
+                    VariableDataEmitFlags.None
                 )
             );
         }
@@ -1186,8 +1169,7 @@ namespace VisCPU.HL
                     name,
                     1,
                     TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
-                    false,
-                    false
+                    VariableDataEmitFlags.None
                 )
             );
         }
@@ -1213,8 +1195,7 @@ namespace VisCPU.HL
                     name,
                     1,
                     TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
-                    false,
-                    false
+                    VariableDataEmitFlags.None
                 )
             );
         }
@@ -1240,8 +1221,7 @@ namespace VisCPU.HL
                     name,
                     1,
                     TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
-                    false,
-                    false
+                    VariableDataEmitFlags.None
                 )
             );
         }
@@ -1306,8 +1286,7 @@ namespace VisCPU.HL
                                 includedFileExternalSymbol,
                                 1,
                                 TypeSystem.GetType( Root, HLBaseTypeNames.s_UintTypeName ),
-                                true,
-                                false,
+                                VariableDataEmitFlags.Visible,
                                 ExternalDataType.Function ) );
                     }
 
@@ -1571,9 +1550,8 @@ namespace VisCPU.HL
                             arrSize,
                             tt,
                             t.VariableDefinition.Modifiers.Any(
-                                x => x.Type == HlTokenType.OpPublicMod
-                            ),
-                            false
+                                    x => x.Type == HlTokenType.OpPublicMod
+                                )? VariableDataEmitFlags.Visible: VariableDataEmitFlags.None
                         );
 
                         HlExpression init = t.Initializer.FirstOrDefault();
@@ -1584,7 +1562,7 @@ namespace VisCPU.HL
                                  vOp.Value.Type == HlTokenType.OpStringLiteral )
                             {
                                 string content = vOp.Value.ToString();
-                                CreateVariable( asmVarName, content, tt, false, false );
+                                CreateVariable( asmVarName, content, tt, VariableDataEmitFlags.None);
                             }
                         }
                     }
@@ -1702,8 +1680,7 @@ namespace VisCPU.HL
                         "this",
                         1,
                         tdef,
-                        false,
-                        true
+                        VariableDataEmitFlags.Pointer
                     );
 
                     fComp.EmitterResult.Emit( "POP", fComp.GetFinalName( "this" ) );

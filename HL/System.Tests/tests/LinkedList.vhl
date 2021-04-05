@@ -23,7 +23,7 @@ public static void LinkedListExample()
 
 	count = list.Count(); //3 Elements
 
-	list.Remove(69); //Remove all Elements with value "69"
+	list.RemoveAll(69); //Remove all Elements with value "69"
 
 	count = list.Count(); //1 Element
 

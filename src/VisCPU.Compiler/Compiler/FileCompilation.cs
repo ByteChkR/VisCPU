@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using VisCPU.Compiler.Compiler.Events;
 using VisCPU.Compiler.Parser;
 using VisCPU.Compiler.Parser.Tokens;
@@ -162,9 +164,24 @@ namespace VisCPU.Compiler.Compiler
             for ( int i = 0; i < Tokens.Count; i++ )
             {
                 if ( Tokens[i].Length >= 3 &&
-                     Tokens[i][1] is WordToken name &&
-                     Tokens[i][0] is WordToken word &&
-                     word.GetValue() == ":data" )
+                     Tokens[i][1] is WordToken vName &&
+                     Tokens[i][0] is WordToken dWord &&
+                     dWord.GetValue() == ":file" )
+                {
+                    object[] linkerArgs = ParseLinkerArgs(Tokens[i].Skip(3));
+
+                    DataSectionHeader[vName.GetValue()] = new AddressItem
+                    {
+                        Address = (uint)DataSection.Count,
+                        LinkerArguments = linkerArgs
+                    };
+
+                    DataSection.AddRange(File.ReadAllBytes(Tokens[i][3].ToString()).ToUInt());
+                }
+                else if ( Tokens[i].Length >= 3 &&
+                          Tokens[i][1] is WordToken name &&
+                          Tokens[i][0] is WordToken word &&
+                          word.GetValue() == ":data" )
                 {
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 3 ) );
 
@@ -175,7 +192,29 @@ namespace VisCPU.Compiler.Compiler
 
                     if ( Tokens[i][2] is StringToken str )
                     {
-                        DataSection.AddRange( str.GetContent().ToCharArray().Select( x => ( uint ) x ) );
+                        bool compress = linkerArgs.Contains("string:packed");
+                        bool nullTerm = linkerArgs.Contains("string:c-style");
+                        string data = str.GetContent();
+
+                        if (nullTerm)
+                        {
+                            data = data + '\0';
+                        }
+
+                        if ( compress )
+                        {
+                            List < byte > cData = Encoding.ASCII.GetBytes( data ).ToList();
+                            cData.AddRange( Enumerable.Repeat( ( byte ) 0, cData.Count % sizeof( uint ) ) );
+
+                            for ( int j = 0; j < cData.Count/sizeof(uint); j++ )
+                            {
+                                DataSection.Add(BitConverter.ToUInt32(cData.ToArray(), j));
+                            }
+                        }
+                        else
+                        {
+                            DataSection.AddRange(data.Select(x => (uint)x));
+                        }
                     }
                     else if ( Tokens[i][2] is ValueToken val )
                     {

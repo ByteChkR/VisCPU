@@ -83,6 +83,7 @@ namespace VisCPU.HL.Parser
         OpOverrideMod,
         OpStaticMod,
         OpConstMod,
+        OpPackedMod,
 
         OpComment,
 

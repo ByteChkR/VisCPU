@@ -5,6 +5,7 @@
 
 #include "OutOfMemoryException.vhl"
 #include "BlockNotMappedException.vhl"
+#include "../Settings.vhl"
 
 public class RawAllocatorBlockData
 {
@@ -125,16 +126,24 @@ public class RawAllocator : Allocator
 
 			return ptr;
 		}
-		ExceptionHandler.Throw(OutOfMemoryException());
+		if(ENABLE_THROW_ERRORS())
+		{
+			ExceptionHandler.Throw(OutOfMemoryException());
+		}
+		return 0;
 	}
 
-	public override uint Free(uint ptr)
+	public override void Free(uint ptr)
 	{
 		RawAllocatorBlockData data = this.GetDataFromBlock(ptr);
 
 		if(data.IsFree())
 		{
-			ExceptionHandler.Throw(BlockNotMappedException());
+			if(ENABLE_THROW_ERRORS())
+			{
+				ExceptionHandler.Throw(BlockNotMappedException());
+			}
+			return 0;
 		}
 
 		data.SetFree(1);

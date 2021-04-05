@@ -274,7 +274,7 @@ namespace VisCPU.HL.Compiler.Special
                 string var = HlCompilation.GetUniqueName( "static_alloc" );
                 HlTypeDefinition tdef = compilation.TypeSystem.GetType( compilation.Root, target );
                 uint size = tdef.GetSize();
-                compilation.CreateVariable( var, size, tdef, false, false );
+                compilation.CreateVariable( var, size, tdef, VariableDataEmitFlags.None );
                 string finalName = compilation.GetFinalName( var );
 
                 ExpressionTarget ret = new ExpressionTarget(

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using VisCPU.HL.Compiler.Events;
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens.Expressions;
@@ -51,8 +52,7 @@ namespace VisCPU.HL.Compiler.Variables
                     vdef,
                     expr.VariableDefinition.Modifiers.Any(
                         x => x.Type == HlTokenType.OpPublicMod
-                    ),
-                    false
+                    )? VariableDataEmitFlags.Visible: VariableDataEmitFlags.None
                 );
 
                 HlExpression init = expr.Initializer.FirstOrDefault();
@@ -69,7 +69,15 @@ namespace VisCPU.HL.Compiler.Variables
                         );
 
                         string content = vOp.Value.ToString();
-                        compilation.CreateVariable( asmVarName, content, vdef, false, false );
+
+                        VariableDataEmitFlags emFlags = vdef is CStringTypeDefinition
+                            ? VariableDataEmitFlags.CStyle
+                            : VariableDataEmitFlags.None;
+
+                        if ( expr.VariableDefinition.Modifiers.Any( x => x.Type == HlTokenType.OpPackedMod ) )
+                            emFlags |= VariableDataEmitFlags.Packed;
+                        
+                        compilation.CreateVariable( asmVarName, content, vdef, emFlags);
 
                         return new ExpressionTarget(
                             svar.ResultAddress,
