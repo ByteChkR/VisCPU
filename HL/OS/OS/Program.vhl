@@ -1,0 +1,6 @@
+#include "System/System.vhl"
+//Entry Point of Project
+
+private static string s_OS_Hello = "Hello World from OS!";
+
+Console.WriteLine(&s_OS_Hello, size_of(s_OS_Hello));

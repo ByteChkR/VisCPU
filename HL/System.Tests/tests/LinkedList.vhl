@@ -37,7 +37,7 @@ public static void LinkedListExample()
 	count = list.Count(); //0 Elements
 }
 
-public static void RunLLTests()
+public static void RunLLTests(uint items)
 {
 
 	RawAllocator a = RawAllocator(100000, 100000);
@@ -45,7 +45,7 @@ public static void RunLLTests()
 
 	LinkedList ll = LinkedList(a);
 
-	for(uint i = 0; i < 10; i++)
+	for(uint i = 0; i < items; i++)
 	{
 		ll.Add(i % 5);
 	}

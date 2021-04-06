@@ -8,11 +8,13 @@
 #include "tests/DeviceDetection.vhl"
 #include "tests/Bench.vhl"
 #include "tests/LinkedList.vhl"
+#include "tests/LinkedQueue.vhl"
 #include "tests/String.vhl"
 
 //Strings
 private static string S_TESTING_DEV = "Testing Device Detection...";
 private static string S_TESTING_LL = "Testing Linked List...";
+private static string S_TESTING_LQ = "Testing Linked Queue...";
 private static string S_TESTING_BENCH = "Testing Benchmark Device...";
 private static string S_TESTING_SIMD = "Testing SIMD Features...";
 private static string S_TESTING_TIME = "Testing Time Features...";
@@ -56,7 +58,10 @@ private static void Main()
 	StringTests();
 
 	Console.WriteLine(&S_TESTING_LL, size_of(S_TESTING_LL));
-	RunLLTests();
+	RunLLTests(10);
+
+	Console.WriteLine(&S_TESTING_LQ, size_of(S_TESTING_LQ));
+	RunLQTests(10);
 
 	Console.WriteLine(&S_READY, size_of(S_READY));
 }

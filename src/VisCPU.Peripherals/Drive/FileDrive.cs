@@ -96,13 +96,13 @@ namespace VisCPU.Peripherals.Drive
 
             foreach ( Memory.Memory memory in n )
             {
-                if ( memory.StartAddress <= destination &&
-                     memory.EndAddress >= destination + start + length )
+                if ( memory.StartAddress <= address &&
+                     memory.EndAddress >= address + start + length )
                 {
-                    m_FileStream.Position = address * sizeof( uint );
+                    m_FileStream.Position = destination * sizeof( uint );
 
                     byte[] buffer = memory.GetInternalBuffer().
-                                           Skip( ( int ) ( destination - memory.StartAddress + start ) ).
+                                           Skip( ( int ) ( address - memory.StartAddress + start ) ).
                                            Take( ( int ) length ).
                                            SelectMany( BitConverter.GetBytes ).
                                            ToArray();

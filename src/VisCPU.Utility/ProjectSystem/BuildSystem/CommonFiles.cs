@@ -45,6 +45,8 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
 
             ProjectBuildTarget releaseRunTarget = CreateReleaseRunTarget();
 
+            ProjectBuildTarget runTarget = CreateRunTarget();
+
             ProjectBuildTarget publishTarget = new ProjectBuildTarget();
             publishTarget.TargetName = "Publish";
             ProjectBuildJob publishJob = new ProjectBuildJob();
@@ -57,6 +59,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             config.BuildTargets["DebugRun"] = debugRunTarget;
             config.BuildTargets["Release"] = releaseTarget;
             config.BuildTargets["ReleaseRun"] = releaseRunTarget;
+            config.BuildTargets["Run"] = runTarget;
 
             return config;
         }
@@ -218,7 +221,24 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             mergeRunJob.BuildJobRunner = "merged";
             mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
             mergeRunJob.Arguments["run:input"] = "Program.vbin";
-            release.Jobs.Add( mergeRunJob );
+            release.Jobs.Add(mergeRunJob);
+
+            return release;
+        }
+
+        private static ProjectBuildTarget CreateRunTarget()
+        {
+            ProjectBuildTarget release = new ProjectBuildTarget();
+            release.TargetName = "Run";
+
+            release.DependsOn = new string[0];
+
+            ProjectBuildJob mergeRunJob = new ProjectBuildJob();
+            mergeRunJob.JobName = "Merged Run";
+            mergeRunJob.BuildJobRunner = "merged";
+            mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
+            mergeRunJob.Arguments["run:input"] = "Program.vbin";
+            release.Jobs.Add(mergeRunJob);
 
             return release;
         }

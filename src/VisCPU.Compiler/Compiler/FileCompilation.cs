@@ -141,17 +141,19 @@ namespace VisCPU.Compiler.Compiler
                     {
                         EventManager < ErrorEvent >.SendEvent( new FileNotFoundEvent( file, false ) );
                     }
+                    string p = (Tokens[i][2] is StringToken st) ? st.GetContent() : Tokens[i][2].ToString();
 
-                    uint[] data = File.ReadAllBytes( file ).ToUInt();
-
-                    DataSection.AddRange( data );
-
+                    uint[] data = File.ReadAllBytes( p ).ToUInt();
+                    DataSection.AddRange(data);
+                    
                     DataSectionHeader[name.GetValue() + "_LEN"] = new AddressItem
                     {
-                        Address = ( uint ) data.Length,
+                        Address = ( uint ) DataSection.Count,
                         LinkerArguments =
-                            new[] { "linker:autogen", "linker:file_length", "linker:hide" }
+                            new[] { "linker:autogen", "linker:file_length" }
                     };
+
+                    DataSection.Add( ( uint ) data.Length );
 
                     Tokens.RemoveAt( i );
                     i--;
@@ -164,21 +166,6 @@ namespace VisCPU.Compiler.Compiler
             for ( int i = 0; i < Tokens.Count; i++ )
             {
                 if ( Tokens[i].Length >= 3 &&
-                     Tokens[i][1] is WordToken vName &&
-                     Tokens[i][0] is WordToken dWord &&
-                     dWord.GetValue() == ":file" )
-                {
-                    object[] linkerArgs = ParseLinkerArgs(Tokens[i].Skip(3));
-
-                    DataSectionHeader[vName.GetValue()] = new AddressItem
-                    {
-                        Address = (uint)DataSection.Count,
-                        LinkerArguments = linkerArgs
-                    };
-
-                    DataSection.AddRange(File.ReadAllBytes(Tokens[i][3].ToString()).ToUInt());
-                }
-                else if ( Tokens[i].Length >= 3 &&
                           Tokens[i][1] is WordToken name &&
                           Tokens[i][0] is WordToken word &&
                           word.GetValue() == ":data" )

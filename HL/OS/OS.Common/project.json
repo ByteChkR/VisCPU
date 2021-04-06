@@ -1,12 +1,7 @@
 {
-  "ProjectName": "System.Tests",
-  "ProjectVersion": "2021.4.6.5",
-  "Dependencies": [
-    {
-      "ProjectName": "System",
-      "ProjectVersion": "ANY"
-    }
-  ],
+  "ProjectName": "OS.Common",
+  "ProjectVersion": "2021.4.6.9",
+  "Dependencies": [],
   "DefaultTarget": "Debug",
   "BuildTargets": {
     "Debug": {
@@ -25,7 +20,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_build.json",
-            "build:input": "Program.vhl"
+            "build:input": "DiskTools.vhl"
           }
         }
       ]
@@ -54,7 +49,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_run.json",
-            "run:input": "Program.vbin"
+            "run:input": "DiskTools.vbin"
           }
         }
       ]
@@ -75,7 +70,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_build.json",
-            "build:input": "Program.vhl"
+            "build:input": "DiskTools.vhl"
           }
         }
       ]
@@ -91,7 +86,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_run.json",
-            "run:input": "Program.vbin"
+            "run:input": "DiskTools.vbin"
           }
         }
       ]

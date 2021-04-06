@@ -1,0 +1,24 @@
+#include "../System/System.vhl"
+
+public static void RunLQTests(uint items)
+{
+	
+	RawAllocator a = RawAllocator(100000, 100000);
+	a.SetOptimizationLevel(2);
+
+	LinkedQueue lq = LinkedQueue(&a);
+
+	for(uint i = 0; i < items; i++)
+	{
+		lq.Enqueue(i);
+	}
+
+	a.WriteDebugData();
+
+	while(!lq.IsEmpty())
+	{
+		Console.WriteNumberLine(lq.Dequeue());
+	}
+
+	a.WriteDebugData();
+}

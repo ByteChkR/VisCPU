@@ -3,11 +3,15 @@
 #include "System/Array.vhl"
 #include "System/Colors.vhl"
 #include "System/Console.vhl"
+#include "System/DeviceLoader.vhl"
+#include "System/DeviceTypes.vhl"
 #include "System/Exception.vhl"
 #include "System/ExceptionHandler.vhl"
 #include "System/List.vhl"
 #include "System/LinkedList.vhl"
+#include "System/LinkedQueue.vhl"
 #include "System/Math.vhl"
+#include "System/Queue.vhl"
 #include "System/SIMD/SIMD.vhl"
 #include "System/Stack.vhl"
 #include "System/String.vhl"
@@ -31,6 +35,7 @@
 #include "System/DEVS/DeviceNotFoundException.vhl"
 #include "System/StackEmptyException.vhl"
 #include "System/StackOverflowException.vhl"
+#include "System/QueueEmptyException.vhl"
 
 //Include Global System Library Settings.
 #include "System/Settings.vhl"

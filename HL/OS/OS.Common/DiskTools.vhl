@@ -1,0 +1,71 @@
+#include "../System/System.vhl"
+
+public class DiskTools
+{
+	public static uint GetBootableMagic()
+	{
+		uint v = 0;
+		v |= 1337;
+		v |= 420;
+		v |= 69;
+		return v;
+	}
+
+	public static uint GetDrive()
+	{
+		DeviceLoader dl = DeviceLoader(DeviceTypes.Drive());
+		uint d = dl.GetNextDevice();
+		return d;
+	}
+
+	public static uint LoadDriver()
+	{
+		uint drive = DiskTools.GetDrive();
+		if(!drive)
+		{
+			string noDiskMsg = "Could not detect a Disk Drive";
+			//Print No Disk Found.
+			Console.WriteLine(&noDiskMsg, size_of(noDiskMsg));
+			halt();
+		}
+
+		STOREDRV diskDriver = STOREDRV(drive);
+
+		uint p = diskDriver;
+		return p;
+
+	}
+
+	public static void MakeBootable(STOREDRV drv)
+	{
+		drv.Write(0, DiskTools.GetBootableMagic()); //Write Magic Number
+	}
+
+	public static void FormatDrive(STOREDRV drv)
+	{
+		string formatMsg = "Formatting Drive..";
+		Console.WriteLine(&formatMsg, size_of(formatMsg));
+		uint size = drv.GetSize();
+		uint p = 0;
+		uint pp = size / 100;
+		string processMsg = "% Formatting...";
+		for(uint i = 0; i < size; i++)
+		{
+			drv.Write(i, 0);
+			if(i % pp == 0)
+			{
+				Console.WriteNumber(p);
+				Console.WriteLine(&processMsg, size_of(processMsg));
+				p++;			
+			}
+		}
+	}
+
+	public static uint IsBootable(STOREDRV drv)
+	{
+		uint magic = DiskTools.GetBootableMagic();
+		uint drvMagic = drv.Read(0);
+		return drvMagic == magic;
+	}
+
+}

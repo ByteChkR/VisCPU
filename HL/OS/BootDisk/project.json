@@ -1,9 +1,13 @@
 {
-  "ProjectName": "System.Tests",
-  "ProjectVersion": "2021.4.6.5",
+  "ProjectName": "BootDisk",
+  "ProjectVersion": "2021.4.6.3",
   "Dependencies": [
     {
       "ProjectName": "System",
+      "ProjectVersion": "ANY"
+    },
+    {
+      "ProjectName": "OS.Common",
       "ProjectVersion": "ANY"
     }
   ],
@@ -88,6 +92,20 @@
       "Jobs": [
         {
           "JobName": "Merged Release Run",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/release_run.json",
+            "run:input": "Program.vbin"
+          }
+        }
+      ]
+    },
+    "Run": {
+      "TargetName": "Run",
+      "DependsOn": [],
+      "Jobs": [
+        {
+          "JobName": "Merged Run",
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_run.json",

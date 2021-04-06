@@ -1,6 +1,6 @@
 {
   "ProjectName": "Prime",
-  "ProjectVersion": "0.0.0.1",
+  "ProjectVersion": "2021.4.6.5",
   "Dependencies": [
     {
       "ProjectName": "System",

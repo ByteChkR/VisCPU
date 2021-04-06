@@ -1,6 +1,6 @@
 {
-  "ProjectName": "System.Tests",
-  "ProjectVersion": "2021.4.6.5",
+  "ProjectName": "OS",
+  "ProjectVersion": "2021.4.6.3",
   "Dependencies": [
     {
       "ProjectName": "System",
@@ -25,7 +25,8 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_build.json",
-            "build:input": "Program.vhl"
+            "build:input": "Program.vhl",
+            "assembler:offset.global": "60000"
           }
         }
       ]
@@ -75,7 +76,8 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_build.json",
-            "build:input": "Program.vhl"
+            "build:input": "Program.vhl",
+            "assembler:offset.global": "60000"
           }
         }
       ]
