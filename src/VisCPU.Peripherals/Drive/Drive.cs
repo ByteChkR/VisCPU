@@ -14,13 +14,11 @@
         private uint m_WriteBufferStep = 0;
         private uint m_WriteBufferDstAddr = 0;
         private uint m_WriteBufferSrcAddr = 0;
-        private uint m_WriteBufferSrcStart = 0;
         private uint m_WriteBufferSrcLen = 0;
 
         private uint m_ReadBufferStep = 0;
         private uint m_ReadBufferDstAddr = 0;
         private uint m_ReadBufferSrcAddr = 0;
-        private uint m_ReadBufferSrcStart = 0;
         private uint m_ReadBufferSrcLen = 0;
 
         public override PeripheralType PeripheralType => PeripheralType.Drive;
@@ -33,11 +31,11 @@
 
         public abstract uint Read( uint address );
 
-        public abstract void ReadBuffer( uint address, uint destination, uint start, uint length );
+        public abstract void ReadBuffer( uint address, uint destination, uint length );
 
         public abstract void Write( uint address, uint data );
 
-        public abstract void WriteBuffer( uint address, uint destination, uint start, uint length );
+        public abstract void WriteBuffer( uint address, uint destination, uint length );
 
         public override bool CanRead( uint address )
         {
@@ -114,11 +112,6 @@
                     m_WriteBufferStep++;
                     m_WriteBufferSrcAddr = data;
                 }
-                else if ( m_WriteBufferStep == 2 )
-                {
-                    m_WriteBufferStep++;
-                    m_WriteBufferSrcStart = data;
-                }
                 else
                 {
                     m_WriteBufferSrcLen = data;
@@ -127,7 +120,6 @@
                     WriteBuffer(
                         m_WriteBufferDstAddr,
                         m_WriteBufferSrcAddr,
-                        m_WriteBufferSrcStart,
                         m_WriteBufferSrcLen
                     );
                 }
@@ -146,17 +138,12 @@
                     m_ReadBufferStep++;
                     m_ReadBufferSrcAddr = data;
                 }
-                else if ( m_ReadBufferStep == 2 )
-                {
-                    m_ReadBufferStep++;
-                    m_ReadBufferSrcStart = data;
-                }
                 else
                 {
                     m_ReadBufferSrcLen = data;
                     m_ReadBufferStep = 0;
 
-                    ReadBuffer( m_ReadBufferDstAddr, m_ReadBufferSrcAddr, m_ReadBufferSrcStart, m_ReadBufferSrcLen );
+                    ReadBuffer( m_ReadBufferDstAddr, m_ReadBufferSrcAddr, m_ReadBufferSrcLen );
                 }
             }
         }

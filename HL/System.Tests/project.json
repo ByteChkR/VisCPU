@@ -1,6 +1,6 @@
 {
   "ProjectName": "System.Tests",
-  "ProjectVersion": "2021.4.6.5",
+  "ProjectVersion": "2021.4.7.1",
   "Dependencies": [
     {
       "ProjectName": "System",

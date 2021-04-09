@@ -64,21 +64,19 @@ public class STOREDRV
 		return v;
 	}
 
-	public void WriteBuffer(uint src, uint dst, uint start, uint len)
+	public void WriteBuffer(uint src, uint dst, uint len)
 	{
 		uint wb = this.m_WRITE_BUF;
 		wb[0] = src;
 		wb[0] = dst;
-		wb[0] = start;
 		wb[0] = len;
 	}
 
-	public void ReadBuffer(uint src, uint dst, uint start, uint len)
+	public void ReadBuffer(uint src, uint dst, uint len)
 	{
 		uint rb = this.m_READ_BUF;
 		rb[0] = src;
 		rb[0] = dst;
-		rb[0] = start;
 		rb[0] = len;
 	}
 }

@@ -1,6 +1,6 @@
 {
   "ProjectName": "OS.Common",
-  "ProjectVersion": "2021.4.6.9",
+  "ProjectVersion": "2021.4.7.1",
   "Dependencies": [],
   "DefaultTarget": "Debug",
   "BuildTargets": {

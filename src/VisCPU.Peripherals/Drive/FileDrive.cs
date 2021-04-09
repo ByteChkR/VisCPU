@@ -52,7 +52,7 @@ namespace VisCPU.Peripherals.Drive
             return BitConverter.ToUInt32( d, 0 );
         }
 
-        public override void ReadBuffer( uint address, uint destination, uint start, uint length )
+        public override void ReadBuffer( uint address, uint destination, uint length )
         {
             IEnumerable < Memory.Memory > n = AttachedCpu.MemoryBus.GetPeripherals < Memory.Memory >();
 
@@ -71,7 +71,7 @@ namespace VisCPU.Peripherals.Drive
                         buffer.ToUInt(),
                         0,
                         memory.GetInternalBuffer(),
-                        ( int ) ( destination - memory.StartAddress + start ),
+                        ( int ) ( destination - memory.StartAddress ),
                         length
                     );
                 }
@@ -90,19 +90,19 @@ namespace VisCPU.Peripherals.Drive
             m_FileStream.Write( BitConverter.GetBytes( data ), 0, sizeof( uint ) );
         }
 
-        public override void WriteBuffer( uint address, uint destination, uint start, uint length )
+        public override void WriteBuffer( uint address, uint destination, uint length )
         {
             IEnumerable < Memory.Memory > n = AttachedCpu.MemoryBus.GetPeripherals < Memory.Memory >();
 
             foreach ( Memory.Memory memory in n )
             {
                 if ( memory.StartAddress <= address &&
-                     memory.EndAddress >= address + start + length )
+                     memory.EndAddress >= address + length )
                 {
                     m_FileStream.Position = destination * sizeof( uint );
 
                     byte[] buffer = memory.GetInternalBuffer().
-                                           Skip( ( int ) ( address - memory.StartAddress + start ) ).
+                                           Skip( ( int ) ( address - memory.StartAddress ) ).
                                            Take( ( int ) length ).
                                            SelectMany( BitConverter.GetBytes ).
                                            ToArray();

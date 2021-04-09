@@ -11,6 +11,8 @@
 #include "System/LinkedList.vhl"
 #include "System/LinkedQueue.vhl"
 #include "System/Math.vhl"
+#include "System/Partition.vhl"
+#include "System/PartitionTable.vhl"
 #include "System/Queue.vhl"
 #include "System/SIMD/SIMD.vhl"
 #include "System/Stack.vhl"
@@ -48,3 +50,58 @@ SET_ENABLE_RANGE_CHECK(1); //Enable Range Checking on Arrays and LinkedLists
 //Example: Checking Global Setup
 uint ethrow = ENABLE_THROW_ERRORS();
 uint erange = ENABLE_RANGE_CHECK();
+
+RawAllocator al = RawAllocator(100000, 100000);
+
+uint ldP = al.Allocate(size_of(DeviceLoader));
+DeviceLoader ld = DeviceLoader.new(ldP, DeviceTypes.Drive());
+
+uint diskP = al.Allocate(size_of(STOREDRV));
+STOREDRV disk = STOREDRV.new(diskP, ld.GetNextDevice());
+
+//Write Partition Table to Disk
+//Only needs to happen once before the disk is used with partitions.
+PartitionTable.WriteBootPartition(disk);
+
+//Create Partition Table from disk
+PartitionTable pt = PartitionTable(disk, al);
+
+//Get Partitions
+Partition pBoot = pt.GetPartition(0);
+Partition pData = pt.GetPartition(1);
+
+//Display Boot Partition Info
+string pBootSMsg = "Boot Partition Start: ";
+string pBootLMsg = "Boot Partition Length: ";
+Console.Write(&pBootSMsg, size_of(pBootSMsg));
+Console.WriteNumberLine(pBoot.Start());
+Console.Write(&pBootLMsg, size_of(pBootLMsg));
+Console.WriteNumberLine(pBoot.GetSize());
+
+//Display Data Partition Info
+string pDataSMsg = "Data Partition Start: ";
+string pDataLMsg = "Data Partition Length: ";
+Console.Write(&pDataSMsg, size_of(pDataSMsg));
+Console.WriteNumberLine(pData.Start());
+Console.Write(&pDataLMsg, size_of(pDataLMsg));
+Console.WriteNumberLine(pData.GetSize());
+
+//Check Allocator for memory Consumption
+al.WriteDebugData();
+
+//Zero Out Partitions
+private static void ZeroOut(Partition p)
+{
+	uint s = p.GetSize();
+	for(uint i = 0; i < s; i++)
+	{
+		p.Write(i, 0);
+	}
+}
+
+string uB = "Zeroing Out Boot Partition";
+string uD = "Zeroing Out Data Partition";
+Console.WriteLine(&uB, size_of(uB));
+ZeroOut(pBoot);
+Console.WriteLine(&uD, size_of(uD));
+ZeroOut(pData);
