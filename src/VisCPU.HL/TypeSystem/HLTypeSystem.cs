@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Events;
 using VisCPU.HL.Namespaces;
@@ -12,6 +13,7 @@ namespace VisCPU.HL.TypeSystem
 
     public class HlTypeSystem : IEnumerable < HlTypeDefinition >
     {
+
         private readonly List < HlTypeDefinition > m_DefinedTypes = new List < HlTypeDefinition >();
 
         #region Public
@@ -21,8 +23,8 @@ namespace VisCPU.HL.TypeSystem
             HlTypeSystem ret = new HlTypeSystem();
             ret.AddItem( new UIntTypeDefinition( root ) );
             ret.AddItem( new FloatTypeDefinition( root ) );
-            ret.AddItem(new StringTypeDefinition(root));
-            ret.AddItem(new CStringTypeDefinition(root));
+            ret.AddItem( new StringTypeDefinition( root ) );
+            ret.AddItem( new CStringTypeDefinition( root ) );
             ret.AddItem( new HlTypeDefinition( root, "void", false, true, true ) );
 
             return ret;
@@ -104,6 +106,7 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
     }
 
 }

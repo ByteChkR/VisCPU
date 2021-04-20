@@ -3,6 +3,7 @@
 
     public class BreakInstruction : BaseInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "BRK";
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

@@ -62,7 +62,6 @@ public class RawAllocator : Allocator
 		return RawAllocatorBlockData.new(thisPtr, len, free);
 	}
 
-
 	public void SetOptimizationLevel(uint level)
 	{
 		this.m_OptimizationLevel = level;
@@ -104,6 +103,12 @@ public class RawAllocator : Allocator
 
 	public override uint Allocate(uint size)
 	{
+		if(!size)
+		{
+			string zeroSizeErr = "Can not allocate size of 0";
+			Console.WriteLine(&zeroSizeErr, size_of(zeroSizeErr));
+			interrupt(1);
+		}
 		uint start = this.m_MemoryStart;
 		uint next = this.FindFree(start, size);
 		if(next) //Found a Free Block, reusing..
@@ -120,7 +125,7 @@ public class RawAllocator : Allocator
 				RawAllocatorBlockData nextData = this.GetNext(next);
 
 				uint blockLength = actualSize - size + size_of(RawAllocatorBlockData);
-
+				
 				nextData.SetData(1, blockLength);
 			}
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 
@@ -13,6 +14,7 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class ArraySubscriptOperator : HlExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -62,6 +64,7 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
+
     }
 
 }

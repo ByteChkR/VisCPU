@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
     /// </summary>
     public static class EnqueuedCommandsNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -23,7 +24,9 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueBarrier" )]
         [Obsolete( "This is a deprecated OpenCL 1.1 method, please use EnqueueBarrierWithWaitList instead." )]
-        public static extern Result EnqueueBarrier( [In] IntPtr commandQueue );
+        public static extern Result EnqueueBarrier(
+            [In]
+            IntPtr commandQueue );
 
         /// <summary>
         ///     A synchronization point that enqueues a barrier operation.
@@ -46,11 +49,14 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueBarrierWithWaitList" )]
         public static extern Result EnqueueBarrierWithWaitList(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to copy from one buffer object to another.
@@ -84,16 +90,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueCopyBuffer" )]
         public static extern Result EnqueueCopyBuffer(
-            [In] IntPtr commandQueue,
-            [In] IntPtr sourceBuffer,
-            [In] IntPtr destinationBuffer,
-            [In] UIntPtr sourceOffset,
-            [In] UIntPtr destinationOffset,
-            [In] UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr sourceBuffer,
+            [In]
+            IntPtr destinationBuffer,
+            [In]
+            UIntPtr sourceOffset,
+            [In]
+            UIntPtr destinationOffset,
+            [In]
+            UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to copy a 2D or 3D rectangular region from a buffer object to another buffer object.
@@ -158,23 +172,32 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueCopyBufferRect" )]
         public static extern Result EnqueueCopyBufferRectangle(
-            [In] IntPtr commandQueue,
-            [In] IntPtr sourceBuffer,
-            [In] IntPtr destinationBuffer,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr sourceBuffer,
+            [In]
+            IntPtr destinationBuffer,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] sourceOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] destinationOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr sourceRowPitch,
-            [In] UIntPtr sourceSlicePitch,
-            [In] UIntPtr destinationRowPitch,
-            [In] UIntPtr destinationSlicePitch,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr sourceRowPitch,
+            [In]
+            UIntPtr sourceSlicePitch,
+            [In]
+            UIntPtr destinationRowPitch,
+            [In]
+            UIntPtr destinationSlicePitch,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to copy a buffer object to an image object.
@@ -236,18 +259,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueCopyBufferToImage" )]
         public static extern Result EnqueueCopyBufferToImage(
-            [In] IntPtr commandQueue,
-            [In] IntPtr sourceBuffer,
-            [In] IntPtr destinationImage,
-            [In] UIntPtr sourceOffset,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr sourceBuffer,
+            [In]
+            IntPtr destinationImage,
+            [In]
+            UIntPtr sourceOffset,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] destinationOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to copy image objects.
@@ -321,19 +350,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueCopyImage" )]
         public static extern Result EnqueueCopyImage(
-            [In] IntPtr commandQueue,
-            [In] IntPtr sourceImage,
-            [In] IntPtr destinationImage,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr sourceImage,
+            [In]
+            IntPtr destinationImage,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] sourceOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] destinationOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to copy an image object to a buffer object.
@@ -398,18 +432,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueCopyImageToBuffer" )]
         public static extern Result EnqueueCopyImageToBuffer(
-            [In] IntPtr commandQueue,
-            [In] IntPtr sourceImage,
-            [In] IntPtr destinationBuffer,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr sourceImage,
+            [In]
+            IntPtr destinationBuffer,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] sourceOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr destinationOffset,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr destinationOffset,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to fill a buffer object with a pattern of a given pattern size.
@@ -459,16 +499,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueFillBuffer" )]
         public static extern Result EnqueueFillBuffer(
-            [In] IntPtr commandQueue,
-            [In] IntPtr buffer,
-            [In] IntPtr pattern,
-            [In] UIntPtr patternSize,
-            [In] UIntPtr offset,
-            [In] UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr buffer,
+            [In]
+            IntPtr pattern,
+            [In]
+            UIntPtr patternSize,
+            [In]
+            UIntPtr offset,
+            [In]
+            UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to fill an image object with a specified color.
@@ -526,17 +574,22 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueFillImage" )]
         public static extern Result EnqueueFillImage(
-            [In] IntPtr commandQueue,
-            [In] IntPtr image,
-            [In] IntPtr fillColor,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr image,
+            [In]
+            IntPtr fillColor,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] origin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to map a region of the buffer object given by buffer into the host address space and returns a
@@ -590,17 +643,26 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueMapBuffer" )]
         public static extern IntPtr EnqueueMapBuffer(
-            [In] IntPtr commandQueue,
-            [In] IntPtr buffer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingMap,
-            [In] [MarshalAs( UnmanagedType.U8 )] MapFlag mapFlag,
-            [In] UIntPtr offset,
-            [In] UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr buffer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingMap,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MapFlag mapFlag,
+            [In]
+            UIntPtr offset,
+            [In]
+            UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [Out]
+            out IntPtr waitEvent,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Enqueues a command to map a region of an image object into the host address space and returns a pointer to this
@@ -685,21 +747,30 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueMapImage" )]
         public static extern IntPtr EnqueueMapImage(
-            [In] IntPtr commandQueue,
-            [In] IntPtr image,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingMap,
-            [In] [MarshalAs( UnmanagedType.U8 )] MapFlag mapFlag,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr image,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingMap,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MapFlag mapFlag,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] origin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr imageRowPitch,
-            [In] UIntPtr imageSlicePitch,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr imageRowPitch,
+            [In]
+            UIntPtr imageSlicePitch,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [Out]
+            out IntPtr waitEvent,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Enqueues a marker command.
@@ -711,8 +782,10 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [DllImport( "OpenCL", EntryPoint = "clEnqueueMarker" )]
         [Obsolete( "This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead." )]
         public static extern Result EnqueueMarker(
-            [In] IntPtr commandQueue,
-            [In] IntPtr waitEvent );
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a marker command which waits for either a list of events to complete, or all previously enqueued commands
@@ -736,11 +809,14 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueMarkerWithWaitList" )]
         public static extern Result EnqueueMarkerWithWaitList(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to indicate which device a set of memory objects should be associated with.
@@ -774,15 +850,20 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueMigrateMemObjects" )]
         public static extern Result EnqueueMigrateMemorysObjects(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfMemoryObjects,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfMemoryObjects,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] memoryObjects,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryMigrationFlag memoryMigrationFlags,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryMigrationFlag memoryMigrationFlags,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to execute a native C/C++ function not compiled using the OpenCL compiler.
@@ -823,19 +904,26 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueNativeKernel" )]
         public static extern Result EnqueueNativeKernel(
-            [In] IntPtr commandQueue,
-            [In] IntPtr userFunction,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr userFunction,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] arguments,
-            [In] UIntPtr argumentSize,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfMemoryObjects,
+            [In]
+            UIntPtr argumentSize,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfMemoryObjects,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] memoryObjects,
-            [In] IntPtr argumentsMemoryLocation,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr argumentsMemoryLocation,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to execute a kernel on a device.
@@ -885,16 +973,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueNDRangeKernel" )]
         public static extern Result EnqueueNDRangeKernel(
-            [In] IntPtr commandQueue,
-            [In] IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint workDimension,
-            [In] IntPtr[] globalWorkOffset,
-            [In] IntPtr[] globalWorkSize,
-            [In] IntPtr[] localWorkSize,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint workDimension,
+            [In]
+            IntPtr[] globalWorkOffset,
+            [In]
+            IntPtr[] globalWorkSize,
+            [In]
+            IntPtr[] localWorkSize,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueue commands to read from a buffer object to host memory.
@@ -925,16 +1021,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueReadBuffer" )]
         public static extern Result EnqueueReadBuffer(
-            [In] IntPtr commandQueue,
-            [In] IntPtr buffer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingRead,
-            [In] UIntPtr offset,
-            [In] UIntPtr size,
-            [In] IntPtr pointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr buffer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingRead,
+            [In]
+            UIntPtr offset,
+            [In]
+            UIntPtr size,
+            [In]
+            IntPtr pointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueue command to read from a 2D or 3D rectangular region from a buffer object to host memory.
@@ -1012,24 +1116,34 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueReadBufferRect" )]
         public static extern Result EnqueueReadBufferRectangle(
-            [In] IntPtr commandQueue,
-            [In] IntPtr buffer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingRead,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr buffer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingRead,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] bufferOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] hostOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr bufferRowPitch,
-            [In] UIntPtr bufferSlicePitch,
-            [In] UIntPtr hostRowPitch,
-            [In] UIntPtr hostSlicePitch,
-            [In] IntPtr pointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr bufferRowPitch,
+            [In]
+            UIntPtr bufferSlicePitch,
+            [In]
+            UIntPtr hostRowPitch,
+            [In]
+            UIntPtr hostSlicePitch,
+            [In]
+            IntPtr pointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueue commands to read from an image or image array object to host memory.
@@ -1103,20 +1217,28 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueReadImage" )]
         public static extern Result EnqueueReadImage(
-            [In] IntPtr commandQueue,
-            [In] IntPtr image,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingRead,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr image,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingRead,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] origin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr rowPitch,
-            [In] UIntPtr slicePitch,
-            [In] IntPtr pointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr rowPitch,
+            [In]
+            UIntPtr slicePitch,
+            [In]
+            IntPtr pointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to free the shared virtual memory allocated using clSVMAlloc or a shared system memory pointer.
@@ -1165,16 +1287,22 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueSVMFree" )]
         public static extern Result EnqueueSvmFree(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfSvmPointers,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfSvmPointers,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] svmPointers,
-            [In] IntPtr svmFreePointersCallback,
-            [In] IntPtr userData,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr svmFreePointersCallback,
+            [In]
+            IntPtr userData,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command that will allow the host to update a region of a SVM buffer.
@@ -1218,15 +1346,22 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueSVMMap" )]
         public static extern Result EnqueueSvmMap(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingMap,
-            [In] [MarshalAs( UnmanagedType.U8 )] MapFlag mapFlag,
-            [In] IntPtr svmPointer,
-            [In] UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingMap,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MapFlag mapFlag,
+            [In]
+            IntPtr svmPointer,
+            [In]
+            UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to do a memcpy operation.
@@ -1275,15 +1410,22 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueSVMMemcpy" )]
         public static extern Result EnqueueSvmMemoryCopy(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingCopy,
-            [In] IntPtr destinationPointer,
-            [In] IntPtr sourcePointer,
-            [In] UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingCopy,
+            [In]
+            IntPtr destinationPointer,
+            [In]
+            IntPtr sourcePointer,
+            [In]
+            UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to fill a region in memory with a pattern of a given pattern size.
@@ -1331,15 +1473,22 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueSVMMemFill" )]
         public static extern Result EnqueueSvmMemoryFill(
-            [In] IntPtr commandQueue,
-            [In] IntPtr svmPointer,
-            [In] IntPtr pattern,
-            [In] UIntPtr patternSize,
-            [In] UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr svmPointer,
+            [In]
+            IntPtr pattern,
+            [In]
+            UIntPtr patternSize,
+            [In]
+            UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to indicate which device a set of ranges of SVM allocations should be associated with.
@@ -1375,17 +1524,22 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueSVMMigrateMem" )]
         public static extern Result EnqueueSvmMigrateMemory(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfSvmPointers,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfSvmPointers,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] svmPointers,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] sizes,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryMigrationFlag memoryMigrationFlags,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryMigrationFlag memoryMigrationFlags,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to indicate that the host has completed updating the region given by <see cref="svmPointer" />
@@ -1414,12 +1568,16 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueSVMUnmap" )]
         public static extern Result EnqueueSvmUnmap(
-            [In] IntPtr commandQueue,
-            [In] IntPtr svmPointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr svmPointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to execute a kernel on a device.
@@ -1450,12 +1608,16 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [DllImport( "OpenCL", EntryPoint = "clEnqueueTask" )]
         [Obsolete( "This is a deprecated OpenCL 1.2 method." )]
         public static extern Result EnqueueTask(
-            [In] IntPtr commandQueue,
-            [In] IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to unmap a previously mapped region of a memory object.
@@ -1489,13 +1651,18 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueUnmapMemObject" )]
         public static extern Result EnqueueUnmapMemoryObject(
-            [In] IntPtr commandQueue,
-            [In] IntPtr memoryObject,
-            [In] IntPtr mappedPointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr memoryObject,
+            [In]
+            IntPtr mappedPointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         /// Enqueues a wait for a specific event or a list of events to complete before any future commands queued in the command-queue are executed.
@@ -1511,8 +1678,10 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [DllImport( "OpenCL", EntryPoint = "clEnqueueWaitForEvents" )]
         [Obsolete( "This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead." )]
         public static extern Result EnqueueWaitForEvents(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList );
 
@@ -1561,16 +1730,24 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueWriteBuffer" )]
         public static extern Result EnqueueWriteBuffer(
-            [In] IntPtr commandQueue,
-            [In] IntPtr buffer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingWrite,
-            [In] UIntPtr offset,
-            [In] UIntPtr size,
-            [In] IntPtr pointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr buffer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingWrite,
+            [In]
+            UIntPtr offset,
+            [In]
+            UIntPtr size,
+            [In]
+            IntPtr pointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueue command to write a 2D or 3D rectangular region to a buffer object from host memory.
@@ -1649,24 +1826,34 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueWriteBufferRect" )]
         public static extern Result EnqueueWriteBufferRectangle(
-            [In] IntPtr commandQueue,
-            [In] IntPtr buffer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingWrite,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr buffer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingWrite,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] bufferOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] hostOrigin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr bufferRowPitch,
-            [In] UIntPtr bufferSlicePitch,
-            [In] UIntPtr hostRowPitch,
-            [In] UIntPtr hostSlicePitch,
-            [In] IntPtr pointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr bufferRowPitch,
+            [In]
+            UIntPtr bufferSlicePitch,
+            [In]
+            UIntPtr hostRowPitch,
+            [In]
+            UIntPtr hostSlicePitch,
+            [In]
+            IntPtr pointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         /// <summary>
         ///     Enqueues a command to write to an image or image array object from host memory.
@@ -1741,22 +1928,31 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clEnqueueWriteImage" )]
         public static extern Result EnqueueWriteImage(
-            [In] IntPtr commandQueue,
-            [In] IntPtr image,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint blockingWrite,
+            [In]
+            IntPtr commandQueue,
+            [In]
+            IntPtr image,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint blockingWrite,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] origin,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] region,
-            [In] UIntPtr inputRowPitch,
-            [In] UIntPtr inputSlicePitch,
-            [In] IntPtr pointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEventsInWaitList,
+            [In]
+            UIntPtr inputRowPitch,
+            [In]
+            UIntPtr inputSlicePitch,
+            [In]
+            IntPtr pointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEventsInWaitList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventWaitList,
-            [Out] out IntPtr waitEvent );
+            [Out]
+            out IntPtr waitEvent );
 
         #endregion
+
     }
 
 }

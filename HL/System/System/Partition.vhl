@@ -2,6 +2,7 @@
 #include "ExceptionHandler.vhl"
 #include "OutOfBoundsException.vhl"
 #include "Settings.vhl"
+#include "Console.vhl"
 
 public class Partition
 {
@@ -30,7 +31,9 @@ public class Partition
 	public void Write(uint addr, uint data)
 	{
 		STOREDRV dev = this.m_Device;
-		uint a = this.Start() + addr;
+		uint s = this.Start();
+
+		uint a = s + addr;
 		if(ENABLE_RANGE_CHECK() && a >= dev.GetSize())
 		{
 			if(ENABLE_THROW_ERRORS())

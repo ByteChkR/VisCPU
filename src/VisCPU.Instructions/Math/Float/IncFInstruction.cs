@@ -5,6 +5,7 @@ namespace VisCPU.Instructions.Math.Float
 
     public class IncFInstruction : AddFSelfInstruction
     {
+
         public override uint Cycles => 1;
 
         public override uint InstructionSize => 4;
@@ -27,6 +28,7 @@ namespace VisCPU.Instructions.Math.Float
         }
 
         #endregion
+
     }
 
 }

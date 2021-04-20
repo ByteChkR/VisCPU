@@ -8,6 +8,7 @@ namespace OpenCL.Wrapper.Exceptions
     /// </summary>
     public class ItemNotFoundExeption : Exception
     {
+
         #region Public
 
         /// <summary>
@@ -17,9 +18,9 @@ namespace OpenCL.Wrapper.Exceptions
         /// <param name="desc">Description what caused the crash</param>
         /// <param name="inner">Inner Exception</param>
         public ItemNotFoundExeption( string itemType, string desc, Exception inner ) : base(
-            $"The Item {itemType} could not be Found.\n Description: {desc}",
-            inner
-        )
+             $"The Item {itemType} could not be Found.\n Description: {desc}",
+             inner
+            )
         {
         }
 
@@ -33,6 +34,7 @@ namespace OpenCL.Wrapper.Exceptions
         }
 
         #endregion
+
     }
 
 }

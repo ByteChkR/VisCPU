@@ -6,6 +6,7 @@ namespace VisCPU.HL.Compiler.Special
 
     public class ArrayAccessCompiler : HlExpressionCompiler < HlArrayAccessorOp >
     {
+
         protected override bool AllImplementations => true;
 
         #region Public
@@ -18,15 +19,16 @@ namespace VisCPU.HL.Compiler.Special
             ExpressionTarget tempPtrVar = compilation.Parse( expr.Left );
 
             ExpressionTarget tempPtr = new ExpressionTarget(
-                compilation.GetTempVar( 0 ),
-                true,
-                tempPtrVar.TypeDefinition,
-                true
-            );
+                                                            compilation.GetTempVar( 0 ),
+                                                            true,
+                                                            tempPtrVar.TypeDefinition,
+                                                            true
+                                                           );
 
             ExpressionTarget pn = compilation.Parse(
-                expr.ParameterList[0]
-            ).MakeAddress(compilation);
+                                                    expr.ParameterList[0]
+                                                   ).
+                                              MakeAddress( compilation );
 
             if ( tempPtrVar.TypeDefinition is ArrayTypeDefintion adef )
             {
@@ -48,10 +50,10 @@ namespace VisCPU.HL.Compiler.Special
             if ( outputTarget.ResultAddress != null )
             {
                 compilation.EmitterResult.Emit(
-                    $"DREF",
-                    tempPtr.ResultAddress,
-                    outputTarget.ResultAddress
-                );
+                                               $"DREF",
+                                               tempPtr.ResultAddress,
+                                               outputTarget.ResultAddress
+                                              );
 
                 compilation.ReleaseTempVar( tempPtr.ResultAddress );
                 compilation.ReleaseTempVar( tempPtrVar.ResultAddress );
@@ -72,6 +74,7 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
+
     }
 
 }

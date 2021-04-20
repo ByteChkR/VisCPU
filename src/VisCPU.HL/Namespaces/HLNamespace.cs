@@ -8,6 +8,7 @@ namespace VisCPU.HL.Namespaces
 
     public class HlNamespace : IEnumerable < HlNamespace >
     {
+
         public const string NS_SEPARATOR = "::";
 
         private readonly string m_Name;
@@ -129,7 +130,6 @@ namespace VisCPU.HL.Namespaces
 
         protected HlNamespace( string name ) : this( null, name )
         {
-
         }
 
         #endregion
@@ -167,7 +167,6 @@ namespace VisCPU.HL.Namespaces
             }
 
             return Get( parts[currentIndex] ).InternalAddRecursive( parts, currentIndex );
-
         }
 
         private bool InternalExists( string[] parts, int currentIndex )
@@ -191,6 +190,7 @@ namespace VisCPU.HL.Namespaces
         }
 
         #endregion
+
     }
 
 }

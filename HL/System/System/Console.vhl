@@ -145,7 +145,7 @@ public class Console
 		C_RC = 1;
 	}
 
-	public static void Read()
+	public static uint Read()
 	{
 		uint v = C_RD;
 		return v;

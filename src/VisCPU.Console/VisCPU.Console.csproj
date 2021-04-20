@@ -98,6 +98,8 @@
     <PeripheralExt Include="..\VisCPU.Peripherals\bin\$(Configuration)\netstandard2.0\VisCPU.Peripherals.dll" />
     <InstructionExt Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.dll" />
     <SimdExt Include="..\VisCPU.SIMD\bin\$(Configuration)\netstandard2.0\VisCPU.SIMD.dll" />
+    <VPP Include="..\VPP.Importer\bin\$(Configuration)\netstandard2.0\VPP.Importer.dll" />
+    <VPPPdb Include="..\VPP.Importer\bin\$(Configuration)\netstandard2.0\VPP.Importer.pdb" />
     <PeripheralPdb Include="..\VisCPU.Peripherals\bin\$(Configuration)\netstandard2.0\VisCPU.Peripherals.pdb" />
     <InstructionPdb Include="..\VisCPU.Instructions\bin\$(Configuration)\netstandard2.0\VisCPU.Instructions.pdb" /><SimdPdb Include="..\VisCPU.SIMD\bin\$(Configuration)\netstandard2.0\VisCPU.SIMD.pdb" />
   	</ItemGroup>
@@ -106,6 +108,8 @@
     	<Copy SourceFiles="@(PeripheralExt)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />
     	<Copy SourceFiles="@(InstructionExt)" DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions" />
     	<Copy SourceFiles="@(PeripheralPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />
+    	<Copy SourceFiles="@(VPPPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\text-importer" />
+    	<Copy SourceFiles="@(VPP)" DestinationFolder="$(OutDir)\configs\cpu\extensions\text-importer" />
     	<Copy SourceFiles="@(InstructionPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\instructions" />
     	<Copy SourceFiles="@(SimdPdb)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />
     	<Copy SourceFiles="@(SimdExt)" DestinationFolder="$(OutDir)\configs\cpu\extensions\peripherals" />

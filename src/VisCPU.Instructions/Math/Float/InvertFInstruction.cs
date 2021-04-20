@@ -1,10 +1,13 @@
-﻿using VisCPU.Utility.Logging;
+﻿using System;
+
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Instructions.Math.Float
 {
 
     public class InvertFInstruction : Instruction
     {
+
         public override uint Cycles => 1;
 
         public override uint InstructionSize => 4;
@@ -30,6 +33,7 @@ namespace VisCPU.Instructions.Math.Float
         }
 
         #endregion
+
     }
 
 }

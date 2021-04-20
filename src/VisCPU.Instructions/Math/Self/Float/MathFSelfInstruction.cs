@@ -5,6 +5,7 @@ namespace VisCPU.Instructions.Math.Self.Float
 
     public abstract class MathFSelfInstruction : MathFInstruction
     {
+
         #region Public
 
         public override void Process( Cpu cpu )
@@ -21,6 +22,7 @@ namespace VisCPU.Instructions.Math.Self.Float
         }
 
         #endregion
+
     }
 
 }

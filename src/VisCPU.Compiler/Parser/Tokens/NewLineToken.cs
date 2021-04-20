@@ -5,6 +5,7 @@ namespace VisCPU.Compiler.Parser.Tokens
 
     public class NewLineToken : AToken
     {
+
         #region Public
 
         public NewLineToken( string originalText, int start, int length ) : base( originalText, start, length )
@@ -17,6 +18,7 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
+
     }
 
 }

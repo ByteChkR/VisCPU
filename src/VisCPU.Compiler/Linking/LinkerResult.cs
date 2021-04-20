@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Linking
@@ -7,6 +8,7 @@ namespace VisCPU.Compiler.Linking
 
     public class LinkerResult
     {
+
         public Dictionary < string, AddressItem > Constants { get; }
 
         public List < uint > DataSection { get; }
@@ -54,14 +56,15 @@ namespace VisCPU.Compiler.Linking
             foreach ( KeyValuePair < string, AddressItem > keyValuePair in items )
             {
                 DataSectionHeader[keyValuePair.Key] = new AddressItem
-                {
-                    Address = ( uint ) ( keyValuePair.Value.Address + off ),
-                    LinkerArguments = keyValuePair.Value.LinkerArguments
-                };
+                                                      {
+                                                          Address = ( uint ) ( keyValuePair.Value.Address + off ),
+                                                          LinkerArguments = keyValuePair.Value.LinkerArguments
+                                                      };
             }
         }
 
         #endregion
+
     }
 
 }

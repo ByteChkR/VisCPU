@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Base.settings;
 using Utility.FastString;
+
 using Utils = Utility.ExtPP.Base.Utils;
 
 namespace Utility.ExtPP
@@ -16,6 +18,7 @@ namespace Utility.ExtPP
     /// </summary>
     public class PreProcessor : ALoggable < LogType >
     {
+
         /// <summary>
         /// </summary>
         private readonly string sep = " ";
@@ -86,9 +89,10 @@ namespace Utility.ExtPP
         public string[] Run( string[] files, IDefinitions defs )
         {
             return Run(
-                files.Select( x => new FilePathContent( x, x ) ).OfType < IFileContent >().ToArray(),
-                null,
-                defs );
+                       files.Select( x => new FilePathContent( x, x ) ).OfType < IFileContent >().ToArray(),
+                       null,
+                       defs
+                      );
         }
 
         public string[] Run( IFileContent[] content, IDefinitions defs )
@@ -200,10 +204,10 @@ namespace Utility.ExtPP
                 Logger.Log( LogType.Log, $"Initializing Plugin: {plugin.GetType().Name}", 3 );
 
                 plugin.Initialize(
-                    settings.GetSettingsWithPrefix( plugin.Prefix, plugin.IncludeGlobal ),
-                    sourceManager,
-                    def
-                );
+                                  settings.GetSettingsWithPrefix( plugin.Prefix, plugin.IncludeGlobal ),
+                                  sourceManager,
+                                  def
+                                 );
             }
         }
 
@@ -259,10 +263,10 @@ namespace Utility.ExtPP
             foreach ( ISourceScript finishedScript in ret )
             {
                 Logger.Log(
-                    LogType.Log,
-                    $"Selecting File: {Path.GetFileName( finishedScript.GetFileInterface().GetKey() )}",
-                    3
-                );
+                           LogType.Log,
+                           $"Selecting File: {Path.GetFileName( finishedScript.GetFileInterface().GetKey() )}",
+                           3
+                          );
 
                 RunStages( this, ProcessStage.OnFinishUp, finishedScript, sm, definitions );
             }
@@ -384,6 +388,7 @@ namespace Utility.ExtPP
         }
 
         #endregion
+
     }
 
 }

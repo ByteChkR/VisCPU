@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+
 using VisCPU.Utility;
 using VisCPU.Utility.SharedBase;
 
@@ -10,6 +11,7 @@ namespace VisCPU.Dynamic
 
     public class DynamicCpuWrapper : DynamicObject
     {
+
         private readonly Cpu m_Instance;
 
         public IEnumerable < string > Labels =>
@@ -18,9 +20,10 @@ namespace VisCPU.Dynamic
         public IEnumerable < string > Constants =>
             m_Instance.SymbolServer.LoadedSymbols.SelectMany( x => x.Constants.Keys ).Distinct();
 
-        public IEnumerable < string > Data => m_Instance.SymbolServer.LoadedSymbols.
-                                                         SelectMany( x => x.DataSectionHeader.Keys ).
-                                                         Distinct();
+        public IEnumerable < string > Data =>
+            m_Instance.SymbolServer.LoadedSymbols.
+                       SelectMany( x => x.DataSectionHeader.Keys ).
+                       Distinct();
 
         #region Public
 
@@ -208,6 +211,7 @@ namespace VisCPU.Dynamic
         }
 
         #endregion
+
     }
 
 }

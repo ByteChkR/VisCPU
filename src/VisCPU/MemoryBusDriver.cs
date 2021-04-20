@@ -5,14 +5,17 @@ namespace VisCPU
 
     public class MemoryBusDriver : Peripheral
     {
+
         private enum AddressPins : uint
         {
+
             PeripheralPresent = PeripheralCount - 1,
             PeripheralCount = PeripheralType - 1,
             PeripheralType = PeripheralAddress - 1,
             PeripheralAddress = PeripheralName - 1,
             PeripheralName = PeripheralNameLength - 1,
             PeripheralNameLength = uint.MaxValue - 1
+
         }
 
         private uint m_PeripheralTypeStep;
@@ -122,14 +125,13 @@ namespace VisCPU
                     m_PeripheralNameStep = 0;
                     Peripheral p = AttachedCpu.MemoryBus.GetPeripheralAt( ( int ) m_PeripheralNameId );
 
-                    char u =  p.PeripheralName[( int ) m_PeripheralNameIndex];
+                    char u = p.PeripheralName[( int ) m_PeripheralNameIndex];
 
                     return u;
                 }
             }
 
             return 0;
-
         }
 
         public override void WriteData( uint address, uint data )
@@ -172,12 +174,12 @@ namespace VisCPU
                 {
                     m_PeripheralNameLengthStep++;
                     m_PeripheralNameLengthId = data;
-
                 }
             }
         }
 
         #endregion
+
     }
 
 }

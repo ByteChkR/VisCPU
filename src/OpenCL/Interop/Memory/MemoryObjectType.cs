@@ -5,6 +5,7 @@ namespace OpenCL.NET.Interop.Memory
     /// </summary>
     public enum MemoryObjectType : uint
     {
+
         /// <summary>
         ///     The memory object is a buffer.
         /// </summary>
@@ -44,6 +45,7 @@ namespace OpenCL.NET.Interop.Memory
         ///     The memory object is a pipe.
         /// </summary>
         Pipe = 0x10F7
+
     }
 
 }

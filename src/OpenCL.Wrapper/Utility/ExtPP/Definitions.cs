@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
@@ -11,6 +12,7 @@ namespace Utility.ExtPP
     /// </summary>
     public class Definitions : ALoggable < LogType >, IDefinitions
     {
+
         /// <summary>
         ///     Dictionary to keep track of what is defined and what is not
         /// </summary>
@@ -110,6 +112,7 @@ namespace Utility.ExtPP
         }
 
         #endregion
+
     }
 
 }

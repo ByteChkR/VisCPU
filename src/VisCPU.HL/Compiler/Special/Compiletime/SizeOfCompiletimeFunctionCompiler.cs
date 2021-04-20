@@ -10,6 +10,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class SizeOfCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
+
         public string FuncName => "size_of";
 
         #region Public
@@ -19,51 +20,61 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 1 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                    new FunctionArgumentMismatchEvent(
-                        "Invalid Arguments. Expected size_of(variable)"
-                    )
-                );
+                                                      new FunctionArgumentMismatchEvent(
+                                                           "Invalid Arguments. Expected size_of(variable)"
+                                                          )
+                                                     );
             }
 
             if ( compilation.ContainsVariable( expr.ParameterList[0].ToString() ) )
             {
                 string v = compilation.GetTempVar(
-                    compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
-                );
+                                                  compilation.GetVariable( expr.ParameterList[0].ToString() ).Size
+                                                 );
 
                 return new ExpressionTarget(
-                    v,
-                    true,
-                    compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_UintTypeName )
-                );
+                                            v,
+                                            true,
+                                            compilation.TypeSystem.GetType(
+                                                                           compilation.Root,
+                                                                           HLBaseTypeNames.s_UintTypeName
+                                                                          )
+                                           );
             }
 
             if ( compilation.TypeSystem.HasType( compilation.Root, expr.ParameterList[0].ToString() ) )
             {
                 string v = compilation.GetTempVar(
-                    compilation.TypeSystem.
-                                GetType( compilation.Root, expr.ParameterList[0].ToString() ).
-                                GetSize()
-                );
+                                                  compilation.TypeSystem.
+                                                              GetType(
+                                                                      compilation.Root,
+                                                                      expr.ParameterList[0].ToString()
+                                                                     ).
+                                                              GetSize()
+                                                 );
 
                 return new ExpressionTarget(
-                    v,
-                    true,
-                    compilation.TypeSystem.GetType( compilation.Root, HLBaseTypeNames.s_UintTypeName )
-                );
+                                            v,
+                                            true,
+                                            compilation.TypeSystem.GetType(
+                                                                           compilation.Root,
+                                                                           HLBaseTypeNames.s_UintTypeName
+                                                                          )
+                                           );
             }
 
             EventManager < ErrorEvent >.SendEvent(
-                new HlVariableNotFoundEvent(
-                    expr.ParameterList[0].ToString(),
-                    false
-                )
-            );
+                                                  new HlVariableNotFoundEvent(
+                                                                              expr.ParameterList[0].ToString(),
+                                                                              false
+                                                                             )
+                                                 );
 
             return new ExpressionTarget();
         }
 
         #endregion
+
     }
 
 }

@@ -8,6 +8,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
     /// </summary>
     public class HlUnaryOp : HlExpression
     {
+
         /// <summary>
         ///     Left Side of the Expression
         /// </summary>
@@ -54,6 +55,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         }
 
         #endregion
+
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using VisCPU.Compiler.Parser.Tokens;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
@@ -9,6 +10,7 @@ namespace VisCPU.Compiler.Parser
 
     public class Tokenizer : VisBase
     {
+
         private readonly string m_OriginalText;
         private int m_Position;
 
@@ -215,6 +217,7 @@ namespace VisCPU.Compiler.Parser
         }
 
         #endregion
+
     }
 
 }

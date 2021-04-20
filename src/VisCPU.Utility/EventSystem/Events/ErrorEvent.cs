@@ -3,6 +3,7 @@
 
     public class ErrorEvent : Event
     {
+
         public string Message { get; }
 
         public override string EventKey { get; }
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

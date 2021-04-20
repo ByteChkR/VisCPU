@@ -6,6 +6,7 @@ namespace OpenCL.NET.Interop.Memory
     /// </summary>
     public enum ImageInformation : uint
     {
+
         /// <summary>
         ///     Return image format descriptor specified when image is created with <see cref="CreateImage" />.
         /// </summary>
@@ -63,6 +64,7 @@ namespace OpenCL.NET.Interop.Memory
         ///     Return num_samples associated with the image.
         /// </summary>
         NumberOfSamples = 0x111A
+
     }
 
 }

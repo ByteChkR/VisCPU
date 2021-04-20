@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using OpenCL.Wrapper.ExtPP.API;
 using OpenCL.Wrapper.TypeEnums;
+
 using Utility.ADL;
 using Utility.ExtPP.API;
 
@@ -15,6 +17,7 @@ namespace OpenCL.Wrapper
     /// </summary>
     public class KernelDatabase : ALoggable < LogType >, IDisposable
     {
+
         /// <summary>
         ///     The currently loaded kernels
         /// </summary>
@@ -41,9 +44,9 @@ namespace OpenCL.Wrapper
         /// <param name="folderName">Folder name where the kernels are located</param>
         /// <param name="genDataVectorType">The DataVectorTypes used to compile the FL Database</param>
         public KernelDatabase( CLAPI instance, string folderName, DataVectorTypes genDataVectorType ) : base(
-            OpenCLDebugConfig.Settings,
-            "DB"
-        )
+             OpenCLDebugConfig.Settings,
+             "DB"
+            )
         {
             GenDataType = KernelParameter.GetDataString( genDataVectorType );
 
@@ -63,9 +66,9 @@ namespace OpenCL.Wrapper
         /// <param name="folderName">Folder name where the kernels are located</param>
         /// <param name="genDataVectorType">The DataVectorTypes used to compile the FL Database</param>
         public KernelDatabase( DataVectorTypes genDataVectorType ) : base(
-            OpenCLDebugConfig.Settings,
-            "DB"
-        )
+                                                                          OpenCLDebugConfig.Settings,
+                                                                          "DB"
+                                                                         )
         {
             GenDataType = KernelParameter.GetDataString( genDataVectorType );
             loadedPrograms = new List < CLProgram >();
@@ -107,10 +110,10 @@ namespace OpenCL.Wrapper
                 else
                 {
                     Logger.Log(
-                        LogType.Log,
-                        "Kernel with name: " + containedKernel.Key + " is already loaded. Skipping...",
-                        5
-                    );
+                               LogType.Log,
+                               "Kernel with name: " + containedKernel.Key + " is already loaded. Skipping...",
+                               5
+                              );
                 }
             }
 
@@ -163,10 +166,10 @@ namespace OpenCL.Wrapper
                 else
                 {
                     Logger.Log(
-                        LogType.Log,
-                        "Kernel with name: " + containedKernel.Key + " is already loaded. Skipping...",
-                        5
-                    );
+                               LogType.Log,
+                               "Kernel with name: " + containedKernel.Key + " is already loaded. Skipping...",
+                               5
+                              );
                 }
             }
 
@@ -264,6 +267,7 @@ namespace OpenCL.Wrapper
         }
 
         #endregion
+
     }
 
 }

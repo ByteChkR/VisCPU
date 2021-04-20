@@ -1,4 +1,5 @@
 ﻿using System;
+
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.IO.Settings.Loader;
@@ -9,6 +10,7 @@ namespace VisCPU.Peripherals.Console.IO
     [Serializable]
     public class ConsoleOutInterfaceSettings
     {
+
         [field: Argument( Name = "console:out.pin.read" )]
         public uint InterfacePresentPin { get; set; } = 0xFFFF1000;
 
@@ -25,17 +27,18 @@ namespace VisCPU.Peripherals.Console.IO
 
         static ConsoleOutInterfaceSettings()
         {
-            SettingsCategory coutCategory = Peripheral.s_PeripheralCategory.AddCategory( "console" );
+            SettingsCategory coutCategory = Peripheral.PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                coutCategory,
-                "out.json",
-                new ConsoleOutInterfaceSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  coutCategory,
+                                                  "out.json",
+                                                  new ConsoleOutInterfaceSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

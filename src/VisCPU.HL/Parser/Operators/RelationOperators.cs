@@ -9,6 +9,7 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class RelationOperators : HlExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -47,10 +48,10 @@ namespace VisCPU.HL.Parser.Operators
                     parser.Eat( HlTokenType.OpEquality );
 
                     node = new HlBinaryOp(
-                        currentNode,
-                        HlTokenType.OpLessOrEqual,
-                        parser.ParseExpr( PrecedenceLevel )
-                    );
+                                          currentNode,
+                                          HlTokenType.OpLessOrEqual,
+                                          parser.ParseExpr( PrecedenceLevel )
+                                         );
                 }
                 else
                 {
@@ -64,10 +65,10 @@ namespace VisCPU.HL.Parser.Operators
                     parser.Eat( HlTokenType.OpEquality );
 
                     node = new HlBinaryOp(
-                        currentNode,
-                        HlTokenType.OpGreaterOrEqual,
-                        parser.ParseExpr( PrecedenceLevel )
-                    );
+                                          currentNode,
+                                          HlTokenType.OpGreaterOrEqual,
+                                          parser.ParseExpr( PrecedenceLevel )
+                                         );
                 }
                 else
                 {
@@ -79,6 +80,7 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
+
     }
 
 }

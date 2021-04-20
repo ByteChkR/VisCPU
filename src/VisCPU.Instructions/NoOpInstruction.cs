@@ -3,6 +3,7 @@
 
     public class NoOpInstruction : BaseInstruction
     {
+
         public override uint Cycles => 1;
 
         public override string Key => "NOP";
@@ -19,6 +20,7 @@
         }
 
         #endregion
+
     }
 
 }

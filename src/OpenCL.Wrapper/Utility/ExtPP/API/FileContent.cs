@@ -8,6 +8,7 @@ namespace Utility.ExtPP.API
     /// </summary>
     public class FileContent : IFileContent
     {
+
         private readonly string extension;
         private readonly string incDir;
         private readonly string[] lines;
@@ -60,6 +61,7 @@ namespace Utility.ExtPP.API
         }
 
         #endregion
+
     }
 
 }

@@ -1,0 +1,58 @@
+
+public class HFSCommands
+{
+	
+	// COMMANDS
+	public static uint DeviceReset()
+	{
+		return 0x00;
+	}
+	public static uint OpenRead()
+	{
+		return 0x01;
+	}
+	public static uint OpenWrite()
+	{
+		return 0x02;
+	}
+	public static uint Close()
+	{
+		return 0x03;
+	}
+	public static uint GetFileSize()
+	{
+		return 0x04;
+	}
+	public static uint ChangeDir()
+	{
+		return 0x05;
+	}
+	public static uint CurrentDir()
+	{
+		return 0x06;
+	}
+	public static uint MakeDir()
+	{
+		return 0x07;
+	}
+	public static uint Delete()
+	{
+		return 0x08;
+	}
+	public static uint GetFilesNum()
+	{
+		return 0x09;
+	}
+	public static uint GetFiles()
+	{
+		return 0x0A;
+	}
+	public static uint FileExists()
+	{
+		return 0x0B;
+	}
+	public static uint LoadSymbols()
+	{
+		return 0x0C;
+	}
+}

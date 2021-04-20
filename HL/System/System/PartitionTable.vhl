@@ -2,32 +2,35 @@
 #include "LinkedList.vhl"
 #include "DEVS/STOREDRV.vhl"
 #include "Partition.vhl"
+#include "ExceptionHandler.vhl"
+#include "PartitionTableCorruptedException.vhl"
 
 public class PartitionTable
 {
 	private uint m_Device;
 	private uint m_List;
 	public static PartitionTable(uint dev, Allocator alloc)
-	{
+	{		
 		this.m_Device = dev;
-
 		uint lp = alloc.Allocate(size_of(LinkedList));
 		LinkedList.new(lp, alloc);
 
 		this.m_List = lp;
 		this.Populate(alloc);
 	}
-
+	
 	public static void WriteDefault(STOREDRV drv)
 	{
-		drv.Write(0, drv.GetSize() - 1);
-	}
+		//Format Drive
+		for(uint i = 0; i < drv.GetSize(); i++)
+		{
+			drv.Write(i, 0);
+		}
 
-	public static void WriteBootPartition(STOREDRV drv)
-	{
 		drv.Write(0, 65535);
 		uint dataLen = drv.GetSize() - 65538;
 		drv.Write(65537, dataLen);
+
 	}
 
 	private uint FindNextHeader(uint current)
@@ -49,6 +52,11 @@ public class PartitionTable
 			uint l = d.Read(cur);
 			if(!l)
 			{
+				string errStr = "Can not read Partition Table. Restoring Table and formatting drive, the CPU will crash once repairs finished.";
+				Console.WriteLine(&errStr, size_of(errStr));
+				PartitionTable.WriteDefault(d);
+
+				ExceptionHandler.Throw(PartitionTableCorruptedException());
 				interrupt(1); //0 length partition
 			}
 			uint ptr = a.Allocate(size_of(Partition));

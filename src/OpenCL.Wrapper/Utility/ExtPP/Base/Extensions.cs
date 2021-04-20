@@ -9,6 +9,7 @@ namespace Utility.ExtPP.Base
     /// </summary>
     public static class Extensions
     {
+
         #region Public
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
+
     }
 
 }

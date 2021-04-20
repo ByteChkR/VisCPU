@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+
 using VisCPU.Utility;
 using VisCPU.Utility.IO.Settings;
 
@@ -10,6 +11,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
     public class DriveImageFormatV1 : DriveImageFormat
     {
+
         private DriveImageFormatV1Settings m_Settings;
 
         public override string FormatName => "FSv1";
@@ -29,7 +31,6 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
         public override void Pack( string input )
         {
-
             if ( Directory.Exists( input ) )
             {
                 string cacheDir = Path.Combine( VisConsole.GetCacheDirectory( SubSystem ), "zip-temp" );
@@ -49,9 +50,9 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
             string fullPath = Path.GetFullPath( input );
 
             string output = Path.Combine(
-                Path.GetDirectoryName( fullPath ),
-                Path.GetFileNameWithoutExtension( fullPath ) + ".bin"
-            );
+                                         Path.GetDirectoryName( fullPath ),
+                                         Path.GetFileNameWithoutExtension( fullPath ) + ".bin"
+                                        );
 
             FileStream fs = File.Create( output );
 
@@ -103,7 +104,6 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
             fs.Close();
             archive.Dispose();
-
         }
 
         public override void Unpack( string input )
@@ -118,9 +118,9 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
             string fullPath = Path.GetFullPath( input );
 
             string output = Path.Combine(
-                Path.GetDirectoryName( fullPath ),
-                Path.GetFileNameWithoutExtension( fullPath ) + ".zip"
-            );
+                                         Path.GetDirectoryName( fullPath ),
+                                         Path.GetFileNameWithoutExtension( fullPath ) + ".zip"
+                                        );
 
             if ( File.Exists( output ) )
             {
@@ -191,6 +191,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
         }
 
         #endregion
+
     }
 
 }

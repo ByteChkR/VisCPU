@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+
 using OpenCL.NET.Interop.Devices;
 
 #endregion
@@ -14,6 +15,7 @@ namespace OpenCL.NET.Interop.Contexts
     /// </summary>
     public static class ContextsNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -62,13 +64,18 @@ namespace OpenCL.NET.Interop.Contexts
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateContext" )]
         public static extern IntPtr CreateContext(
-            [In] IntPtr properties,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
+            [In]
+            IntPtr properties,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfDevices,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] devices,
-            [In] IntPtr notificationCallback,
-            [In] IntPtr userData,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr notificationCallback,
+            [In]
+            IntPtr userData,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Create an OpenCL context from a device type that identifies the specific device(s) to use.
@@ -105,11 +112,16 @@ namespace OpenCL.NET.Interop.Contexts
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateContextFromType" )]
         public static extern IntPtr CreateContextFromType(
-            [In] IntPtr properties,
-            [In] [MarshalAs( UnmanagedType.U8 )] DeviceType deviceType,
-            [In] IntPtr notificationCallback,
-            [In] IntPtr userData,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr properties,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            DeviceType deviceType,
+            [In]
+            IntPtr notificationCallback,
+            [In]
+            IntPtr userData,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Increment the context reference count.
@@ -126,7 +138,9 @@ namespace OpenCL.NET.Interop.Contexts
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainContext" )]
-        public static extern Result CreateContextFromType( [In] IntPtr context );
+        public static extern Result CreateContextFromType(
+            [In]
+            IntPtr context );
 
         /// <summary>
         ///     Query information about a context.
@@ -157,11 +171,16 @@ namespace OpenCL.NET.Interop.Contexts
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetContextInfo" )]
         public static extern Result GetContextInformation(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U4 )] ContextInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            ContextInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Decrement the context reference count.
@@ -178,9 +197,12 @@ namespace OpenCL.NET.Interop.Contexts
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseContext" )]
-        public static extern Result ReleaseContext( [In] IntPtr context );
+        public static extern Result ReleaseContext(
+            [In]
+            IntPtr context );
 
         #endregion
+
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using VisCPU.Utility.ProjectSystem.Data;
 
 namespace VisCPU.Utility.ProjectSystem.BuildSystem
@@ -6,6 +7,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
 
     public static class CommonFiles
     {
+
         #region Public
 
         public static void GenerateCommonFiles()
@@ -73,9 +75,9 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             if ( !File.Exists( Path.Combine( rootDir, "Program.vhl" ) ) )
             {
                 File.WriteAllText(
-                    Path.Combine( rootDir, "Program.vhl" ),
-                    @"//Entry Point of Project"
-                );
+                                  Path.Combine( rootDir, "Program.vhl" ),
+                                  @"//Entry Point of Project"
+                                 );
             }
         }
 
@@ -221,24 +223,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             mergeRunJob.BuildJobRunner = "merged";
             mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
             mergeRunJob.Arguments["run:input"] = "Program.vbin";
-            release.Jobs.Add(mergeRunJob);
-
-            return release;
-        }
-
-        private static ProjectBuildTarget CreateRunTarget()
-        {
-            ProjectBuildTarget release = new ProjectBuildTarget();
-            release.TargetName = "Run";
-
-            release.DependsOn = new string[0];
-
-            ProjectBuildJob mergeRunJob = new ProjectBuildJob();
-            mergeRunJob.JobName = "Merged Run";
-            mergeRunJob.BuildJobRunner = "merged";
-            mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
-            mergeRunJob.Arguments["run:input"] = "Program.vbin";
-            release.Jobs.Add(mergeRunJob);
+            release.Jobs.Add( mergeRunJob );
 
             return release;
         }
@@ -259,6 +244,23 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             mergeBuildJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_build.json";
             mergeBuildJob.Arguments["build:input"] = "Program.vhl";
             release.Jobs.Add( mergeBuildJob );
+
+            return release;
+        }
+
+        private static ProjectBuildTarget CreateRunTarget()
+        {
+            ProjectBuildTarget release = new ProjectBuildTarget();
+            release.TargetName = "Run";
+
+            release.DependsOn = new string[0];
+
+            ProjectBuildJob mergeRunJob = new ProjectBuildJob();
+            mergeRunJob.JobName = "Merged Run";
+            mergeRunJob.BuildJobRunner = "merged";
+            mergeRunJob.Arguments["merge:include"] = "%VISDIR%common/jobs/release_run.json";
+            mergeRunJob.Arguments["run:input"] = "Program.vbin";
+            release.Jobs.Add( mergeRunJob );
 
             return release;
         }
@@ -303,6 +305,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
         }
 
         #endregion
+
     }
 
 }

@@ -5,6 +5,7 @@ namespace VisCPU.HL.TypeSystem
 
     public class ArrayTypeDefintion : HlTypeDefinition
     {
+
         public HlTypeDefinition ElementType { get; }
 
         public uint Size { get; }
@@ -12,12 +13,12 @@ namespace VisCPU.HL.TypeSystem
         #region Public
 
         public ArrayTypeDefintion( HlNamespace root, HlTypeDefinition elementType, uint size ) : base(
-            root,
-            elementType.Name + "[]",
-            true,
-            false,
-            false
-        )
+             root,
+             elementType.Name + "[]",
+             true,
+             false,
+             false
+            )
         {
             Size = size;
             ElementType = elementType;
@@ -29,6 +30,7 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
     }
 
 }

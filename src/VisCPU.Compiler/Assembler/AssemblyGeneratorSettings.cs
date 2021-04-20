@@ -7,6 +7,7 @@ namespace VisCPU.Compiler.Assembler
 
     public class AssemblyGeneratorSettings
     {
+
         [field: Argument( Name = "assembler:offset.global" )]
         public uint GlobalOffset { get; set; }
 
@@ -20,14 +21,15 @@ namespace VisCPU.Compiler.Assembler
             SettingsCategory assemblerCategory = SettingsCategories.Get( "sdk.compiler.vasm", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                assemblerCategory,
-                "assembler.json",
-                new AssemblyGeneratorSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  assemblerCategory,
+                                                  "assembler.json",
+                                                  new AssemblyGeneratorSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

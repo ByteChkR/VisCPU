@@ -12,6 +12,7 @@ namespace OpenCL.NET.Memory
     /// </summary>
     public class MemoryBuffer : MemoryObject
     {
+
         #region Public
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace OpenCL.NET.Memory
         }
 
         #endregion
+
     }
 
 }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+
 using Newtonsoft.Json;
+
 using VisCPU.Utility.ProjectSystem.Database;
 
 namespace VisCPU.Utility.ProjectSystem.Data
@@ -12,6 +14,7 @@ namespace VisCPU.Utility.ProjectSystem.Data
     [Serializable]
     public class ProjectPackage
     {
+
         [JsonIgnore]
         [XmlIgnore]
         public ProjectDatabase Manager { get; set; }
@@ -45,18 +48,18 @@ namespace VisCPU.Utility.ProjectSystem.Data
                 string infoPath = Manager.GetTargetInfoUri( this, version );
 
                 return JsonConvert.DeserializeObject < ProjectConfig >(
-                    File.ReadAllText( infoPath )
-                );
+                                                                       File.ReadAllText( infoPath )
+                                                                      );
             }
 
             return JsonConvert.DeserializeObject < ProjectConfig >(
-                File.ReadAllText(
-                    Manager.GetTargetInfoUri(
-                        this,
-                        ModuleVersions.Last()
-                    )
-                )
-            );
+                                                                   File.ReadAllText(
+                                                                        Manager.GetTargetInfoUri(
+                                                                             this,
+                                                                             ModuleVersions.Last()
+                                                                            )
+                                                                       )
+                                                                  );
         }
 
         public bool HasTarget( string version )
@@ -65,6 +68,7 @@ namespace VisCPU.Utility.ProjectSystem.Data
         }
 
         #endregion
+
     }
 
 }

@@ -8,8 +8,9 @@ namespace VisCPU.Peripherals.HostFS
 
     public class HostFileSystemSettings
     {
+
         [field: Argument( Name = "hostfs:root.use" )]
-        public bool UseRootPath { get; set; }
+        public bool UseRootPath { get; set; } = true;
 
         [field: Argument( Name = "hostfs:delete.enable" )]
         public bool EnableDeleteFiles { get; set; }
@@ -33,17 +34,18 @@ namespace VisCPU.Peripherals.HostFS
 
         static HostFileSystemSettings()
         {
-            SettingsCategory hfsCategory = Peripheral.s_PeripheralCategory.AddCategory( "host-fs" );
+            SettingsCategory hfsCategory = Peripheral.PeripheralCategory.AddCategory( "host-fs" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                hfsCategory,
-                "default.json",
-                new HostFileSystemSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  hfsCategory,
+                                                  "default.json",
+                                                  new HostFileSystemSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

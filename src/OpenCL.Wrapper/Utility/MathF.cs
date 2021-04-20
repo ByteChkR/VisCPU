@@ -5,6 +5,7 @@ namespace Utility.Collections
 
     public static class MathF
     {
+
         public const float PI = ( float ) Math.PI;
         public const float E = ( float ) Math.E;
 
@@ -180,6 +181,7 @@ namespace Utility.Collections
         }
 
         #endregion
+
     }
 
 }

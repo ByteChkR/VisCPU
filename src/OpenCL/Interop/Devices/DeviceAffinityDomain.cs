@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.Devices
     [Flags]
     public enum DeviceAffinityDomain : ulong
     {
+
         /// <summary>
         ///     Split the device into sub-devices comprised of compute units that share a NUMA node.
         /// </summary>
@@ -44,6 +45,7 @@ namespace OpenCL.NET.Interop.Devices
         ///     device into sub-devices comprised of compute units that share memory subsystems at this level.
         /// </summary>
         NextPartitionable = 1 << 5
+
     }
 
 }

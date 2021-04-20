@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.Memory
     /// </summary>
     public static class MemoryNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -41,11 +42,16 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateBuffer" )]
         public static extern IntPtr CreateBuffer(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] UIntPtr size,
-            [In] IntPtr hostPointer,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In]
+            UIntPtr size,
+            [In]
+            IntPtr hostPointer,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Creates a 1D image, 1D image buffer, 1D image array, 2D image, 2D image array or 3D image object.
@@ -73,12 +79,18 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateImage" )]
         public static extern IntPtr CreateImage(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] IntPtr imageFormat,
-            [In] IntPtr imageDescription,
-            [In] IntPtr hostPointer,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In]
+            IntPtr imageFormat,
+            [In]
+            IntPtr imageDescription,
+            [In]
+            IntPtr hostPointer,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Creates a 2D image object.
@@ -120,14 +132,22 @@ namespace OpenCL.NET.Interop.Memory
         [DllImport( "OpenCL", EntryPoint = "clCreateImage2D" )]
         [Obsolete( "This is a deprecated OpenCL 1.1 method, please use CreateImage instead." )]
         public static extern IntPtr CreateImage2D(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] IntPtr imageFormat,
-            [In] UIntPtr imageWidth,
-            [In] UIntPtr imageHeight,
-            [In] UIntPtr imageRowPitch,
-            [In] IntPtr hostPointer,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In]
+            IntPtr imageFormat,
+            [In]
+            UIntPtr imageWidth,
+            [In]
+            UIntPtr imageHeight,
+            [In]
+            UIntPtr imageRowPitch,
+            [In]
+            IntPtr hostPointer,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Creates a 3D image object.
@@ -181,16 +201,26 @@ namespace OpenCL.NET.Interop.Memory
         [DllImport( "OpenCL", EntryPoint = "clCreateImage3D" )]
         [Obsolete( "This is a deprecated OpenCL 1.1 method, please use CreateImage instead." )]
         public static extern IntPtr CreateImage3D(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] IntPtr imageFormat,
-            [In] UIntPtr imageWidth,
-            [In] UIntPtr imageHeight,
-            [In] UIntPtr imageDepth,
-            [In] UIntPtr imageRowPitch,
-            [In] UIntPtr imageSlicePitch,
-            [In] IntPtr hostPointer,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In]
+            IntPtr imageFormat,
+            [In]
+            UIntPtr imageWidth,
+            [In]
+            UIntPtr imageHeight,
+            [In]
+            UIntPtr imageDepth,
+            [In]
+            UIntPtr imageRowPitch,
+            [In]
+            UIntPtr imageSlicePitch,
+            [In]
+            IntPtr hostPointer,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Creates a pipe object.
@@ -225,13 +255,18 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreatePipe" )]
         public static extern IntPtr CreatePipe(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint pipePacketSize,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint pipeMaximumNumberOfPackets,
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint pipePacketSize,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint pipeMaximumNumberOfPackets,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] properties,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Creates a new buffer object (referred to as a sub-buffer object) from an existing buffer object.
@@ -267,11 +302,16 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateSubBuffer" )]
         public static extern IntPtr CreateSubBuffer(
-            [In] IntPtr memoryObject,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] [MarshalAs( UnmanagedType.U4 )] BufferCreateType bufferCreateType,
-            [In] IntPtr bufferCreateInformation,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr memoryObject,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            BufferCreateType bufferCreateType,
+            [In]
+            IntPtr bufferCreateInformation,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Get information specific to an image object created with <see cref="CreateImage" />.
@@ -304,11 +344,16 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetImageInfo" )]
         public static extern Result GetImageInformation(
-            [In] IntPtr image,
-            [In] [MarshalAs( UnmanagedType.U4 )] ImageInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr image,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            ImageInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Get information that is common to all memory objects (buffer and image objects).
@@ -342,11 +387,16 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetMemObjectInfo" )]
         public static extern Result GetMemoryObjectInformation(
-            [In] IntPtr memoryObject,
-            [In] [MarshalAs( UnmanagedType.U4 )] MemoryObjectInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr memoryObject,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            MemoryObjectInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Get information specific to a pipe object created with <see cref="CreatePipe" />.
@@ -379,11 +429,16 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetPipeInfo" )]
         public static extern Result GetPipeInformation(
-            [In] IntPtr pipe,
-            [In] [MarshalAs( UnmanagedType.U4 )] PipeInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr pipe,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            PipeInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Get the list of image formats supported by an OpenCL implementation.
@@ -420,13 +475,18 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetSupportedImageFormats" )]
         public static extern Result GetSupportedImageFormats(
-            [In] IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )] MemoryFlag flags,
-            [In] [MarshalAs( UnmanagedType.U4 )] MemoryObjectType imageType,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEntries,
+            [In]
+            IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            MemoryFlag flags,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            MemoryObjectType imageType,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEntries,
             [Out] [MarshalAs( UnmanagedType.LPArray )]
             ImageFormat[] imageFormats,
-            [Out] [MarshalAs( UnmanagedType.U4 )] out uint numberOfImageFormats );
+            [Out] [MarshalAs( UnmanagedType.U4 )]
+            out uint numberOfImageFormats );
 
         /// <summary>
         ///     Decrements the memory object reference count.
@@ -443,7 +503,9 @@ namespace OpenCL.NET.Interop.Memory
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseMemObject" )]
-        public static extern Result ReleaseMemoryObject( [In] IntPtr memoryObject );
+        public static extern Result ReleaseMemoryObject(
+            [In]
+            IntPtr memoryObject );
 
         /// <summary>
         ///     Increments the memory object reference count.
@@ -460,7 +522,9 @@ namespace OpenCL.NET.Interop.Memory
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainMemObject" )]
-        public static extern Result RetainMemoryObject( [In] IntPtr memoryObject );
+        public static extern Result RetainMemoryObject(
+            [In]
+            IntPtr memoryObject );
 
         /// <summary>
         ///     Registers a user callback function with a memory object.
@@ -491,11 +555,15 @@ namespace OpenCL.NET.Interop.Memory
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clSetMemObjectDestructorCallback" )]
         public static extern Result SetMemoryObjectDestructorCallback(
-            [In] IntPtr memoryObject,
-            [In] IntPtr notificationCallback,
-            [In] IntPtr userData );
+            [In]
+            IntPtr memoryObject,
+            [In]
+            IntPtr notificationCallback,
+            [In]
+            IntPtr userData );
 
         #endregion
+
     }
 
 }

@@ -8,6 +8,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
     /// </summary>
     public class HlValueOperand : HlExpression
     {
+
         /// <summary>
         ///     The Value
         /// </summary>
@@ -45,6 +46,7 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         }
 
         #endregion
+
     }
 
 }

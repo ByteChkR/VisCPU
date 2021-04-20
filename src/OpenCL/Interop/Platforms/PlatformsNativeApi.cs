@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.Platforms
     /// </summary>
     public static class PlatformsNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -46,10 +47,12 @@ namespace OpenCL.NET.Interop.Platforms
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetPlatformIDs" )]
         public static extern Result GetPlatformIds(
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEntries,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEntries,
             [Out] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] platforms,
-            [Out] [MarshalAs( UnmanagedType.U4 )] out uint numberOfPlatforms );
+            [Out] [MarshalAs( UnmanagedType.U4 )]
+            out uint numberOfPlatforms );
 
         /// <summary>
         ///     Get specific information about the OpenCL platform.
@@ -85,13 +88,19 @@ namespace OpenCL.NET.Interop.Platforms
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetPlatformInfo" )]
         public static extern Result GetPlatformInformation(
-            [In] IntPtr platform,
-            [In] [MarshalAs( UnmanagedType.U4 )] PlatformInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr platform,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            PlatformInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         #endregion
+
     }
 
 }

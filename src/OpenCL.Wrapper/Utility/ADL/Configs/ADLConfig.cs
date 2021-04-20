@@ -11,6 +11,7 @@ namespace Utility.ADL.Configs
     [Serializable]
     public class ADLConfig : AbstractADLConfig
     {
+
         /// <summary>
         ///     Is ADL enabled when this config is loaded?
         /// </summary>
@@ -29,16 +30,19 @@ namespace Utility.ADL.Configs
         /// </summary>
         public string TimeFormatString { get; set; }
 
-        public static PrefixLookupSettings LowestPerformance => PrefixLookupSettings.AddPrefixIfAvailable |
-                                                                PrefixLookupSettings.DeconstructMaskToFind;
+        public static PrefixLookupSettings LowestPerformance =>
+            PrefixLookupSettings.AddPrefixIfAvailable |
+            PrefixLookupSettings.DeconstructMaskToFind;
 
-        public static PrefixLookupSettings LowPerformance => PrefixLookupSettings.AddPrefixIfAvailable |
-                                                             PrefixLookupSettings.DeconstructMaskToFind |
-                                                             PrefixLookupSettings.OnlyOnePrefix;
+        public static PrefixLookupSettings LowPerformance =>
+            PrefixLookupSettings.AddPrefixIfAvailable |
+            PrefixLookupSettings.DeconstructMaskToFind |
+            PrefixLookupSettings.OnlyOnePrefix;
 
-        public static PrefixLookupSettings MediumPerformance => PrefixLookupSettings.AddPrefixIfAvailable |
-                                                                PrefixLookupSettings.DeconstructMaskToFind |
-                                                                PrefixLookupSettings.BakePrefixes;
+        public static PrefixLookupSettings MediumPerformance =>
+            PrefixLookupSettings.AddPrefixIfAvailable |
+            PrefixLookupSettings.DeconstructMaskToFind |
+            PrefixLookupSettings.BakePrefixes;
 
         public static PrefixLookupSettings HighPerformance => PrefixLookupSettings.AddPrefixIfAvailable;
 
@@ -53,16 +57,17 @@ namespace Utility.ADL.Configs
         public override AbstractADLConfig GetStandard()
         {
             return new ADLConfig
-            {
-                AdlEnabled = true,
-                PrefixLookupMode = PrefixLookupSettings.AddPrefixIfAvailable |
-                                   PrefixLookupSettings.DeconstructMaskToFind,
-                TextEncoding = Encoding.ASCII,
-                TimeFormatString = "MM-dd-yyyy-H-mm-ss"
-            };
+                   {
+                       AdlEnabled = true,
+                       PrefixLookupMode = PrefixLookupSettings.AddPrefixIfAvailable |
+                                          PrefixLookupSettings.DeconstructMaskToFind,
+                       TextEncoding = Encoding.ASCII,
+                       TimeFormatString = "MM-dd-yyyy-H-mm-ss"
+                   };
         }
 
         #endregion
+
     }
 
 }

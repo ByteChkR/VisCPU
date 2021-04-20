@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.Devices
     /// </summary>
     public static class DevicesNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -61,13 +62,16 @@ namespace OpenCL.NET.Interop.Devices
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateSubDevices" )]
         public static extern Result CreateSubDevices(
-            [In] IntPtr inDevice,
+            [In]
+            IntPtr inDevice,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] properties,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfDevices,
             [Out] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] outDevices,
-            [Out] [MarshalAs( UnmanagedType.U4 )] out uint numberOfDevicesReturned );
+            [Out] [MarshalAs( UnmanagedType.U4 )]
+            out uint numberOfDevicesReturned );
 
         /// <summary>
         ///     Returns a reasonably synchronized pair of timestamps from the device timer and the host timer as seen by device.
@@ -96,9 +100,12 @@ namespace OpenCL.NET.Interop.Devices
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clGetDeviceAndHostTimer" )]
         public static extern Result GetDeviceAndHostTimer(
-            [In] IntPtr device,
-            [In] IntPtr deviceTimestamp,
-            [In] IntPtr hostTimestamp );
+            [In]
+            IntPtr device,
+            [In]
+            IntPtr deviceTimestamp,
+            [In]
+            IntPtr hostTimestamp );
 
         /// <summary>
         ///     Obtain the list of devices available on a platform.
@@ -141,12 +148,16 @@ namespace OpenCL.NET.Interop.Devices
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetDeviceIDs" )]
         public static extern Result GetDeviceIds(
-            [In] IntPtr platform,
-            [In] [MarshalAs( UnmanagedType.U8 )] DeviceType deviceType,
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEntries,
+            [In]
+            IntPtr platform,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            DeviceType deviceType,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEntries,
             [Out] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] devices,
-            [Out] [MarshalAs( UnmanagedType.U4 )] out uint numberOfDevicesReturned );
+            [Out] [MarshalAs( UnmanagedType.U4 )]
+            out uint numberOfDevicesReturned );
 
         /// <summary>
         ///     Get information about an OpenCL device.
@@ -185,11 +196,16 @@ namespace OpenCL.NET.Interop.Devices
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetDeviceInfo" )]
         public static extern Result GetDeviceInformation(
-            [In] IntPtr device,
-            [In] [MarshalAs( UnmanagedType.U4 )] DeviceInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr device,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            DeviceInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Return the current value of the host clock as seen by device.
@@ -213,8 +229,10 @@ namespace OpenCL.NET.Interop.Devices
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clGetHostTimer" )]
         public static extern Result GetHostTimer(
-            [In] IntPtr device,
-            [In] IntPtr hostTimestamp );
+            [In]
+            IntPtr device,
+            [In]
+            IntPtr hostTimestamp );
 
         /// <summary>
         ///     Decrements the device reference count if device is a valid sub-device created by a call to
@@ -234,7 +252,9 @@ namespace OpenCL.NET.Interop.Devices
         /// </returns>
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseDevice" )]
-        public static extern Result ReleaseDevice( [In] IntPtr device );
+        public static extern Result ReleaseDevice(
+            [In]
+            IntPtr device );
 
         /// <summary>
         ///     Increments the device reference count.
@@ -250,7 +270,9 @@ namespace OpenCL.NET.Interop.Devices
         /// </returns>
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainDevice" )]
-        public static extern Result RetainDevice( [In] IntPtr device );
+        public static extern Result RetainDevice(
+            [In]
+            IntPtr device );
 
         /// <summary>
         ///     Replaces the default command queue on the device. <see cref="SetDefaultDeviceCommandQueue" /> may be used to
@@ -278,11 +300,15 @@ namespace OpenCL.NET.Interop.Devices
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clSetDefaultDeviceCommandQueue" )]
         public static extern Result SetDefaultDeviceCommandQueue(
-            [In] IntPtr context,
-            [In] IntPtr device,
-            [In] IntPtr commandQueue );
+            [In]
+            IntPtr context,
+            [In]
+            IntPtr device,
+            [In]
+            IntPtr commandQueue );
 
         #endregion
+
     }
 
 }

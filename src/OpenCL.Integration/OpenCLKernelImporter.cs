@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using OpenCL.Wrapper;
 using OpenCL.Wrapper.TypeEnums;
+
 using VisCPU.HL;
 using VisCPU.HL.Importer;
 
@@ -12,6 +14,7 @@ namespace OpenCL.Integration
 
     public class OpenCLKernelImporter : AImporter, IFileImporter
     {
+
         private readonly string m_DeviceDriverDirectory;
 
         #region Public
@@ -104,6 +107,7 @@ namespace OpenCL.Integration
         }
 
         #endregion
+
     }
 
 }

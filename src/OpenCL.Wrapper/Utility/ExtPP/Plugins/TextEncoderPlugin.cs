@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Base.settings;
 using Utility.FastString;
+
 using Utils = Utility.ExtPP.Base.Utils;
 
 namespace Utility.ExtPP.Plugins
@@ -16,8 +18,10 @@ namespace Utility.ExtPP.Plugins
 
     public class TextEncoderPlugin : AbstractFullScriptPlugin
     {
+
         public class TextEncoding
         {
+
             public delegate string DecodeDel( string text, string[] parameter );
 
             public delegate string EncodeDel( string text, string[] parameter );
@@ -34,12 +38,12 @@ namespace Utility.ExtPP.Plugins
             public static TextEncoding Base64 { get; } = new TextEncoding( "b64", Encode_BASE64, Decode_BASE64 );
 
             public static TextEncoding Rot { get; } = new TextEncoding(
-                "rot",
-                ( text, parameter ) =>
-                    DeEncode_ROT( text, parameter, true ),
-                ( text, parameter ) =>
-                    DeEncode_ROT( text, parameter, false )
-            );
+                                                                       "rot",
+                                                                       ( text, parameter ) =>
+                                                                           DeEncode_ROT( text, parameter, true ),
+                                                                       ( text, parameter ) =>
+                                                                           DeEncode_ROT( text, parameter, false )
+                                                                      );
 
             #region Public
 
@@ -120,21 +124,22 @@ namespace Utility.ExtPP.Plugins
             }
 
             #endregion
+
         }
 
         private static readonly List < TextEncoding > Encoders = new List < TextEncoding >
-        {
-            TextEncoding.Base64, TextEncoding.Rot
-        };
+                                                                 {
+                                                                     TextEncoding.Base64,
+                                                                     TextEncoding.Rot
+                                                                 };
 
-        public override ProcessStage ProcessStages => Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
-            ? ProcessStage.OnLoadStage
-            : ProcessStage.OnMain;
+        public override ProcessStage ProcessStages =>
+            Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
+                ? ProcessStage.OnLoadStage
+                : ProcessStage.OnMain;
 
-        public override string[] Cleanup => new[]
-        {
-            BlockEncodeStartKeyword, BlockEncodeEndKeyword, BlockDecodeStartKeyword, BlockDecodeEndKeyword
-        };
+        public override string[] Cleanup =>
+            new[] { BlockEncodeStartKeyword, BlockEncodeEndKeyword, BlockDecodeStartKeyword, BlockDecodeEndKeyword };
 
         public string Stage { get; set; } = "onload";
 
@@ -149,72 +154,72 @@ namespace Utility.ExtPP.Plugins
         public override string[] Prefix => new[] { "tenc", "TextEncoderPlugin" };
 
         public override List < CommandInfo > Info { get; } = new List < CommandInfo >
-        {
-            new CommandInfo(
-                "set-stage",
-                "ss",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        TextEncoderPlugin
-                    ),
-                    nameof(
-                        Stage )
-                ),
-                "Sets the Stage Type of the Plugin to be Executed OnLoad or OnMain"
-            ),
-            new CommandInfo(
-                "set-start-encode-keyword",
-                "ssek",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        TextEncoderPlugin
-                    ),
-                    nameof(
-                        BlockEncodeStartKeyword
-                    )
-                ),
-                "Sets the keyword that is used to open a Encode block"
-            ),
-            new CommandInfo(
-                "set-end-encode-keyword",
-                "seek",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        TextEncoderPlugin
-                    ),
-                    nameof(
-                        BlockEncodeEndKeyword
-                    )
-                ),
-                "Sets the keyword that is used to end a Encode block"
-            ),
-            new CommandInfo(
-                "set-start-decode-keyword",
-                "ssdk",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        TextEncoderPlugin
-                    ),
-                    nameof(
-                        BlockDecodeStartKeyword
-                    )
-                ),
-                "Sets the keyword that is used to open a Decode block"
-            ),
-            new CommandInfo(
-                "set-end-decode-keyword",
-                "sedk",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        TextEncoderPlugin
-                    ),
-                    nameof(
-                        BlockDecodeEndKeyword
-                    )
-                ),
-                "Sets the keyword that is used to end a Decode block"
-            )
-        };
+                                                             {
+                                                                 new CommandInfo(
+                                                                      "set-stage",
+                                                                      "ss",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               TextEncoderPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               Stage )
+                                                                          ),
+                                                                      "Sets the Stage Type of the Plugin to be Executed OnLoad or OnMain"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-start-encode-keyword",
+                                                                      "ssek",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               TextEncoderPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               BlockEncodeStartKeyword
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to open a Encode block"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-end-encode-keyword",
+                                                                      "seek",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               TextEncoderPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               BlockEncodeEndKeyword
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to end a Encode block"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-start-decode-keyword",
+                                                                      "ssdk",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               TextEncoderPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               BlockDecodeStartKeyword
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to open a Decode block"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-end-decode-keyword",
+                                                                      "sedk",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               TextEncoderPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               BlockDecodeEndKeyword
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to end a Decode block"
+                                                                     )
+                                                             };
 
         #region Public
 
@@ -233,10 +238,10 @@ namespace Utility.ExtPP.Plugins
                     removeIndices.Add( i );
 
                     bool encodingOk = TryParseDecodeStatement(
-                        lines[i].TrimStart(),
-                        out TextEncoding enc,
-                        out string[] encParameter
-                    );
+                                                              lines[i].TrimStart(),
+                                                              out TextEncoding enc,
+                                                              out string[] encParameter
+                                                             );
 
                     i++; //Move forward.
 
@@ -266,10 +271,10 @@ namespace Utility.ExtPP.Plugins
                     removeIndices.Add( i );
 
                     bool decodingOk = TryParseDecodeStatement(
-                        lines[i].TrimStart(),
-                        out TextEncoding enc,
-                        out string[] encParameter
-                    );
+                                                              lines[i].TrimStart(),
+                                                              out TextEncoding enc,
+                                                              out string[] encParameter
+                                                             );
 
                     i++; //Move forward.
 
@@ -346,6 +351,7 @@ namespace Utility.ExtPP.Plugins
         }
 
         #endregion
+
     }
 
 }

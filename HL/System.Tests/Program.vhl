@@ -24,6 +24,9 @@ private static string S_TESTING_STRING = "Testing String Features";
 private static string S_READY = "Testing Completed.";
 
 
+SET_ENABLE_THROW_ERRORS(1); //Enable Throwing Exceptions
+SET_ENABLE_RANGE_CHECK(1); //Enable Range Checking on Arrays and LinkedLists
+
 private static void Main()
 {
 

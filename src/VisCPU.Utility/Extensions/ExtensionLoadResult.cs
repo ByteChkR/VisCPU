@@ -10,6 +10,7 @@ namespace VisCPU.Utility.Extensions
 
     internal class ExtensionLoadResult < T > : IEnumerable < T >
     {
+
         private readonly string[] m_Files;
 
         #region Public
@@ -17,10 +18,10 @@ namespace VisCPU.Utility.Extensions
         public ExtensionLoadResult( string directory, bool recursive )
         {
             m_Files = Directory.GetFiles(
-                Path.GetFullPath( directory ),
-                "*.dll",
-                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
-            );
+                                         Path.GetFullPath( directory ),
+                                         "*.dll",
+                                         recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
+                                        );
         }
 
         public ExtensionLoadResult( string[] files )
@@ -80,7 +81,7 @@ namespace VisCPU.Utility.Extensions
 
                 return true;
             }
-            catch ( Exception)
+            catch ( Exception )
             {
                 asm = null;
 
@@ -89,6 +90,7 @@ namespace VisCPU.Utility.Extensions
         }
 
         #endregion
+
     }
 
 }

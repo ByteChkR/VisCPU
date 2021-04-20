@@ -1,4 +1,5 @@
 ﻿using System;
+
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.TypeSystem;
 using VisCPU.Utility;
@@ -11,6 +12,7 @@ namespace VisCPU.HL.Compiler
 
     public readonly struct ExpressionTarget : IEquatable < ExpressionTarget >
     {
+
         public readonly string ResultAddress;
         public readonly bool IsAddress;
         public readonly bool IsPointer;
@@ -18,11 +20,11 @@ namespace VisCPU.HL.Compiler
 
         public ExpressionTarget( string resultAddress, bool isAddress, HlTypeDefinition def )
             : this(
-                resultAddress,
-                isAddress,
-                def,
-                false
-            )
+                   resultAddress,
+                   isAddress,
+                   def,
+                   false
+                  )
         {
             //ResultAddress = resultAddress;
             //IsAddress = isAddress;
@@ -80,10 +82,10 @@ namespace VisCPU.HL.Compiler
             }
 
             ExpressionTarget tmpVal = new ExpressionTarget(
-                c.GetTempVarDref( ResultAddress ),
-                true,
-                TypeDefinition
-            );
+                                                           c.GetTempVarDref( ResultAddress ),
+                                                           true,
+                                                           TypeDefinition
+                                                          );
 
             return tmpVal;
         }
@@ -96,11 +98,11 @@ namespace VisCPU.HL.Compiler
             }
 
             ExpressionTarget tmpVal = new ExpressionTarget(
-                c.GetTempVarLoad( ResultAddress ),
-                true,
-                TypeDefinition,
-                IsPointer
-            );
+                                                           c.GetTempVarLoad( ResultAddress ),
+                                                           true,
+                                                           TypeDefinition,
+                                                           IsPointer
+                                                          );
 
             return tmpVal;
         }
@@ -177,6 +179,7 @@ namespace VisCPU.HL.Compiler
                 return hashCode;
             }
         }
+
     }
 
 }

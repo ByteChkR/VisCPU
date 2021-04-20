@@ -1,70 +1,8 @@
 #include "System/System.vhl"
-#include "OS.Common/DiskTools.vhl"
+#include "BootLoader.vhl"
 
-//Steps
-//1. Try Load Disk Drive
-//2. Detect if the disk is Bootable
-//3. Load Data from Disk and patch to fit into address
-//4. "Erase self from memory" and Hand Over control to loaded data
 
-private static void LoadBootImage(STOREDRV drv)
-{
-	uint imageLength = drv.Read(1);
-	uint addrStart = drv.Read(2);
-	uint entry = drv.Read(3);
-	if(!imageLength)
-	{
-		string invalidImageLenMsg = "The Image has size 0. Can not boot with empty Image! Formatting Drive..";
-		Console.WriteLine(&invalidImageLenMsg, size_of(invalidImageLenMsg));
-		DiskTools.FormatDrive(drv);
-		return;
-	}
+SET_ENABLE_THROW_ERRORS(1); //Enable Throwing Exceptions
+SET_ENABLE_RANGE_CHECK(1); //Enable Range Checking on Arrays and LinkedLists
 
-	if(!addrStart)
-	{
-		string invalidImageAddrMsg = "The Start Address is 0. Can not Load Image at address 0! Formatting Drive..";
-		Console.WriteLine(&invalidImageAddrMsg, size_of(invalidImageAddrMsg));
-		DiskTools.FormatDrive(drv);
-		return;
-	}
-
-	if(entry < addrStart || entry >= (addrStart + imageLength))
-	{
-		string invalidImageEntryMsg = "The Entry Address is not valid. It has to point into the loaded image. Formatting Drive..";
-		Console.WriteLine(&invalidImageEntryMsg, size_of(invalidImageEntryMsg));
-		DiskTools.FormatDrive(drv);
-		return;
-	}
-
-	drv.ReadBuffer(4, addrStart, 0, imageLength);
-	return entry;
-}
-
-private static uint Initialize()
-{
-	Console.Clear();
-
-	STOREDRV drv = DiskTools.LoadDriver();
-
-	if(DiskTools.IsBootable(drv))
-	{
-		string yesMsg = "Bootable Device Found!";
-		Console.WriteLine(&yesMsg, size_of(yesMsg));
-		string loadImageMsg = "Loading Boot Image.."
-		Console.WriteLine(&loadImageMsg, size_of(loadImageMsg));
-		uint entry = LoadBootImage(drv);
-		string imageEntryMsg = "Found Entry at ";
-		Console.Write(&imageEntryMsg, size_of(imageEntryMsg));
-		Console.WriteNumberLine(entry);
-
-		entry(); //Invoke Entry Address
-	}
-	else
-	{
-		string noMsg = "NO Bootable Device Found! Exiting...";
-		Console.WriteLine(&noMsg, size_of(noMsg));
-		halt(); //Halt Execution
-	}
-}
-
-Initialize();
+BootLoader.Load();

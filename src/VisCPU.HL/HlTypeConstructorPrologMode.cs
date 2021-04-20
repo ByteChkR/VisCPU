@@ -3,8 +3,10 @@
 
     public enum HlTypeConstructorPrologMode
     {
+
         Outline,
         Inline,
+
     }
 
 }

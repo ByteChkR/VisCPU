@@ -9,6 +9,7 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class MulDivModOperators : HlExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -48,6 +49,7 @@ namespace VisCPU.HL.Parser.Operators
         }
 
         #endregion
+
     }
 
 }

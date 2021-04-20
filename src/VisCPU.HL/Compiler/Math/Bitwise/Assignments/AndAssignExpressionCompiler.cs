@@ -3,7 +3,9 @@
 
     public class AndAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
+
         protected override string InstructionKey => "AND";
+
     }
 
 }

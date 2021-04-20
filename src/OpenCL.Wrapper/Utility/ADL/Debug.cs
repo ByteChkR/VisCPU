@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Utility.ADL.Configs;
 using Utility.ADL.Streams;
 using Utility.Collections;
@@ -17,6 +18,7 @@ namespace Utility.ADL
     /// </summary>
     public static class Debug
     {
+
         /// <summary>
         ///     Flag to check wether this is the first execution.
         /// </summary>
@@ -106,23 +108,25 @@ namespace Utility.ADL
             {
                 AddPrefix =
                     BitMask.IsContainedInMask(
-                        ( int ) value,
-                        ( int ) PrefixLookupSettings.AddPrefixIfAvailable,
-                        false );
+                                              ( int ) value,
+                                              ( int ) PrefixLookupSettings.AddPrefixIfAvailable,
+                                              false
+                                             );
 
                 Deconstructtofind = BitMask.IsContainedInMask(
-                    ( int ) value,
-                    ( int ) PrefixLookupSettings.DeconstructMaskToFind,
-                    false
-                );
+                                                              ( int ) value,
+                                                              ( int ) PrefixLookupSettings.DeconstructMaskToFind,
+                                                              false
+                                                             );
 
                 Onlyone = BitMask.IsContainedInMask( ( int ) value, ( int ) PrefixLookupSettings.OnlyOnePrefix, false );
                 LookupMode = value;
 
                 BakePrefixes = BitMask.IsContainedInMask(
-                    ( int ) value,
-                    ( int ) PrefixLookupSettings.BakePrefixes,
-                    false );
+                                                         ( int ) value,
+                                                         ( int ) PrefixLookupSettings.BakePrefixes,
+                                                         false
+                                                        );
             }
         }
 
@@ -144,9 +148,10 @@ namespace Utility.ADL
             if ( stream == null )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "AddOutputStream(NULL): The Supplied stream is a nullpointer.",
-                    1 );
+                                   LogType.Warning,
+                                   "AddOutputStream(NULL): The Supplied stream is a nullpointer.",
+                                   1
+                                  );
 
                 return;
             }
@@ -154,12 +159,12 @@ namespace Utility.ADL
             if ( !AdlEnabled )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "AddOutputStream(" +
-                    stream +
-                    "): ADL is disabled, you are adding an Output Stream while ADL is disabled.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "AddOutputStream(" +
+                                   stream +
+                                   "): ADL is disabled, you are adding an Output Stream while ADL is disabled.",
+                                   1
+                                  );
             }
 
             bool contains = false;
@@ -172,10 +177,10 @@ namespace Utility.ADL
             if ( contains )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "AddOutputStream(" + stream + "): Supplied stream is already in the list. Aborting!",
-                    1
-                );
+                                   LogType.Warning,
+                                   "AddOutputStream(" + stream + "): Supplied stream is already in the list. Aborting!",
+                                   1
+                                  );
 
                 return;
             }
@@ -264,10 +269,10 @@ namespace Utility.ADL
             if ( !contains )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "RemoveOutputStream(" + stream + "): Supplied stream is not in the list. Aborting!",
-                    1
-                );
+                                   LogType.Warning,
+                                   "RemoveOutputStream(" + stream + "): Supplied stream is not in the list. Aborting!",
+                                   1
+                                  );
 
                 return;
             }
@@ -275,12 +280,12 @@ namespace Utility.ADL
             if ( !AdlEnabled )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "RemoveOutputStream(" +
-                    stream +
-                    "): ADL is disabled, you are removing an Output Stream while while ADL is disabled.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "RemoveOutputStream(" +
+                                   stream +
+                                   "): ADL is disabled, you are removing an Output Stream while while ADL is disabled.",
+                                   1
+                                  );
             }
 
             lock ( Streams )
@@ -337,27 +342,27 @@ namespace Utility.ADL
             if ( !AdlEnabled )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "AddPrefixForMask(" +
-                    mask +
-                    "): ADL is disabled, you are adding a prefix for a mask while ADL is disabled.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "AddPrefixForMask(" +
+                                   mask +
+                                   "): ADL is disabled, you are adding a prefix for a mask while ADL is disabled.",
+                                   1
+                                  );
             }
 
             if ( !BitMask.IsUniqueMask( mask ) )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "AddPrefixForMask(" +
-                    mask +
-                    "): Adding Prefix: " +
-                    prefix +
-                    " for mask: " +
-                    mask +
-                    ". Mask is not unique.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "AddPrefixForMask(" +
+                                   mask +
+                                   "): Adding Prefix: " +
+                                   prefix +
+                                   " for mask: " +
+                                   mask +
+                                   ". Mask is not unique.",
+                                   1
+                                  );
             }
 
             lock ( PrefixLock )
@@ -387,10 +392,10 @@ namespace Utility.ADL
             if ( !AdlEnabled )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "GetAllPrefixes(): ADL is disabled, you are getting all prefixes while ADL is disabled.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "GetAllPrefixes(): ADL is disabled, you are getting all prefixes while ADL is disabled.",
+                                   1
+                                  );
             }
 
             lock ( prefixes )
@@ -455,9 +460,9 @@ namespace Utility.ADL
                     lock ( PrefixLock )
                     {
                         prefixes.Add(
-                            mask,
-                            StringBuilder.ToString()
-                        ); //Create a "custom prefix" with the constructed mask.
+                                     mask,
+                                     StringBuilder.ToString()
+                                    ); //Create a "custom prefix" with the constructed mask.
                     }
                 }
             }
@@ -556,12 +561,12 @@ namespace Utility.ADL
             if ( !AdlEnabled )
             {
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "RemovePrefixForMask(" +
-                    mask +
-                    "): ADL is disabled, you are removing a prefix for a mask while ADL is disabled.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "RemovePrefixForMask(" +
+                                   mask +
+                                   "): ADL is disabled, you are removing a prefix for a mask while ADL is disabled.",
+                                   1
+                                  );
             }
 
             lock ( PrefixLock )
@@ -589,12 +594,12 @@ namespace Utility.ADL
                 prefixes.ToList().ForEach( x => info += x + ", " );
 
                 InternalLogger.Log(
-                    LogType.Warning,
-                    "SetAllPrefixes(" +
-                    info +
-                    "): ADL is disabled, you are removing a prefix for a mask while ADL is disabled.",
-                    1
-                );
+                                   LogType.Warning,
+                                   "SetAllPrefixes(" +
+                                   info +
+                                   "): ADL is disabled, you are removing a prefix for a mask while ADL is disabled.",
+                                   1
+                                  );
             }
 
             RemoveAllPrefixes( prefixes );
@@ -606,6 +611,7 @@ namespace Utility.ADL
         }
 
         #endregion
+
     }
 
 }

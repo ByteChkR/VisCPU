@@ -1,20 +1,13 @@
 ﻿using System;
+
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.DataTypes
 {
-    [Flags]
-    public enum VariableDataEmitFlags
-    {
-        None = 0,
-        CStyle = 1,
-        Packed = 2,
-        Visible = 4,
-        Pointer = 8,
-    }
 
     public struct VariableData : IExternalData, IEquatable < VariableData >
     {
+
         public ExternalDataType DataType { get; }
 
         private readonly VariableDataEmitFlags m_EmitFlags;
@@ -34,7 +27,8 @@ namespace VisCPU.HL.DataTypes
         public readonly HlTypeDefinition TypeDefinition;
 
         public bool IsVisible => ( m_EmitFlags & VariableDataEmitFlags.Visible ) != 0;
-        public  bool IsPointer => (m_EmitFlags & VariableDataEmitFlags.Pointer) != 0;
+
+        public bool IsPointer => ( m_EmitFlags & VariableDataEmitFlags.Pointer ) != 0;
 
         public uint Size { get; }
 
@@ -62,7 +56,7 @@ namespace VisCPU.HL.DataTypes
             string finalName,
             string content,
             HlTypeDefinition tdef,
-            VariableDataEmitFlags emFlags)
+            VariableDataEmitFlags emFlags )
         {
             DataType = ExternalDataType.Variable;
             m_Name = name;
@@ -101,31 +95,37 @@ namespace VisCPU.HL.DataTypes
 
                 return hashCode;
             }
-
-            
         }
+
         public string EmitVasm()
         {
-
             string linkerArgs = "";
 
-            if (IsVisible)
+            if ( IsVisible )
+            {
                 linkerArgs += "linker:hide ";
-            if ((m_EmitFlags & VariableDataEmitFlags.CStyle)!=0)
+            }
+
+            if ( ( m_EmitFlags & VariableDataEmitFlags.CStyle ) != 0 )
+            {
                 linkerArgs += "string:c-style ";
-            if ((m_EmitFlags & VariableDataEmitFlags.Packed) != 0)
+            }
+
+            if ( ( m_EmitFlags & VariableDataEmitFlags.Packed ) != 0 )
+            {
                 linkerArgs += "string:packed ";
+            }
 
             if ( InitContent != null )
-                {
-                    return
-                        $":data {GetFinalName()} \"{InitContent}\" {linkerArgs}";
-                }
-
-
+            {
                 return
-                    $":data {GetFinalName()} {Size} {linkerArgs}";
+                    $":data {GetFinalName()} \"{InitContent}\" {linkerArgs}";
+            }
+
+            return
+                $":data {GetFinalName()} {Size} {linkerArgs}";
         }
+
     }
 
 }

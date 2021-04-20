@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
+
 using OpenCL.NET;
 using OpenCL.NET.CommandQueues;
 using OpenCL.NET.Contexts;
@@ -13,6 +14,7 @@ using OpenCL.NET.Kernels;
 using OpenCL.NET.Memory;
 using OpenCL.NET.Platforms;
 using OpenCL.NET.Programs;
+
 using Utility.ADL;
 
 namespace OpenCL.Wrapper
@@ -23,6 +25,7 @@ namespace OpenCL.Wrapper
     /// </summary>
     public class CLAPI : ALoggable < LogType >, IDisposable
     {
+
         /// <summary>
         ///     A Delegate to create random numbers for every data type
         /// </summary>
@@ -81,12 +84,12 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
             }
 
             MemoryBuffer mb = CreateEmpty < T >(
-                instance,
-                ( int ) input.Size,
-                input.Flags,
-                "CopyOf:" + input,
-                true
-            );
+                                                instance,
+                                                ( int ) input.Size,
+                                                input.Flags,
+                                                "CopyOf:" + input,
+                                                true
+                                               );
 
             k.SetBuffer( 0, mb );
             k.SetBuffer( 1, input );
@@ -124,11 +127,11 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
         {
             MemoryBuffer mb =
                 instance.context.CreateBuffer(
-                    flags | MemoryFlag.CopyHostPointer,
-                    t,
-                    data,
-                    handleIdentifier
-                );
+                                              flags | MemoryFlag.CopyHostPointer,
+                                              t,
+                                              data,
+                                              handleIdentifier
+                                             );
 
             return mb;
         }
@@ -171,10 +174,10 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
             object handleIdentifier )
         {
             BitmapData data = bmp.LockBits(
-                new Rectangle( 0, 0, bmp.Width, bmp.Height ),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format32bppArgb
-            );
+                                           new Rectangle( 0, 0, bmp.Width, bmp.Height ),
+                                           ImageLockMode.ReadOnly,
+                                           PixelFormat.Format32bppArgb
+                                          );
 
             byte[] buffer = new byte[bmp.Width * bmp.Height * 4];
             Marshal.Copy( data.Scan0, buffer, 0, buffer.Length );
@@ -233,10 +236,10 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
         public static byte[] GetBitmapData( Bitmap bmp )
         {
             BitmapData data = bmp.LockBits(
-                new Rectangle( 0, 0, bmp.Width, bmp.Height ),
-                ImageLockMode.ReadOnly,
-                PixelFormat.Format32bppArgb
-            );
+                                           new Rectangle( 0, 0, bmp.Width, bmp.Height ),
+                                           ImageLockMode.ReadOnly,
+                                           PixelFormat.Format32bppArgb
+                                          );
 
             byte[] buffer = new byte[bmp.Width * bmp.Height * 4];
             Marshal.Copy( data.Scan0, buffer, 0, buffer.Length );
@@ -310,10 +313,10 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
             BGRAtoARGB( bytes );
 
             BitmapData data = target.LockBits(
-                new Rectangle( 0, 0, target.Width, target.Height ),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format32bppArgb
-            );
+                                              new Rectangle( 0, 0, target.Width, target.Height ),
+                                              ImageLockMode.WriteOnly,
+                                              PixelFormat.Format32bppArgb
+                                             );
 
             Marshal.Copy( bytes.ToArray(), 0, data.Scan0, bytes.Length );
             target.UnlockBits( data );
@@ -324,10 +327,10 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
             BGRAtoARGB( bytes );
 
             BitmapData data = target.LockBits(
-                new Rectangle( 0, 0, target.Width, target.Height ),
-                ImageLockMode.WriteOnly,
-                PixelFormat.Format32bppArgb
-            );
+                                              new Rectangle( 0, 0, target.Width, target.Height ),
+                                              ImageLockMode.WriteOnly,
+                                              PixelFormat.Format32bppArgb
+                                             );
 
             Marshal.Copy( bytes, 0, data.Scan0, bytes.Length );
             target.UnlockBits( data );
@@ -542,9 +545,10 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
             int bufByteSize = Marshal.SizeOf < T >() * size;
 
             return instance.context.CreateBuffer(
-                flags | MemoryFlag.AllocateHostPointer,
-                bufByteSize,
-                handleIdentifier );
+                                                 flags | MemoryFlag.AllocateHostPointer,
+                                                 bufByteSize,
+                                                 handleIdentifier
+                                                );
         }
 
         /// <summary>
@@ -562,9 +566,10 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
                 for ( int j = 0; j < ds.Count(); j++ )
                 {
                     Logger.Log(
-                        LogType.Log,
-                        "Adding Device: " + ds.ElementAt( j ).Name + "@" + ds.ElementAt( j ).Vendor,
-                        1 );
+                               LogType.Log,
+                               "Adding Device: " + ds.ElementAt( j ).Name + "@" + ds.ElementAt( j ).Vendor,
+                               1
+                              );
 
                     devs.Add( ds.ElementAt( j ) );
                 }
@@ -600,18 +605,19 @@ __kernel void copy(__global uchar* destination, __global uchar* source)
                 Logger.Log( LogType.Error, e.ToString(), 1 );
 
                 throw new OpenClException(
-                    "Could not initialize OpenCL with Device: " +
-                    chosenDevice.Name +
-                    "@" +
-                    chosenDevice.Vendor +
-                    "\n\t" +
-                    e.Message,
-                    e
-                );
+                                          "Could not initialize OpenCL with Device: " +
+                                          chosenDevice.Name +
+                                          "@" +
+                                          chosenDevice.Vendor +
+                                          "\n\t" +
+                                          e.Message,
+                                          e
+                                         );
             }
         }
 
         #endregion
+
     }
 
 }

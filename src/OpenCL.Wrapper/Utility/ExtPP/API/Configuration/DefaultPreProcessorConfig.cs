@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Plugins;
 
@@ -11,18 +12,20 @@ namespace Utility.ExtPP.API.Configuration
     /// </summary>
     public class DefaultPreProcessorConfig : APreProcessorConfig
     {
+
         private static readonly StringBuilder Sb = new StringBuilder();
 
         public override string FileExtension => "***";
 
-        protected override List < AbstractPlugin > Plugins => new List < AbstractPlugin >
-        {
-            new FakeGenericsPlugin(),
-            new IncludePlugin(),
-            new ConditionalPlugin { EnableDefine = true },
-            new ExceptionPlugin(),
-            new MultiLinePlugin()
-        };
+        protected override List < AbstractPlugin > Plugins =>
+            new List < AbstractPlugin >
+            {
+                new FakeGenericsPlugin(),
+                new IncludePlugin(),
+                new ConditionalPlugin { EnableDefine = true },
+                new ExceptionPlugin(),
+                new MultiLinePlugin()
+            };
 
         #region Public
 
@@ -42,6 +45,7 @@ namespace Utility.ExtPP.API.Configuration
         }
 
         #endregion
+
     }
 
 }

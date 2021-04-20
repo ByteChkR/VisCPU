@@ -1,4 +1,5 @@
 ﻿using System;
+
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -9,6 +10,7 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleInterface : Peripheral
     {
+
         private readonly ConsoleInterfaceSettings m_Settings;
 
         public override string PeripheralName => "Console Management Device";
@@ -59,24 +61,24 @@ namespace VisCPU.Peripherals.Console
                 return ( uint ) System.Console.CursorTop;
             }
 
-            if (address == m_Settings.WidthAddr)
+            if ( address == m_Settings.WidthAddr )
             {
-                return (uint)System.Console.WindowWidth;
+                return ( uint ) System.Console.WindowWidth;
             }
 
-            if (address == m_Settings.HeightAddr)
+            if ( address == m_Settings.HeightAddr )
             {
-                return (uint)System.Console.WindowHeight;
+                return ( uint ) System.Console.WindowHeight;
             }
 
-            if (address == m_Settings.BufWidthAddr)
+            if ( address == m_Settings.BufWidthAddr )
             {
-                return (uint)System.Console.BufferWidth;
+                return ( uint ) System.Console.BufferWidth;
             }
 
-            if (address == m_Settings.BufHeightAddr)
+            if ( address == m_Settings.BufHeightAddr )
             {
-                return (uint)System.Console.BufferHeight;
+                return ( uint ) System.Console.BufferHeight;
             }
 
             if ( address == m_Settings.BackColorAddr )
@@ -104,21 +106,21 @@ namespace VisCPU.Peripherals.Console
             {
                 System.Console.CursorTop = ( int ) data;
             }
-            else if (address == m_Settings.WidthAddr)
+            else if ( address == m_Settings.WidthAddr )
             {
-                System.Console.WindowWidth = (int)data;
+                System.Console.WindowWidth = ( int ) data;
             }
-            else if (address == m_Settings.HeightAddr)
+            else if ( address == m_Settings.HeightAddr )
             {
-                System.Console.WindowHeight = (int)data;
+                System.Console.WindowHeight = ( int ) data;
             }
-            else if (address == m_Settings.BufWidthAddr)
+            else if ( address == m_Settings.BufWidthAddr )
             {
-                System.Console.BufferWidth = (int)data;
+                System.Console.BufferWidth = ( int ) data;
             }
-            else if (address == m_Settings.BufHeightAddr)
+            else if ( address == m_Settings.BufHeightAddr )
             {
-                System.Console.BufferHeight = (int)data;
+                System.Console.BufferHeight = ( int ) data;
             }
             else if ( address == m_Settings.BackColorAddr )
             {
@@ -139,6 +141,7 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
+
     }
 
 }

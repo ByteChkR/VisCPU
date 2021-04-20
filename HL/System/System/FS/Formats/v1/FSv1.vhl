@@ -1,0 +1,11 @@
+#include "../../../Partition.vhl"
+#include "../../../Console.vhl"
+#include "../../../ALLOC/Allocator.vhl"
+#include "../../FSCore.vhl"
+
+#define FileStream FSv1FileStream
+#define FileSystem FSv1
+
+#include <FSv1Core.vhl>
+#include <FSv1FileStream.vhl>
+#include <FSv1FileTable.vhl>

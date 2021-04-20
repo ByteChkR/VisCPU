@@ -2,7 +2,7 @@
 
 public static void TestAllocator()
 {
-	RawAllocator alloc = RawAllocator(30000, 100000);
+	RawAllocator alloc = RawAllocator(100000, 100000);
 	alloc.SetOptimizationLevel(2); //Full Optimizations(mitigates memory fragmentation)
 	alloc.WriteDebugData();
 

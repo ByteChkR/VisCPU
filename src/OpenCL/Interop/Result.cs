@@ -6,6 +6,7 @@ namespace OpenCL.NET.Interop
     /// </summary>
     public enum Result
     {
+
         #region OpenCL Error Codes
 
         /// <summary>
@@ -263,6 +264,7 @@ namespace OpenCL.NET.Interop
         InvalidPartitionNameExt = -1059
 
         #endregion
+
     }
 
 }

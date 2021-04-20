@@ -10,6 +10,7 @@ namespace Utility.ADL
     /// </summary>
     public class BitMask
     {
+
         public static readonly int Empty;
         public static readonly int WildCard = ~0;
 
@@ -226,6 +227,7 @@ namespace Utility.ADL
         }
 
         #endregion
+
     }
 
     /// <summary>
@@ -234,6 +236,7 @@ namespace Utility.ADL
     /// <typeparam name="T">Type of enum you want to use</typeparam>
     public class BitMask < T > : BitMask where T : struct
     {
+
         /// <summary>
         ///     Auto Convert to Int
         /// </summary>
@@ -352,6 +355,7 @@ namespace Utility.ADL
         }
 
         #endregion
+
     }
 
 }

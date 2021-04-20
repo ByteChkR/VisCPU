@@ -1,5 +1,7 @@
 ﻿using System;
+
 using Newtonsoft.Json;
+
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.IO.Settings.Loader;
@@ -10,6 +12,7 @@ namespace VisCPU.HL
     [Serializable]
     public class HlCompilerSettings
     {
+
         [field: Argument( Name = "compiler:enable-caching" )]
         public bool EnableCompilationCaching { get; set; } = true;
 
@@ -55,14 +58,15 @@ namespace VisCPU.HL
             SettingsCategory hlcCategory = SettingsCategories.Get( "sdk.compiler.hl", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                hlcCategory,
-                "compiler.json",
-                new HlCompilerSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  hlcCategory,
+                                                  "compiler.json",
+                                                  new HlCompilerSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

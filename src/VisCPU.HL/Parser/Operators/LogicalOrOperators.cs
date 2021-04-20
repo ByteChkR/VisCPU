@@ -9,6 +9,7 @@ namespace VisCPU.HL.Parser.Operators
     /// </summary>
     public class LogicalOrOperators : HlExpressionOperator
     {
+
         /// <summary>
         ///     Precedence Level of the Operators
         /// </summary>
@@ -40,13 +41,14 @@ namespace VisCPU.HL.Parser.Operators
             parser.Eat( HlTokenType.OpPipe );
 
             return new HlBinaryOp(
-                currentNode,
-                HlTokenType.OpLogicalOr,
-                parser.ParseExpr( PrecedenceLevel )
-            );
+                                  currentNode,
+                                  HlTokenType.OpLogicalOr,
+                                  parser.ParseExpr( PrecedenceLevel )
+                                 );
         }
 
         #endregion
+
     }
 
 }

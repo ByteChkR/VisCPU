@@ -6,6 +6,7 @@ namespace OpenCL.NET.CommandQueues
     /// </summary>
     public enum CommandExecutionStatus
     {
+
         /// <summary>
         ///     The command could not be executed successfully.
         /// </summary>
@@ -30,6 +31,7 @@ namespace OpenCL.NET.CommandQueues
         ///     The command has been enqueued in the command-queue.
         /// </summary>
         Queued = 0x3
+
     }
 
 }

@@ -3,6 +3,7 @@
 
     public class SubExpressionCompiler : MathExpressionCompiler
     {
+
         protected override string InstructionKey => "SUB";
 
         #region Protected
@@ -16,6 +17,7 @@
         }
 
         #endregion
+
     }
 
 }

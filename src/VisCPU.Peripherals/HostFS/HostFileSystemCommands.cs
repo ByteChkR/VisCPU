@@ -3,6 +3,7 @@
 
     public enum HostFileSystemCommands : uint
     {
+
         HfsDeviceReset = 0x00,
         HfsOpenRead = 0x01,
         HfsOpenWrite = 0x02,
@@ -16,6 +17,7 @@
         HfsGetFiles = 0x0A,
         HfsFileExist = 0x0B,
         HfsLoadSymbols = 0x0C,
+
     }
 
 }
