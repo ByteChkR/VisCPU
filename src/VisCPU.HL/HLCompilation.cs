@@ -311,6 +311,7 @@ namespace VisCPU.HL
                     {
                         List < IHlToken > content = tokens.GetRange( i + 1, endQuote - i - 1 );
 
+                        
                         return OriginalText.Substring(
                                                       content.First().SourceIndex,
                                                       tokens[i + 1 + content.Count].SourceIndex -

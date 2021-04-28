@@ -1,6 +1,6 @@
 {
   "ProjectName": "System",
-  "ProjectVersion": "2021.4.14.3",
+  "ProjectVersion": "2021.4.22.1",
   "Dependencies": [],
   "DefaultTarget": "Debug",
   "BuildTargets": {
@@ -20,7 +20,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_build.json",
-            "build:input": "System.vhl"
+            "build:input": "Program.vhl"
           }
         }
       ]
@@ -49,7 +49,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_run.json",
-            "run:input": "System.vbin"
+            "run:input": "Program.vbin"
           }
         }
       ]
@@ -70,7 +70,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_build.json",
-            "build:input": "System.vhl"
+            "build:input": "Program.vhl"
           }
         }
       ]
@@ -86,7 +86,7 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_run.json",
-            "run:input": "System.vbin"
+            "run:input": "Program.vbin"
           }
         }
       ]

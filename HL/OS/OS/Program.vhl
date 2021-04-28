@@ -1,36 +1,29 @@
-#include "System/System.vhl"
+#include <System/System.vhl>
+#include <System/Header/sys.vhl>
+#include <System/Header/stdio.vhl>
+#include <System/Header/stdmm.vhl>
 //Entry Point of Project
 
-private static string s_AllocInitialize = "Initializing Allocator...";
-Console.WriteLine(&s_AllocInitialize, size_of(s_AllocInitialize));
+//Initialize System Library. With Template from sys.vhl
+sysinit();
 
-private static RawAllocator al = RawAllocator(100000, 1024);
-al.SetOptimizationLevel(2);
+//Create File System Wrapper Function for File System Class
+create_fsysinit(FileSystem) //Note: no semicolon because this is a function that gets inlined into this script
 
-private static string s_DisktInitialize = "Initializing Disks...";
-Console.WriteLine(&s_DisktInitialize, size_of(s_DisktInitialize));
-private static DiskTable diskTable = DiskTable(al);
+//Use the File System Wrapper Function to Create the File System.
+//0: File System Class Name
+//1: Disk ID
+//2: Partition ID
+FileSystem fs = fsinit(FileSystem, 0, 1);
 
 public class OS
 {
-	public static uint Allocate(uint size)
-	{
-		uint ptr = al.Allocate(size);
-		return ptr;
-	}
-
-	public static void Free(uint ptr)
-	{
-		al.Free(ptr);
-	}
-
-
 	public static void Run()
 	{
 		private static string s_OSStarted = "OS Initialized!";
 		Console.WriteLine(&s_OSStarted, size_of(s_OSStarted));
-
 	}
+
 }
 
 OS.Run();

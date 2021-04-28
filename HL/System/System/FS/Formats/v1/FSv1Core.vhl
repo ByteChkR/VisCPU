@@ -35,9 +35,14 @@ public class FSv1 : FSCore
 		uint c = table.GetEntryCount();
 		for(uint i = 0; i < c; i++)
 		{
-			if(this.IsName(i, path, pathLen))
+			uint isDel = table.IsDeleted(i);
+			if(!isDel)
 			{
-				return i;
+				uint isName = this.IsName(i, path, pathLen);
+				if(isName)
+				{
+					return i;
+				}
 			}
 		}
 		interrupt(1); //File not Found
@@ -49,9 +54,14 @@ public class FSv1 : FSCore
 		uint c = table.GetEntryCount();
 		for(uint i = 0; i < c; i++)
 		{
-			if(!table.IsDeleted(i) && this.IsName(i, path, pathLen))
+			uint isDel = table.IsDeleted(i);
+			if(!isDel)
 			{
-				return 1;
+				uint isName = this.IsName(i, path, pathLen);
+				if(isName)
+				{
+					return i;
+				}
 			}
 		}
 		return 0;
@@ -65,6 +75,7 @@ public class FSv1 : FSCore
 		{
 			return 0;
 		}
+		
 		for(uint i = 0; i < pathLen; i++)
 		{
 			uint v = table.GetEntryName(idx, i);
@@ -119,5 +130,11 @@ public class FSv1 : FSCore
 		FSv1FileTable table = this.m_RootFileTable;
 		uint s = table.GetEntrySize(idx);
 		return s;
+	}
+
+	public void WriteInfo()
+	{
+		FSv1FileTable table = this.m_RootFileTable;
+		table.WriteInfo();
 	}
 }

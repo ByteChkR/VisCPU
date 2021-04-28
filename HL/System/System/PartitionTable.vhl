@@ -4,6 +4,9 @@
 #include "Partition.vhl"
 #include "ExceptionHandler.vhl"
 #include "PartitionTableCorruptedException.vhl"
+#include "Console.vhl"
+
+#define FORMAT_ON_CREATE 0
 
 public class PartitionTable
 {
@@ -18,13 +21,33 @@ public class PartitionTable
 		this.m_List = lp;
 		this.Populate(alloc);
 	}
+
+	private static void Format(STOREDRV drv)
+	{
+		//Format Drive
+		uint mod = drv.GetSize() / 10000;
+		for(uint i = 0; i < drv.GetSize(); i++)
+		{
+			if((i % mod) == 0)
+			{
+				string fmtPerc = "% Completed (";
+				Console.WriteNumber((i / mod) / 100);
+				Console.Write(&fmtPerc, size_of(fmtPerc));
+				Console.WriteNumber(i);
+				Console.WriteChar('/');
+				Console.WriteNumber(drv.GetSize());
+				Console.WriteChar(')');
+				Console.WriteChar('\n');
+			}
+			drv.Write(i, 0);
+		}
+	}
 	
 	public static void WriteDefault(STOREDRV drv)
 	{
-		//Format Drive
-		for(uint i = 0; i < drv.GetSize(); i++)
+		if(FORMAT_ON_CREATE)
 		{
-			drv.Write(i, 0);
+			PartitionTable.Format();
 		}
 
 		drv.Write(0, 65535);

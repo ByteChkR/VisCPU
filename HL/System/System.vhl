@@ -3,6 +3,7 @@
 #include "System/Array.vhl"
 #include "System/Colors.vhl"
 #include "System/Console.vhl"
+#include "System/Convert.vhl"
 #include "System/DeviceLoader.vhl"
 #include "System/DeviceTypes.vhl"
 #include "System/DiskTable.vhl"
@@ -43,136 +44,55 @@
 
 //Include Global System Library Settings.
 #include "System/Settings.vhl"
-
-//Include File System Implementation
 #include <System/FS/Formats/v1/FSv1.vhl>
 
-Console.Clear();
+private static uint s_Allocator;
+private static uint s_DiskTable;
+private static uint s_InitFlag;
 
-SET_ENABLE_THROW_ERRORS(1);
-SET_ENABLE_RANGE_CHECK(1);
-
-RawAllocator a = RawAllocator(100000, 100000);
-a.SetOptimizationLevel(2);
-
-private PartitionTable Init()
+public class SystemCore
 {
-	uint dlp = a.Allocate(size_of(DeviceLoader));
-	DeviceLoader.new(dlp, DeviceTypes.Drive());
-	DeviceLoader dl = dlp;
-
-	uint dp = a.Allocate(size_of(STOREDRV));
-	STOREDRV.new(dp, dl.GetNextDevice());
-
-	STOREDRV drive = dp;
-	//drive.Write(0,0);
-
-	a.Free(dlp);
-
-	uint ptp = a.Allocate(size_of(PartitionTable));
-
-	PartitionTable.new(ptp, dp, a);
-
-	return ptp;
-}
-
-private void FormatData()
-{
-	for(uint i = 0; i < pData.GetSize(); i++)
+	public static uint GetAllocator()
 	{
-		pData.Write(i, 0);
-	}
-}
-
-private void CreateTest(FileSystem fs)
-{
-	string sCreate = "Creating Test File...";
-	Console.WriteLine(&sCreate, size_of(sCreate));
-
-	FileStream s = fs.Create(&file, size_of(file));
-
-	for(uint i = 0; i < 10; i++)
-	{
-		s.Write(i); //Write something to allocate a block
+		if(s_InitFlag)
+		{
+			return s_Allocator;
+		}
+		interrupt(1);
 	}
 
-	uint sz = s.GetSize();
-	Console.WriteNumberLine(sz);
-	fs.Close(s);
-}
-
-private void OpenTest(FileSystem fs)
-{
-	string sOpen = "Opening Test File...";
-	Console.WriteLine(&sOpen, size_of(sOpen));
-
-	FileStream s = fs.Open(&file, size_of(file));
-	string str_fsize = "File Size: ";
-	uint fsize = s.GetSize();
-
-	Console.Write(&str_fsize, size_of(str_fsize));
-	Console.WriteNumberLine(fsize);
-
-	for(uint i = 0; i < fsize; i++)
+	public static void Initialize(uint opt, uint start, uint len)
 	{
-		Console.WriteNumberLine(s.Read());
+		if(s_InitFlag)
+		{
+			return;
+		}
+
+		RawAllocator alloc = RawAllocator(start, len);
+		s_Allocator = alloc;
+		alloc.SetOptimizationLevel(opt);
+
+		DiskTable diskT = DiskTable(s_Allocator);
+		s_DiskTable = diskT;
+
+		s_InitFlag = 1;
 	}
 
-	fs.Close(s); //Close File
-}
-
-private void AppendTest(FileSystem fs)
-{
-	string sAppend = "Appending Test File...";
-	Console.WriteLine(&sAppend, size_of(sAppend));
-
-	FileStream s = fs.Open(&file, size_of(file));
-	string str_fsize = "File Size: ";
-	uint fsize = s.GetSize();
-
-	Console.Write(&str_fsize, size_of(str_fsize));
-	Console.WriteNumberLine(fsize);
-
-	uint amount = 100 - fsize;
-	s.SetPosition(fsize);
-	for(uint i = 0; i < amount; i++)
+	public static uint Allocate(uint size)
 	{
-		s.Write(i);
+		RawAllocator a = s_Allocator;
+		uint p = a.Allocate(size);
+		return p;
 	}
 
-	fs.Close(s); //Close File
-}
-
-//Initialize Disk
-PartitionTable pt = Init();
-Partition pData = pt.GetPartition(1);
-
-//FormatData();
-
-//Create File System
-uint fsfmtp = a.Allocate(size_of(FileSystem));
-FileSystem.new(fsfmtp, a, pData);
-FileSystem fs = fsfmtp;
-
-
-string file = "test.txt";
-
-if(fs.Exists(&file, size_of(file)))
-{
-	uint s = fs.GetSize(&file, size_of(file));
-	if(s < 100)
+	public static void Free(uint p)
 	{
-		AppendTest(fs);
+		RawAllocator a = s_Allocator;
+		a.Free(p);
 	}
-	else
+
+	public static DiskTable GetDiskTable()
 	{
-		OpenTest(fs);
-		string sreset = "Resetting VM to Start State..";
-		Console.WriteLine(&sreset, size_of(sreset));
-		FormatData();
+		return s_DiskTable;
 	}
-}
-else
-{
-	CreateTest(fs);
 }

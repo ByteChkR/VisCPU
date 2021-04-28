@@ -21,7 +21,6 @@ namespace VisCPU.Peripherals.Console.IO
 
         public Action < char > WriteConsoleChar { get; set; } = System.Console.Write;
 
-        public Action ConsoleClear { get; set; } = System.Console.Clear;
 
         public Action < uint > WriteConsoleNum { get; set; } = x => System.Console.Write( x.ToString() );
 
@@ -48,8 +47,7 @@ namespace VisCPU.Peripherals.Console.IO
         public override bool CanWrite( uint address )
         {
             return address == m_Settings.WriteOutputAddress ||
-                   m_Settings.WriteNumOutputAddress == address ||
-                   m_Settings.InterfaceClearPin == address;
+                   m_Settings.WriteNumOutputAddress == address;
         }
 
         public override uint ReadData( uint address )
@@ -68,11 +66,7 @@ namespace VisCPU.Peripherals.Console.IO
         {
             if ( CanWrite( address ) )
             {
-                if ( m_Settings.InterfaceClearPin == address )
-                {
-                    ConsoleClear();
-                }
-                else if ( m_Settings.WriteNumOutputAddress == address )
+                if ( m_Settings.WriteNumOutputAddress == address )
                 {
                     WriteConsoleNum( data );
                 }

@@ -75,8 +75,16 @@ public class FSv1FileTable
 		uint bc = this.GetBlockCount(idx);
 		this.SetBlockCount(idx, bc+1);
 		uint block = this.GetNextFreeBlock();
-		this.SetBlock(idx, bc+1, block);
+		this.SetBlock(idx, bc, block);
 		this.SetBlockFree(block, 1);
+	}
+
+	public void RemoveAllBlocks(uint idx)
+	{
+		while(this.GetBlockCount(idx))
+		{
+			this.RemoveBlock(idx);
+		}
 	}
 
 	public void RemoveBlock(uint idx)
@@ -84,7 +92,7 @@ public class FSv1FileTable
 		string remblock = "Remove Block..";
 		Console.WriteLine(&remblock, size_of(remblock));
 		uint bc = this.GetBlockCount(idx);
-		uint blockIdx = this.GetBlock(idx, bc);
+		uint blockIdx = this.GetBlock(idx, bc-1);
 		this.SetBlockCount(idx, bc-1);
 		this.SetBlockFree(blockIdx, 0);
 	}
@@ -203,7 +211,8 @@ public class FSv1FileTable
 	{
 		uint handle = this.GetBlockStart(idx);
 		Partition p = this.m_Partition;
-		uint v = p.Read(handle + blockIdx);
+		uint i = handle + blockIdx + 1;
+		uint v = p.Read(i) + ROOT_BLOCKS;
 		return v;
 	}
 
@@ -211,7 +220,8 @@ public class FSv1FileTable
 	{
 		uint handle = this.GetBlockStart(idx);
 		Partition p = this.m_Partition;
-		p.Write(handle + 1 + blockIdx, blockNum);
+		uint i = handle + 1 + blockIdx;
+		p.Write(i, blockNum - ROOT_BLOCKS);
 	}
 
 	public uint CreateEntry(string name, uint nameLength)
@@ -237,9 +247,11 @@ public class FSv1FileTable
 	public uint RemoveEntry(uint idx)
 	{
 		Partition p = this.m_Partition;
-		this.SetBlockCount(idx, 0);
+
+		this.RemoveAllBlocks(idx);
+
 		uint handle = this.IndexToHandle(idx);
-		p.Write(handle + F_ENTRY_FLAGS, 1);	
+		p.Write(handle + F_ENTRY_FLAGS, 1);
 	}
 
 	public uint GetPartition()
@@ -248,4 +260,151 @@ public class FSv1FileTable
 		return p;
 	}
 
+	public uint GetMaxRootTableSize()
+	{
+		return (ROOT_BLOCKS * BLOCK_SIZE);
+	}
+
+	public uint CalculateRootTableSize()
+	{
+		return this.IndexToHandle(this.GetEntryCount());
+	}
+
+
+	public void WriteInfo()
+	{
+		nprint();
+		string sRootBlocks = "Root Block Size: ";
+		string sRootBlockOccupation = "Used Root Size: ";
+		string sMaxBlocks = "Max Blocks: ";
+		uint rootMax = this.GetMaxRootTableSize();
+		uint rootUsed = this.CalculateRootTableSize();
+		uint max = this.m_MaxBlocks;
+		uint fileCount = this.GetEntryCount();
+		string sMaxFileBlocks = "Max Blocks Per File: ";
+		string sFileCount = "File Count(Total): ";
+
+		print(sRootBlocks);
+		printnl(ROOT_BLOCKS);
+		print(sMaxBlocks);
+		printnl(max);
+		print(sRootBlockOccupation);
+		printn(rootUsed);
+		Console.WriteChar('/');
+		printnl(rootMax);
+
+		print(sMaxFileBlocks);
+		printnl(F_ENTRY_BLOCK_COUNT);
+		print(sFileCount);
+		printnl(fileCount);
+
+		for(uint i = 0; i < fileCount; i++)
+		{
+			this.PrintFileInfo(i);
+			nprint();
+		}
+
+	}
+
+	private void PrintFileInfo(uint index)
+	{
+		string fn = "File Name: ";
+		print(fn);
+		uint nc = this.GetEntryNameLength(index);
+		uint bc = this.GetBlockCount(index);
+		for(uint i = 0; i < nc; i++)
+		{
+			uint fnc = this.GetEntryName(index, i);
+			printc(fnc);
+		}
+		nprint();
+
+		string fStat = "Status: ";
+		string fDel = "Deleted";
+		string fAlive = "Alive";
+
+		tprint(fStat);
+		if(this.IsDeleted(index))
+		{
+			tprintl(fDel);
+		}
+		else
+		{
+			tprintl(fAlive);
+		}
+
+		string sBlockCount = "Used Block Count: ";
+		tprint(sBlockCount);
+		tprintnl(bc);
+
+		string sBlock = "Blocks: ";
+		tprint(sBlock);
+		for(uint i = 0; i < bc; i++)
+		{
+			uint bid = this.GetBlock(index, i);
+			if(i != 0)
+			{
+				Console.WriteChar('|');
+			}
+			printn(bid);
+		}
+		nprint();
+	}
+
 }
+
+#define nprint()
+{
+	Console.WriteChar('\n')
+}
+#define printc(c)
+{
+	Console.WriteChar(c)
+}
+
+#define print(str1)
+{
+	Console.Write(&str1, size_of(str1))
+}
+
+#define printl(str1)
+{
+	Console.WriteLine(&str1, size_of(str1))
+}
+
+#define printn(n)
+{
+	Console.WriteNumber(n)
+}
+
+#define printnl(n)
+{
+	Console.WriteNumberLine(n)
+}
+
+#define tprintn(n)
+{
+	Console.WriteChar('\t');
+	Console.WriteNumber(n)
+}
+
+
+#define tprintnl(n)
+{
+	Console.WriteChar('\t');
+	Console.WriteNumberLine(n)
+}
+
+#define tprint(str1)
+{
+	Console.WriteChar('\t');
+	Console.Write(&str1, size_of(str1))
+}
+
+
+#define tprintl(str1)
+{
+	Console.WriteChar('\t');
+	Console.WriteLine(&str1, size_of(str1))
+}
+

@@ -7,6 +7,7 @@
 public class Partition
 {
 	private uint m_Device;
+	private uint m_FileSystemLink;
 	private uint m_Start;
 	private uint m_Length;
 	public static Partition(uint dev, uint start, uint len)

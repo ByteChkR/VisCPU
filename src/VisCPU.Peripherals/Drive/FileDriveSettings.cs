@@ -9,7 +9,7 @@ namespace VisCPU.Peripherals.Drive
     public class FileDriveSettings : DrivePinSettings
     {
 
-        public uint FileLength = 1024 * 1024;
+        public uint FileLength = 1024 * 1024 * 32;
 
         public string FileDrive = Path.Combine(
                                                Peripheral.PeripheralCategory.

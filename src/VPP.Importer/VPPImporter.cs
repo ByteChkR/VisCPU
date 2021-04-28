@@ -123,7 +123,9 @@ namespace VPP.Importer
             List<string> p = new List<string>();
             while (true)
             {
-                p.Add(parser.EatWord());
+                if (isEnd(parser))
+                    break;
+                p.Add(parser.EatWordOrNumber());
                 parser.EatWhiteSpace();
                 if (isEnd(parser))
                     break;

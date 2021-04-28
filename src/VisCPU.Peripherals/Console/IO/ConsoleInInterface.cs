@@ -19,6 +19,7 @@ namespace VisCPU.Peripherals.Console.IO
 
         public override uint PresentPin => m_Settings.InterfacePresentPin;
 
+        public Func < bool > HasConsoleInput { get; set; } = () => System.Console.KeyAvailable;
         public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
 
         #region Unity Event Functions
@@ -50,7 +51,12 @@ namespace VisCPU.Peripherals.Console.IO
         {
             if ( address == m_Settings.InterfacePresentPin )
             {
-                return 1;
+                return 1u;
+            }
+
+            if ( address == m_Settings.InputAvailableAddress )
+            {
+                return HasConsoleInput() ? 1u : 0u;
             }
 
             if ( address == m_Settings.ReadInputAddress )

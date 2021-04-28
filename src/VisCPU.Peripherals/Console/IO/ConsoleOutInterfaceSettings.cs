@@ -14,14 +14,12 @@ namespace VisCPU.Peripherals.Console.IO
         [field: Argument( Name = "console:out.pin.read" )]
         public uint InterfacePresentPin { get; set; } = 0xFFFF1000;
 
+        [field: Argument(Name = "console:out.pin.write.char")]
+        public uint WriteOutputAddress { get; set; } = 0xFFFF1001;
+
         [field: Argument( Name = "console:out.pin.write.num" )]
         public uint WriteNumOutputAddress { get; set; } = 0xFFFF1002;
 
-        [field: Argument( Name = "console:out.pin.write.char" )]
-        public uint WriteOutputAddress { get; set; } = 0xFFFF1001;
-
-        [field: Argument( Name = "console:out.pin.clear" )]
-        public uint InterfaceClearPin { get; set; } = 0xFFFF1005;
 
         #region Private
 

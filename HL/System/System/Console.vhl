@@ -1,16 +1,20 @@
 private const uint C_OUT = 0xFFFF1001;
 private const uint C_NOUT = 0xFFFF1002;
-private const uint C_RD = 0xFFFF1004;
-private const uint C_CLR = 0xFFFF1005;
-private const uint C_WD = 0xFFFF1007;
-private const uint C_HT = 0xFFFF1008;
-private const uint C_CL = 0xFFFF1009;
-private const uint C_CT = 0xFFFF100A;
-private const uint C_BC = 0xFFFF100B;
-private const uint C_FC = 0xFFFF100C;
-private const uint C_RC = 0xFFFF100D;
-private const uint C_BWD = 0xFFFF100E;
-private const uint C_BHT = 0xFFFF100F;
+
+private const uint C_RD = 0xFFFF1011;
+private const uint C_IAV = 0xFFFF1012;
+
+private const uint C_CLR = 0xFFFF1021;
+private const uint C_WD = 0xFFFF1022;
+private const uint C_HT = 0xFFFF1023;
+private const uint C_CL = 0xFFFF1024;
+private const uint C_CT = 0xFFFF1025;
+private const uint C_BC = 0xFFFF1026;
+private const uint C_FC = 0xFFFF1027;
+private const uint C_RC = 0xFFFF1028;
+private const uint C_BWD = 0xFFFF1029;
+private const uint C_BHT = 0xFFFF102A;
+
 
 
 public class Console
@@ -143,6 +147,13 @@ public class Console
 	public static void ResetColors()
 	{
 		C_RC = 1;
+	}
+
+	public static uint CanRead()
+	{
+		uint v = C_IAV;
+		return v;
+
 	}
 
 	public static uint Read()

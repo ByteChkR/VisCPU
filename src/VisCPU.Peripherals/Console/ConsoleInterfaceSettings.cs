@@ -1,4 +1,5 @@
-﻿using VisCPU.Utility.IO.Settings;
+﻿using VisCPU.Utility.ArgumentParser;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.IO.Settings.Loader;
 
 namespace VisCPU.Peripherals.Console
@@ -6,26 +7,27 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleInterfaceSettings
     {
+        public uint InterfacePresentPin { get; set; } = 0xFFFF1020;
 
-        public uint InterfacePresentPin { get; set; } = 0xFFFF1006;
+        public uint InterfaceClearPin { get; set; } = 0xFFFF1021;
 
-        public uint WidthAddr { get; set; } = 0xFFFF1007;
+        public uint WidthAddr { get; set; } = 0xFFFF1022;
 
-        public uint HeightAddr { get; set; } = 0xFFFF1008;
+        public uint HeightAddr { get; set; } = 0xFFFF1023;
 
-        public uint CursorLeftAddr { get; set; } = 0xFFFF1009;
+        public uint CursorLeftAddr { get; set; } = 0xFFFF1024;
 
-        public uint CursorTopAddr { get; set; } = 0xFFFF100A;
+        public uint CursorTopAddr { get; set; } = 0xFFFF1025;
 
-        public uint BackColorAddr { get; set; } = 0xFFFF100B;
+        public uint BackColorAddr { get; set; } = 0xFFFF1026;
 
-        public uint ForeColorAddr { get; set; } = 0xFFFF100C;
+        public uint ForeColorAddr { get; set; } = 0xFFFF1027;
 
-        public uint ResetColorAddr { get; set; } = 0xFFFF100D;
+        public uint ResetColorAddr { get; set; } = 0xFFFF1028;
 
-        public uint BufWidthAddr { get; set; } = 0xFFFF100E;
+        public uint BufWidthAddr { get; set; } = 0xFFFF1029;
 
-        public uint BufHeightAddr { get; set; } = 0xFFFF100F;
+        public uint BufHeightAddr { get; set; } = 0xFFFF102A;
 
         #region Public
 
@@ -40,7 +42,8 @@ namespace VisCPU.Peripherals.Console
                    addr == ForeColorAddr ||
                    addr == ResetColorAddr ||
                    addr == BufHeightAddr ||
-                   addr == BufWidthAddr;
+                   addr == BufWidthAddr ||
+                   addr == InterfaceClearPin;
         }
 
         #endregion

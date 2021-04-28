@@ -80,6 +80,32 @@ namespace VPP.Importer
             return s;
         }
 
+        public string EatNumber()
+        {
+            if(!char.IsDigit(m_Text, m_Position))
+                throw new Exception();
+            s_Builder.Clear();
+
+            s_Builder.Append(m_Text[m_Position]);
+            Eat(m_Text[m_Position]);
+            while (char.IsDigit(m_Text, m_Position))
+            {
+                s_Builder.Append(m_Text[m_Position]);
+                Eat(m_Text[m_Position]);
+            }
+
+            string s = s_Builder.ToString();
+            s_Builder.Clear();
+            return s;
+        }
+
+        public string EatWordOrNumber()
+        {
+            if (!IsWordBegin())
+                return EatNumber();
+            return EatWord();
+        }
+
         public string EatWord()
         {
             if (!IsWordBegin())

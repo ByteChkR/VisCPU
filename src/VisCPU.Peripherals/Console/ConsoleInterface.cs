@@ -19,6 +19,8 @@ namespace VisCPU.Peripherals.Console
 
         public override uint PresentPin => m_Settings.InterfacePresentPin;
 
+        public Action ConsoleClear { get; set; } = System.Console.Clear;
+
         #region Unity Event Functions
 
         public override void Reset()
@@ -98,7 +100,11 @@ namespace VisCPU.Peripherals.Console
 
         public override void WriteData( uint address, uint data )
         {
-            if ( address == m_Settings.CursorLeftAddr )
+            if (m_Settings.InterfaceClearPin == address)
+            {
+                ConsoleClear();
+            }
+            else if ( address == m_Settings.CursorLeftAddr )
             {
                 System.Console.CursorLeft = ( int ) data;
             }
