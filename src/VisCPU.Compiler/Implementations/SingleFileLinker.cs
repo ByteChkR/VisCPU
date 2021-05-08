@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.Compiler.Compiler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Compiler.Linking.Events;
@@ -11,7 +10,6 @@ namespace VisCPU.Compiler.Implementations
 
     public class SingleFileLinker : Linker
     {
-
         #region Public
 
         public override LinkerResult Link( LinkerTarget target, Compilation compilation )
@@ -22,19 +20,18 @@ namespace VisCPU.Compiler.Implementations
             }
 
             LinkerResult ret = new LinkerResult(
-                                                new[] { target },
-                                                target.FileCompilation.Constants,
-                                                target.FileCompilation.Labels,
-                                                target.FileCompilation.DataSectionHeader,
-                                                target.FileCompilation.Tokens.ToList(),
-                                                target.FileCompilation.DataSection.ToArray()
-                                               );
+                new[] { target },
+                target.FileCompilation.Constants,
+                target.FileCompilation.Labels,
+                target.FileCompilation.DataSectionHeader,
+                target.FileCompilation.Tokens.ToList(),
+                target.FileCompilation.DataSection.ToArray()
+            );
 
             return ret;
         }
 
         #endregion
-
     }
 
 }

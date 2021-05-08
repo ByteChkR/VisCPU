@@ -1,0 +1,63 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+private static uint kt_list(uint arg1, uint arg1L)
+{
+	string strFSCmd = "fs-info";
+	string strMallocCmd = "malloc-info";
+	if(str_cmp(&strFSCmd, size_of(strFSCmd), arg1, arg1L))
+	{
+		fs_info(0);
+		return;
+	}
+	else if(str_cmp(&strMallocCmd, size_of(strMallocCmd), arg1, arg1L))
+	{
+		mallocinfo();
+		return;
+	}
+	else
+	{
+		string strNotFound1 = "The System ";
+		string strNotFound2 = "was not found.";
+		kprint(&strNotFound1, size_of(strNotFound1));
+		kprint(arg1, arg1L);
+		kprintl(&strNotFound2, size_of(strNotFound2));
+	}
+}
+
+public static uint APP_START(uint args, uint argc)
+{
+	kprintnl(args);
+	kprintnl(argc);
+	uint firstSep = str_find_char(0x20, args, argc);
+	uint binName = args;
+	uint binNameL = firstSep;
+
+	string strRBin = "Running Binary: ";
+	kprint(&strRBin, size_of(strRBin));
+	kprintl(binName, binNameL);
+
+	uint argStart = firstSep + 1;
+	uint argLen = argc - argStart;
+	uint secondSep = str_find_char(0x20, args + argStart, argLen);
+	uint arg1 = args + argStart;
+	uint arg1L = secondSep;
+
+	uint arg2 = arg1+arg1L+1;
+	uint arg2L = argLen - arg1L;
+	arg2L--;
+
+	kprintnl(arg1);
+	kprintnl(arg1L);
+
+
+	string strListCmd = "list";
+	if(str_cmp(&strListCmd, size_of(strListCmd), arg1, arg1L))
+	{
+		kt_list(arg2, arg2L);
+		return;
+	}
+
+	string strInvalid = "Invalid Input: ";
+	kprint(&strInvalid, size_of(strInvalid));
+	kprintl(arg1, arg1L);
+}

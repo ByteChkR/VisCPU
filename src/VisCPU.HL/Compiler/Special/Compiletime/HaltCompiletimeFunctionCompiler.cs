@@ -8,7 +8,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class HaltCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
-
         public string FuncName => "halt";
 
         #region Public
@@ -18,10 +17,10 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 0 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new FunctionArgumentMismatchEvent(
-                                                           "Invalid Arguments. Expected halt()"
-                                                          )
-                                                     );
+                    new FunctionArgumentMismatchEvent(
+                        "Invalid Arguments. Expected halt()"
+                    )
+                );
             }
 
             compilation.EmitterResult.Emit( "HLT" );
@@ -30,7 +29,6 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
         }
 
         #endregion
-
     }
 
 }

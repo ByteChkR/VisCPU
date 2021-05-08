@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.ProjectSystem.Data;
@@ -11,16 +10,13 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
     public class ProjectAddDependencySubSystem : ConsoleSubsystem
     {
-
         private class AddDependencyConfig
         {
-
             [field: Argument( Name = "name" )]
             public string Name { get; set; } = "ModuleDependency";
 
             [field: Argument( Name = "version" )]
             public string Version { get; set; } = "ANY";
-
         }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
@@ -41,18 +37,13 @@ namespace VisCPU.Console.Core.Subsystems.Project
             ArgumentSyntaxParser.Parse( a.Skip( 1 ).ToArray(), config );
 
             t.Dependencies.Add(
-                               new ProjectDependency
-                               {
-                                   ProjectName = config.Name,
-                                   ProjectVersion = config.Version
-                               }
-                              );
+                new ProjectDependency { ProjectName = config.Name, ProjectVersion = config.Version }
+            );
 
             ProjectConfig.Save( Path.Combine( Directory.GetCurrentDirectory(), "project.json" ), t );
         }
 
         #endregion
-
     }
 
 }

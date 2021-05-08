@@ -1,0 +1,201 @@
+#include "DLREntry.vhl"
+#include "DLRBinaryHelper.vhl"
+#include "../Console.vhl"
+#include "../Utils/LinkedList.vhl"
+#include "../MemoryManagement/malloc.vhl"
+#include <../DiskManagement/FileSystem/fs.vhl>
+
+
+
+private static uint m_LoadedLibList;
+private static uint dlr_initFlag;
+
+
+public static void dlr_init()
+{
+	if(dlr_initFlag)
+	{
+		return;
+	}
+	uint ll = malloc(size_of(LinkedList));
+	LinkedList.new(ll);
+	m_LoadedLibList = ll;
+	dlr_initFlag = 1;
+}
+
+
+//Checks if a Libary has been loaded.
+//It Returns the Pointer to the DLREntry structure if found
+// 0 if lib is not loaded.
+private static uint dlr_has_loaded(string libPath, uint libPathLen)
+{
+	LinkedList lll = m_LoadedLibList;
+
+	for(uint i = 0; i < lll.Count(); i++)
+	{
+		DLREntry e = lll.Get(i);
+		if(e.IsName(libPath, libPathLen))
+		{
+			uint eP = e;
+			return eP;
+		}
+	}
+
+	return 0;
+}
+
+private static void dlr_inner_unload(uint l)
+{
+	DLREntry e = l;
+	e.Dispose();
+}
+
+public static uint dlr_unload_lib(string libPath, uint libPathLen)
+{
+	LinkedList lll = m_LoadedLibList;
+	uint l = dlr_has_loaded(libPath, libPathLen);
+	if(l)
+	{
+
+		lll.Remove(l);
+
+		string strDLRUnload = "[DLR] Unloading Lib: ";
+		kprint(&strDLRUnload, size_of(strDLRUnload));
+		kprintl(libPath, libPathLen);
+		dlr_inner_unload(l);
+	}
+}
+
+public static void dlr_unload_all()
+{
+	LinkedList lll = m_LoadedLibList;
+
+	uint c = lll.Count();
+
+	for(uint i = 0; i < c; i++)
+	{
+		DLREntry e = lll.Get(0);
+		lll.RemoveAt(0);
+		
+		string strDLRUnload = "[DLR] Unloading Lib: ";
+		kprint(&strDLRUnload, size_of(strDLRUnload));
+		kprintl(e.Name(), e.NameLength());
+		dlr_inner_unload(e);
+	}
+
+	return 0;
+}
+
+//Resolves a Library.
+//Initializes it OR uses Existing Loaded Library
+public static uint dlr_load_lib(string libPath, uint libPathLen)
+{
+	uint l = dlr_has_loaded(libPath, libPathLen);
+	if(l)
+	{
+		return l;
+	}
+	else
+	{
+		uint lP = dlr_inner_load_lib(libPath, libPathLen);
+		uint eP = DLREntry.AllocateEntry(libPath, libPathLen, lP);
+		
+		DLREntry e = eP;
+
+		LinkedList lll = m_LoadedLibList;
+		lll.Add(eP);
+
+		return eP;
+	}
+}
+
+//Loads the Library Data from the File System
+private static uint dlr_inner_load_lib(string libPath, uint libPathLen)
+{
+	uint ex = fs_exists(libPath, libPathLen);
+	if(!ex)
+	{
+		string fnf = "[DLR] File was not found: ";
+		kprint(&fnf, size_of(fnf));
+		kprintl(libPath, libPathLen);
+		interrupt(1);
+	}
+
+	string ldInfo = "[DLR] Loading Library: ";
+	kprint(&ldInfo, size_of(ldInfo));
+	kprintl(libPath, libPathLen);
+
+	uint libSize = fs_getsize(libPath, libPathLen);
+	uint libPtr = malloc(libSize);
+
+	uint libFile = fs_open(libPath, libPathLen);
+	
+	f_readbuf(libFile, libPtr, libSize);
+	fs_close(libFile);
+	
+
+	DLRBinaryHelper.PatchSymbolTable(libPtr);
+	DLRBinaryHelper.PatchPICBinary(libPtr);
+
+	return libPtr;
+}
+
+
+//Resolves a Call Site inside an external Library
+public static uint dlr_resolve_call(uint lib, string funcName, uint funcNameLen)
+{
+
+	DLREntry e = lib;
+	
+
+	uint ptr = e.LibPointer();
+	uint c = DLRBinaryHelper.GetSymbolEntryCount(ptr);
+	for(uint i = 0; i < c; i++)
+	{
+		uint eStart = DLRBinaryHelper.GetSymbolEntry(ptr, i);
+		uint eNStart = DLRBinaryHelper.GetSymbolEntryName(eStart);
+		uint eNLen = DLRBinaryHelper.GetSymbolEntryNameSize(eStart);
+		if(dlr_strcmp(eNStart, eNLen, funcName, funcNameLen))
+		{
+			uint site = DLRBinaryHelper.GetSymbolEntrySite(eStart);
+			return site;
+		}
+	}
+
+	string cre = "[DLR] Can not Find Site: ";
+	string cre1 = "in Library: ";
+	kprint(&cre, size_of(cre));
+	kprint(funcName, funcNameLen);
+	kprintc(0x20);
+	kprint(&cre1, size_of(cre1));
+	kprintl(e.Name(), e.NameLength());
+	interrupt(1); //Can not Resolve Call Site
+}
+
+//Compares 2 Strings
+private static uint dlr_strcmp(string s1, uint s1L, string s2, uint s2L)
+{
+	if(s1L != s2L)
+	{
+		return 0;
+	}
+
+	for(uint i = 0 ; i < s1L; i++)
+	{
+		uint v1 = s1[i];
+		uint v2 = s2[i];
+		if(v1 != v2)
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+
+
+public static void dlr_uninit()
+{
+	dlr_unload_all();
+	free(m_LoadedLibList);
+	dlr_initFlag = 0;
+}

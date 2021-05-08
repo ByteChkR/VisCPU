@@ -12,7 +12,6 @@ namespace OpenCL.NET.Interop.Devices
     /// </summary>
     public enum DeviceInformation : uint
     {
-
         /// <summary>
         ///     The OpenCL device type.
         /// </summary>
@@ -659,7 +658,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     implementation.
         /// </summary>
         SpirVersion = 0x40E0
-
     }
 
 }

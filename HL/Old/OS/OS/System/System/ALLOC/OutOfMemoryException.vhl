@@ -1,0 +1,21 @@
+#include "../Exception.vhl"
+
+private static string S_OUT_OF_MEMORY = "The System ran out of Memory.";
+
+public class OutOfMemoryException : Exception
+{
+	public static OutOfMemoryException()
+	{
+		
+	}
+
+	public override uint GetMessage()
+	{
+		return &S_OUT_OF_MEMORY;
+	}
+
+	public override uint GetMessageLength()
+	{
+		return size_of(S_OUT_OF_MEMORY);
+	}
+}

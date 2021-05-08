@@ -8,7 +8,6 @@ namespace OpenCL.Wrapper.Exceptions
     /// </summary>
     public class InvalidFolderPathException : Exception
     {
-
         #region Public
 
         /// <summary>
@@ -17,11 +16,11 @@ namespace OpenCL.Wrapper.Exceptions
         /// <param name="folderpath">The Folder that was not found</param>
         /// <param name="inner">Inner exeption</param>
         public InvalidFolderPathException( string folderpath, Exception inner ) : base(
-             "The folder " +
-             folderpath +
-             " could not be found.",
-             inner
-            )
+            "The folder " +
+            folderpath +
+            " could not be found.",
+            inner
+        )
         {
         }
 
@@ -34,7 +33,6 @@ namespace OpenCL.Wrapper.Exceptions
         }
 
         #endregion
-
     }
 
 }

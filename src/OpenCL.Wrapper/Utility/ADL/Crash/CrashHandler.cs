@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
-
 using Utility.ADL.Configs;
 
 namespace Utility.ADL.Crash
@@ -9,14 +8,11 @@ namespace Utility.ADL.Crash
 
     public static class CrashHandler
     {
-
         private enum CrashLogType
         {
-
             CrashShort,
             Error,
             Crash
-
         }
 
         private static bool initialized;
@@ -192,7 +188,6 @@ namespace Utility.ADL.Crash
         }
 
         #endregion
-
     }
 
 }

@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Profiling
     /// </summary>
     public static class ProfilingNativeApi
     {
-
         #region Public
 
         /// <summary>
@@ -48,19 +47,13 @@ namespace OpenCL.NET.Interop.Profiling
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetEventProfilingInfo" )]
         public static extern Result GetEventProfilingInformation(
-            [In]
-            IntPtr eventHandle,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            ProfilingInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr eventHandle,
+            [In] [MarshalAs( UnmanagedType.U4 )] ProfilingInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         #endregion
-
     }
 
 }

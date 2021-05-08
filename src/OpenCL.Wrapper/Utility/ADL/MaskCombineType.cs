@@ -6,7 +6,6 @@
     /// </summary>
     public enum MaskCombineType
     {
-
         /// <summary>
         ///     Add everything that both "tables" have
         /// </summary>
@@ -16,7 +15,6 @@
         ///     Add only flags that is represented in both tables
         /// </summary>
         BitAnd = 1
-
     }
 
 }

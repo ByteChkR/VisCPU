@@ -1,5 +1,4 @@
-﻿using VisCPU.Utility.ArgumentParser;
-using VisCPU.Utility.IO.Settings;
+﻿using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.IO.Settings.Loader;
 
 namespace VisCPU.Peripherals.Console
@@ -55,15 +54,14 @@ namespace VisCPU.Peripherals.Console
             SettingsCategory coutCategory = Peripheral.PeripheralCategory.AddCategory( "console" );
 
             SettingsManager.RegisterDefaultLoader(
-                                                  new JsonSettingsLoader(),
-                                                  coutCategory,
-                                                  "management.json",
-                                                  new ConsoleInterfaceSettings()
-                                                 );
+                new JsonSettingsLoader(),
+                coutCategory,
+                "management.json",
+                new ConsoleInterfaceSettings()
+            );
         }
 
         #endregion
-
     }
 
 }

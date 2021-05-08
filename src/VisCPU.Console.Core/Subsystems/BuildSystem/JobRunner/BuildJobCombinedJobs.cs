@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Utility.ProjectSystem.BuildSystem;
 using VisCPU.Utility.ProjectSystem.Data;
 
@@ -8,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobCombinedJobs : BuildJobRunner
     {
-
         public override string RunnerName => "combined";
 
         #region Public
@@ -27,7 +25,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
-
     }
 
 }

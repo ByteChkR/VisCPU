@@ -3,7 +3,6 @@
 
     public class GreaterEqualExpressionCompiler : RelationalExpressionCompiler
     {
-
         protected override string InstructionKey => "BGE";
 
         #region Public
@@ -14,7 +13,6 @@
         }
 
         #endregion
-
     }
 
 }

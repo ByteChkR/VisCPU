@@ -5,7 +5,6 @@ namespace VisCPU.Utility
 
     public static class AppRootHelper
     {
-
         public static string AppRoot { get; private set; }
 
         #region Public
@@ -21,7 +20,6 @@ namespace VisCPU.Utility
         }
 
         #endregion
-
     }
 
 }

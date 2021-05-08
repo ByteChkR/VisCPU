@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Devices
     [Flags]
     public enum DeviceSvmCapabilities : ulong
     {
-
         /// <summary>
         ///     Support for coarse-grain buffer sharing using <see cref="SvmAllocate" />. Memory consistency is guaranteed at
         ///     synchronization points and the host must use calls to <see cref="EnqueueMapBuffer" /> and
@@ -39,7 +38,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     supporting fine-grain SVM allocations.
         /// </summary>
         Atomics = 1 << 3
-
     }
 
 }

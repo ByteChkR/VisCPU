@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Utility.ADL;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.FastString;
@@ -15,7 +14,6 @@ namespace Utility.ExtPP.Base
     /// </summary>
     public static class Utils
     {
-
         /// <summary>
         ///     A Delegate used to create different parsers
         /// </summary>
@@ -31,25 +29,13 @@ namespace Utility.ExtPP.Base
         ///     The List of implemented parsers.
         /// </summary>
         private static readonly Dictionary < Type, TryParse > Parser = new Dictionary < Type, TryParse >
-                                                                       {
-                                                                           {
-                                                                               typeof( string ),
-                                                                               CreateTryParser < string >()
-                                                                           },
-                                                                           { typeof( int ), CreateTryParser < int >() },
-                                                                           {
-                                                                               typeof( float ),
-                                                                               CreateTryParser < float >()
-                                                                           },
-                                                                           {
-                                                                               typeof( char ),
-                                                                               CreateTryParser < char >()
-                                                                           },
-                                                                           {
-                                                                               typeof( bool ),
-                                                                               CreateTryParser < bool >()
-                                                                           }
-                                                                       };
+        {
+            { typeof( string ), CreateTryParser < string >() },
+            { typeof( int ), CreateTryParser < int >() },
+            { typeof( float ), CreateTryParser < float >() },
+            { typeof( char ), CreateTryParser < char >() },
+            { typeof( bool ), CreateTryParser < bool >() }
+        };
 
         #region Public
 
@@ -212,10 +198,10 @@ namespace Utility.ExtPP.Base
                     if ( source[i].Trim().StartsWith( t ) )
                     {
                         Logger.Log(
-                                   LogType.Log,
-                                   string.Format( "Removing statement {0} on line {1}", t, i ),
-                                   7
-                                  );
+                            LogType.Log,
+                            string.Format( "Removing statement {0} on line {1}", t, i ),
+                            7
+                        );
 
                         source.RemoveAt( i );
 
@@ -294,58 +280,58 @@ namespace Utility.ExtPP.Base
             if ( typeof( T ) == typeof( int ) )
             {
                 ret = ( string val, out object value ) =>
-                      {
-                          bool r = int.TryParse( val, out int v );
-                          value = v;
+                {
+                    bool r = int.TryParse( val, out int v );
+                    value = v;
 
-                          return r;
-                      };
+                    return r;
+                };
             }
             else if ( typeof( T ) == typeof( float ) )
             {
                 ret = ( string val, out object value ) =>
-                      {
-                          bool r = float.TryParse( val, out float v );
-                          value = v;
+                {
+                    bool r = float.TryParse( val, out float v );
+                    value = v;
 
-                          return r;
-                      };
+                    return r;
+                };
             }
             else if ( typeof( T ) == typeof( char ) )
             {
                 ret = ( string val, out object value ) =>
-                      {
-                          bool r = char.TryParse( val, out char v );
-                          value = v;
+                {
+                    bool r = char.TryParse( val, out char v );
+                    value = v;
 
-                          return r;
-                      };
+                    return r;
+                };
             }
             else if ( typeof( T ) == typeof( bool ) )
             {
                 ret = ( string val, out object value ) =>
-                      {
-                          bool r = bool.TryParse( val, out bool v );
+                {
+                    bool r = bool.TryParse( val, out bool v );
 
-                          if ( string.IsNullOrEmpty( val ) )
-                          {
-                              r = true;
-                              v = true;
-                          }
+                    if ( string.IsNullOrEmpty( val ) )
+                    {
+                        r = true;
+                        v = true;
+                    }
 
-                          value = v;
+                    value = v;
 
-                          return r;
-                      };
+                    return r;
+                };
             }
             else if ( typeof( T ) == typeof( string ) )
             {
                 ret = ( string val, out object value ) =>
-                      {
-                          value = val;
+                {
+                    value = val;
 
-                          return true;
-                      };
+                    return true;
+                };
             }
 
             return ret;
@@ -408,7 +394,6 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
-
     }
 
 }

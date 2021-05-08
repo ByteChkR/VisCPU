@@ -1,0 +1,65 @@
+public class String
+{
+	public static void Pack(uint str, uint len, uint ptr)
+	{
+		uint packedSize = len/4;
+		if(len % 4 != 0)
+		{
+			packedSize++;
+		}
+		for(uint i = 0; i < packedSize;i++)
+		{
+			uint uv0 = str[i];
+			uint uv1 = str[i+1];
+			uint uv2 = str[i+2];
+			uint uv3 = str[i+3];
+			
+			//Packing Characters
+			ptr[i] = uv0 | (uv1 << 8) | (uv2 << 16) | (uv3 << 24);
+		}
+	}
+
+	public static void Unpack(uint str, uint len, uint ptr)
+	{
+		uint packedSize = len / 4; //Size of UINT
+		if(len % 4 != 0)
+		{
+			packedSize++;
+		}
+		uint ptrPos = 0;
+		for(uint i = 0; i < packedSize; i++)
+		{
+			uint pv = str[i];
+			
+			uint uv0 = pv & 0xFF;
+			uint uv1 = (pv & 0xFF00) >> 8;
+			uint uv2 = (pv & 0xFF0000) >> 16;
+			uint uv3 = (pv & 0xFF000000) >> 24;
+
+			if(!uv0)
+			{
+				return;
+			}
+			ptr[ptrPos] = uv0;
+
+			if(!uv1)
+			{
+				return;
+			}
+			ptr[ptrPos+1] = uv1;
+
+			if(!uv2)
+			{
+				return;
+			}
+			ptr[ptrPos+2] = uv2;
+
+			if(!uv3)
+			{
+				return;
+			}
+			ptr[ptrPos+3] = uv3;
+			ptrPos+=4;
+		}
+	}
+}

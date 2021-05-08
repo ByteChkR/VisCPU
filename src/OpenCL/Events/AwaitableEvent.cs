@@ -2,7 +2,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-
 using OpenCL.NET.CommandQueues;
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Events;
@@ -20,7 +19,6 @@ namespace OpenCL.NET.Events
     /// </summary>
     public class AwaitableEvent : HandleBase
     {
-
         /// <summary>
         ///     A delegate for the callback of wait event.
         /// </summary>
@@ -83,76 +81,76 @@ namespace OpenCL.NET.Events
         {
             // Subscribes to the event callbacks of the OpenCL event, so that a CLR event can be raised
             EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             ( int ) CommandExecutionStatus.Queued,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData ) =>
-                                                                                 OnQueued?.Invoke(
-                                                                                      this,
-                                                                                      new
-                                                                                          EventArgs()
-                                                                                     )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
+                Handle,
+                ( int ) CommandExecutionStatus.Queued,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnQueued?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
 
             EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             ( int ) CommandExecutionStatus.Submitted,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData ) =>
-                                                                                 OnSubmitted?.Invoke(
-                                                                                      this,
-                                                                                      new
-                                                                                          EventArgs()
-                                                                                     )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
+                Handle,
+                ( int ) CommandExecutionStatus.Submitted,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnSubmitted?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
 
             EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             ( int ) CommandExecutionStatus.Running,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData ) =>
-                                                                                 OnRunning?.Invoke(
-                                                                                      this,
-                                                                                      new
-                                                                                          EventArgs()
-                                                                                     )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
+                Handle,
+                ( int ) CommandExecutionStatus.Running,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnRunning?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
 
             EventsNativeApi.SetEventCallback(
-                                             Handle,
-                                             ( int ) CommandExecutionStatus.Complete,
-                                             Marshal.GetFunctionPointerForDelegate(
-                                                  new AwaitableEventCallback(
-                                                                             (
-                                                                                     waitEvent,
-                                                                                     userData ) =>
-                                                                                 OnCompleted?.Invoke(
-                                                                                      this,
-                                                                                      new
-                                                                                          EventArgs()
-                                                                                     )
-                                                                            )
-                                                 ),
-                                             IntPtr.Zero
-                                            );
+                Handle,
+                ( int ) CommandExecutionStatus.Complete,
+                Marshal.GetFunctionPointerForDelegate(
+                    new AwaitableEventCallback(
+                        (
+                                waitEvent,
+                                userData ) =>
+                            OnCompleted?.Invoke(
+                                this,
+                                new
+                                    EventArgs()
+                            )
+                    )
+                ),
+                IntPtr.Zero
+            );
         }
 
         /// <summary>
@@ -193,12 +191,12 @@ namespace OpenCL.NET.Events
 
             Result result =
                 EventsNativeApi.GetEventInformation(
-                                                    Handle,
-                                                    eventInformation,
-                                                    UIntPtr.Zero,
-                                                    null,
-                                                    out returnValueSize
-                                                   );
+                    Handle,
+                    eventInformation,
+                    UIntPtr.Zero,
+                    null,
+                    out returnValueSize
+                );
 
             if ( result != Result.Success )
             {
@@ -209,12 +207,12 @@ namespace OpenCL.NET.Events
             byte[] output = new byte[returnValueSize.ToUInt32()];
 
             result = EventsNativeApi.GetEventInformation(
-                                                         Handle,
-                                                         eventInformation,
-                                                         new UIntPtr( ( uint ) output.Length ),
-                                                         output,
-                                                         out returnValueSize
-                                                        );
+                Handle,
+                eventInformation,
+                new UIntPtr( ( uint ) output.Length ),
+                output,
+                out returnValueSize
+            );
 
             if ( result != Result.Success )
             {
@@ -226,7 +224,6 @@ namespace OpenCL.NET.Events
         }
 
         #endregion
-
     }
 
 }

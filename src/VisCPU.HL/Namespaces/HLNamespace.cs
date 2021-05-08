@@ -8,7 +8,6 @@ namespace VisCPU.HL.Namespaces
 
     public class HlNamespace : IEnumerable < HlNamespace >
     {
-
         public const string NS_SEPARATOR = "::";
 
         private readonly string m_Name;
@@ -190,7 +189,6 @@ namespace VisCPU.HL.Namespaces
         }
 
         #endregion
-
     }
 
 }

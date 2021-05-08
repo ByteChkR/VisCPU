@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
 
@@ -9,7 +8,6 @@ namespace VisCPU.Utility.IO.UriResolvers
 
     public abstract class UriResolver : VisBase
     {
-
         protected override LoggerSystems SubSystem => LoggerSystems.UriResolver;
 
         #region Public
@@ -45,10 +43,9 @@ namespace VisCPU.Utility.IO.UriResolvers
         private static UriResolver GetResolver( string tempPath, string uri )
         {
             List < UriResolver > resolvers = new List < UriResolver >
-                                             {
-                                                 new HttpUriResolver( tempPath ),
-                                                 new FileUriResolver()
-                                             };
+            {
+                new HttpUriResolver( tempPath ), new FileUriResolver()
+            };
 
             UriResolver r = resolvers.FirstOrDefault( x => x.CanResolve( uri ) );
 
@@ -56,7 +53,6 @@ namespace VisCPU.Utility.IO.UriResolvers
         }
 
         #endregion
-
     }
 
 }

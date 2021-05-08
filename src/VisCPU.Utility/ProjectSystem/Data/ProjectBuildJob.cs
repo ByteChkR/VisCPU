@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
 using Newtonsoft.Json;
 
 namespace VisCPU.Utility.ProjectSystem.Data
@@ -8,7 +7,6 @@ namespace VisCPU.Utility.ProjectSystem.Data
 
     public class ProjectBuildJob
     {
-
         public string JobName { get; set; }
 
         public string BuildJobRunner { get; set; }
@@ -35,13 +33,12 @@ namespace VisCPU.Utility.ProjectSystem.Data
         public static string Serialize( ProjectBuildJob config )
         {
             return JsonConvert.SerializeObject(
-                                               config,
-                                               Formatting.Indented
-                                              );
+                config,
+                Formatting.Indented
+            );
         }
 
         #endregion
-
     }
 
 }

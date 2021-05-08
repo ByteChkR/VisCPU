@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Console.Core.Subsystems.BuildSystem;
 using VisCPU.Utility.Logging;
 
@@ -8,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
     public class ProjectSubSystem : ConsoleSystem
     {
-
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {
@@ -21,7 +19,6 @@ namespace VisCPU.Console.Core.Subsystems.Project
             };
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
-
     }
 
 }

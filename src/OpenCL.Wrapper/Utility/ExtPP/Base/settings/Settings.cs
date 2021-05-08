@@ -7,7 +7,6 @@ namespace Utility.ExtPP.Base.settings
 
     public class Settings
     {
-
         /// <summary>
         ///     Dictionary to store the settings for processing
         /// </summary>
@@ -52,12 +51,12 @@ namespace Utility.ExtPP.Base.settings
             }
 
             string[] val = Utils.ParseArray(
-                                            info.Field.PropertyType.IsArray
-                                                ? info.Field.PropertyType.GetElementType()
-                                                : info.Field.PropertyType,
-                                            cmdVal,
-                                            info.DefaultIfNotSpecified
-                                           ).
+                                     info.Field.PropertyType.IsArray
+                                         ? info.Field.PropertyType.GetElementType()
+                                         : info.Field.PropertyType,
+                                     cmdVal,
+                                     info.DefaultIfNotSpecified
+                                 ).
                                  OfType < string >().
                                  ToArray();
 
@@ -293,7 +292,6 @@ namespace Utility.ExtPP.Base.settings
         }
 
         #endregion
-
     }
 
 }

@@ -6,7 +6,6 @@
     /// </summary>
     public enum Verbosity
     {
-
         /// <summary>
         ///     Lowest Verbosity Level, no output on console.
         /// </summary>
@@ -39,7 +38,6 @@
         ///     Highest Level of verbosity, you will get every log that gets sent.
         /// </summary>
         Level20
-
     }
 
 }

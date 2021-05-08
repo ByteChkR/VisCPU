@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.DataTypes
@@ -7,6 +6,12 @@ namespace VisCPU.HL.DataTypes
 
     public struct VariableData : IExternalData, IEquatable < VariableData >
     {
+        public int UseCount { get; private set; }
+
+        public void SetUsed()
+        {
+            UseCount++;
+        }
 
         public ExternalDataType DataType { get; }
 
@@ -42,6 +47,7 @@ namespace VisCPU.HL.DataTypes
             VariableDataEmitFlags emFlags,
             ExternalDataType dt = ExternalDataType.Variable )
         {
+            UseCount = 0;
             DataType = dt;
             InitContent = null;
             Size = dataSize;
@@ -58,6 +64,7 @@ namespace VisCPU.HL.DataTypes
             HlTypeDefinition tdef,
             VariableDataEmitFlags emFlags )
         {
+            UseCount = 0;
             DataType = ExternalDataType.Variable;
             m_Name = name;
             m_FinalName = finalName;
@@ -125,7 +132,6 @@ namespace VisCPU.HL.DataTypes
             return
                 $":data {GetFinalName()} {Size} {linkerArgs}";
         }
-
     }
 
 }

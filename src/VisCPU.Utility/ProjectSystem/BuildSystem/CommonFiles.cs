@@ -1,5 +1,4 @@
 ﻿using System.IO;
-
 using VisCPU.Utility.ProjectSystem.Data;
 
 namespace VisCPU.Utility.ProjectSystem.BuildSystem
@@ -7,7 +6,6 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
 
     public static class CommonFiles
     {
-
         #region Public
 
         public static void GenerateCommonFiles()
@@ -75,9 +73,9 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             if ( !File.Exists( Path.Combine( rootDir, "Program.vhl" ) ) )
             {
                 File.WriteAllText(
-                                  Path.Combine( rootDir, "Program.vhl" ),
-                                  @"//Entry Point of Project"
-                                 );
+                    Path.Combine( rootDir, "Program.vhl" ),
+                    @"//Entry Point of Project"
+                );
             }
         }
 
@@ -102,6 +100,8 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "false";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "false";
+            debugBuildJob.Arguments["compiler:strip-unused-functions"] = "false";
+
             debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Inline";
 
             return debugBuildJob;
@@ -185,6 +185,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-reduce-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-if-expr"] = "true";
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "true";
+            debugBuildJob.Arguments["compiler:strip-unused-functions"] = "false";
             debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Inline";
 
             return debugBuildJob;
@@ -305,7 +306,6 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
         }
 
         #endregion
-
     }
 
 }

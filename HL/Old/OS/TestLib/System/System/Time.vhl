@@ -1,0 +1,30 @@
+public class Time
+{
+
+	public static uint GetMinutes(uint t)
+	{
+		return t / 60;
+	}
+
+	public static uint GetHours(uint t)
+	{
+		return Time.GetMinutes(t) / 60;
+	}
+
+	public static uint GetMinuteInHour(uint t)
+	{
+		return Time.GetMinutes(t) % 60;
+	}
+
+	public static uint GetHourInDay(uint t)
+	{
+		return Time.GetHours(t) % 24;
+	}
+
+	public static uint GetSecondInMinute(uint t)
+	{
+		return t % 60;
+	}
+
+
+}

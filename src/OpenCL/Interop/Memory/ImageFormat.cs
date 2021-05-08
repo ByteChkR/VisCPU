@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Memory
     [StructLayout( LayoutKind.Sequential )]
     public struct ImageFormat
     {
-
         #region Public Properties
 
         /// <summary>
@@ -29,7 +28,6 @@ namespace OpenCL.NET.Interop.Memory
         public ChannelType ChannelDataType;
 
         #endregion
-
     }
 
 }

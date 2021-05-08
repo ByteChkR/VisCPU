@@ -1,0 +1,120 @@
+#include "../Utils/LinkedList.vhl"
+#include "../Console.vhl"
+#include "Drivers/STOREDRV.vhl"
+#include "Partition.vhl"
+#include <../KernelSettings.vhl>
+
+public class PartitionTable
+{
+	private uint m_Device;
+	private uint m_List;
+	public static PartitionTable(uint dev)
+	{	
+		string strPTInit = "[PT] Reading from Disk";
+		kprintl(&strPTInit, size_of(strPTInit));
+		this.m_Device = dev;
+		uint lp = malloc(size_of(LinkedList));
+		LinkedList.new(lp);
+		this.m_List = lp;
+		this.Populate();
+	}
+
+	private static void Format(STOREDRV drv)
+	{
+		uint s = drv.GetSize();
+		for(uint i = 0; i < s; i++)
+		{
+			drv.Write(i, 0);
+		}
+	}
+
+
+	public static void WriteDefault(STOREDRV drv)
+	{
+		if(K_PTABLE_FORMAT_ON_CREATE)
+		{
+			PartitionTable.Format(drv);
+		}
+
+		drv.Write(0, 65535);
+		uint dataLen = drv.GetSize() - 65538;
+		drv.Write(65537, dataLen);
+
+	}
+
+	private uint FindNextHeader(uint current)
+	{
+		STOREDRV d = this.m_Device;
+		uint pLen = d.Read(current);
+		return current + pLen + 2; //Current + Partition Length + 2
+	}
+
+	private void Populate()
+	{
+		string strPartFound = "[PT] Found Partition: ";
+		uint lstPtr = this.m_List;
+		LinkedList lst = lstPtr;
+		uint dp = this.m_Device;
+		STOREDRV d = dp;
+		uint sz = d.GetSize();
+
+		uint cur = 0;
+		uint partCount = 0;
+		while(cur < sz)
+		{
+			uint l = d.Read(cur);
+			if(!l)
+			{
+				string errStr = "Can not read Partition Table. Restoring Table and formatting drive, the CPU will crash once repairs finished.";
+				kprintl(&errStr, size_of(errStr));
+				PartitionTable.WriteDefault(d);
+				interrupt(1); //0 length partition
+			}
+			kprint(&strPartFound, size_of(strPartFound));
+			kprintnl(partCount);
+			uint ptr = malloc(size_of(Partition));
+			Partition.new(ptr, dp, cur+1, l);
+			lst.Add(ptr);
+			cur = this.FindNextHeader(cur);
+			partCount++;
+		}
+	}
+
+	public uint GetPartitionCount()
+	{
+		LinkedList l = this.m_List;
+		uint c = l.Count();
+		return c;
+	}
+
+
+	public uint GetPartition(uint num)
+	{
+		LinkedList l = this.m_List;
+		uint c = l.Get(num);
+		return c;
+	}
+
+	public uint GetDevice()
+	{
+		uint v = this.m_Device;
+		return v;
+	}
+
+	public void Unload()
+	{
+		uint c = this.GetPartitionCount();
+		for(uint i = 0; i < c; i++)
+		{
+			Partition p = this.GetPartition(i);
+			free(p);
+		}
+		uint d = this.GetDevice();
+		LinkedList l = this.m_List;
+		free(d);
+		l.Clear();
+		uint ll = l;
+		free(ll);
+		free(this);
+	}
+}

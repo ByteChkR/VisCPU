@@ -8,7 +8,6 @@ namespace Utility.ExtPP.API.Exceptions
     /// </summary>
     public class TextProcessingException : Exception
     {
-
         #region Public
 
         public TextProcessingException( string errorMessage, ApplicationException inner ) : base( errorMessage, inner )
@@ -16,7 +15,6 @@ namespace Utility.ExtPP.API.Exceptions
         }
 
         #endregion
-
     }
 
 }

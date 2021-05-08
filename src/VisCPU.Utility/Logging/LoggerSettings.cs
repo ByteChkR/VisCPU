@@ -5,7 +5,6 @@ namespace VisCPU.Utility.Logging
 
     public class LoggerSettings
     {
-
         [field: Argument( Name = "log" )]
         private LoggerSystems m_EnabledSystems = LoggerSystems.Default;
 
@@ -25,7 +24,6 @@ namespace VisCPU.Utility.Logging
         }
 
         #endregion
-
     }
 
 }

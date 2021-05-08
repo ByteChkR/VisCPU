@@ -11,7 +11,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
     /// </summary>
     public abstract class HlExpression : IHlToken
     {
-
         /// <summary>
         ///     Start index in source
         /// </summary>
@@ -46,7 +45,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         }
 
         #endregion
-
     }
 
 }

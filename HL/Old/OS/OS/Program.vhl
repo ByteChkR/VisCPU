@@ -1,0 +1,191 @@
+#enable HL_LOC_MAKE_GLOBAL
+#enable HL_OPT_NO_STRIP
+
+#define LIB_INJECT_SAFE_WRITE 1
+#define LIB_INJECT_MAKE_NEW 1
+#define DISK_FORMAT_BUFFER_SIZE 256
+
+#include <System/System.vhl>
+#include <System/Header/sys.vhl>
+#include <System/Header/stdio.vhl>
+#include <System/Header/stdmm.vhl>
+#include "DynamicLinker/DLR.vhl"
+#include "testlib.vasm" TEST_LIB TEST_LIB_LEN TEST_APP TEST_APP_LEN
+//Entry Point of Project
+
+Console.Clear();
+
+//Initialize System Library. With Template from sys.vhl
+sysinit();
+
+
+if(LIB_INJECT_MAKE_NEW)
+{
+
+	DiskTable dt = SystemCore.GetDiskTable();
+
+	PartitionTable pt = dt.GetPartitionTable(0);
+
+	STOREDRV driver = pt.GetDevice();
+
+	uint diskSize = driver.GetSize();
+	
+	if(LIB_INJECT_SAFE_WRITE)
+	{
+		string strFormatSafe = "Formatting in safe mode...";
+		Console.Write(&strFormatSafe, size_of(strFormatSafe));
+		for(uint i = 0; i < diskSize; i++)
+		{
+			driver.Write(i, 0);
+		}
+	}
+	else
+	{
+		string strInitFormatBuffer = "Initializing format buffer (sz:";
+		Console.Write(&strInitFormatBuffer, size_of(strInitFormatBuffer));
+		Console.WriteNumber(DISK_FORMAT_BUFFER_SIZE);
+		string strInitFormatAddr = ") ==> Address: ";
+		Console.Write(&strInitFormatAddr, size_of(strInitFormatAddr));
+
+		uint m = mallocs(DISK_FORMAT_BUFFER_SIZE);
+		Console.WriteNumberLine(m);
+		for(uint i = 0; i < DISK_FORMAT_BUFFER_SIZE; i++)
+		{
+			m[i] = 0;
+		}
+		string strInitFinished = "Initialization Finished. Formatting...";
+		Console.Write(&strInitFinished, size_of(strInitFinished));
+
+		
+		uint writeLeft = diskSize;
+		uint writeSize = DISK_FORMAT_BUFFER_SIZE;
+		uint writes = 0;
+		uint maxWrites = diskSize / DISK_FORMAT_BUFFER_SIZE;
+		uint mod = maxWrites / 10;
+		while(writeLeft)
+		{
+			if((writes % mod) == 0)
+			{
+				Console.WriteChar('.');
+			}
+			if(writeLeft < DISK_FORMAT_BUFFER_SIZE)
+			{
+				writeSize = writeLeft;
+			}
+			driver.WriteBuffer(writes * DISK_FORMAT_BUFFER_SIZE, m, writeSize);
+			writeLeft -= writeSize;
+			writes++;
+		}
+
+		free(m);
+		Console.WriteChar('\n');
+	}
+	
+
+	
+}
+
+//Create File System Wrapper Function for File System Class
+create_fsysinit(FileSystem) //Note: no semicolon because this is a function that gets inlined into this script
+
+//Use the File System Wrapper Function to Create the File System.
+//0: File System Class Name
+//1: Disk ID
+//2: Partition ID
+FileSystem fs = fsinit(FileSystem, 0, 1);
+string libPath = "libs/system.vbin";
+string appPath = "apps/testapp.vbin";
+
+public static void OS_WriteChar(uint c)
+{
+	Console.WriteChar(c);
+}
+
+public static uint OS_LoadLib(string libPath, uint pathLength)
+{
+	uint v = DLR.LoadLib(libPath, size_of(pathLength));
+	return v;
+}
+
+public static uint OS_ResolveCall(uint lib, string site, uint length)
+{
+	uint v = DLR.ResolveCallSite(lib, site, length);
+	return v;
+}
+
+public class OS
+{
+	public static void Run()
+	{
+
+		private static string s_OSStarted = "OS Initialized!";
+		Console.WriteLine(&s_OSStarted, size_of(s_OSStarted));
+
+		uint pfs = fs;
+		DLR.Initialize(pfs);
+
+
+		uint p = DLR.LoadLib(&appPath, size_of(appPath));
+		string siteName = "APP_START";
+		uint callSite = DLR.ResolveCallSite(p, &siteName, size_of(siteName));
+		string fakeArgs = "testapp.vbin arg1 arg2";
+		callSite(&fakeArgs, size_of(fakeArgs)); //Invoke Call Site
+	}
+
+	private void Loop()
+	{
+
+	}
+
+}
+
+private static void InjectLib(string libPath, uint pathLen, uint ptr, uint len)
+{
+		
+	//Inject Test Lib into FS
+	uint existsLib = fs.Exists(libPath, pathLen);
+	if(!existsLib)
+	{
+		string sLibPatch = "Injecting: ";
+		Console.Write(&sLibPatch, size_of(sLibPatch));
+		Console.WriteLine(libPath, pathLen);
+
+		FileStream fstream = fs.Create(libPath, pathLen);
+
+		uint v = ptr;
+		uint v1 = len;
+		uint l = v1 - v;
+		string tlSize = "Test Lib Size: ";
+		Console.Write(&tlSize, size_of(tlSize));
+		Console.WriteNumberLine(l);
+
+		if(LIB_INJECT_SAFE_WRITE)
+		{
+			string strWriteSafe = "Safe Write Enabled";
+			Console.WriteLine(&strWriteSafe, size_of(strWriteSafe));
+			for(uint i = 0; i < l; i++)
+			{
+				uint val = v[i];
+				fstream.Write(val);
+			}
+		}
+		else
+		{			
+			string strWriteUnSafe = "Unsafe Write Enabled";
+			Console.WriteLine(&strWriteUnSafe, size_of(strWriteUnSafe));
+			fstream.WriteBuffer(v, l);
+		}
+
+		fs.Close(fstream);
+		fs.WriteInfo();
+		
+	}
+
+}
+
+InjectLib(&libPath, size_of(libPath), TEST_LIB, TEST_LIB_LEN);
+InjectLib(&appPath, size_of(appPath), TEST_APP, TEST_APP_LEN);
+
+
+OS.Run();
+

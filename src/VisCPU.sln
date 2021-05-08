@@ -45,7 +45,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SIMD", "SIMD", "{7168552A-2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.SIMD", "VisCPU.SIMD\VisCPU.SIMD.csproj", "{80165C84-057F-42B1-9AF6-C32993E610AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPP.Importer", "VPP.Importer\VPP.Importer.csproj", "{B2DD327B-42F5-4173-9BDC-FD0B28AEA69C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VPP.Importer", "VPP.Importer\VPP.Importer.csproj", "{B2DD327B-42F5-4173-9BDC-FD0B28AEA69C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Parser;
 using VisCPU.HL.Parser.Tokens;
 
@@ -9,7 +8,6 @@ namespace VisCPU.HL.TypeSystem
 
     public abstract class HlMemberDefinition : IHlTypeSystemInstance
     {
-
         public bool IsPublic { get; }
 
         public bool IsStatic { get; }
@@ -54,7 +52,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

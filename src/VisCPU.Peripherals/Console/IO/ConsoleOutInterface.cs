@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -10,7 +9,6 @@ namespace VisCPU.Peripherals.Console.IO
 
     public class ConsoleOutInterface : Peripheral
     {
-
         private readonly ConsoleOutInterfaceSettings m_Settings;
 
         public override string PeripheralName => "Console Output Device";
@@ -20,7 +18,6 @@ namespace VisCPU.Peripherals.Console.IO
         public override uint PresentPin => m_Settings.InterfacePresentPin;
 
         public Action < char > WriteConsoleChar { get; set; } = System.Console.Write;
-
 
         public Action < uint > WriteConsoleNum { get; set; } = x => System.Console.Write( x.ToString() );
 
@@ -78,7 +75,6 @@ namespace VisCPU.Peripherals.Console.IO
         }
 
         #endregion
-
     }
 
 }

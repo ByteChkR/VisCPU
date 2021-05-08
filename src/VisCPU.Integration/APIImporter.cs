@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-
 using VisCPU.HL;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer;
@@ -14,7 +13,6 @@ namespace VisCPU.Integration
 
     public class ApiImporter : AImporter, IDataImporter, IFileImporter
     {
-
         public readonly string DeviceDriverDirectory;
         private readonly Dictionary < uint, FunctionData > m_ExposedApis = new Dictionary < uint, FunctionData >();
 
@@ -35,9 +33,9 @@ namespace VisCPU.Integration
             m_ExposedApis.Add( addr, funcData );
 
             string driverDir = Path.Combine(
-                                            DeviceDriverDirectory,
-                                            funcData.GetFinalName() + ".vhl"
-                                           );
+                DeviceDriverDirectory,
+                funcData.GetFinalName() + ".vhl"
+            );
 
             File.WriteAllText( driverDir, GenerateApiDriver( funcData, addr ) );
         }
@@ -57,10 +55,10 @@ namespace VisCPU.Integration
             sb.Append( "// Do not change unless you know exactly what you are doing.\n" );
 
             sb.AppendFormat(
-                            "// Device Driver for API Call: {0} on Address {1}\n\n",
-                            data.GetFinalName(),
-                            devAddr.ToHexString()
-                           );
+                "// Device Driver for API Call: {0} on Address {1}\n\n",
+                data.GetFinalName(),
+                devAddr.ToHexString()
+            );
 
             sb.AppendFormat( "public {1} {0}(", data.GetFinalName(), HLBaseTypeNames.s_UintTypeName );
 
@@ -104,9 +102,9 @@ namespace VisCPU.Integration
             KeyValuePair < uint, FunctionData > api = m_ExposedApis.First( x => x.Value.GetFinalName() == name );
 
             string target = Path.Combine(
-                                         DeviceDriverDirectory,
-                                         api.Value.GetFinalName() + ".vhl"
-                                        );
+                DeviceDriverDirectory,
+                api.Value.GetFinalName() + ".vhl"
+            );
 
             Log( "Including Device Driver: {0} :: {1}", name, target );
 
@@ -122,7 +120,6 @@ namespace VisCPU.Integration
         }
 
         #endregion
-
     }
 
 }

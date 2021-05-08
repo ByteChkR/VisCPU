@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Devices;
 
@@ -17,7 +16,6 @@ namespace OpenCL.NET.Devices
     /// </summary>
     public class Device : HandleBase
     {
-
         /// <summary>
         ///     Contains the name of the device.
         /// </summary>
@@ -234,12 +232,12 @@ namespace OpenCL.NET.Devices
 
             Result result =
                 DevicesNativeApi.GetDeviceInformation(
-                                                      Handle,
-                                                      deviceInformation,
-                                                      UIntPtr.Zero,
-                                                      null,
-                                                      out returnValueSize
-                                                     );
+                    Handle,
+                    deviceInformation,
+                    UIntPtr.Zero,
+                    null,
+                    out returnValueSize
+                );
 
             if ( result != Result.Success )
             {
@@ -250,12 +248,12 @@ namespace OpenCL.NET.Devices
             byte[] output = new byte[returnValueSize.ToUInt32()];
 
             result = DevicesNativeApi.GetDeviceInformation(
-                                                           Handle,
-                                                           deviceInformation,
-                                                           new UIntPtr( ( uint ) output.Length ),
-                                                           output,
-                                                           out returnValueSize
-                                                          );
+                Handle,
+                deviceInformation,
+                new UIntPtr( ( uint ) output.Length ),
+                output,
+                out returnValueSize
+            );
 
             if ( result != Result.Success )
             {
@@ -267,7 +265,6 @@ namespace OpenCL.NET.Devices
         }
 
         #endregion
-
     }
 
 }

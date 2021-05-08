@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-
 using Utility.ADL;
 using Utility.ExtPP.API.Configuration;
 using Utility.ExtPP.Base;
@@ -16,7 +15,6 @@ namespace Utility.ExtPP.API
     /// </summary>
     public static class TextProcessorAPI
     {
-
         private static readonly ADLLogger < LogType > Logger =
             new ADLLogger < LogType >( ExtPPDebugConfig.Settings, "API" );
 
@@ -29,9 +27,9 @@ namespace Utility.ExtPP.API
                 if ( _configs == null )
                 {
                     _configs = new Dictionary < string, APreProcessorConfig >
-                               {
-                                   ["***"] = new DefaultPreProcessorConfig()
-                               };
+                    {
+                        ["***"] = new DefaultPreProcessorConfig()
+                    };
                 }
 
                 return _configs;
@@ -63,11 +61,11 @@ namespace Utility.ExtPP.API
         public static string PreprocessSource( string[] filenames, Dictionary < string, bool > defs )
         {
             return PreprocessSource(
-                                    filenames.Select( x => new FilePathContent( x, x ) ).
-                                              Cast < IFileContent >().
-                                              ToArray(),
-                                    defs
-                                   );
+                filenames.Select( x => new FilePathContent( x, x ) ).
+                          Cast < IFileContent >().
+                          ToArray(),
+                defs
+            );
         }
 
         public static string PreprocessSource( string filename, Dictionary < string, bool > defs )
@@ -140,7 +138,6 @@ namespace Utility.ExtPP.API
         }
 
         #endregion
-
     }
 
 }

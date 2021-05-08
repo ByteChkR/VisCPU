@@ -1,0 +1,167 @@
+#include <../System/System.vhl>
+#include "DLREntry.vhl"
+#include "DLRBinaryHelper.vhl"
+
+
+private static uint m_LoadedLibList;
+private static uint m_FS;
+public class DLR
+{
+
+	public static void Initialize(uint fs)
+	{
+		m_FS = fs;
+
+		uint ll = SystemCore.Allocate(size_of(LinkedList));
+		LinkedList.new(ll, SystemCore.GetAllocator());
+		m_LoadedLibList = ll;
+	}
+
+	//Checks if a Libary has been loaded.
+	//It Returns the Pointer to the DLREntry structure if found
+	// 0 if lib is not loaded.
+	private static uint HasLoaded(string libPath, uint libPathLen)
+	{
+		LinkedList lll = m_LoadedLibList;
+
+		for(uint i = 0; i < lll.Count(); i++)
+		{
+			DLREntry e = lll.Get(i);
+			if(e.IsName(libPath, libPathLen))
+			{
+				uint eP = e;
+				return eP;
+			}
+		}
+
+		return 0;
+	}
+
+	//Resolves a Library.
+	//Initializes it OR uses Existing Loaded Library
+	public static uint LoadLib(string libPath, uint libPathLen)
+	{
+		uint l = DLR.HasLoaded(libPath, libPathLen);
+		if(l)
+		{
+			return l;
+		}
+		else
+		{
+			uint lP = DLR.InnerLoadLib(libPath, libPathLen);
+			uint eP = DLREntry.AllocateEntry(libPath, libPathLen, lP);
+			LinkedList lll = m_LoadedLibList;
+			lll.Add(eP);
+			return eP;
+		}
+	}
+
+	//Loads the Library Data from the File System
+	private static uint InnerLoadLib(string libPath, uint libPathLen)
+	{
+		FileSystem fs = m_FS;
+
+		uint ex = fs.Exists(libPath, libPathLen);
+		if(!ex)
+		{
+			string fnf = "File was not found: ";
+			Console.Write(&fnf, size_of(fnf));
+			Console.WriteLine(libPath, libPathLen);
+			interrupt(1);
+		}
+
+		string ldInfo = "Loading Library: ";
+		Console.Write(&ldInfo, size_of(ldInfo));
+		Console.WriteLine(libPath, libPathLen);
+
+		uint libSize = fs.GetSize(libPath, libPathLen);
+		FileStream libFile = fs.Open(libPath, libPathLen);
+		uint libPtr = SystemCore.Allocate(libSize);
+		for(uint i = 0; i < libSize; i++)
+		{
+			libPtr[i] = libFile.Read();
+		}
+
+
+		string patchSymbolTable = "Patching Symbol Table...";
+		Console.WriteLine(&patchSymbolTable, size_of(patchSymbolTable));
+
+		DLRBinaryHelper.PatchSymbolTable(libPtr);
+
+
+		string patchBinary = "Patching Binary...";
+		Console.WriteLine(&patchBinary, size_of(patchBinary));
+		DLRBinaryHelper.PatchPICBinary(libPtr);
+
+
+		string libLoadFinished = "Library Loaded at Address ";
+		Console.Write(&libLoadFinished, size_of(libLoadFinished));
+		Console.WriteNumberLine(libPtr);
+
+		return libPtr;
+	}
+
+
+	//Resolves a Call Site inside an external Library
+	public static uint ResolveCallSite(uint lib, string funcName, uint funcNameLen)
+	{
+
+		DLREntry e = lib;
+		string libFuncResolve = "Resolving Function ";
+		string libFuncResolve1 = "in Library ";
+
+		Console.Write(&libFuncResolve, size_of(libFuncResolve));
+		Console.Write(funcName, funcNameLen);
+		Console.WriteChar(0x20);
+		Console.Write(&libFuncResolve1, size_of(libFuncResolve1));
+		Console.WriteLine(e.Name(), e.NameLength());
+
+
+		uint ptr = e.LibPointer();
+		uint c = DLRBinaryHelper.GetSymbolEntryCount(ptr);
+		for(uint i = 0; i < c; i++)
+		{
+			uint eStart = DLRBinaryHelper.GetSymbolEntry(ptr, i);
+			uint eNStart = DLRBinaryHelper.GetSymbolEntryName(eStart);
+			uint eNLen = DLRBinaryHelper.GetSymbolEntryNameSize(eStart);
+			if(DLR.StrCompare(eNStart, eNLen, funcName, funcNameLen))
+			{
+				string resolveSuccess = "Resolved Address: ";
+				Console.Write(&resolveSuccess, size_of(resolveSuccess));
+				uint site = DLRBinaryHelper.GetSymbolEntrySite(eStart);
+				Console.WriteNumberLine(site);
+				return site;
+			}
+		}
+
+		string cre = "Can not Find Site: ";
+		string cre1 = "in Library: ";
+		Console.Write(&cre, size_of(cre));
+		Console.WriteLine(funcName, funcNameLen);
+		Console.Write(&cre1, size_of(cre1));
+		Console.WriteLine(e.Name(), e.NameLength());
+		interrupt(1); //Can not Resolve Call Site
+	}
+
+	//Compares 2 Strings
+	private static uint StrCompare(string s1, uint s1L, string s2, uint s2L)
+	{
+		if(s1L != s2L)
+		{
+			return 0;
+		}
+
+		for(uint i = 0 ; i < s1L; i++)
+		{
+			uint v1 = s1[i];
+			uint v2 = s2[i];
+			if(v1 != v2)
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+}
+
+

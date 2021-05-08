@@ -6,7 +6,6 @@ namespace OpenCL.NET.Platforms
     /// </summary>
     public enum Profile
     {
-
         /// <summary>
         ///     The full OpenCL specification is supported.
         /// </summary>
@@ -16,7 +15,6 @@ namespace OpenCL.NET.Platforms
         ///     A subset of the OpenCL specification for embedded devices is supported.
         /// </summary>
         Embedded
-
     }
 
 }

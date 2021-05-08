@@ -2,9 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-
 using Newtonsoft.Json;
-
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.ProjectSystem.BuildSystem;
 using VisCPU.Utility.ProjectSystem.Database;
@@ -14,7 +12,6 @@ namespace VisCPU.Utility.ProjectSystem.Data
 
     public class ProjectConfig
     {
-
         private static readonly Dictionary < string, BuildJobRunner > s_BuildJobRunners =
             new Dictionary < string, BuildJobRunner >();
 
@@ -35,19 +32,19 @@ namespace VisCPU.Utility.ProjectSystem.Data
             {
                 {
                     "Debug", new ProjectBuildTarget
-                             {
-                                 TargetName = "Debug",
-                                 Jobs = new List < ProjectBuildJob >
-                                        {
-                                            new ProjectBuildJob
-                                            {
-                                                JobName =
-                                                    "Clean Project Folder",
-                                                BuildJobRunner =
-                                                    "clean"
-                                            }
-                                        }
-                             }
+                    {
+                        TargetName = "Debug",
+                        Jobs = new List < ProjectBuildJob >
+                        {
+                            new ProjectBuildJob
+                            {
+                                JobName =
+                                    "Clean Project Folder",
+                                BuildJobRunner =
+                                    "clean"
+                            }
+                        }
+                    }
                 }
             };
 
@@ -97,9 +94,9 @@ namespace VisCPU.Utility.ProjectSystem.Data
         public static string Serialize( ProjectConfig config )
         {
             return JsonConvert.SerializeObject(
-                                               config,
-                                               Formatting.Indented
-                                              );
+                config,
+                Formatting.Indented
+            );
         }
 
         public void RunDefaultTarget( string rootDir )
@@ -169,18 +166,18 @@ namespace VisCPU.Utility.ProjectSystem.Data
         private void ResolveBuildJobItems( string rootDir, ProjectBuildTarget buildTarget, ProjectBuildJob job )
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
-                                                   {
-                                                       { "VISDIR", AppRootHelper.AppRoot },
-                                                       {
-                                                           "PROJDIR", rootDir.EndsWith( "\\" ) ||
-                                                                      rootDir.EndsWith( "/" )
-                                                                          ? rootDir
-                                                                          : rootDir + "/"
-                                                       },
-                                                       { "NAME", ProjectName },
-                                                       { "VERSION", ProjectVersion },
-                                                       { "TARGET", buildTarget.TargetName },
-                                                   };
+            {
+                { "VISDIR", AppRootHelper.AppRoot },
+                {
+                    "PROJDIR", rootDir.EndsWith( "\\" ) ||
+                               rootDir.EndsWith( "/" )
+                        ? rootDir
+                        : rootDir + "/"
+                },
+                { "NAME", ProjectName },
+                { "VERSION", ProjectVersion },
+                { "TARGET", buildTarget.TargetName },
+            };
 
             foreach ( string varMapKey in varMap.Keys )
             {
@@ -197,18 +194,18 @@ namespace VisCPU.Utility.ProjectSystem.Data
         private void ResolveBuildJobItems( string rootDir, ProjectBuildTarget buildTarget )
         {
             Dictionary < string, string > varMap = new Dictionary < string, string >
-                                                   {
-                                                       { "VISDIR", AppRootHelper.AppRoot },
-                                                       {
-                                                           "PROJDIR", rootDir.EndsWith( "\\" ) ||
-                                                                      rootDir.EndsWith( "/" )
-                                                                          ? rootDir
-                                                                          : rootDir + "/"
-                                                       },
-                                                       { "NAME", ProjectName },
-                                                       { "VERSION", ProjectVersion },
-                                                       { "TARGET", buildTarget.TargetName },
-                                                   };
+            {
+                { "VISDIR", AppRootHelper.AppRoot },
+                {
+                    "PROJDIR", rootDir.EndsWith( "\\" ) ||
+                               rootDir.EndsWith( "/" )
+                        ? rootDir
+                        : rootDir + "/"
+                },
+                { "NAME", ProjectName },
+                { "VERSION", ProjectVersion },
+                { "TARGET", buildTarget.TargetName },
+            };
 
             foreach ( string varMapKey in varMap.Keys )
             {
@@ -223,7 +220,6 @@ namespace VisCPU.Utility.ProjectSystem.Data
         }
 
         #endregion
-
     }
 
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -10,7 +9,6 @@ namespace VisCPU.Peripherals.Console.IO
 
     public class ConsoleInInterface : Peripheral
     {
-
         private readonly ConsoleInInterfaceSettings m_Settings;
 
         public override string PeripheralName => "Console Input Device";
@@ -20,6 +18,7 @@ namespace VisCPU.Peripherals.Console.IO
         public override uint PresentPin => m_Settings.InterfacePresentPin;
 
         public Func < bool > HasConsoleInput { get; set; } = () => System.Console.KeyAvailable;
+
         public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
 
         #region Unity Event Functions
@@ -75,7 +74,6 @@ namespace VisCPU.Peripherals.Console.IO
         }
 
         #endregion
-
     }
 
 }

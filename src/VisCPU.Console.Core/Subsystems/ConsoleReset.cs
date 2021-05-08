@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
 using VisCPU.Utility;
 
 namespace VisCPU.Console.Core.Subsystems
@@ -8,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ConsoleReset : ConsoleSubsystem
     {
-
         #region Public
 
         public override void Help()
@@ -32,7 +30,6 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
-
     }
 
 }

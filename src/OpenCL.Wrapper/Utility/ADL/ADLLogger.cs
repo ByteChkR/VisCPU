@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-
 using Utility.ADL.Configs;
 
 namespace Utility.ADL
@@ -10,7 +9,6 @@ namespace Utility.ADL
 
     public class ADLLogger
     {
-
         private static readonly Dictionary < IProjectDebugConfig, List < ADLLogger > > LoggerMap =
             new Dictionary < IProjectDebugConfig, List < ADLLogger > >();
 
@@ -169,13 +167,11 @@ namespace Utility.ADL
         }
 
         #endregion
-
     }
 
     public class ADLLogger < T > : ADLLogger
         where T : struct
     {
-
         public override string[] ProjectMaskPrefixes
         {
             get
@@ -197,9 +193,9 @@ namespace Utility.ADL
         #region Public
 
         public ADLLogger( IProjectDebugConfig projectDebugConfig, string subProjectname = "" ) : base(
-             projectDebugConfig,
-             subProjectname
-            )
+            projectDebugConfig,
+            subProjectname
+        )
         {
         }
 
@@ -218,7 +214,6 @@ namespace Utility.ADL
         }
 
         #endregion
-
     }
 
 }

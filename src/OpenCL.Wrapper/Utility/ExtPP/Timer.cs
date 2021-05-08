@@ -8,7 +8,6 @@ namespace Utility.ExtPP
     /// </summary>
     public class Timer
     {
-
         /// <summary>
         ///     A static wrapper for the singleton(showing the total ellapsed milliseconds since assembly load.
         /// </summary>
@@ -64,7 +63,6 @@ namespace Utility.ExtPP
         }
 
         #endregion
-
     }
 
 }

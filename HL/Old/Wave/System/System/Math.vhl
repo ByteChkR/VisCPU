@@ -1,0 +1,51 @@
+
+public class Math
+{
+    public static uint Pow(uint a, uint exp)
+    {
+        uint ret = 1;
+        uint count = exp;
+        while(count)
+        {
+            ret *= a;
+            count--;
+        }
+
+        return ret;
+    }
+
+    public static uint IsPrime(uint num)
+    {
+        if (num <= 1)
+        {
+            return 0;
+        }
+        uint i = 2;
+        uint end = num / 2;
+        while(i <= end)
+        {
+            uint val = num % i;
+            if (!val)
+            {
+                return 0;
+            }
+            i += 1;
+        }
+
+        return 1;        
+    }
+
+    public static uint Clamp(uint a, uint min, uint max)
+    {
+        if(a < min)
+        {
+            return min;
+        }
+        if(a > max)
+        {
+            return max;
+        }
+
+        return a;
+    }
+}

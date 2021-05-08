@@ -5,7 +5,6 @@ namespace VisCPU.HL.DataTypes
 
     public class FunctionData : IExternalData
     {
-
         private readonly Func < string[] > m_FunctionCompiler;
 
         private readonly string m_Name;
@@ -18,6 +17,8 @@ namespace VisCPU.HL.DataTypes
         public bool Public { get; }
 
         public bool Static { get; }
+
+        public int UseCount { get; private set; } = 0;
 
         public ExternalDataType DataType => ExternalDataType.Function;
 
@@ -67,8 +68,12 @@ namespace VisCPU.HL.DataTypes
             return m_Name;
         }
 
-        #endregion
+        public void SetUsed()
+        {
+            UseCount++;
+        }
 
+        #endregion
     }
 
 }

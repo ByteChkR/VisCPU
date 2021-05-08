@@ -1,0 +1,106 @@
+
+//System Structures
+#include "System/Array.vhl"
+#include "System/Colors.vhl"
+#include "System/Console.vhl"
+#include "System/Convert.vhl"
+#include "System/DeviceLoader.vhl"
+#include "System/DeviceTypes.vhl"
+#include "System/DiskTable.vhl"
+#include "System/Exception.vhl"
+#include "System/ExceptionHandler.vhl"
+#include "System/List.vhl"
+#include "System/LinkedList.vhl"
+#include "System/LinkedQueue.vhl"
+#include "System/Math.vhl"
+#include "System/Partition.vhl"
+#include "System/PartitionTable.vhl"
+#include "System/Queue.vhl"
+#include "System/SIMD/SIMD.vhl"
+#include "System/Stack.vhl"
+#include "System/String.vhl"
+#include "System/Thread.vhl"
+#include "System/Time.vhl"
+
+//Allocator Implementation
+#include "System/ALLOC/Allocator.vhl"
+#include "System/ALLOC/RawAllocator.vhl"
+
+
+//Device Drivers
+#include "System/DEVS/BENCHDRV.vhl"
+#include "System/DEVS/MBUSDRV.vhl"
+#include "System/DEVS/STOREDRV.vhl"
+#include "System/DEVS/TIMEDRV.vhl"
+
+//Custom Exceptions
+#include "System/ALLOC/BlockNotMappedException.vhl"
+#include "System/ALLOC/OutOfMemoryException.vhl"
+#include "System/DEVS/DeviceNotFoundException.vhl"
+#include "System/StackEmptyException.vhl"
+#include "System/StackOverflowException.vhl"
+#include "System/QueueEmptyException.vhl"
+#include "System/PartitionTableCorruptedException.vhl"
+
+//Include Global System Library Settings.
+#include "System/Settings.vhl"
+#include <System/FS/Formats/v1/FSv1.vhl>
+
+private static uint s_Allocator;
+private static uint s_DiskTable;
+private static uint s_InitFlag;
+
+public class SystemCore
+{
+	public static uint GetAllocator()
+	{
+		if(s_InitFlag)
+		{
+			return s_Allocator;
+		}
+		interrupt(1);
+	}
+
+	public static void Initialize(uint opt, uint start, uint len)
+	{
+		if(s_InitFlag)
+		{
+			return;
+		}
+
+		RawAllocator alloc = RawAllocator(start, len);
+		s_Allocator = alloc;
+		alloc.SetOptimizationLevel(opt);
+
+		DiskTable diskT = DiskTable(s_Allocator);
+		s_DiskTable = diskT;
+
+		s_InitFlag = 1;
+	}
+
+	public static void CorruptDisk(uint disk)
+	{
+		DiskTable dt = s_DiskTable;
+		PartitionTable d = dt.GetPartitionTable(disk);
+		STOREDRV drv = d.GetDevice();
+		drv.Write(0,0);
+	}
+
+	public static uint Allocate(uint size)
+	{
+		RawAllocator a = s_Allocator;
+		uint p = a.Allocate(size);
+		return p;
+	}
+
+	public static void Free(uint p)
+	{
+		RawAllocator a = s_Allocator;
+		a.Free(p);
+	}
+
+	public static DiskTable GetDiskTable()
+	{
+		return s_DiskTable;
+	}
+}

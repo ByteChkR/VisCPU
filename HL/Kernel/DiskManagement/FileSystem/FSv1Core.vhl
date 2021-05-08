@@ -1,0 +1,205 @@
+#include <FSv1Utils.vhl>
+#include <FSv1FileTable.vhl>
+#include <FSv1FileStream.vhl>
+#include "../../Console.vhl"
+#include "../../MemoryManagement/malloc.vhl"
+
+#define FS_LOG_FILE_ACTIONS 0
+
+public class FSv1
+{
+	private uint m_Partition;
+	private uint m_RootFileTable;
+
+	public static FSv1(uint p)
+	{
+		this.m_Partition = p;
+		uint v = this.m_Partition;
+
+		uint ptr = malloc(size_of(FSv1FileTable));
+		FSv1FileTable.new(ptr, p, 0);
+		this.m_RootFileTable = ptr;
+	}
+
+	public uint GetPartition()
+	{
+		uint p = this.m_Partition;
+		return p;
+	}
+
+	public uint GetFileTable()
+	{
+		uint p = this.m_RootFileTable;
+		return p;
+	}
+
+	private uint FindIndex(string path, uint pathLen)
+	{
+		FSv1FileTable table = this.m_RootFileTable;
+		uint c = table.GetEntryCount();
+		for(uint i = 0; i < c; i++)
+		{
+			uint isDel = table.IsDeleted(i);
+			if(!isDel)
+			{
+				uint isName = this.IsName(i, path, pathLen);
+				if(isName)
+				{
+					return i;
+				}
+			}
+		}
+		interrupt(1); //File not Found
+	}
+
+	private uint HasIndex(string path, uint pathLen)
+	{
+		FSv1FileTable table = this.m_RootFileTable;
+		uint c = table.GetEntryCount();
+		for(uint i = 0; i < c; i++)
+		{
+			uint isDel = table.IsDeleted(i);
+			if(!isDel)
+			{
+				
+				uint isName = this.IsName(i, path, pathLen);
+				if(isName)
+				{
+					return 1;
+				}
+			}
+		}
+		return 0;
+	}
+
+	private uint IsName(uint idx, string path, uint pathLen)
+	{
+		FSv1FileTable table = this.m_RootFileTable;
+		uint pl = table.GetEntryNameLength(idx);
+		if(pl != pathLen)
+		{
+			return 0;
+		}
+		
+		for(uint i = 0; i < pathLen; i++)
+		{
+			uint v = table.GetEntryName(idx, i);
+			uint t = path[i];
+			if(v != t)
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+
+	public uint Open(string path, uint pathLen)
+	{
+		if(!this.Exists(path, pathLen))
+		{
+			string fNoExists = "The File ";
+			string fNoExists1 = "does not exist";
+			kprint(&fNoExists, size_of(fNoExists));
+			kprint(path, pathLen);
+			kprintc(0x20);
+			kprintl(&fNoExists1, size_of(fNoExists1));
+			interrupt(1);
+		}
+		uint p = this.InnerOpen(path, pathLen);
+		return p;
+	}
+
+	private void InnerOpen(string path, uint pathLen)
+	{
+		if(FS_LOG_FILE_ACTIONS)
+		{
+			string strOpenFile = "[FSv1] Opening File: ";
+			kprint(&strOpenFile, size_of(strOpenFile));
+			kprintl(path, pathLen);
+		}
+
+		uint p = malloc(size_of(FSv1FileStream));
+		uint table = this.m_RootFileTable;
+
+		uint idx = this.FindIndex(path, pathLen);
+		FSv1FileStream.new(p, idx, table);
+		return p;
+	}
+
+	public void Close(uint handle)
+	{
+		free(handle);
+	}
+
+	public uint Create(string path, uint pathLen)
+	{
+		if(this.Exists(path, pathLen))
+		{
+			string fExists = "The File ";
+			string fExists1 = "does already exist";
+			kprint(&fExists, size_of(fExists));
+			kprint(path, pathLen);
+			kprintc(0x20);
+			kprintl(&fExists1, size_of(fExists1));
+			interrupt(1);
+		}
+		FSv1FileTable table = this.m_RootFileTable;
+		table.CreateEntry(path, pathLen);
+		uint v = this.InnerOpen(path, pathLen);
+		return v;
+	}
+
+	public void Delete(string path, uint pathLen)
+	{
+		if(!this.Exists(path, pathLen))
+		{
+			string fNoExists = "The File ";
+			string fNoExists1 = "does not exist";
+			kprint(&fNoExists, size_of(fNoExists));
+			kprint(path, pathLen);
+			kprintc(0x20);
+			kprintl(&fNoExists1, size_of(fNoExists1));
+			interrupt(1);
+		}
+		FSv1FileTable table = this.m_RootFileTable;
+		table.RemoveEntry(this.FindIndex(path, pathLen));
+	}
+
+	public uint Exists(string path, uint pathLen)
+	{
+		uint p = this.HasIndex(path, pathLen);
+
+		return p;
+	}
+
+	public uint GetSize(string path, uint pathLen)
+	{
+		if(!this.Exists(path, pathLen))
+		{
+			string fNoExists = "The File ";
+			string fNoExists1 = "does not exist";
+			kprint(&fNoExists, size_of(fNoExists));
+			kprint(path, pathLen);
+			kprintc(0x20);
+			kprintl(&fNoExists1, size_of(fNoExists1));
+			interrupt(1);
+		}
+		uint idx = this.FindIndex(path, pathLen);
+		FSv1FileTable table = this.m_RootFileTable;
+		uint s = table.GetEntrySize(idx);
+		return s;
+	}
+
+	public void WriteInfo()
+	{
+		FSv1FileTable table = this.m_RootFileTable;
+		table.WriteInfo();
+	}
+
+	public void Unload()
+	{
+		uint table = this.m_RootFileTable;
+		free(table);
+		free(this);
+	}
+}

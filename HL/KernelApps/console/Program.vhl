@@ -1,0 +1,259 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+#define CMD_WRITE_COMMAND 1
+#define CMD_READ_BUF 256
+
+private static string s_Console_StartupPath = "0:configs/console/startup.cmd";
+private static string s_AppStartSiteName = "APP_START";
+private static string s_Console_Alias = "cmd";
+private static uint s_Aliases;
+
+private class CommandAlias
+{
+	public uint Alias;
+	public uint AliasLength;
+	public uint ExecutablePath;
+	public uint ExecutablePathLength;
+}
+
+private static uint cmd_resolve_alias(uint s, uint l)
+{
+	uint c = ll_count(s_Aliases);
+	for(uint i = 0; i < c; i++)
+	{
+		uint p = ll_get(s_Aliases, i);
+		CommandAlias a = p;
+		uint aP = a.Alias;
+		uint aL = a.AliasLength;
+		if(str_cmp(aP, aL, s, l))
+		{
+			return p;
+		}
+	}
+	return 0;
+}
+
+public static void cmd_remove_all_aliases()
+{
+	uint c = ll_count(s_Aliases);
+	for(uint i = 0; i < c; i++)
+	{
+		uint p = ll_get(s_Aliases, 0);
+		CommandAlias a = p;
+		uint aP = a.Alias;
+		uint aL = a.AliasLength;
+		uint eP = a.ExecutablePath;
+
+		ll_removeat(s_Aliases, 0);
+		free(aP);
+		free(eP);
+		free(a);
+	}
+	return 0;
+}
+
+public static void cmd_remove_alias(uint alias, uint aliasL)
+{
+	uint c = ll_count(s_Aliases);
+	for(uint i = 0; i < c; i++)
+	{
+		uint p = ll_get(s_Aliases, i);
+		CommandAlias a = p;
+		uint aP = a.Alias;
+		uint aL = a.AliasLength;
+		uint eP = a.ExecutablePath;
+		if(str_cmp(aP, aL, alias, aliasL))
+		{
+			ll_removeat(i);
+			free(aP);
+			free(eP);
+			free(a);
+		}
+	}
+	return 0;
+}
+
+private static uint cmd_read_command(uint ptr, uint max)
+{
+	uint cur = 0;
+	while(cur < max)
+	{
+		uint v = kread();
+		while(v == '\r')
+		{
+			v = kread();
+		}
+		if(v == '\n')
+		{
+			return cur;
+		}
+		ptr[cur] = v;
+		cur++;
+	}
+	return max;
+} 
+
+private static void cmd_exec(uint fWord, uint fWordLen, uint readBuf, uint l)
+{
+	uint a = cmd_resolve_alias(fWord, fWordLen);
+	if(a)
+	{
+		CommandAlias ca = a;
+		fWord = ca.ExecutablePath;
+		fWordLen = ca.ExecutablePathLength;
+	}
+	
+	if(!fs_is_path(fWord, fWordLen))
+	{
+		string strInvalidPath = "Invalid Path: ";
+		kprint(&strInvalidPath, size_of(strInvalidPath));
+		kprintl(fWord, fWordLen);
+		return;
+	}
+
+	if(!fs_exists(fWord, fWordLen))
+	{
+		string strNoExists = "Specified Binary does not exist: ";
+		kprint(&strNoExists, size_of(strNoExists));
+		kprintl(fWord, fWordLen);
+	}
+	else
+	{
+		uint lib = dlr_load_lib(fWord, fWordLen);
+		uint libSite = dlr_resolve_call(lib, &s_AppStartSiteName, size_of(s_AppStartSiteName));
+		libSite(readBuf, l);
+	}
+}
+
+private static void cmd_execute(uint s, uint l)
+{
+	uint strExitCmd = "exit";
+	if(str_cmp(s, l, &strExitCmd, size_of(strExitCmd)))
+	{
+		return 1;
+	}
+	else
+	{
+		uint fWord = s;
+		uint fWordLen = str_find_char(0x20, s, l);
+		
+		cmd_exec(fWord, fWordLen, s, l);
+		return 0;
+	}
+	return 1;
+}
+
+private static void cmd_loop()
+{
+	uint readBuf = malloc(CMD_READ_BUF);
+	uint exit = 0;
+	while(!exit)
+	{
+		kprintc('>');
+		uint l = cmd_read_command(readBuf, CMD_READ_BUF);
+		
+		if(CMD_WRITE_COMMAND)
+		{
+			kprintl(readBuf, l);
+		}
+
+		exit = cmd_execute(readBuf, l);
+	}
+
+	free(readBuf);
+}
+
+public static void cmd_add_alias(uint alias, uint aliasL, uint bin, uint binL)
+{
+	string strAddAlias = "[CMD] Adding Alias: ";
+	kprint(&strAddAlias, size_of(strAddAlias));
+	kprint(alias, aliasL);
+	kprintc(0x20);
+	kprintc('=');
+	kprintc('>');
+	kprintc(0x20);
+	kprintl(bin, binL);
+
+
+	uint prev = cmd_resolve_alias(alias, aliasL);
+	if(prev)
+	{
+		return;
+	}
+	uint entry = malloc(size_of(CommandAlias));
+	uint a = malloc(aliasL);
+	mem_copy(alias, a, aliasL);
+	uint b = malloc(binL);
+	mem_copy(bin, b, binL);
+
+	CommandAlias e = entry;
+
+	e.Alias = a;
+	e.AliasLength = aliasL;
+	e.ExecutablePath = b;
+	e.ExecutablePathLength = binL;
+
+	ll_add(s_Aliases, entry);
+}
+
+public static void cmd_run_script(uint filePtr, uint filePtrL)
+{
+	if(!fs_exists(filePtr, filePtrL))
+	{
+		string strFNExist = "The File Does not Exist";
+		kprintl(&strFNExist, size_of(strFNExist));
+		return;
+	}
+
+	string strLoadScript = "[CMD] Loading Script: ";
+	kprint(&strLoadScript, size_of(strLoadScript));
+	kprintl(filePtr, filePtrL);
+	uint fs = fs_getsize(filePtr, filePtrL);
+	uint script = malloc(fs);
+	uint file = fs_open(filePtr, filePtrL);
+	f_readbuf(file, script, fs);
+
+	uint left = fs;
+	while(left)
+	{
+		uint index = script + (fs - left);
+		uint lineLength = str_find_char('\n', index, left);
+		//kprintl(index, lineLength);
+		cmd_execute(index, lineLength);
+		left-=lineLength+1;
+	}
+
+	free(script);
+	fs_close(file);
+}
+
+private static void cmd_execute_startup()
+{
+	cmd_run_script(&s_Console_StartupPath, size_of(s_Console_StartupPath));
+}
+
+public static void APP_START(uint args, uint argc)
+{
+	s_Aliases = ll_new();
+
+	uint argNum = arg_getc(args, argc);
+	if(argNum == 1)
+	{
+		uint exPtrL;
+		uint exPtr = arg_get(0, args, argc, &exPtrL);
+
+		cmd_execute_startup();
+
+		cmd_loop();
+
+		cmd_remove_all_aliases();
+
+		free(s_Aliases);
+
+	}
+	else
+	{
+		string strInvalidArgs = "Invalid Arguments";
+		kprintl(&strInvalidArgs, size_of(strInvalidArgs));
+	}
+}

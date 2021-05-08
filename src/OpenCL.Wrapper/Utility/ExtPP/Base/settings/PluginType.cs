@@ -6,11 +6,9 @@
     /// </summary>
     public enum PluginType
     {
-
         LinePluginBefore = 16,
         FullScriptPlugin = 32,
         LinePluginAfter = 64
-
     }
 
 }

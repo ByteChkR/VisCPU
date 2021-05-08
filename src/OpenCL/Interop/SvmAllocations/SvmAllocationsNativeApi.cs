@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.SvmAllocations
     /// </summary>
     public static class SvmAllocationsNativeApi
     {
-
         #region Public
 
         /// <summary>
@@ -49,14 +48,10 @@ namespace OpenCL.NET.Interop.SvmAllocations
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clSVMAlloc" )]
         public static extern IntPtr SvmAllocate(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U8 )]
-            SvmMemoryFlag flags,
-            [In]
-            UIntPtr size,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint alignment );
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U8 )] SvmMemoryFlag flags,
+            [In] UIntPtr size,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint alignment );
 
         /// <summary>
         ///     Frees a shared virtual memory buffer allocated using <see cref="SvmAllocate" />. Note that <see cref="SvmFree" />
@@ -72,13 +67,10 @@ namespace OpenCL.NET.Interop.SvmAllocations
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clSVMFree" )]
         public static extern void SvmFree(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr svmPointer );
+            [In] IntPtr context,
+            [In] IntPtr svmPointer );
 
         #endregion
-
     }
 
 }

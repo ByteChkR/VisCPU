@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Console.Core.Subsystems
@@ -7,7 +6,6 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class HelpSubSystem : ConsoleSubsystem
     {
-
         private readonly ConsoleSystem m_Owner;
 
         #region Public
@@ -39,7 +37,6 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
-
     }
 
 }

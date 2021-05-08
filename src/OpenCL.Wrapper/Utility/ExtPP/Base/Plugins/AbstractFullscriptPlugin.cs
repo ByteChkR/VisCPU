@@ -9,7 +9,6 @@ namespace Utility.ExtPP.Base.Plugins
     /// </summary>
     public abstract class AbstractFullScriptPlugin : AbstractPlugin
     {
-
         /// <summary>
         ///     Specifies the plugin type. Fullscript or Line Script
         /// </summary>
@@ -66,7 +65,6 @@ namespace Utility.ExtPP.Base.Plugins
         }
 
         #endregion
-
     }
 
 }

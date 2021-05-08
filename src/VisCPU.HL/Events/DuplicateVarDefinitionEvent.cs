@@ -6,19 +6,17 @@ namespace VisCPU.HL.Events
 
     internal class DuplicateVarDefinitionEvent : ErrorEvent
     {
-
         #region Public
 
         public DuplicateVarDefinitionEvent( string varName ) : base(
-                                                                    $"Duplicate Definition of: {varName}",
-                                                                    ErrorEventKeys.s_HlVarDuplicateDef,
-                                                                    false
-                                                                   )
+            $"Duplicate Definition of: {varName}",
+            ErrorEventKeys.s_HlVarDuplicateDef,
+            false
+        )
         {
         }
 
         #endregion
-
     }
 
 }

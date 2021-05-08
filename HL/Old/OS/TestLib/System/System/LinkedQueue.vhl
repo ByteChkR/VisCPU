@@ -1,0 +1,116 @@
+#include "ExceptionHandler.vhl"
+#include "QueueEmptyException.vhl"
+#include "Queue.vhl"
+#include "ALLOC/Allocator.vhl"
+
+public class LinkedQueue : Queue
+{
+	private uint m_Allocator;
+	private uint m_Head; //Dequeue/Peek
+	private uint m_Tail; //Enqueue
+	public static LinkedQueue(Allocator a)
+	{
+		this.m_Allocator = a;
+		this.m_Head = 0;
+		this.m_Tail = 0;
+	}
+
+	public override uint IsEmpty()
+	{
+		uint h = this.m_Head;
+		uint t = this.m_Tail;
+		return h == 0 && t == 0;
+	}
+
+	private uint Create(uint value)
+	{
+		Allocator a = this.m_Allocator;
+		uint ptr = a.Allocate(size_of(LinkedQueueItem));
+		LinkedQueueItem li = ptr;
+		li.Next = 0;
+		li.Value = value;
+		return ptr;
+	}
+
+	private void Release(uint ptr)
+	{
+		Allocator a = this.m_Allocator;
+		a.Free(ptr);
+	}
+
+	public override uint Count()
+	{
+		uint current = this.m_Head;
+		uint count = 0;
+		while(current)
+		{
+			LinkedQueueItem li = current;
+			current = li.Next;
+			count++;
+		}
+		return count;
+	}
+
+	public override uint Peek()
+	{
+		if(this.IsEmpty())
+		{
+			ExceptionHandler.Throw(QueueEmptyException());
+			return 0;
+		}
+		else
+		{
+			uint p = this.m_Head;
+			LinkedQueueItem l = p;
+			uint v = l.Value;
+			return v;
+		}
+	}
+
+	public override uint Dequeue()
+	{
+		if(this.IsEmpty())
+		{
+			ExceptionHandler.Throw(QueueEmptyException());
+			return 0;
+		}
+		else
+		{
+			uint v = this.Peek();
+			uint p = this.m_Head;
+			LinkedQueueItem cur = p;
+			uint n = cur.Next;
+			if(!n)
+			{
+				this.m_Tail = 0;
+			}
+
+			this.m_Head = n;
+			this.Release(p);
+			return v;
+		}
+	}
+
+	public override void Enqueue(uint value)
+	{
+		uint p = this.Create(value);
+
+		if(this.IsEmpty())
+		{
+			this.m_Head = p;
+			this.m_Tail = p;
+		}
+		else
+		{
+			LinkedQueueItem li = this.m_Tail;
+			li.Next = p;
+			this.m_Tail = p;
+		}
+	}
+}
+
+public class LinkedQueueItem
+{
+	public uint Next;
+	public uint Value;
+}

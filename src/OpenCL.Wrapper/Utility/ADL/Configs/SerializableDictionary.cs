@@ -11,7 +11,6 @@ namespace Utility.ADL.Configs
     /// <typeparam name="T2">Value</typeparam>
     public class SerializableDictionary < T1, T2 >
     {
-
         /// <summary>
         ///     The Stored Keys
         /// </summary>
@@ -76,7 +75,6 @@ namespace Utility.ADL.Configs
         }
 
         #endregion
-
     }
 
 }

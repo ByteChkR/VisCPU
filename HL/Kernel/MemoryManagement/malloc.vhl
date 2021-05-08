@@ -1,0 +1,77 @@
+#include "../Console.vhl"
+#inline "RawAllocator.vhl"
+#include <../KernelSettings.vhl>
+
+#define MALLOC_DEBUG_LOGGING 0
+
+uint v;
+uint s_KernelAlloc;
+
+private static void mallocinit()
+{
+	string strInitMalloc = "[MALLOC] Initializing...";
+	kprintl(&strInitMalloc, size_of(strInitMalloc));
+	RawAllocator a = RawAllocator(K_ALLOC_START, K_ALLOC_SIZE);
+	a.SetOptimizationLevel(2);
+	s_KernelAlloc = a;
+}
+
+public static void mallocinfo()
+{
+	string strInfo = "[MALLOC] Allocator Info: ";
+	kprintl(&strInfo, size_of(strInfo));
+	if(!s_KernelAlloc)
+	{
+		mallocinit();
+	}
+
+	RawAllocator a = s_KernelAlloc;
+	a.WriteDebugData();
+}
+
+public static uint malloc(uint size)
+{
+	if(!s_KernelAlloc)
+	{
+		mallocinit();
+	}
+
+	RawAllocator a = s_KernelAlloc;
+	uint p = a.Allocate(size);
+
+	if(MALLOC_DEBUG_LOGGING)
+	{
+		string strAllocSz = "[MALLOC] Allocating ";
+		kprint(&strAllocSz, size_of(strAllocSz));
+		kprintc('P');
+		kprintc(':');
+		kprintc(0x20);
+		kprintn(p);
+		kprintc(0x20);
+		kprintc('S');
+		kprintc(':');
+		kprintnl(size);
+
+	}
+
+	return p;
+}
+
+public static void free(uint ptr)
+{
+	if(!s_KernelAlloc)
+	{
+		return;
+	}
+
+	RawAllocator a = s_KernelAlloc;
+
+	if(MALLOC_DEBUG_LOGGING)
+	{
+		string strAllocSz = "[MALLOC] Freeing Pointer: ";
+		kprint(&strAllocSz, size_of(strAllocSz));
+		kprintnl(ptr);
+	}
+
+	a.Free(ptr);
+}

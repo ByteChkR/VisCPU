@@ -5,7 +5,6 @@ namespace VisCPU.Utility.Logging
 
     public static class Logger
     {
-
         public static readonly LoggerSettings s_Settings = new LoggerSettings();
 
         public static event Action < LoggerSystems, string > OnLogReceive;
@@ -23,7 +22,6 @@ namespace VisCPU.Utility.Logging
         }
 
         #endregion
-
     }
 
 }

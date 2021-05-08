@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
 using VisCPU.HL.Events;
 using VisCPU.HL.Namespaces;
 using VisCPU.HL.Parser;
@@ -16,7 +15,6 @@ namespace VisCPU.HL.TypeSystem
 
     public class HlTypeDefinition : IHlTypeSystemInstance, IEnumerable < HlMemberDefinition >
     {
-
         private readonly List < HlMemberDefinition > m_Members = new List < HlMemberDefinition >();
 
         private readonly List < IHlToken > m_BaseTypes;
@@ -26,17 +24,16 @@ namespace VisCPU.HL.TypeSystem
 
         public bool IsAbstract { get; }
 
-        public IEnumerable < HlFunctionDefinition > OverridableFunctions =>
-            m_Types.
-                SelectMany( x => x.OverridableFunctions ).
-                Concat(
-                       m_Members.Where(
-                                       x => ( x.IsVirtual ||
-                                              x.IsAbstract ) &&
-                                            x is HlFunctionDefinition
-                                      ).
-                                 Cast < HlFunctionDefinition >()
-                      );
+        public IEnumerable < HlFunctionDefinition > OverridableFunctions => m_Types.
+                                                                            SelectMany( x => x.OverridableFunctions ).
+                                                                            Concat(
+                                                                                m_Members.Where(
+                                                                                        x => ( x.IsVirtual ||
+                                                                                                x.IsAbstract ) &&
+                                                                                            x is HlFunctionDefinition
+                                                                                    ).
+                                                                                    Cast < HlFunctionDefinition >()
+                                                                            );
 
         public HlNamespace Namespace { get; }
 
@@ -48,25 +45,21 @@ namespace VisCPU.HL.TypeSystem
 
         public HlTokenType Type => HlTokenType.OpClassDefinition;
 
-        public HlMemberDefinition StaticConstructor =>
-            m_Members.FirstOrDefault(
-                                     x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic
-                                    );
+        public HlMemberDefinition StaticConstructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic
+        );
 
-        public HlMemberDefinition StaticDestructor =>
-            m_Members.FirstOrDefault(
-                                     x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic
-                                    );
+        public HlMemberDefinition StaticDestructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && x.IsStatic
+        );
 
-        public HlMemberDefinition DynamicConstructor =>
-            m_Members.FirstOrDefault(
-                                     x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
-                                    );
+        public HlMemberDefinition DynamicConstructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
+        );
 
-        public HlMemberDefinition DynamicDestructor =>
-            m_Members.FirstOrDefault(
-                                     x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
-                                    );
+        public HlMemberDefinition DynamicDestructor => m_Members.FirstOrDefault(
+            x => x.Type == HlTokenType.OpFunctionDefinition && x.Name == Name && !x.IsStatic
+        );
 
         #region Public
 
@@ -90,11 +83,11 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetOffset(
-                                      start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
-                                      ret,
-                                      current + 1,
-                                      parts
-                                     );
+                start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
+                ret,
+                current + 1,
+                parts
+            );
         }
 
         public static HlMemberDefinition RecursiveGetPrivateOrPublicMember(
@@ -110,10 +103,10 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetPrivateOrPublicMember(
-                                                     start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
-                                                     current + 1,
-                                                     parts
-                                                    );
+                start.GetType( start.GetPrivateOrPublicMember( parts[current] ) ),
+                current + 1,
+                parts
+            );
         }
 
         public static HlMemberDefinition RecursiveGetPublicMember( HlTypeDefinition start, int current, string[] parts )
@@ -126,10 +119,10 @@ namespace VisCPU.HL.TypeSystem
             }
 
             return RecursiveGetPublicMember(
-                                            start.GetType( start.GetPublicMember( parts[current] ) ),
-                                            current + 1,
-                                            parts
-                                           );
+                start.GetType( start.GetPublicMember( parts[current] ) ),
+                current + 1,
+                parts
+            );
         }
 
         public void AddBaseType( IHlToken token )
@@ -383,7 +376,6 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
-
     }
 
 }

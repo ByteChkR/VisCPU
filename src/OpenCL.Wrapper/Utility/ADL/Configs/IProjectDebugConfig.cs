@@ -3,7 +3,6 @@
 
     public interface IProjectDebugConfig
     {
-
         int GetAcceptMask();
 
         int GetMinSeverity();
@@ -19,7 +18,6 @@
         void SetPrefixLookupSettings( PrefixLookupSettings settings );
 
         void SetProjectName( string projectName );
-
     }
 
 }

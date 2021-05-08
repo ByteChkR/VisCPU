@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.HL
@@ -7,7 +6,6 @@ namespace VisCPU.HL
 
     public static class HlCompilerCache
     {
-
         private static readonly Dictionary < string, HlCompilation > m_Compilations =
             new Dictionary < string, HlCompilation >();
 
@@ -36,7 +34,6 @@ namespace VisCPU.HL
         }
 
         #endregion
-
     }
 
 }

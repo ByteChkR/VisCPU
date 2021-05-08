@@ -5,7 +5,6 @@ namespace VisCPU.HL.Compiler.Memory
 
     public class DereferenceExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
-
         protected override bool NeedsOutput => true;
 
         #region Public
@@ -16,10 +15,10 @@ namespace VisCPU.HL.Compiler.Memory
             ExpressionTarget outputTarget )
         {
             compilation.EmitterResult.Emit(
-                                           $"DREF",
-                                           target.ResultAddress,
-                                           outputTarget.ResultAddress
-                                          );
+                $"DREF",
+                target.ResultAddress,
+                outputTarget.ResultAddress
+            );
 
             return outputTarget.Cast( target.TypeDefinition );
         }
@@ -33,7 +32,6 @@ namespace VisCPU.HL.Compiler.Memory
         }
 
         #endregion
-
     }
 
 }

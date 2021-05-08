@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
 using Newtonsoft.Json;
 
 namespace VisCPU.Utility.ProjectSystem.Data
@@ -8,7 +7,6 @@ namespace VisCPU.Utility.ProjectSystem.Data
 
     public class ProjectBuildTarget
     {
-
         public string TargetName { get; set; }
 
         public string[] DependsOn { get; set; } = new string[0];
@@ -35,13 +33,12 @@ namespace VisCPU.Utility.ProjectSystem.Data
         public static string Serialize( ProjectBuildTarget config )
         {
             return JsonConvert.SerializeObject(
-                                               config,
-                                               Formatting.Indented
-                                              );
+                config,
+                Formatting.Indented
+            );
         }
 
         #endregion
-
     }
 
 }

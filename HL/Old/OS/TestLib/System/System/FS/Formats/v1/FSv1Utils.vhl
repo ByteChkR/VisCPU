@@ -1,0 +1,20 @@
+
+//Size of the Blocks
+#define BLOCK_SIZE 4096
+#define ROOT_BLOCKS 16
+
+//Offset for the Entry Count of the FST
+#define FST_ENTRY_COUNT 0
+
+//Offset for Name Length of a File
+#define F_ENTRY_FLAGS 0
+
+#define F_ENTRY_NAME_COUNT 1
+
+#define F_ENTRY_SIZE 2
+
+//Offset for Name of a File
+#define F_ENTRY_NAME 3
+
+//Amount of Blocks per File Entry
+#define F_ENTRY_BLOCK_COUNT 64

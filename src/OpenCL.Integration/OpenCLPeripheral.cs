@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using OpenCL.NET;
 using OpenCL.NET.CommandQueues;
 using OpenCL.NET.Contexts;
@@ -8,7 +7,6 @@ using OpenCL.NET.Devices;
 using OpenCL.NET.Platforms;
 using OpenCL.Wrapper;
 using OpenCL.Wrapper.TypeEnums;
-
 using VisCPU.Peripherals;
 
 namespace OpenCL.Integration
@@ -16,7 +14,6 @@ namespace OpenCL.Integration
 
     public class OpenCLPeripheral : Peripheral
     {
-
         private KernelDatabase m_Database = new KernelDatabase( DataVectorTypes.Uchar1 );
 
         private uint m_PlatformIdxSelector;
@@ -98,8 +95,8 @@ namespace OpenCL.Integration
             if ( address == GetDeviceCountPin )
             {
                 return ( m_Handles[( int ) m_DeviceCountPlatformIdxSelector] as Platform ).GetDeviceCount(
-                     DeviceType.All
-                    );
+                    DeviceType.All
+                );
             }
 
             if ( address == GetDevicePin )
@@ -181,7 +178,6 @@ namespace OpenCL.Integration
         }
 
         #endregion
-
     }
 
 }

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-
 using Newtonsoft.Json;
-
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.ProjectSystem.Data;
@@ -17,21 +15,20 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
 
     public class LocalProjectDatabase : ProjectDatabase
     {
-
         private readonly List < ProjectPackage > m_PackageList;
 
         #region Public
 
         public LocalProjectDatabase( string moduleRoot ) : base(
-                                                                Parse( moduleRoot )
-                                                               )
+            Parse( moduleRoot )
+        )
         {
             Directory.CreateDirectory( ModuleRoot.OriginalString );
 
             string modListPath = Path.Combine(
-                                              ModuleRoot.OriginalString,
-                                              s_ModuleList
-                                             );
+                ModuleRoot.OriginalString,
+                s_ModuleList
+            );
 
             if ( !File.Exists( modListPath ) )
             {
@@ -40,8 +37,8 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
 
             m_PackageList =
                 JsonConvert.DeserializeObject < List < ProjectPackage > >(
-                                                                          File.ReadAllText( modListPath )
-                                                                         );
+                    File.ReadAllText( modListPath )
+                );
 
             m_PackageList.ForEach( x => x.Manager = this );
         }
@@ -63,11 +60,11 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
             if ( package.HasTarget( target.ProjectVersion ) )
             {
                 EventManager < WarningEvent >.SendEvent(
-                                                        new ProjectVersionAlreadyExistsEvent(
-                                                             target.ProjectName,
-                                                             target.ProjectVersion
-                                                            )
-                                                       );
+                    new ProjectVersionAlreadyExistsEvent(
+                        target.ProjectName,
+                        target.ProjectVersion
+                    )
+                );
 
                 string dataDir = GetTargetDataPath( target );
 
@@ -100,7 +97,7 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
                 Get(
                     ProjectResolver.Resolve( this, targetDependency ),
                     Path.Combine( targetDir, targetDependency.ProjectName )
-                   );
+                );
             }
         }
 
@@ -169,7 +166,7 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
                 Get(
                     ProjectResolver.Resolve( this, targetDependency ),
                     Path.Combine( rootDir, targetDependency.ProjectName )
-                   );
+                );
             }
         }
 
@@ -185,13 +182,12 @@ namespace VisCPU.Utility.ProjectSystem.Database.Implementations
             }
 
             return Path.Combine(
-                                AppRootHelper.AppRoot,
-                                moduleRoot
-                               );
+                AppRootHelper.AppRoot,
+                moduleRoot
+            );
         }
 
         #endregion
-
     }
 
 }

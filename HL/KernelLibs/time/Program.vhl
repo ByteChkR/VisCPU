@@ -1,0 +1,22 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+#inline "Time.vhl"
+#inline "TIMEDRV.vhl"
+
+private static uint s_TimeDriver;
+private static void time_init()
+{
+	if(!s_TimeDriver)
+	{
+		s_TimeDriver = malloc(size_of(TIMEDRV));
+		TIMEDRV.new(s_TimeDriver, 0xFFFF5000);
+	}
+}
+
+public static uint time_get()
+{
+	time_init();
+	TIMEDRV drv = s_TimeDriver;
+	uint t = drv.GetTime();
+	return t;
+}

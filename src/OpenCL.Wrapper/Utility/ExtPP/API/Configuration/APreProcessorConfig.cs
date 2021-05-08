@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Utility.ADL;
 using Utility.ExtPP.API.Exceptions;
 using Utility.ExtPP.Base;
@@ -16,7 +15,6 @@ namespace Utility.ExtPP.API.Configuration
     /// </summary>
     public abstract class APreProcessorConfig : ALoggable < LogType >
     {
-
         public abstract string FileExtension { get; }
 
         protected abstract List < AbstractPlugin > Plugins { get; }
@@ -52,10 +50,10 @@ namespace Utility.ExtPP.API.Configuration
             {
                 throw
                     new TextProcessingException(
-                                                "Could not preprocess file: " +
-                                                filenames.FirstOrDefault()?.GetFilePath(),
-                                                ex
-                                               );
+                        "Could not preprocess file: " +
+                        filenames.FirstOrDefault()?.GetFilePath(),
+                        ex
+                    );
             }
 
             return ret;
@@ -71,7 +69,6 @@ namespace Utility.ExtPP.API.Configuration
         }
 
         #endregion
-
     }
 
 }

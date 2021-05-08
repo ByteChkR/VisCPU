@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Programs
     /// </summary>
     public static class ProgramsNativeApi
     {
-
         #region Public
 
         /// <summary>
@@ -52,18 +51,14 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clBuildProgram" )]
         public static extern Result BuildProgram(
-            [In]
-            IntPtr program,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfDevices,
+            [In] IntPtr program,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] deviceList,
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string options,
-            [In]
-            IntPtr notificationCallback,
-            [In]
-            IntPtr userData );
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData );
 
         /// <summary>
         ///     Compiles a program’s source for all the devices or a specific device(s) in the OpenCL context associated with
@@ -116,24 +111,18 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clCompileProgram" )]
         public static extern Result CompileProgram(
-            [In]
-            IntPtr program,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfDevices,
+            [In] IntPtr program,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] deviceList,
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string options,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfInputHeaders,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfInputHeaders,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] inputHeaders,
-            [Out]
-            out IntPtr headerIncludeNames,
-            [In]
-            IntPtr notificationCallback,
-            [In]
-            IntPtr userData );
+            [Out] out IntPtr headerIncludeNames,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData );
 
         /// <summary>
         ///     Creates a program object for a context, and loads the binary bits specified by <see cref="binary" /> into the
@@ -193,20 +182,15 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateProgramWithBinary" )]
         public static extern IntPtr CreateProgramWithBinary(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfDevices,
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] deviceList,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             UIntPtr[] lengths,
-            [In]
-            IntPtr binaries,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result[] binaryStatus,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [In] IntPtr binaries,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result[] binaryStatus,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates a program object for a context, and loads the information related to the built-in kernels into a program
@@ -245,16 +229,13 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateProgramWithBuiltInKernels" )]
         public static extern IntPtr CreateProgramWithBuiltInKernels(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfDevices,
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] deviceList,
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string kernelNames,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates a program object for a context, and loads the IL into the program object.
@@ -286,14 +267,10 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateProgramWithIL" )]
         public static extern IntPtr CreateProgramWithIl(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr il,
-            [In]
-            UIntPtr length,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [In] IntPtr context,
+            [In] IntPtr il,
+            [In] UIntPtr length,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates a program object for a context, and loads the source code specified by the text strings in the
@@ -327,16 +304,13 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateProgramWithSource" )]
         public static extern IntPtr CreateProgramWithSource(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint count,
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint count,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] strings,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             uint[] lengths,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Returns build information for each device in the program object.
@@ -375,18 +349,12 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetProgramBuildInfo" )]
         public static extern Result GetProgramBuildInformation(
-            [In]
-            IntPtr program,
-            [In]
-            IntPtr device,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            ProgramBuildInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr program,
+            [In] IntPtr device,
+            [In] [MarshalAs( UnmanagedType.U4 )] ProgramBuildInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Returns information about the program object.
@@ -422,16 +390,11 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetProgramInfo" )]
         public static extern Result GetProgramInformation(
-            [In]
-            IntPtr program,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            ProgramInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr program,
+            [In] [MarshalAs( UnmanagedType.U4 )] ProgramInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Links a set of compiled program objects and libraries for all the devices or a specific device(s) in the OpenCL
@@ -488,24 +451,18 @@ namespace OpenCL.NET.Interop.Programs
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clLinkProgram" )]
         public static extern IntPtr LinkProgram(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfDevices,
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfDevices,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] deviceList,
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string options,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfInputPrograms,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfInputPrograms,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] inputPrograms,
-            [In]
-            IntPtr notificationCallback,
-            [In]
-            IntPtr userData,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Decrements the program reference count.
@@ -522,9 +479,7 @@ namespace OpenCL.NET.Interop.Programs
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseProgram" )]
-        public static extern Result ReleaseProgram(
-            [In]
-            IntPtr program );
+        public static extern Result ReleaseProgram( [In] IntPtr program );
 
         /// <summary>
         ///     Increments the program reference count. <see cref="CreateProgram" /> does an implicit retain.
@@ -541,9 +496,7 @@ namespace OpenCL.NET.Interop.Programs
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainProgram" )]
-        public static extern Result RetainProgram(
-            [In]
-            IntPtr program );
+        public static extern Result RetainProgram( [In] IntPtr program );
 
         /// <summary>
         ///     Allows the implementation to release the resources allocated by the OpenCL compiler.
@@ -565,12 +518,9 @@ namespace OpenCL.NET.Interop.Programs
         /// </returns>
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clUnloadPlatformCompiler" )]
-        public static extern Result UnloadPlatformCompiler(
-            [In]
-            IntPtr platform );
+        public static extern Result UnloadPlatformCompiler( [In] IntPtr platform );
 
         #endregion
-
     }
 
 }

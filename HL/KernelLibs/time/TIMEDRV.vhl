@@ -1,0 +1,37 @@
+private class TIMEDRV
+{
+	private uint m_PRESENT;
+	private uint m_TIME;
+
+	private static TIMEDRV(uint presentPin)
+	{
+		this.m_PRESENT = presentPin;
+
+		if(!this.IsPresent())
+		{
+			string strNoTimeDev = "No Time Device Detected at address: ";
+			kprint(&strNoTimeDev, size_of(strNoTimeDev));
+			kprintnl(presentPin);
+		}
+
+		this.m_TIME = presentPin + 1;
+	}
+
+
+	private uint IsPresent()
+	{
+		uint p = this.m_PRESENT;
+
+		uint v = p[0];
+		return v;
+	}
+
+	private uint GetTime()
+	{
+		uint t = this.m_TIME;
+		uint v = t[0];
+		return v;
+	}
+
+
+}

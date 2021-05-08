@@ -16,7 +16,6 @@ namespace OpenCL.NET
     /// </summary>
     public static class InteropConverter
     {
-
         /// <summary>
         ///     Contains a map, which maps a data type to a converter that is able to convert it.
         /// </summary>
@@ -47,33 +46,33 @@ namespace OpenCL.NET
 
                 MethodInfo converterMethodInfo = typeInfo.GetMethods().
                                                           FirstOrDefault(
-                                                                         method =>
-                                                                             method.IsStatic &&
-                                                                             method.ReturnType ==
-                                                                             targetType &&
-                                                                             method.GetParameters().Count() ==
-                                                                             1 &&
-                                                                             method.GetParameters().
-                                                                                 First().
-                                                                                 ParameterType ==
-                                                                             typeof( byte[] ) &&
-                                                                             method.Name ==
-                                                                             $"To{targetType.Name}"
-                                                                        );
+                                                              method =>
+                                                                  method.IsStatic &&
+                                                                  method.ReturnType ==
+                                                                  targetType &&
+                                                                  method.GetParameters().Count() ==
+                                                                  1 &&
+                                                                  method.GetParameters().
+                                                                         First().
+                                                                         ParameterType ==
+                                                                  typeof( byte[] ) &&
+                                                                  method.Name ==
+                                                                  $"To{targetType.Name}"
+                                                          );
 
                 if ( converterMethodInfo == null )
                 {
                     throw new InvalidOperationException(
-                                                        $"No fitting converter could be found for the type {targetType.Name}"
-                                                       );
+                        $"No fitting converter could be found for the type {targetType.Name}"
+                    );
                 }
 
                 lock ( ConverterMap )
                 {
                     ConverterMap.Add(
-                                     targetType,
-                                     dataToConvert => converterMethodInfo.Invoke( null, new object[] { dataToConvert } )
-                                    );
+                        targetType,
+                        dataToConvert => converterMethodInfo.Invoke( null, new object[] { dataToConvert } )
+                    );
                 }
             }
 
@@ -141,7 +140,6 @@ namespace OpenCL.NET
         }
 
         #endregion
-
     }
 
 }

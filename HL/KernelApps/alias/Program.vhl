@@ -1,0 +1,36 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+private static string strConsoleLib = "0:bin/console.vbin";
+private static string strConsoleAddAlias = "cmd_add_alias";
+
+
+public static void APP_START(uint args, uint argc)
+{
+	uint argNum = arg_getc(args, argc);
+	uint filePtrL;
+	uint filePtr = arg_get(1, args, argc, &filePtrL);
+	string strAlias = "add";
+	if(str_cmp(filePtr, filePtrL, &strAlias, size_of(strAlias)))
+	{
+		if(argNum != 4)
+		{
+			string strNotEnoughArgs = "Not Enough Alias Arguments Specified";
+			kprintl(&strNotEnoughArgs, size_of(strNotEnoughArgs));
+			return;
+		}
+		uint aNameL;
+		uint aName = arg_get(2, args, argc, &aNameL);
+		uint binNameL;
+		uint binName = arg_get(3, args, argc, &binNameL);
+		uint cApp = dlr_load_lib(&strConsoleLib, size_of(strConsoleLib));
+		uint cAddAlias = dlr_resolve_call(cApp, &strConsoleAddAlias, size_of(strConsoleAddAlias));
+	
+		cAddAlias(aName, aNameL, binName, binNameL);
+	}
+	else
+	{
+		string strInvalidArgs = "Invalid Alias Arguments Specified";
+		kprintl(&strInvalidArgs, size_of(strInvalidArgs));
+		
+	}
+}

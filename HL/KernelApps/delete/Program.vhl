@@ -1,0 +1,31 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+private static void DeleteFile(uint inp, uint inL)
+{
+	string strIn = "Deleting File: ";
+	kprint(&strIn, size_of(strIn));
+	kprintl(inp, inL);
+	if(!fs_exists(inp, inL))
+	{
+		string strSrcNExist = "File does not Exist";
+		kprintl(&strSrcNExist, size_of(strSrcNExist));
+		interrupt(1);
+	}
+	fs_delete(inp, inL);
+}
+
+public static void APP_START(uint args, uint argc)
+{
+	uint firstSep = str_find_char(0x20, args, argc);
+	uint binName = args;
+	uint binNameL = firstSep;
+
+	string strRBin = "Running Binary: ";
+	kprint(&strRBin, size_of(strRBin));
+	kprintl(binName, binNameL);
+
+	uint argStart = firstSep + 1;
+	uint argLen = argc - argStart;
+
+	DeleteFile(args + argStart, argLen);
+}

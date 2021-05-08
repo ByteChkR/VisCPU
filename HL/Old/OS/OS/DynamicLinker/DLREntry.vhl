@@ -1,0 +1,74 @@
+#include <../System/System.vhl>
+public class DLREntry
+{
+	//The Length of the Name
+	private uint m_LibNameLength;
+	//The Pointer of the Name
+	private uint m_LibNameStart;
+	//The Library Pointer in Memory
+	private uint m_LibPointer;
+
+	public static DLREntry(uint name, uint nameLength, uint ptr)
+	{
+		this.m_LibNameLength = nameLength;
+		this.m_LibNameStart = name;
+		this.m_LibPointer = ptr;
+	}
+
+	public uint Name()
+	{
+		uint p = this.m_LibNameStart;
+		return p;
+	}
+	public uint NameLength()
+	{
+		uint p = this.m_LibNameLength;
+		return p;
+	}
+
+	public uint LibPointer()
+	{
+		uint p = this.m_LibPointer;
+		return p;
+	}
+
+	public uint IsName(string name, uint len)
+	{
+		uint thisLen = this.m_LibNameLength;
+		if(thisLen != len)
+		{
+			return 0;
+		}
+
+		uint thisName = this.m_LibNameStart;
+		for(uint i = 0; i < thisLen; i++)
+		{
+			uint tv = thisName[i];
+			uint ov = name[i];
+			if(tv != ov)
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+
+	public static uint AllocateEntry(string name, uint len, uint ptr)
+	{
+		uint llsPtr = SystemCore.Allocate(size_of(DLREntry));
+		uint llsPathPtr = SystemCore.Allocate(len);
+		SIMD.Copy(name, llsPathPtr, len);
+		DLREntry e = DLREntry.new(llsPtr, name, len, ptr);
+		return llsPtr;
+	}
+
+	public void Dispose()
+	{
+		uint sptr = this.m_LibNameStart;
+		uint p = this;
+		uint lib = this.m_LibPointer;
+		SystemCore.Free(lib);
+		SystemCore.Free(sptr);
+		SystemCore.Free(p);
+	}
+}

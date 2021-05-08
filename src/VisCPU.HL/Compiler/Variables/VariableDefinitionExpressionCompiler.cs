@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Events;
@@ -16,7 +15,6 @@ namespace VisCPU.HL.Compiler.Variables
 
     public class VariableDefinitionExpressionCompiler : HlExpressionCompiler < HlVarDefOperand >
     {
-
         private readonly HlTypeSystem m_TypeSystem;
 
         #region Public
@@ -38,9 +36,9 @@ namespace VisCPU.HL.Compiler.Variables
                 }
 
                 HlTypeDefinition vdef = m_TypeSystem.GetType(
-                                                             compilation.Root,
-                                                             expr.VariableDefinition.TypeName.ToString()
-                                                            );
+                    compilation.Root,
+                    expr.VariableDefinition.TypeName.ToString()
+                );
 
                 uint arrSize = expr.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
 
@@ -50,15 +48,15 @@ namespace VisCPU.HL.Compiler.Variables
                 }
 
                 compilation.CreateVariable(
-                                           asmVarName,
-                                           arrSize,
-                                           vdef,
-                                           expr.VariableDefinition.Modifiers.Any(
-                                                x => x.Type == HlTokenType.OpPublicMod
-                                               )
-                                               ? VariableDataEmitFlags.Visible
-                                               : VariableDataEmitFlags.None
-                                          );
+                    asmVarName,
+                    arrSize,
+                    vdef,
+                    expr.VariableDefinition.Modifiers.Any(
+                        x => x.Type == HlTokenType.OpPublicMod
+                    )
+                        ? VariableDataEmitFlags.Visible
+                        : VariableDataEmitFlags.None
+                );
 
                 HlExpression init = expr.Initializer.FirstOrDefault();
 
@@ -68,16 +66,16 @@ namespace VisCPU.HL.Compiler.Variables
                          vOp.Value.Type == HlTokenType.OpStringLiteral )
                     {
                         ExpressionTarget svar = new ExpressionTarget(
-                                                                     compilation.GetFinalName( asmVarName ),
-                                                                     true,
-                                                                     vdef
-                                                                    );
+                            compilation.GetFinalName( asmVarName ),
+                            true,
+                            vdef
+                        );
 
                         string content = vOp.Value.ToString();
 
                         VariableDataEmitFlags emFlags = vdef is CStringTypeDefinition
-                                                            ? VariableDataEmitFlags.CStyle
-                                                            : VariableDataEmitFlags.None;
+                            ? VariableDataEmitFlags.CStyle
+                            : VariableDataEmitFlags.None;
 
                         if ( expr.VariableDefinition.Modifiers.Any( x => x.Type == HlTokenType.OpPackedMod ) )
                         {
@@ -87,18 +85,18 @@ namespace VisCPU.HL.Compiler.Variables
                         compilation.CreateVariable( asmVarName, content, vdef, emFlags );
 
                         return new ExpressionTarget(
-                                                    svar.ResultAddress,
-                                                    true,
-                                                    vdef
-                                                   );
+                            svar.ResultAddress,
+                            true,
+                            vdef
+                        );
                     }
                 }
 
                 ExpressionTarget dvar = new ExpressionTarget(
-                                                             compilation.GetFinalName( asmVarName ),
-                                                             true,
-                                                             vdef
-                                                            );
+                    compilation.GetFinalName( asmVarName ),
+                    true,
+                    vdef
+                );
 
                 if ( init != null )
                 {
@@ -118,26 +116,26 @@ namespace VisCPU.HL.Compiler.Variables
                 }
 
                 compilation.ConstValTypes.Set(
-                                              asmVarName,
-                                              new ConstantValueItem()
-                                              {
-                                                  Value = expr.VariableDefinition.InitializerExpression.
-                                                               FirstOrDefault()?.
-                                                               ToString(),
-                                                  IsPublic = expr.VariableDefinition.Modifiers.Any(
-                                                       x => x.Type == HlTokenType.OpPublicMod
-                                                      )
-                                              }
-                                             );
+                    asmVarName,
+                    new ConstantValueItem()
+                    {
+                        Value = expr.VariableDefinition.InitializerExpression.
+                                     FirstOrDefault()?.
+                                     ToString(),
+                        IsPublic = expr.VariableDefinition.Modifiers.Any(
+                            x => x.Type == HlTokenType.OpPublicMod
+                        )
+                    }
+                );
 
                 return new ExpressionTarget(
-                                            asmVarName,
-                                            true,
-                                            compilation.TypeSystem.GetType(
-                                                                           compilation.Root,
-                                                                           expr.VariableDefinition.TypeName.ToString()
-                                                                          )
-                                           );
+                    asmVarName,
+                    true,
+                    compilation.TypeSystem.GetType(
+                        compilation.Root,
+                        expr.VariableDefinition.TypeName.ToString()
+                    )
+                );
             }
 
             EventManager < ErrorEvent >.SendEvent( new DynamicVariablesNotSupportedEvent() );
@@ -146,7 +144,6 @@ namespace VisCPU.HL.Compiler.Variables
         }
 
         #endregion
-
     }
 
 }

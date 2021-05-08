@@ -6,11 +6,9 @@
     /// </summary>
     public enum MemoryScope
     {
-
         None = 0,
         Global = 1,
         Constant = 2
-
     }
 
 }

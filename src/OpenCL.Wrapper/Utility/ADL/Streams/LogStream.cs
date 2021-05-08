@@ -14,7 +14,6 @@ namespace Utility.ADL.Streams
     /// </summary>
     public class LogStream : Stream
     {
-
         /// <summary>
         ///     Base stream
         /// </summary>
@@ -209,7 +208,6 @@ namespace Utility.ADL.Streams
         }
 
         #endregion
-
     }
 
 }

@@ -1,0 +1,170 @@
+#include <FSv1Utils.vhl>
+#include <FSv1FileTable.vhl>
+#include "../../../Console.vhl"
+#include "../../../Partition.vhl"
+
+public class FSv1FileStream
+{
+	private uint m_FileIndex;
+	private uint m_Position;
+	private uint m_FileTable;
+
+	public static FSv1FileStream(uint i, uint table)
+	{
+		this.m_FileIndex = i;
+		this.m_Position = 0;
+		this.m_FileTable = table;
+	}
+
+	private uint GetAbsoluteAddress()
+	{
+		uint i = this.m_FileIndex;
+		uint p = this.m_Position;
+		FSv1FileTable table = this.m_FileTable;
+		uint blockIdx = p / BLOCK_SIZE;
+
+		while(table.GetBlockCount(i) <= blockIdx)
+		{
+			table.AddBlock(i); //Add Block
+		}
+
+		uint block = table.GetBlock(i, blockIdx);
+		uint off = p % BLOCK_SIZE;
+		uint addr = block * BLOCK_SIZE;
+		addr += off;
+		return addr;
+	}
+
+	private uint GetRemainingSizeInBlock()
+	{
+		uint p = this.m_Position;
+		uint blockFree = BLOCK_SIZE - (p % BLOCK_SIZE);
+		return blockFree;
+	}
+
+
+	public void WriteBuffer(uint buf, uint len)
+	{
+		uint pos = this.m_Position;
+		FSv1FileTable table = this.m_FileTable;
+		Partition p = table.GetPartition();
+
+		uint fileSize = this.GetSize();
+		uint end = pos + len;
+
+		if(fileSize < end)
+		{
+			//this.SetSize(end);
+		}
+
+		uint currentIndex = this.GetAbsoluteAddress();
+		uint totalWriteLeft = len;
+		uint currentLength = this.GetRemainingSizeInBlock();
+
+		while(totalWriteLeft)
+		{
+			if(totalWriteLeft < currentLength)
+			{
+				currentLength = totalWriteLeft;
+			}
+			
+			Console.WriteChar('P');
+			Console.WriteChar('A');
+			Console.WriteNumber(currentIndex);
+			Console.WriteChar('\t');
+			Console.WriteChar('B');
+			Console.WriteChar('A');
+			Console.WriteNumber(buf);
+			Console.WriteChar('\t');
+			Console.WriteChar('W');
+			Console.WriteChar('S');
+			Console.WriteNumberLine(currentLength);
+
+
+			p.WriteBuffer(currentIndex, buf, currentLength);
+
+			totalWriteLeft -= currentLength;
+			buf += currentLength;
+			pos += currentLength;
+			this.SetPosition(pos);
+			currentIndex = this.GetAbsoluteAddress();
+			currentLength = this.GetRemainingSizeInBlock();
+		}
+
+	}
+
+	public void Write(uint data)
+	{
+		FSv1FileTable table = this.m_FileTable;
+		uint addr = this.GetAbsoluteAddress();
+		Partition p = table.GetPartition();
+		p.Write(addr, data);
+		uint pos = this.m_Position;
+		pos++;
+		this.m_Position = pos;
+		uint s = this.GetSize();
+		if(s < pos)
+		{
+			this.SetSize(pos);
+		}
+	}
+
+	public uint Read()
+	{
+		FSv1FileTable table = this.m_FileTable;
+		uint addr = this.GetAbsoluteAddress();
+		Partition p = table.GetPartition();
+		uint v = p.Read(addr);
+		uint pos = this.m_Position;
+		pos++;
+		this.m_Position = pos;
+		return v;
+	}
+
+	public uint GetSize()
+	{
+		FSv1FileTable table = this.m_FileTable;
+		uint i = this.m_FileIndex;
+		uint v = table.GetEntrySize(i);
+		return v;
+	}
+
+	public void SetPosition(uint pos)
+	{
+		uint sz = this.GetSize();
+		if(pos >= sz)
+		{
+			this.SetSize(pos);
+		}
+		this.m_Position = pos;
+	}
+
+	public uint GetPosition()
+	{
+		uint v = this.m_Position;
+		return v;
+	}
+
+	public void SetSize(uint sz)
+	{
+		uint i = this.m_FileIndex;
+		FSv1FileTable table = this.m_FileTable;
+		uint blockIdx = sz / BLOCK_SIZE;
+		if(table.GetBlockCount(i) < blockIdx)
+		{
+			while(table.GetBlockCount(i) < blockIdx)
+			{
+				table.AddBlock(i); //Add Block
+			}
+		}
+		else if(table.GetBlockCount(i) > blockIdx+1)
+		{
+			while(table.GetBlockCount(i) > blockIdx+1)
+			{
+				table.RemoveBlock(i); //Remove Block
+			}
+		}
+
+		table.SetEntrySize(i, sz);
+	}
+}

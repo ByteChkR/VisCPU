@@ -7,7 +7,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobRestore : BuildJobRunner
     {
-
         public override string RunnerName => "restore";
 
         #region Public
@@ -27,7 +26,6 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
-
     }
 
 }

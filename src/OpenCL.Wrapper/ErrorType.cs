@@ -3,10 +3,8 @@
 
     public enum ErrorType
     {
-
         ProgramBuild,
         KernelBuild
-
     }
 
 }

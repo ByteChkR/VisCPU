@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-
 using Utility.ExtPP.Base.settings;
 
 namespace Utility.ExtPP.Base.Plugins
@@ -10,22 +9,19 @@ namespace Utility.ExtPP.Base.Plugins
     /// </summary>
     public abstract class AbstractLinePlugin : AbstractPlugin
     {
-
         /// <summary>
         ///     Specifies the plugin type. Fullscript or Line Script
         /// </summary>
-        public override PluginType PluginTypeToggle =>
-            Order.ToLower( CultureInfo.InvariantCulture ) == "after"
-                ? PluginType.LinePluginAfter
-                : PluginType.LinePluginBefore;
+        public override PluginType PluginTypeToggle => Order.ToLower( CultureInfo.InvariantCulture ) == "after"
+            ? PluginType.LinePluginAfter
+            : PluginType.LinePluginBefore;
 
         /// <summary>
         ///     Specifies the order on what "event" the plugin should execute
         /// </summary>
-        public override ProcessStage ProcessStages =>
-            Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
-                ? ProcessStage.OnLoadStage
-                : ProcessStage.OnFinishUp;
+        public override ProcessStage ProcessStages => Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
+            ? ProcessStage.OnLoadStage
+            : ProcessStage.OnFinishUp;
 
         public string Order { get; set; } = "after";
 
@@ -71,7 +67,6 @@ namespace Utility.ExtPP.Base.Plugins
         }
 
         #endregion
-
     }
 
 }

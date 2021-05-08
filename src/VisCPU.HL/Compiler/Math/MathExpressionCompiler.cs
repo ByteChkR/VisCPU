@@ -7,7 +7,6 @@ namespace VisCPU.HL.Compiler.Math
 
     public abstract class MathExpressionCompiler : HlExpressionCompiler < HlBinaryOp >
     {
-
         protected abstract string InstructionKey { get; }
 
         protected override bool NeedsOutput => true;
@@ -43,17 +42,17 @@ namespace VisCPU.HL.Compiler.Math
             if ( target.IsPointer )
             {
                 ExpressionTarget et = new ExpressionTarget(
-                                                           compilation.GetTempVarDref( target.ResultAddress ),
-                                                           true,
-                                                           target.TypeDefinition
-                                                          );
+                    compilation.GetTempVarDref( target.ResultAddress ),
+                    true,
+                    target.TypeDefinition
+                );
 
                 compilation.EmitterResult.Emit(
-                                               instrKey,
-                                               et.ResultAddress,
-                                               rTarget.ResultAddress,
-                                               outputTarget.ResultAddress
-                                              );
+                    instrKey,
+                    et.ResultAddress,
+                    rTarget.ResultAddress,
+                    outputTarget.ResultAddress
+                );
 
                 compilation.ReleaseTempVar( et.ResultAddress );
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
@@ -63,11 +62,11 @@ namespace VisCPU.HL.Compiler.Math
             }
 
             compilation.EmitterResult.Emit(
-                                           instrKey,
-                                           target.ResultAddress,
-                                           rTarget.ResultAddress,
-                                           outputTarget.ResultAddress
-                                          );
+                instrKey,
+                target.ResultAddress,
+                rTarget.ResultAddress,
+                outputTarget.ResultAddress
+            );
 
             compilation.ReleaseTempVar( rTarget.ResultAddress );
             compilation.ReleaseTempVar( target.ResultAddress );
@@ -85,7 +84,6 @@ namespace VisCPU.HL.Compiler.Math
             ExpressionTarget right );
 
         #endregion
-
     }
 
 }

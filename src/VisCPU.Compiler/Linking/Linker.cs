@@ -7,7 +7,6 @@ namespace VisCPU.Compiler.Linking
 
     public abstract class Linker : VisBase
     {
-
         protected override LoggerSystems SubSystem => LoggerSystems.Linker;
 
         #region Public
@@ -15,7 +14,6 @@ namespace VisCPU.Compiler.Linking
         public abstract LinkerResult Link( LinkerTarget target, Compilation compilation );
 
         #endregion
-
     }
 
 }

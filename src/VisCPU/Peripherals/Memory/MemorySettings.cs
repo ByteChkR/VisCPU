@@ -1,5 +1,4 @@
 ﻿using System.IO;
-
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.IO.Settings.Loader;
@@ -9,7 +8,6 @@ namespace VisCPU.Peripherals.Memory
 
     public class MemorySettings
     {
-
         [field: Argument( Name = "memory:read" )]
         public bool EnableRead { get; set; } = true;
 
@@ -21,12 +19,12 @@ namespace VisCPU.Peripherals.Memory
 
         [field: Argument( Name = "memory:persistent.path" )]
         public string PersistentPath { get; set; } = Path.Combine(
-                                                                  Peripheral.PeripheralCategory.
-                                                                             AddCategory( "memory" ).
-                                                                             AddCategory( "states" ).
-                                                                             GetCategoryDirectory(),
-                                                                  "default.bin"
-                                                                 );
+            Peripheral.PeripheralCategory.
+                       AddCategory( "memory" ).
+                       AddCategory( "states" ).
+                       GetCategoryDirectory(),
+            "default.bin"
+        );
 
         [field: Argument( Name = "memory:size" )]
         public uint Size { get; set; } = 262144;
@@ -45,15 +43,14 @@ namespace VisCPU.Peripherals.Memory
             SettingsCategory memoryCategory = Peripheral.PeripheralCategory.AddCategory( "memory" );
 
             SettingsManager.RegisterDefaultLoader(
-                                                  new JsonSettingsLoader(),
-                                                  memoryCategory,
-                                                  "default.json",
-                                                  new MemorySettings()
-                                                 );
+                new JsonSettingsLoader(),
+                memoryCategory,
+                "default.json",
+                new MemorySettings()
+            );
         }
 
         #endregion
-
     }
 
 }

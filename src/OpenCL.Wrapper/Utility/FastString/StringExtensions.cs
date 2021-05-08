@@ -8,7 +8,6 @@ namespace Utility.FastString
 
     public static class StringExtensions
     {
-
         /// <summary>
         ///     String builder to be able to concat long arrays faster
         /// </summary>
@@ -77,7 +76,6 @@ namespace Utility.FastString
         }
 
         #endregion
-
     }
 
 }

@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Devices
     [Flags]
     public enum DeviceFloatingPointConfiguration : ulong
     {
-
         /// <summary>
         ///     Denorms are supported.
         /// </summary>
@@ -53,7 +52,6 @@ namespace OpenCL.NET.Interop.Devices
         ///     Divide and sqrt are correctly rounded as defined by the IEEE754 specification.
         /// </summary>
         CorrectlyRoundedDivideSquareRoot = 1 << 7
-
     }
 
 }

@@ -5,7 +5,6 @@ namespace OpenCL.Wrapper
 
     public struct CLProgramBuildError
     {
-
         public readonly ErrorType Error;
         public readonly Exception Exception;
 
@@ -22,7 +21,6 @@ namespace OpenCL.Wrapper
         {
             return $"[{Error}] {Exception.GetType().Name} {Message}";
         }
-
     }
 
 }

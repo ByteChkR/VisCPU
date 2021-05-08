@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using Utility.ADL;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.settings;
@@ -13,7 +12,6 @@ namespace Utility.ExtPP.Base.Plugins
     /// </summary>
     public abstract class AbstractPlugin : ALoggable < LogType >
     {
-
         protected const int PLUGIN_MIN_SEVERITY = 5;
 
         /// <summary>
@@ -61,9 +59,9 @@ namespace Utility.ExtPP.Base.Plugins
             ProcessStage stage )
         {
             return plugins.Where(
-                                 x => BitMask.IsContainedInMask( ( int ) x.PluginTypeToggle, ( int ) type, true ) &&
-                                      BitMask.IsContainedInMask( ( int ) x.ProcessStages, ( int ) stage, true )
-                                ).
+                               x => BitMask.IsContainedInMask( ( int ) x.PluginTypeToggle, ( int ) type, true ) &&
+                                    BitMask.IsContainedInMask( ( int ) x.ProcessStages, ( int ) stage, true )
+                           ).
                            ToList();
         }
 
@@ -150,7 +148,6 @@ namespace Utility.ExtPP.Base.Plugins
         }
 
         #endregion
-
     }
 
 }

@@ -1,0 +1,26 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+public static void APP_START(uint args, uint argc)
+{
+	uint firstSep = str_find_char(0x20, args, argc);
+	uint binName = args;
+	uint binNameL = firstSep;
+
+	string strRBin = "Running Binary: ";
+	kprint(&strRBin, size_of(strRBin));
+	kprintl(binName, binNameL);
+
+	uint argStart = firstSep + 1;
+	uint argLen = argc - argStart;
+	uint secondSep = str_find_char(0x20, args + argStart, argLen);
+	uint arg1 = args + argStart;
+	uint arg1L = secondSep;
+
+	uint arg2 = arg1+arg1L+1;
+	uint arg2L = argLen - arg1L;
+	arg2L--;
+
+
+	kal_load_from_hfs(arg1, arg1L, arg2, arg2L);
+
+}

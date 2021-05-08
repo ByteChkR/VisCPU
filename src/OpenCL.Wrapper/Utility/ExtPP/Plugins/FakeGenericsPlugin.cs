@@ -2,14 +2,12 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
-
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Base.settings;
 using Utility.FastString;
-
 using Utils = Utility.ExtPP.Base.Utils;
 
 namespace Utility.ExtPP.Plugins
@@ -17,13 +15,11 @@ namespace Utility.ExtPP.Plugins
 
     public class FakeGenericsPlugin : AbstractFullScriptPlugin
     {
-
         public override string[] Prefix => new[] { "gen", "FakeGen" };
 
-        public override ProcessStage ProcessStages =>
-            Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
-                ? ProcessStage.OnLoadStage
-                : ProcessStage.OnMain;
+        public override ProcessStage ProcessStages => Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
+            ? ProcessStage.OnLoadStage
+            : ProcessStage.OnMain;
 
         public string Stage { get; set; } = "onmain";
 
@@ -32,46 +28,46 @@ namespace Utility.ExtPP.Plugins
         public string Separator { get; set; } = " ";
 
         public override List < CommandInfo > Info { get; } = new List < CommandInfo >
-                                                             {
-                                                                 new CommandInfo(
-                                                                      "set-genkeyword",
-                                                                      "g",
-                                                                      PropertyHelper.GetPropertyInfo(
-                                                                           typeof(
-                                                                               FakeGenericsPlugin
-                                                                           ),
-                                                                           nameof(
-                                                                               GenericKeyword
-                                                                           )
-                                                                          ),
-                                                                      "Sets the keyword that is used when writing pseudo generic code."
-                                                                     ),
-                                                                 new CommandInfo(
-                                                                      "set-separator",
-                                                                      "s",
-                                                                      PropertyHelper.GetPropertyInfo(
-                                                                           typeof(
-                                                                               FakeGenericsPlugin
-                                                                           ),
-                                                                           nameof(
-                                                                               Separator
-                                                                           )
-                                                                          ),
-                                                                      "Sets the separator that is used to separate different generic types"
-                                                                     ),
-                                                                 new CommandInfo(
-                                                                      "set-stage",
-                                                                      "ss",
-                                                                      PropertyHelper.GetPropertyInfo(
-                                                                           typeof(
-                                                                               FakeGenericsPlugin
-                                                                           ),
-                                                                           nameof(
-                                                                               Stage )
-                                                                          ),
-                                                                      "Sets the Stage Type of the Plugin to be Executed OnLoad or OnFinishUp"
-                                                                     )
-                                                             };
+        {
+            new CommandInfo(
+                "set-genkeyword",
+                "g",
+                PropertyHelper.GetPropertyInfo(
+                    typeof(
+                        FakeGenericsPlugin
+                    ),
+                    nameof(
+                        GenericKeyword
+                    )
+                ),
+                "Sets the keyword that is used when writing pseudo generic code."
+            ),
+            new CommandInfo(
+                "set-separator",
+                "s",
+                PropertyHelper.GetPropertyInfo(
+                    typeof(
+                        FakeGenericsPlugin
+                    ),
+                    nameof(
+                        Separator
+                    )
+                ),
+                "Sets the separator that is used to separate different generic types"
+            ),
+            new CommandInfo(
+                "set-stage",
+                "ss",
+                PropertyHelper.GetPropertyInfo(
+                    typeof(
+                        FakeGenericsPlugin
+                    ),
+                    nameof(
+                        Stage )
+                ),
+                "Sets the Stage Type of the Plugin to be Executed OnLoad or OnFinishUp"
+            )
+        };
 
         #region Public
 
@@ -91,16 +87,16 @@ namespace Utility.ExtPP.Plugins
                 for ( int i = genParams.Length - 1; i >= 0; i-- )
                 {
                     Logger.Log(
-                               LogType.Log,
-                               $"Replacing Keyword {GenericKeyword}{i} with {genParams[i]} in file {file.GetKey()}",
-                               PLUGIN_MIN_SEVERITY + 1
-                              );
+                        LogType.Log,
+                        $"Replacing Keyword {GenericKeyword}{i} with {genParams[i]} in file {file.GetKey()}",
+                        PLUGIN_MIN_SEVERITY + 1
+                    );
 
                     Utils.ReplaceKeyWord(
-                                         file.GetSource(),
-                                         genParams[i],
-                                         GenericKeyword + i
-                                        );
+                        file.GetSource(),
+                        genParams[i],
+                        GenericKeyword + i
+                    );
                 }
             }
 
@@ -152,7 +148,6 @@ namespace Utility.ExtPP.Plugins
         }
 
         #endregion
-
     }
 
 }

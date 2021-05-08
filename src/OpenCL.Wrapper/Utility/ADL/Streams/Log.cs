@@ -10,7 +10,6 @@ namespace Utility.ADL.Streams
     /// </summary>
     public struct Log
     {
-
         /// <summary>
         ///     The mask of the log.
         /// </summary>
@@ -82,7 +81,6 @@ namespace Utility.ADL.Streams
 
             return new Log( mask, message );
         }
-
     }
 
 }

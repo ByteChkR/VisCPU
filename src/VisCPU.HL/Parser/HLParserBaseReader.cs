@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-
 using VisCPU.HL.Parser.Tokens;
 
 namespace VisCPU.HL.Parser
@@ -14,7 +13,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public class HlParserBaseReader
     {
-
         /// <summary>
         ///     Input Source
         /// </summary>
@@ -88,10 +86,10 @@ namespace VisCPU.HL.Parser
                 else
                 {
                     m_CurrentToken = new HlTextToken(
-                                                     HlTokenType.Unknown,
-                                                     m_Input[m_CurrentIndex].ToString(),
-                                                     m_CurrentIndex
-                                                    );
+                        HlTokenType.Unknown,
+                        m_Input[m_CurrentIndex].ToString(),
+                        m_CurrentIndex
+                    );
 
                     m_CurrentIndex++;
                 }
@@ -295,7 +293,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

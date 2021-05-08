@@ -6,7 +6,6 @@ namespace OpenCL.NET.Interop.Kernels
     /// </summary>
     public enum KernelExecutionInformation : uint
     {
-
         /// <summary>
         ///     SVM pointers used by a kernel which are not passed as arguments to kernel. These addresses may be defined in SVM
         ///     buffer(s) that are passed as arguments to kernel. These non-argument SVM pointers must be specified using
@@ -21,7 +20,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     kernel.
         /// </summary>
         SvmFineGrainSystem = 0x11B7
-
     }
 
 }

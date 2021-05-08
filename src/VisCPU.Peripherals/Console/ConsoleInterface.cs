@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -10,7 +9,6 @@ namespace VisCPU.Peripherals.Console
 
     public class ConsoleInterface : Peripheral
     {
-
         private readonly ConsoleInterfaceSettings m_Settings;
 
         public override string PeripheralName => "Console Management Device";
@@ -100,7 +98,7 @@ namespace VisCPU.Peripherals.Console
 
         public override void WriteData( uint address, uint data )
         {
-            if (m_Settings.InterfaceClearPin == address)
+            if ( m_Settings.InterfaceClearPin == address )
             {
                 ConsoleClear();
             }
@@ -147,7 +145,6 @@ namespace VisCPU.Peripherals.Console
         }
 
         #endregion
-
     }
 
 }

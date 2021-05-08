@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.CommandQueues
     [Flags]
     public enum CommandQueueProperty : ulong
     {
-
         /// <summary>
         ///     Determines whether the commands queued in the command-queue are executed in-order or out-of-order. If set, the
         ///     commands in the command-queue are executed out-of-order. Otherwise, commands are executed in-order.
@@ -43,7 +42,6 @@ namespace OpenCL.NET.Interop.CommandQueues
         ///     that has already been created and increment its retain count by 1.
         /// </summary>
         OnDeviceDefault = 1 << 3
-
     }
 
 }

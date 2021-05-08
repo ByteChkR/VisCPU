@@ -1,0 +1,147 @@
+
+#define DLR_ENABLE_LOGS 1
+
+#include "../Console.vhl"
+public class DLRBinaryHelper
+{
+
+	//Library Structure
+	//	SymbolTableCount
+	//	SymbolTableEntries
+	//	...
+	//	PIC Header and Table
+	// 	...
+	//	Binary
+
+	//Gets the Binary Start of the Library
+	public static uint GetBinaryStart(uint libPtr)
+	{
+		uint picStart = DLRBinaryHelper.GetPICStart(libPtr);
+		uint picTableLen = picStart[2];
+		return picStart + picTableLen+4;
+	}
+
+	//Returns the PIC Header Position
+	public static uint GetPICStart(uint libPtr)
+	{
+		uint picStart = DLRBinaryHelper.GetSymbolEntry(libPtr, DLRBinaryHelper.GetSymbolEntryCount(libPtr));
+		return picStart;
+	}
+
+	//Returns the Number of Symbols in the Table of the Library
+	public static uint GetSymbolEntryCount(uint libPtr)
+	{
+		uint count = libPtr[0];
+		return count;
+	}
+
+	//Get the Size of a Single Entry
+	private static uint GetSymbolEntrySize(uint entryStart)
+	{
+		uint nameSize = entryStart[0];
+		uint totalSize = nameSize + 2;
+		return totalSize;
+	}
+
+	//Get the Position of the Entry at index.
+	public static uint GetSymbolEntry(uint libPtr, uint index)
+	{
+		uint current = libPtr + 1;
+		for(uint i = 0; i < index; i++)
+		{
+			uint sz = DLRBinaryHelper.GetSymbolEntrySize(current);
+			current += sz;
+		}
+		return current;
+	}
+
+	//returns the pointer to the entry name
+	public static uint GetSymbolEntryName(uint entryPtr)
+	{
+		uint nameStart = entryPtr+2;
+		return nameStart;
+	}
+
+	//returns the size of the entry name
+	public static uint GetSymbolEntryNameSize(uint entryPtr)
+	{
+		uint nameStart = entryPtr[0];
+		return nameStart;
+	}
+
+	//returns the call site of the entry(the address of the function)
+	public static uint GetSymbolEntrySite(uint entryPtr)
+	{
+		uint site = entryPtr[1];
+		return site;
+	}
+
+	//Applies the correct offset for the current memory position
+	//Running this function multiple times will corrupt the table
+	public static void PatchSymbolTable(uint libPtr)
+	{
+		uint binaryOffset = DLRBinaryHelper.GetBinaryStart(libPtr);
+		uint symCount = DLRBinaryHelper.GetSymbolEntryCount(libPtr);
+
+		if(DLR_ENABLE_LOGS)
+		{
+			string strPatchIdx = "[DLR] Patch List: ";
+			kprint(&strPatchIdx, size_of(strPatchIdx));
+			kprintnl(symCount);
+		}
+
+
+		uint symStart = libPtr + 1;
+		for(uint i = 0; i < symCount; i++)
+		{
+			uint siteName = DLRBinaryHelper.GetSymbolEntryName(symStart);
+			uint siteNameSize = DLRBinaryHelper.GetSymbolEntryNameSize(symStart);
+			string siteStr = "[DLR] Patching Site: ";
+			kprint(&siteStr, size_of(siteStr));
+			kprint(siteName, siteNameSize);
+			kprintc('-');
+			kprintc('>');
+
+			uint site = DLRBinaryHelper.GetSymbolEntrySite(symStart);
+			uint newSite = site + binaryOffset;
+			symStart[1] = newSite;
+			kprintnl(newSite);
+			symStart += DLRBinaryHelper.GetSymbolEntrySize(symStart);
+		}
+	}
+	
+	//Applies the correct offset for the current memory position
+	//Running this function multiple times will corrupt the binary
+	public static void PatchPICBinary(uint libPtr)
+	{
+		uint picStart = DLRBinaryHelper.GetPICStart(libPtr);
+		uint binaryStart = DLRBinaryHelper.GetBinaryStart(libPtr);
+		uint picSymbolCount = DLRBinaryHelper.GetSymbolEntryCount(libPtr);
+		uint version = picStart[1]; //Read Version Byte (V1 = 1)
+
+		if(version != 2)
+		{
+			string strUnsupportedVersion = "Unsupported Binary Version: ";
+			kprintl(&strUnsupportedVersion, size_of(strUnsupportedVersion));
+			kprintnl(version);
+			interrupt(1);
+			return 0;
+		}
+
+		uint listLength = picStart[2]; //Read List Length
+
+		uint picTableStart = picStart + 4;
+
+		for(uint i = 0; i < listLength; i++)
+		{
+			uint valIndex = picTableStart[i];
+			uint val = binaryStart[valIndex];
+
+
+			uint newVal = val + binaryStart;
+			
+			binaryStart[valIndex] = newVal;
+		}
+	}
+
+}

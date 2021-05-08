@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Utility.FastString;
 
 namespace OpenCL.Wrapper
@@ -9,7 +8,6 @@ namespace OpenCL.Wrapper
 
     public class CLBuildException : Exception
     {
-
         public readonly List < CLProgramBuildResult > BuildResults;
 
         #region Public
@@ -37,7 +35,6 @@ namespace OpenCL.Wrapper
         }
 
         #endregion
-
     }
 
 }

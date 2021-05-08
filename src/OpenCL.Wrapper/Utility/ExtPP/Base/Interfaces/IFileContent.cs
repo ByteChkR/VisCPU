@@ -3,7 +3,6 @@
 
     public interface IFileContent
     {
-
         string GetDefinedName();
 
         string GetFilePath();
@@ -15,7 +14,6 @@
         void SetKey( string key );
 
         bool TryGetLines( out string[] lines );
-
     }
 
 }

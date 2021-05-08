@@ -3,7 +3,6 @@
 
     public static class WarningEventKeys
     {
-
         public static readonly string s_ModuleVersionExists = "module-version-exists";
 
         public static readonly string s_MemoryBusDeviceOverlap = "memory-bus-device-overlap";
@@ -21,7 +20,6 @@
         public static readonly string s_StaticInstanceMemberAccess = "hl-compiler-static-instance-member-access";
 
         public static readonly string s_HlMemberNotImplemented = "hl-member-not-implemented";
-
     }
 
 }

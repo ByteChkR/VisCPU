@@ -6,7 +6,6 @@ namespace OpenCL.NET.Interop.Memory
     /// </summary>
     public enum ChannelOrder : uint
     {
-
         /// <summary>
         ///     Only a red channel.
         /// </summary>
@@ -131,7 +130,6 @@ namespace OpenCL.NET.Interop.Memory
         ///     <c>ChannelType.UnsignedInteger8</c>.
         /// </summary>
         Abgr = 0x10C3
-
     }
 
 }

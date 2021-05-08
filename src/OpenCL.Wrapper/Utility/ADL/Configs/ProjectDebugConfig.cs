@@ -5,7 +5,6 @@ namespace Utility.ADL.Configs
 
     public class ProjectDebugConfig : IProjectDebugConfig
     {
-
         private int? minSeverity;
 
         public string ProjectName { get; set; }
@@ -79,14 +78,12 @@ namespace Utility.ADL.Configs
         }
 
         #endregion
-
     }
 
     public class ProjectDebugConfig < MaskType, SeverityType > : IProjectDebugConfig
         where MaskType : Enum
         where SeverityType : Enum
     {
-
         private int? minSeverity;
 
         public string ProjectName { get; set; }
@@ -163,7 +160,6 @@ namespace Utility.ADL.Configs
         }
 
         #endregion
-
     }
 
 }

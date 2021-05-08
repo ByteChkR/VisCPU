@@ -5,7 +5,6 @@ namespace Utility.ADL.Streams
 
     public class LogTextStream : LogStream
     {
-
         #region Public
 
         /// <summary>
@@ -38,7 +37,6 @@ namespace Utility.ADL.Streams
         }
 
         #endregion
-
     }
 
 }

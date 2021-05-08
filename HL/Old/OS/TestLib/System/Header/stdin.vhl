@@ -1,0 +1,12 @@
+#define read()
+{
+	Console.Read();
+}
+
+#define readbuf(buf, start, len)
+{
+	for(uint i = start; i < len; i++)
+	{
+		buf[i] = Console.Read();
+	}
+}

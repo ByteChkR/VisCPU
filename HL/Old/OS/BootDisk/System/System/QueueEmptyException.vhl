@@ -1,0 +1,22 @@
+#include "Exception.vhl"
+
+private static string S_QUEUE_EMPTY = "The Specified Index is out of bounds";
+
+
+public class QueueEmptyException : Exception
+{
+	public static QueueEmptyException()
+	{
+
+	}
+
+	public override uint GetMessage()
+	{
+		return &S_QUEUE_EMPTY;
+	}
+
+	public override uint GetMessageLength()
+	{
+		return size_of(S_QUEUE_EMPTY);
+	}
+}

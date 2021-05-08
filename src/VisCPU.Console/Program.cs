@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Console.Core;
 using VisCPU.Utility;
 
@@ -10,7 +9,6 @@ namespace VisCPU.Console
 
     public static class Program
     {
-
         #region Private
 
         private static void Main( string[] args )
@@ -33,7 +31,6 @@ namespace VisCPU.Console
         }
 
         #endregion
-
     }
 
 }

@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-
 using OpenCL.NET.Devices;
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Contexts;
@@ -14,7 +13,6 @@ using OpenCL.NET.Interop.Memory;
 using OpenCL.NET.Interop.Programs;
 using OpenCL.NET.Memory;
 using OpenCL.NET.Programs;
-
 using MemoryFlag = OpenCL.NET.Memory.MemoryFlag;
 
 #endregion
@@ -27,7 +25,6 @@ namespace OpenCL.NET.Contexts
     /// </summary>
     public class Context : HandleBase
     {
-
         /// <summary>
         ///     A delegate for the callback of <see cref="BuildProgram" />.
         /// </summary>
@@ -80,13 +77,13 @@ namespace OpenCL.NET.Contexts
         {
             // Creates the new context for the specified devices
             IntPtr contextPointer = ContextsNativeApi.CreateContext(
-                                                                    IntPtr.Zero,
-                                                                    ( uint ) devices.Count(),
-                                                                    devices.Select( device => device.Handle ).ToArray(),
-                                                                    IntPtr.Zero,
-                                                                    IntPtr.Zero,
-                                                                    out Result result
-                                                                   );
+                IntPtr.Zero,
+                ( uint ) devices.Count(),
+                devices.Select( device => device.Handle ).ToArray(),
+                IntPtr.Zero,
+                IntPtr.Zero,
+                out Result result
+            );
 
             // Checks if the device creation was successful, if not, then an exception is thrown
             if ( result != Result.Success )
@@ -288,10 +285,10 @@ namespace OpenCL.NET.Contexts
                     {
                         string buildLog =
                             GetProgramBuildInformation < string >(
-                                                                  programPointer,
-                                                                  device,
-                                                                  ProgramBuildInformation.Log
-                                                                 ).
+                                    programPointer,
+                                    device,
+                                    ProgramBuildInformation.Log
+                                ).
                                 Trim();
 
                         if ( !string.IsNullOrWhiteSpace( buildLog ) )
@@ -306,17 +303,17 @@ namespace OpenCL.NET.Contexts
 
                 // Compiles the build logs into a formatted string and integrates it into the exception message
                 string buildLogString = string.Join(
-                                                    $"{Environment.NewLine}{Environment.NewLine}",
-                                                    buildLogs.Select(
-                                                                     keyValuePair =>
-                                                                         $" Build log for device \"{keyValuePair.Key}\":{Environment.NewLine}{keyValuePair.Value}"
-                                                                    )
-                                                   );
+                    $"{Environment.NewLine}{Environment.NewLine}",
+                    buildLogs.Select(
+                        keyValuePair =>
+                            $" Build log for device \"{keyValuePair.Key}\":{Environment.NewLine}{keyValuePair.Value}"
+                    )
+                );
 
                 throw new OpenClException(
-                                          $"The program could not be compiled and linked.{Environment.NewLine}{Environment.NewLine}{buildLogString}",
-                                          result
-                                         );
+                    $"The program could not be compiled and linked.{Environment.NewLine}{Environment.NewLine}{buildLogString}",
+                    result
+                );
             }
 
             // Creates the new program and returns it
@@ -368,115 +365,115 @@ namespace OpenCL.NET.Contexts
             Result result1 = result;
 
             result = ProgramsNativeApi.BuildProgram(
-                                                    programPointer,
-                                                    0,
-                                                    null,
-                                                    null,
-                                                    Marshal.GetFunctionPointerForDelegate(
-                                                         new BuildProgramCallback(
-                                                              (
-                                                                  builtProgramPointer,
-                                                                  userData ) =>
-                                                              {
-                                                                  // Tries to validate the build, if not successful, then an exception is thrown
-                                                                  try
-                                                                  {
-                                                                      // Cycles over all devices and retrieves the build log for each one, so that the errors that occurred can be added to the exception message (if any error occur during the retrieval, the exception is thrown without the log)
-                                                                      Dictionary
-                                                                      < string
-                                                                        , string
-                                                                      > buildLogs
-                                                                          = new
-                                                                              Dictionary
-                                                                              < string
-                                                                                , string
-                                                                              >();
+                programPointer,
+                0,
+                null,
+                null,
+                Marshal.GetFunctionPointerForDelegate(
+                    new BuildProgramCallback(
+                        (
+                            builtProgramPointer,
+                            userData ) =>
+                        {
+                            // Tries to validate the build, if not successful, then an exception is thrown
+                            try
+                            {
+                                // Cycles over all devices and retrieves the build log for each one, so that the errors that occurred can be added to the exception message (if any error occur during the retrieval, the exception is thrown without the log)
+                                Dictionary
+                                < string
+                                    , string
+                                > buildLogs
+                                    = new
+                                        Dictionary
+                                        < string
+                                            , string
+                                        >();
 
-                                                                      foreach
-                                                                      ( Device
-                                                                            device
-                                                                          in
-                                                                          Devices
-                                                                      )
-                                                                      {
-                                                                          try
-                                                                          {
-                                                                              string
-                                                                                  buildLog
-                                                                                      = GetProgramBuildInformation
-                                                                                          < string
-                                                                                          >(
-                                                                                               builtProgramPointer,
-                                                                                               device,
-                                                                                               ProgramBuildInformation.
-                                                                                                   Log
-                                                                                              ).
-                                                                                          Trim();
+                                foreach
+                                ( Device
+                                        device
+                                    in
+                                    Devices
+                                )
+                                {
+                                    try
+                                    {
+                                        string
+                                            buildLog
+                                                = GetProgramBuildInformation
+                                                    < string
+                                                    >(
+                                                        builtProgramPointer,
+                                                        device,
+                                                        ProgramBuildInformation.
+                                                            Log
+                                                    ).
+                                                    Trim();
 
-                                                                              if
-                                                                              ( !string.IsNullOrWhiteSpace(
-                                                                                   buildLog
-                                                                                  ) )
-                                                                              {
-                                                                                  buildLogs.Add(
-                                                                                       device.Name,
-                                                                                       buildLog
-                                                                                      );
-                                                                              }
-                                                                          }
-                                                                          catch
-                                                                          ( OpenClException
-                                                                          )
-                                                                          {
-                                                                          }
-                                                                      }
+                                        if
+                                        ( !string.IsNullOrWhiteSpace(
+                                            buildLog
+                                        ) )
+                                        {
+                                            buildLogs.Add(
+                                                device.Name,
+                                                buildLog
+                                            );
+                                        }
+                                    }
+                                    catch
+                                    ( OpenClException
+                                    )
+                                    {
+                                    }
+                                }
 
-                                                                      // Checks if there were any errors, if so then the build logs are compiled into a formatted string and integrates it into the exception message
-                                                                      if
-                                                                      ( buildLogs.Any()
-                                                                      )
-                                                                      {
-                                                                          string
-                                                                              buildLogString
-                                                                                  = string.Join(
-                                                                                       $"{Environment.NewLine}{Environment.NewLine}",
-                                                                                       buildLogs.Select(
-                                                                                            keyValuePair =>
-                                                                                                $" Build log for device \"{keyValuePair.Key}\":{Environment.NewLine}{keyValuePair.Value}"
-                                                                                           )
-                                                                                      );
+                                // Checks if there were any errors, if so then the build logs are compiled into a formatted string and integrates it into the exception message
+                                if
+                                ( buildLogs.Any()
+                                )
+                                {
+                                    string
+                                        buildLogString
+                                            = string.Join(
+                                                $"{Environment.NewLine}{Environment.NewLine}",
+                                                buildLogs.Select(
+                                                    keyValuePair =>
+                                                        $" Build log for device \"{keyValuePair.Key}\":{Environment.NewLine}{keyValuePair.Value}"
+                                                )
+                                            );
 
-                                                                          taskCompletionSource.TrySetException(
-                                                                               new
-                                                                                   OpenClException(
-                                                                                        $"The program could not be compiled and linked.{Environment.NewLine}{Environment.NewLine}{buildLogString}",
-                                                                                        result1
-                                                                                       )
-                                                                              );
-                                                                      }
+                                    taskCompletionSource.TrySetException(
+                                        new
+                                            OpenClException(
+                                                $"The program could not be compiled and linked.{Environment.NewLine}{Environment.NewLine}{buildLogString}",
+                                                result1
+                                            )
+                                    );
+                                }
 
-                                                                      // Since the build was successful, the program is created and the task completion source is resolved with it Creates the new program and returns it
-                                                                      taskCompletionSource.TrySetResult(
-                                                                           new
-                                                                               Program(
-                                                                                    builtProgramPointer
-                                                                                   )
-                                                                          );
-                                                                  }
-                                                                  catch
-                                                                  ( Exception
-                                                                      exception
-                                                                  )
-                                                                  {
-                                                                      taskCompletionSource.TrySetException(
-                                                                           exception
-                                                                          );
-                                                                  }
-                                                              }
-                                                             )
-                                                        ),
-                                                    IntPtr.Zero
-                                                   );
+                                // Since the build was successful, the program is created and the task completion source is resolved with it Creates the new program and returns it
+                                taskCompletionSource.TrySetResult(
+                                    new
+                                        Program(
+                                            builtProgramPointer
+                                        )
+                                );
+                            }
+                            catch
+                            ( Exception
+                                exception
+                            )
+                            {
+                                taskCompletionSource.TrySetException(
+                                    exception
+                                );
+                            }
+                        }
+                    )
+                ),
+                IntPtr.Zero
+            );
 
             // Checks if the build could be started successfully, if not, then an exception is thrown
             if ( result != Result.Success )
@@ -484,11 +481,11 @@ namespace OpenCL.NET.Contexts
                 if ( result != Result.Success )
                 {
                     taskCompletionSource.TrySetException(
-                                                         new OpenClException(
-                                                                             "The program could not be compiled and linked.",
-                                                                             result
-                                                                            )
-                                                        );
+                        new OpenClException(
+                            "The program could not be compiled and linked.",
+                            result
+                        )
+                    );
                 }
             }
 
@@ -524,12 +521,12 @@ namespace OpenCL.NET.Contexts
         {
             // Creates a new memory buffer of the specified size and with the specified memory flags
             IntPtr memoryBufferPointer = MemoryNativeApi.CreateBuffer(
-                                                                      Handle,
-                                                                      ( Interop.Memory.MemoryFlag ) memoryFlags,
-                                                                      new UIntPtr( ( uint ) size ),
-                                                                      IntPtr.Zero,
-                                                                      out Result result
-                                                                     );
+                Handle,
+                ( Interop.Memory.MemoryFlag ) memoryFlags,
+                new UIntPtr( ( uint ) size ),
+                IntPtr.Zero,
+                out Result result
+            );
 
             // Checks if the creation of the memory buffer was successful, if not, then an exception is thrown
             if ( result != Result.Success )
@@ -576,12 +573,12 @@ namespace OpenCL.NET.Contexts
 
                 // Creates a new memory buffer for the specified value
                 IntPtr memoryBufferPointer = MemoryNativeApi.CreateBuffer(
-                                                                          Handle,
-                                                                          ( Interop.Memory.MemoryFlag ) memoryFlags,
-                                                                          new UIntPtr( ( uint ) size ),
-                                                                          hostBufferPointer,
-                                                                          out Result result
-                                                                         );
+                    Handle,
+                    ( Interop.Memory.MemoryFlag ) memoryFlags,
+                    new UIntPtr( ( uint ) size ),
+                    hostBufferPointer,
+                    out Result result
+                );
 
                 // Checks if the creation of the memory buffer was successful, if not, then an exception is thrown
                 if ( result != Result.Success )
@@ -618,11 +615,11 @@ namespace OpenCL.NET.Contexts
             where T : struct
         {
             return CreateBuffer(
-                                memoryFlags,
-                                typeof( T ),
-                                Array.ConvertAll( value, x => ( object ) x ),
-                                handleIdentifier
-                               );
+                memoryFlags,
+                typeof( T ),
+                Array.ConvertAll( value, x => ( object ) x ),
+                handleIdentifier
+            );
         }
 
         /// <summary>
@@ -665,13 +662,13 @@ namespace OpenCL.NET.Contexts
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             Result result = ProgramsNativeApi.GetProgramBuildInformation(
-                                                                         program,
-                                                                         device.Handle,
-                                                                         programBuildInformation,
-                                                                         UIntPtr.Zero,
-                                                                         null,
-                                                                         out UIntPtr returnValueSize
-                                                                        );
+                program,
+                device.Handle,
+                programBuildInformation,
+                UIntPtr.Zero,
+                null,
+                out UIntPtr returnValueSize
+            );
 
             if ( result != Result.Success )
             {
@@ -682,13 +679,13 @@ namespace OpenCL.NET.Contexts
             byte[] output = new byte[returnValueSize.ToUInt32()];
 
             result = ProgramsNativeApi.GetProgramBuildInformation(
-                                                                  program,
-                                                                  device.Handle,
-                                                                  programBuildInformation,
-                                                                  new UIntPtr( ( uint ) output.Length ),
-                                                                  output,
-                                                                  out returnValueSize
-                                                                 );
+                program,
+                device.Handle,
+                programBuildInformation,
+                new UIntPtr( ( uint ) output.Length ),
+                output,
+                out returnValueSize
+            );
 
             if ( result != Result.Success )
             {
@@ -700,7 +697,6 @@ namespace OpenCL.NET.Contexts
         }
 
         #endregion
-
     }
 
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Peripherals.Time
@@ -7,7 +6,6 @@ namespace VisCPU.Peripherals.Time
 
     public class TimeDevice : Peripheral
     {
-
         private readonly TimeDeviceSettings m_Settings;
 
         public override string PeripheralName => "Time Provider Device";
@@ -74,7 +72,6 @@ namespace VisCPU.Peripherals.Time
         }
 
         #endregion
-
     }
 
 }

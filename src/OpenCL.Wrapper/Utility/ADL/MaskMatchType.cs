@@ -6,7 +6,6 @@
     /// </summary>
     public enum MaskMatchType
     {
-
         /// <summary>
         ///     If one flag is not in the logstream mask, return false
         /// </summary>
@@ -16,7 +15,6 @@
         ///     If there is at least one flag in the mask
         /// </summary>
         MatchOne = 1
-
     }
 
 }

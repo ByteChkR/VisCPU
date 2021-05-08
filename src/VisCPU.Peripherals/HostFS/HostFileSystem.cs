@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -12,7 +11,6 @@ namespace VisCPU.Peripherals.HostFS
 
     public class HostFileSystem : Peripheral
     {
-
         private HostFileSystemStatus m_Status = HostFileSystemStatus.HfsStatusReady;
         private readonly HostFileSystemSettings m_Settings;
         private readonly StringBuilder m_SbPath = new StringBuilder();
@@ -109,10 +107,10 @@ namespace VisCPU.Peripherals.HostFS
                     if ( read != sizeof( uint ) )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                                                              new HostFileSystemReadFailureEvent(
-                                                                   "Did not read full uint size."
-                                                                  )
-                                                             );
+                            new HostFileSystemReadFailureEvent(
+                                "Did not read full uint size."
+                            )
+                        );
                     }
 
                     return BitConverter.ToUInt32( buf, 0 );
@@ -155,7 +153,7 @@ namespace VisCPU.Peripherals.HostFS
                     case HostFileSystemCommands.HfsOpenRead:
                         m_Status = HostFileSystemStatus.HfsStatusFileOpen;
                         string pathR = GetPath( m_SbPath.ToString() );
-                        Log( "Opening File(READ): " + pathR );
+                        //Log( "Opening File(READ): " + pathR );
 
                         if ( !File.Exists( pathR ) )
                         {
@@ -174,7 +172,7 @@ namespace VisCPU.Peripherals.HostFS
                     case HostFileSystemCommands.HfsOpenWrite:
                         m_Status = HostFileSystemStatus.HfsStatusFileOpen;
                         string pathW = GetPath( m_SbPath.ToString() );
-                        Log( "Opening File(WRITE): " + pathW );
+                        //Log( "Opening File(WRITE): " + pathW );
 
                         if ( !File.Exists( m_SbPath.ToString() ) )
                         {
@@ -192,7 +190,7 @@ namespace VisCPU.Peripherals.HostFS
                         break;
 
                     case HostFileSystemCommands.HfsClose:
-                        Log( "Closing File: " + m_CurrentFile.FullName );
+                        //Log( "Closing File: " + m_CurrentFile.FullName );
                         m_Status = HostFileSystemStatus.HfsStatusReady;
                         m_SbPath.Clear();
                         m_CurrentFileStream?.Close();
@@ -211,7 +209,7 @@ namespace VisCPU.Peripherals.HostFS
 
                     case HostFileSystemCommands.HfsFileExist:
                         string testFile = GetPath( m_SbPath.ToString() );
-                        Log( "[Test File Exists] {0}", testFile );
+                        //Log( "[Test File Exists] {0}", testFile );
                         m_CurrentFile = new FileInfo( testFile );
                         m_SbPath.Clear();
                         m_ReadFileExists = true;
@@ -275,7 +273,6 @@ namespace VisCPU.Peripherals.HostFS
         }
 
         #endregion
-
     }
 
 }

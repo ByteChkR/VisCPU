@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Console.Core.Subsystems.FileSystemBuilder;
@@ -21,7 +20,6 @@ namespace VisCPU.Console.Core
 
     public class VisConsole : ConsoleSystem
     {
-
         public override Dictionary < string, ConsoleSubsystem > SubSystems =>
             new Dictionary < string, ConsoleSubsystem >
             {
@@ -175,21 +173,20 @@ namespace VisCPU.Console.Core
 
             Run(
                 args.Concat(
-                            s.Configs.SelectMany(
-                                                 x => File.Exists( x )
-                                                          ? File.ReadAllText( x ).
-                                                                 Split(
-                                                                       new[] { '\n', '\r', ' ' },
-                                                                       StringSplitOptions.RemoveEmptyEntries
-                                                                      )
-                                                          : new string[0]
-                                                )
-                           )
-               );
+                    s.Configs.SelectMany(
+                        x => File.Exists( x )
+                            ? File.ReadAllText( x ).
+                                   Split(
+                                       new[] { '\n', '\r', ' ' },
+                                       StringSplitOptions.RemoveEmptyEntries
+                                   )
+                            : new string[0]
+                    )
+                )
+            );
         }
 
         #endregion
-
     }
 
 }

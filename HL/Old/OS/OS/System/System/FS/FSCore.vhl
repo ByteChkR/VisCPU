@@ -1,0 +1,10 @@
+public abstract class FSCore
+{
+
+	public abstract uint Open(string path, uint pathLen);
+	public abstract void Close(uint handle);
+	public abstract uint Create(string path, uint pathLen);
+	public abstract void Delete(string path, uint pathLen);
+	public abstract uint Exists(string path, uint pathLen);
+	public abstract uint GetSize(string path, uint pathLen);
+}

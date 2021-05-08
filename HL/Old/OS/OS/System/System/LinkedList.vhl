@@ -1,0 +1,299 @@
+#include "OutOfBoundsException.vhl"
+#include "ExceptionHandler.vhl"
+#include "ALLOC/Allocator.vhl"
+#include "List.vhl"
+#include "Settings.vhl"
+
+public class LinkedList : List
+{
+	private uint m_Head;
+	private uint m_Allocator;
+
+	public static LinkedList(uint alloc)
+	{
+		this.m_Allocator = alloc;
+		this.m_Head = 0;
+	}
+
+	private uint IsEmpty()
+	{
+		uint e = this.m_Head;
+		return e == 0;
+	}
+
+	private uint NextItem(uint prev)
+	{
+		LinkedListItem lli = prev;
+		uint n = lli.Next;
+		return n;
+	}
+
+	private uint CreateItem(uint data)
+	{
+		Allocator a = this.m_Allocator;
+		LinkedListItem p = a.Allocate(size_of(LinkedListItem));
+		p.Value = data;
+		p.Next = 0;
+		return p;
+	}
+
+	private void ReleaseItem(uint p)
+	{
+		Allocator a = this.m_Allocator;
+		a.Free(p);
+	}
+
+	public override uint Count()
+	{
+		uint r = 0;
+		uint c = this.m_Head;
+		while(c)
+		{
+			r++;
+			c = this.NextItem(c);
+		}
+		return r;
+	}
+
+	public override void Clear()
+	{
+		uint c = this.m_Head;
+		while(c)
+		{
+			uint n = this.NextItem(c);
+			this.ReleaseItem(c);
+			c = n;
+		}
+	}
+
+	public override void Set(uint index, uint value)
+	{
+		uint c = this.m_Head;
+		for(uint i = 0; i < index; i++)
+		{
+			if(ENABLE_RANGE_CHECK())
+			{
+				if(!c)
+				{
+					//Throw out of bounds
+					if(ENABLE_THROW_ERRORS())
+					{
+						ExceptionHandler.Throw(OutOfBoundsException());
+					}
+					return 0;
+				}
+			}
+
+			c = this.NextItem(c);
+		}
+
+		LinkedListItem lli = c;
+		lli.Value = value;
+	}
+
+	public override uint Get(uint index)
+	{
+		uint c = this.m_Head;
+
+		for(uint i = 0; i < index; i++)
+		{
+			if(ENABLE_RANGE_CHECK())
+			{
+				if(!c)
+				{
+					//Throw out of bounds
+					if(ENABLE_THROW_ERRORS())
+					{
+						ExceptionHandler.Throw(OutOfBoundsException());
+					}
+					return 0;
+				}
+			}
+			c = this.NextItem(c);
+		}
+
+		LinkedListItem lli = c;
+
+
+		uint v = lli.Value;
+
+		return v;
+	}
+
+	public override void Add(uint value)
+	{
+		uint i = this.Count();
+
+		this.Insert(i, value);
+	}
+
+	public override void Remove(uint value)
+	{
+		uint c = this.m_Head;
+		uint l = 0;
+		while(c)
+		{
+			uint n = this.NextItem(c);
+			LinkedListItem item = c;
+			uint v = item.Value;
+			if(v == value)
+			{
+				if(l)
+				{
+					LinkedListItem prev = l;
+					prev.Next = n;
+				}
+				else
+				{
+					this.m_Head = n;
+				}
+				this.ReleaseItem(c);
+				return;
+			}
+			l = c;
+			c = n;
+		}
+	}
+
+	public override void RemoveAll(uint value)
+	{
+		uint c = this.m_Head;
+		uint l = 0;
+		while(c)
+		{
+			uint n = this.NextItem(c);
+			LinkedListItem item = c;
+			uint v = item.Value;
+			if(v == value)
+			{
+				if(l)
+				{
+					LinkedListItem prev = l;
+					prev.Next = n;
+				}
+				else
+				{
+					this.m_Head = n;
+				}
+				this.ReleaseItem(c);
+			}
+			l = c;
+			c = n;
+		}
+	}
+
+	public override void RemoveAt(uint index)
+	{
+		if(ENABLE_RANGE_CHECK())
+		{
+			if(this.IsEmpty())
+			{
+				//Throw out of bounds
+				if(ENABLE_THROW_ERRORS())
+				{
+					ExceptionHandler.Throw(OutOfBoundsException());
+				}
+				return 0;
+			}
+		}
+
+		uint c = this.m_Head;
+		uint last = 0;
+		for(uint i = 0; i <= index; i++)
+		{
+			if(i == index)
+			{
+				LinkedListItem remItem = c;
+				uint next = remItem.Next;
+				this.ReleaseItem(c);
+				if(i == 0)
+				{
+					this.m_Head = next;
+				}
+				else
+				{
+					LinkedListItem lst = last;
+					lst.Next = next;
+				}
+				return;
+			}
+
+			last = c;
+			c = this.NextItem(c);
+			if(ENABLE_RANGE_CHECK())
+			{
+				if(c == 0)
+				{
+					//Throw out of bounds
+					if(ENABLE_THROW_ERRORS())
+					{
+						ExceptionHandler.Throw(OutOfBoundsException());
+					}
+					return 0;
+				}
+			}
+		}
+	}
+
+	public override void Insert(uint index, uint v)
+	{
+		if(this.IsEmpty())
+		{
+			if(ENABLE_RANGE_CHECK())
+			{
+				if(index != 0)
+				{
+					//Throw out of bounds
+					if(ENABLE_THROW_ERRORS())
+					{
+						ExceptionHandler.Throw(OutOfBoundsException());
+					}
+					return 0;
+				}
+			}
+			uint ptr = this.CreateItem(v);
+			this.m_Head = ptr;
+			return;
+		}
+		else
+		{
+			uint c = this.m_Head;
+			uint last = 0;
+			for(uint i = 0; i <= index; i++)
+			{
+				if(i == index)
+				{
+					uint ptr = this.CreateItem(v);
+					LinkedListItem item = ptr;
+					item.Next = c;
+					LinkedListItem lst = last;
+					lst.Next = ptr;
+					return;
+				}
+
+				last = c;
+				c = this.NextItem(c);
+
+				if(ENABLE_RANGE_CHECK())
+				{
+					if(last == 0)
+					{
+						//Throw out of bounds
+						if(ENABLE_THROW_ERRORS())
+						{
+							ExceptionHandler.Throw(OutOfBoundsException());
+						}
+						return 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+public class LinkedListItem
+{
+	public uint Next;
+	public uint Value;
+}

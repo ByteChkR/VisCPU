@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
-
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.IO.Settings.Events;
@@ -13,10 +12,8 @@ namespace VisCPU.Utility.IO.Settings
 
     public static class SettingsManager
     {
-
         private struct SettingsEntry : IEquatable < SettingsEntry >
         {
-
             public readonly string DefaultFile;
             public object CachedObject;
             public readonly SettingsLoader FileLoader;
@@ -47,7 +44,6 @@ namespace VisCPU.Utility.IO.Settings
                            ( FileLoader != null ? FileLoader.GetHashCode() : 0 );
                 }
             }
-
         }
 
         private static readonly Dictionary < Type, SettingsEntry > s_DefaultLoaderMap =
@@ -176,9 +172,9 @@ namespace VisCPU.Utility.IO.Settings
             string defaultFileName )
         {
             s_DefaultLoaderMap[t] = new SettingsEntry(
-                                                      Path.Combine( category.GetCategoryDirectory(), defaultFileName ),
-                                                      loader
-                                                     );
+                Path.Combine( category.GetCategoryDirectory(), defaultFileName ),
+                loader
+            );
         }
 
         public static void RegisterDefaultLoader(
@@ -189,9 +185,9 @@ namespace VisCPU.Utility.IO.Settings
             object defaultValues )
         {
             s_DefaultLoaderMap[t] = new SettingsEntry(
-                                                      Path.Combine( category.GetCategoryDirectory(), defaultFile ),
-                                                      loader
-                                                     );
+                Path.Combine( category.GetCategoryDirectory(), defaultFile ),
+                loader
+            );
 
             if ( !DefaultFileExists( t ) )
             {
@@ -204,10 +200,10 @@ namespace VisCPU.Utility.IO.Settings
             if ( s_DefaultLoaderMap.ContainsKey( o.GetType() ) )
             {
                 SaveSettings(
-                             s_DefaultLoaderMap[o.GetType()].FileLoader,
-                             o,
-                             s_DefaultLoaderMap[o.GetType()].DefaultFile
-                            );
+                    s_DefaultLoaderMap[o.GetType()].FileLoader,
+                    o,
+                    s_DefaultLoaderMap[o.GetType()].DefaultFile
+                );
 
                 return;
             }
@@ -234,7 +230,6 @@ namespace VisCPU.Utility.IO.Settings
         }
 
         #endregion
-
     }
 
 }

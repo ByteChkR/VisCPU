@@ -1,0 +1,131 @@
+
+public class SIMD_SW
+{
+	public static void AddConstant(uint a, uint c, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			r[i] = a[i] + c;
+		}
+	}
+
+	public static void Add(uint a, uint b, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			uint va = a[i];
+			uint vb = b[i];
+			r[i] = va + vb;
+		}
+	}
+
+	public static void SubConstant(uint a, uint c, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			r[i] = a[i] - c;
+		}
+	}
+
+	public static void Sub(uint a, uint b, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			uint va = a[i];
+			uint vb = b[i];
+			r[i] = va - vb;
+		}
+	}
+
+	public static void MulConstant(uint a, uint c, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			r[i] = a[i] * c;
+		}
+	}
+
+	public static void Mul(uint a, uint b, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			uint va = a[i];
+			uint vb = b[i];
+			r[i] = va * vb;
+		}
+	}
+
+	public static void DivConstant(uint a, uint c, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			r[i] = a[i] / c;
+		}
+	}
+
+	public static void Div(uint a, uint b, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			uint va = a[i];
+			uint vb = b[i];
+			r[i] = va / vb;
+		}
+	}
+
+	public static void ModConstant(uint a, uint c, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			r[i] = a[i] % c;
+		}
+	}
+
+	public static void Mod(uint a, uint b, uint r, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			uint va = a[i];
+			uint vb = b[i];
+			r[i] = va % vb;
+		}
+	}
+
+	public static void Set(uint a, uint c, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			a[i] = c;
+		}
+	}
+
+	public static void Copy(uint a, uint b, uint l)
+	{
+
+		for(uint i = 0; i < l; i++)
+		{
+			b[i] = a[i];
+		}
+	}
+
+	public static void Move(uint a, uint b, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			b[i] = a[i];
+			a[i] = 0;
+		}
+	}
+
+	public static void Swap(uint a, uint b, uint l)
+	{
+		for(uint i = 0; i < l; i++)
+		{
+			uint va = a[i];
+			uint vb = b[i];
+
+			a[i] = vb;
+			b[i] = va;
+		}
+	}
+}

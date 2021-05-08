@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-
 using OpenCL.NET.Memory;
 
 namespace OpenCL.Wrapper.CLFonts
@@ -8,7 +7,6 @@ namespace OpenCL.Wrapper.CLFonts
 
     public class CLFont
     {
-
         public readonly Font Font;
 
         private readonly Dictionary < char, CLChar > bufferCache = new Dictionary < char, CLChar >();
@@ -64,7 +62,6 @@ namespace OpenCL.Wrapper.CLFonts
         }
 
         #endregion
-
     }
 
 }

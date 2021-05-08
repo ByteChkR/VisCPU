@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Utility
@@ -10,14 +9,13 @@ namespace VisCPU.Utility
 
     public static class UIntExtensions
     {
-
         #region Public
 
         public static IDictionary < string, AddressItem > ApplyOffset(
             this IDictionary < string, AddressItem > input,
             uint offset )
         {
-            return input.ToDictionary( x => x.Key, x => x.Value.Offset( offset ) );
+            return input.ToDictionary( x => x.Key, x => x.Value.Offset( ( int ) offset ) );
         }
 
         public static uint ParseHexUInt( this string val )
@@ -86,7 +84,6 @@ namespace VisCPU.Utility
         }
 
         #endregion
-
     }
 
 }

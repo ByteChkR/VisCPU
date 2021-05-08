@@ -6,7 +6,6 @@
     /// </summary>
     public interface IDefinitions
     {
-
         /// <summary>
         ///     Returns true if the definition is "set" and returns false if the definition is "unset"
         /// </summary>
@@ -37,7 +36,6 @@
         /// </summary>
         /// <param name="key">The key that will be unset</param>
         void Unset( string key );
-
     }
 
 }

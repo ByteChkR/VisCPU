@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using VisCPU.HL.Parser.Events;
 using VisCPU.HL.Parser.Tokens;
 using VisCPU.Utility.EventSystem;
@@ -13,7 +12,6 @@ namespace VisCPU.HL.Parser
     /// </summary>
     public static class HlParsingTools
     {
-
         #region Public
 
         /// <summary>
@@ -27,8 +25,8 @@ namespace VisCPU.HL.Parser
             if ( !ReadAnyOrNone( tokens, start, out IHlToken ret ) )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                                                      new HlTokenReadEvent( tokens, HlTokenType.Any, ret.Type, start )
-                                                     );
+                    new HlTokenReadEvent( tokens, HlTokenType.Any, ret.Type, start )
+                );
             }
 
             return ret;
@@ -82,8 +80,8 @@ namespace VisCPU.HL.Parser
             }
 
             EventManager < ErrorEvent >.SendEvent(
-                                                  new HlTokenReadEvent( tokens, item, tokens[i].Type, start )
-                                                 );
+                new HlTokenReadEvent( tokens, item, tokens[i].Type, start )
+            );
 
             items = list.ToArray();
 
@@ -311,7 +309,6 @@ namespace VisCPU.HL.Parser
         }
 
         #endregion
-
     }
 
 }

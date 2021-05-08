@@ -12,7 +12,6 @@ namespace OpenCL.NET.Memory
     /// </summary>
     public class Image : MemoryObject
     {
-
         #region Public
 
         /// <summary>
@@ -25,7 +24,6 @@ namespace OpenCL.NET.Memory
         }
 
         #endregion
-
     }
 
 }

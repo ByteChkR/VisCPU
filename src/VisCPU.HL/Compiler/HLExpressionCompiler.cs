@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
@@ -10,7 +9,6 @@ namespace VisCPU.HL.Compiler
     public abstract class HlExpressionCompiler < T > : VisBase, IHlExpressionCompiler
         where T : HlExpression
     {
-
         protected override LoggerSystems SubSystem => LoggerSystems.HlCompiler;
 
         protected virtual bool NeedsOutput { get; }
@@ -48,13 +46,13 @@ namespace VisCPU.HL.Compiler
                 if ( outputTarget.ResultAddress == null || !outputTarget.IsAddress )
                 {
                     target = new ExpressionTarget(
-                                                  compilation.GetTempVar( 0 ),
-                                                  true,
-                                                  compilation.TypeSystem.GetType(
-                                                       compilation.Root,
-                                                       HLBaseTypeNames.s_UintTypeName
-                                                      )
-                                                 );
+                        compilation.GetTempVar( 0 ),
+                        true,
+                        compilation.TypeSystem.GetType(
+                            compilation.Root,
+                            HLBaseTypeNames.s_UintTypeName
+                        )
+                    );
                 }
 
                 return ParseExpression( compilation, expr, target );
@@ -77,7 +75,6 @@ namespace VisCPU.HL.Compiler
         }
 
         #endregion
-
     }
 
 }

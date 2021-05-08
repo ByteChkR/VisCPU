@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Samplers
     /// </summary>
     public static class SamplersNativeApi
     {
-
         #region Public
 
         /// <summary>
@@ -50,16 +49,11 @@ namespace OpenCL.NET.Interop.Samplers
         [DllImport( "OpenCL", EntryPoint = "clCreateSampler" )]
         [Obsolete( "This is a deprecated OpenCL 1.2 method, please use CreateImage instead." )]
         public static extern IntPtr CreateSampler(
-            [In]
-            IntPtr context,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint normalizedCoordinates,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            AddressingMode addressingMode,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            FilterMode filterMode,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [In] IntPtr context,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint normalizedCoordinates,
+            [In] [MarshalAs( UnmanagedType.U4 )] AddressingMode addressingMode,
+            [In] [MarshalAs( UnmanagedType.U4 )] FilterMode filterMode,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates a sampler object. A sampler object describes how to sample an image when the image is read in the kernel.
@@ -99,12 +93,9 @@ namespace OpenCL.NET.Interop.Samplers
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateSamplerWithProperties" )]
         public static extern IntPtr CreateSamplerWithProperties(
-            [In]
-            IntPtr context,
-            [In]
-            IntPtr samplerProperties,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [In] IntPtr context,
+            [In] IntPtr samplerProperties,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Returns information about the sampler object.
@@ -138,16 +129,11 @@ namespace OpenCL.NET.Interop.Samplers
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetSamplerInfo" )]
         public static extern Result GetSamplerInformation(
-            [In]
-            IntPtr sampler,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            SamplerInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr sampler,
+            [In] [MarshalAs( UnmanagedType.U4 )] SamplerInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Decrements the sampler reference count.
@@ -164,9 +150,7 @@ namespace OpenCL.NET.Interop.Samplers
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseSampler" )]
-        public static extern Result ReleaseSampler(
-            [In]
-            IntPtr sampler );
+        public static extern Result ReleaseSampler( [In] IntPtr sampler );
 
         /// <summary>
         ///     Increments the sampler reference count.
@@ -183,12 +167,9 @@ namespace OpenCL.NET.Interop.Samplers
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainSampler" )]
-        public static extern Result RetainSample(
-            [In]
-            IntPtr sampler );
+        public static extern Result RetainSample( [In] IntPtr sampler );
 
         #endregion
-
     }
 
 }

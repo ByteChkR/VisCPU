@@ -7,7 +7,6 @@ namespace VisCPU.HL.Lifetime
 
     public class Scope < V > : IEnumerable < KeyValuePair < string, V > >
     {
-
         private readonly string m_Prefix;
         private readonly Scope < V > m_Parent = null;
         private readonly Dictionary < string, V > m_Data = new Dictionary < string, V >();
@@ -97,7 +96,6 @@ namespace VisCPU.HL.Lifetime
         }
 
         #endregion
-
     }
 
 }

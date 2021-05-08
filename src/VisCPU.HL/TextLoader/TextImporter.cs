@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Utility.Extensions;
 
 namespace VisCPU.HL.TextLoader
@@ -9,7 +8,6 @@ namespace VisCPU.HL.TextLoader
 
     public abstract class TextImporter
     {
-
         private static readonly List < TextImporter > s_ImporterList;
 
         private static readonly string s_DefaultImporter = "VPPImporter";
@@ -56,15 +54,15 @@ namespace VisCPU.HL.TextLoader
                                      GetCategoryDirectory();
 
             s_ImporterList = ExtensionLoader.LoadFrom < TextImporter >(
-                                                                       dir,
-                                                                       true
-                                                                      ).
+                                                 dir,
+                                                 true
+                                             ).
                                              ToList();
 
             s_ImporterFile = Path.Combine(
-                                          dir,
-                                          "importer.txt"
-                                         );
+                dir,
+                "importer.txt"
+            );
 
             string importer = s_DefaultImporter;
 
@@ -77,7 +75,6 @@ namespace VisCPU.HL.TextLoader
         }
 
         #endregion
-
     }
 
 }

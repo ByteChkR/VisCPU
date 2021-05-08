@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using VisCPU.Utility;
 using VisCPU.Utility.IO.Settings;
 
@@ -11,7 +10,6 @@ namespace VisCPU.Peripherals.Drive
 
     public class FileDrive : Drive
     {
-
         private FileStream m_FileStream;
 
         public override string PeripheralName => "File Drive";
@@ -70,12 +68,12 @@ namespace VisCPU.Peripherals.Drive
                     m_FileStream.Read( buffer, 0, buffer.Length );
 
                     Array.Copy(
-                               buffer.ToUInt(),
-                               0,
-                               memory.GetInternalBuffer(),
-                               ( int ) ( destination - memory.StartAddress ),
-                               length
-                              );
+                        buffer.ToUInt(),
+                        0,
+                        memory.GetInternalBuffer(),
+                        ( int ) ( destination - memory.StartAddress ),
+                        length
+                    );
                 }
             }
         }
@@ -115,7 +113,6 @@ namespace VisCPU.Peripherals.Drive
         }
 
         #endregion
-
     }
 
 }

@@ -6,7 +6,6 @@ namespace OpenCL.NET.Interop.Programs
     /// </summary>
     public enum ProgramInformation : uint
     {
-
         /// <summary>
         ///     Retrieves the program reference count. The reference count returned should be considered immediately stale. It is
         ///     unsuitable for general use in applications. This feature is provided for identifying memory leaks.
@@ -100,7 +99,6 @@ namespace OpenCL.NET.Interop.Programs
         ///     unchanged and <see cref="parameterValueSizeRetrievesed" /> will be set to 0.
         /// </summary>
         Il = 0x1169
-
     }
 
 }

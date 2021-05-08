@@ -6,7 +6,6 @@ namespace OpenCL.NET.Interop.Kernels
     /// </summary>
     public enum KernelInformation : uint
     {
-
         /// <summary>
         ///     The kernel function name.
         /// </summary>
@@ -58,7 +57,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     0 is returned.
         /// </summary>
         CompileNumberOfSubGroups = 0x11BA
-
     }
 
 }

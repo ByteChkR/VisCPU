@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-
 using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.Console.Core.Subsystems.VM
@@ -12,7 +11,6 @@ namespace VisCPU.Console.Core.Subsystems.VM
 
     public class VMStartSubSystem : ConsoleSubsystem
     {
-
         #region Public
 
         public override void Help()
@@ -30,11 +28,7 @@ namespace VisCPU.Console.Core.Subsystems.VM
                 string p = Path.Combine( AppDomain.CurrentDomain.BaseDirectory, name );
                 Directory.CreateDirectory( p );
 
-                c = new VMConfig()
-                    {
-                        Name = name,
-                        Root = p
-                    };
+                c = new VMConfig() { Name = name, Root = p };
 
                 vms.Configurations.Add( c );
                 SettingsManager.SaveSettings( vms );
@@ -51,7 +45,6 @@ namespace VisCPU.Console.Core.Subsystems.VM
         }
 
         #endregion
-
     }
 
 }

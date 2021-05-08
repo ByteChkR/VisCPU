@@ -2,7 +2,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Memory;
 
@@ -16,7 +15,6 @@ namespace OpenCL.NET.Memory
     /// </summary>
     public abstract class MemoryObject : HandleBase
     {
-
         /// <summary>
         ///     Contains the size of the contents of the memory object in bytes.
         /// </summary>
@@ -116,12 +114,12 @@ namespace OpenCL.NET.Memory
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             Result result = MemoryNativeApi.GetMemoryObjectInformation(
-                                                                       Handle,
-                                                                       memoryObjectInformation,
-                                                                       UIntPtr.Zero,
-                                                                       null,
-                                                                       out UIntPtr returnValueSize
-                                                                      );
+                Handle,
+                memoryObjectInformation,
+                UIntPtr.Zero,
+                null,
+                out UIntPtr returnValueSize
+            );
 
             if ( result != Result.Success )
             {
@@ -132,12 +130,12 @@ namespace OpenCL.NET.Memory
             byte[] output = new byte[returnValueSize.ToUInt32()];
 
             result = MemoryNativeApi.GetMemoryObjectInformation(
-                                                                Handle,
-                                                                memoryObjectInformation,
-                                                                new UIntPtr( ( uint ) output.Length ),
-                                                                output,
-                                                                out returnValueSize
-                                                               );
+                Handle,
+                memoryObjectInformation,
+                new UIntPtr( ( uint ) output.Length ),
+                output,
+                out returnValueSize
+            );
 
             if ( result != Result.Success )
             {
@@ -149,7 +147,6 @@ namespace OpenCL.NET.Memory
         }
 
         #endregion
-
     }
 
 }

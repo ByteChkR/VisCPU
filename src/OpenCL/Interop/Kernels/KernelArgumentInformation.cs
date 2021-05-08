@@ -7,7 +7,6 @@ namespace OpenCL.NET.Interop.Kernels
     /// </summary>
     public enum KernelArgumentInformation : uint
     {
-
         /// <summary>
         ///     The address qualifier specified for the argument.
         /// </summary>
@@ -35,7 +34,6 @@ namespace OpenCL.NET.Interop.Kernels
         ///     The name specified for the argument.
         /// </summary>
         Name = 0x119A
-
     }
 
 }

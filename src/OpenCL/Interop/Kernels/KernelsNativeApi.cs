@@ -13,7 +13,6 @@ namespace OpenCL.NET.Interop.Kernels
     /// </summary>
     public static class KernelsNativeApi
     {
-
         #region Public
 
         /// <summary>
@@ -40,10 +39,8 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clCloneKernel" )]
         public static extern IntPtr CloneKernel(
-            [In]
-            IntPtr sourceKernel,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [In] IntPtr sourceKernel,
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates a kernel object.
@@ -72,12 +69,10 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateKernel" )]
         public static extern IntPtr CreateKernel(
-            [In]
-            IntPtr program,
+            [In] IntPtr program,
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string kernelName,
-            [Out] [MarshalAs( UnmanagedType.I4 )]
-            out Result errorCode );
+            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
 
         /// <summary>
         ///     Creates kernel objects for all kernel functions in a program object.
@@ -113,14 +108,11 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateKernelsInProgram" )]
         public static extern Result CreateKernelsInProgram(
-            [In]
-            IntPtr program,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint numberOfKernels,
+            [In] IntPtr program,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfKernels,
             [Out] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] kernels,
-            [Out] [MarshalAs( UnmanagedType.U4 )]
-            out uint numberOfKernelsReturned );
+            [Out] [MarshalAs( UnmanagedType.U4 )] out uint numberOfKernelsReturned );
 
         /// <summary>
         ///     Returns information about the arguments of a kernel.
@@ -157,18 +149,12 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clGetKernelArgInfo" )]
         public static extern Result GetKernelArgumentInformation(
-            [In]
-            IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint argumentIndex,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            KernelArgumentInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint argumentIndex,
+            [In] [MarshalAs( UnmanagedType.U4 )] KernelArgumentInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Returns information about the kernel object.
@@ -202,16 +188,11 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetKernelInfo" )]
         public static extern Result GetKernelInformation(
-            [In]
-            IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            KernelInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )] KernelInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Gets information about the kernel object.
@@ -262,22 +243,14 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 2, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clGetKernelSubGroupInfo" )]
         public static extern Result GetKernelSubGroupInformation(
-            [In]
-            IntPtr kernel,
-            [In]
-            IntPtr device,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            KernelSubGroupInformation parameterName,
-            [In]
-            UIntPtr inputValueSize,
-            [In]
-            IntPtr inputValue,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr kernel,
+            [In] IntPtr device,
+            [In] [MarshalAs( UnmanagedType.U4 )] KernelSubGroupInformation parameterName,
+            [In] UIntPtr inputValueSize,
+            [In] IntPtr inputValue,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Gets information about the kernel object that may be specific to a device.
@@ -319,18 +292,12 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetKernelWorkGroupInfo" )]
         public static extern Result GetKernelWorkGroupInformation(
-            [In]
-            IntPtr kernel,
-            [In]
-            IntPtr device,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            KernelWorkGroupInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [Out]
-            byte[] parameterValue,
-            [Out]
-            out UIntPtr parameterValueSizeReturned );
+            [In] IntPtr kernel,
+            [In] IntPtr device,
+            [In] [MarshalAs( UnmanagedType.U4 )] KernelWorkGroupInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Decrements the kernel reference count.
@@ -347,9 +314,7 @@ namespace OpenCL.NET.Interop.Kernels
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseKernel" )]
-        public static extern Result ReleaseKernel(
-            [In]
-            IntPtr kernel );
+        public static extern Result ReleaseKernel( [In] IntPtr kernel );
 
         /// <summary>
         ///     Increments the kernel object reference count. <see cref="CreateKernel" /> or <see cref="CreateKernelsInProgram" />
@@ -366,9 +331,7 @@ namespace OpenCL.NET.Interop.Kernels
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainKernel" )]
-        public static extern Result RetainKernel(
-            [In]
-            IntPtr kernel );
+        public static extern Result RetainKernel( [In] IntPtr kernel );
 
         /// <summary>
         ///     Set the argument value for a specific argument of a kernel.
@@ -399,14 +362,10 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clSetKernelArg" )]
         public static extern Result SetKernelArgument(
-            [In]
-            IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint argumentIndex,
-            [In]
-            UIntPtr argumentSize,
-            [In]
-            IntPtr argumentValue );
+            [In] IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint argumentIndex,
+            [In] UIntPtr argumentSize,
+            [In] IntPtr argumentValue );
 
         /// <summary>
         ///     Set a SVM pointer as the argument value for a specific argument of a kernel.
@@ -443,12 +402,9 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clSetKernelArgSVMPointer" )]
         public static extern Result SetKernelArgumentSvmPointer(
-            [In]
-            IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            uint argumentIndex,
-            [In]
-            IntPtr argumentValue );
+            [In] IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )] uint argumentIndex,
+            [In] IntPtr argumentValue );
 
         /// <summary>
         ///     Pass additional information other than argument values to a kernel.
@@ -478,17 +434,12 @@ namespace OpenCL.NET.Interop.Kernels
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clSetKernelExecInfo" )]
         public static extern Result SetKernelExecutionInformation(
-            [In]
-            IntPtr kernel,
-            [In] [MarshalAs( UnmanagedType.U4 )]
-            KernelExecutionInformation parameterName,
-            [In]
-            UIntPtr parameterValueSize,
-            [In]
-            IntPtr parameterValue );
+            [In] IntPtr kernel,
+            [In] [MarshalAs( UnmanagedType.U4 )] KernelExecutionInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [In] IntPtr parameterValue );
 
         #endregion
-
     }
 
 }

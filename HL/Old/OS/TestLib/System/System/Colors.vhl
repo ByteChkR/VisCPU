@@ -1,0 +1,19 @@
+public class Colors
+{
+	public static uint Black() { return 0; }
+    public static uint DarkBlue() { return 1; }
+    public static uint DarkGreen() { return 2; }
+    public static uint DarkCyan() { return 3; }
+    public static uint DarkRed() { return 4; }
+    public static uint DarkMagenta() { return 5; }
+   	public static uint DarkYellow() { return 6; }
+    public static uint Gray() { return 7; }
+    public static uint DarkGray() { return 8; }
+    public static uint Blue() { return 9; }
+    public static uint Green() { return 10; }
+    public static uint Cyan() { return 11; }
+    public static uint Red() { return 12; }
+    public static uint Magenta() { return 13; }
+    public static uint Yellow() { return 14; }
+    public static uint White() { return 15; }
+}

@@ -5,7 +5,6 @@ namespace Utility.FastString
 
     public static class FString
     {
-
         #region Public
 
         public static int FastIndexOf( string source, string pattern )
@@ -99,7 +98,6 @@ namespace Utility.FastString
         }
 
         #endregion
-
     }
 
 }

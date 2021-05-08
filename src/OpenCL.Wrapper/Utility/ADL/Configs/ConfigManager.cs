@@ -10,7 +10,6 @@ namespace Utility.ADL.Configs
     /// </summary>
     public static class ConfigManager
     {
-
         private static readonly ADLLogger < LogType > Logger =
             new ADLLogger < LogType >( InternalADLProjectDebugConfig.Settings );
 
@@ -50,10 +49,10 @@ namespace Utility.ADL.Configs
                 ret = GetDefault < T >();
 
                 Logger.Log(
-                           LogType.Warning,
-                           "Config Manager: Failed to deserialize XML file. Either XML file is corrupted or file access is denied.",
-                           1
-                          );
+                    LogType.Warning,
+                    "Config Manager: Failed to deserialize XML file. Either XML file is corrupted or file access is denied.",
+                    1
+                );
             }
 
             return ret;
@@ -82,15 +81,14 @@ namespace Utility.ADL.Configs
             catch ( Exception )
             {
                 Logger.Log(
-                           LogType.Warning,
-                           "Config Manager: Failed to save xml file. Directory exists? Access to Write to directory?",
-                           1
-                          );
+                    LogType.Warning,
+                    "Config Manager: Failed to save xml file. Directory exists? Access to Write to directory?",
+                    1
+                );
             }
         }
 
         #endregion
-
     }
 
 }

@@ -6,7 +6,6 @@ namespace Utility.ExtPP.Plugins
 
     public static class EncoderListExtensions
     {
-
         #region Public
 
         public static bool TryFindByKey(
@@ -20,7 +19,6 @@ namespace Utility.ExtPP.Plugins
         }
 
         #endregion
-
     }
 
 }

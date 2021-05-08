@@ -1,0 +1,102 @@
+
+#include "../MemoryManagement/malloc.vhl"
+#include "../Memory/Memory.vhl"
+#include "../Console.vhl"
+
+#define LOG_ENTRY_CREATION 0
+
+public class DLREntry
+{
+	//The Length of the Name
+	private uint m_LibNameLength;
+	//The Pointer of the Name
+	private uint m_LibNameStart;
+	//The Library Pointer in Memory
+	private uint m_LibPointer;
+
+	public static DLREntry(uint name, uint nameLength, uint ptr)
+	{
+
+		this.m_LibNameLength = nameLength;
+		this.m_LibNameStart = name;
+		this.m_LibPointer = ptr;
+
+		if(LOG_ENTRY_CREATION)
+		{
+			string strNewEntry1 = "[DLR] Creating new DLR Entry(Name:";
+			string strNewEntry2 = ", Name Length: ";
+			string strNewEntry3 = ", Lib Ptr: ";
+			kprint(&strNewEntry1, size_of(strNewEntry1));
+			kprintn(this.Name());
+			kprint(&strNewEntry2, size_of(strNewEntry2));
+			kprintn(this.NameLength());
+			kprint(&strNewEntry3, size_of(strNewEntry3));
+			kprintn(this.LibPointer());
+			kprintc(')');
+			kprintc('\n');
+			string strEntryAddr = "[DLR] Entry Address: ";
+			kprint(&strEntryAddr, size_of(strEntryAddr));
+			kprintnl(this);
+		}
+	}
+
+	public uint Name()
+	{
+		uint p = this.m_LibNameStart;
+		return p;
+	}
+
+	public uint NameLength()
+	{
+		uint p = this.m_LibNameLength;
+		return p;
+	}
+
+	public uint LibPointer()
+	{
+		uint p = this.m_LibPointer;
+		return p;
+	}
+
+	public uint IsName(string name, uint len)
+	{
+		uint thisLen = this.m_LibNameLength;
+		if(thisLen != len)
+		{
+			return 0;
+		}
+
+		uint thisName = this.m_LibNameStart;
+		for(uint i = 0; i < thisLen; i++)
+		{
+			uint tv = thisName[i];
+			uint ov = name[i];
+			if(tv != ov)
+			{
+				return 0;
+			}
+		}
+		return 1;
+	}
+
+	public static uint AllocateEntry(uint name, uint len, uint ptr)
+	{
+		uint llsPtr = malloc(size_of(DLREntry));
+		uint llsPathPtr = malloc(len);
+		mem_copy(name, llsPathPtr, len);
+
+		DLREntry e = DLREntry.new(llsPtr, llsPathPtr, len, ptr);
+		
+
+		return llsPtr;
+	}
+
+	public void Dispose()
+	{
+		uint sptr = this.m_LibNameStart;
+		uint lib = this.m_LibPointer;
+		free(lib);
+		free(sptr);
+		free(this);
+	}
+}

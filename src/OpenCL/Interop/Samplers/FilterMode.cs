@@ -6,7 +6,6 @@ namespace OpenCL.NET.Interop.Samplers
     /// </summary>
     public enum FilterMode : uint
     {
-
         /// <summary>
         ///     The filter mode is nearest.
         /// </summary>
@@ -16,7 +15,6 @@ namespace OpenCL.NET.Interop.Samplers
         ///     The filter mode is linear.
         /// </summary>
         Linear = 0x1141
-
     }
 
 }

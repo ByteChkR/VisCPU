@@ -1,5 +1,4 @@
 ﻿using System;
-
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.DataTypes
@@ -7,8 +6,14 @@ namespace VisCPU.HL.DataTypes
 
     public struct ConstantData : IExternalData, IEquatable < ConstantData >
     {
-
         public ExternalDataType DataType => ExternalDataType.Variable;
+
+        public int UseCount { get; private set; }
+
+        public void SetUsed()
+        {
+            UseCount++;
+        }
 
         public string GetName()
         {
@@ -30,6 +35,7 @@ namespace VisCPU.HL.DataTypes
 
         public ConstantData( string name, string finalName, string value, HlTypeDefinition tdef, bool isVisible )
         {
+            UseCount = 0;
             InitContent = null;
             Value = value;
             m_Name = name;
@@ -67,7 +73,6 @@ namespace VisCPU.HL.DataTypes
                 return hashCode;
             }
         }
-
     }
 
 }

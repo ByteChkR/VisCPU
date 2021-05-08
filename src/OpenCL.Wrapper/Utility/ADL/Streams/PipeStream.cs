@@ -26,7 +26,6 @@
     /// </summary>
     public class PipeStream : GenPipeStream < byte >
     {
-
     }
 
 }

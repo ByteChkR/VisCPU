@@ -12,14 +12,13 @@ namespace OpenCL.NET.Interop
     ///     is was introduced in.
     /// </summary>
     [AttributeUsage(
-                       AttributeTargets.Enum |
-                       AttributeTargets.Field |
-                       AttributeTargets.Method |
-                       AttributeTargets.Struct
-                   )]
+        AttributeTargets.Enum |
+        AttributeTargets.Field |
+        AttributeTargets.Method |
+        AttributeTargets.Struct
+    )]
     public class IntroducedInOpenClAttribute : Attribute
     {
-
         /// <summary>
         ///     Gets or sets the major version of OpenCL in which the marked element of the public API was introduced.
         /// </summary>
@@ -44,7 +43,6 @@ namespace OpenCL.NET.Interop
         }
 
         #endregion
-
     }
 
 }

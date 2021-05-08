@@ -5,16 +5,17 @@ namespace VisCPU.HL
 
     public readonly struct IncludedItem : IEquatable < IncludedItem >
     {
-
         public readonly string Data;
         public readonly string[] ExternalSymbols;
         public readonly bool IsInline;
+        public readonly bool IsLocal;
 
-        public IncludedItem( string data, bool isInline, string[] externalSymbols = null )
+        public IncludedItem( string data, bool isInline, string[] externalSymbols = null, bool isLocal = false )
         {
             Data = data;
             IsInline = isInline;
             ExternalSymbols = externalSymbols;
+            IsLocal = isLocal;
         }
 
         public bool Equals( IncludedItem other )
@@ -34,7 +35,6 @@ namespace VisCPU.HL
                 return ( ( Data != null ? Data.GetHashCode() : 0 ) * 397 ) ^ IsInline.GetHashCode();
             }
         }
-
     }
 
 }

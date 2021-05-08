@@ -8,9 +8,7 @@ namespace Utility.ExtPP.Base.Plugins
     /// </summary>
     public abstract class AbstractLineBeforePlugin : AbstractLinePlugin
     {
-
         public override PluginType PluginTypeToggle { get; } = PluginType.LinePluginBefore;
-
     }
 
 }

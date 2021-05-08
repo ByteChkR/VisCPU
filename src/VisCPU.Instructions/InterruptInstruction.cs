@@ -3,7 +3,6 @@
 
     public class InterruptInstruction : BaseInstruction
     {
-
         public override uint Cycles => 1;
 
         public override string Key => "INT";
@@ -20,7 +19,6 @@
         }
 
         #endregion
-
     }
 
 }

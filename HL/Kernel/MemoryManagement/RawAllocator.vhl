@@ -1,0 +1,239 @@
+#include <../KernelSettings.vhl>
+
+private class RawAllocatorBlockData
+{
+	private uint m_BlockLength;
+	private uint m_IsFree;
+	private static RawAllocatorBlockData(uint length, uint free)
+	{	
+		this.m_BlockLength = length;
+		this.m_IsFree = free;
+	}
+
+	private uint GetBlockLength()
+	{
+		uint v = this.m_BlockLength;
+
+		return v;
+	}
+
+	private void SetData(uint isFree, uint len)
+	{
+		this.m_IsFree = isFree;
+		this.m_BlockLength = len;
+	}
+
+	private void SetFree(uint isFree)
+	{
+		this.m_IsFree = isFree;
+	}
+
+	private uint IsFree()
+	{
+		uint v = this.m_IsFree;
+		return v;
+	}
+}
+
+
+private class RawAllocator
+{
+	private uint m_MemoryStart;
+	private uint m_MemoryLength;
+	private uint m_OptimizationLevel;
+
+	private static RawAllocator(uint memoryStart, uint memoryLength)
+	{
+		this.m_MemoryStart = memoryStart;
+		this.m_MemoryLength = memoryLength;
+		this.CreateBlock(memoryStart, memoryLength-size_of(RawAllocatorBlockData), 1);
+		this.m_OptimizationLevel = 0;
+	}
+
+	private uint CreateBlock(uint thisPtr, uint len, uint free)
+	{
+		return RawAllocatorBlockData.new(thisPtr, len, free);
+	}
+
+	private void SetOptimizationLevel(uint level)
+	{
+		this.m_OptimizationLevel = level;
+	}
+
+	private uint GetRawBlock(uint current)
+	{
+		return current + size_of(RawAllocatorBlockData);
+	}
+
+
+	private uint GetDataFromBlock(uint blockPtr)
+	{
+		return blockPtr - size_of(RawAllocatorBlockData);
+	}
+
+
+	private uint GetNext(uint current)
+	{
+		RawAllocatorBlockData data = current;
+		uint size = data.GetBlockLength();
+		size += size_of(RawAllocatorBlockData);
+		size += current;
+		return size;
+	}
+
+	private uint FindFree(uint current, uint minSize)
+	{
+		RawAllocatorBlockData data = current;
+		if(data.IsFree() && data.GetBlockLength() >= minSize)
+		{
+			return current;
+		}
+
+		uint offset = this.GetRawBlock(current);
+		offset += data.GetBlockLength();
+		return this.FindFree(offset, minSize);
+	}
+
+	private uint Allocate(uint size)
+	{
+		if(!size)
+		{
+			string zeroSizeErr = "Can not allocate size of 0";
+			kprintl(&zeroSizeErr, size_of(zeroSizeErr));
+			interrupt(1);
+		}
+		uint start = this.m_MemoryStart;
+		uint next = this.FindFree(start, size);
+		if(next) //Found a Free Block, reusing..
+		{
+			uint ptr = this.GetRawBlock(next); //Get Offset to the Actual Memory Block
+
+			RawAllocatorBlockData data = next;
+			uint actualSize = data.GetBlockLength();
+
+			if(size < actualSize) //Block is to big, split it
+			{
+				data.SetData(0, size);
+
+				RawAllocatorBlockData nextData = this.GetNext(next);
+
+				uint blockLength = actualSize - size + size_of(RawAllocatorBlockData);
+				
+				nextData.SetData(1, blockLength);
+			}
+
+			return ptr;
+		}
+		if(K_ALLOC_INT_ON_ERROR)
+		{
+			string OoMemStr = "Out of Memory!";
+			kprintl(&OoMemStr, size_of(OoMemStr));
+			interrupt(1);
+		}
+		return 0;
+	}
+
+	private void Free(uint ptr)
+	{
+		RawAllocatorBlockData data = this.GetDataFromBlock(ptr);
+
+		if(data.IsFree())
+		{
+			if(K_ALLOC_INT_ON_ERROR)
+			{
+				string bnmStr = "The Block is not mapped!";
+				kprintl(&bnmStr, size_of(bnmStr));
+				interrupt(1);
+			}
+			return 0;
+		}
+
+		data.SetFree(1);
+
+		this.OptimizeBlocks(); //Merge free Blocks
+	}
+
+	private void WriteDebugData()
+	{
+		string s_TableTitle = "Allocation Table: [Index, P = Pointer, S = Size, F = IsFree]";
+		kprintl(&s_TableTitle, size_of(s_TableTitle));
+
+		uint len = this.m_MemoryLength;
+		uint max = this.m_MemoryStart;
+		max += len;
+
+		uint ptr = this.m_MemoryStart;
+
+		uint cout = 0xFFFF1001;
+
+		uint count = 0;
+
+		while(ptr < max)
+		{
+			RawAllocatorBlockData data = ptr;
+
+			kprintn(count);
+			kprintc('\t');
+			kprintc('P');
+			kprintc(':');
+			kprintn(this.GetRawBlock(ptr));
+			kprintc('\t');
+			kprintc('S');
+			kprintc(':');
+			kprintn(data.GetBlockLength());
+			kprintc('\t');
+			kprintc('F');
+			kprintc(':');
+			kprintnl(data.IsFree());
+
+			ptr = this.GetNext(data);
+			count++;
+		}
+		kprintc('\n');
+	}
+
+
+	private void OptimizeBlocks()
+	{
+		uint optLevel = this.m_OptimizationLevel;
+		if(!optLevel)
+		{
+			return;
+		}
+		uint len = this.m_MemoryLength;
+		uint max = this.m_MemoryStart;
+		max += len;
+
+		uint ptr = this.m_MemoryStart;
+
+		uint last = 0;
+
+		uint optimized = 0;
+
+		while(ptr < max)
+		{
+			RawAllocatorBlockData data = ptr;
+
+			if(last)
+			{
+				RawAllocatorBlockData lastData = last;
+
+				if(lastData.IsFree() && data.IsFree())
+				{
+					lastData.SetData(1,  //Set Free
+						lastData.GetBlockLength() + //Current Size
+						data.GetBlockLength() +
+						size_of(RawAllocatorBlockData)); //Offset to acount for the now unused Data Structure
+					optimized = 1;
+				}
+			}
+			last = ptr;
+			ptr = this.GetNext(data);
+		}
+
+		if(optLevel >= 2 && optimized)
+		{
+			this.OptimizeBlocks();
+		}
+	}
+}

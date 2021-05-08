@@ -1,0 +1,273 @@
+#include <LibInjector.vhl>
+#include "DiskManagement/diskmgmnt.vhl"
+#include "MemoryManagement/malloc.vhl"
+#include <DiskManagement/FileSystem/fs.vhl>
+#include "DynamicLinker/DLR.vhl"
+#include "Memory/Memory.vhl"
+#include "Console.vhl"
+#include "KernelLoader/kal.vhl"
+#include "ArgParser.vhl"
+#include "String.vhl"
+
+#define USE_BUF_WRITE 1
+#define USE_BUF_READ 1
+
+string s_StartupConfigPath = "0:configs/os/startup.cfg";
+string s_AppStartName = "APP_START";
+private static uint s_KernelDiskTable;
+
+
+private static void kernel_install_default()
+{
+	string s_InstallLockFile = "0:configs/install/lock";
+	if(fs_exists(&s_InstallLockFile, size_of(s_InstallLockFile)))
+	{
+		return 0; //Only if Lock file is missing
+	}
+	//Inject/Install Default Apps
+	string strOSDL = "[INSTALL] Installing Default Libraries...";
+	kprintl(&strOSDL, size_of(strOSDL));
+
+	string s_CoreLibTime = "0:lib/time.vbin";
+	string s_HFSLibTime = "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/time/Program.vbin";
+	inj_hfs(s_CoreLibTime, s_HFSLibTime);
+
+	string s_CoreLibCFGLoader = "0:lib/cfgloader.vbin";
+	string s_HFSLibCFGLoader = "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/cfgloader/Program.vbin";
+	inj_hfs(s_CoreLibCFGLoader, s_HFSLibCFGLoader);
+
+	string s_CoreLibCTools = "0:lib/consoletools.vbin";
+	string s_HFSLibCTools = "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/consoletools/Program.vbin";
+	inj_hfs(s_CoreLibCTools, s_HFSLibCTools);
+
+	string strOSDA = "[INSTALL] Installing Default Apps...";
+	kprintl(&strOSDA, size_of(strOSDA));
+
+	string s_CoreAppCopy = "0:bin/copy.vbin";
+	string s_HFSAppCopy = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/copy/Program.vbin";
+	inj_hfs(s_CoreAppCopy, s_HFSAppCopy);
+
+	string s_CoreAppMove = "0:bin/move.vbin";
+	string s_HFSAppMove = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/move/Program.vbin";
+	inj_hfs(s_CoreAppMove, s_HFSAppMove);
+
+	string s_CoreAppDelete = "0:bin/delete.vbin";
+	string s_HFSAppDelete = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/delete/Program.vbin";
+	inj_hfs(s_CoreAppDelete, s_HFSAppDelete);
+
+	string s_CoreAppConsole = "0:bin/console.vbin";
+	string s_HFSAppConsole = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/console/Program.vbin";
+	inj_hfs(s_CoreAppConsole, s_HFSAppConsole);
+
+	string s_CoreAppAlias = "0:bin/alias.vbin";
+	string s_HFSAppAlias = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/alias/Program.vbin";
+	inj_hfs(s_CoreAppAlias, s_HFSAppAlias);
+
+	string s_CoreAppKtools = "0:bin/kerneltools.vbin";
+	string s_HFSAppKtools = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/kerneltools/Program.vbin";
+	inj_hfs(s_CoreAppKtools, s_HFSAppKtools);
+
+
+	string s_CoreAppEcho = "0:bin/echo.vbin";
+	string s_HFSAppEcho = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/echo/Program.vbin";
+	inj_hfs(s_CoreAppEcho, s_HFSAppEcho);
+
+	string s_CoreAppClear = "0:bin/clear.vbin";
+	string s_HFSAppClear = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/clear/Program.vbin";
+	inj_hfs(s_CoreAppClear, s_HFSAppClear);
+
+	string s_CoreAppKLoader = "0:bin/kernelloader.vbin";
+	string s_HFSAppKLoader = "D:/Users/Tim/Documents/viscpu/HL/KernelApps/kernelloader/Program.vbin";
+	inj_hfs(s_CoreAppKLoader, s_HFSAppKLoader);
+
+	string strTestScriptPath = "0:configs/console/startup.cmd";
+	string strTestScriptContent = "0:bin/alias.vbin add alias 0:bin/alias.vbin|0:bin/alias.vbin add kloader 0:bin/kernelloader.vbin|0:bin/alias.vbin add echo 0:bin/echo.vbin|0:bin/alias.vbin add clear 0:bin/clear.vbin|0:bin/alias.vbin add ktools 0:bin/kerneltools.vbin|0:bin/alias.vbin add delete 0:bin/delete.vbin|0:bin/alias.vbin add move 0:bin/move.vbin|0:bin/alias.vbin add copy 0:bin/copy.vbin|";
+
+	uint strTestScriptContentP = &strTestScriptContent;
+	for(uint i = 0; i < size_of(strTestScriptContent); i++)
+	{
+		uint v = strTestScriptContentP[i];
+		if(v == '|')
+		{
+			strTestScriptContentP[i] = '\n';
+		}
+
+	}
+	uint testScript = fs_create(&strTestScriptPath, size_of(strTestScriptPath));
+	f_writebuf(testScript, &strTestScriptContent, size_of(strTestScriptContent));
+	fs_close(testScript);
+	//Create Lock File
+	uint f = fs_create(&s_InstallLockFile, size_of(s_InstallLockFile));
+	fs_close(f);
+
+	//Set Console as Default Startup App.
+	kernel_make_startup(&s_CoreAppConsole, size_of(s_CoreAppConsole));
+	
+	return 1;
+}
+
+private static uint kernel_find_char(uint f, uint c)
+{
+	uint r = 0;
+	uint p = f_getpos(f);
+	uint l = f_getsize(f);
+	uint v = f_read(f);
+	while(v != c && p < l)
+	{
+		kprintc(v);
+		r++;
+		p++;
+		v = f_read(f);
+	}
+
+	return r;
+}
+
+private static uint kernel_run_app(uint path, uint pathL, uint site, uint siteL, uint args, uint argc)
+{
+	string strRunApp = "[OS] Running App: ";
+	kprint(&strRunApp, size_of(strRunApp));
+	kprint(path, pathL);
+	kprintc('|');
+	kprintl(site, siteL);
+	uint appPtr = dlr_load_lib(path, pathL);
+	uint appStart = dlr_resolve_call(appPtr, site, siteL);
+
+	uint v = appStart(args, argc);
+	return v;
+}
+
+private static void kernel_load_startup()
+{
+
+	string strStartupRun = "[OS] Running Startup Events...";
+	kprintl(&strStartupRun, size_of(strStartupRun));
+	uint startupConfig = 0;
+	if(!fs_exists(&s_StartupConfigPath, size_of(s_StartupConfigPath)))
+	{
+		startupConfig = fs_create(&s_StartupConfigPath, size_of(s_StartupConfigPath));
+	}
+	else
+	{
+		startupConfig = fs_open(&s_StartupConfigPath, size_of(s_StartupConfigPath));
+	}
+	f_setpos(startupConfig, 0);
+
+	
+	uint lineLen = kernel_find_char(startupConfig, '\n');
+
+	while(lineLen)
+	{
+		uint lineBuf = malloc(lineLen);
+		
+		uint start = f_getpos(startupConfig) - lineLen;
+		start--;
+		f_setpos(startupConfig, start);
+
+		f_readbuf(startupConfig, lineBuf, lineLen);
+
+
+		kernel_run_app(lineBuf, 
+						lineLen, 
+						&s_AppStartName, 
+						size_of(s_AppStartName), 
+						lineBuf, 
+						lineLen);
+
+
+		free(lineBuf);
+
+		lineLen = kernel_find_char(startupConfig, '\n');
+	}
+
+	fs_close(startupConfig);
+
+}
+
+public static void kernel_make_startup(uint s, uint l)
+{
+	uint f = fs_open(&s_StartupConfigPath, size_of(s_StartupConfigPath));
+	f_writebuf(f, s, l);
+	f_write(f, '\n');
+	fs_close(f);
+}
+
+public static void kernel_shutdown()
+{
+	string strKStart = "[Kernel] Shutdown Kernel...";
+	kprintl(&strKStart, size_of(strKStart));
+	fs_unload(0);
+
+	DiskTable kdt = s_KernelDiskTable;
+
+	kdt.Unload();
+
+	dlr_uninit();
+
+	fs_core_unload();
+}
+
+public static void kernel_startup()
+{
+	string strKStart = "[Kernel] Starting Kernel...";
+	kprintl(&strKStart, size_of(strKStart));
+	fs_core_init();
+	dlr_init();
+	s_KernelDiskTable = malloc(size_of(DiskTable));
+	DiskTable.new(s_KernelDiskTable);
+	DiskTable dt = s_KernelDiskTable;
+	PartitionTable pt0 = dt.GetPartitionTable(0);
+	Partition pOS = pt0.GetPartition(0);
+	Partition pData = pt0.GetPartition(1);
+	fs_init(0, pData);
+
+	kernel_load_startup();
+}
+
+public static void kernel_reboot()
+{
+	kernel_shutdown();
+	kernel_startup();
+}
+
+private static void test_console_lib()
+{
+	//Path of the Library in the FileSystem
+	string strCToolsPath = "0:lib/consoletools.vbin";
+
+	//The Function name inside the lib that sets the fore color
+	string strCToolsFCSite = "ct_set_fore_color";
+	//The Function name inside the lib that returns the color code for red
+	string strCToolsCCRed = "color_red";
+
+	//Loading the Library from the FileSystem
+	uint l = dlr_load_lib(&strCToolsPath, size_of(strCToolsPath));
+	
+	//Resolve the Calls
+	uint changeColor = dlr_resolve_call(l, &strCToolsFCSite, size_of(strCToolsFCSite));
+	uint colorRed = dlr_resolve_call(l, &strCToolsCCRed, size_of(strCToolsCCRed));
+	
+	//Invoke the Calls as normal.
+	changeColor(colorRed());
+}
+
+private static void kernel_main()
+{
+
+	//Initialize Kernel Systems
+	kernel_startup();
+
+	//Install Default Apps(if not found on disk)
+	if(kernel_install_default())
+	{	
+		//Soft-Reboot
+		kernel_reboot();
+	}
+
+	kernel_shutdown();
+
+	mallocinfo();
+}
+
+
+kernel_main();

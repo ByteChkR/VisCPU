@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Base.settings;
-
 using Utils = Utility.ExtPP.Base.Utils;
 
 namespace Utility.ExtPP
@@ -20,7 +18,6 @@ namespace Utility.ExtPP
     /// </summary>
     public class SourceManager : ALoggable < LogType >, ISourceManager
     {
-
         /// <summary>
         ///     The processing states of the scripts included.
         /// </summary>
@@ -99,10 +96,10 @@ namespace Utility.ExtPP
         public void FixOrder( ISourceScript script )
         {
             Logger.Log(
-                       LogType.Log,
-                       $"Fixing Build Order of file: {Path.GetFileName( script.GetFileInterface().GetKey() )}",
-                       3
-                      );
+                LogType.Log,
+                $"Fixing Build Order of file: {Path.GetFileName( script.GetFileInterface().GetKey() )}",
+                3
+            );
 
             int idx = IndexOfFile( script.GetKey() );
             ISourceScript a = sources[idx];
@@ -226,10 +223,10 @@ namespace Utility.ExtPP
                 script = null;
 
                 Logger.Log(
-                           LogType.Warning,
-                           "A Plugin is trying to add a file outside of the main stage. Is the configuration correct?",
-                           3
-                          );
+                    LogType.Warning,
+                    "A Plugin is trying to add a file outside of the main stage. Is the configuration correct?",
+                    3
+                );
 
                 return false;
             }
@@ -303,7 +300,6 @@ namespace Utility.ExtPP
         }
 
         #endregion
-
     }
 
 }

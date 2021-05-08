@@ -1,0 +1,111 @@
+{
+  "ProjectName": "consoletools",
+  "ProjectVersion": "0.0.0.1",
+  "Dependencies": [],
+  "DefaultTarget": "Debug",
+  "BuildTargets": {
+    "Debug": {
+      "TargetName": "Debug",
+      "DependsOn": [],
+      "Jobs": [
+        {
+          "JobName": "Restore %NAME%@%VERSION%",
+          "BuildJobRunner": "restore",
+          "Arguments": {
+            "origin": "local"
+          }
+        },
+        {
+          "JobName": "Merged Debug Build",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/debug_build.json",
+            "build:input": "Program.vhl",
+            "assembler:format": "v3-pic"
+          }
+        }
+      ]
+    },
+    "Publish": {
+      "TargetName": "Publish",
+      "DependsOn": [],
+      "Jobs": [
+        {
+          "JobName": "Publish Project",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/newVersion.json"
+          }
+        }
+      ]
+    },
+    "DebugRun": {
+      "TargetName": "DebugRun",
+      "DependsOn": [
+        "Debug"
+      ],
+      "Jobs": [
+        {
+          "JobName": "Merged Debug Run",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/debug_run.json",
+            "run:input": "Program.vbin"
+          }
+        }
+      ]
+    },
+    "Release": {
+      "TargetName": "Release",
+      "DependsOn": [],
+      "Jobs": [
+        {
+          "JobName": "Restore %NAME%@%VERSION%",
+          "BuildJobRunner": "restore",
+          "Arguments": {
+            "origin": "local"
+          }
+        },
+        {
+          "JobName": "Merged Release Build",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/release_build.json",
+            "build:input": "Program.vhl",
+            "assembler:format": "v3-pic"
+          }
+        }
+      ]
+    },
+    "ReleaseRun": {
+      "TargetName": "ReleaseRun",
+      "DependsOn": [
+        "Release"
+      ],
+      "Jobs": [
+        {
+          "JobName": "Merged Release Run",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/release_run.json",
+            "run:input": "Program.vbin"
+          }
+        }
+      ]
+    },
+    "Run": {
+      "TargetName": "Run",
+      "DependsOn": [],
+      "Jobs": [
+        {
+          "JobName": "Merged Run",
+          "BuildJobRunner": "merged",
+          "Arguments": {
+            "merge:include": "%VISDIR%common/jobs/release_run.json",
+            "run:input": "Program.vbin"
+          }
+        }
+      ]
+    }
+  }
+}

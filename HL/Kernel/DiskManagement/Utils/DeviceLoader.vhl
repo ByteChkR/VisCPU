@@ -1,0 +1,44 @@
+#include "../Drivers/MBUSDRV.vhl"
+
+public class DeviceLoader
+{
+	private uint m_BusDev;
+	private uint m_DevType;
+	private uint m_NextDev;
+	private uint m_MaxDev;
+	public static DeviceLoader(uint targetType)
+	{
+		MBUSDRV dev = MBUSDRV();
+		uint p = dev;
+		this.m_BusDev = p;
+		this.m_DevType = targetType;
+		this.m_NextDev = 0;
+		this.m_MaxDev = dev.GetDeviceCount();
+	}
+
+	public uint GetNextDevice()
+	{
+		MBUSDRV dev = this.m_BusDev;
+		uint current = this.m_NextDev;
+		uint max = this.m_MaxDev;
+		if(current >= max)
+		{
+			return 0;
+		}
+
+		for(uint i = current; i < max; i++)
+		{
+			uint type = dev.GetDeviceType(i);
+			uint target = this.m_DevType;
+			if(type == target)
+			{
+				this.m_NextDev = i + 1;
+				uint a = dev.GetDeviceAddress(i);
+				return a;
+			}
+		}
+		
+		this.m_NextDev = max; //We Found all Devices of this type.
+		return 0;
+	}
+}

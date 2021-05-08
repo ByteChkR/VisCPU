@@ -3,7 +3,6 @@
 
     public enum PeripheralType
     {
-
         MemoryBusDriver,
         ConsoleOutput,
         ConsoleInput,
@@ -12,7 +11,6 @@
         Drive,
         Time,
         Custom
-
     }
 
 }

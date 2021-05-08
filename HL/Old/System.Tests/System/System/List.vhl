@@ -1,0 +1,19 @@
+public abstract class List
+{
+	public abstract uint Count();
+	public abstract void Add(uint v);
+	public abstract void Insert(uint i, uint v);
+
+	//Remove Instance At
+	public abstract void RemoveAt(uint i);
+
+	//Remove First Instance with value V
+	public abstract void Remove(uint v);
+
+	//Remove All Instances with value V
+	public abstract void RemoveAll(uint v);
+
+	public abstract uint Get(uint i);
+	public abstract void Set(uint i, uint v);
+	public abstract void Clear();
+}

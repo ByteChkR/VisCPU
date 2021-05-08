@@ -9,7 +9,6 @@ namespace Utility.ExtPP.Base.settings
     /// </summary>
     public interface IChainCollection
     {
-
         /// <summary>
         ///     The chain of the collection
         /// </summary>
@@ -19,7 +18,6 @@ namespace Utility.ExtPP.Base.settings
         ///     The name to be found in the assembly.
         /// </summary>
         string Name { get; }
-
     }
 
 }

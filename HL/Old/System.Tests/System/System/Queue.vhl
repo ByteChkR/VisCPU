@@ -1,0 +1,9 @@
+public abstract class Queue
+{
+	public abstract void Enqueue(uint value);
+	public abstract uint Count();
+	public abstract uint IsEmpty();
+	public abstract uint Peek();
+	public abstract uint Dequeue();
+}
+

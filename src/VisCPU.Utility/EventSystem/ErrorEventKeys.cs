@@ -3,7 +3,6 @@
 
     public static class ErrorEventKeys
     {
-
         public static readonly string s_AbstractConstructorCall = "hl-abstract-constructor-call";
         public static readonly string s_HlConstVarDuplicateDef = "hl-const-var-duplicate-definition";
 
@@ -60,7 +59,6 @@
 
         public static readonly string s_HfsReadFailure = "hfs-read-failure";
         public static readonly string s_OriginUrlSchemeUnsupported = "origin-url-scheme-unsupported";
-
     }
 
 }

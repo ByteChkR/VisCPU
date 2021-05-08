@@ -1,0 +1,130 @@
+#include "Console.vhl"
+public static uint str_cmp(string s1, uint s1L, string s2, uint s2L)
+{
+	if(s1L != s2L)
+	{
+		return 0;
+	}
+
+	for(uint i = 0 ; i < s1L; i++)
+	{
+		uint v1 = s1[i];
+		uint v2 = s2[i];
+		if(v1 != v2)
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+
+public static uint str_find_char(uint c, uint ptr, uint l)
+{
+	for(uint i = 0; i < l; i++)
+	{
+		uint v = ptr[i];
+		if(c == v)
+		{
+			return i;
+		}
+	}
+	return l;
+}
+
+private static void str_invalid_args(uint sBase, uint lBase, uint s, uint l)
+{
+	string strZLength1 = "Unable to find String ";
+	string strZLength2 = "in String ";
+	kprint(&strZLength1, size_of(strZLength1));
+	kprint(s, l);
+	kprintl(&strZLength2, size_of(strZLength2));
+	kprint(sBase, lBase);
+	interrupt(1);
+}
+
+public static uint str_find_str(uint sBase, uint lBase, uint s, uint l)
+{
+	if(!l || !lBase || l > lBase)
+	{
+		str_invalid_args(sBase, lBase, s, l);
+	}
+
+	uint baseEnd = lBase - l;
+	uint startChar = s[0];
+	for(uint baseI = 0; baseI <= baseEnd; baseI++)
+	{
+		uint v = sBase[baseI];
+		if(v == startChar)
+		{
+			uint correct = 1;
+			for(uint i = 1; i < l; i++)
+			{
+				uint sv = s[i];
+				v = sBase[baseI + i];
+				if(sv != v)
+				{
+					correct = 0;
+				}
+			}
+
+			if(correct)
+			{
+				return baseI;
+			}
+
+		}
+	}
+	str_invalid_args(sBase, lBase, s, l);
+}
+
+public static uint str_contains_str(uint sBase, uint lBase, uint s, uint l)
+{
+	if(!l || !lBase)
+	{
+		string strZLength = "Argument has zero-length.";
+		kprintl(&strZLength, size_of(strZLength));
+		interrupt(1);
+	}
+	if(l > lBase)
+	{
+		return 0;
+	}
+
+	uint baseEnd = lBase - l;
+	uint startChar = s[0];
+	for(uint baseI = 0; baseI <= baseEnd; baseI++)
+	{
+		uint v = sBase[baseI];
+		if(v == startChar)
+		{
+			uint correct = 1;
+			for(uint i = 1; i < l; i++)
+			{
+				uint sv = s[i];
+				v = sBase[baseI + i];
+				if(sv != v)
+				{
+					correct = 0;
+				}
+			}
+			if(correct)
+			{
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+public static uint str_contains_char(uint s, uint l, uint c)
+{
+	for(uint i = 0; i < l; i++)
+	{
+		uint v = s[0];
+		if(v == c)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}

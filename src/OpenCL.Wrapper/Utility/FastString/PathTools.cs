@@ -6,7 +6,6 @@ namespace Utility.FastString
 
     public static class PathTools
     {
-
         #region Public
 
         public static string CleanPath( string path )
@@ -66,7 +65,6 @@ namespace Utility.FastString
         }
 
         #endregion
-
     }
 
 }

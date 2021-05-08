@@ -6,19 +6,17 @@ namespace VisCPU.Utility.IO.Settings.Events
 
     internal class SettingsIoDisabledEvent : ErrorEvent
     {
-
         #region Public
 
         public SettingsIoDisabledEvent( string errMessage ) : base(
-                                                                   errMessage,
-                                                                   ErrorEventKeys.s_SettingsIoDisabled,
-                                                                   false
-                                                                  )
+            errMessage,
+            ErrorEventKeys.s_SettingsIoDisabled,
+            false
+        )
         {
         }
 
         #endregion
-
     }
 
 }

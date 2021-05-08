@@ -5,7 +5,6 @@ namespace VisCPU.HL.Parser.Tokens.Combined
 
     public class FunctionDefinitionToken : CombinedToken
     {
-
         public IHlToken[] Arguments { get; }
 
         public IHlToken[] Block { get; }
@@ -31,10 +30,10 @@ namespace VisCPU.HL.Parser.Tokens.Combined
             int start,
             HlTypeDefinition parent = null,
             HlFunctionType functionType = HlFunctionType.Function ) : base(
-                                                                           HlTokenType.OpFunctionDefinition,
-                                                                           subtokens,
-                                                                           start
-                                                                          )
+            HlTokenType.OpFunctionDefinition,
+            subtokens,
+            start
+        )
         {
             FunctionType = functionType;
             Parent = parent;
@@ -46,7 +45,6 @@ namespace VisCPU.HL.Parser.Tokens.Combined
         }
 
         #endregion
-
     }
 
 }

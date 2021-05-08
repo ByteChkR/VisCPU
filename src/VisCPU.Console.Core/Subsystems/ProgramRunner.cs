@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
 using OpenCL.Integration;
-
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.Instructions;
@@ -23,7 +21,6 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ProgramRunner : ConsoleSubsystem
     {
-
         #region Public
 
         public static void Run( Dictionary < string, string > args )
@@ -36,13 +33,13 @@ namespace VisCPU.Console.Core.Subsystems
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
             ArgumentSyntaxParser.Parse(
-                                       args,
-                                       settings,
-                                       hls,
-                                       ms,
-                                       mbs,
-                                       cpuSettings
-                                      );
+                args,
+                settings,
+                hls,
+                ms,
+                mbs,
+                cpuSettings
+            );
 
             SettingsManager.SaveSettings( hls );
             SettingsManager.SaveSettings( ms );
@@ -126,13 +123,13 @@ namespace VisCPU.Console.Core.Subsystems
             MemoryBusSettings mbs = SettingsManager.GetSettings < MemoryBusSettings >();
 
             ArgumentSyntaxParser.Parse(
-                                       args.ToArray(),
-                                       settings,
-                                       hls,
-                                       ms,
-                                       mbs,
-                                       cpuSettings
-                                      );
+                args.ToArray(),
+                settings,
+                hls,
+                ms,
+                mbs,
+                cpuSettings
+            );
 
             SettingsManager.SaveSettings( hls );
             SettingsManager.SaveSettings( ms );
@@ -202,13 +199,13 @@ namespace VisCPU.Console.Core.Subsystems
         private static MemoryBus CreateBus( MemoryBusSettings settings, params Peripheral[] additionalPeripherals )
         {
             List < Peripheral > ps = settings.MemoryDevices.Select(
-                                                                   x => new Memory(
-                                                                        SettingsManager.
-                                                                            GetSettings < MemorySettings >(
-                                                                                 x
-                                                                                )
-                                                                       )
-                                                                  ).
+                                                  x => new Memory(
+                                                      SettingsManager.
+                                                          GetSettings < MemorySettings >(
+                                                              x
+                                                          )
+                                                  )
+                                              ).
                                               Concat( additionalPeripherals ).
                                               Concat( Peripheral.GetExtensionPeripherals() ).
                                               ToList();
@@ -219,8 +216,8 @@ namespace VisCPU.Console.Core.Subsystems
             }
 
             return new MemoryBus(
-                                 ps
-                                );
+                ps
+            );
         }
 
         private static void InterruptHandler( Cpu cpu, uint code )
@@ -271,11 +268,11 @@ namespace VisCPU.Console.Core.Subsystems
                     if ( item.Key == null )
                     {
                         Logger.LogMessage(
-                                          LoggerSystems.StackTrace,
-                                          "\t[Element {1}] Function at address: {0} was not exported",
-                                          callee.ToHexString(),
-                                          stackNum
-                                         );
+                            LoggerSystems.StackTrace,
+                            "\t[Element {1}] Function at address: {0} was not exported",
+                            callee.ToHexString(),
+                            stackNum
+                        );
                     }
                     else
 
@@ -311,7 +308,6 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
-
     }
 
 }

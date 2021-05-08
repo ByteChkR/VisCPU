@@ -3,7 +3,6 @@
 
     public class ValToken : ValueToken
     {
-
         public override uint Value { get; }
 
         #region Public
@@ -19,7 +18,6 @@
         }
 
         #endregion
-
     }
 
 }

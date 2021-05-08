@@ -8,7 +8,6 @@ namespace Utility.ExtPP.Base
     /// </summary>
     public class ProcessorException : ApplicationException
     {
-
         #region Public
 
         /// <summary>
@@ -20,7 +19,6 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
-
     }
 
 }

@@ -1,0 +1,12 @@
+#include "DEVS/TIMEDRV.vhl"
+
+public class Thread
+{
+	public static void Sleep(uint seconds)
+	{
+		TIMEDRV time = TIMEDRV(0xFFFF5000); //Time Device
+		uint target = time.GetTime() + seconds;
+		while(target > time.GetTime()){} //Spin for Remaining Time
+	}
+
+}
