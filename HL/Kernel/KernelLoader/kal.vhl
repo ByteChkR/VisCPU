@@ -1,23 +1,58 @@
 #include "hfs/hfs.vhl"
 #include "../MemoryManagement/malloc.vhl"
-#include <../DiskManagement/FileSystem/fs.vhl>
+#include "../DiskManagement/FileSystem/fs.vhl"
 #include "../Console.vhl"
 
-#define LIB_INJECT_SAFE_WRITE 0
+//Settings
+#include <../Settings/InstallerSettings.vhl>
 
-public static void kal_load_from_hfs(string libPath, uint pathLen, string hfsPath, uint hfsLength)
+private static uint kal_read_path(uint ptr, uint max)
+{
+	uint cur = 0;
+	while(cur < max)
+	{
+		uint v = kread();
+		while(v == '\r')
+		{
+			v = kread();
+		}
+		if(v == '\n')
+		{
+			return cur;
+		}
+		ptr[cur] = v;
+		cur++;
+	}
+	return max;
+} 
+
+public static void kal_load_from_hfs(uint libPath, uint pathLen, uint hfsPath, uint hfsLength)
 {
 	string sTag = "[KAL] Installing: ";
 
 	kprint(&sTag, size_of(sTag));
 	kprintl(libPath, pathLen);
 	uint existsHfs = HFS.FileExists(hfsPath, hfsLength);
+	uint needsFreeBuf = 0;
 	if(!existsHfs)
 	{
 		string strHfsNotExist = "HFS File Does not Exist: ";
 		kprint(&strHfsNotExist, size_of(strHfsNotExist));
 		kprintl(hfsPath, hfsLength);
-		interrupt(1);
+		string strReenterPath = "HFS PATH: ";
+		kprint(&strReenterPath, size_of(strReenterPath));
+
+		needsFreeBuf = 1;
+		uint pBuf = malloc(256);
+		uint pLen = kal_read_path(pBuf, 256);
+		hfsPath = pBuf;
+		hfsLength = pLen;
+
+		existsHfs = HFS.FileExists(hfsPath, hfsLength);
+		if(!existsHfs)
+		{
+			return;
+		}
 	}
 	uint size = HFS.GetFileSize(hfsPath, hfsLength);
 	
@@ -33,7 +68,7 @@ public static void kal_load_from_hfs(string libPath, uint pathLen, string hfsPat
 		libFile = fs_create(libPath, pathLen);
 	}
 	
-	if(LIB_INJECT_SAFE_WRITE)
+	if(KAL_INSTALL_SAFE_WRITE)
 	{
 		HFS.FileOpenRead(hfsPath, hfsLength);
 
@@ -53,6 +88,11 @@ public static void kal_load_from_hfs(string libPath, uint pathLen, string hfsPat
 	}
 	
 	fs_close(libFile);
+
+	if(needsFreeBuf)
+	{
+		free(hfsPath);
+	}
 }
 
 public static void kal_inject_from_hfs(string libPath, uint pathLen, string hfsPath, uint hfsLength)
@@ -81,7 +121,7 @@ public static void kal_inject_from_memory(string libPath, uint pathLen, uint ptr
 		uint v1 = len;
 		uint l = v1 - v;
 
-		if(LIB_INJECT_SAFE_WRITE)
+		if(KAL_INSTALL_SAFE_WRITE)
 		{
 			string strWriteSafe = "[KAL] Safe Write Enabled";
 			kprintl(&strWriteSafe, size_of(strWriteSafe));

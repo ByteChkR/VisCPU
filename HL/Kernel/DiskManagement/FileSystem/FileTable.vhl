@@ -1,21 +1,23 @@
-#include <FSv1Utils.vhl>
 #include "../Partition.vhl"
 #include "../../Console.vhl"
 
-public class FSv1FileTable
+//Settings
+#include <../../Settings/FileSystemSettings.vhl>
+
+public class FileTable
 {
 	private uint m_Partition;
 	private uint m_TableStart;
 	private uint m_EntryStart;
 	private uint m_MaxBlocks;
-	public static FSv1FileTable(uint p, uint tableStart)
+	public static FileTable(uint p, uint tableStart)
 	{
 		this.m_Partition = p;
 		this.m_TableStart = tableStart;
 		
 		Partition part = p;
-		uint blocks = part.GetSize() / BLOCK_SIZE;
-		blocks -= ROOT_BLOCKS;
+		uint blocks = part.GetSize() / FS_BLOCK_SIZE;
+		blocks -= FS_ROOT_BLOCKS;
 		this.m_MaxBlocks = blocks;
 
 		uint es = tableStart+blocks;
@@ -25,12 +27,12 @@ public class FSv1FileTable
 
 	public uint IsBlockFree(uint blockNum)
 	{
-		if(blockNum < ROOT_BLOCKS)
+		if(blockNum < FS_ROOT_BLOCKS)
 		{
 			return 0;
 		}
 
-		uint idx = blockNum - ROOT_BLOCKS;
+		uint idx = blockNum - FS_ROOT_BLOCKS;
 		uint ts = this.m_TableStart;
 		Partition part = this.m_Partition;
 		uint free = part.Read(ts+idx);
@@ -40,12 +42,12 @@ public class FSv1FileTable
 
 	public void SetBlockFree(uint blockNum, uint free)
 	{
-		if(blockNum < ROOT_BLOCKS)
+		if(blockNum < FS_ROOT_BLOCKS)
 		{
 			interrupt(1); //Can not free ROOT BLOCKS
 		}
 
-		uint idx = blockNum - ROOT_BLOCKS;
+		uint idx = blockNum - FS_ROOT_BLOCKS;
 		uint ts = this.m_TableStart;
 		Partition part = this.m_Partition;
 		part.Write(ts+idx, free);
@@ -56,9 +58,9 @@ public class FSv1FileTable
 		uint max = this.m_MaxBlocks;
 		for(uint i= 0; i < max; i++)
 		{
-			if(this.IsBlockFree(ROOT_BLOCKS + i))
+			if(this.IsBlockFree(FS_ROOT_BLOCKS + i))
 			{
-				uint bn = ROOT_BLOCKS+i;
+				uint bn = FS_ROOT_BLOCKS+i;
 				return bn;
 			}
 		}
@@ -95,7 +97,7 @@ public class FSv1FileTable
 		uint ts = this.m_EntryStart;
 		Partition p = this.m_Partition;
 
-		uint ec = p.Read(ts+FST_ENTRY_COUNT);
+		uint ec = p.Read(ts+FS_T_ENTRY_COUNT);
 
 
 
@@ -107,15 +109,15 @@ public class FSv1FileTable
 		uint ts = this.m_EntryStart;
 		Partition p = this.m_Partition;
 
-		p.Write(ts+FST_ENTRY_COUNT, c);
+		p.Write(ts+FS_T_ENTRY_COUNT, c);
 	}
 
 	private uint GetFileEntryLength(uint handle)
 	{
-		uint len = F_ENTRY_NAME; //Offset Flags and Name Length
+		uint len = FS_F_ENTRY_NAME; //Offset Flags and Name Length
 		Partition p = this.m_Partition;
-		len += p.Read(handle+F_ENTRY_NAME_COUNT);
-		len += F_ENTRY_BLOCK_COUNT;
+		len += p.Read(handle+FS_F_ENTRY_NAME_COUNT);
+		len += FS_F_ENTRY_BLOCK_COUNT;
 		len++; //Block Length Var
 		return len;
 	}
@@ -136,7 +138,7 @@ public class FSv1FileTable
 	{
 		uint handle = this.IndexToHandle(idx);
 		Partition p = this.m_Partition;
-		uint flags = p.Read(handle+F_ENTRY_FLAGS);
+		uint flags = p.Read(handle+FS_F_ENTRY_FLAGS);
 		return flags;
 	}
 
@@ -145,14 +147,14 @@ public class FSv1FileTable
 	{
 		uint handle = this.IndexToHandle(idx);
 		Partition p = this.m_Partition;
-		uint nameLength = p.Read(handle + F_ENTRY_NAME_COUNT);
+		uint nameLength = p.Read(handle + FS_F_ENTRY_NAME_COUNT);
 		return nameLength;
 	}
 
 	private uint GetEntryNameStart(uint idx)
 	{	
 		uint handle = this.IndexToHandle(idx);
-		uint nameStart = handle + F_ENTRY_NAME;
+		uint nameStart = handle + FS_F_ENTRY_NAME;
 		return nameStart;
 	}
 
@@ -193,7 +195,7 @@ public class FSv1FileTable
 		uint pp = this.m_Partition;
 		
 		Partition p = pp;
-		uint s = handle+F_ENTRY_SIZE;
+		uint s = handle+FS_F_ENTRY_SIZE;
 		uint flags = p.Read(s);
 		return flags;
 	}
@@ -202,7 +204,7 @@ public class FSv1FileTable
 	{
 		uint handle = this.IndexToHandle(idx);
 		Partition p = this.m_Partition;
-		p.Write(handle+F_ENTRY_SIZE, sz);
+		p.Write(handle+FS_F_ENTRY_SIZE, sz);
 	}
 
 	public uint GetBlock(uint idx, uint blockIdx)
@@ -210,7 +212,7 @@ public class FSv1FileTable
 		uint handle = this.GetBlockStart(idx);
 		Partition p = this.m_Partition;
 		uint i = handle + blockIdx + 1;
-		uint v = p.Read(i) + ROOT_BLOCKS;
+		uint v = p.Read(i) + FS_ROOT_BLOCKS;
 		return v;
 	}
 
@@ -219,7 +221,7 @@ public class FSv1FileTable
 		uint handle = this.GetBlockStart(idx);
 		Partition p = this.m_Partition;
 		uint i = handle + 1 + blockIdx;
-		p.Write(i, blockNum - ROOT_BLOCKS);
+		p.Write(i, blockNum - FS_ROOT_BLOCKS);
 	}
 
 	public uint CreateEntry(string name, uint nameLength)
@@ -227,10 +229,10 @@ public class FSv1FileTable
 		Partition p = this.m_Partition;
 		uint start = this.IndexToHandle(this.GetEntryCount());
 
-		p.Write(start+F_ENTRY_FLAGS, 0);
-		p.Write(start+F_ENTRY_NAME_COUNT, nameLength);
-		p.WriteBuffer(name, start+F_ENTRY_NAME, nameLength);
-		p.Write(start+F_ENTRY_NAME+nameLength, 0); //Write Block Count
+		p.Write(start+FS_F_ENTRY_FLAGS, 0);
+		p.Write(start+FS_F_ENTRY_NAME_COUNT, nameLength);
+		p.WriteBuffer(name, start+FS_F_ENTRY_NAME, nameLength);
+		p.Write(start+FS_F_ENTRY_NAME+nameLength, 0); //Write Block Count
 		this.SetEntryCount(this.GetEntryCount() + 1);
 		return start;
 	}
@@ -249,7 +251,7 @@ public class FSv1FileTable
 		this.RemoveAllBlocks(idx);
 
 		uint handle = this.IndexToHandle(idx);
-		p.Write(handle + F_ENTRY_FLAGS, 1);
+		p.Write(handle + FS_F_ENTRY_FLAGS, 1);
 	}
 
 	public uint GetPartition()
@@ -260,7 +262,7 @@ public class FSv1FileTable
 
 	public uint GetMaxRootTableSize()
 	{
-		return (ROOT_BLOCKS * BLOCK_SIZE);
+		return (FS_ROOT_BLOCKS * FS_BLOCK_SIZE);
 	}
 
 	public uint CalculateRootTableSize()
@@ -273,19 +275,19 @@ public class FSv1FileTable
 	public void WriteInfo()
 	{
 		nprint();
-		string sRootBlocks = "[FSv1] Root Block Size: ";
-		string sRootBlockOccupation = "[FSv1] Used Root Size: ";
-		string sMaxBlocks = "[FSv1] Max Blocks: ";
+		string sRootBlocks = "[FS] Root Block Size: ";
+		string sRootBlockOccupation = "[FS] Used Root Size: ";
+		string sMaxBlocks = "[FS] Max Blocks: ";
 		
 		uint rootMax = this.GetMaxRootTableSize();
 		uint rootUsed = this.CalculateRootTableSize();
 		uint max = this.m_MaxBlocks;
 		uint fileCount = this.GetEntryCount();
-		string sMaxFileBlocks = "[FSv1] Max Blocks Per File: ";
-		string sFileCount = "[FSv1] File Count(Total): ";
+		string sMaxFileBlocks = "[FS] Max Blocks Per File: ";
+		string sFileCount = "[FS] File Count(Total): ";
 
 		print(sRootBlocks);
-		printnl(ROOT_BLOCKS);
+		printnl(FS_ROOT_BLOCKS);
 		print(sMaxBlocks);
 		printnl(max);
 		print(sRootBlockOccupation);
@@ -294,7 +296,7 @@ public class FSv1FileTable
 		printnl(rootMax);
 
 		print(sMaxFileBlocks);
-		printnl(F_ENTRY_BLOCK_COUNT);
+		printnl(FS_F_ENTRY_BLOCK_COUNT);
 		print(sFileCount);
 		printnl(fileCount);
 
@@ -308,7 +310,7 @@ public class FSv1FileTable
 
 	private void PrintFileInfo(uint index)
 	{
-		string fn = "[FSv1] File Name: ";
+		string fn = "[FS] File Name: ";
 		print(fn);
 		uint nc = this.GetEntryNameLength(index);
 		uint bc = this.GetBlockCount(index);
@@ -319,7 +321,7 @@ public class FSv1FileTable
 		}
 		nprint();
 
-		string sTag = "[FSv1] ";
+		string sTag = "[FS] ";
 		string fStat = "Status: ";
 		string fDel = "Deleted";
 		string fAlive = "Alive";

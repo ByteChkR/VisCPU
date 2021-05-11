@@ -1,5 +1,5 @@
 #include "String.vhl"
-#include "Console.vhl"
+#include "../Console.vhl"
 
 public static uint arg_getc(uint s, uint l)
 {

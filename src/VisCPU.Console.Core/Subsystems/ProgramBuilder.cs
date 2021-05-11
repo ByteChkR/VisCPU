@@ -7,6 +7,7 @@ using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
 using VisCPU.HL;
 using VisCPU.HL.Importer;
+using VisCPU.HL.TextLoader;
 using VisCPU.Peripherals;
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.EventSystem;
@@ -35,6 +36,7 @@ namespace VisCPU.Console.Core.Subsystems
                 ls,
                 hls
             );
+            
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
@@ -65,6 +67,7 @@ namespace VisCPU.Console.Core.Subsystems
 
         public static void Build( BuilderSettings settings )
         {
+            TextImporter.ParseImporterArgs();
             ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter(), new OpenCLKernelImporter() );
 
             foreach ( PeripheralImporter peripheralImporter in Peripheral.GetPeripheralImporters() )

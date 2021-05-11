@@ -1,0 +1,34 @@
+#define TIME_LIB_HFS "./bios/libs/time.vbin"
+
+
+#define CFG_LIB_HFS "./bios/libs/cfgloader.vbin"
+
+
+#define CTOOLS_LIB_HFS "./bios/libs/consoletools.vbin"
+
+
+#define COPY_APP_HFS "./bios/apps/copy.vbin"
+
+
+#define MOVE_APP_HFS "./bios/apps/move.vbin"
+
+
+#define DELETE_APP_HFS "./bios/apps/delete.vbin"
+
+
+#define CONSOLE_APP_HFS "./bios/apps/console.vbin"
+
+
+#define ALIAS_APP_HFS "./bios/apps/alias.vbin"
+
+
+#define KTOOLS_APP_HFS "./bios/apps/kerneltools.vbin"
+
+
+#define ECHO_APP_HFS "./bios/apps/echo.vbin"
+
+
+#define CLEAR_APP_HFS "./bios/apps/clear.vbin"
+
+
+#define KLOADER_APP_HFS "./bios/apps/kernelloader.vbin"

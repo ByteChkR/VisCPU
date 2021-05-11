@@ -1,0 +1,10 @@
+
+//#######################################
+//Malloc/Free Implementation Definitions
+
+//---------------------------------------
+//The Absolute Memory Address where Malloc Starts
+#define MALLOC_MEM_START 100000
+//---------------------------------------
+//The Length/Size of the Allocator
+#define MALLOC_MEM_SIZE 100000

@@ -1,4 +1,4 @@
-#include "Console.vhl"
+#include "../Console.vhl"
 public static uint str_cmp(string s1, uint s1L, string s2, uint s2L)
 {
 	if(s1L != s2L)

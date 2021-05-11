@@ -43,11 +43,13 @@ namespace VisCPU.Console.Core.Settings
         [JsonIgnore]
         public string[] EntryFiles { get; set; }
 
-        [field: Argument( Name = "build:input-dirs" )]
-        [field: Argument( Name = "build:if" )]
+        [field: Argument(Name = "build:input-dirs")]
+        [field: Argument(Name = "build:if")]
         [XmlIgnore]
         [JsonIgnore]
         public string[] InputFolders { get; set; }
+
+        
 
         [XmlIgnore]
         [JsonIgnore]

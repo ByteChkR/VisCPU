@@ -1,8 +1,11 @@
 #include "../Console.vhl"
 #inline "RawAllocator.vhl"
-#include <../KernelSettings.vhl>
 
-#define MALLOC_DEBUG_LOGGING 0
+//Settings
+#include <../Settings/MallocSettings.vhl>
+#include <../Settings/LoggingSettings.vhl>
+
+
 
 uint v;
 uint s_KernelAlloc;
@@ -11,7 +14,7 @@ private static void mallocinit()
 {
 	string strInitMalloc = "[MALLOC] Initializing...";
 	kprintl(&strInitMalloc, size_of(strInitMalloc));
-	RawAllocator a = RawAllocator(K_ALLOC_START, K_ALLOC_SIZE);
+	RawAllocator a = RawAllocator(MALLOC_MEM_START, MALLOC_MEM_SIZE);
 	a.SetOptimizationLevel(2);
 	s_KernelAlloc = a;
 }
@@ -39,7 +42,7 @@ public static uint malloc(uint size)
 	RawAllocator a = s_KernelAlloc;
 	uint p = a.Allocate(size);
 
-	if(MALLOC_DEBUG_LOGGING)
+	if(MALLOC_ENABLE_LOGS)
 	{
 		string strAllocSz = "[MALLOC] Allocating ";
 		kprint(&strAllocSz, size_of(strAllocSz));
@@ -66,7 +69,7 @@ public static void free(uint ptr)
 
 	RawAllocator a = s_KernelAlloc;
 
-	if(MALLOC_DEBUG_LOGGING)
+	if(MALLOC_ENABLE_LOGS)
 	{
 		string strAllocSz = "[MALLOC] Freeing Pointer: ";
 		kprint(&strAllocSz, size_of(strAllocSz));

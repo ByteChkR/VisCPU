@@ -48,6 +48,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             ProjectConfig.AddRunner( new BuildJobMergedJobs() );
 
             ProjectConfig config = ProjectConfig.Load( src );
+
             string target = config.DefaultTarget;
 
             if ( a.Length > 1 )

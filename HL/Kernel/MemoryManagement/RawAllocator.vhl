@@ -1,4 +1,4 @@
-#include <../KernelSettings.vhl>
+#include <../Settings/ErrorSettings.vhl>
 
 private class RawAllocatorBlockData
 {

@@ -1,0 +1,2 @@
+//Enable disk formatting on PTable Create
+#define PTABLE_FORMAT_ON_CREATE 0

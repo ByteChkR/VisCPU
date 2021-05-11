@@ -1,23 +1,24 @@
-#include <FSv1Utils.vhl>
-#include <FSv1FileTable.vhl>
-#include <FSv1FileStream.vhl>
+#include "FileTable.vhl"
+#include "FileStream.vhl"
 #include "../../Console.vhl"
 #include "../../MemoryManagement/malloc.vhl"
 
-#define FS_LOG_FILE_ACTIONS 0
+//Settings
+#include <../../Settings/LoggingSettings.vhl>
 
-public class FSv1
+
+public class FileSystem
 {
 	private uint m_Partition;
 	private uint m_RootFileTable;
 
-	public static FSv1(uint p)
+	public static FileSystem(uint p)
 	{
 		this.m_Partition = p;
 		uint v = this.m_Partition;
 
-		uint ptr = malloc(size_of(FSv1FileTable));
-		FSv1FileTable.new(ptr, p, 0);
+		uint ptr = malloc(size_of(FileTable));
+		FileTable.new(ptr, p, 0);
 		this.m_RootFileTable = ptr;
 	}
 
@@ -35,7 +36,7 @@ public class FSv1
 
 	private uint FindIndex(string path, uint pathLen)
 	{
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		uint c = table.GetEntryCount();
 		for(uint i = 0; i < c; i++)
 		{
@@ -54,7 +55,7 @@ public class FSv1
 
 	private uint HasIndex(string path, uint pathLen)
 	{
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		uint c = table.GetEntryCount();
 		for(uint i = 0; i < c; i++)
 		{
@@ -74,7 +75,7 @@ public class FSv1
 
 	private uint IsName(uint idx, string path, uint pathLen)
 	{
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		uint pl = table.GetEntryNameLength(idx);
 		if(pl != pathLen)
 		{
@@ -111,18 +112,18 @@ public class FSv1
 
 	private void InnerOpen(string path, uint pathLen)
 	{
-		if(FS_LOG_FILE_ACTIONS)
+		if(FS_ENABLE_FILE_ACTION_LOGS)
 		{
-			string strOpenFile = "[FSv1] Opening File: ";
+			string strOpenFile = "[FS] Opening File: ";
 			kprint(&strOpenFile, size_of(strOpenFile));
 			kprintl(path, pathLen);
 		}
 
-		uint p = malloc(size_of(FSv1FileStream));
+		uint p = malloc(size_of(FileStream));
 		uint table = this.m_RootFileTable;
 
 		uint idx = this.FindIndex(path, pathLen);
-		FSv1FileStream.new(p, idx, table);
+		FileStream.new(p, idx, table);
 		return p;
 	}
 
@@ -143,7 +144,7 @@ public class FSv1
 			kprintl(&fExists1, size_of(fExists1));
 			interrupt(1);
 		}
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		table.CreateEntry(path, pathLen);
 		uint v = this.InnerOpen(path, pathLen);
 		return v;
@@ -161,7 +162,7 @@ public class FSv1
 			kprintl(&fNoExists1, size_of(fNoExists1));
 			interrupt(1);
 		}
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		table.RemoveEntry(this.FindIndex(path, pathLen));
 	}
 
@@ -185,14 +186,14 @@ public class FSv1
 			interrupt(1);
 		}
 		uint idx = this.FindIndex(path, pathLen);
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		uint s = table.GetEntrySize(idx);
 		return s;
 	}
 
 	public void WriteInfo()
 	{
-		FSv1FileTable table = this.m_RootFileTable;
+		FileTable table = this.m_RootFileTable;
 		table.WriteInfo();
 	}
 

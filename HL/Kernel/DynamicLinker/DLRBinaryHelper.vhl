@@ -1,7 +1,8 @@
-
-#define DLR_ENABLE_LOGS 1
-
 #include "../Console.vhl"
+
+//Settings
+#include <../Settings/LoggingSettings.vhl>
+
 public class DLRBinaryHelper
 {
 

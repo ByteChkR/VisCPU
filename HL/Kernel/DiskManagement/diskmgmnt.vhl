@@ -1,5 +1,6 @@
 
 #include "DiskTable.vhl"
+
 private static DiskTable dmgmnt_dt;
 private static uint dmgmnt_initflag;
 private static void dmgmntinit()

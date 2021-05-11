@@ -2,7 +2,9 @@
 #include "../Console.vhl"
 #include "Drivers/STOREDRV.vhl"
 #include "Partition.vhl"
-#include <../KernelSettings.vhl>
+
+//Settings
+#include <../Settings/DiskSettings.vhl>
 
 public class PartitionTable
 {
@@ -31,7 +33,7 @@ public class PartitionTable
 
 	public static void WriteDefault(STOREDRV drv)
 	{
-		if(K_PTABLE_FORMAT_ON_CREATE)
+		if(PTABLE_FORMAT_ON_CREATE)
 		{
 			PartitionTable.Format(drv);
 		}

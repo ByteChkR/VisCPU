@@ -1,6 +1,8 @@
 #include "Drivers/STOREDRV.vhl"
 #include "../Console.vhl"
-#include <../KernelSettings.vhl>
+
+//Settings
+#include <../Settings/ErrorSettings.vhl>
 
 public class Partition
 {

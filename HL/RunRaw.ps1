@@ -8,7 +8,7 @@ if ($decision -eq 0) {
     echo "Skipping Build.."
 } else {
 
-    ./Build.ps1
+    ./BuildRaw.ps1
 
     #Delete Old Disk if any
     echo "Removing Old Disks"

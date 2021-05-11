@@ -3,7 +3,9 @@
 #include "../Memory/Memory.vhl"
 #include "../Console.vhl"
 
-#define LOG_ENTRY_CREATION 0
+//Settings
+#include <../Settings/LoggingSettings.vhl>
+
 
 public class DLREntry
 {
@@ -21,7 +23,7 @@ public class DLREntry
 		this.m_LibNameStart = name;
 		this.m_LibPointer = ptr;
 
-		if(LOG_ENTRY_CREATION)
+		if(DLR_ENABLE_ENTRY_CREATION_LOGS)
 		{
 			string strNewEntry1 = "[DLR] Creating new DLR Entry(Name:";
 			string strNewEntry2 = ", Name Length: ";

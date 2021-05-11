@@ -13,16 +13,36 @@ namespace VPP.Importer
 
         #region Public
 
-        public override string Import( string text, string rootDir )
+        private static List < VPPMakro > CreateFromArgs()
         {
-            ( string ret, List < VPPMakro > makros ) = InnerImport( text.Replace( "\r", "" ), rootDir );
+            List < VPPMakro > m = new List < VPPMakro >();
+
+            foreach ( (string, string) importerArg in TextImporter.ImporterArgs )
+            {
+                m.Add(
+                    new VPPMakro
+                    {
+                        Name = importerArg.Item1,
+                        Parameters = new List < VPPMakroParameter >(),
+                        Value = importerArg.Item2
+                    } );
+            }
+
+            return m;
+        }
+
+
+        public override string Import(string text, string rootDir )
+        {
+
+            ( string ret, List < VPPMakro > makros ) = InnerImport( text.Replace( "\r", "" ), rootDir, CreateFromArgs() );
 
             return ret;
         }
 
-        #endregion
+#endregion
 
-        #region Private
+#region Private
 
         private static List < string > ParseList( VPPTextParser parser, Func < VPPTextParser, bool > isEnd )
         {
@@ -50,12 +70,14 @@ namespace VPP.Importer
             return p;
         }
 
-        private static void ResolveMakro( VPPMakro makro, VPPTextParser parser )
+        private static bool ResolveMakro( VPPMakro makro, VPPTextParser parser )
         {
 
             parser.SetPosition( 0 );
 
             int idx;
+
+            bool resolved = false;
 
             while ( ( idx = parser.Seek( makro.Name ) ) != -1 )
             {
@@ -84,27 +106,45 @@ namespace VPP.Importer
                     parser.Remove( makro.Name.Length );
                     parser.Insert( makro.GenerateValue( new string[0] ) );
                 }
+                resolved = true;
             }
+
+            return resolved;
         }
 
-        private static void ResolveMakros( VPPTextParser parser, List < VPPMakro > makros )
+        private static bool ResolveMakros( VPPTextParser parser, List < VPPMakro > makros )
         {
+            bool resolved = false;
             foreach ( VPPMakro vppMakro in makros )
             {
-                ResolveMakro( vppMakro, parser );
+               resolved |= ResolveMakro( vppMakro, parser );
             }
+
+            return resolved;
 
         }
 
-        private (string, List < VPPMakro >) InnerImport( string text, string rootDir )
+        private (string, List < VPPMakro >) InnerImport( string text, string rootDir, List <VPPMakro> makros = null )
         {
             VPPTextParser parser = new( text );
-            string[] includes = ParseIncludes( parser ).Concat( ParseInlines( parser ) ).ToArray();
-            List < VPPMakro > makros = ParseDefines( parser );
+            makros ??= new List < VPPMakro >();
 
-            ResolveIncludes( includes, makros, rootDir );
+            List < string > incs = new List < string >();
 
-            ResolveMakros( parser, makros );
+            bool recurse = true;
+
+            while ( recurse )
+            {
+                List<VPPMakro> curM = ParseDefines( parser );
+                List<string> curI = ParseIncludes( parser ).Concat( ParseInlines( parser ) ).ToList();
+                makros.AddRange(curM);
+                incs.AddRange(curI);
+                recurse = ResolveIncludes(curI, makros, rootDir);
+                recurse |= ResolveMakros(parser, makros);
+
+            }
+
+
 
             return ( parser.ToString(), makros );
         }
@@ -210,18 +250,22 @@ namespace VPP.Importer
             return ret.ToArray();
         }
 
-        private void ResolveIncludes( string[] includes, List < VPPMakro > result, string rootDir )
+        private bool ResolveIncludes( List <string> includes, List < VPPMakro > result, string rootDir )
         {
+            bool resolved = false;
             foreach ( string include in includes )
             {
+                resolved = true;
                 string file = Path.GetFullPath( Path.Combine( rootDir, include ) );
                 string root = Path.GetDirectoryName( file );
                 ( string s2, List < VPPMakro > fileMakros ) = InnerImport( File.ReadAllText( file ), root );
                 result.AddRange( fileMakros );
             }
+
+            return resolved;
         }
 
-        #endregion
+#endregion
     }
 
 }

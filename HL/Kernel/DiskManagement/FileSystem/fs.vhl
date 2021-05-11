@@ -1,4 +1,11 @@
-#include <FSv1.vhl>
+#include "../Partition.vhl"
+#include "FileStream.vhl"
+#include "FileTable.vhl"
+#include "FileSystem.vhl"
+
+//Settings
+#include <../../Settings/LoggingSettings.vhl>
+
 
 private static string fs_Hint_NoSep = "NSEP";
 private static string fs_Hint_NoNum = "NNUM";
@@ -25,7 +32,7 @@ public static void fs_core_unload()
 
 private static void fs_invalid_mapping(uint idx, string hint)
 {
-	string strInvalidMapping = "[FSv1] The Mapping is Invalid: ";
+	string strInvalidMapping = "[FS] The Mapping is Invalid: ";
 	kprint(&strInvalidMapping, size_of(strInvalidMapping));
 	kprintn(idx);
 	kprintc(0x20);
@@ -39,7 +46,7 @@ private static void fs_invalid_mapping(uint idx, string hint)
 
 private static void fs_invalid_path(string p, uint l, string hint)
 {
-	string strInvalidPath = "[FSv1] The Path is Invalid: ";
+	string strInvalidPath = "[FS] The Path is Invalid: ";
 	kprint(&strInvalidPath, size_of(strInvalidPath));
 	kprint(p, l);
 	kprintc(0x20);
@@ -160,22 +167,22 @@ public static uint fs_resolve_fsys(uint p, uint l)
 
 public static uint fs_open(uint p, uint l)
 {
-	FSv1 fs = fs_resolve_fsys(p, l);
+	FileSystem fs = fs_resolve_fsys(p, l);
 	uint fstream = fs.Open(p+2, l-2);
 	return fstream;
 }
 
 public static void fs_close(uint handle)
 {
-	if(FS_LOG_FILE_ACTIONS)
+	if(FS_ENABLE_FILE_ACTION_LOGS)
 	{
-		string strCloseFile = "[FSv1] Closing File: ";
+		string strCloseFile = "[FS] Closing File: ";
 		kprint(&strCloseFile, size_of(strCloseFile));
-		FSv1FileStream fs = handle;
+		FileStream fs = handle;
 
 
 		uint idx = fs.GetFileIndex();
-		FSv1FileTable table = fs.GetFileTable();
+		FileTable table = fs.GetFileTable();
 		uint pl = table.GetEntryNameLength(idx);
 		
 		for(uint i = 0; i < pl; i++)
@@ -190,27 +197,27 @@ public static void fs_close(uint handle)
 
 public static uint fs_create(uint p, uint l)
 {
-	FSv1 fs = fs_resolve_fsys(p, l);
+	FileSystem fs = fs_resolve_fsys(p, l);
 	uint fstream = fs.Create(p+2, l-2);
 	return fstream;
 }
 
 public static void fs_delete(uint p, uint l)
 {
-	FSv1 fs = fs_resolve_fsys(p, l);
+	FileSystem fs = fs_resolve_fsys(p, l);
 	fs.Delete(p+2, l-2);
 }
 
 public static uint fs_exists(uint p, uint l)
 {
-	FSv1 fs = fs_resolve_fsys(p, l);
+	FileSystem fs = fs_resolve_fsys(p, l);
 	uint e = fs.Exists(p+2, l-2);
 	return e;
 }
 
 public static uint fs_getsize(uint p, uint l)
 {
-	FSv1 fs = fs_resolve_fsys(p, l);
+	FileSystem fs = fs_resolve_fsys(p, l);
 	uint fsize = fs.GetSize(p+2, l-2);
 	return fsize;
 }
@@ -218,7 +225,7 @@ public static uint fs_getsize(uint p, uint l)
 public static void fs_info(uint mapIndex)
 {
 	Partition p = fs_map_get(mapIndex);
-	FSv1 fs = p.GetFileSystem();
+	FileSystem fs = p.GetFileSystem();
 	fs.WriteInfo();
 }
 
@@ -226,7 +233,7 @@ public static void fs_unload(uint mapIndex)
 {
 	uint pp = fs_map_get(mapIndex);
 	Partition p = pp;
-	FSv1 f = p.GetFileSystem();
+	FileSystem f = p.GetFileSystem();
 	p.SetFileSystem(0);
 	fs_unmap(pp);
 	f.Unload();
@@ -234,9 +241,9 @@ public static void fs_unload(uint mapIndex)
 
 public static void fs_init(uint mapIndex, uint p)
 {
-	string strInit1 = "[FSv1] Initializing File System(Partition: ";
+	string strInit1 = "[FS] Initializing File System(Partition: ";
 	string strInit2 = ", FS: ";
-	uint fs = malloc(size_of(FSv1));
+	uint fs = malloc(size_of(FileSystem));
 	kprint(&strInit1, size_of(strInit1));
 	kprintn(p);
 	kprint(&strInit2, size_of(strInit2));
@@ -244,51 +251,51 @@ public static void fs_init(uint mapIndex, uint p)
 	kprintc(')');
 	kprintc('\n');
 
-	FSv1.new(fs, p);
+	FileSystem.new(fs, p);
 	fs_map(mapIndex, p);
 	Partition pp = p;
 	pp.SetFileSystem(fs);
 	return fs;
 }
 
-public static void f_write(FSv1FileStream handle, uint value)
+public static void f_write(FileStream handle, uint value)
 {
 	handle.Write(value);
 }
 
-public static void f_writebuf(FSv1FileStream handle, uint ptr, uint len)
+public static void f_writebuf(FileStream handle, uint ptr, uint len)
 {
 	handle.WriteBuffer(ptr, len);
 }
 
-public static void f_readbuf(FSv1FileStream handle, uint ptr, uint len)
+public static void f_readbuf(FileStream handle, uint ptr, uint len)
 {
 	handle.ReadBuffer(ptr, len);
 }
 
-public static uint f_read(FSv1FileStream handle)
+public static uint f_read(FileStream handle)
 {
 	uint v = handle.Read();
 	return v;
 }
 
-public static uint f_getsize(FSv1FileStream handle)
+public static uint f_getsize(FileStream handle)
 {
 	uint v = handle.GetSize();
 	return v;
 }
 
-public static void f_setsize(FSv1FileStream handle, uint size)
+public static void f_setsize(FileStream handle, uint size)
 {
 	handle.SetSize(size);
 }
 
-public static void f_setpos(FSv1FileStream handle, uint pos)
+public static void f_setpos(FileStream handle, uint pos)
 {
 	handle.SetPosition(pos);
 }
 
-public static uint f_getpos(FSv1FileStream handle)
+public static uint f_getpos(FileStream handle)
 {
 	uint p = handle.GetPosition();
 	return p;

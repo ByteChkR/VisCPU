@@ -1,0 +1,34 @@
+#define TIME_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/time/Program.vbin"
+
+
+#define CFG_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/cfgloader/Program.vbin"
+
+
+#define CTOOLS_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/consoletools/Program.vbin"
+
+
+#define COPY_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/copy/Program.vbin"
+
+
+#define MOVE_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/move/Program.vbin"
+
+
+#define DELETE_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/delete/Program.vbin"
+
+
+#define CONSOLE_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/console/Program.vbin"
+
+
+#define ALIAS_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/alias/Program.vbin"
+
+
+#define KTOOLS_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/kerneltools/Program.vbin"
+
+
+#define ECHO_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/echo/Program.vbin"
+
+
+#define CLEAR_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/clear/Program.vbin"
+
+
+#define KLOADER_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/kernelloader/Program.vbin"

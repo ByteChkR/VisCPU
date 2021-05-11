@@ -1,4 +1,5 @@
-#include <../MemoryManagement/malloc.vhl>
+#include "../MemoryManagement/malloc.vhl"
+#include <../Settings/ErrorSettings.vhl>
 
 public class LinkedList
 {
