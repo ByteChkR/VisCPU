@@ -8,6 +8,7 @@ namespace Utility.ADL.Streams
 
     public class GenPipeStream < T > : Stream, IDisposable
     {
+
         /// <summary>
         ///     Queue of bytes provides the datastructure for transmitting from an
         ///     input stream to an output stream.
@@ -334,6 +335,7 @@ namespace Utility.ADL.Streams
         }
 
         #endregion
+
     }
 
 }

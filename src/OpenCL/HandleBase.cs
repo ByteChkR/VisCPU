@@ -13,6 +13,7 @@ namespace OpenCL.NET
     /// </summary>
     public abstract class HandleBase : IEquatable < HandleBase >, IDisposable
     {
+
         private static int TotalCLObjectsCreated;
         private static readonly List < HandleBase > objects = new List < HandleBase >();
 
@@ -182,6 +183,7 @@ namespace OpenCL.NET
         }
 
         #endregion
+
     }
 
 }

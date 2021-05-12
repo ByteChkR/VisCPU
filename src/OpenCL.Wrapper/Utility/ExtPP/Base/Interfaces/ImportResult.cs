@@ -8,6 +8,7 @@ namespace Utility.ExtPP.Base.Interfaces
     /// </summary>
     public class ImportResult
     {
+
         /// <summary>
         ///     The underlying data structure that is used to hold the custom data
         /// </summary>
@@ -98,6 +99,7 @@ namespace Utility.ExtPP.Base.Interfaces
         }
 
         #endregion
+
     }
 
 }

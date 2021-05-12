@@ -1,4 +1,5 @@
 ﻿using System;
+
 using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -9,6 +10,7 @@ namespace VisCPU.Peripherals.Console.IO
 
     public class ConsoleOutInterface : Peripheral
     {
+
         private readonly ConsoleOutInterfaceSettings m_Settings;
 
         public override string PeripheralName => "Console Output Device";
@@ -75,6 +77,7 @@ namespace VisCPU.Peripherals.Console.IO
         }
 
         #endregion
+
     }
 
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+
 using VisCPU.Events;
 using VisCPU.Peripherals;
 using VisCPU.Utility.EventSystem;
@@ -15,6 +16,7 @@ namespace VisCPU
 
     public class MemoryBus : VisBase
     {
+
         private readonly List < Peripheral > m_Peripherals;
 
         public int PeripheralCount => m_Peripherals.Count;
@@ -143,6 +145,7 @@ namespace VisCPU
         }
 
         #endregion
+
     }
 
 }

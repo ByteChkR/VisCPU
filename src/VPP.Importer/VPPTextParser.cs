@@ -6,6 +6,7 @@ namespace VPP.Importer
 
     public class VPPTextParser
     {
+
         private static readonly StringBuilder s_Builder = new StringBuilder();
         private string m_Text;
         private int m_Position;
@@ -181,7 +182,6 @@ namespace VPP.Importer
                 }
 
                 Eat( m_Text[m_Position] );
-
             }
 
             int r = m_Position;
@@ -256,9 +256,9 @@ namespace VPP.Importer
             string t = m_Position == 0 ? m_Text : m_Text.Remove( 0, m_Position );
 
             int idx = t.IndexOf(
-                s,
-                StringComparison.InvariantCulture
-            );
+                                s,
+                                StringComparison.InvariantCulture
+                               );
 
             if ( idx == -1 )
             {
@@ -294,6 +294,7 @@ namespace VPP.Importer
         }
 
         #endregion
+
     }
 
 }

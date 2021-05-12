@@ -9,6 +9,7 @@ namespace VisCPU.HL.Compiler.Math.Atomic
 
     public class UnaryMinusExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
     {
+
         #region Public
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlUnaryOp expr )
@@ -22,17 +23,17 @@ namespace VisCPU.HL.Compiler.Math.Atomic
             ExpressionTarget outputTarget )
         {
             ExpressionTarget target = compilation.Parse(
-                                                      expr.Left
-                                                  ).
+                                                        expr.Left
+                                                       ).
                                                   MakeAddress( compilation );
 
             if ( target.TypeDefinition.Name != HLBaseTypeNames.s_FloatTypeName )
             {
                 EventManager < WarningEvent >.SendEvent(
-                    new UnaryMinusExpressionInvalidEvent(
-                        "Unary inversion is only possible with signed types and floats, performing this instruction on other types may yield undefined results."
-                    )
-                );
+                                                        new UnaryMinusExpressionInvalidEvent(
+                                                             "Unary inversion is only possible with signed types and floats, performing this instruction on other types may yield undefined results."
+                                                            )
+                                                       );
             }
 
             if ( outputTarget.ResultAddress == target.ResultAddress )
@@ -50,6 +51,7 @@ namespace VisCPU.HL.Compiler.Math.Atomic
         }
 
         #endregion
+
     }
 
 }

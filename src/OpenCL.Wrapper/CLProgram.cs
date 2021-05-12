@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using OpenCL.NET;
 using OpenCL.NET.Kernels;
 using OpenCL.NET.Programs;
 using OpenCL.Wrapper.TypeEnums;
+
 using Utility.ExtPP.API;
 
 namespace OpenCL.Wrapper
@@ -15,6 +17,7 @@ namespace OpenCL.Wrapper
     /// </summary>
     public class CLProgram
     {
+
         /// <summary>
         ///     The filepath of the program source
         /// </summary>
@@ -86,10 +89,10 @@ namespace OpenCL.Wrapper
             out CLProgram program )
         {
             CLProgramBuildResult result = new CLProgramBuildResult(
-                filePath,
-                source,
-                new List < CLProgramBuildError >()
-            );
+                                                                   filePath,
+                                                                   source,
+                                                                   new List < CLProgramBuildError >()
+                                                                  );
 
             string[] kernelNames = FindKernelNames( source );
 
@@ -124,33 +127,33 @@ namespace OpenCL.Wrapper
                     int kernelNameIndex = source.IndexOf( " " + kernelName + " (", StringComparison.InvariantCulture );
 
                     kernelNameIndex = kernelNameIndex == -1
-                        ? source.IndexOf( " " + kernelName + "(", StringComparison.InvariantCulture )
-                        : kernelNameIndex;
+                                          ? source.IndexOf( " " + kernelName + "(", StringComparison.InvariantCulture )
+                                          : kernelNameIndex;
 
                     KernelParameter[] parameter = KernelParameter.CreateKernelParametersFromKernelCode(
-                        source,
-                        kernelNameIndex,
-                        source.Substring(
-                                   kernelNameIndex,
-                                   source.Length -
-                                   kernelNameIndex
-                               ).
-                               IndexOf(
-                                   ')'
-                               ) +
-                        1
-                    );
+                         source,
+                         kernelNameIndex,
+                         source.Substring(
+                                          kernelNameIndex,
+                                          source.Length -
+                                          kernelNameIndex
+                                         ).
+                                IndexOf(
+                                        ')'
+                                       ) +
+                         1
+                        );
 
                     if ( k == null )
                     {
                         result.BuildErrors.Add(
-                            new CLProgramBuildError(
-                                ErrorType.KernelBuild,
-                                new OpenClException(
-                                    $"Header parser completed on {kernelName} but the kernel could not be loaded."
-                                )
-                            )
-                        );
+                                               new CLProgramBuildError(
+                                                                       ErrorType.KernelBuild,
+                                                                       new OpenClException(
+                                                                            $"Header parser completed on {kernelName} but the kernel could not be loaded."
+                                                                           )
+                                                                      )
+                                              );
 
                         kernels.Add( kernelName, new CLKernel( instance, null, kernelName, parameter ) );
                     }
@@ -232,12 +235,12 @@ namespace OpenCL.Wrapper
                         if ( parts[i + 2].Contains( '(' ) )
                         {
                             kernelNames.Add(
-                                parts[i + 2]. //The Kernel name
-                                    Substring(
-                                        0,
-                                        parts[i + 2].IndexOf( '(' )
-                                    )
-                            );
+                                            parts[i + 2]. //The Kernel name
+                                                Substring(
+                                                          0,
+                                                          parts[i + 2].IndexOf( '(' )
+                                                         )
+                                           );
                         }
                         else
                         {
@@ -261,6 +264,7 @@ namespace OpenCL.Wrapper
         }
 
         #endregion
+
     }
 
 }

@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.Events
     /// </summary>
     public static class EventsNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -42,8 +43,10 @@ namespace OpenCL.NET.Interop.Events
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateUserEvent" )]
         public static extern IntPtr CreateUserEvent(
-            [In] IntPtr context,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Returns information about the event object.
@@ -79,11 +82,16 @@ namespace OpenCL.NET.Interop.Events
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetEventInfo" )]
         public static extern Result GetEventInformation(
-            [In] IntPtr eventPointer,
-            [In] [MarshalAs( UnmanagedType.U4 )] EventInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr eventPointer,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            EventInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Decrements the event reference count. The event object is deleted once the reference count becomes zero, the
@@ -116,7 +124,9 @@ namespace OpenCL.NET.Interop.Events
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseEvent" )]
-        public static extern Result ReleaseEvent( [In] IntPtr eventPointer );
+        public static extern Result ReleaseEvent(
+            [In]
+            IntPtr eventPointer );
 
         /// <summary>
         ///     Increments the event reference count. The OpenCL commands that return an event perform an implicit retain.
@@ -132,7 +142,9 @@ namespace OpenCL.NET.Interop.Events
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainEvent" )]
-        public static extern Result RetainEvent( [In] IntPtr eventPointer );
+        public static extern Result RetainEvent(
+            [In]
+            IntPtr eventPointer );
 
         /// <summary>
         ///     Registers a user callback function for a specific command execution status.
@@ -183,10 +195,14 @@ namespace OpenCL.NET.Interop.Events
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clSetEventCallback" )]
         public static extern Result SetEventCallback(
-            [In] IntPtr eventPointer,
-            [In] [MarshalAs( UnmanagedType.I4 )] int commandExecutionCallbackType,
-            [In] IntPtr notificationCallback,
-            [In] IntPtr userData );
+            [In]
+            IntPtr eventPointer,
+            [In] [MarshalAs( UnmanagedType.I4 )]
+            int commandExecutionCallbackType,
+            [In]
+            IntPtr notificationCallback,
+            [In]
+            IntPtr userData );
 
         /// <summary>
         ///     Sets the execution status of a user event object. If there are enqueued commands with user events in the
@@ -217,8 +233,10 @@ namespace OpenCL.NET.Interop.Events
         [IntroducedInOpenCl( 1, 1 )]
         [DllImport( "OpenCL", EntryPoint = "clSetUserEventStatus" )]
         public static extern Result SetUserEventStatus(
-            [In] IntPtr eventPointer,
-            [In] [MarshalAs( UnmanagedType.I4 )] int executionStatus );
+            [In]
+            IntPtr eventPointer,
+            [In] [MarshalAs( UnmanagedType.I4 )]
+            int executionStatus );
 
         /// <summary>
         ///     Waits on the host thread for commands identified by event objects in <see cref="eventList" /> to complete. A
@@ -244,11 +262,13 @@ namespace OpenCL.NET.Interop.Events
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clWaitForEvents" )]
         public static extern Result WaitForEvents(
-            [In] [MarshalAs( UnmanagedType.U4 )] uint numberOfEvents,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            uint numberOfEvents,
             [In] [MarshalAs( UnmanagedType.LPArray )]
             IntPtr[] eventList );
 
         #endregion
+
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using OpenCL.NET;
 using OpenCL.NET.DataTypes;
 using OpenCL.Wrapper.TypeEnums;
@@ -12,6 +13,7 @@ namespace OpenCL.Wrapper
     /// </summary>
     public class KernelParameter
     {
+
         /// <summary>
         ///     A List of Data type pairs.
         ///     Item 1: C 99 compilant keyword for the type
@@ -63,10 +65,10 @@ namespace OpenCL.Wrapper
                 new Tuple < string, float, DataVectorTypes >( "ushort4", ushort.MaxValue, DataVectorTypes.Ushort4 ),
                 new Tuple < string, float, DataVectorTypes >( "ushort8", ushort.MaxValue, DataVectorTypes.Ushort8 ),
                 new Tuple < string, float, DataVectorTypes >(
-                    "ushort16",
-                    ushort.MaxValue,
-                    DataVectorTypes.Ushort16
-                ),
+                                                             "ushort16",
+                                                             ushort.MaxValue,
+                                                             DataVectorTypes.Ushort16
+                                                            ),
                 new Tuple < string, float, DataVectorTypes >( "long", long.MaxValue, DataVectorTypes.Long1 ),
                 new Tuple < string, float, DataVectorTypes >( "long2", long.MaxValue, DataVectorTypes.Long2 ),
                 new Tuple < string, float, DataVectorTypes >( "long3", long.MaxValue, DataVectorTypes.Long3 ),
@@ -109,64 +111,65 @@ namespace OpenCL.Wrapper
         /// <summary>
         ///     A list of Types(in the same order as the DataType enum
         /// </summary>
-        internal static Type[] Converters => new[]
-        {
-            typeof( object ),
-            typeof( float ),
-            typeof( float2 ),
-            typeof( float3 ),
-            typeof( float4 ),
-            typeof( float8 ),
-            typeof( float16 ),
-            typeof( int ),
-            typeof( int2 ),
-            typeof( int3 ),
-            typeof( int4 ),
-            typeof( int8 ),
-            typeof( int16 ),
-            typeof( uint ),
-            typeof( uint2 ),
-            typeof( uint3 ),
-            typeof( uint4 ),
-            typeof( uint8 ),
-            typeof( uint16 ),
-            typeof( sbyte ),
-            typeof( char2 ),
-            typeof( char3 ),
-            typeof( char4 ),
-            typeof( char8 ),
-            typeof( char16 ),
-            typeof( byte ),
-            typeof( uchar2 ),
-            typeof( uchar3 ),
-            typeof( uchar4 ),
-            typeof( uchar8 ),
-            typeof( uchar16 ),
-            typeof( short ),
-            typeof( short2 ),
-            typeof( short3 ),
-            typeof( short4 ),
-            typeof( short8 ),
-            typeof( short16 ),
-            typeof( ushort ),
-            typeof( ushort2 ),
-            typeof( ushort3 ),
-            typeof( ushort4 ),
-            typeof( ushort8 ),
-            typeof( ushort16 ),
-            typeof( long ),
-            typeof( long2 ),
-            typeof( long3 ),
-            typeof( long4 ),
-            typeof( long8 ),
-            typeof( long16 ),
-            typeof( ulong ),
-            typeof( ulong2 ),
-            typeof( ulong3 ),
-            typeof( ulong4 ),
-            typeof( ulong8 ),
-            typeof( ulong16 )
-        };
+        internal static Type[] Converters =>
+            new[]
+            {
+                typeof( object ),
+                typeof( float ),
+                typeof( float2 ),
+                typeof( float3 ),
+                typeof( float4 ),
+                typeof( float8 ),
+                typeof( float16 ),
+                typeof( int ),
+                typeof( int2 ),
+                typeof( int3 ),
+                typeof( int4 ),
+                typeof( int8 ),
+                typeof( int16 ),
+                typeof( uint ),
+                typeof( uint2 ),
+                typeof( uint3 ),
+                typeof( uint4 ),
+                typeof( uint8 ),
+                typeof( uint16 ),
+                typeof( sbyte ),
+                typeof( char2 ),
+                typeof( char3 ),
+                typeof( char4 ),
+                typeof( char8 ),
+                typeof( char16 ),
+                typeof( byte ),
+                typeof( uchar2 ),
+                typeof( uchar3 ),
+                typeof( uchar4 ),
+                typeof( uchar8 ),
+                typeof( uchar16 ),
+                typeof( short ),
+                typeof( short2 ),
+                typeof( short3 ),
+                typeof( short4 ),
+                typeof( short8 ),
+                typeof( short16 ),
+                typeof( ushort ),
+                typeof( ushort2 ),
+                typeof( ushort3 ),
+                typeof( ushort4 ),
+                typeof( ushort8 ),
+                typeof( ushort16 ),
+                typeof( long ),
+                typeof( long2 ),
+                typeof( long3 ),
+                typeof( long4 ),
+                typeof( long8 ),
+                typeof( long16 ),
+                typeof( ulong ),
+                typeof( ulong2 ),
+                typeof( ulong3 ),
+                typeof( ulong4 ),
+                typeof( ulong8 ),
+                typeof( ulong16 )
+            };
 
         #region Public
 
@@ -209,17 +212,17 @@ namespace OpenCL.Wrapper
                 string[] parametr = pars[i].Trim().Split( ' ' );
 
                 ret[i] = new KernelParameter
-                {
-                    Name = parametr[parametr.Length - 1].Replace( '*', ' ' ).Trim(),
-                    DataType = GetDataType( parametr[parametr.Length - 2].Replace( '*', ' ' ).Trim() ),
-                    MemScope = GetMemoryScope( parametr.Length == 3 ? parametr[0] : "" ),
-                    IsArray =
-                        parametr[parametr.Length - 2].IndexOf( "*", StringComparison.InvariantCulture ) !=
-                        -1 ||
-                        parametr[parametr.Length - 1].IndexOf( "*", StringComparison.InvariantCulture ) !=
-                        -1,
-                    Id = i
-                };
+                         {
+                             Name = parametr[parametr.Length - 1].Replace( '*', ' ' ).Trim(),
+                             DataType = GetDataType( parametr[parametr.Length - 2].Replace( '*', ' ' ).Trim() ),
+                             MemScope = GetMemoryScope( parametr.Length == 3 ? parametr[0] : "" ),
+                             IsArray =
+                                 parametr[parametr.Length - 2].IndexOf( "*", StringComparison.InvariantCulture ) !=
+                                 -1 ||
+                                 parametr[parametr.Length - 1].IndexOf( "*", StringComparison.InvariantCulture ) !=
+                                 -1,
+                             Id = i
+                         };
             }
 
             return ret;
@@ -338,6 +341,7 @@ namespace OpenCL.Wrapper
         }
 
         #endregion
+
     }
 
 }

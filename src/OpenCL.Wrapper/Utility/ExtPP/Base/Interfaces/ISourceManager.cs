@@ -6,6 +6,7 @@
     /// </summary>
     public interface ISourceManager
     {
+
         /// <summary>
         ///     Adds a script to the to do list of the source manager.
         ///     Will do nothing if already included
@@ -61,6 +62,7 @@
             IFileContent file,
             ImportResult importInfo,
             bool isInline );
+
     }
 
 }

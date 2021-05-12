@@ -7,6 +7,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
     public class DriveImageFormatV1Settings
     {
+
         [Argument( Name = "dib:image.v1.path.prefix" )]
         public string FileSystemPrefix = "";
 
@@ -26,14 +27,15 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
             SettingsCategory diCategory = SettingsCategories.Get( "sdk.utils.disk.formats.v1", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                diCategory,
-                "v1-format.json",
-                new DriveImageFormatV1Settings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  diCategory,
+                                                  "v1-format.json",
+                                                  new DriveImageFormatV1Settings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

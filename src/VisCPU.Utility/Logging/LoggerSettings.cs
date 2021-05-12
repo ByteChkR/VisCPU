@@ -1,11 +1,15 @@
-﻿using VisCPU.Utility.ArgumentParser;
+﻿using System.Xml.Serialization;
+
+using VisCPU.Utility.ArgumentParser;
 
 namespace VisCPU.Utility.Logging
 {
 
     public class LoggerSettings
     {
-        [field: Argument( Name = "log" )]
+
+        [Argument( Name = "log" )]
+        [XmlIgnore]
         private LoggerSystems m_EnabledSystems = LoggerSystems.Default;
 
         [field: Argument( Name = "core:debug" )]
@@ -24,6 +28,7 @@ namespace VisCPU.Utility.Logging
         }
 
         #endregion
+
     }
 
 }

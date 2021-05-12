@@ -3,6 +3,7 @@
 
     public class StringToken : WordToken
     {
+
         private WordToken Content => new WordToken( OriginalText, Start + 1, Length - 2 );
 
         #region Public
@@ -17,6 +18,7 @@
         }
 
         #endregion
+
     }
 
 }

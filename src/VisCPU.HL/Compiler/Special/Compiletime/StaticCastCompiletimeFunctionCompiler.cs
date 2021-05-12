@@ -8,6 +8,7 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
 
     public class StaticCastCompiletimeFunctionCompiler : ICompiletimeFunctionCompiler
     {
+
         public string FuncName => "static_cast";
 
         #region Public
@@ -17,22 +18,23 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
             if ( expr.ParameterList.Length != 2 )
             {
                 EventManager < ErrorEvent >.SendEvent(
-                    new FunctionArgumentMismatchEvent(
-                        "Invalid Arguments. Expected static_cast(variable, type)"
-                    )
-                );
+                                                      new FunctionArgumentMismatchEvent(
+                                                           "Invalid Arguments. Expected static_cast(variable, type)"
+                                                          )
+                                                     );
             }
 
             return compilation.Parse( expr.ParameterList[0] ).
                                Cast(
-                                   compilation.TypeSystem.GetType(
-                                       compilation.Root,
-                                       expr.ParameterList[1].ToString()
-                                   )
-                               );
+                                    compilation.TypeSystem.GetType(
+                                                                   compilation.Root,
+                                                                   expr.ParameterList[1].ToString()
+                                                                  )
+                                   );
         }
 
         #endregion
+
     }
 
 }

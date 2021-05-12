@@ -5,14 +5,17 @@ namespace VisCPU
 
     public class MemoryBusDriver : Peripheral
     {
+
         private enum AddressPins : uint
         {
+
             PeripheralPresent = PeripheralCount - 1,
             PeripheralCount = PeripheralType - 1,
             PeripheralType = PeripheralAddress - 1,
             PeripheralAddress = PeripheralName - 1,
             PeripheralName = PeripheralNameLength - 1,
             PeripheralNameLength = uint.MaxValue - 1
+
         }
 
         private uint m_PeripheralTypeStep;
@@ -176,6 +179,7 @@ namespace VisCPU
         }
 
         #endregion
+
     }
 
 }

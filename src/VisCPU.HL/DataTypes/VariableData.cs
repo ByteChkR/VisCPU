@@ -1,4 +1,5 @@
 ﻿using System;
+
 using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.DataTypes
@@ -6,6 +7,7 @@ namespace VisCPU.HL.DataTypes
 
     public struct VariableData : IExternalData, IEquatable < VariableData >
     {
+
         public int UseCount { get; private set; }
 
         public void SetUsed()
@@ -132,6 +134,7 @@ namespace VisCPU.HL.DataTypes
             return
                 $":data {GetFinalName()} {Size} {linkerArgs}";
         }
+
     }
 
 }

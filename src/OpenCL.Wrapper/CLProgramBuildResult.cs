@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Utility.FastString;
 
 namespace OpenCL.Wrapper
@@ -8,6 +9,7 @@ namespace OpenCL.Wrapper
 
     public struct CLProgramBuildResult
     {
+
         public readonly string TargetFile;
 
         public bool Success => BuildErrors.Count == 0;
@@ -36,6 +38,7 @@ namespace OpenCL.Wrapper
         {
             return $"{TargetFile}: \n\t{BuildErrors.Select( x => x.ToString() ).Unpack( "\n\t" )}";
         }
+
     }
 
 }

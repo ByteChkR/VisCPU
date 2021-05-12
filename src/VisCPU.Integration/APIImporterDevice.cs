@@ -1,4 +1,5 @@
 ﻿using System;
+
 using VisCPU.Peripherals;
 
 namespace VisCPU.Integration
@@ -6,6 +7,7 @@ namespace VisCPU.Integration
 
     public class ApiImporterDevice : Peripheral
     {
+
         private readonly uint m_ListenAddr;
         private readonly Func < Cpu, uint > m_InvokeExec;
 
@@ -53,6 +55,7 @@ namespace VisCPU.Integration
         }
 
         #endregion
+
     }
 
 }

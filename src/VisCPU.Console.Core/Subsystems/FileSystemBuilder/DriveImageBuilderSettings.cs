@@ -7,6 +7,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
     public class DriveImageBuilderSettings
     {
+
         [Argument( Name = "dib:input" )]
         [Argument( Name = "dib:i" )]
         public string[] InputFiles = new string[0];
@@ -21,14 +22,15 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
             SettingsCategory diCategory = SettingsCategories.Get( "sdk.utils.disk", true );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                diCategory,
-                "builder.json",
-                new DriveImageBuilderSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  diCategory,
+                                                  "builder.json",
+                                                  new DriveImageBuilderSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

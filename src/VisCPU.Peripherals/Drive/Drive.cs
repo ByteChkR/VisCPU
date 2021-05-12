@@ -3,6 +3,7 @@
 
     public abstract class Drive : Peripheral
     {
+
         protected DrivePinSettings m_Settings;
 
         private uint m_WriteDataStep = 0;
@@ -118,10 +119,10 @@
                     m_WriteBufferStep = 0;
 
                     WriteBuffer(
-                        m_WriteBufferDstAddr,
-                        m_WriteBufferSrcAddr,
-                        m_WriteBufferSrcLen
-                    );
+                                m_WriteBufferDstAddr,
+                                m_WriteBufferSrcAddr,
+                                m_WriteBufferSrcLen
+                               );
                 }
             }
 
@@ -157,6 +158,7 @@
         }
 
         #endregion
+
     }
 
 }

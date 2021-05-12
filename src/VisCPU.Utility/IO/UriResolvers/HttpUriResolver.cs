@@ -7,6 +7,7 @@ namespace VisCPU.Utility.IO.UriResolvers
 
     public class HttpUriResolver : UriResolver
     {
+
         private readonly WebClient m_Client = new WebClient();
 
         private readonly string m_TempPath;
@@ -50,6 +51,7 @@ namespace VisCPU.Utility.IO.UriResolvers
         }
 
         #endregion
+
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Compiler.Special.Compiletime;
 using VisCPU.HL.DataTypes;
@@ -18,6 +19,7 @@ namespace VisCPU.HL.Compiler.Special
 
     public class InvocationExpressionCompiler : HlExpressionCompiler < HlInvocationOp >
     {
+
         private readonly CompiletimeFunctionCompilerCollection m_CtFuncCollection =
             new CompiletimeFunctionCompilerCollection();
 
@@ -38,32 +40,32 @@ namespace VisCPU.HL.Compiler.Special
                           expr.Instance == null ) ) )
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                        new FunctionArgumentMismatchEvent(
-                            $"{functionName}: Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
-                        )
-                    );
+                                                          new FunctionArgumentMismatchEvent(
+                                                               $"{functionName}: Invalid parameter Count. Expected {targetLength} got {expr.ParameterList.Length}"
+                                                              )
+                                                         );
                 }
             }
 
             if ( expr.Instance != null )
             {
                 compilation.EmitterResult.Emit(
-                    $"PUSH",
-                    expr.Instance
-                );
+                                               $"PUSH",
+                                               expr.Instance
+                                              );
             }
 
             foreach ( HlExpression parameter in expr.ParameterList )
             {
                 ExpressionTarget arg = compilation.Parse(
-                                                       parameter
-                                                   ).
+                                                         parameter
+                                                        ).
                                                    MakeAddress( compilation );
 
                 compilation.EmitterResult.Emit(
-                    $"PUSH",
-                    arg.ResultAddress
-                );
+                                               $"PUSH",
+                                               arg.ResultAddress
+                                              );
 
                 compilation.ReleaseTempVar( arg.ResultAddress );
             }
@@ -71,13 +73,13 @@ namespace VisCPU.HL.Compiler.Special
             compilation.EmitterResult.Emit( jumpInstruction, functionName );
 
             ExpressionTarget tempReturn = new ExpressionTarget(
-                compilation.GetTempVarPop(),
-                true,
-                compilation.TypeSystem.GetType(
-                    compilation.Root,
-                    HLBaseTypeNames.s_UintTypeName
-                )
-            );
+                                                               compilation.GetTempVarPop(),
+                                                               true,
+                                                               compilation.TypeSystem.GetType(
+                                                                    compilation.Root,
+                                                                    HLBaseTypeNames.s_UintTypeName
+                                                                   )
+                                                              );
 
             return tempReturn;
         }
@@ -97,8 +99,8 @@ namespace VisCPU.HL.Compiler.Special
                     uint off = tdef.GetOffset( tdefAbstractFunction.Name );
 
                     compilation.EmitterResult.Store(
-                        $"; Applying Function Pointer: {test.Name} Offset from Begin: {off}"
-                    );
+                                                    $"; Applying Function Pointer: {test.Name} Offset from Begin: {off}"
+                                                   );
 
                     string tmp =
                         compilation.GetTempVarLoad( off.ToString() );
@@ -126,20 +128,20 @@ namespace VisCPU.HL.Compiler.Special
                 else if ( !tdef.IsAbstract )
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                        new MemberNotImplementedErrorEvent(
-                            tdef,
-                            tdefAbstractFunction
-                        )
-                    );
+                                                          new MemberNotImplementedErrorEvent(
+                                                               tdef,
+                                                               tdefAbstractFunction
+                                                              )
+                                                         );
                 }
                 else
                 {
                     EventManager < WarningEvent >.SendEvent(
-                        new MemberNotImplementedWarningEvent(
-                            tdef,
-                            tdefAbstractFunction
-                        )
-                    );
+                                                            new MemberNotImplementedWarningEvent(
+                                                                 tdef,
+                                                                 tdefAbstractFunction
+                                                                )
+                                                           );
                 }
             }
         }
@@ -159,18 +161,18 @@ namespace VisCPU.HL.Compiler.Special
                                               Arguments[i];
 
                 compilation.EmitterResult.Emit(
-                    $"POP",
-                    $"{compilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
-                );
+                                               $"POP",
+                                               $"{compilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                                              );
             }
 
             compilation.EmitterResult.Emit( $"POP", $"{compilation.GetFinalName( "this" )}" );
 
             WriteConstructorInvocationProlog(
-                compilation,
-                tdef,
-                compilation.GetFinalName( "this" )
-            );
+                                             compilation,
+                                             tdef,
+                                             compilation.GetFinalName( "this" )
+                                            );
 
             compilation.EmitterResult.Emit( $"PUSH", $"{compilation.GetFinalName( "this" )}" );
 
@@ -184,9 +186,9 @@ namespace VisCPU.HL.Compiler.Special
                                               Arguments[i];
 
                 compilation.EmitterResult.Emit(
-                    $"PUSH",
-                    $"{compilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
-                );
+                                               $"PUSH",
+                                               $"{compilation.GetFinalName( ( valueArgument as VariableDefinitionToken ).Name.ToString() )}"
+                                              );
             }
         }
 
@@ -203,9 +205,9 @@ namespace VisCPU.HL.Compiler.Special
 
             IExternalData externalSymbol =
                 compilation.ExternalSymbols.FirstOrDefault(
-                    x => x.GetName() == target &&
-                         x.DataType == ExternalDataType.Function
-                );
+                                                           x => x.GetName() == target &&
+                                                                x.DataType == ExternalDataType.Function
+                                                          );
 
             //if (expr.Instance == null &&
             //    expr.MemberDefinition == null &&
@@ -238,11 +240,11 @@ namespace VisCPU.HL.Compiler.Special
                     HlTypeDefinition tdef = expr.InstanceType;
 
                     ExpressionTarget ret = new ExpressionTarget(
-                        instance.ResultAddress,
-                        true,
-                        tdef,
-                        true
-                    );
+                                                                instance.ResultAddress,
+                                                                true,
+                                                                tdef,
+                                                                true
+                                                               );
 
                     if ( expr.WriteProlog &&
                          SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
@@ -254,9 +256,9 @@ namespace VisCPU.HL.Compiler.Special
                     expr.Redirect( ret.ResultAddress, tdef, tdef.StaticConstructor, expr.WriteProlog );
 
                     ParseExpression(
-                        compilation,
-                        expr
-                    );
+                                    compilation,
+                                    expr
+                                   );
 
                     return ret;
                 }
@@ -286,11 +288,11 @@ namespace VisCPU.HL.Compiler.Special
                 string finalName = compilation.GetFinalName( var );
 
                 ExpressionTarget ret = new ExpressionTarget(
-                    compilation.GetTempVarLoad( finalName ),
-                    true,
-                    tdef,
-                    true
-                );
+                                                            compilation.GetTempVarLoad( finalName ),
+                                                            true,
+                                                            tdef,
+                                                            true
+                                                           );
 
                 if ( SettingsManager.GetSettings < HlCompilerSettings >().ConstructorPrologMode ==
                      HlTypeConstructorPrologMode.Outline )
@@ -303,9 +305,9 @@ namespace VisCPU.HL.Compiler.Special
                     expr.Redirect( ret.ResultAddress, tdef, tdef.StaticConstructor );
 
                     ParseExpression(
-                        compilation,
-                        expr
-                    );
+                                    compilation,
+                                    expr
+                                   );
                 }
 
                 return ret;
@@ -325,8 +327,8 @@ namespace VisCPU.HL.Compiler.Special
                     compilation.EmitterResult.Emit( "DREF", tmp, tmp );
 
                     int targetLength = fdef.ParameterTypes != null
-                        ? fdef.ParameterTypes.Length
-                        : expr.ParameterList.Length;
+                                           ? fdef.ParameterTypes.Length
+                                           : expr.ParameterList.Length;
 
                     externalSymbol?.SetUsed();
                     ExpressionTarget t = ParseFunctionInvocation( compilation, expr, targetLength, tmp, "JSREF" );
@@ -427,9 +429,9 @@ namespace VisCPU.HL.Compiler.Special
                     ExpressionTarget tt = compilation.Parse( parameter ).MakeAddress( compilation );
 
                     compilation.EmitterResult.Emit(
-                        $"PUSH",
-                        tt.ResultAddress
-                    );
+                                                   $"PUSH",
+                                                   tt.ResultAddress
+                                                  );
 
                     compilation.ReleaseTempVar( tt.ResultAddress );
                 }
@@ -444,13 +446,13 @@ namespace VisCPU.HL.Compiler.Special
                 }
 
                 ExpressionTarget tempReturn = new ExpressionTarget(
-                    compilation.GetTempVarPop(),
-                    true,
-                    compilation.TypeSystem.GetType(
-                        compilation.Root,
-                        HLBaseTypeNames.s_UintTypeName
-                    )
-                );
+                                                                   compilation.GetTempVarPop(),
+                                                                   true,
+                                                                   compilation.TypeSystem.GetType(
+                                                                        compilation.Root,
+                                                                        HLBaseTypeNames.s_UintTypeName
+                                                                       )
+                                                                  );
 
                 return tempReturn;
             }
@@ -461,6 +463,7 @@ namespace VisCPU.HL.Compiler.Special
         }
 
         #endregion
+
     }
 
 }

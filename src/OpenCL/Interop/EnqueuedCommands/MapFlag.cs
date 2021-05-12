@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
     [Flags]
     public enum MapFlag : ulong
     {
+
         /// <summary>
         ///     This flag specifies that the region being mapped in the memory object is being mapped for reading. The pointer
         ///     returned by <see cref="EnqueueMapBuffer" /> and <see cref="EnqueueMapImage" /> is guaranteed to contain the latest
@@ -42,6 +43,7 @@ namespace OpenCL.NET.Interop.EnqueuedCommands
         ///     <c>MapFlag.WriteInvalidateRegion</c> are mutually exclusive.
         /// </summary>
         WriteInvalidateRegion = 1 << 2
+
     }
 
 }

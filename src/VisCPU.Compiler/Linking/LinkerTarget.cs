@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.Compiler.Compiler;
 
 namespace VisCPU.Compiler.Linking
@@ -6,6 +7,7 @@ namespace VisCPU.Compiler.Linking
 
     public class LinkerTarget
     {
+
         public IReadOnlyList < object > AdditionalCompilationFlags { get; }
 
         public FileCompilation FileCompilation { get; }
@@ -19,6 +21,7 @@ namespace VisCPU.Compiler.Linking
         }
 
         #endregion
+
     }
 
 }

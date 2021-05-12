@@ -3,7 +3,9 @@
 
     public class OrAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
+
         protected override string InstructionKey => "OR";
+
     }
 
 }

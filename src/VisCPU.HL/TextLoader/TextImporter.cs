@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
+
 using Newtonsoft.Json;
+
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Extensions;
 
@@ -12,50 +14,70 @@ namespace VisCPU.HL.TextLoader
 
     public class TextImporterSettings
     {
-        [field: Argument(Name = "importer:args")]
-        [field: Argument(Name = "imp:args")]
-        [XmlIgnore]
-        [JsonIgnore]
-        private string[] m_DefinedSymbols { get; set; } = new string[0];
+
         public (string, string)[] DefinedSymbols
         {
             get
             {
-                List<(string, string)> ret = new List<(string, string)>();
+                List < (string, string) > ret = new List < (string, string) >();
 
-                foreach (string definedSymbol in m_DefinedSymbols)
+                foreach ( string definedSymbol in m_DefinedSymbols )
                 {
-                    string[] p = definedSymbol.Split('=');
-                    ret.Add((p[0], p[1]));
+                    string[] p = definedSymbol.Split( '=' );
+                    ret.Add( ( p[0], p[1] ) );
                 }
 
                 return ret.ToArray();
             }
         }
+
+        [field: Argument( Name = "importer:args" )]
+        [field: Argument( Name = "imp:args" )]
+        [XmlIgnore]
+        [JsonIgnore]
+        private string[] m_DefinedSymbols { get; set; } = new string[0];
+
     }
+
     public abstract class TextImporter
     {
-        public static IEnumerable < (string, string) > ImporterArgs { get; private set; } = new (string, string)[0];
+
         private static readonly List < TextImporter > s_ImporterList;
 
         private static readonly string s_DefaultImporter = "VPPImporter";
         private static string s_Importer = "PlainTextImporter";
         private static readonly string s_ImporterFile;
 
+        public static IEnumerable < (string, string) > ImporterArgs { get; private set; } = new (string, string)[0];
+
         public abstract string Name { get; }
 
         #region Public
 
-        public static string ImportFile(string text, string rootDir )
+        public static string ImportFile( string text, string rootDir )
         {
-            return ImportFile(s_Importer, text, rootDir );
+            return ImportFile( s_Importer, text, rootDir );
         }
 
-        public static string ImportFile(string importerName, string text, string rootDir )
+        public static string ImportFile( string importerName, string text, string rootDir )
         {
-            string s = s_ImporterList.First( x => x.Name == importerName ).Import(text, rootDir );
+            string s = s_ImporterList.First( x => x.Name == importerName ).Import( text, rootDir );
 
             return s;
+        }
+
+        public static void ParseImporterArgs( string[] args )
+        {
+            TextImporterSettings s = new TextImporterSettings();
+            ArgumentSyntaxParser.Parse( args, s );
+            SetImporterArgs( s.DefinedSymbols );
+        }
+
+        public static void ParseImporterArgs()
+        {
+            TextImporterSettings s = new TextImporterSettings();
+            ArgumentSyntaxParser.Parse( Environment.GetCommandLineArgs(), s );
+            SetImporterArgs( s.DefinedSymbols );
         }
 
         public static void SetDefaultImporter()
@@ -63,25 +85,15 @@ namespace VisCPU.HL.TextLoader
             s_Importer = s_DefaultImporter;
         }
 
-        public static void ParseImporterArgs(string[] args)
-        {
-            TextImporterSettings s = new TextImporterSettings();
-            ArgumentSyntaxParser.Parse(args, s);
-            SetImporterArgs(s.DefinedSymbols);
-        }
-        public static void ParseImporterArgs()
-        {
-            TextImporterSettings s = new TextImporterSettings();
-            ArgumentSyntaxParser.Parse(Environment.GetCommandLineArgs(), s);
-            SetImporterArgs(s.DefinedSymbols);
-        }
-
-        public static void SetImporterArgs( (string, string)[] args ) => ImporterArgs = args;
-
         public static void SetImporter( string importer )
         {
             s_Importer = importer;
             File.WriteAllText( s_ImporterFile, s_Importer );
+        }
+
+        public static void SetImporterArgs( (string, string)[] args )
+        {
+            ImporterArgs = args;
         }
 
         public abstract string Import( string text, string rootDir );
@@ -97,15 +109,15 @@ namespace VisCPU.HL.TextLoader
                                      GetCategoryDirectory();
 
             s_ImporterList = ExtensionLoader.LoadFrom < TextImporter >(
-                                                 dir,
-                                                 true
-                                             ).
+                                                                       dir,
+                                                                       true
+                                                                      ).
                                              ToList();
 
             s_ImporterFile = Path.Combine(
-                dir,
-                "importer.txt"
-            );
+                                          dir,
+                                          "importer.txt"
+                                         );
 
             string importer = s_DefaultImporter;
 
@@ -118,6 +130,7 @@ namespace VisCPU.HL.TextLoader
         }
 
         #endregion
+
     }
 
 }

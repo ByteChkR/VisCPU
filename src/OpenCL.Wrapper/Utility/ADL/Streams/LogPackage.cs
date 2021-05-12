@@ -9,6 +9,7 @@ namespace Utility.ADL.Streams
     /// </summary>
     public struct LogPackage
     {
+
         /// <summary>
         ///     Logs that were deserialized
         /// </summary>
@@ -83,6 +84,7 @@ namespace Utility.ADL.Streams
 
             return new LogPackage( buffer );
         }
+
     }
 
 }

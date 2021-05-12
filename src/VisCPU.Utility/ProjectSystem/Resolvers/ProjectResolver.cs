@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.ProjectSystem.Data;
 using VisCPU.Utility.ProjectSystem.Database;
@@ -11,6 +12,7 @@ namespace VisCPU.Utility.ProjectSystem.Resolvers
 
     public static class ProjectResolver
     {
+
         private static Dictionary < string, ProjectDatabase > s_Managers;
 
         public static ProjectResolverSettings ResolverSettings { get; set; }
@@ -101,6 +103,7 @@ namespace VisCPU.Utility.ProjectSystem.Resolvers
         }
 
         #endregion
+
     }
 
 }

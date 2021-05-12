@@ -10,6 +10,7 @@ namespace VisCPU.HL.Compiler.Types
 
     public class MemberAccessCompiler : HlExpressionCompiler < HlMemberAccessOp >
     {
+
         protected override bool AllImplementations => true;
 
         #region Public
@@ -43,18 +44,18 @@ namespace VisCPU.HL.Compiler.Types
                          data == lType.TypeDefinition.StaticConstructor )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                            new AbstractConstructorCallEvent( lType.TypeDefinition )
-                        );
+                                                              new AbstractConstructorCallEvent( lType.TypeDefinition )
+                                                             );
                     }
 
                     if ( data != null && !data.IsStatic )
                     {
                         EventManager < WarningEvent >.SendEvent(
-                            new StaticInstanceMemberAccessEvent(
-                                lType.TypeDefinition,
-                                data
-                            )
-                        );
+                                                                new StaticInstanceMemberAccessEvent(
+                                                                     lType.TypeDefinition,
+                                                                     data
+                                                                    )
+                                                               );
                     }
 
                     invoc.Redirect( null, lType.TypeDefinition, data, writeProlog );
@@ -81,11 +82,11 @@ namespace VisCPU.HL.Compiler.Types
                     if ( !data.IsStatic )
                     {
                         EventManager < WarningEvent >.SendEvent(
-                            new StaticInstanceMemberAccessEvent(
-                                lType.TypeDefinition,
-                                data
-                            )
-                        );
+                                                                new StaticInstanceMemberAccessEvent(
+                                                                     lType.TypeDefinition,
+                                                                     data
+                                                                    )
+                                                               );
                     }
 
                     if ( outputTarget.ResultAddress != null )
@@ -96,14 +97,14 @@ namespace VisCPU.HL.Compiler.Types
                     }
 
                     return new ExpressionTarget(
-                        funcName,
-                        true,
-                        compilation.TypeSystem.GetType(
-                            compilation.Root,
-                            HLBaseTypeNames.s_UintTypeName
-                        ),
-                        false
-                    );
+                                                funcName,
+                                                true,
+                                                compilation.TypeSystem.GetType(
+                                                                               compilation.Root,
+                                                                               HLBaseTypeNames.s_UintTypeName
+                                                                              ),
+                                                false
+                                               );
                 }
             }
 
@@ -121,10 +122,10 @@ namespace VisCPU.HL.Compiler.Types
                     HlMemberDefinition data = lType.TypeDefinition.GetPrivateOrPublicMember( inv.Left.ToString() );
 
                     inv.Redirect(
-                        lType.ResultAddress,
-                        lType.TypeDefinition,
-                        data
-                    );
+                                 lType.ResultAddress,
+                                 lType.TypeDefinition,
+                                 data
+                                );
 
                     ExpressionTarget t = compilation.Parse( inv, outputTarget ).
                                                      CopyIfNotNull( compilation, outputTarget );
@@ -139,11 +140,11 @@ namespace VisCPU.HL.Compiler.Types
             }
 
             uint off = HlTypeDefinition.RecursiveGetOffset(
-                lType.TypeDefinition,
-                0,
-                0,
-                containerName.Split( '.' )
-            );
+                                                           lType.TypeDefinition,
+                                                           0,
+                                                           0,
+                                                           containerName.Split( '.' )
+                                                          );
 
             string tmpOff = compilation.GetTempVar( off );
 
@@ -165,18 +166,18 @@ namespace VisCPU.HL.Compiler.Types
             if ( expr.Left.ToString() == "this" )
             {
                 mdef = HlTypeDefinition.RecursiveGetPrivateOrPublicMember(
-                    lType.TypeDefinition,
-                    0,
-                    containerName.Split( '.' )
-                );
+                                                                          lType.TypeDefinition,
+                                                                          0,
+                                                                          containerName.Split( '.' )
+                                                                         );
             }
             else
             {
                 mdef = HlTypeDefinition.RecursiveGetPublicMember(
-                    lType.TypeDefinition,
-                    0,
-                    containerName.Split( '.' )
-                );
+                                                                 lType.TypeDefinition,
+                                                                 0,
+                                                                 containerName.Split( '.' )
+                                                                );
             }
 
             if ( mdef is HlPropertyDefinition pdef )
@@ -214,6 +215,7 @@ namespace VisCPU.HL.Compiler.Types
         }
 
         #endregion
+
     }
 
 }

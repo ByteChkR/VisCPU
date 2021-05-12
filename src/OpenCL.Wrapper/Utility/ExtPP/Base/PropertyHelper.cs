@@ -7,6 +7,7 @@ namespace Utility.ExtPP.Base
 
     public static class PropertyHelper
     {
+
         #region Public
 
         /// <summary>
@@ -32,10 +33,12 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
+
     }
 
     public static class PropertyHelper < T >
     {
+
         #region Public
 
         /// <summary>
@@ -88,6 +91,7 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
+
     }
 
 }

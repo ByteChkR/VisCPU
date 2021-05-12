@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using OpenCL.NET.CommandQueues;
 using OpenCL.NET.DataTypes;
 using OpenCL.NET.Kernels;
@@ -14,6 +15,7 @@ namespace OpenCL.Wrapper
     /// </summary>
     public class CLKernel : IDisposable
     {
+
         private readonly CLAPI instance;
 
         /// <summary>
@@ -48,10 +50,10 @@ namespace OpenCL.Wrapper
             Parameter = new Dictionary < string, KernelParameter >();
 
             IEnumerable < KeyValuePair < string, KernelParameter > > l = parameter.Select(
-                x =>
-                    new KeyValuePair < string,
-                        KernelParameter >( x.Name, x )
-            );
+                 x =>
+                     new KeyValuePair < string,
+                         KernelParameter >( x.Name, x )
+                );
 
             foreach ( KeyValuePair < string, KernelParameter > keyValuePair in l )
             {
@@ -151,6 +153,7 @@ namespace OpenCL.Wrapper
         }
 
         #endregion
+
     }
 
 }

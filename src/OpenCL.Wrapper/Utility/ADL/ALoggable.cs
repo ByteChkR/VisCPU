@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Utility.ADL.Configs;
 
 namespace Utility.ADL
@@ -11,6 +12,7 @@ namespace Utility.ADL
     /// </summary>
     public abstract class ALoggable < T > where T : struct
     {
+
         private static readonly Dictionary < Type, ADLLogger < T > > CreatedLoggers =
             new Dictionary < Type, ADLLogger < T > >();
 
@@ -28,6 +30,7 @@ namespace Utility.ADL
         }
 
         #endregion
+
     }
 
 }

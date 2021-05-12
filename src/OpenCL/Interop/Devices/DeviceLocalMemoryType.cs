@@ -6,6 +6,7 @@ namespace OpenCL.NET.Interop.Devices
     /// </summary>
     public enum DeviceLocalMemoryType : uint
     {
+
         /// <summary>
         ///     Custom devices may have no local memory support.
         /// </summary>
@@ -20,6 +21,7 @@ namespace OpenCL.NET.Interop.Devices
         ///     No dedicated local memory storage is available, but rather global memory is used.
         /// </summary>
         Global = 0x2
+
     }
 
 }

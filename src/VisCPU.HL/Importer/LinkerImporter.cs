@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer.Events;
 using VisCPU.HL.Parser;
@@ -14,6 +15,7 @@ namespace VisCPU.HL.Importer
 
     public class LinkerImporter : AImporter, IDataImporter
     {
+
         #region Public
 
         public override bool CanImport( string input )
@@ -45,36 +47,36 @@ namespace VisCPU.HL.Importer
                     string name = raw.Substring( 0, idx );
 
                     HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
-                        ? compilation.TypeSystem.GetType( compilation.Root, name )
-                        : compilation.TypeSystem.CreateEmptyType(
-                            compilation.Root,
-                            name,
-                            true,
-                            false,
-                            false
-                        );
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
-                        new HlExternalFunctionDefinition(
-                            compilation.TypeSystem,
-                            compilation.Root,
-                            raw.Remove( 0, idx + 1 ),
-                            label.Key,
-                            new List < IHlToken >
-                            {
-                                new HlTextToken(
-                                    HlTokenType.OpPublicMod,
-                                    "public",
-                                    0
-                                ),
-                                new HlTextToken(
-                                    HlTokenType.OpStaticMod,
-                                    "static",
-                                    0
-                                )
-                            }
-                        )
-                    );
+                                   new HlExternalFunctionDefinition(
+                                                                    compilation.TypeSystem,
+                                                                    compilation.Root,
+                                                                    raw.Remove( 0, idx + 1 ),
+                                                                    label.Key,
+                                                                    new List < IHlToken >
+                                                                    {
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpPublicMod,
+                                                                             "public",
+                                                                             0
+                                                                            ),
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpStaticMod,
+                                                                             "static",
+                                                                             0
+                                                                            )
+                                                                    }
+                                                                   )
+                                  );
                 }
                 else if ( label.Key.StartsWith( "ADFUN_" ) )
                 {
@@ -83,36 +85,36 @@ namespace VisCPU.HL.Importer
                     string name = raw.Substring( 0, idx );
 
                     HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
-                        ? compilation.TypeSystem.GetType( compilation.Root, name )
-                        : compilation.TypeSystem.CreateEmptyType(
-                            compilation.Root,
-                            name,
-                            true,
-                            false,
-                            false
-                        );
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
-                        new HlExternalFunctionDefinition(
-                            compilation.TypeSystem,
-                            compilation.Root,
-                            raw.Remove( 0, idx + 1 ),
-                            label.Key,
-                            new List < IHlToken >
-                            {
-                                new HlTextToken(
-                                    HlTokenType.OpPublicMod,
-                                    "public",
-                                    0
-                                ),
-                                new HlTextToken(
-                                    HlTokenType.OpAbstractMod,
-                                    "abstract",
-                                    0
-                                ),
-                            }
-                        )
-                    );
+                                   new HlExternalFunctionDefinition(
+                                                                    compilation.TypeSystem,
+                                                                    compilation.Root,
+                                                                    raw.Remove( 0, idx + 1 ),
+                                                                    label.Key,
+                                                                    new List < IHlToken >
+                                                                    {
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpPublicMod,
+                                                                             "public",
+                                                                             0
+                                                                            ),
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpAbstractMod,
+                                                                             "abstract",
+                                                                             0
+                                                                            ),
+                                                                    }
+                                                                   )
+                                  );
                 }
                 else if ( label.Key.StartsWith( "DFUN_" ) )
                 {
@@ -121,31 +123,31 @@ namespace VisCPU.HL.Importer
                     string name = raw.Substring( 0, idx );
 
                     HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
-                        ? compilation.TypeSystem.GetType( compilation.Root, name )
-                        : compilation.TypeSystem.CreateEmptyType(
-                            compilation.Root,
-                            name,
-                            true,
-                            false,
-                            false
-                        );
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
-                        new HlExternalFunctionDefinition(
-                            compilation.TypeSystem,
-                            compilation.Root,
-                            raw.Remove( 0, idx + 1 ),
-                            label.Key,
-                            new List < IHlToken >
-                            {
-                                new HlTextToken(
-                                    HlTokenType.OpPublicMod,
-                                    "public",
-                                    0
-                                ),
-                            }
-                        )
-                    );
+                                   new HlExternalFunctionDefinition(
+                                                                    compilation.TypeSystem,
+                                                                    compilation.Root,
+                                                                    raw.Remove( 0, idx + 1 ),
+                                                                    label.Key,
+                                                                    new List < IHlToken >
+                                                                    {
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpPublicMod,
+                                                                             "public",
+                                                                             0
+                                                                            ),
+                                                                    }
+                                                                   )
+                                  );
                 }
                 else if ( label.Key.StartsWith( "VDFUN_" ) )
                 {
@@ -154,60 +156,61 @@ namespace VisCPU.HL.Importer
                     string name = raw.Substring( 0, idx );
 
                     HlTypeDefinition tdef = compilation.TypeSystem.HasType( compilation.Root, name )
-                        ? compilation.TypeSystem.GetType( compilation.Root, name )
-                        : compilation.TypeSystem.CreateEmptyType(
-                            compilation.Root,
-                            name,
-                            true,
-                            false,
-                            false
-                        );
+                                                ? compilation.TypeSystem.GetType( compilation.Root, name )
+                                                : compilation.TypeSystem.CreateEmptyType(
+                                                     compilation.Root,
+                                                     name,
+                                                     true,
+                                                     false,
+                                                     false
+                                                    );
 
                     tdef.AddMember(
-                        new HlExternalFunctionDefinition(
-                            compilation.TypeSystem,
-                            compilation.Root,
-                            raw.Remove( 0, idx + 1 ),
-                            label.Key,
-                            new List < IHlToken >
-                            {
-                                new HlTextToken(
-                                    HlTokenType.OpPublicMod,
-                                    "public",
-                                    0
-                                ),
-                                new HlTextToken(
-                                    HlTokenType.OpVirtualMod,
-                                    "virtual",
-                                    0
-                                )
-                            }
-                        )
-                    );
+                                   new HlExternalFunctionDefinition(
+                                                                    compilation.TypeSystem,
+                                                                    compilation.Root,
+                                                                    raw.Remove( 0, idx + 1 ),
+                                                                    label.Key,
+                                                                    new List < IHlToken >
+                                                                    {
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpPublicMod,
+                                                                             "public",
+                                                                             0
+                                                                            ),
+                                                                        new HlTextToken(
+                                                                             HlTokenType.OpVirtualMod,
+                                                                             "virtual",
+                                                                             0
+                                                                            )
+                                                                    }
+                                                                   )
+                                  );
                 }
             }
 
             return info.Labels.
                         Select(
-                            x => ( IExternalData ) new LinkedData(
-                                x.Key,
-                                x.Value,
-                                ExternalDataType.Function
-                            )
-                        ).
+                               x => ( IExternalData ) new LinkedData(
+                                                                     x.Key,
+                                                                     x.Value,
+                                                                     ExternalDataType.Function
+                                                                    )
+                              ).
                         Concat(
-                            info.DataSectionHeader.Select(
-                                x => ( IExternalData ) new LinkedData(
-                                    x.Key,
-                                    x.Value,
-                                    ExternalDataType.Variable
-                                )
-                            )
-                        ).
+                               info.DataSectionHeader.Select(
+                                                             x => ( IExternalData ) new LinkedData(
+                                                                  x.Key,
+                                                                  x.Value,
+                                                                  ExternalDataType.Variable
+                                                                 )
+                                                            )
+                              ).
                         ToArray();
         }
 
         #endregion
+
     }
 
 }

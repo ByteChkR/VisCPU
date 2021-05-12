@@ -13,6 +13,7 @@ namespace OpenCL.NET.Platforms
     /// </summary>
     public class Version
     {
+
         /// <summary>
         ///     Gets the original version string returned by the OpenCL platform, which is in the format
         ///     "OpenCL[space][major_version.minor_version][space][platform-specific information]".
@@ -55,8 +56,8 @@ namespace OpenCL.NET.Platforms
             // Creates a new regular expression, which is used to parse the version string
             Regex versionStringRegularExpression =
                 new Regex(
-                    "^OpenCL (?<MajorVersion>[0-9]+)\\.(?<MinorVersion>[0-9]+) (?<PlatformSpecificInformation>.*)$"
-                );
+                          "^OpenCL (?<MajorVersion>[0-9]+)\\.(?<MinorVersion>[0-9]+) (?<PlatformSpecificInformation>.*)$"
+                         );
 
             // Parses the version string and checks if it matched successfully, if not, then an ArgumentException is thrown
             Match match = versionStringRegularExpression.Match( VersionString );
@@ -64,8 +65,8 @@ namespace OpenCL.NET.Platforms
             if ( !match.Success )
             {
                 throw new ArgumentException(
-                    $"The version string \"{VersionString}\" is not a valid OpenCL platform version string."
-                );
+                                            $"The version string \"{VersionString}\" is not a valid OpenCL platform version string."
+                                           );
             }
 
             // Saves the version information
@@ -75,6 +76,7 @@ namespace OpenCL.NET.Platforms
         }
 
         #endregion
+
     }
 
 }

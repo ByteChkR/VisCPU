@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.HL.DataTypes;
 using VisCPU.HL.Importer;
 using VisCPU.Integration;
@@ -13,6 +14,7 @@ namespace VisCPU.SIMD
 
     public class SIMDIntrinsics : PeripheralImporter
     {
+
         private uint[] m_Data;
         private ApiImporter m_Importer;
         private uint m_Start;
@@ -228,9 +230,9 @@ namespace VisCPU.SIMD
         private Peripheral ExposeApi( Func < Cpu, uint > func, string name, int argC )
         {
             m_Importer.AddApi(
-                m_Start,
-                new FunctionData( name, true, true, null, argC, HLBaseTypeNames.s_UintTypeName )
-            );
+                              m_Start,
+                              new FunctionData( name, true, true, null, argC, HLBaseTypeNames.s_UintTypeName )
+                             );
 
             ApiImporterDevice d = new ApiImporterDevice( m_Start, func );
             m_Start++;
@@ -335,6 +337,7 @@ namespace VisCPU.SIMD
         }
 
         #endregion
+
     }
 
 }

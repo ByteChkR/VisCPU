@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using OpenCL.NET.DataTypes;
 using OpenCL.Wrapper.TypeEnums;
 
@@ -11,6 +12,7 @@ namespace OpenCL.Wrapper
     /// </summary>
     public static class CLTypeConverter
     {
+
         /// <summary>
         ///     Delegate used to Create the FromConverter
         /// </summary>
@@ -210,16 +212,16 @@ namespace OpenCL.Wrapper
             if ( w == 1 )
             {
                 return System.Convert.ChangeType(
-                    ConvertRange(
-                        ( float ) System.Convert.ChangeType(
-                            value,
-                            typeof( float )
-                        ),
-                        oldMax,
-                        newMax
-                    ),
-                    newType
-                );
+                                                 ConvertRange(
+                                                              ( float ) System.Convert.ChangeType(
+                                                                   value,
+                                                                   typeof( float )
+                                                                  ),
+                                                              oldMax,
+                                                              newMax
+                                                             ),
+                                                 newType
+                                                );
             }
 
             object[] objs = FromConverter[olddt]( value );
@@ -227,16 +229,16 @@ namespace OpenCL.Wrapper
             for ( int i = 0; i < objs.Length; i++ )
             {
                 objs[i] = System.Convert.ChangeType(
-                    ConvertRange(
-                        ( float ) System.Convert.ChangeType(
-                            objs[i],
-                            typeof( float )
-                        ),
-                        oldMax,
-                        newMax
-                    ),
-                    BaseTypes[dt]
-                );
+                                                    ConvertRange(
+                                                                 ( float ) System.Convert.ChangeType(
+                                                                      objs[i],
+                                                                      typeof( float )
+                                                                     ),
+                                                                 oldMax,
+                                                                 newMax
+                                                                ),
+                                                    BaseTypes[dt]
+                                                   );
             }
 
             return ToConverter[dt]( objs );
@@ -268,23 +270,23 @@ namespace OpenCL.Wrapper
         private static object CreateByte16( params object[] args )
         {
             return new uchar16(
-                ( byte ) args[0],
-                ( byte ) args[1],
-                ( byte ) args[2],
-                ( byte ) args[3],
-                ( byte ) args[4],
-                ( byte ) args[5],
-                ( byte ) args[6],
-                ( byte ) args[7],
-                ( byte ) args[8],
-                ( byte ) args[9],
-                ( byte ) args[10],
-                ( byte ) args[11],
-                ( byte ) args[12],
-                ( byte ) args[13],
-                ( byte ) args[14],
-                ( byte ) args[15]
-            );
+                               ( byte ) args[0],
+                               ( byte ) args[1],
+                               ( byte ) args[2],
+                               ( byte ) args[3],
+                               ( byte ) args[4],
+                               ( byte ) args[5],
+                               ( byte ) args[6],
+                               ( byte ) args[7],
+                               ( byte ) args[8],
+                               ( byte ) args[9],
+                               ( byte ) args[10],
+                               ( byte ) args[11],
+                               ( byte ) args[12],
+                               ( byte ) args[13],
+                               ( byte ) args[14],
+                               ( byte ) args[15]
+                              );
         }
 
         /// <summary>
@@ -325,15 +327,15 @@ namespace OpenCL.Wrapper
         private static object CreateByte8( params object[] args )
         {
             return new uchar8(
-                ( byte ) args[0],
-                ( byte ) args[1],
-                ( byte ) args[2],
-                ( byte ) args[3],
-                ( byte ) args[4],
-                ( byte ) args[5],
-                ( byte ) args[6],
-                ( byte ) args[7]
-            );
+                              ( byte ) args[0],
+                              ( byte ) args[1],
+                              ( byte ) args[2],
+                              ( byte ) args[3],
+                              ( byte ) args[4],
+                              ( byte ) args[5],
+                              ( byte ) args[6],
+                              ( byte ) args[7]
+                             );
         }
 
         /// <summary>
@@ -344,23 +346,23 @@ namespace OpenCL.Wrapper
         private static object CreateFloat16( params object[] args )
         {
             return new float16(
-                ( float ) args[0],
-                ( float ) args[1],
-                ( float ) args[2],
-                ( float ) args[3],
-                ( float ) args[4],
-                ( float ) args[5],
-                ( float ) args[6],
-                ( float ) args[7],
-                ( float ) args[8],
-                ( float ) args[9],
-                ( float ) args[10],
-                ( float ) args[11],
-                ( float ) args[12],
-                ( float ) args[13],
-                ( float ) args[14],
-                ( float ) args[15]
-            );
+                               ( float ) args[0],
+                               ( float ) args[1],
+                               ( float ) args[2],
+                               ( float ) args[3],
+                               ( float ) args[4],
+                               ( float ) args[5],
+                               ( float ) args[6],
+                               ( float ) args[7],
+                               ( float ) args[8],
+                               ( float ) args[9],
+                               ( float ) args[10],
+                               ( float ) args[11],
+                               ( float ) args[12],
+                               ( float ) args[13],
+                               ( float ) args[14],
+                               ( float ) args[15]
+                              );
         }
 
         /// <summary>
@@ -401,15 +403,15 @@ namespace OpenCL.Wrapper
         private static object CreateFloat8( params object[] args )
         {
             return new float8(
-                ( float ) args[0],
-                ( float ) args[1],
-                ( float ) args[2],
-                ( float ) args[3],
-                ( float ) args[4],
-                ( float ) args[5],
-                ( float ) args[6],
-                ( float ) args[7]
-            );
+                              ( float ) args[0],
+                              ( float ) args[1],
+                              ( float ) args[2],
+                              ( float ) args[3],
+                              ( float ) args[4],
+                              ( float ) args[5],
+                              ( float ) args[6],
+                              ( float ) args[7]
+                             );
         }
 
         /// <summary>
@@ -420,23 +422,23 @@ namespace OpenCL.Wrapper
         private static object CreateInt16( params object[] args )
         {
             return new int16(
-                ( int ) args[0],
-                ( int ) args[1],
-                ( int ) args[2],
-                ( int ) args[3],
-                ( int ) args[4],
-                ( int ) args[5],
-                ( int ) args[6],
-                ( int ) args[7],
-                ( int ) args[8],
-                ( int ) args[9],
-                ( int ) args[10],
-                ( int ) args[11],
-                ( int ) args[12],
-                ( int ) args[13],
-                ( int ) args[14],
-                ( int ) args[15]
-            );
+                             ( int ) args[0],
+                             ( int ) args[1],
+                             ( int ) args[2],
+                             ( int ) args[3],
+                             ( int ) args[4],
+                             ( int ) args[5],
+                             ( int ) args[6],
+                             ( int ) args[7],
+                             ( int ) args[8],
+                             ( int ) args[9],
+                             ( int ) args[10],
+                             ( int ) args[11],
+                             ( int ) args[12],
+                             ( int ) args[13],
+                             ( int ) args[14],
+                             ( int ) args[15]
+                            );
         }
 
         /// <summary>
@@ -477,15 +479,15 @@ namespace OpenCL.Wrapper
         private static object CreateInt8( params object[] args )
         {
             return new int8(
-                ( int ) args[0],
-                ( int ) args[1],
-                ( int ) args[2],
-                ( int ) args[3],
-                ( int ) args[4],
-                ( int ) args[5],
-                ( int ) args[6],
-                ( int ) args[7]
-            );
+                            ( int ) args[0],
+                            ( int ) args[1],
+                            ( int ) args[2],
+                            ( int ) args[3],
+                            ( int ) args[4],
+                            ( int ) args[5],
+                            ( int ) args[6],
+                            ( int ) args[7]
+                           );
         }
 
         /// <summary>
@@ -496,23 +498,23 @@ namespace OpenCL.Wrapper
         private static object CreateLong16( params object[] args )
         {
             return new long16(
-                ( long ) args[0],
-                ( long ) args[1],
-                ( long ) args[2],
-                ( long ) args[3],
-                ( long ) args[4],
-                ( long ) args[5],
-                ( long ) args[6],
-                ( long ) args[7],
-                ( long ) args[8],
-                ( long ) args[9],
-                ( long ) args[10],
-                ( long ) args[11],
-                ( long ) args[12],
-                ( long ) args[13],
-                ( long ) args[14],
-                ( long ) args[15]
-            );
+                              ( long ) args[0],
+                              ( long ) args[1],
+                              ( long ) args[2],
+                              ( long ) args[3],
+                              ( long ) args[4],
+                              ( long ) args[5],
+                              ( long ) args[6],
+                              ( long ) args[7],
+                              ( long ) args[8],
+                              ( long ) args[9],
+                              ( long ) args[10],
+                              ( long ) args[11],
+                              ( long ) args[12],
+                              ( long ) args[13],
+                              ( long ) args[14],
+                              ( long ) args[15]
+                             );
         }
 
         /// <summary>
@@ -553,15 +555,15 @@ namespace OpenCL.Wrapper
         private static object CreateLong8( params object[] args )
         {
             return new long8(
-                ( long ) args[0],
-                ( long ) args[1],
-                ( long ) args[2],
-                ( long ) args[3],
-                ( long ) args[4],
-                ( long ) args[5],
-                ( long ) args[6],
-                ( long ) args[7]
-            );
+                             ( long ) args[0],
+                             ( long ) args[1],
+                             ( long ) args[2],
+                             ( long ) args[3],
+                             ( long ) args[4],
+                             ( long ) args[5],
+                             ( long ) args[6],
+                             ( long ) args[7]
+                            );
         }
 
         /// <summary>
@@ -572,23 +574,23 @@ namespace OpenCL.Wrapper
         private static object CreateSByte16( params object[] args )
         {
             return new char16(
-                ( sbyte ) args[0],
-                ( sbyte ) args[1],
-                ( sbyte ) args[2],
-                ( sbyte ) args[3],
-                ( sbyte ) args[4],
-                ( sbyte ) args[5],
-                ( sbyte ) args[6],
-                ( sbyte ) args[7],
-                ( sbyte ) args[8],
-                ( sbyte ) args[9],
-                ( sbyte ) args[10],
-                ( sbyte ) args[11],
-                ( sbyte ) args[12],
-                ( sbyte ) args[13],
-                ( sbyte ) args[14],
-                ( sbyte ) args[15]
-            );
+                              ( sbyte ) args[0],
+                              ( sbyte ) args[1],
+                              ( sbyte ) args[2],
+                              ( sbyte ) args[3],
+                              ( sbyte ) args[4],
+                              ( sbyte ) args[5],
+                              ( sbyte ) args[6],
+                              ( sbyte ) args[7],
+                              ( sbyte ) args[8],
+                              ( sbyte ) args[9],
+                              ( sbyte ) args[10],
+                              ( sbyte ) args[11],
+                              ( sbyte ) args[12],
+                              ( sbyte ) args[13],
+                              ( sbyte ) args[14],
+                              ( sbyte ) args[15]
+                             );
         }
 
         /// <summary>
@@ -629,15 +631,15 @@ namespace OpenCL.Wrapper
         private static object CreateSByte8( params object[] args )
         {
             return new char8(
-                ( sbyte ) args[0],
-                ( sbyte ) args[1],
-                ( sbyte ) args[2],
-                ( sbyte ) args[3],
-                ( sbyte ) args[4],
-                ( sbyte ) args[5],
-                ( sbyte ) args[6],
-                ( sbyte ) args[7]
-            );
+                             ( sbyte ) args[0],
+                             ( sbyte ) args[1],
+                             ( sbyte ) args[2],
+                             ( sbyte ) args[3],
+                             ( sbyte ) args[4],
+                             ( sbyte ) args[5],
+                             ( sbyte ) args[6],
+                             ( sbyte ) args[7]
+                            );
         }
 
         /// <summary>
@@ -648,23 +650,23 @@ namespace OpenCL.Wrapper
         private static object CreateShort16( params object[] args )
         {
             return new short16(
-                ( short ) args[0],
-                ( short ) args[1],
-                ( short ) args[2],
-                ( short ) args[3],
-                ( short ) args[4],
-                ( short ) args[5],
-                ( short ) args[6],
-                ( short ) args[7],
-                ( short ) args[8],
-                ( short ) args[9],
-                ( short ) args[10],
-                ( short ) args[11],
-                ( short ) args[12],
-                ( short ) args[13],
-                ( short ) args[14],
-                ( short ) args[15]
-            );
+                               ( short ) args[0],
+                               ( short ) args[1],
+                               ( short ) args[2],
+                               ( short ) args[3],
+                               ( short ) args[4],
+                               ( short ) args[5],
+                               ( short ) args[6],
+                               ( short ) args[7],
+                               ( short ) args[8],
+                               ( short ) args[9],
+                               ( short ) args[10],
+                               ( short ) args[11],
+                               ( short ) args[12],
+                               ( short ) args[13],
+                               ( short ) args[14],
+                               ( short ) args[15]
+                              );
         }
 
         /// <summary>
@@ -705,15 +707,15 @@ namespace OpenCL.Wrapper
         private static object CreateShort8( params object[] args )
         {
             return new short8(
-                ( short ) args[0],
-                ( short ) args[1],
-                ( short ) args[2],
-                ( short ) args[3],
-                ( short ) args[4],
-                ( short ) args[5],
-                ( short ) args[6],
-                ( short ) args[7]
-            );
+                              ( short ) args[0],
+                              ( short ) args[1],
+                              ( short ) args[2],
+                              ( short ) args[3],
+                              ( short ) args[4],
+                              ( short ) args[5],
+                              ( short ) args[6],
+                              ( short ) args[7]
+                             );
         }
 
         /// <summary>
@@ -724,23 +726,23 @@ namespace OpenCL.Wrapper
         private static object CreateUInt16( params object[] args )
         {
             return new uint16(
-                ( uint ) args[0],
-                ( uint ) args[1],
-                ( uint ) args[2],
-                ( uint ) args[3],
-                ( uint ) args[4],
-                ( uint ) args[5],
-                ( uint ) args[6],
-                ( uint ) args[7],
-                ( uint ) args[8],
-                ( uint ) args[9],
-                ( uint ) args[10],
-                ( uint ) args[11],
-                ( uint ) args[12],
-                ( uint ) args[13],
-                ( uint ) args[14],
-                ( uint ) args[15]
-            );
+                              ( uint ) args[0],
+                              ( uint ) args[1],
+                              ( uint ) args[2],
+                              ( uint ) args[3],
+                              ( uint ) args[4],
+                              ( uint ) args[5],
+                              ( uint ) args[6],
+                              ( uint ) args[7],
+                              ( uint ) args[8],
+                              ( uint ) args[9],
+                              ( uint ) args[10],
+                              ( uint ) args[11],
+                              ( uint ) args[12],
+                              ( uint ) args[13],
+                              ( uint ) args[14],
+                              ( uint ) args[15]
+                             );
         }
 
         /// <summary>
@@ -781,15 +783,15 @@ namespace OpenCL.Wrapper
         private static object CreateUInt8( params object[] args )
         {
             return new uint8(
-                ( uint ) args[0],
-                ( uint ) args[1],
-                ( uint ) args[2],
-                ( uint ) args[3],
-                ( uint ) args[4],
-                ( uint ) args[5],
-                ( uint ) args[6],
-                ( uint ) args[7]
-            );
+                             ( uint ) args[0],
+                             ( uint ) args[1],
+                             ( uint ) args[2],
+                             ( uint ) args[3],
+                             ( uint ) args[4],
+                             ( uint ) args[5],
+                             ( uint ) args[6],
+                             ( uint ) args[7]
+                            );
         }
 
         /// <summary>
@@ -800,23 +802,23 @@ namespace OpenCL.Wrapper
         private static object CreateULong16( params object[] args )
         {
             return new ulong16(
-                ( ulong ) args[0],
-                ( ulong ) args[1],
-                ( ulong ) args[2],
-                ( ulong ) args[3],
-                ( ulong ) args[4],
-                ( ulong ) args[5],
-                ( ulong ) args[6],
-                ( ulong ) args[7],
-                ( ulong ) args[8],
-                ( ulong ) args[9],
-                ( ulong ) args[10],
-                ( ulong ) args[11],
-                ( ulong ) args[12],
-                ( ulong ) args[13],
-                ( ulong ) args[14],
-                ( ulong ) args[15]
-            );
+                               ( ulong ) args[0],
+                               ( ulong ) args[1],
+                               ( ulong ) args[2],
+                               ( ulong ) args[3],
+                               ( ulong ) args[4],
+                               ( ulong ) args[5],
+                               ( ulong ) args[6],
+                               ( ulong ) args[7],
+                               ( ulong ) args[8],
+                               ( ulong ) args[9],
+                               ( ulong ) args[10],
+                               ( ulong ) args[11],
+                               ( ulong ) args[12],
+                               ( ulong ) args[13],
+                               ( ulong ) args[14],
+                               ( ulong ) args[15]
+                              );
         }
 
         /// <summary>
@@ -857,15 +859,15 @@ namespace OpenCL.Wrapper
         private static object CreateULong8( params object[] args )
         {
             return new ulong8(
-                ( ulong ) args[0],
-                ( ulong ) args[1],
-                ( ulong ) args[2],
-                ( ulong ) args[3],
-                ( ulong ) args[4],
-                ( ulong ) args[5],
-                ( ulong ) args[6],
-                ( ulong ) args[7]
-            );
+                              ( ulong ) args[0],
+                              ( ulong ) args[1],
+                              ( ulong ) args[2],
+                              ( ulong ) args[3],
+                              ( ulong ) args[4],
+                              ( ulong ) args[5],
+                              ( ulong ) args[6],
+                              ( ulong ) args[7]
+                             );
         }
 
         /// <summary>
@@ -876,23 +878,23 @@ namespace OpenCL.Wrapper
         private static object CreateUShort16( params object[] args )
         {
             return new ushort16(
-                ( ushort ) args[0],
-                ( ushort ) args[1],
-                ( ushort ) args[2],
-                ( ushort ) args[3],
-                ( ushort ) args[4],
-                ( ushort ) args[5],
-                ( ushort ) args[6],
-                ( ushort ) args[7],
-                ( ushort ) args[8],
-                ( ushort ) args[9],
-                ( ushort ) args[10],
-                ( ushort ) args[11],
-                ( ushort ) args[12],
-                ( ushort ) args[13],
-                ( ushort ) args[14],
-                ( ushort ) args[15]
-            );
+                                ( ushort ) args[0],
+                                ( ushort ) args[1],
+                                ( ushort ) args[2],
+                                ( ushort ) args[3],
+                                ( ushort ) args[4],
+                                ( ushort ) args[5],
+                                ( ushort ) args[6],
+                                ( ushort ) args[7],
+                                ( ushort ) args[8],
+                                ( ushort ) args[9],
+                                ( ushort ) args[10],
+                                ( ushort ) args[11],
+                                ( ushort ) args[12],
+                                ( ushort ) args[13],
+                                ( ushort ) args[14],
+                                ( ushort ) args[15]
+                               );
         }
 
         /// <summary>
@@ -933,15 +935,15 @@ namespace OpenCL.Wrapper
         private static object CreateUShort8( params object[] args )
         {
             return new ushort8(
-                ( ushort ) args[0],
-                ( ushort ) args[1],
-                ( ushort ) args[2],
-                ( ushort ) args[3],
-                ( ushort ) args[4],
-                ( ushort ) args[5],
-                ( ushort ) args[6],
-                ( ushort ) args[7]
-            );
+                               ( ushort ) args[0],
+                               ( ushort ) args[1],
+                               ( ushort ) args[2],
+                               ( ushort ) args[3],
+                               ( ushort ) args[4],
+                               ( ushort ) args[5],
+                               ( ushort ) args[6],
+                               ( ushort ) args[7]
+                              );
         }
 
         /// <summary>
@@ -1800,6 +1802,7 @@ namespace OpenCL.Wrapper
         }
 
         #endregion
+
     }
 
 }

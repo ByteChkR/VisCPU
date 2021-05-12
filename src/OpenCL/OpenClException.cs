@@ -1,6 +1,7 @@
 #region Using Directives
 
 using System;
+
 using OpenCL.NET.Interop;
 
 #endregion
@@ -13,6 +14,7 @@ namespace OpenCL.NET
     /// </summary>
     public class OpenClException : Exception
     {
+
         /// <summary>
         ///     Gets the error code that was returned by OpenCL.
         /// </summary>
@@ -79,6 +81,7 @@ namespace OpenCL.NET
         }
 
         #endregion
+
     }
 
 }

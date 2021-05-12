@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+
 using VisCPU.Utility.EventSystem.Events;
 
 namespace VisCPU.Utility.EventSystem
@@ -7,6 +8,7 @@ namespace VisCPU.Utility.EventSystem
 
     public static class EventManager
     {
+
         public static event Action < Event > OnEventReceive;
 
         internal static EventManagerSettings Settings { get; private set; } = new EventManagerSettings();
@@ -95,10 +97,12 @@ namespace VisCPU.Utility.EventSystem
         }
 
         #endregion
+
     }
 
     public static class EventManager < T > where T : Event
     {
+
         public static event Action < T > OnEventReceive;
 
         #region Public
@@ -115,6 +119,7 @@ namespace VisCPU.Utility.EventSystem
         }
 
         #endregion
+
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+
 using Utility.ExtPP.Base.Interfaces;
 
 namespace Utility.ExtPP.Base
@@ -6,6 +7,7 @@ namespace Utility.ExtPP.Base
 
     public class FilePathContent : IFileContent
     {
+
         private readonly string definedName;
         private readonly string filePath;
         private string key;
@@ -60,6 +62,7 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
+
     }
 
 }

@@ -6,6 +6,7 @@ namespace OpenCL.NET.Interop.Memory
     /// </summary>
     public enum PipeInformation : uint
     {
+
         /// <summary>
         ///     Retrieves the pipe packet size specified when pipe is created with <see cref="CreatePipe" />.
         /// </summary>
@@ -15,6 +16,7 @@ namespace OpenCL.NET.Interop.Memory
         ///     Retrieves the maximum number of packets specified when pipe is created with <see cref="CreatePipe" />.
         /// </summary>
         MaximumNumberOfPackets = 0x1121
+
     }
 
 }

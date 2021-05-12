@@ -3,6 +3,7 @@
 
     public abstract class AToken
     {
+
         public int Length { get; }
 
         public string OriginalText { get; }
@@ -34,6 +35,7 @@
         }
 
         #endregion
+
     }
 
 }

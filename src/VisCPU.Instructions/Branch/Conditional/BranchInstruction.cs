@@ -3,6 +3,7 @@
 
     public abstract class BranchInstruction : UnconditionalBranchInstruction
     {
+
         #region Public
 
         public abstract bool Calculate( uint a, uint b );
@@ -22,6 +23,7 @@
         }
 
         #endregion
+
     }
 
 }

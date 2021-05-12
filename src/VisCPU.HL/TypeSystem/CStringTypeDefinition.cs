@@ -6,15 +6,16 @@ namespace VisCPU.HL.TypeSystem
 
     public class CStringTypeDefinition : HlTypeDefinition
     {
+
         #region Public
 
         public CStringTypeDefinition( HlNamespace ns ) : base(
-            ns,
-            HLBaseTypeNames.s_CStringTypeName,
-            true,
-            false,
-            false
-        )
+                                                              ns,
+                                                              HLBaseTypeNames.s_CStringTypeName,
+                                                              true,
+                                                              false,
+                                                              false
+                                                             )
         {
         }
 
@@ -24,6 +25,7 @@ namespace VisCPU.HL.TypeSystem
         }
 
         #endregion
+
     }
 
 }

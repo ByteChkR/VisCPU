@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
@@ -8,6 +9,7 @@ namespace Utility.ExtPP
 
     internal class SourceScript : ALoggable < LogType >, ISourceScript
     {
+
         /// <summary>
         ///     The full filepath of the script
         /// </summary>
@@ -45,9 +47,9 @@ namespace Utility.ExtPP
         /// <param name="key">the key of the source file</param>
         /// <param name="pluginCache">the plugin cache that is used.</param>
         public SourceScript( string separator, IFileContent path, ImportResult importInfo, bool isInline ) : base(
-            ExtPPDebugConfig.Settings,
-            ""
-        )
+             ExtPPDebugConfig.Settings,
+             ""
+            )
         {
             this.importInfo = importInfo;
             IsInline = isInline;
@@ -165,6 +167,7 @@ namespace Utility.ExtPP
         }
 
         #endregion
+
     }
 
 }

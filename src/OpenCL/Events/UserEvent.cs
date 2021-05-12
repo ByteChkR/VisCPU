@@ -13,6 +13,7 @@ namespace OpenCL.NET.Events
     /// </summary>
     public class UserEvent : AwaitableEvent
     {
+
         #region Public
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace OpenCL.NET.Events
         }
 
         #endregion
+
     }
 
 }

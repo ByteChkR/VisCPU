@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Utility.SharedBase;
@@ -9,6 +10,7 @@ namespace VisCPU.Compiler.Compiler
 
     public class Compilation
     {
+
         private readonly AssemblyGenerator m_AssemblyGenerator;
 
         private readonly Linker m_Linker;
@@ -30,12 +32,12 @@ namespace VisCPU.Compiler.Compiler
         public static LinkerInfo CreateFromResult( LinkerResult result )
         {
             return new LinkerInfo
-            {
-                Constants = result.Constants,
-                DataSectionHeader = result.DataSectionHeader,
-                Labels = result.Labels,
-                Source = result.LinkedBinary.FirstOrDefault()?.FirstOrDefault()?.OriginalText
-            };
+                   {
+                       Constants = result.Constants,
+                       DataSectionHeader = result.DataSectionHeader,
+                       Labels = result.Labels,
+                       Source = result.LinkedBinary.FirstOrDefault()?.FirstOrDefault()?.OriginalText
+                   };
         }
 
         public void Compile( string file )
@@ -54,6 +56,7 @@ namespace VisCPU.Compiler.Compiler
         }
 
         #endregion
+
     }
 
 }

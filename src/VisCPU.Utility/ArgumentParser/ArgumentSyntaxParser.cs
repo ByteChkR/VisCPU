@@ -8,6 +8,7 @@ namespace VisCPU.Utility.ArgumentParser
 
     public static class ArgumentSyntaxParser
     {
+
         #region Public
 
         public static IEnumerable < string > GetArgNames( params object[] objs )
@@ -20,8 +21,8 @@ namespace VisCPU.Utility.ArgumentParser
 
                 MemberInfo[] fis = t.GetMembers( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).
                                      Where(
-                                         IsCorrectMemberType
-                                     ).
+                                           IsCorrectMemberType
+                                          ).
                                      ToArray();
 
                 foreach ( MemberInfo fieldInfo in fis )
@@ -69,8 +70,8 @@ namespace VisCPU.Utility.ArgumentParser
 
                 MemberInfo[] fis = t.GetMembers( BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ).
                                      Where(
-                                         IsCorrectMemberType
-                                     ).
+                                           IsCorrectMemberType
+                                          ).
                                      ToArray();
 
                 foreach ( MemberInfo fieldInfo in fis )
@@ -107,20 +108,20 @@ namespace VisCPU.Utility.ArgumentParser
                             else if ( fieldType.IsEnum )
                             {
                                 setDel(
-                                    o,
-                                    Enum.ToObject(
-                                        fieldType,
-                                        parts[name].
-                                            Select(
-                                                x => ( int ) Enum.Parse(
-                                                    fieldType,
-                                                    x,
-                                                    true
-                                                )
-                                            ).
-                                            Aggregate( ( a, x ) => a | x )
-                                    )
-                                );
+                                       o,
+                                       Enum.ToObject(
+                                                     fieldType,
+                                                     parts[name].
+                                                         Select(
+                                                                x => ( int ) Enum.Parse(
+                                                                     fieldType,
+                                                                     x,
+                                                                     true
+                                                                    )
+                                                               ).
+                                                         Aggregate( ( a, x ) => a | x )
+                                                    )
+                                      );
                             }
                             else if ( fieldType == typeof( string[] ) )
                             {
@@ -137,20 +138,20 @@ namespace VisCPU.Utility.ArgumentParser
                             else if ( fieldType.IsArray && fieldType.GetElementType().IsEnum )
                             {
                                 setDel(
-                                    o,
-                                    Enum.ToObject(
-                                        fieldType.GetElementType(),
-                                        parts[name].
-                                            Select(
-                                                x => ( int ) Enum.Parse(
-                                                    fieldType.GetElementType(),
-                                                    x,
-                                                    true
-                                                )
-                                            ).
-                                            ToArray()
-                                    )
-                                );
+                                       o,
+                                       Enum.ToObject(
+                                                     fieldType.GetElementType(),
+                                                     parts[name].
+                                                         Select(
+                                                                x => ( int ) Enum.Parse(
+                                                                     fieldType.GetElementType(),
+                                                                     x,
+                                                                     true
+                                                                    )
+                                                               ).
+                                                         ToArray()
+                                                    )
+                                      );
                             }
                         }
                     }
@@ -231,6 +232,7 @@ namespace VisCPU.Utility.ArgumentParser
         }
 
         #endregion
+
     }
 
 }

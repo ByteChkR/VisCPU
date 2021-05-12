@@ -8,6 +8,7 @@ namespace VisCPU.Utility.IO.Settings.Loader
 
     public class XmlSettingsLoader : SettingsLoader
     {
+
         private readonly Dictionary < Type, XmlSerializer > m_Serializers = new Dictionary < Type, XmlSerializer >();
 
         #region Public
@@ -47,6 +48,7 @@ namespace VisCPU.Utility.IO.Settings.Loader
         }
 
         #endregion
+
     }
 
 }

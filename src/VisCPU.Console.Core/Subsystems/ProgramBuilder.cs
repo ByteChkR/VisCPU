@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using OpenCL.Integration;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
@@ -20,6 +22,7 @@ namespace VisCPU.Console.Core.Subsystems
 
     public class ProgramBuilder : ConsoleSubsystem
     {
+
         #region Public
 
         public static void Build( Dictionary < string, string > args )
@@ -30,13 +33,12 @@ namespace VisCPU.Console.Core.Subsystems
             HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
-                args,
-                settings,
-                asettings,
-                ls,
-                hls
-            );
-            
+                                       args,
+                                       settings,
+                                       asettings,
+                                       ls,
+                                       hls
+                                      );
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
@@ -52,12 +54,12 @@ namespace VisCPU.Console.Core.Subsystems
             HlCompilerSettings hls = SettingsManager.GetSettings < HlCompilerSettings >();
 
             ArgumentSyntaxParser.Parse(
-                args.ToArray(),
-                settings,
-                asettings,
-                ls,
-                hls
-            );
+                                       args.ToArray(),
+                                       settings,
+                                       asettings,
+                                       ls,
+                                       hls
+                                      );
 
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
@@ -89,8 +91,8 @@ namespace VisCPU.Console.Core.Subsystems
                 if ( !File.Exists( file ) )
                 {
                     EventManager < ErrorEvent >.SendEvent(
-                        new FileNotFoundEvent( Path.GetFullPath( file ), true )
-                    );
+                                                          new FileNotFoundEvent( Path.GetFullPath( file ), true )
+                                                         );
 
                     continue;
                 }
@@ -98,9 +100,9 @@ namespace VisCPU.Console.Core.Subsystems
                 foreach ( ( string stepName, BuildSteps step ) in settings.InstanceBuildSteps )
                 {
                     Logger.LogMessage(
-                        LoggerSystems.Console,
-                        $"Running Build Step '{stepName}'"
-                    );
+                                      LoggerSystems.Console,
+                                      $"Running Build Step '{stepName}'"
+                                     );
 
                     string newFile = step( original, file );
 
@@ -110,9 +112,9 @@ namespace VisCPU.Console.Core.Subsystems
                     }
 
                     Logger.LogMessage(
-                        LoggerSystems.Console,
-                        $"'{file}' => '{newFile}'"
-                    );
+                                      LoggerSystems.Console,
+                                      $"'{file}' => '{newFile}'"
+                                     );
 
                     file = newFile;
                 }
@@ -136,6 +138,7 @@ namespace VisCPU.Console.Core.Subsystems
         }
 
         #endregion
+
     }
 
 }

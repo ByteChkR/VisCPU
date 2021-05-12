@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.CommandQueues
     /// </summary>
     public static class CommandQueuesNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -49,10 +50,14 @@ namespace OpenCL.NET.Interop.CommandQueues
         [DllImport( "OpenCL", EntryPoint = "clCreateCommandQueue" )]
         [Obsolete( "This is a deprecated OpenCL 1.2 method, please use CreateCommandQueueWithProperties instead." )]
         public static extern IntPtr CreateCommandQueue(
-            [In] IntPtr context,
-            [In] IntPtr device,
-            [In] [MarshalAs( UnmanagedType.U8 )] CommandQueueProperty properties,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [In]
+            IntPtr device,
+            [In] [MarshalAs( UnmanagedType.U8 )]
+            CommandQueueProperty properties,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Create a host or device command-queue on a specific device.
@@ -79,10 +84,14 @@ namespace OpenCL.NET.Interop.CommandQueues
         [IntroducedInOpenCl( 2, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clCreateCommandQueueWithProperties" )]
         public static extern IntPtr CreateCommandQueueWithProperties(
-            [In] IntPtr context,
-            [In] IntPtr device,
-            [In] IntPtr properties,
-            [Out] [MarshalAs( UnmanagedType.I4 )] out Result errorCode );
+            [In]
+            IntPtr context,
+            [In]
+            IntPtr device,
+            [In]
+            IntPtr properties,
+            [Out] [MarshalAs( UnmanagedType.I4 )]
+            out Result errorCode );
 
         /// <summary>
         ///     Blocks until all previously queued OpenCL commands in a command-queue are issued to the associated device and have
@@ -100,7 +109,9 @@ namespace OpenCL.NET.Interop.CommandQueues
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clFinish" )]
-        public static extern Result Finish( [In] IntPtr commandQueue );
+        public static extern Result Finish(
+            [In]
+            IntPtr commandQueue );
 
         /// <summary>
         ///     Issues all previously queued OpenCL commands in a command-queue to the device associated with the command-queue.
@@ -117,7 +128,9 @@ namespace OpenCL.NET.Interop.CommandQueues
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clFlush" )]
-        public static extern Result Flush( [In] IntPtr commandQueue );
+        public static extern Result Flush(
+            [In]
+            IntPtr commandQueue );
 
         /// <summary>
         ///     Query information about a command-queue.
@@ -148,11 +161,16 @@ namespace OpenCL.NET.Interop.CommandQueues
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetCommandQueueInfo" )]
         public static extern Result GetCommandQueueInfo(
-            [In] IntPtr commandQueue,
-            [In] [MarshalAs( UnmanagedType.U4 )] CommandQueueInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned );
+            [In]
+            IntPtr commandQueue,
+            [In] [MarshalAs( UnmanagedType.U4 )]
+            CommandQueueInformation parameterName,
+            [In]
+            UIntPtr parameterValueSize,
+            [Out]
+            byte[] parameterValue,
+            [Out]
+            out UIntPtr parameterValueSizeReturned );
 
         /// <summary>
         ///     Decrements the commandQueue reference count.
@@ -169,7 +187,9 @@ namespace OpenCL.NET.Interop.CommandQueues
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clReleaseCommandQueue" )]
-        public static extern Result ReleaseCommandQueue( [In] IntPtr commandQueue );
+        public static extern Result ReleaseCommandQueue(
+            [In]
+            IntPtr commandQueue );
 
         /// <summary>
         ///     Increments the command queue reference count.
@@ -185,9 +205,12 @@ namespace OpenCL.NET.Interop.CommandQueues
         /// </returns>
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clRetainCommandQueue" )]
-        public static extern Result RetainCommandQueue( [In] IntPtr commandQueue );
+        public static extern Result RetainCommandQueue(
+            [In]
+            IntPtr commandQueue );
 
         #endregion
+
     }
 
 }

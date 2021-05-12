@@ -3,7 +3,9 @@
 
     public class ShiftRightAssignExpressionCompiler : SelfAssignExpressionCompiler
     {
+
         protected override string InstructionKey => "SHR";
+
     }
 
 }

@@ -3,6 +3,7 @@
 
     public class PlainTextImporter : TextImporter
     {
+
         public override string Name => nameof( PlainTextImporter );
 
         #region Public
@@ -13,6 +14,7 @@
         }
 
         #endregion
+
     }
 
 }

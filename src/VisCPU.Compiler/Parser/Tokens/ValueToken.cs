@@ -5,6 +5,7 @@ namespace VisCPU.Compiler.Parser.Tokens
 
     public abstract class ValueToken : AToken
     {
+
         public abstract uint Value { get; }
 
         #region Public
@@ -23,6 +24,7 @@ namespace VisCPU.Compiler.Parser.Tokens
         }
 
         #endregion
+
     }
 
 }

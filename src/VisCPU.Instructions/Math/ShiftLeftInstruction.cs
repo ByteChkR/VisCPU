@@ -5,6 +5,7 @@ namespace VisCPU.Instructions.Math
 
     public class ShiftLeftInstruction : LogicInstruction
     {
+
         public override uint Cycles => 1;
 
         public override uint InstructionSize => 4;
@@ -21,6 +22,7 @@ namespace VisCPU.Instructions.Math
         }
 
         #endregion
+
     }
 
 }

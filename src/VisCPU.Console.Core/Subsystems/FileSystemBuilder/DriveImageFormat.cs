@@ -6,6 +6,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
     public abstract class DriveImageFormat : VisBase
     {
+
         public abstract string FormatName { get; }
 
         public abstract string[] SupportedExtensions { get; }
@@ -26,6 +27,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
         }
 
         #endregion
+
     }
 
 }

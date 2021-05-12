@@ -7,6 +7,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
 
     public class BuildJobPublish : BuildJobRunner
     {
+
         public override string RunnerName => "publish";
 
         #region Public
@@ -34,6 +35,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         }
 
         #endregion
+
     }
 
 }

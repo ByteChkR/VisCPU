@@ -8,6 +8,7 @@ namespace OpenCL.Wrapper.Exceptions
     /// </summary>
     public class CLProgramException : Exception
     {
+
         #region Public
 
         /// <summary>
@@ -28,6 +29,7 @@ namespace OpenCL.Wrapper.Exceptions
         }
 
         #endregion
+
     }
 
 }

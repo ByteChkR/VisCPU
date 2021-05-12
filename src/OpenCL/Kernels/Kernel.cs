@@ -2,6 +2,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Kernels;
 using OpenCL.NET.Memory;
@@ -16,6 +17,7 @@ namespace OpenCL.NET.Kernels
     /// </summary>
     public class Kernel : HandleBase
     {
+
         /// <summary>
         ///     Contains the function name of the OpenCL kernel.
         /// </summary>
@@ -96,8 +98,8 @@ namespace OpenCL.NET.Kernels
             if ( index < 0 )
             {
                 throw new OpenClArgumentIndexOutOfRangeException(
-                    $"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0."
-                );
+                                                                 $"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0."
+                                                                );
             }
 
             // The set kernel argument method needs a pointer to the pointer, therefore the pointer is pinned, so that the garbage collector can not move it in memory
@@ -107,22 +109,22 @@ namespace OpenCL.NET.Kernels
             {
                 // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
                 Result result = KernelsNativeApi.SetKernelArgument(
-                    Handle,
-                    ( uint ) index,
-                    new UIntPtr(
-                        ( uint ) Marshal.SizeOf(
-                            memoryObject.Handle
-                        )
-                    ),
-                    garbageCollectorHandle.AddrOfPinnedObject()
-                );
+                                                                   Handle,
+                                                                   ( uint ) index,
+                                                                   new UIntPtr(
+                                                                               ( uint ) Marshal.SizeOf(
+                                                                                    memoryObject.Handle
+                                                                                   )
+                                                                              ),
+                                                                   garbageCollectorHandle.AddrOfPinnedObject()
+                                                                  );
 
                 if ( result != Result.Success )
                 {
                     throw new OpenClException(
-                        $"The kernel argument with the index {index} could not be set.",
-                        result
-                    );
+                                              $"The kernel argument with the index {index} could not be set.",
+                                              result
+                                             );
                 }
             }
             finally
@@ -147,8 +149,8 @@ namespace OpenCL.NET.Kernels
             if ( index < 0 )
             {
                 throw new OpenClArgumentIndexOutOfRangeException(
-                    $"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0."
-                );
+                                                                 $"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0."
+                                                                );
             }
 
             // The set kernel argument method needs a pointer to the pointer, therefore the pointer is pinned, so that the garbage collector can not move it in memory
@@ -158,18 +160,18 @@ namespace OpenCL.NET.Kernels
             {
                 // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
                 Result result = KernelsNativeApi.SetKernelArgument(
-                    Handle,
-                    ( uint ) index,
-                    new UIntPtr( ( uint ) Marshal.SizeOf( value ) ),
-                    garbageCollectorHandle.AddrOfPinnedObject()
-                );
+                                                                   Handle,
+                                                                   ( uint ) index,
+                                                                   new UIntPtr( ( uint ) Marshal.SizeOf( value ) ),
+                                                                   garbageCollectorHandle.AddrOfPinnedObject()
+                                                                  );
 
                 if ( result != Result.Success )
                 {
                     throw new OpenClException(
-                        $"The kernel argument with the index {index} could not be set.",
-                        result
-                    );
+                                              $"The kernel argument with the index {index} could not be set.",
+                                              result
+                                             );
                 }
             }
             finally
@@ -198,12 +200,12 @@ namespace OpenCL.NET.Kernels
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             Result result =
                 KernelsNativeApi.GetKernelInformation(
-                    Handle,
-                    kernelInformation,
-                    UIntPtr.Zero,
-                    null,
-                    out UIntPtr returnValueSize
-                );
+                                                      Handle,
+                                                      kernelInformation,
+                                                      UIntPtr.Zero,
+                                                      null,
+                                                      out UIntPtr returnValueSize
+                                                     );
 
             if ( result != Result.Success )
             {
@@ -214,12 +216,12 @@ namespace OpenCL.NET.Kernels
             byte[] output = new byte[returnValueSize.ToUInt32()];
 
             result = KernelsNativeApi.GetKernelInformation(
-                Handle,
-                kernelInformation,
-                new UIntPtr( ( uint ) output.Length ),
-                output,
-                out returnValueSize
-            );
+                                                           Handle,
+                                                           kernelInformation,
+                                                           new UIntPtr( ( uint ) output.Length ),
+                                                           output,
+                                                           out returnValueSize
+                                                          );
 
             if ( result != Result.Success )
             {
@@ -231,6 +233,7 @@ namespace OpenCL.NET.Kernels
         }
 
         #endregion
+
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+
 using VisCPU.Utility.Extensions;
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
@@ -10,6 +11,7 @@ namespace VisCPU.Peripherals
 
     public abstract class Peripheral : VisBase
     {
+
         public static SettingsCategory PeripheralCategory => CpuSettings.CpuCategory.AddCategory( "peripherals" );
 
         public static SettingsCategory PeripheralExtensions =>
@@ -41,9 +43,9 @@ namespace VisCPU.Peripherals
         public static IEnumerable < PeripheralImporter > GetPeripheralImporters()
         {
             return ExtensionLoader.LoadFrom < PeripheralImporter >(
-                PeripheralExtensions.GetCategoryDirectory(),
-                true
-            );
+                                                                   PeripheralExtensions.GetCategoryDirectory(),
+                                                                   true
+                                                                  );
         }
 
         public abstract bool CanRead( uint address );
@@ -68,6 +70,7 @@ namespace VisCPU.Peripherals
         }
 
         #endregion
+
     }
 
 }

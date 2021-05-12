@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
@@ -10,6 +11,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
 
     public class DriveImageSubsystem : ConsoleSubsystem
     {
+
         private static readonly List < DriveImageFormat > s_ImageFormats =
             new List < DriveImageFormat > { new DriveImageFormatV1() };
 
@@ -151,6 +153,7 @@ namespace VisCPU.Console.Core.Subsystems.FileSystemBuilder
         }
 
         #endregion
+
     }
 
 }

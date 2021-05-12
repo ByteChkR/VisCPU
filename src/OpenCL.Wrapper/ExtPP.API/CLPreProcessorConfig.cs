@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+
 using Utility.ExtPP.API.Configuration;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Plugins;
@@ -12,18 +13,20 @@ namespace OpenCL.Wrapper.ExtPP.API
     /// </summary>
     public class CLPreProcessorConfig : APreProcessorConfig
     {
+
         private static readonly StringBuilder Sb = new StringBuilder();
 
         public override string FileExtension => ".cl";
 
-        protected override List < AbstractPlugin > Plugins => new List < AbstractPlugin >
-        {
-            new FakeGenericsPlugin { Stage = "onload" },
-            new IncludePlugin(),
-            new ConditionalPlugin { Stage = "onload" },
-            new ExceptionPlugin(),
-            new MultiLinePlugin()
-        };
+        protected override List < AbstractPlugin > Plugins =>
+            new List < AbstractPlugin >
+            {
+                new FakeGenericsPlugin { Stage = "onload" },
+                new IncludePlugin(),
+                new ConditionalPlugin { Stage = "onload" },
+                new ExceptionPlugin(),
+                new MultiLinePlugin()
+            };
 
         #region Public
 
@@ -43,6 +46,7 @@ namespace OpenCL.Wrapper.ExtPP.API
         }
 
         #endregion
+
     }
 
 }

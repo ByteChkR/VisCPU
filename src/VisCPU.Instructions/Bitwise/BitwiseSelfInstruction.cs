@@ -6,7 +6,9 @@ namespace VisCPU.Instructions.Bitwise
 
     public abstract class BitwiseSelfInstruction : MathSelfInstruction
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.BitwiseInstructions;
+
     }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using VisCPU.Console.Core.Settings;
 using VisCPU.Peripherals.Memory;
 using VisCPU.Utility.IO.Settings;
@@ -8,6 +9,7 @@ namespace VisCPU.Console.Core
 
     public class WriteDefaultConfigSubSystem : ConsoleSubsystem
     {
+
         #region Public
 
         public override void Help()
@@ -23,6 +25,7 @@ namespace VisCPU.Console.Core
         }
 
         #endregion
+
     }
 
 }

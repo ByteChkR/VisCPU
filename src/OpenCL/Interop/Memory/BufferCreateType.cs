@@ -6,10 +6,12 @@ namespace OpenCL.NET.Interop.Memory
     /// </summary>
     public enum BufferCreateType : uint
     {
+
         /// <summary>
         ///     Creates a buffer object that represents a specific region in the buffer.
         /// </summary>
         Region = 0x1220
+
     }
 
 }

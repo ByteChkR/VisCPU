@@ -6,17 +6,19 @@ namespace VisCPU.Peripherals.Events
 
     public class HostFileSystemReadFailureEvent : ErrorEvent
     {
+
         #region Public
 
         public HostFileSystemReadFailureEvent( string errMessage ) : base(
-            errMessage,
-            ErrorEventKeys.s_HfsReadFailure,
-            true
-        )
+                                                                          errMessage,
+                                                                          ErrorEventKeys.s_HfsReadFailure,
+                                                                          true
+                                                                         )
         {
         }
 
         #endregion
+
     }
 
 }

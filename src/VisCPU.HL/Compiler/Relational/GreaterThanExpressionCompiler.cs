@@ -3,6 +3,7 @@
 
     public class GreaterThanExpressionCompiler : RelationalExpressionCompiler
     {
+
         protected override string InstructionKey => "BGT";
 
         #region Public
@@ -13,6 +14,7 @@
         }
 
         #endregion
+
     }
 
 }

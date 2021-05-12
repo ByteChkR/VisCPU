@@ -10,6 +10,7 @@ namespace Utility.ExtPP.Base
     [Serializable]
     public class CommandMetaData
     {
+
         /// <summary>
         ///     The help text of the Command
         /// </summary>
@@ -67,6 +68,7 @@ namespace Utility.ExtPP.Base
         }
 
         #endregion
+
     }
 
 }

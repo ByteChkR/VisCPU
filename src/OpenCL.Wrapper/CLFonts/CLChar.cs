@@ -6,6 +6,7 @@ namespace OpenCL.Wrapper.CLFonts
 
     public class CLChar
     {
+
         public readonly MemoryBuffer Buffer;
         public readonly char Character;
         public readonly int2 Size;
@@ -20,6 +21,7 @@ namespace OpenCL.Wrapper.CLFonts
         }
 
         #endregion
+
     }
 
 }

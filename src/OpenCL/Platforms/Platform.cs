@@ -3,10 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using OpenCL.NET.Devices;
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Devices;
 using OpenCL.NET.Interop.Platforms;
+
 using DeviceType = OpenCL.NET.Devices.DeviceType;
 
 #endregion
@@ -19,6 +21,7 @@ namespace OpenCL.NET.Platforms
     /// </summary>
     public class Platform : HandleBase
     {
+
         /// <summary>
         ///     Contains the name of the OpenCL platform.
         /// </summary>
@@ -221,10 +224,10 @@ namespace OpenCL.NET.Platforms
             IntPtr[] platformPointers = new IntPtr[numberOfAvailablePlatforms];
 
             result = PlatformsNativeApi.GetPlatformIds(
-                numberOfAvailablePlatforms,
-                platformPointers,
-                out numberOfAvailablePlatforms
-            );
+                                                       numberOfAvailablePlatforms,
+                                                       platformPointers,
+                                                       out numberOfAvailablePlatforms
+                                                      );
 
             if ( result != Result.Success )
             {
@@ -241,12 +244,12 @@ namespace OpenCL.NET.Platforms
         public uint GetDeviceCount( DeviceType deviceType )
         {
             Result result = DevicesNativeApi.GetDeviceIds(
-                Handle,
-                ( Interop.Devices.DeviceType ) deviceType,
-                0,
-                null,
-                out uint numberOfAvailableDevices
-            );
+                                                          Handle,
+                                                          ( Interop.Devices.DeviceType ) deviceType,
+                                                          0,
+                                                          null,
+                                                          out uint numberOfAvailableDevices
+                                                         );
 
             return numberOfAvailableDevices;
         }
@@ -266,12 +269,12 @@ namespace OpenCL.NET.Platforms
             uint numberOfAvailableDevices;
 
             Result result = DevicesNativeApi.GetDeviceIds(
-                Handle,
-                ( Interop.Devices.DeviceType ) deviceType,
-                0,
-                null,
-                out numberOfAvailableDevices
-            );
+                                                          Handle,
+                                                          ( Interop.Devices.DeviceType ) deviceType,
+                                                          0,
+                                                          null,
+                                                          out numberOfAvailableDevices
+                                                         );
 
             if ( result != Result.Success )
             {
@@ -282,12 +285,12 @@ namespace OpenCL.NET.Platforms
             IntPtr[] devicePointers = new IntPtr[numberOfAvailableDevices];
 
             result = DevicesNativeApi.GetDeviceIds(
-                Handle,
-                ( Interop.Devices.DeviceType ) deviceType,
-                numberOfAvailableDevices,
-                devicePointers,
-                out numberOfAvailableDevices
-            );
+                                                   Handle,
+                                                   ( Interop.Devices.DeviceType ) deviceType,
+                                                   numberOfAvailableDevices,
+                                                   devicePointers,
+                                                   out numberOfAvailableDevices
+                                                  );
 
             if ( result != Result.Success )
             {
@@ -322,12 +325,12 @@ namespace OpenCL.NET.Platforms
             UIntPtr returnValueSize;
 
             Result result = PlatformsNativeApi.GetPlatformInformation(
-                Handle,
-                platformInformation,
-                UIntPtr.Zero,
-                null,
-                out returnValueSize
-            );
+                                                                      Handle,
+                                                                      platformInformation,
+                                                                      UIntPtr.Zero,
+                                                                      null,
+                                                                      out returnValueSize
+                                                                     );
 
             if ( result != Result.Success )
             {
@@ -338,12 +341,12 @@ namespace OpenCL.NET.Platforms
             byte[] output = new byte[returnValueSize.ToUInt32()];
 
             result = PlatformsNativeApi.GetPlatformInformation(
-                Handle,
-                platformInformation,
-                new UIntPtr( ( uint ) output.Length ),
-                output,
-                out returnValueSize
-            );
+                                                               Handle,
+                                                               platformInformation,
+                                                               new UIntPtr( ( uint ) output.Length ),
+                                                               output,
+                                                               out returnValueSize
+                                                              );
 
             if ( result != Result.Success )
             {
@@ -355,6 +358,7 @@ namespace OpenCL.NET.Platforms
         }
 
         #endregion
+
     }
 
 }

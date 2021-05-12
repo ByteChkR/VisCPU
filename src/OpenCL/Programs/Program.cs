@@ -1,6 +1,7 @@
 #region Using Directives
 
 using System;
+
 using OpenCL.NET.Interop;
 using OpenCL.NET.Interop.Kernels;
 using OpenCL.NET.Interop.Programs;
@@ -16,6 +17,7 @@ namespace OpenCL.NET.Programs
     /// </summary>
     public class Program : HandleBase
     {
+
         #region Public
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace OpenCL.NET.Programs
         }
 
         #endregion
+
     }
 
 }

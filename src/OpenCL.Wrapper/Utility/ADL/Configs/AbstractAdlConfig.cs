@@ -10,6 +10,7 @@ namespace Utility.ADL.Configs
     [Serializable]
     public abstract class AbstractADLConfig
     {
+
         #region Public
 
         ///// <summary>
@@ -19,6 +20,7 @@ namespace Utility.ADL.Configs
         public abstract AbstractADLConfig GetStandard();
 
         #endregion
+
     }
 
 }

@@ -8,6 +8,7 @@ namespace VisCPU.Peripherals.HostFS
 
     public class HostFileSystemSettings
     {
+
         [field: Argument( Name = "hostfs:root.use" )]
         public bool UseRootPath { get; set; } = true;
 
@@ -36,14 +37,15 @@ namespace VisCPU.Peripherals.HostFS
             SettingsCategory hfsCategory = Peripheral.PeripheralCategory.AddCategory( "host-fs" );
 
             SettingsManager.RegisterDefaultLoader(
-                new JsonSettingsLoader(),
-                hfsCategory,
-                "default.json",
-                new HostFileSystemSettings()
-            );
+                                                  new JsonSettingsLoader(),
+                                                  hfsCategory,
+                                                  "default.json",
+                                                  new HostFileSystemSettings()
+                                                 );
         }
 
         #endregion
+
     }
 
 }

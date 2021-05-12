@@ -4,12 +4,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using Utility.ADL;
 using Utility.ExtPP.Base;
 using Utility.ExtPP.Base.Interfaces;
 using Utility.ExtPP.Base.Plugins;
 using Utility.ExtPP.Base.settings;
 using Utility.FastString;
+
 using Utils = Utility.ExtPP.Base.Utils;
 
 namespace Utility.ExtPP.Plugins
@@ -17,15 +19,17 @@ namespace Utility.ExtPP.Plugins
 
     public class ConditionalPlugin : AbstractFullScriptPlugin
     {
+
         private static readonly StringBuilder Sb = new StringBuilder();
 
         public override string[] Cleanup => new[] { DefineKeyword, UndefineKeyword };
 
         public override string[] Prefix => new[] { "con", "Conditional" };
 
-        public override ProcessStage ProcessStages => Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
-            ? ProcessStage.OnLoadStage
-            : ProcessStage.OnMain;
+        public override ProcessStage ProcessStages =>
+            Stage.ToLower( CultureInfo.InvariantCulture ) == "onload"
+                ? ProcessStage.OnLoadStage
+                : ProcessStage.OnMain;
 
         public string StartCondition { get; set; } = "#if";
 
@@ -54,186 +58,186 @@ namespace Utility.ExtPP.Plugins
         public string Stage { get; set; } = "onload";
 
         public override List < CommandInfo > Info { get; } = new List < CommandInfo >
-        {
-            new CommandInfo(
-                "set-define",
-                "d",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        DefineKeyword
-                    )
-                ),
-                "Sets the keyword that is used to define variables during the compilation."
-            ),
-            new CommandInfo(
-                "set-undefine",
-                "u",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        UndefineKeyword
-                    )
-                ),
-                "Sets the keyword that is used to undefine previously defined variables during the compilation."
-            ),
-            new CommandInfo(
-                "set-if",
-                "if",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        StartCondition
-                    )
-                ),
-                "Sets the keyword that is used to start a new condition block."
-            ),
-            new CommandInfo(
-                "set-elseif",
-                "elif",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        ElseIfCondition
-                    )
-                ),
-                "Sets the keyword that is used to continue a previously started condition block with another condition block."
-            ),
-            new CommandInfo(
-                "set-else",
-                "else",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        ElseCondition
-                    )
-                ),
-                "Sets the keyword that is used to start a new condition block that is taken when the previous blocks evaluated to false."
-            ),
-            new CommandInfo(
-                "set-endif",
-                "eif",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        EndCondition
-                    )
-                ),
-                "Sets the keyword that is used to end a previously started condition block."
-            ),
-            new CommandInfo(
-                "set-not",
-                "n",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        NotOperator
-                    )
-                ),
-                "Sets the keyword that is used to negate an expression in if conditions."
-            ),
-            new CommandInfo(
-                "set-and",
-                "a",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        AndOperator
-                    )
-                ),
-                "Sets the keyword for the logical AND operator"
-            ),
-            new CommandInfo(
-                "set-or",
-                "o",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        OrOperator
-                    )
-                ),
-                "Sets the keyword for the logical OR operator"
-            ),
-            new CommandInfo(
-                "enable-define",
-                "eD",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        EnableDefine
-                    )
-                ),
-                "Enables/Disables the detection of define statements(defines can still be set via the defines object/the command line)"
-            ),
-            new CommandInfo(
-                "enable-undefine",
-                "eU",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        EnableUndefine
-                    )
-                ),
-                "Enables/Disables the detection of undefine statements"
-            ),
-            new CommandInfo(
-                "set-stage",
-                "ss",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        Stage )
-                ),
-                "Sets the Stage Type of the Plugin to be Executed OnLoad or OnFinishUp"
-            ),
-            new CommandInfo(
-                "set-separator",
-                "s",
-                PropertyHelper.GetPropertyInfo(
-                    typeof(
-                        ConditionalPlugin
-                    ),
-                    nameof(
-                        Separator
-                    )
-                ),
-                "Sets the separator that is used to separate different generic types"
-            )
-        };
+                                                             {
+                                                                 new CommandInfo(
+                                                                      "set-define",
+                                                                      "d",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               DefineKeyword
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to define variables during the compilation."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-undefine",
+                                                                      "u",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               UndefineKeyword
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to undefine previously defined variables during the compilation."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-if",
+                                                                      "if",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               StartCondition
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to start a new condition block."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-elseif",
+                                                                      "elif",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               ElseIfCondition
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to continue a previously started condition block with another condition block."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-else",
+                                                                      "else",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               ElseCondition
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to start a new condition block that is taken when the previous blocks evaluated to false."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-endif",
+                                                                      "eif",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               EndCondition
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to end a previously started condition block."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-not",
+                                                                      "n",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               NotOperator
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword that is used to negate an expression in if conditions."
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-and",
+                                                                      "a",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               AndOperator
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword for the logical AND operator"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-or",
+                                                                      "o",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               OrOperator
+                                                                           )
+                                                                          ),
+                                                                      "Sets the keyword for the logical OR operator"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "enable-define",
+                                                                      "eD",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               EnableDefine
+                                                                           )
+                                                                          ),
+                                                                      "Enables/Disables the detection of define statements(defines can still be set via the defines object/the command line)"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "enable-undefine",
+                                                                      "eU",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               EnableUndefine
+                                                                           )
+                                                                          ),
+                                                                      "Enables/Disables the detection of undefine statements"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-stage",
+                                                                      "ss",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               Stage )
+                                                                          ),
+                                                                      "Sets the Stage Type of the Plugin to be Executed OnLoad or OnFinishUp"
+                                                                     ),
+                                                                 new CommandInfo(
+                                                                      "set-separator",
+                                                                      "s",
+                                                                      PropertyHelper.GetPropertyInfo(
+                                                                           typeof(
+                                                                               ConditionalPlugin
+                                                                           ),
+                                                                           nameof(
+                                                                               Separator
+                                                                           )
+                                                                          ),
+                                                                      "Sets the separator that is used to separate different generic types"
+                                                                     )
+                                                             };
 
         #region Public
 
         public override bool FullScriptStage( ISourceScript file, ISourceManager todo, IDefinitions defs )
         {
             Logger.Log(
-                LogType.Log,
-                $"Starting Condition Solver passes on file: {Path.GetFileName( file.GetFileInterface().GetKey() )}",
-                PLUGIN_MIN_SEVERITY
-            );
+                       LogType.Log,
+                       $"Starting Condition Solver passes on file: {Path.GetFileName( file.GetFileInterface().GetKey() )}",
+                       PLUGIN_MIN_SEVERITY
+                      );
 
             bool ret = true;
             int openIf = 0;
@@ -261,12 +265,12 @@ namespace Utility.ExtPP.Plugins
                         Logger.Log( LogType.Log, $"Found a {StartCondition} Statement", PLUGIN_MIN_SEVERITY + 2 );
 
                         KeyValuePair < bool, int > prep = PrepareForConditionalEvaluation(
-                            line,
-                            defs,
-                            lastPass,
-                            i,
-                            solvedFile
-                        );
+                             line,
+                             defs,
+                             lastPass,
+                             i,
+                             solvedFile
+                            );
 
                         elseIsValid = prep.Key;
                         i += prep.Value;
@@ -282,13 +286,13 @@ namespace Utility.ExtPP.Plugins
                         if ( !expectEndOrIf && openIf > 0 )
                         {
                             KeyValuePair < bool, int > prep = PrepareForConditionalEvaluation(
-                                line,
-                                defs,
-                                lastPass,
-                                i,
-                                solvedFile,
-                                !elseIsValid
-                            );
+                                 line,
+                                 defs,
+                                 lastPass,
+                                 i,
+                                 solvedFile,
+                                 !elseIsValid
+                                );
 
                             elseIsValid &= prep.Key;
                             i += prep.Value;
@@ -297,10 +301,10 @@ namespace Utility.ExtPP.Plugins
                         else if ( expectEndOrIf )
                         {
                             Logger.Log(
-                                LogType.Error,
-                                $"A {ElseCondition} can not be followed by an {ElseIfCondition}",
-                                1
-                            );
+                                       LogType.Error,
+                                       $"A {ElseCondition} can not be followed by an {ElseIfCondition}",
+                                       1
+                                      );
 
                             ret = false;
 
@@ -309,10 +313,10 @@ namespace Utility.ExtPP.Plugins
                         else
                         {
                             Logger.Log(
-                                LogType.Error,
-                                $"A {ElseIfCondition} should be preceeded by a {StartCondition}",
-                                1
-                            );
+                                       LogType.Error,
+                                       $"A {ElseIfCondition} should be preceeded by a {StartCondition}",
+                                       1
+                                      );
 
                             ret = false;
 
@@ -334,10 +338,10 @@ namespace Utility.ExtPP.Plugins
                             else
                             {
                                 Logger.Log(
-                                    LogType.Log,
-                                    "Ignored since a previous condition was true",
-                                    PLUGIN_MIN_SEVERITY + 3
-                                );
+                                           LogType.Log,
+                                           "Ignored since a previous condition was true",
+                                           PLUGIN_MIN_SEVERITY + 3
+                                          );
                             }
 
                             i += size;
@@ -347,10 +351,10 @@ namespace Utility.ExtPP.Plugins
                         else
                         {
                             Logger.Log(
-                                LogType.Error,
-                                $"A {ElseCondition} should be preceeded by a {StartCondition}",
-                                1
-                            );
+                                       LogType.Error,
+                                       $"A {ElseCondition} should be preceeded by a {StartCondition}",
+                                       1
+                                      );
 
                             ret = false;
 
@@ -369,10 +373,10 @@ namespace Utility.ExtPP.Plugins
                             ret = false;
 
                             Logger.Log(
-                                LogType.Error,
-                                $"A {EndCondition} should be preceeded by a {StartCondition}",
-                                1
-                            );
+                                       LogType.Error,
+                                       $"A {EndCondition} should be preceeded by a {StartCondition}",
+                                       1
+                                      );
 
                             break;
                         }
@@ -400,8 +404,8 @@ namespace Utility.ExtPP.Plugins
                 if ( openIf != 0 )
                 {
                     throw new InvalidOperationException(
-                        $"Can not find an appropriate closing tag for {openIf} {StartCondition} statements."
-                    );
+                                                        $"Can not find an appropriate closing tag for {openIf} {StartCondition} statements."
+                                                       );
                 }
 
                 if ( ret )
@@ -589,11 +593,11 @@ namespace Utility.ExtPP.Plugins
             }
 
             throw new InvalidOperationException(
-                "Can not determine Ending tag for Keyword:" +
-                source[start] +
-                " at line " +
-                start
-            );
+                                                "Can not determine Ending tag for Keyword:" +
+                                                source[start] +
+                                                " at line " +
+                                                start
+                                               );
         }
 
         private int IndexOfClosingBracket( string[] expression, int openBracketIndex )
@@ -606,10 +610,10 @@ namespace Utility.ExtPP.Plugins
                 if ( expression[i] == "(" )
                 {
                     Logger.Log(
-                        LogType.Log,
-                        "Found Nested opening Bracket, adjusting tolerance.",
-                        PLUGIN_MIN_SEVERITY + 8
-                    );
+                               LogType.Log,
+                               "Found Nested opening Bracket, adjusting tolerance.",
+                               PLUGIN_MIN_SEVERITY + 8
+                              );
 
                     tolerance++;
                 }
@@ -623,10 +627,10 @@ namespace Utility.ExtPP.Plugins
                     }
 
                     Logger.Log(
-                        LogType.Log,
-                        "Found Nested Closing Bracket, adjusting tolerance.",
-                        PLUGIN_MIN_SEVERITY + 8
-                    );
+                               LogType.Log,
+                               "Found Nested Closing Bracket, adjusting tolerance.",
+                               PLUGIN_MIN_SEVERITY + 8
+                              );
 
                     tolerance--;
                 }
@@ -668,6 +672,7 @@ namespace Utility.ExtPP.Plugins
         }
 
         #endregion
+
     }
 
 }

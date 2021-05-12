@@ -13,6 +13,7 @@ namespace OpenCL.NET.Interop.Extensions
     /// </summary>
     public static class ExtensionsNativeApi
     {
+
         #region Public
 
         /// <summary>
@@ -43,8 +44,8 @@ namespace OpenCL.NET.Interop.Extensions
         [IntroducedInOpenCl( 1, 0 )]
         [DllImport( "OpenCL", EntryPoint = "clGetExtensionFunctionAddress" )]
         [Obsolete(
-            "This is a deprecated OpenCL 1.1 method, please use GetExtensionFunctionAddressForPlatform instead."
-        )]
+                     "This is a deprecated OpenCL 1.1 method, please use GetExtensionFunctionAddressForPlatform instead."
+                 )]
         public static extern IntPtr GetExtensionFunctionAddress(
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string functionName );
@@ -80,11 +81,13 @@ namespace OpenCL.NET.Interop.Extensions
         [IntroducedInOpenCl( 1, 2 )]
         [DllImport( "OpenCL", EntryPoint = "clGetExtensionFunctionAddressForPlatform" )]
         public static extern IntPtr GetExtensionFunctionAddressForPlatform(
-            [In] IntPtr platform,
+            [In]
+            IntPtr platform,
             [In] [MarshalAs( UnmanagedType.LPStr )]
             string functionName );
 
         #endregion
+
     }
 
 }

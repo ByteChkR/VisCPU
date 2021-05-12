@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Assembler.Events;
 using VisCPU.Compiler.Compiler;
@@ -11,7 +11,6 @@ using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.IO.Settings;
-using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Implementations
@@ -19,6 +18,7 @@ namespace VisCPU.Compiler.Implementations
 
     public class DefaultAssemblyGenerator : AssemblyGenerator
     {
+
         #region Public
 
         public override List < byte > Assemble( LinkerResult result )
@@ -44,10 +44,10 @@ namespace VisCPU.Compiler.Implementations
                 result.Labels.ApplyOffset( settings.GlobalOffset ).ToDictionary( x => x.Key, x => x.Value );
 
             FileCompilation.ApplyToAllTokens(
-                result.LinkedBinary,
-                consts,
-                new List < uint >()
-            ); //Apply global constants
+                                             result.LinkedBinary,
+                                             consts,
+                                             new List < uint >()
+                                            ); //Apply global constants
 
             List < uint > indexList = new List < uint >();
 
@@ -56,15 +56,15 @@ namespace VisCPU.Compiler.Implementations
             Dictionary < string, AddressItem > ds =
                 result.DataSectionHeader.
                        ApplyOffset(
-                           settings.GlobalOffset +
-                           ( uint ) result.LinkedBinary.Count * CpuSettings.InstructionSize
-                       ).
+                                   settings.GlobalOffset +
+                                   ( uint ) result.LinkedBinary.Count * CpuSettings.InstructionSize
+                                  ).
                        ToDictionary( x => x.Key, x => x.Value );
 
             result.ApplyDataOffset(
-                ( int ) ( settings.GlobalOffset +
-                          result.LinkedBinary.Count * CpuSettings.InstructionSize )
-            );
+                                   ( int ) ( settings.GlobalOffset +
+                                             result.LinkedBinary.Count * CpuSettings.InstructionSize )
+                                  );
 
             FileCompilation.ApplyToAllTokens( result.LinkedBinary, ds, indexList );
 
@@ -72,12 +72,12 @@ namespace VisCPU.Compiler.Implementations
                 HiddenConstantItems )
             {
                 FileCompilation.ApplyToTokens(
-                    result.LinkedBinary,
-                    resultHiddenAddressItem.Value,
-                    new List < uint >(),
-                    resultHiddenAddressItem.Key.Item1,
-                    resultHiddenAddressItem.Key.Item2
-                ); //Apply global constants
+                                              result.LinkedBinary,
+                                              resultHiddenAddressItem.Value,
+                                              new List < uint >(),
+                                              resultHiddenAddressItem.Key.Item1,
+                                              resultHiddenAddressItem.Key.Item2
+                                             ); //Apply global constants
             }
 
             foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
@@ -88,34 +88,34 @@ namespace VisCPU.Compiler.Implementations
                                             ToDictionary( x => x.Key, x => x.Value );
 
                 FileCompilation.ApplyToTokens(
-                    result.LinkedBinary,
-                    hiddenLabels,
-                    indexList,
-                    resultHiddenAddressItem.Key.Item1,
-                    resultHiddenAddressItem.Key.Item2
-                ); //Apply global constants
+                                              result.LinkedBinary,
+                                              hiddenLabels,
+                                              indexList,
+                                              resultHiddenAddressItem.Key.Item1,
+                                              resultHiddenAddressItem.Key.Item2
+                                             ); //Apply global constants
             }
 
             foreach ( KeyValuePair < (int, int), Dictionary < string, AddressItem > > resultHiddenAddressItem in result.
                 HiddenDataSectionItems )
             {
                 Dictionary < string, AddressItem > hds = resultHiddenAddressItem.Value.ApplyOffset(
-                        settings.GlobalOffset +
-                        ( uint ) result.LinkedBinary.Count *
-                        CpuSettings.InstructionSize
-                    ).
+                         settings.GlobalOffset +
+                         ( uint ) result.LinkedBinary.Count *
+                         CpuSettings.InstructionSize
+                        ).
                     ToDictionary(
-                        x => x.Key,
-                        x => x.Value
-                    );
+                                 x => x.Key,
+                                 x => x.Value
+                                );
 
                 FileCompilation.ApplyToTokens(
-                    result.LinkedBinary,
-                    hds,
-                    indexList,
-                    resultHiddenAddressItem.Key.Item1,
-                    resultHiddenAddressItem.Key.Item2
-                ); //Apply global constants
+                                              result.LinkedBinary,
+                                              hds,
+                                              indexList,
+                                              resultHiddenAddressItem.Key.Item1,
+                                              resultHiddenAddressItem.Key.Item2
+                                             ); //Apply global constants
             }
 
             for ( int i = 0; i < result.LinkedBinary.Count; i++ )
@@ -126,11 +126,11 @@ namespace VisCPU.Compiler.Implementations
 
                 uint opCode =
                     CpuSettings.InstructionSet.GetInstruction(
-                        CpuSettings.InstructionSet.GetInstruction(
-                            instr.GetValue(),
-                            result.LinkedBinary[i].Length - 1
-                        )
-                    );
+                                                              CpuSettings.InstructionSet.GetInstruction(
+                                                                   instr.GetValue(),
+                                                                   result.LinkedBinary[i].Length - 1
+                                                                  )
+                                                             );
 
                 bytes.AddRange( BitConverter.GetBytes( opCode ) );
 
@@ -169,28 +169,29 @@ namespace VisCPU.Compiler.Implementations
 
                 if ( settings.Format == "v3-pic" )
                 {
-                    List < uint > symbolTable = new List <uint>();
-                    symbolTable.Add((uint)result.Labels.Count);
+                    List < uint > symbolTable = new List < uint >();
+                    symbolTable.Add( ( uint ) result.Labels.Count );
+
                     foreach ( KeyValuePair < string, AddressItem > keyValuePair in result.Labels )
                     {
-                        uint[] bs =keyValuePair.Key.ToCharArray().
-                                             Select( x =>( uint ) x  ).
-                                             ToArray();
+                        uint[] bs = keyValuePair.Key.ToCharArray().
+                                                 Select( x => ( uint ) x ).
+                                                 ToArray();
 
-                        symbolTable.Add((uint)keyValuePair.Key.Length);
-                        symbolTable.Add(keyValuePair.Value.Address);
+                        symbolTable.Add( ( uint ) keyValuePair.Key.Length );
+                        symbolTable.Add( keyValuePair.Value.Address );
                         symbolTable.AddRange( bs );
                     }
 
-                    instrBytes.InsertRange( 0, symbolTable.SelectMany(BitConverter.GetBytes));
+                    instrBytes.InsertRange( 0, symbolTable.SelectMany( BitConverter.GetBytes ) );
                 }
             }
-
 
             return instrBytes;
         }
 
         #endregion
+
     }
 
 }

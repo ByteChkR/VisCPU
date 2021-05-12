@@ -5,6 +5,7 @@ namespace VisCPU.Utility.Extensions
 
     public static class ExtensionLoader
     {
+
         #region Public
 
         public static IEnumerable < T > LoadFrom < T >( string directory, bool recursive )
@@ -18,6 +19,7 @@ namespace VisCPU.Utility.Extensions
         }
 
         #endregion
+
     }
 
 }

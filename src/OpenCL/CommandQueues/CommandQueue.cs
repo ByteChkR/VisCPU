@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+
 using OpenCL.NET.Contexts;
 using OpenCL.NET.Devices;
 using OpenCL.NET.Events;
@@ -22,6 +23,7 @@ namespace OpenCL.NET.CommandQueues
     /// </summary>
     public class CommandQueue : HandleBase
     {
+
         #region Public
 
         /// <summary>
@@ -48,11 +50,11 @@ namespace OpenCL.NET.CommandQueues
             // Creates the new command queue for the specified context and device
             IntPtr commandQueuePointer =
                 CommandQueuesNativeApi.CreateCommandQueueWithProperties(
-                    context.Handle,
-                    device.Handle,
-                    IntPtr.Zero,
-                    out Result result
-                );
+                                                                        context.Handle,
+                                                                        device.Handle,
+                                                                        IntPtr.Zero,
+                                                                        out Result result
+                                                                       );
 
             // Checks if the command queue creation was successful, if not, then an exception is thrown
             if ( result != Result.Success )
@@ -94,16 +96,16 @@ namespace OpenCL.NET.CommandQueues
         {
             // Enqueues the kernel
             Result result = EnqueuedCommandsNativeApi.EnqueueNDRangeKernel(
-                Handle,
-                kernel.Handle,
-                ( uint ) workDimension,
-                null,
-                new[] { new IntPtr( workUnitsPerKernel ) },
-                null,
-                0,
-                null,
-                out IntPtr _
-            );
+                                                                           Handle,
+                                                                           kernel.Handle,
+                                                                           ( uint ) workDimension,
+                                                                           null,
+                                                                           new[] { new IntPtr( workUnitsPerKernel ) },
+                                                                           null,
+                                                                           0,
+                                                                           null,
+                                                                           out IntPtr _
+                                                                          );
 
             // Checks if the kernel was enqueued successfully, if not, then an exception is thrown
             if ( result != Result.Success )
@@ -129,16 +131,16 @@ namespace OpenCL.NET.CommandQueues
 
             // Enqueues the kernel
             Result result = EnqueuedCommandsNativeApi.EnqueueNDRangeKernel(
-                Handle,
-                kernel.Handle,
-                ( uint ) workDimension,
-                null,
-                new[] { new IntPtr( workUnitsPerKernel ) },
-                null,
-                0,
-                null,
-                out IntPtr waitEventPointer
-            );
+                                                                           Handle,
+                                                                           kernel.Handle,
+                                                                           ( uint ) workDimension,
+                                                                           null,
+                                                                           new[] { new IntPtr( workUnitsPerKernel ) },
+                                                                           null,
+                                                                           0,
+                                                                           null,
+                                                                           out IntPtr waitEventPointer
+                                                                          );
 
             // Checks if the kernel was enqueued successfully, if not, then an exception is thrown
             if ( result != Result.Success )
@@ -150,32 +152,32 @@ namespace OpenCL.NET.CommandQueues
             AwaitableEvent awaitableEvent = new AwaitableEvent( waitEventPointer );
 
             awaitableEvent.OnCompleted += ( sender, e ) =>
-            {
-                try
-                {
-                    if ( awaitableEvent.CommandExecutionStatus ==
-                         CommandExecutionStatus.Error )
-                    {
-                        taskCompletionSource.TrySetException(
-                            new OpenClException(
-                                $"The command completed with the error code {awaitableEvent.CommandExecutionStatusCode}."
-                            )
-                        );
-                    }
-                    else
-                    {
-                        taskCompletionSource.TrySetResult( true );
-                    }
-                }
-                catch ( Exception exception )
-                {
-                    taskCompletionSource.TrySetException( exception );
-                }
-                finally
-                {
-                    awaitableEvent.Dispose();
-                }
-            };
+                                          {
+                                              try
+                                              {
+                                                  if ( awaitableEvent.CommandExecutionStatus ==
+                                                       CommandExecutionStatus.Error )
+                                                  {
+                                                      taskCompletionSource.TrySetException(
+                                                           new OpenClException(
+                                                                               $"The command completed with the error code {awaitableEvent.CommandExecutionStatusCode}."
+                                                                              )
+                                                          );
+                                                  }
+                                                  else
+                                                  {
+                                                      taskCompletionSource.TrySetResult( true );
+                                                  }
+                                              }
+                                              catch ( Exception exception )
+                                              {
+                                                  taskCompletionSource.TrySetException( exception );
+                                              }
+                                              finally
+                                              {
+                                                  awaitableEvent.Dispose();
+                                              }
+                                          };
 
             return taskCompletionSource.Task;
         }
@@ -200,16 +202,16 @@ namespace OpenCL.NET.CommandQueues
 
                 // Reads the memory object, by enqueuing the read operation to the command queue
                 Result result = EnqueuedCommandsNativeApi.EnqueueReadBuffer(
-                    Handle,
-                    memoryObject.Handle,
-                    1,
-                    UIntPtr.Zero,
-                    new UIntPtr( ( uint ) size ),
-                    resultValuePointer,
-                    0,
-                    null,
-                    out IntPtr _
-                );
+                                                                            Handle,
+                                                                            memoryObject.Handle,
+                                                                            1,
+                                                                            UIntPtr.Zero,
+                                                                            new UIntPtr( ( uint ) size ),
+                                                                            resultValuePointer,
+                                                                            0,
+                                                                            null,
+                                                                            out IntPtr _
+                                                                           );
 
                 // Checks if the read operation was queued successfuly, if not, an exception is thrown
                 if ( result != Result.Success )
@@ -258,16 +260,16 @@ namespace OpenCL.NET.CommandQueues
 
             // Reads the memory object, by enqueuing the read operation to the command queue
             Result result = EnqueuedCommandsNativeApi.EnqueueReadBuffer(
-                Handle,
-                memoryObject.Handle,
-                1,
-                UIntPtr.Zero,
-                new UIntPtr( ( uint ) size ),
-                resultValuePointer,
-                0,
-                null,
-                out IntPtr waitEventPointer
-            );
+                                                                        Handle,
+                                                                        memoryObject.Handle,
+                                                                        1,
+                                                                        UIntPtr.Zero,
+                                                                        new UIntPtr( ( uint ) size ),
+                                                                        resultValuePointer,
+                                                                        0,
+                                                                        null,
+                                                                        out IntPtr waitEventPointer
+                                                                       );
 
             // Checks if the read operation was queued successfuly, if not, an exception is thrown
             if ( result != Result.Success )
@@ -279,54 +281,54 @@ namespace OpenCL.NET.CommandQueues
             AwaitableEvent awaitableEvent = new AwaitableEvent( waitEventPointer );
 
             awaitableEvent.OnCompleted += ( sender, e ) =>
-            {
-                try
-                {
-                    // Checks if the command was executed successfully, if not, then an exception is thrown
-                    if ( awaitableEvent.CommandExecutionStatus ==
-                         CommandExecutionStatus.Error )
-                    {
-                        taskCompletionSource.TrySetException(
-                            new OpenClException(
-                                $"The command completed with the error code {awaitableEvent.CommandExecutionStatusCode}."
-                            )
-                        );
+                                          {
+                                              try
+                                              {
+                                                  // Checks if the command was executed successfully, if not, then an exception is thrown
+                                                  if ( awaitableEvent.CommandExecutionStatus ==
+                                                       CommandExecutionStatus.Error )
+                                                  {
+                                                      taskCompletionSource.TrySetException(
+                                                           new OpenClException(
+                                                                               $"The command completed with the error code {awaitableEvent.CommandExecutionStatusCode}."
+                                                                              )
+                                                          );
 
-                        return;
-                    }
+                                                      return;
+                                                  }
 
-                    // Goes through the result and converts the content of the result to an array
-                    T[] resultValue = new T[outputSize];
+                                                  // Goes through the result and converts the content of the result to an array
+                                                  T[] resultValue = new T[outputSize];
 
-                    for ( int i = 0; i < outputSize; i++ )
-                    {
-                        resultValue[i] =
-                            Marshal.PtrToStructure < T >(
-                                IntPtr.Add(
-                                    resultValuePointer,
-                                    i * Marshal.SizeOf < T >()
-                                )
-                            );
-                    }
+                                                  for ( int i = 0; i < outputSize; i++ )
+                                                  {
+                                                      resultValue[i] =
+                                                          Marshal.PtrToStructure < T >(
+                                                               IntPtr.Add(
+                                                                          resultValuePointer,
+                                                                          i * Marshal.SizeOf < T >()
+                                                                         )
+                                                              );
+                                                  }
 
-                    // Sets the result
-                    taskCompletionSource.TrySetResult( resultValue );
-                }
-                catch ( Exception exception )
-                {
-                    taskCompletionSource.TrySetException( exception );
-                }
-                finally
-                {
-                    // Finally the allocated memory has to be freed and the allocated resources are disposed of
-                    if ( resultValuePointer != IntPtr.Zero )
-                    {
-                        Marshal.FreeHGlobal( resultValuePointer );
-                    }
+                                                  // Sets the result
+                                                  taskCompletionSource.TrySetResult( resultValue );
+                                              }
+                                              catch ( Exception exception )
+                                              {
+                                                  taskCompletionSource.TrySetException( exception );
+                                              }
+                                              finally
+                                              {
+                                                  // Finally the allocated memory has to be freed and the allocated resources are disposed of
+                                                  if ( resultValuePointer != IntPtr.Zero )
+                                                  {
+                                                      Marshal.FreeHGlobal( resultValuePointer );
+                                                  }
 
-                    awaitableEvent.Dispose();
-                }
-            };
+                                                  awaitableEvent.Dispose();
+                                              }
+                                          };
 
             // Returns the task completion source, which resolves when the command has finished
             return taskCompletionSource.Task;
@@ -352,16 +354,16 @@ namespace OpenCL.NET.CommandQueues
 
                 // Reads the memory object, by enqueuing the read operation to the command queue
                 Result result = EnqueuedCommandsNativeApi.EnqueueWriteBuffer(
-                    Handle,
-                    memoryObject.Handle,
-                    1,
-                    UIntPtr.Zero,
-                    new UIntPtr( ( uint ) size ),
-                    resultValuePointer,
-                    0,
-                    null,
-                    out IntPtr _
-                );
+                                                                             Handle,
+                                                                             memoryObject.Handle,
+                                                                             1,
+                                                                             UIntPtr.Zero,
+                                                                             new UIntPtr( ( uint ) size ),
+                                                                             resultValuePointer,
+                                                                             0,
+                                                                             null,
+                                                                             out IntPtr _
+                                                                            );
 
                 // Checks if the read operation was queued successfuly, if not, an exception is thrown
                 if ( result != Result.Success )
@@ -385,6 +387,7 @@ namespace OpenCL.NET.CommandQueues
         }
 
         #endregion
+
     }
 
 }

@@ -6,6 +6,7 @@
     /// </summary>
     public interface ISourceScript
     {
+
         /// <summary>
         ///     Adds a value to the plugin cache to be read later during the processing
         /// </summary>
@@ -55,6 +56,7 @@
         /// </summary>
         /// <param name="source">the updated source</param>
         void SetSource( string[] source );
+
     }
 
 }

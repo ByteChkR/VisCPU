@@ -5,6 +5,7 @@ namespace VPP.Importer
 
     public class VPPMakro
     {
+
         public string Name;
         public string Value;
         public List < VPPMakroParameter > Parameters;
@@ -51,12 +52,11 @@ namespace VPP.Importer
                 {
                     parser.Eat();
                 }
-
             }
-
         }
 
         #endregion
+
     }
 
 }

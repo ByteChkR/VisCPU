@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using VisCPU.Console.Core.Settings;
 using VisCPU.Console.Core.Subsystems;
 using VisCPU.Utility.ArgumentParser;
@@ -10,6 +11,7 @@ namespace VisCPU.Console.Core
 
     public abstract class ConsoleSystem : ConsoleSubsystem
     {
+
         public abstract Dictionary < string, ConsoleSubsystem > SubSystems { get; }
 
         #region Public
@@ -32,6 +34,7 @@ namespace VisCPU.Console.Core
         }
 
         #endregion
+
     }
 
 }

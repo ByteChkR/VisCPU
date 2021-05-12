@@ -3,6 +3,7 @@
 
     public interface IExternalData
     {
+
         ExternalDataType DataType { get; }
 
         string GetFinalName();
@@ -12,6 +13,7 @@
         void SetUsed();
 
         int UseCount { get; }
+
     }
 
 }

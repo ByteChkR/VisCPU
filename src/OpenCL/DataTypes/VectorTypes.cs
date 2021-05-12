@@ -28,15 +28,18 @@ namespace OpenCL.NET.DataTypes
 
     public interface IVectorType
     {
+
         int Rank { get; }
 
         IntPtr Size { get; }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct char2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public sbyte x;
 
@@ -109,12 +112,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct char3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public sbyte x;
 
@@ -219,12 +224,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct char4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public sbyte x;
 
@@ -329,12 +336,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct char8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public sbyte s0;
 
@@ -479,14 +488,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct char16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public sbyte s0;
 
@@ -620,24 +631,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public sbyte this[ int index ]
@@ -787,12 +798,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct uchar2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public byte x;
 
@@ -865,12 +878,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct uchar3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public byte x;
 
@@ -975,12 +990,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct uchar4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public byte x;
 
@@ -1085,12 +1102,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct uchar8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public byte s0;
 
@@ -1235,14 +1254,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct uchar16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public byte s0;
 
@@ -1376,24 +1397,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public byte this[ int index ]
@@ -1543,12 +1564,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct short2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public short x;
 
@@ -1621,12 +1644,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct short3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public short x;
 
@@ -1731,12 +1756,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct short4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public short x;
 
@@ -1841,12 +1868,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct short8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public short s0;
 
@@ -1991,14 +2020,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct short16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public short s0;
 
@@ -2132,24 +2163,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public short this[ int index ]
@@ -2299,12 +2330,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct ushort2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ushort x;
 
@@ -2377,12 +2410,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct ushort3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ushort x;
 
@@ -2487,12 +2522,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct ushort4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ushort x;
 
@@ -2597,12 +2634,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct ushort8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ushort s0;
 
@@ -2747,14 +2786,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct ushort16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ushort s0;
 
@@ -2888,24 +2929,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public ushort this[ int index ]
@@ -3055,12 +3096,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct int2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public int x;
 
@@ -3133,12 +3176,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct int3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public int x;
 
@@ -3243,12 +3288,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct int4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public int x;
 
@@ -3353,12 +3400,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct int8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public int s0;
 
@@ -3503,14 +3552,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct int16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public int s0;
 
@@ -3644,24 +3695,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public int this[ int index ]
@@ -3811,12 +3862,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct uint2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public uint x;
 
@@ -3889,12 +3942,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct uint3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public uint x;
 
@@ -3999,12 +4054,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct uint4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public uint x;
 
@@ -4109,12 +4166,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct uint8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public uint s0;
 
@@ -4259,14 +4318,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct uint16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public uint s0;
 
@@ -4400,24 +4461,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public uint this[ int index ]
@@ -4567,12 +4628,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct long2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public long x;
 
@@ -4645,12 +4708,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct long3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public long x;
 
@@ -4755,12 +4820,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct long4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public long x;
 
@@ -4865,12 +4932,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct long8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public long s0;
 
@@ -5015,14 +5084,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct long16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public long s0;
 
@@ -5156,24 +5227,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public long this[ int index ]
@@ -5323,12 +5394,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct ulong2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ulong x;
 
@@ -5401,12 +5474,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct ulong3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ulong x;
 
@@ -5511,12 +5586,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct ulong4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ulong x;
 
@@ -5621,12 +5698,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct ulong8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ulong s0;
 
@@ -5771,14 +5850,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct ulong16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public ulong s0;
 
@@ -5912,24 +5993,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public ulong this[ int index ]
@@ -6079,12 +6160,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct float2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public float x;
 
@@ -6157,12 +6240,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct float3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public float x;
 
@@ -6267,12 +6352,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct float4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public float x;
 
@@ -6377,12 +6464,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct float8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public float s0;
 
@@ -6527,14 +6616,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct float16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public float s0;
 
@@ -6668,24 +6759,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public float this[ int index ]
@@ -6835,12 +6926,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}" )]
     public struct double2 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public double x;
 
@@ -6913,12 +7006,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct double3 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public double x;
 
@@ -7023,12 +7118,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "x={x}, y={y}, z={z}, w={w}" )]
     public struct double4 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public double x;
 
@@ -7133,12 +7230,14 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay( "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}" )]
     public struct double8 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public double s0;
 
@@ -7283,14 +7382,16 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
     [StructLayout( LayoutKind.Explicit )]
     [DebuggerDisplay(
-        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
-    )]
+                        "s0={s0}, s1={s1}, s2={s2}, s3={s3}, s4={s4}, s5={s5}, s6={s6}, s7={s7}, s8={s8}, s9={s9}, sa={sa}, sb={sb}, sc={sc}, sd={sd}, se={se}, sf={sf}"
+                    )]
     public struct double16 : IVectorType
     {
+
         [FieldOffset( 0 )]
         public double s0;
 
@@ -7424,24 +7525,24 @@ namespace OpenCL.NET.DataTypes
         public override string ToString()
         {
             return string.Format(
-                "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
-                s0,
-                s1,
-                s2,
-                s3,
-                s4,
-                s5,
-                s6,
-                s7,
-                s8,
-                s9,
-                sa,
-                sb,
-                sc,
-                sd,
-                se,
-                sf
-            );
+                                 "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15}",
+                                 s0,
+                                 s1,
+                                 s2,
+                                 s3,
+                                 s4,
+                                 s5,
+                                 s6,
+                                 s7,
+                                 s8,
+                                 s9,
+                                 sa,
+                                 sb,
+                                 sc,
+                                 sd,
+                                 se,
+                                 sf
+                                );
         }
 
         public double this[ int index ]
@@ -7591,6 +7692,7 @@ namespace OpenCL.NET.DataTypes
                 }
             }
         }
+
     }
 
 }

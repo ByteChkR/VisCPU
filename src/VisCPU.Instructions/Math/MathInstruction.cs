@@ -5,6 +5,7 @@ namespace VisCPU.Instructions.Math
 
     public abstract class MathInstruction : Instruction
     {
+
         protected override LoggerSystems SubSystem => LoggerSystems.MathInstructions;
 
         #region Public
@@ -26,6 +27,7 @@ namespace VisCPU.Instructions.Math
         }
 
         #endregion
+
     }
 
 }

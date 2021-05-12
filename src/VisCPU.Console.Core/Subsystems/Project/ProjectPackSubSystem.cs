@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+
 using VisCPU.Utility.ArgumentParser;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.ProjectSystem.Data;
@@ -13,10 +14,13 @@ namespace VisCPU.Console.Core.Subsystems.Project
 
     public class ProjectPackSubSystem : ConsoleSubsystem
     {
+
         public class PackOptions
         {
+
             [field: Argument( Name = "version" )]
             public string VersionString { get; set; } = "(~){yyyy}.(~){MM}.(~){dd}.+";
+
         }
 
         protected override LoggerSystems SubSystem => LoggerSystems.ModuleSystem;
@@ -112,29 +116,29 @@ namespace VisCPU.Console.Core.Subsystems.Project
             ApplyChangeReset( changeReset, original, versions );
 
             return new Version(
-                versions[0],
-                versions[1] < 0 ? 0 : versions[1],
-                versions[2] < 0 ? 0 : versions[2],
-                versions[3] < 0 ? 0 : versions[3]
-            );
+                               versions[0],
+                               versions[1] < 0 ? 0 : versions[1],
+                               versions[2] < 0 ? 0 : versions[2],
+                               versions[3] < 0 ? 0 : versions[3]
+                              );
         }
 
         public static void CopyTo( string src, string dst )
         {
             foreach ( string dirPath in Directory.GetDirectories(
-                src,
-                "*",
-                SearchOption.AllDirectories
-            ) )
+                                                                 src,
+                                                                 "*",
+                                                                 SearchOption.AllDirectories
+                                                                ) )
             {
                 Directory.CreateDirectory( dirPath.Replace( src, dst ) );
             }
 
             foreach ( string newPath in Directory.GetFiles(
-                src,
-                "*.*",
-                SearchOption.AllDirectories
-            ) )
+                                                           src,
+                                                           "*.*",
+                                                           SearchOption.AllDirectories
+                                                          ) )
             {
                 File.Copy( newPath, newPath.Replace( src, dst ), true );
             }
@@ -156,9 +160,9 @@ namespace VisCPU.Console.Core.Subsystems.Project
             ProjectConfig.Save( src, t );
 
             string temp = Path.Combine(
-                Path.GetDirectoryName( Directory.GetCurrentDirectory() ),
-                "temp_" + t.ProjectName
-            );
+                                       Path.GetDirectoryName( Directory.GetCurrentDirectory() ),
+                                       "temp_" + t.ProjectName
+                                      );
 
             Directory.CreateDirectory( temp );
 
@@ -219,6 +223,7 @@ namespace VisCPU.Console.Core.Subsystems.Project
         }
 
         #endregion
+
     }
 
 }

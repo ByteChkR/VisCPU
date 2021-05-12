@@ -3,9 +3,11 @@
 
     public enum HlFunctionType
     {
+
         Constructor,
         Function,
         Destructor
+
     }
 
 }

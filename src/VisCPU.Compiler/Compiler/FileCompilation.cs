@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+
 using VisCPU.Compiler.Compiler.Events;
 using VisCPU.Compiler.Parser;
 using VisCPU.Compiler.Parser.Tokens;
@@ -17,6 +18,7 @@ namespace VisCPU.Compiler.Compiler
 
     public class FileCompilation : VisBase
     {
+
         public readonly Dictionary < string, AddressItem > Constants = new Dictionary < string, AddressItem >();
 
         public readonly Dictionary < string, AddressItem > DataSectionHeader = new Dictionary < string, AddressItem >();
@@ -72,11 +74,11 @@ namespace VisCPU.Compiler.Compiler
                         indexList.Add( ( uint ) ( i * 4 + j ) );
 
                         tokens[i][j] = new ValToken(
-                            tokens[i][j].OriginalText,
-                            tokens[i][j].Start,
-                            tokens[i][j].Length,
-                            header[w].Address
-                        );
+                                                    tokens[i][j].OriginalText,
+                                                    tokens[i][j].Start,
+                                                    tokens[i][j].Length,
+                                                    header[w].Address
+                                                   );
                     }
                 }
             }
@@ -100,11 +102,11 @@ namespace VisCPU.Compiler.Compiler
                         indexList.Add( ( uint ) ( i * 4 + j ) );
 
                         tokens[i][j] = new ValToken(
-                            tokens[i][j].OriginalText,
-                            tokens[i][j].Start,
-                            tokens[i][j].Length,
-                            header[w].Address
-                        );
+                                                    tokens[i][j].OriginalText,
+                                                    tokens[i][j].Start,
+                                                    tokens[i][j].Length,
+                                                    header[w].Address
+                                                   );
                     }
                 }
             }
@@ -126,16 +128,17 @@ namespace VisCPU.Compiler.Compiler
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 3 ) );
 
                     DataSectionHeader[name.GetValue()] = new AddressItem
-                    {
-                        Address = ( uint ) DataSection.Count, LinkerArguments = linkerArgs
-                    };
+                                                         {
+                                                             Address = ( uint ) DataSection.Count,
+                                                             LinkerArguments = linkerArgs
+                                                         };
 
                     WordToken tFile = Tokens[i][2] as WordToken;
 
                     string file = Path.Combine(
-                        Path.GetDirectoryName( Reference.File ),
-                        Tokens[i][2] is StringToken str ? str.GetContent() : tFile.GetValue()
-                    );
+                                               Path.GetDirectoryName( Reference.File ),
+                                               Tokens[i][2] is StringToken str ? str.GetContent() : tFile.GetValue()
+                                              );
 
                     if ( !File.Exists( file ) )
                     {
@@ -148,11 +151,14 @@ namespace VisCPU.Compiler.Compiler
                     DataSection.AddRange( data );
 
                     DataSectionHeader[name.GetValue() + "_LEN"] = new AddressItem
-                    {
-                        Address = ( uint ) DataSection.Count,
-                        LinkerArguments =
-                            new[] { "linker:autogen", "linker:file_length" }
-                    };
+                                                                  {
+                                                                      Address = ( uint ) DataSection.Count,
+                                                                      LinkerArguments =
+                                                                          new[]
+                                                                          {
+                                                                              "linker:autogen", "linker:file_length"
+                                                                          }
+                                                                  };
 
                     DataSection.Add( ( uint ) data.Length );
 
@@ -174,9 +180,10 @@ namespace VisCPU.Compiler.Compiler
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 3 ) );
 
                     DataSectionHeader[name.GetValue()] = new AddressItem
-                    {
-                        Address = ( uint ) DataSection.Count, LinkerArguments = linkerArgs
-                    };
+                                                         {
+                                                             Address = ( uint ) DataSection.Count,
+                                                             LinkerArguments = linkerArgs
+                                                         };
 
                     if ( Tokens[i][2] is StringToken str )
                     {
@@ -207,16 +214,16 @@ namespace VisCPU.Compiler.Compiler
                     else if ( Tokens[i][2] is ValueToken val )
                     {
                         uint defVal = Tokens[i].Length == 4 && Tokens[i][3] is ValueToken defV
-                            ? defV.Value
-                            : 0;
+                                          ? defV.Value
+                                          : 0;
 
                         DataSection.AddRange( Enumerable.Repeat( defVal, ( int ) val.Value ) );
                     }
                     else
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                            new InvalidDataDefinitionEvent( name.GetValue() )
-                        );
+                                                              new InvalidDataDefinitionEvent( name.GetValue() )
+                                                             );
                     }
 
                     Tokens.RemoveAt( i );
@@ -274,11 +281,11 @@ namespace VisCPU.Compiler.Compiler
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 2 ) );
 
                     string c = Path.GetFullPath(
-                        Path.Combine(
-                            Path.GetDirectoryName( Reference.File ),
-                            cstr
-                        )
-                    );
+                                                Path.Combine(
+                                                             Path.GetDirectoryName( Reference.File ),
+                                                             cstr
+                                                            )
+                                               );
 
                     FileReferences.Add( new FileReference( c, linkerArgs ) );
                     Tokens.RemoveAt( i );
@@ -295,13 +302,13 @@ namespace VisCPU.Compiler.Compiler
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 1 ) );
 
                     Labels[Tokens[i][0].GetValue().Remove( 0, 1 )] = new AddressItem
-                    {
-                        Address =
-                            ( uint ) ( i *
-                                       CpuSettings.InstructionSize
-                            ),
-                        LinkerArguments = linkerArgs
-                    };
+                                                                     {
+                                                                         Address =
+                                                                             ( uint ) ( i *
+                                                                                         CpuSettings.InstructionSize
+                                                                                 ),
+                                                                         LinkerArguments = linkerArgs
+                                                                     };
 
                     Tokens.RemoveAt( i );
                     i--;
@@ -318,18 +325,19 @@ namespace VisCPU.Compiler.Compiler
                     if ( Tokens[i].Length < 3 )
                     {
                         EventManager < ErrorEvent >.SendEvent(
-                            new InvalidConstantDefinitionEvent(
-                                "Invalid Constant Statement"
-                            )
-                        );
+                                                              new InvalidConstantDefinitionEvent(
+                                                                   "Invalid Constant Statement"
+                                                                  )
+                                                             );
                     }
 
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 3 ) );
 
                     Constants[Tokens[i][1].GetValue()] = new AddressItem
-                    {
-                        Address = ( Tokens[i][2] as ValueToken ).Value, LinkerArguments = linkerArgs
-                    };
+                                                         {
+                                                             Address = ( Tokens[i][2] as ValueToken ).Value,
+                                                             LinkerArguments = linkerArgs
+                                                         };
 
                     Tokens.RemoveAt( i );
                 }
@@ -339,6 +347,7 @@ namespace VisCPU.Compiler.Compiler
         }
 
         #endregion
+
     }
 
 }

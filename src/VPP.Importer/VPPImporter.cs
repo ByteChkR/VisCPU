@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using VisCPU.HL.TextLoader;
 
 namespace VPP.Importer
@@ -9,40 +10,41 @@ namespace VPP.Importer
 
     public class VPPImporter : TextImporter
     {
+
         public override string Name => nameof( VPPImporter );
 
         #region Public
+
+        public override string Import( string text, string rootDir )
+        {
+            ( string ret, List < VPPMakro > makros ) =
+                InnerImport( text.Replace( "\r", "" ), rootDir, CreateFromArgs() );
+
+            return ret;
+        }
+
+        #endregion
+
+        #region Private
 
         private static List < VPPMakro > CreateFromArgs()
         {
             List < VPPMakro > m = new List < VPPMakro >();
 
-            foreach ( (string, string) importerArg in TextImporter.ImporterArgs )
+            foreach ( (string, string) importerArg in ImporterArgs )
             {
                 m.Add(
-                    new VPPMakro
-                    {
-                        Name = importerArg.Item1,
-                        Parameters = new List < VPPMakroParameter >(),
-                        Value = importerArg.Item2
-                    } );
+                      new VPPMakro
+                      {
+                          Name = importerArg.Item1,
+                          Parameters = new List < VPPMakroParameter >(),
+                          Value = importerArg.Item2
+                      }
+                     );
             }
 
             return m;
         }
-
-
-        public override string Import(string text, string rootDir )
-        {
-
-            ( string ret, List < VPPMakro > makros ) = InnerImport( text.Replace( "\r", "" ), rootDir, CreateFromArgs() );
-
-            return ret;
-        }
-
-#endregion
-
-#region Private
 
         private static List < string > ParseList( VPPTextParser parser, Func < VPPTextParser, bool > isEnd )
         {
@@ -72,7 +74,6 @@ namespace VPP.Importer
 
         private static bool ResolveMakro( VPPMakro makro, VPPTextParser parser )
         {
-
             parser.SetPosition( 0 );
 
             int idx;
@@ -106,6 +107,7 @@ namespace VPP.Importer
                     parser.Remove( makro.Name.Length );
                     parser.Insert( makro.GenerateValue( new string[0] ) );
                 }
+
                 resolved = true;
             }
 
@@ -115,16 +117,16 @@ namespace VPP.Importer
         private static bool ResolveMakros( VPPTextParser parser, List < VPPMakro > makros )
         {
             bool resolved = false;
+
             foreach ( VPPMakro vppMakro in makros )
             {
-               resolved |= ResolveMakro( vppMakro, parser );
+                resolved |= ResolveMakro( vppMakro, parser );
             }
 
             return resolved;
-
         }
 
-        private (string, List < VPPMakro >) InnerImport( string text, string rootDir, List <VPPMakro> makros = null )
+        private (string, List < VPPMakro >) InnerImport( string text, string rootDir, List < VPPMakro > makros = null )
         {
             VPPTextParser parser = new( text );
             makros ??= new List < VPPMakro >();
@@ -135,16 +137,13 @@ namespace VPP.Importer
 
             while ( recurse )
             {
-                List<VPPMakro> curM = ParseDefines( parser );
-                List<string> curI = ParseIncludes( parser ).Concat( ParseInlines( parser ) ).ToList();
-                makros.AddRange(curM);
-                incs.AddRange(curI);
-                recurse = ResolveIncludes(curI, makros, rootDir);
-                recurse |= ResolveMakros(parser, makros);
-
+                List < VPPMakro > curM = ParseDefines( parser );
+                List < string > curI = ParseIncludes( parser ).Concat( ParseInlines( parser ) ).ToList();
+                makros.AddRange( curM );
+                incs.AddRange( curI );
+                recurse = ResolveIncludes( curI, makros, rootDir );
+                recurse |= ResolveMakros( parser, makros );
             }
-
-
 
             return ( parser.ToString(), makros );
         }
@@ -183,8 +182,13 @@ namespace VPP.Importer
                 }
 
                 ret.Add(
-                    new VPPMakro { Name = var, Parameters = new List < VPPMakroParameter >(), Value = value }
-                );
+                        new VPPMakro
+                        {
+                            Name = var,
+                            Parameters = new List < VPPMakroParameter >(),
+                            Value = value
+                        }
+                       );
             }
 
             return ret;
@@ -206,9 +210,11 @@ namespace VPP.Importer
             parser.Remove( end + 1 - start );
 
             return new VPPMakro
-            {
-                Name = var, Parameters = p.Select( x => new VPPMakroParameter { Name = x } ).ToList(), Value = block
-            };
+                   {
+                       Name = var,
+                       Parameters = p.Select( x => new VPPMakroParameter { Name = x } ).ToList(),
+                       Value = block
+                   };
         }
 
         private string[] ParseIncludes( VPPTextParser parser )
@@ -250,9 +256,10 @@ namespace VPP.Importer
             return ret.ToArray();
         }
 
-        private bool ResolveIncludes( List <string> includes, List < VPPMakro > result, string rootDir )
+        private bool ResolveIncludes( List < string > includes, List < VPPMakro > result, string rootDir )
         {
             bool resolved = false;
+
             foreach ( string include in includes )
             {
                 resolved = true;
@@ -265,7 +272,8 @@ namespace VPP.Importer
             return resolved;
         }
 
-#endregion
+        #endregion
+
     }
 
 }
