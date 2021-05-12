@@ -1,10 +1,13 @@
 #include "DLREntry.vhl"
-#include "DLRBinaryHelper.vhl"
+//#include "DLRBinaryHelper.vhl"
 #include "../Console.vhl"
 #include "../Utils/LinkedList.vhl"
 #include "../MemoryManagement/malloc.vhl"
 #include "../DiskManagement/FileSystem/fs.vhl"
-
+#include <../Settings/LoggingSettings.vhl>
+#include <../Settings/KernelPaths.vhl>
+#include <v3pic/v3pic.vhl>
+private static string s_AppStartName = DLR_APP_START;
 
 
 private static uint m_LoadedLibList;
@@ -24,10 +27,8 @@ public static void dlr_init()
 }
 
 
-//Checks if a Libary has been loaded.
-//It Returns the Pointer to the DLREntry structure if found
-// 0 if lib is not loaded.
-private static uint dlr_has_loaded(string libPath, uint libPathLen)
+
+private static uint dlr_has_lib_loaded(string libPath, uint libPathLen)
 {
 	LinkedList lll = m_LoadedLibList;
 
@@ -44,25 +45,24 @@ private static uint dlr_has_loaded(string libPath, uint libPathLen)
 	return 0;
 }
 
-private static void dlr_inner_unload(uint l)
-{
-	DLREntry e = l;
-	e.Dispose();
-}
 
-public static uint dlr_unload_lib(string libPath, uint libPathLen)
+public static void dlr_unload_lib(string libPath, uint libPathLen)
 {
-	LinkedList lll = m_LoadedLibList;
-	uint l = dlr_has_loaded(libPath, libPathLen);
-	if(l)
+	if(DLR_ENABLE_LOGS)
 	{
-
-		lll.Remove(l);
-
-		string strDLRUnload = "[DLR] Unloading Lib: ";
+		string strDLRUnload = "[DLR] Trying to Unload Lib: ";
 		kprint(&strDLRUnload, size_of(strDLRUnload));
 		kprintl(libPath, libPathLen);
-		dlr_inner_unload(l);
+	}
+	LinkedList lll = m_LoadedLibList;
+	uint l = dlr_has_lib_loaded(libPath, libPathLen);
+	if(l)
+	{		
+		
+		DLREntry e = l;
+		e.Dispose();
+		lll.RemoveAll(l);
+
 	}
 }
 
@@ -74,13 +74,19 @@ public static void dlr_unload_all()
 
 	for(uint i = 0; i < c; i++)
 	{
-		DLREntry e = lll.Get(0);
-		lll.RemoveAt(0);
+		uint l = lll.Get(0);
+		DLREntry e = l;
+		if(DLR_ENABLE_LOGS)
+		{
+			string strDLRUnload = "[DLR] Unloading Binary: ";
+			kprint(&strDLRUnload, size_of(strDLRUnload));
+			kprintl(e.Name(), e.NameLength());
+		}
+
 		
-		string strDLRUnload = "[DLR] Unloading Lib: ";
-		kprint(&strDLRUnload, size_of(strDLRUnload));
-		kprintl(e.Name(), e.NameLength());
-		dlr_inner_unload(e);
+		e.Dispose();
+
+		lll.RemoveAt(0);
 	}
 
 	return 0;
@@ -90,14 +96,22 @@ public static void dlr_unload_all()
 //Initializes it OR uses Existing Loaded Library
 public static uint dlr_load_lib(string libPath, uint libPathLen)
 {
-	uint l = dlr_has_loaded(libPath, libPathLen);
+	
+	uint l = dlr_has_lib_loaded(libPath, libPathLen);
 	if(l)
 	{
 		return l;
 	}
 	else
 	{
-		uint lP = dlr_inner_load_lib(libPath, libPathLen);
+		if(DLR_ENABLE_LOGS)
+		{
+			string ldInfo = "[DLR] Loading Library: ";
+			kprint(&ldInfo, size_of(ldInfo));
+			kprintl(libPath, libPathLen);
+		}
+			
+		uint lP = v3pic_load(libPath, libPathLen);
 		uint eP = DLREntry.AllocateEntry(libPath, libPathLen, lP);
 		
 		DLREntry e = eP;
@@ -109,87 +123,18 @@ public static uint dlr_load_lib(string libPath, uint libPathLen)
 	}
 }
 
-//Loads the Library Data from the File System
-private static uint dlr_inner_load_lib(string libPath, uint libPathLen)
+public static uint dlr_resolve_call(uint l, uint site, uint siteL)
 {
-	uint ex = fs_exists(libPath, libPathLen);
-	if(!ex)
-	{
-		string fnf = "[DLR] File was not found: ";
-		kprint(&fnf, size_of(fnf));
-		kprintl(libPath, libPathLen);
-		interrupt(1);
-	}
-
-	string ldInfo = "[DLR] Loading Library: ";
-	kprint(&ldInfo, size_of(ldInfo));
-	kprintl(libPath, libPathLen);
-
-	uint libSize = fs_getsize(libPath, libPathLen);
-	uint libPtr = malloc(libSize);
-
-	uint libFile = fs_open(libPath, libPathLen);
-	
-	f_readbuf(libFile, libPtr, libSize);
-	fs_close(libFile);
-	
-
-	DLRBinaryHelper.PatchSymbolTable(libPtr);
-	DLRBinaryHelper.PatchPICBinary(libPtr);
-
-	return libPtr;
-}
-
-
-//Resolves a Call Site inside an external Library
-public static uint dlr_resolve_call(uint lib, string funcName, uint funcNameLen)
-{
-
-	DLREntry e = lib;
-	
-
+	DLREntry e = l;
 	uint ptr = e.LibPointer();
-	uint c = DLRBinaryHelper.GetSymbolEntryCount(ptr);
-	for(uint i = 0; i < c; i++)
-	{
-		uint eStart = DLRBinaryHelper.GetSymbolEntry(ptr, i);
-		uint eNStart = DLRBinaryHelper.GetSymbolEntryName(eStart);
-		uint eNLen = DLRBinaryHelper.GetSymbolEntryNameSize(eStart);
-		if(dlr_strcmp(eNStart, eNLen, funcName, funcNameLen))
-		{
-			uint site = DLRBinaryHelper.GetSymbolEntrySite(eStart);
-			return site;
-		}
-	}
-
-	string cre = "[DLR] Can not Find Site: ";
-	string cre1 = "in Library: ";
-	kprint(&cre, size_of(cre));
-	kprint(funcName, funcNameLen);
-	kprintc(0x20);
-	kprint(&cre1, size_of(cre1));
-	kprintl(e.Name(), e.NameLength());
-	interrupt(1); //Can not Resolve Call Site
+	uint p = v3pic_resolve_call(ptr, site, siteL);
+	return p;
 }
 
-//Compares 2 Strings
-private static uint dlr_strcmp(string s1, uint s1L, string s2, uint s2L)
+public static uint dlr_get_app_start(uint l)
 {
-	if(s1L != s2L)
-	{
-		return 0;
-	}
-
-	for(uint i = 0 ; i < s1L; i++)
-	{
-		uint v1 = s1[i];
-		uint v2 = s2[i];
-		if(v1 != v2)
-		{
-			return 0;
-		}
-	}
-	return 1;
+	uint v = dlr_resolve_call(l, &s_AppStartName, size_of(s_AppStartName));
+	return v;
 }
 
 

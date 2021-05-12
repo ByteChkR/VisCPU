@@ -5,6 +5,7 @@
 
 //Settings
 #include <../Settings/DiskSettings.vhl>
+#include <../Settings/LoggingSettings.vhl>
 
 public class PartitionTable
 {
@@ -12,8 +13,11 @@ public class PartitionTable
 	private uint m_List;
 	public static PartitionTable(uint dev)
 	{	
-		string strPTInit = "[PT] Reading from Disk";
-		kprintl(&strPTInit, size_of(strPTInit));
+		if(PT_ENABLE_LOGS)
+		{
+			string strPTInit = "[PT] Reading from Disk";
+			kprintl(&strPTInit, size_of(strPTInit));
+		}
 		this.m_Device = dev;
 		uint lp = malloc(size_of(LinkedList));
 		LinkedList.new(lp);
@@ -24,10 +28,33 @@ public class PartitionTable
 	private static void Format(STOREDRV drv)
 	{
 		uint s = drv.GetSize();
+		uint m = s / 1000;
 		for(uint i = 0; i < s; i++)
 		{
+			if(PTABLE_FORMAT_WRITE_STATUS)
+			{				
+				if((i % m) == 0)
+				{
+
+					uint p = 0;
+					if(i)
+					{
+						p = i / m;
+					}
+					uint intP = p / 10;
+					uint decP = p % 10;
+					string strPStat = "[PT] Progress: ";
+					kprint(&strPStat, size_of(strPStat));
+					kprintn(intP);
+					kprintc('.');
+					kprintn(decP);
+					kprintc('%');
+					kprintc('\n');
+				}
+			}
 			drv.Write(i, 0);
 		}
+		kprintc('\n');
 	}
 
 
@@ -53,7 +80,6 @@ public class PartitionTable
 
 	private void Populate()
 	{
-		string strPartFound = "[PT] Found Partition: ";
 		uint lstPtr = this.m_List;
 		LinkedList lst = lstPtr;
 		uint dp = this.m_Device;
@@ -67,13 +93,18 @@ public class PartitionTable
 			uint l = d.Read(cur);
 			if(!l)
 			{
-				string errStr = "Can not read Partition Table. Restoring Table and formatting drive, the CPU will crash once repairs finished.";
+				string errStr = "Can not read Partition Table. Restoring Table and formatting drive..";
 				kprintl(&errStr, size_of(errStr));
 				PartitionTable.WriteDefault(d);
-				interrupt(1); //0 length partition
+				interrupt(2); //0 length partition
 			}
-			kprint(&strPartFound, size_of(strPartFound));
-			kprintnl(partCount);
+			if(PT_ENABLE_LOGS)
+			{
+				string strPartFound = "[PT] Found Partition: ";
+				kprint(&strPartFound, size_of(strPartFound));
+				kprintnl(partCount);
+			}
+			
 			uint ptr = malloc(size_of(Partition));
 			Partition.new(ptr, dp, cur+1, l);
 			lst.Add(ptr);

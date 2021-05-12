@@ -7,17 +7,39 @@
 
 
 
-uint v;
-uint s_KernelAlloc;
+private static uint s_KernelAlloc;
 
 private static void mallocinit()
 {
-	string strInitMalloc = "[MALLOC] Initializing...";
-	kprintl(&strInitMalloc, size_of(strInitMalloc));
+	if(MALLOC_ENABLE_LOGS)
+	{			
+		string strInitMalloc = "[MALLOC] Initializing...";
+		kprintl(&strInitMalloc, size_of(strInitMalloc));
+	}
 	RawAllocator a = RawAllocator(MALLOC_MEM_START, MALLOC_MEM_SIZE);
 	a.SetOptimizationLevel(2);
 	s_KernelAlloc = a;
 }
+
+public static void mallocclear()
+{
+	if(!s_KernelAlloc)
+	{
+		return;
+	}
+	if(MALLOC_ENABLE_LOGS)
+	{			
+		string strClearMalloc = "[MALLOC] Clearing...";
+		kprintl(&strClearMalloc, size_of(strClearMalloc));
+	}
+	uint v = MALLOC_MEM_START;
+	for(uint i = 0; i < MALLOC_MEM_SIZE; i++)
+	{
+		v[i] = 0;
+	}
+	s_KernelAlloc = 0;
+}
+
 
 public static void mallocinfo()
 {

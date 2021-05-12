@@ -2,36 +2,40 @@
 
 //Include Kernel
 #include "Kernel.vhl"
-
-//Install Requirements
 #include "Install/Installer.vhl"
 
+#include "InterruptHandler/InterruptHandler.vasm" int_set_hl_addr int_set_addr int_get_addr
+#include "Utils/CPUTools.vasm" cpu_restart
 
-private static void test_console_lib()
+
+public static void k_int_handler(uint code)
 {
-	//Path of the Library in the FileSystem
-	string strCToolsPath = "0:lib/consoletools.vbin";
+	string strKInt = "[KERNEL] Received Interrupt. Cleaning up and Restarting CPU...";
+	kprintl(&strKInt, size_of(strKInt));
 
-	//The Function name inside the lib that sets the fore color
-	string strCToolsFCSite = "ct_set_fore_color";
-	//The Function name inside the lib that returns the color code for red
-	string strCToolsCCRed = "color_red";
-
-	//Loading the Library from the FileSystem
-	uint l = dlr_load_lib(&strCToolsPath, size_of(strCToolsPath));
-	
-	//Resolve the Calls
-	uint changeColor = dlr_resolve_call(l, &strCToolsFCSite, size_of(strCToolsFCSite));
-	uint colorRed = dlr_resolve_call(l, &strCToolsCCRed, size_of(strCToolsCCRed));
-	
-	//Invoke the Calls as normal.
-	changeColor(colorRed());
+	kernel_shutdown();
+	cpu_restart();
 }
 
-//Install Default Apps(if not found on disk)
-//Launch Kernel and Run Installer if needed.
+kclear();
+
+//Register Interrupt Handler
+int_set_hl_addr(&k_int_handler);
+
+//Initialize Kernel
+kernel_init();
+
+//Install Default Apps if needed.
 if(kernel_install_default())
-{	
-	//Soft-Reboot
-	kernel_reboot();
+{
+	//Shutdown Kernel
+	kernel_shutdown();
+	//Restart CPU
+	cpu_restart();
 }
+
+//Run Startup Events(a \n terminated list of v3-pic binary files to execute)
+kernel_process_startup_events(); 
+
+//Shutdown Kernel when we ran all startup events
+kernel_shutdown();

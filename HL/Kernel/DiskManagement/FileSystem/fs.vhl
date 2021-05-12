@@ -2,6 +2,7 @@
 #include "FileStream.vhl"
 #include "FileTable.vhl"
 #include "FileSystem.vhl"
+#include "../../Console.vhl"
 
 //Settings
 #include <../../Settings/LoggingSettings.vhl>
@@ -27,7 +28,11 @@ public static void fs_core_init()
 
 public static void fs_core_unload()
 {
-	free(fs_PartitionMapping);
+	if(fs_PartitionMapping)
+	{
+		free(fs_PartitionMapping);
+		fs_PartitionMapping = 0;
+	}
 }
 
 private static void fs_invalid_mapping(uint idx, string hint)
@@ -66,6 +71,20 @@ public static void fs_unmap(uint mapIndex)
 		fs_invalid_mapping(mapIndex, &fs_Hint_MapIndexInvalid);
 	}
 	fs_PartitionMapping[mapIndex] = 0;
+}
+
+private static uint fs_has_mapped(uint mapIndex)
+{
+	if(mapIndex >= 10)
+	{
+		return 0;
+	}
+	uint v = fs_PartitionMapping[mapIndex];
+	if(!v)
+	{
+		return 0;
+	}
+	return 1;
 }
 
 private static uint fs_map_get(uint mapIndex)
@@ -231,6 +250,10 @@ public static void fs_info(uint mapIndex)
 
 public static void fs_unload(uint mapIndex)
 {
+	if(!fs_has_mapped(mapIndex))
+	{
+		return;
+	}
 	uint pp = fs_map_get(mapIndex);
 	Partition p = pp;
 	FileSystem f = p.GetFileSystem();
@@ -241,15 +264,20 @@ public static void fs_unload(uint mapIndex)
 
 public static void fs_init(uint mapIndex, uint p)
 {
-	string strInit1 = "[FS] Initializing File System(Partition: ";
-	string strInit2 = ", FS: ";
+
 	uint fs = malloc(size_of(FileSystem));
-	kprint(&strInit1, size_of(strInit1));
-	kprintn(p);
-	kprint(&strInit2, size_of(strInit2));
-	kprintn(fs);
-	kprintc(')');
-	kprintc('\n');
+	
+	if(FS_ENABLE_LOGS)
+	{
+		string strInit1 = "[FS] Initializing File System(Partition: ";
+		string strInit2 = ", FS: ";
+		kprint(&strInit1, size_of(strInit1));
+		kprintn(p);
+		kprint(&strInit2, size_of(strInit2));
+		kprintn(fs);
+		kprintc(')');
+		kprintc('\n');
+	}
 
 	FileSystem.new(fs, p);
 	fs_map(mapIndex, p);

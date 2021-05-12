@@ -2,6 +2,7 @@
 #include "../MemoryManagement/malloc.vhl"
 #include "../Memory/Memory.vhl"
 #include "../Console.vhl"
+#include "v3pic/v3pic.vhl"
 
 //Settings
 #include <../Settings/LoggingSettings.vhl>
@@ -93,12 +94,14 @@ public class DLREntry
 		return llsPtr;
 	}
 
+
 	public void Dispose()
 	{
 		uint sptr = this.m_LibNameStart;
-		uint lib = this.m_LibPointer;
-		free(lib);
 		free(sptr);
 		free(this);
+		
+		uint lib = this.m_LibPointer;
+		v3pic_unload(lib);
 	}
 }

@@ -1,4 +1,6 @@
 
+//Install Requirements
+
 #include "DiskManagement/diskmgmnt.vhl"
 #include "MemoryManagement/malloc.vhl"
 #include "DiskManagement/FileSystem/fs.vhl"
@@ -13,7 +15,6 @@
 #include <Settings/KernelPaths.vhl>
 
 private static string s_StartupConfigPath = K_STARTUP_CONFIG;
-private static string s_AppStartName = DLR_APP_START;
 
 private static uint s_KernelDiskTable;
 
@@ -25,7 +26,6 @@ private static uint kernel_find_char(uint f, uint c)
 	uint v = f_read(f);
 	while(v != c && p < l)
 	{
-		kprintc(v);
 		r++;
 		p++;
 		v = f_read(f);
@@ -34,21 +34,20 @@ private static uint kernel_find_char(uint f, uint c)
 	return r;
 }
 
-private static uint kernel_run_app(uint path, uint pathL, uint site, uint siteL, uint args, uint argc)
+private static uint kernel_run_app(uint path, uint pathL, uint args, uint argc)
 {
 	string strRunApp = "[OS] Running App: ";
 	kprint(&strRunApp, size_of(strRunApp));
-	kprint(path, pathL);
-	kprintc('|');
-	kprintl(site, siteL);
-	uint appPtr = dlr_load_lib(path, pathL);
-	uint appStart = dlr_resolve_call(appPtr, site, siteL);
-
+	kprintl(path, pathL);
+	
+	uint app = dlr_load_lib(path, pathL);
+	uint appStart = dlr_get_app_start(app);
 	uint v = appStart(args, argc);
+	dlr_unload_lib(path, pathL);
 	return v;
 }
 
-private static void kernel_load_startup()
+public static void kernel_process_startup_events()
 {
 
 	string strStartupRun = "[OS] Running Startup Events...";
@@ -80,8 +79,6 @@ private static void kernel_load_startup()
 
 		kernel_run_app(lineBuf, 
 						lineLen, 
-						&s_AppStartName, 
-						size_of(s_AppStartName), 
 						lineBuf, 
 						lineLen);
 
@@ -97,7 +94,15 @@ private static void kernel_load_startup()
 
 public static void kernel_make_startup(uint s, uint l)
 {
-	uint f = fs_open(&s_StartupConfigPath, size_of(s_StartupConfigPath));
+	uint f = 0;
+	if(!fs_exists(&s_StartupConfigPath, size_of(s_StartupConfigPath)))
+	{
+		f = fs_create(&s_StartupConfigPath, size_of(s_StartupConfigPath));
+	}
+	else
+	{
+		f = fs_open(&s_StartupConfigPath, size_of(s_StartupConfigPath));
+	}
 	f_writebuf(f, s, l);
 	f_write(f, '\n');
 	fs_close(f);
@@ -116,9 +121,11 @@ public static void kernel_shutdown()
 	dlr_uninit();
 
 	fs_core_unload();
+
+	mallocclear();
 }
 
-public static void kernel_startup()
+public static void kernel_init()
 {
 	string strKStart = "[Kernel] Starting Kernel...";
 	kprintl(&strKStart, size_of(strKStart));
@@ -131,24 +138,4 @@ public static void kernel_startup()
 	Partition pOS = pt0.GetPartition(0);
 	Partition pData = pt0.GetPartition(1);
 	fs_init(0, pData);
-
-	kernel_load_startup();
-}
-
-public static void kernel_reboot()
-{
-	kernel_shutdown();
-	kernel_startup();
-}
-
-public static void kernel_main()
-{
-
-	//Initialize Kernel Systems
-	kernel_startup();
-
-	
-	kernel_shutdown();
-
-	mallocinfo();
 }

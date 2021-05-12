@@ -66,9 +66,8 @@ private static string s_HFSAppKLoader = KLOADER_APP_HFS;
 
 
 
-public static void kernel_install_default()
+public static uint kernel_install_default()
 {
-	kernel_startup();
 	if(fs_exists(&s_InstallLockFile, size_of(s_InstallLockFile)))
 	{
 		return 0; //Only if Lock file is missing
@@ -104,6 +103,8 @@ public static void kernel_install_default()
 
 	inj_hfs(s_CoreAppKLoader, s_HFSAppKLoader);
 
+	string strCreateConsoleStartup = "[INSTALL] Creating Console Startup Config..."
+	kprintl(&strCreateConsoleStartup, size_of(strCreateConsoleStartup));
 	string strTestScriptPath = CONSOLE_STARTUP_SCRIPT_PATH;
 	string strTestScriptContent = "0:bin/alias.vbin add alias 0:bin/alias.vbin|0:bin/alias.vbin add kloader 0:bin/kernelloader.vbin|0:bin/alias.vbin add echo 0:bin/echo.vbin|0:bin/alias.vbin add clear 0:bin/clear.vbin|0:bin/alias.vbin add ktools 0:bin/kerneltools.vbin|0:bin/alias.vbin add delete 0:bin/delete.vbin|0:bin/alias.vbin add move 0:bin/move.vbin|0:bin/alias.vbin add copy 0:bin/copy.vbin|";
 
@@ -125,6 +126,8 @@ public static void kernel_install_default()
 	fs_close(f);
 
 	//Set Console as Default Startup App.
+	string strCreateStartup = "[INSTALL] Creating Startup Entry...";
+	kprintl(&strCreateStartup, size_of(strCreateStartup));
 	kernel_make_startup(&s_CoreAppConsole, size_of(s_CoreAppConsole));
 	
 	return 1;

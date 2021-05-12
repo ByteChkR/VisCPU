@@ -1,6 +1,7 @@
 #include "../MemoryManagement/malloc.vhl"
 #include "../Utils/LinkedList.vhl"
 #include "../Console.vhl"
+#include <../Settings/LoggingSettings.vhl>
 
 #include "Utils/DeviceLoader.vhl"
 #include "Utils/DeviceTypes.vhl"
@@ -14,14 +15,12 @@ public class DiskTable
 	private uint m_List;
 	public static DiskTable()
 	{
-		string strInit = "[DT] Initializing Disk Table";
-		string strDiskSearch = "[DT] Searching for Devices..";
-		string strFoundDisk = "[DT] Found Disk ";
-		string strInitDiskDriver = "[DT] Initializing Driver for Disk ";
-		string strInitPTable = "[DT] Loading Partition Table from Disk ";
-		string strInitFinished = "[DT] Disk initialization Finished.";
 
-		kprintl(&strInit, size_of(strInit));
+		if(DT_ENABLE_LOGS)
+		{
+			string strInit = "[DT] Initializing Disk Table";
+			kprintl(&strInit, size_of(strInit));
+		}
 
 		uint lp = malloc(size_of(LinkedList));
 		LinkedList.new(lp);
@@ -29,7 +28,12 @@ public class DiskTable
 		this.m_List = lp;
 		LinkedList ll = lp;
 
-		kprintl(&strDiskSearch, size_of(strDiskSearch));
+		if(DT_ENABLE_LOGS)
+		{
+			string strDiskSearch = "[DT] Searching for Devices..";
+			kprintl(&strDiskSearch, size_of(strDiskSearch));
+		}
+
 
 		DeviceLoader ld = DeviceLoader(DeviceTypes.Drive());
 
@@ -37,15 +41,24 @@ public class DiskTable
 		uint devCount = 0;
 		while(device)
 		{
-			kprint(&strFoundDisk, size_of(strFoundDisk));
-			kprintnl(devCount);
-			kprint(&strInitDiskDriver, size_of(strInitDiskDriver));
-			kprintnl(devCount);
+			if(DT_ENABLE_LOGS)
+			{
+				string strFoundDisk = "[DT] Found Disk ";
+				string strInitDiskDriver = "[DT] Initializing Driver for Disk ";
+				kprint(&strFoundDisk, size_of(strFoundDisk));
+				kprintnl(devCount);
+				kprint(&strInitDiskDriver, size_of(strInitDiskDriver));
+				kprintnl(devCount);
+			}
 			uint driver = malloc(size_of(STOREDRV));
 			STOREDRV.new(driver, device);
 
-			kprint(&strInitPTable, size_of(strInitPTable));
-			kprintnl(devCount);
+			if(DT_ENABLE_LOGS)
+			{
+				string strInitPTable = "[DT] Loading Partition Table from Disk ";
+				kprint(&strInitPTable, size_of(strInitPTable));
+				kprintnl(devCount);
+			}
 			uint p = malloc(size_of(PartitionTable));
 			PartitionTable.new(p, driver);
 
@@ -53,7 +66,11 @@ public class DiskTable
 			devCount++;
 			device = ld.GetNextDevice();
 		}
-		kprintl(&strInitFinished, size_of(strInitFinished));
+		if(DT_ENABLE_LOGS)
+		{
+			string strInitFinished = "[DT] Disk initialization Finished.";
+			kprintl(&strInitFinished, size_of(strInitFinished));
+		}
 	}
 
 	public uint GetDiskCount()

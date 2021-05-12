@@ -4,7 +4,7 @@
 #define CMD_READ_BUF 256
 
 private static string s_Console_StartupPath = "0:configs/console/startup.cmd";
-private static string s_AppStartSiteName = "APP_START";
+private static string s_Console_HeaderText = "Kernel Console v1";
 private static string s_Console_Alias = "cmd";
 private static uint s_Aliases;
 
@@ -14,6 +14,30 @@ private class CommandAlias
 	public uint AliasLength;
 	public uint ExecutablePath;
 	public uint ExecutablePathLength;
+}
+
+public static void cmd_list_aliases()
+{
+	uint c = ll_count(s_Aliases);
+	for(uint i = 0; i < c; i++)
+	{
+		uint p = ll_get(s_Aliases, i);
+		CommandAlias a = p;
+		uint aP = a.Alias;
+		uint aL = a.AliasLength;
+		uint s = a.ExecutablePath;
+		uint l = a.ExecutablePathLength;
+		
+		kprint(aP, aL);
+		kprintc(0x20);
+
+		kprintc('=');
+		kprintc('>');
+
+		kprintc(0x20);
+		kprintl(s, l);
+	}
+	return 0;
 }
 
 private static uint cmd_resolve_alias(uint s, uint l)
@@ -119,9 +143,10 @@ private static void cmd_exec(uint fWord, uint fWordLen, uint readBuf, uint l)
 	}
 	else
 	{
-		uint lib = dlr_load_lib(fWord, fWordLen);
-		uint libSite = dlr_resolve_call(lib, &s_AppStartSiteName, size_of(s_AppStartSiteName));
-		libSite(readBuf, l);
+		uint app = dlr_load_lib(fWord, fWordLen);
+		uint appStart = dlr_get_app_start(app);
+		appStart(readBuf, l);
+		//dlr_unload_lib(fWord, fWordLen);
 	}
 }
 
@@ -244,6 +269,11 @@ public static void APP_START(uint args, uint argc)
 
 		cmd_execute_startup();
 
+		
+		kprintl(&s_Console_HeaderText, size_of(s_Console_HeaderText));
+		kprintc('\n');
+		kprintc('\n');
+		kprintc('\n');
 		cmd_loop();
 
 		cmd_remove_all_aliases();

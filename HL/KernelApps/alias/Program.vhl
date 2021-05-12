@@ -2,6 +2,7 @@
 
 private static string strConsoleLib = "0:bin/console.vbin";
 private static string strConsoleAddAlias = "cmd_add_alias";
+private static string strConsoleListAlias = "cmd_list_aliases";
 
 
 public static void APP_START(uint args, uint argc)
@@ -10,12 +11,14 @@ public static void APP_START(uint args, uint argc)
 	uint filePtrL;
 	uint filePtr = arg_get(1, args, argc, &filePtrL);
 	string strAlias = "add";
+	string strListAlias = "list";
 	if(str_cmp(filePtr, filePtrL, &strAlias, size_of(strAlias)))
 	{
 		if(argNum != 4)
 		{
-			string strNotEnoughArgs = "Not Enough Alias Arguments Specified";
+			string strNotEnoughArgs = "Not Enough Alias Arguments Specified: ";
 			kprintl(&strNotEnoughArgs, size_of(strNotEnoughArgs));
+			kprintnl(argNum);
 			return;
 		}
 		uint aNameL;
@@ -26,6 +29,20 @@ public static void APP_START(uint args, uint argc)
 		uint cAddAlias = dlr_resolve_call(cApp, &strConsoleAddAlias, size_of(strConsoleAddAlias));
 	
 		cAddAlias(aName, aNameL, binName, binNameL);
+	}
+	else if(str_cmp(filePtr, filePtrL, &strListAlias, size_of(strListAlias)))
+	{
+		if(argNum != 2)
+		{
+			string strNotEnoughArgs = "Not Enough Alias Arguments Specified: ";
+			kprint(&strNotEnoughArgs, size_of(strNotEnoughArgs));
+			kprintnl(argNum);
+			return;
+		}
+		uint cApp = dlr_load_lib(&strConsoleLib, size_of(strConsoleLib));
+		uint cListAlias = dlr_resolve_call(cApp, &strConsoleListAlias, size_of(strConsoleListAlias));
+	
+		cListAlias();
 	}
 	else
 	{

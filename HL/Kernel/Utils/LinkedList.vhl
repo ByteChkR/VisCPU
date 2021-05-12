@@ -1,5 +1,7 @@
 #include "../MemoryManagement/malloc.vhl"
 #include <../Settings/ErrorSettings.vhl>
+#include <../Settings/LoggingSettings.vhl>
+
 
 public class LinkedList
 {
@@ -133,6 +135,11 @@ public class LinkedList
 			uint v = item.Value;
 			if(v == value)
 			{
+				if(LL_ENABLE_LOGS)
+				{
+					string strRemovedItem = "[LL] Removed Item";
+					kprintl(&strRemovedItem, size_of(strRemovedItem));
+				}
 				if(l)
 				{
 					LinkedListItem prev = l;
@@ -161,6 +168,11 @@ public class LinkedList
 			uint v = item.Value;
 			if(v == value)
 			{
+				if(LL_ENABLE_LOGS)
+				{
+					string strRemovedItem = "[LL] Removed Item";
+					kprintl(&strRemovedItem, size_of(strRemovedItem));
+				}
 				if(l)
 				{
 					LinkedListItem prev = l;
