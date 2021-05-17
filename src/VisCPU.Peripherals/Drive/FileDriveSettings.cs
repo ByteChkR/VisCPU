@@ -1,11 +1,12 @@
 ﻿using System.IO;
+using System;
 
 using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.IO.Settings.Loader;
 
 namespace VisCPU.Peripherals.Drive
 {
-
+    [Serializable]
     public class FileDriveSettings : DrivePinSettings
     {
 

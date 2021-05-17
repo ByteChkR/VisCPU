@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -283,21 +284,45 @@ namespace VisCPU
             PushState( pc, Flags.None );
         }
 
-        public void Run()
+        public IEnumerable GetEnumerator()
         {
-            while ( !HasSet( Flags.Halt ) )
+            while (!HasSet(Flags.Halt))
             {
                 Cycle();
 
-                if ( HasSet( Flags.Break ) )
+                if (HasSet(Flags.Break))
                 {
-                    if ( OnBreak == null )
+                    if (OnBreak == null)
                     {
-                        UnSet( Flags.Break );
+                        UnSet(Flags.Break);
                     }
                     else
                     {
-                        OnBreak( this );
+                        OnBreak(this);
+                    }
+                }
+                yield return true;
+            }
+
+            MemoryBus.Shutdown();
+            yield return false;
+        }
+
+        public void Run()
+        {
+            while (!HasSet(Flags.Halt))
+            {
+                Cycle();
+
+                if (HasSet(Flags.Break))
+                {
+                    if (OnBreak == null)
+                    {
+                        UnSet(Flags.Break);
+                    }
+                    else
+                    {
+                        OnBreak(this);
                     }
                 }
             }

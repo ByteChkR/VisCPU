@@ -61,14 +61,14 @@ namespace VisCPU.Utility.SharedBase
 
         public void Save( string outputFile, LinkerInfoFormat format, uint offset )
         {
-            foreach ( string labelKeys in Labels.Keys )
+            foreach ( string labelKeys in Labels.Keys.ToArray() )
             {
                 AddressItem item = Labels[labelKeys];
                 item.Address += offset;
                 Labels[labelKeys] = item;
             }
 
-            foreach ( string labelKeys in DataSectionHeader.Keys )
+            foreach ( string labelKeys in DataSectionHeader.Keys.ToArray())
             {
                 AddressItem item = DataSectionHeader[labelKeys];
                 item.Address += offset;

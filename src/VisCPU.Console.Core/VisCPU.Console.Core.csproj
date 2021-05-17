@@ -5,8 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OpenCL.Integration\OpenCL.Integration.csproj" />
-    <ProjectReference Include="..\OpenCL.Wrapper\OpenCL.Wrapper.csproj" />
     <ProjectReference Include="..\VisCPU.Compiler\VisCPU.Compiler.csproj" />
     <ProjectReference Include="..\VisCPU.HL\VisCPU.HL.csproj" />
     <ProjectReference Include="..\VisCPU.Utility\VisCPU.Utility.csproj" />

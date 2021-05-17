@@ -12,13 +12,13 @@ namespace VisCPU.Peripherals.Console.IO
     {
 
         [field: Argument( Name = "console:in.pin.present" )]
-        public uint InterfacePresentPin { get; set; } = 0xFFFF1010;
+        public uint InterfacePresentPin  = 0xFFFF1010;
 
         [field: Argument( Name = "console:in.pin.read" )]
-        public uint ReadInputAddress { get; set; } = 0xFFFF1011;
+        public uint ReadInputAddress  = 0xFFFF1011;
 
         [field: Argument( Name = "console:in.pin.available" )]
-        public uint InputAvailableAddress { get; set; } = 0xFFFF1012;
+        public uint InputAvailableAddress  = 0xFFFF1012;
 
         #region Private
 

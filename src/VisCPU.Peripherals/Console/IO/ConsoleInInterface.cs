@@ -4,6 +4,7 @@ using VisCPU.Peripherals.Events;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
 using VisCPU.Utility.IO.Settings;
+using System.IO;
 
 namespace VisCPU.Peripherals.Console.IO
 {
@@ -19,9 +20,9 @@ namespace VisCPU.Peripherals.Console.IO
 
         public override uint PresentPin => m_Settings.InterfacePresentPin;
 
-        public Func < bool > HasConsoleInput { get; set; } = () => System.Console.KeyAvailable;
+        public Func<bool> HasConsoleInput { get; set; } = () => System.Console.KeyAvailable;
 
-        public Func < int > ReadConsoleInput { get; set; } = System.Console.Read;
+        public Func<int> ReadConsoleInput { get; set; } = () => System.Console.Read();
 
         #region Unity Event Functions
 
@@ -40,7 +41,7 @@ namespace VisCPU.Peripherals.Console.IO
 
         public override bool CanRead( uint address )
         {
-            return address == m_Settings.ReadInputAddress || address == m_Settings.InterfacePresentPin;
+            return address == m_Settings.ReadInputAddress || address == m_Settings.InputAvailableAddress || address == m_Settings.InterfacePresentPin;
         }
 
         public override bool CanWrite( uint address )
@@ -57,7 +58,8 @@ namespace VisCPU.Peripherals.Console.IO
 
             if ( address == m_Settings.InputAvailableAddress )
             {
-                return HasConsoleInput() ? 1u : 0u;
+                uint v = HasConsoleInput() ? 1u : 0u;
+                return v;
             }
 
             if ( address == m_Settings.ReadInputAddress )

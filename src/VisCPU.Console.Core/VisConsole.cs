@@ -107,7 +107,7 @@ namespace VisCPU.Console.Core
 
                             continue;
                         }
-
+                        Logger.LogMessage(LoggerSystems.Console, "Running Subsystem: " + subSystemKey);
                         subsystem.Run( args.Skip( 1 ) );
                     }
 

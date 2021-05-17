@@ -182,11 +182,11 @@ namespace VisCPU.Utility.ProjectSystem.Data
                                                        { "TARGET", buildTarget.TargetName },
                                                    };
 
-            foreach ( string varMapKey in varMap.Keys )
+            foreach ( string varMapKey in varMap.Keys.ToArray())
             {
                 job.JobName = job.JobName.Replace( $"%{varMapKey}%", varMap[varMapKey] );
 
-                foreach ( string argumentsKey in job.Arguments.Keys )
+                foreach ( string argumentsKey in job.Arguments.Keys.ToArray() )
                 {
                     job.Arguments[argumentsKey] =
                         job.Arguments[argumentsKey].Replace( $"%{varMapKey}%", varMap[varMapKey] );
@@ -210,7 +210,7 @@ namespace VisCPU.Utility.ProjectSystem.Data
                                                        { "TARGET", buildTarget.TargetName },
                                                    };
 
-            foreach ( string varMapKey in varMap.Keys )
+            foreach ( string varMapKey in varMap.Keys.ToArray())
             {
                 buildTarget.TargetName = buildTarget.TargetName.Replace( $"%{varMapKey}%", varMap[varMapKey] );
 

@@ -1,0 +1,39 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+private static string dnsLibPath = "0:lib/networking.dns.vbin";
+private static uint dns_register;
+private static string dnsRegisterName = "dns_register";
+
+private static void ResolveDependencies()
+{
+	uint dnsLib = dlr_load_lib(&dnsLibPath, size_of(dnsLibPath));
+	dns_register = dlr_resolve_call(dnsLib, &dnsRegisterName, size_of(dnsRegisterName));
+}
+
+
+public static void APP_START(uint args, uint argc)
+{
+	ResolveDependencies();
+
+	uint firstSep = str_find_char(0x20, args, argc);
+	uint binName = args;
+	uint binNameL = firstSep;
+
+	string strRBin = "Running Binary: ";
+	kprint(&strRBin, size_of(strRBin));
+	kprintl(binName, binNameL);
+
+	uint argStart = firstSep + 1;
+	uint argLen = argc - argStart;
+	uint success = dns_register(argStart+args, argLen);
+	if(success)
+	{
+		string strSuccess = "[DNS] Successfully Registered";
+		kprintl(&strSuccess, size_of(strSuccess));
+	}
+	else
+	{
+		string strSuccess = "[DNS] Registration Failed";
+		kprintl(&strSuccess, size_of(strSuccess));
+	}
+}

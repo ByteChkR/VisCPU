@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 
-using OpenCL.Integration;
 
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
@@ -70,7 +69,7 @@ namespace VisCPU.Console.Core.Subsystems
         public static void Build( BuilderSettings settings )
         {
             TextImporter.ParseImporterArgs();
-            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter(), new OpenCLKernelImporter() );
+            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter() );
 
             foreach ( PeripheralImporter peripheralImporter in Peripheral.GetPeripheralImporters() )
             {

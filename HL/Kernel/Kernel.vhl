@@ -110,6 +110,7 @@ public static void kernel_make_startup(uint s, uint l)
 
 public static void kernel_shutdown()
 {
+
 	string strKStart = "[Kernel] Shutdown Kernel...";
 	kprintl(&strKStart, size_of(strKStart));
 	fs_unload(0);

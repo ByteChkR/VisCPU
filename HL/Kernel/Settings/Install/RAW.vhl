@@ -1,6 +1,14 @@
 #define TIME_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/time/Program.vbin"
 
 
+#define NET_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/networking/Program.vbin"
+
+
+#define DNS_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/networking.dns/Program.vbin"
+
+#define DNS_REG_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/dnsreg/Program.vbin"
+
+
 #define CFG_LIB_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelLibs/cfgloader/Program.vbin"
 
 
@@ -8,6 +16,15 @@
 
 
 #define COPY_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/copy/Program.vbin"
+
+
+#define NETWRITE_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/netwrite/Program.vbin"
+
+#define NETECHO_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/netecho/Program.vbin"
+
+#define SEND_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/send/Program.vbin"
+
+#define RECV_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/receive/Program.vbin"
 
 
 #define MOVE_APP_HFS "D:/Users/Tim/Documents/viscpu/HL/KernelApps/move/Program.vbin"

@@ -1,0 +1,222 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+#define DEFAULT_NETWRITE_PORT 444
+
+private static string netSendExit = "nw::exit";
+private static string netSendNoWrite = "nw::nowrite";
+private static string netSendNoRead = "nw::noread";
+private static string netSendSkip = "nw::skip";
+
+private static string dnsLibPath = "0:lib/networking.dns.vbin";
+private static uint dns_resolve;
+private static string dnsResolveName = "dns_resolve";
+
+private static string netLibPath = "0:lib/networking.vbin";
+private static uint net_connect;
+private static string netConnectName = "net_connect";
+
+private static uint net_is_connected;
+private static string netIsConnectedName = "net_is_connected";
+
+private static uint net_send;
+private static string netSendName = "net_send";
+
+private static uint net_packet_size;
+private static string netPacketSizeName = "net_packet_size";
+
+private static uint net_packet_data;
+private static string netPacketDataName = "net_packet_data";
+
+private static uint net_has_packet;
+private static string netHasPackageName = "net_has_packet";
+
+private static uint net_open_port;
+private static string netOpenPortName = "net_open_port";
+
+private static uint net_close_port;
+private static string netClosePortName = "net_close_port";
+
+private static uint net_consume;
+private static string netConsumeName = "net_consume";
+
+
+private static void ResolveDependencies()
+{
+	uint netLib = dlr_load_lib(&netLibPath, size_of(netLibPath));
+	net_connect = dlr_resolve_call(netLib, &netConnectName, size_of(netConnectName));
+	net_is_connected = dlr_resolve_call(netLib, &netIsConnectedName, size_of(netIsConnectedName));
+	net_send = dlr_resolve_call(netLib, &netSendName, size_of(netSendName));
+	net_packet_size = dlr_resolve_call(netLib, &netPacketSizeName, size_of(netPacketSizeName));
+	net_packet_data = dlr_resolve_call(netLib, &netPacketDataName, size_of(netPacketDataName));
+	net_has_packet = dlr_resolve_call(netLib, &netHasPackageName, size_of(netHasPackageName));
+	net_open_port = dlr_resolve_call(netLib, &netOpenPortName, size_of(netOpenPortName));
+	net_close_port = dlr_resolve_call(netLib, &netClosePortName, size_of(netClosePortName));
+	net_consume = dlr_resolve_call(netLib, &netConsumeName, size_of(netConsumeName));
+
+
+	uint dnsLib = dlr_load_lib(&dnsLibPath, size_of(dnsLibPath));
+	dns_resolve = dlr_resolve_call(dnsLib, &dnsResolveName, size_of(dnsResolveName));
+}
+
+private static uint read_command(uint ptr, uint max)
+{
+	uint cur = 0;
+	while(cur < max)
+	{
+		uint v = kread();
+		while(v == '\r')
+		{
+			v = kread();
+		}
+		if(v == '\n')
+		{
+			return cur;
+		}
+		ptr[cur] = v;
+		cur++;
+	}
+	return max;
+} 
+
+private static void ProcessPacket()
+{
+	//Read Packet
+	uint sz = net_packet_size(DEFAULT_NETWRITE_PORT);
+	if(sz == 0)
+	{
+		net_consume(DEFAULT_NETWRITE_PORT);
+		return;
+	}
+	uint ptr = malloc(sz);
+	net_packet_data(DEFAULT_NETWRITE_PORT, ptr);
+
+	net_consume(DEFAULT_NETWRITE_PORT);
+
+	kprintl(ptr, sz);
+
+	//Free Packet Buffer
+	free(ptr);
+}
+
+private static void Loop(uint addr, uint addrL, uint additionalArgs, uint additionalArgLen)
+{
+	string strConnectTo = "[NET] Connecting To: ";
+	kprint(&strConnectTo, size_of(strConnectTo));
+	kprintl(addr, addrL);
+	uint targetAddr = dns_resolve(addr, addrL);
+	string strResolveTo = "[NET] Resolved: ";
+	kprint(&strResolveTo, size_of(strResolveTo));
+	kprintl(addr, addrL);
+	
+	net_open_port(DEFAULT_NETWRITE_PORT); //Open Port in order to receive Packages
+
+	uint enableWrite = 1;
+	uint enableRead = 1;
+	
+	uint adArgsPos = additionalArgs;
+	uint adArgsLen = additionalArgLen;
+
+	uint lineBuf = malloc(256);
+	uint dataPtr = lineBuf;
+	uint dataLen = 0;
+
+	while(1)
+	{
+		if(enableRead && net_has_packet(DEFAULT_NETWRITE_PORT))
+		{
+			ProcessPacket();
+		}
+		else if(enableWrite)
+		{	
+			if(adArgsPos && adArgsLen != 0)
+			{
+				uint sep = str_find_char(0x20, adArgsPos, adArgsLen);
+				uint newStart = sep + 1;
+				
+				dataPtr = adArgsPos;
+				dataLen = sep;
+				if(sep == adArgsLen)
+				{
+					adArgsPos = 0;
+					adArgsLen = 0;
+				}
+				else
+				{					
+					adArgsPos += newStart;
+					adArgsLen -= newStart;
+				}
+				//net_send(DEFAULT_NETWRITE_PORT, targetAddr, DEFAULT_NETWRITE_PORT, adArgsPos, sep);
+			}
+			else
+			{
+				dataLen = read_command(lineBuf, 256);
+				dataPtr = lineBuf;
+			}
+
+			if(str_cmp(&netSendExit, size_of(netSendExit), dataPtr, dataLen))
+			{
+				free(lineBuf);
+				return;
+			}
+			else if(str_cmp(&netSendSkip, size_of(netSendSkip), dataPtr, dataLen))
+			{
+				//Skip and do nothing
+			}
+			else if(str_cmp(&netSendNoWrite, size_of(netSendNoWrite), dataPtr, dataLen))
+			{
+				enableWrite = !enableWrite; //Only Listen
+			}
+			else if(str_cmp(&netSendNoRead, size_of(netSendNoRead), dataPtr, dataLen))
+			{
+				enableRead = !enableRead; //Only Listen
+			}
+			else
+			{
+				net_send(DEFAULT_NETWRITE_PORT, targetAddr, DEFAULT_NETWRITE_PORT, dataPtr, dataLen);
+			}
+			
+			dataLen = 0;
+
+		}
+	}
+}
+
+public static void APP_START(uint args, uint argc)
+{
+	ResolveDependencies();
+	if(!net_is_connected())
+	{
+		string strConnectingToNetwork = "[NET] Connecting to Network...";
+		kprintl(&strConnectingToNetwork, size_of(strConnectingToNetwork));
+		net_connect();
+	}
+
+	uint firstSep = str_find_char(0x20, args, argc);
+	uint binName = args;
+	uint binNameL = firstSep;
+
+	string strRBin = "Running Binary: ";
+	kprint(&strRBin, size_of(strRBin));
+	kprintl(binName, binNameL);
+
+	uint argStart = firstSep + 1;
+	uint argLen = argc - argStart;
+
+	uint argumentBegin = argStart+args;
+
+	uint secondSep = str_find_char(0x20, argumentBegin, argLen);
+
+	if(secondSep != argLen) //Found another Space Char. Writing all text after the first argument to the network
+	{
+		uint adArgs = secondSep	+ 1;
+		uint adLen = argLen	- adArgs;
+		uint adBegin = adArgs + argumentBegin;
+		kprint(adBegin, adLen);
+		Loop(argumentBegin, secondSep, adBegin, adLen); //No Additional Arguments
+	}
+	else
+	{
+		Loop(argumentBegin, argLen, 0, 0); //No Additional Arguments
+	}
+
+}

@@ -1,0 +1,138 @@
+#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
+
+#define DEFAULT_NETWRITE_PORT 444
+
+private static string netSendExit = "nw::exit";
+
+private static string dnsLibPath = "0:lib/networking.dns.vbin";
+private static uint dns_resolve;
+private static string dnsResolveName = "dns_resolve";
+
+private static string netLibPath = "0:lib/networking.vbin";
+private static uint net_connect;
+private static string netConnectName = "net_connect";
+
+private static uint net_is_connected;
+private static string netIsConnectedName = "net_is_connected";
+
+private static uint net_send;
+private static string netSendName = "net_send";
+
+private static uint net_packet_size;
+private static string netPacketSizeName = "net_packet_size";
+
+private static uint net_packet_data;
+private static string netPacketDataName = "net_packet_data";
+
+private static uint net_has_packet;
+private static string netHasPackageName = "net_has_packet";
+
+private static uint net_open_port;
+private static string netOpenPortName = "net_open_port";
+
+private static uint net_close_port;
+private static string netClosePortName = "net_close_port";
+
+private static uint net_consume;
+private static string netConsumeName = "net_consume";
+
+private static uint net_get_sender_addr;
+private static string netSenderAddrName = "net_get_sender_addr";
+
+private static uint net_get_sender_port;
+private static string netSenderPortName = "net_get_sender_port";
+
+
+private static void ResolveDependencies()
+{
+	uint netLib = dlr_load_lib(&netLibPath, size_of(netLibPath));
+	net_connect = dlr_resolve_call(netLib, &netConnectName, size_of(netConnectName));
+	net_is_connected = dlr_resolve_call(netLib, &netIsConnectedName, size_of(netIsConnectedName));
+	net_send = dlr_resolve_call(netLib, &netSendName, size_of(netSendName));
+	net_packet_size = dlr_resolve_call(netLib, &netPacketSizeName, size_of(netPacketSizeName));
+	net_packet_data = dlr_resolve_call(netLib, &netPacketDataName, size_of(netPacketDataName));
+	net_has_packet = dlr_resolve_call(netLib, &netHasPackageName, size_of(netHasPackageName));
+	net_open_port = dlr_resolve_call(netLib, &netOpenPortName, size_of(netOpenPortName));
+	net_close_port = dlr_resolve_call(netLib, &netClosePortName, size_of(netClosePortName));
+	net_consume = dlr_resolve_call(netLib, &netConsumeName, size_of(netConsumeName));
+	net_get_sender_addr = dlr_resolve_call(netLib, &netSenderAddrName, size_of(netSenderAddrName));
+	net_get_sender_port = dlr_resolve_call(netLib, &netSenderPortName, size_of(netSenderPortName));
+
+
+	uint dnsLib = dlr_load_lib(&dnsLibPath, size_of(dnsLibPath));
+	dns_resolve = dlr_resolve_call(dnsLib, &dnsResolveName, size_of(dnsResolveName));
+}
+
+
+private static void ProcessPacket()
+{
+	//Read Packet
+	uint sz = net_packet_size(DEFAULT_NETWRITE_PORT);
+	if(sz == 0)
+	{
+		return;
+	}
+	uint ptr = malloc(sz);
+	net_packet_data(DEFAULT_NETWRITE_PORT, ptr);
+
+
+	uint receiver = net_get_sender_addr(DEFAULT_NETWRITE_PORT);
+	uint receiverPort = net_get_sender_port(DEFAULT_NETWRITE_PORT);
+
+
+	net_consume(DEFAULT_NETWRITE_PORT);
+
+
+	net_send(DEFAULT_NETWRITE_PORT, receiver, receiverPort, ptr, sz);
+
+	//Free Packet Buffer
+	free(ptr);
+}
+
+private static void Loop(uint addr, uint addrL)
+{
+	string strConnectTo = "[NET] Connecting To: ";
+	kprint(&strConnectTo, size_of(strConnectTo));
+	kprintl(addr, addrL);
+	uint targetAddr = dns_resolve(addr, addrL);
+	string strResolveTo = "[NET] Resolved: ";
+	kprint(&strResolveTo, size_of(strResolveTo));
+	kprintl(addr, addrL);
+
+	net_open_port(DEFAULT_NETWRITE_PORT); //Open Port in order to receive Packages
+
+	string strNetEchoListening = "[NETECHO] Listening...";
+	kprintl(&strNetEchoListening, size_of(strNetEchoListening));
+	while(1)
+	{
+		if(net_has_packet(DEFAULT_NETWRITE_PORT))
+		{
+			ProcessPacket();
+		}
+	}
+}
+
+public static void APP_START(uint args, uint argc)
+{
+	ResolveDependencies();
+	if(!net_is_connected())
+	{
+		string strConnectingToNetwork = "[NET] Connecting to Network...";
+		kprintl(&strConnectingToNetwork, size_of(strConnectingToNetwork));
+		net_connect();
+	}
+
+	uint firstSep = str_find_char(0x20, args, argc);
+	uint binName = args;
+	uint binNameL = firstSep;
+
+	string strRBin = "Running Binary: ";
+	kprint(&strRBin, size_of(strRBin));
+	kprintl(binName, binNameL);
+
+	uint argStart = firstSep + 1;
+	uint argLen = argc - argStart;
+
+	Loop(argStart+args, argLen);
+
+}

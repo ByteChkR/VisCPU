@@ -35,6 +35,8 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
 
             string src = Path.Combine( root, "project.json" );
 
+            Logger.LogMessage(LoggerSystems.Console, "File: {0}", src);
+
             ProjectConfig.AddRunner( new BuildJobBuild() );
             ProjectConfig.AddRunner( new BuildJobClean() );
             ProjectConfig.AddRunner( new BuildJobPublish() );

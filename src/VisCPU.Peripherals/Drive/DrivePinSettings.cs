@@ -1,6 +1,8 @@
-﻿namespace VisCPU.Peripherals.Drive
+﻿using System;
+namespace VisCPU.Peripherals.Drive
 {
 
+    [Serializable]
     public class DrivePinSettings
     {
 

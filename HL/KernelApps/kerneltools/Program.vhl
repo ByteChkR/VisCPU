@@ -1,9 +1,12 @@
 #import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
 
+#inline "NetworkInfo.vhl"
+
 private static uint kt_list(uint arg1, uint arg1L)
 {
 	string strFSCmd = "fs-info";
 	string strMallocCmd = "malloc-info";
+	string strNetworkCmd = "net-info";
 	if(str_cmp(&strFSCmd, size_of(strFSCmd), arg1, arg1L))
 	{
 		fs_info(0);
@@ -12,6 +15,11 @@ private static uint kt_list(uint arg1, uint arg1L)
 	else if(str_cmp(&strMallocCmd, size_of(strMallocCmd), arg1, arg1L))
 	{
 		mallocinfo();
+		return;
+	}
+	else if(str_cmp(&strNetworkCmd, size_of(strNetworkCmd), arg1, arg1L))
+	{
+		print_network_info();
 		return;
 	}
 	else
@@ -24,10 +32,13 @@ private static uint kt_list(uint arg1, uint arg1L)
 	}
 }
 
+public static void kt_print_net_info()
+{
+
+}
+
 public static uint APP_START(uint args, uint argc)
 {
-	kprintnl(args);
-	kprintnl(argc);
 	uint firstSep = str_find_char(0x20, args, argc);
 	uint binName = args;
 	uint binNameL = firstSep;
@@ -45,9 +56,6 @@ public static uint APP_START(uint args, uint argc)
 	uint arg2 = arg1+arg1L+1;
 	uint arg2L = argLen - arg1L;
 	arg2L--;
-
-	kprintnl(arg1);
-	kprintnl(arg1L);
 
 
 	string strListCmd = "list";

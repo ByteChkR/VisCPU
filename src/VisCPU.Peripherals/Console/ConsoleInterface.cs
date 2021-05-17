@@ -93,6 +93,7 @@ namespace VisCPU.Peripherals.Console
                 return ( uint ) System.Console.ForegroundColor;
             }
 
+
             EventManager < WarningEvent >.SendEvent( new InvalidPeripheralReadEvent( address, this ) );
 
             return 0;

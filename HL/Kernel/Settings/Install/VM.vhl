@@ -1,6 +1,13 @@
 #define TIME_LIB_HFS "./bios/libs/time.vbin"
 
 
+#define NET_LIB_HFS "./bios/libs/networking.vbin"
+
+
+#define DNS_LIB_HFS "./bios/libs/networking.dns.vbin"
+
+#define DNS_REG_APP_HFS "./bios/apps/dnsreg.vbin"
+
 #define CFG_LIB_HFS "./bios/libs/cfgloader.vbin"
 
 
@@ -8,6 +15,10 @@
 
 
 #define COPY_APP_HFS "./bios/apps/copy.vbin"
+
+#define NETWRITE_APP_HFS "./bios/apps/netwrite.vbin"
+
+#define NETECHO_APP_HFS "./bios/apps/netecho.vbin"
 
 
 #define MOVE_APP_HFS "./bios/apps/move.vbin"

@@ -7,6 +7,15 @@
 //Time Lib
 #define TIME_LIB_PATH "0:lib/time.vbin"
 
+//Networking Lib
+#define NET_LIB_PATH "0:lib/networking.vbin"
+
+//DNS Lib
+#define DNS_LIB_PATH "0:lib/networking.dns.vbin"
+
+//DNS Lib
+#define DNS_REG_APP_PATH "0:bin/dnsreg.vbin"
+
 //CFGLoader Lib
 #define CFG_LIB_PATH "0:lib/cfgloader.vbin"
 
@@ -16,6 +25,9 @@
 //Copy App
 #define COPY_APP_PATH "0:bin/copy.vbin"
 
+#define NETWRITE_APP_PATH "0:bin/netwrite.vbin"
+
+#define NETECHO_APP_PATH "0:bin/netecho.vbin"
 //Move App
 #define MOVE_APP_PATH "0:bin/move.vbin"
 
