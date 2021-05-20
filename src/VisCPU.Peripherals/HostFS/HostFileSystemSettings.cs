@@ -10,7 +10,7 @@ namespace VisCPU.Peripherals.HostFS
     {
 
         [field: Argument( Name = "hostfs:root.use" )]
-        public bool UseRootPath { get; set; } = true;
+        public bool UseRootPath { get; set; } = false;
 
         [field: Argument( Name = "hostfs:delete.enable" )]
         public bool EnableDeleteFiles { get; set; }
