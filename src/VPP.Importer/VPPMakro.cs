@@ -3,50 +3,64 @@
 namespace VPP.Importer
 {
 
-    public class VPPMakro
+    public class VPPUniqueMakro : VPPMakro
     {
 
-        public string Name;
-        public string Value;
-        public List < VPPMakroParameter > Parameters;
-
-        #region Public
-
-        public string GenerateValue( string[] args )
+        private static int m_UniqueId = 0;
+        public VPPUniqueMakro() : base("vpp_unique", new List<VPPMakroParameter> { new() { Name = "var_prefix" } })
         {
-            if ( Parameters.Count == 0 )
+
+        }
+
+        public override string GenerateValue( string[] args )
+        {
+            return $"{args[0]}_{m_UniqueId++}";
+        }
+
+    }
+
+    public class VPPTextMakro : VPPMakro
+    {
+
+        private string Value;
+
+
+        public VPPTextMakro(string name, string value, List<VPPMakroParameter> parameters) : base(name, parameters)
+        {
+            Value = value;
+        }
+
+        public override string GenerateValue(string[] args)
+        {
+            if (Parameters.Count == 0)
             {
                 return Value;
             }
 
             string v = Value;
 
-            VPPTextParser parser = new VPPTextParser( v );
+            VPPTextParser parser = new VPPTextParser(v);
 
-            for ( int i = 0; i < Parameters.Count; i++ )
+            for (int i = 0; i < Parameters.Count; i++)
             {
-                ApplyParameter( parser, Parameters[i], args[i] );
+                ApplyParameter(parser, Parameters[i], args[i]);
             }
 
             return parser.ToString();
         }
 
-        #endregion
-
-        #region Private
-
-        private void ApplyParameter( VPPTextParser parser, VPPMakroParameter p, string v )
+        private void ApplyParameter(VPPTextParser parser, VPPMakroParameter p, string v)
         {
-            parser.SetPosition( 0 );
+            parser.SetPosition(0);
             int idx;
 
-            while ( ( idx = parser.Seek( p.Name ) ) != -1 )
+            while ((idx = parser.Seek(p.Name)) != -1)
             {
-                if ( parser.IsValidPreWordCharacter( idx - 1 ) &&
-                     parser.IsValidPostWordCharacter( idx + p.Name.Length ) )
+                if (parser.IsValidPreWordCharacter(idx - 1) &&
+                    parser.IsValidPostWordCharacter(idx + p.Name.Length))
                 {
-                    parser.Remove( p.Name.Length );
-                    parser.Insert( v );
+                    parser.Remove(p.Name.Length);
+                    parser.Insert(v);
                 }
                 else
                 {
@@ -54,6 +68,29 @@ namespace VPP.Importer
                 }
             }
         }
+
+
+    }
+
+    public abstract class VPPMakro
+    {
+
+        public readonly string Name;
+        public readonly List<VPPMakroParameter> Parameters;
+
+        protected VPPMakro(string name, List<VPPMakroParameter> parameters)
+        {
+            Name = name;
+            Parameters = parameters;
+        }
+
+        #region Public
+
+        public abstract string GenerateValue(string[] args);
+        #endregion
+
+        #region Private
+
 
         #endregion
 

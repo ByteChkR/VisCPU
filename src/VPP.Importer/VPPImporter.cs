@@ -29,17 +29,12 @@ namespace VPP.Importer
 
         private static List < VPPMakro > CreateFromArgs()
         {
-            List < VPPMakro > m = new List < VPPMakro >();
+            List < VPPMakro > m = new List < VPPMakro >{new VPPUniqueMakro()};
 
             foreach ( (string, string) importerArg in ImporterArgs )
             {
                 m.Add(
-                      new VPPMakro
-                      {
-                          Name = importerArg.Item1,
-                          Parameters = new List < VPPMakroParameter >(),
-                          Value = importerArg.Item2
-                      }
+                      new VPPTextMakro(importerArg.Item1, importerArg.Item2, new List < VPPMakroParameter >())
                      );
             }
 
@@ -182,12 +177,7 @@ namespace VPP.Importer
                 }
 
                 ret.Add(
-                        new VPPMakro
-                        {
-                            Name = var,
-                            Parameters = new List < VPPMakroParameter >(),
-                            Value = value
-                        }
+                        new VPPTextMakro(var, value, new List < VPPMakroParameter >())
                        );
             }
 
@@ -209,12 +199,7 @@ namespace VPP.Importer
             parser.SetPosition( start );
             parser.Remove( end + 1 - start );
 
-            return new VPPMakro
-                   {
-                       Name = var,
-                       Parameters = p.Select( x => new VPPMakroParameter { Name = x } ).ToList(),
-                       Value = block
-                   };
+            return new VPPTextMakro( var, block, p.Select( x => new VPPMakroParameter { Name = x } ).ToList() );
         }
 
         private string[] ParseIncludes( VPPTextParser parser )
