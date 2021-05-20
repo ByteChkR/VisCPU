@@ -7,6 +7,7 @@ namespace VPP.Importer
     {
 
         private static int m_UniqueId = 0;
+        private static Dictionary < string, string > m_UniqueMap;
         public VPPUniqueMakro() : base("vpp_unique", new List<VPPMakroParameter> { new() { Name = "var_prefix" } })
         {
 
@@ -14,7 +15,9 @@ namespace VPP.Importer
 
         public override string GenerateValue( string[] args )
         {
-            return $"{args[0]}_{m_UniqueId++}";
+            if ( m_UniqueMap.ContainsKey( args[0] ) )
+                return m_UniqueMap[args[0]];
+            return m_UniqueMap[args[0]] = $"{args[0]}_{m_UniqueId++}";
         }
 
     }
