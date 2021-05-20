@@ -87,7 +87,7 @@ namespace VisCPU.Peripherals.HostFS
                 if ( m_ReadFileExists )
                 {
                     m_ReadFileExists = false;
-
+                    Log( "HFS File: {0} Exists: {1}", m_CurrentFile.FullName, m_CurrentFile.Exists );
                     return ( uint ) ( m_CurrentFile.Exists ? 1 : 0 );
                 }
 
