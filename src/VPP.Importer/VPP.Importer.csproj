@@ -13,4 +13,8 @@
     <ProjectReference Include="..\VisCPU.HL\VisCPU.HL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Directives\" />
+  </ItemGroup>
+
 </Project>

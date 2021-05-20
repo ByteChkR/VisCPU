@@ -160,6 +160,15 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             restoreJob.Arguments["origin"] = "local";
             debug.Jobs.Add( restoreJob );
 
+
+
+            ProjectBuildJob externalJob = new ProjectBuildJob();
+            externalJob.BuildJobRunner = "external-build";
+            externalJob.JobName = "Building Dependencies of %NAME%@%VERSION%";
+            externalJob.Arguments["path"] = "";
+            externalJob.Arguments["target"] = "%TARGET%";
+            debug.Jobs.Add(externalJob);
+
             ProjectBuildJob mergeBuildJob = new ProjectBuildJob();
             mergeBuildJob.JobName = "Merged Debug Build";
             mergeBuildJob.BuildJobRunner = "merged";
@@ -230,6 +239,7 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
 
             return release;
         }
+        
 
         private static ProjectBuildTarget CreateReleaseTarget()
         {
@@ -240,6 +250,13 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             restoreJob.JobName = "Restore %NAME%@%VERSION%";
             restoreJob.Arguments["origin"] = "local";
             release.Jobs.Add( restoreJob );
+
+            ProjectBuildJob externalJob = new ProjectBuildJob();
+            externalJob.BuildJobRunner = "external-build";
+            externalJob.JobName = "Building Dependencies of %NAME%@%VERSION%";
+            externalJob.Arguments["path"] = "";
+            externalJob.Arguments["target"] = "%TARGET%";
+            release.Jobs.Add( externalJob );
 
             ProjectBuildJob mergeBuildJob = new ProjectBuildJob();
             mergeBuildJob.JobName = "Merged Release Build";
@@ -291,6 +308,8 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             newVersionJob.Arguments["publish"] = "%VISDIR%common/jobs/publish.json";
             newVersionJob.Arguments["restore"] = "%VISDIR%common/jobs/restore.json";
 
+
+
             ProjectBuildJob dBuildJob = CreateDebugBuildJob();
             ProjectBuildJob rBuildJob = CreateReleaseBuildJob();
             ProjectBuildJob dRunJob = CreateDebugRunJob();
@@ -304,7 +323,8 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             ProjectBuildJob.Save( Path.Combine( dir, "clean.json" ), cleanJob );
             ProjectBuildJob.Save( Path.Combine( dir, "restore.json" ), restoreJob );
             ProjectBuildJob.Save( Path.Combine( dir, "publish.json" ), publishJob );
-            ProjectBuildJob.Save( Path.Combine( dir, "newVersion.json" ), newVersionJob );
+            ProjectBuildJob.Save(Path.Combine(dir, "newVersion.json"), newVersionJob);
+
         }
 
         #endregion
