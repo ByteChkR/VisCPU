@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 
-
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
 using VisCPU.Console.Core.Settings;
@@ -42,7 +41,17 @@ namespace VisCPU.Console.Core.Subsystems
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
             SettingsManager.SaveSettings( hls );
-            Build( settings );
+
+            List < string > ar = new List < string >();
+
+            foreach ( string key in args.Keys )
+            {
+                ar.Add( '-' + key );
+                string[] vals = args[key].Split( ' ' );
+                ar.AddRange( vals );
+            }
+
+            Build( settings, ar.ToArray() );
         }
 
         public static void Build( IEnumerable < string > args )
@@ -63,12 +72,17 @@ namespace VisCPU.Console.Core.Subsystems
             SettingsManager.SaveSettings( ls );
             SettingsManager.SaveSettings( asettings );
             SettingsManager.SaveSettings( hls );
-            Build( settings );
+            Build( settings, args );
         }
 
         public static void Build( BuilderSettings settings )
         {
-            TextImporter.ParseImporterArgs();
+            Build( settings, new string[0] );
+        }
+
+        public static void Build( BuilderSettings settings, IEnumerable < string > importerArgs )
+        {
+            TextImporter.ParseImporterArgs( importerArgs.ToArray() );
             ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter() );
 
             foreach ( PeripheralImporter peripheralImporter in Peripheral.GetPeripheralImporters() )

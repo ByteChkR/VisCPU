@@ -40,8 +40,8 @@ namespace VisCPU.HL.Parser.Operators
         public override HlExpression Create( HlExpressionParser parser, HlExpression currentNode )
         {
             HlTokenType tt = parser.CurrentToken.Type == HlTokenType.OpPlus
-                                 ? HlTokenType.OpUnaryIncrement
-                                 : HlTokenType.OpUnaryDecrement;
+                                 ? HlTokenType.OpUnaryPostfixIncrement
+                                 : HlTokenType.OpUnaryPostfixDecrement;
 
             parser.Eat( parser.CurrentToken.Type );
             parser.Eat( parser.CurrentToken.Type );

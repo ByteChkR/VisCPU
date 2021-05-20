@@ -126,6 +126,9 @@ namespace VisCPU.HL.Compiler.Variables
                                                                ToString(),
                                                   IsPublic = expr.VariableDefinition.Modifiers.Any(
                                                        x => x.Type == HlTokenType.OpPublicMod
+                                                      ),
+                                                  IsInternal = expr.VariableDefinition.Modifiers.Any(
+                                                       x => x.Type == HlTokenType.OpInternalMod
                                                       )
                                               }
                                              );

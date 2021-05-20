@@ -121,16 +121,20 @@ public static void net_consume(uint port)
 	RunCommand(CONSUME_PACKET);
 }
 
-public static void net_get_sender_addr(uint port)
+public static uint net_get_sender_addr(uint port)
 {
 	SetCommandArg(port);
 	RunCommand(GET_SENDER_ADDR);
+	uint v = GetReturn();
+	return v;
 }
 
-public static void net_get_sender_port(uint port)
+public static uint net_get_sender_port(uint port)
 {
 	SetCommandArg(port);
 	RunCommand(GET_SENDER_PORT);
+	uint v = GetReturn();
+	return v;
 }
 
 

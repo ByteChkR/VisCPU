@@ -1,9 +1,9 @@
 
-private const uint C_OUT = 0xFFFF1001;
-private const uint C_NOUT = 0xFFFF1002;
-private const uint C_RD = 0xFFFF1011;
-private const uint C_CLR = 0xFFFF1021;
-private const uint C_IAV = 0xFFFF1012;
+private internal const uint C_OUT = 0xFFFF1001;
+private internal const uint C_NOUT = 0xFFFF1002;
+private internal const uint C_RD = 0xFFFF1011;
+private internal const uint C_CLR = 0xFFFF1021;
+private internal const uint C_IAV = 0xFFFF1012;
 
 public static void kclear()
 {

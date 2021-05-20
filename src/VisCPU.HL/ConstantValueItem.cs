@@ -6,6 +6,7 @@
 
         public string Value;
         public bool IsPublic;
+        public bool IsInternal;
 
     }
 

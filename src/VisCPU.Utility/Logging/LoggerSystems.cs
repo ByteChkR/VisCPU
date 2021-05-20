@@ -49,7 +49,15 @@ namespace VisCPU.Utility.Logging
 
         Compiler = AssemblyGenerator | FileCompilation | Linker | Parser,
 
-        Default = UriResolver | Console | ModuleSystem | StackTrace | Debug | Hl | Compiler | DriveImageSystems | Network
+        Default = UriResolver |
+                  Console |
+                  ModuleSystem |
+                  StackTrace |
+                  Debug |
+                  Hl |
+                  Compiler |
+                  DriveImageSystems |
+                  Network
 
     }
 

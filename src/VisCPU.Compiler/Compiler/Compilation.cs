@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Linking;
+using VisCPU.Utility;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.Compiler.Compiler
@@ -29,13 +31,16 @@ namespace VisCPU.Compiler.Compiler
             m_AssemblyGenerator = assemblyGenerator;
         }
 
+        
+
         public static LinkerInfo CreateFromResult( LinkerResult result )
         {
+            
             return new LinkerInfo
                    {
-                       Constants = result.Constants,
-                       DataSectionHeader = result.DataSectionHeader,
-                       Labels = result.Labels,
+                       Constants = result.Constants.Filter(kvp => !kvp.Value.Internal && !kvp.Value.Hide),
+                       DataSectionHeader = result.DataSectionHeader.Filter(kvp => !kvp.Value.Internal && !kvp.Value.Hide),
+                       Labels = result.Labels.Filter(kvp => !kvp.Value.Internal && !kvp.Value.Hide),
                        Source = result.LinkedBinary.FirstOrDefault()?.FirstOrDefault()?.OriginalText
                    };
         }

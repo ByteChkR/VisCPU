@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.SIMD", "VisCPU.SIMD\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VPP.Importer", "VPP.Importer\VPP.Importer.csproj", "{B2DD327B-42F5-4173-9BDC-FD0B28AEA69C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisCPU.Networking", "VisCPU.Networking\VisCPU.Networking.csproj", "{948826F2-6A3A-48BB-93D2-DB05EC782F28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VisCPU.Networking", "VisCPU.Networking\VisCPU.Networking.csproj", "{948826F2-6A3A-48BB-93D2-DB05EC782F28}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

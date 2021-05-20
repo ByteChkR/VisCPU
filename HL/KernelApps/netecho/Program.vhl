@@ -68,36 +68,31 @@ private static void ProcessPacket()
 {
 	//Read Packet
 	uint sz = net_packet_size(DEFAULT_NETWRITE_PORT);
-	if(sz == 0)
-	{
-		return;
-	}
-	uint ptr = malloc(sz);
-	net_packet_data(DEFAULT_NETWRITE_PORT, ptr);
-
-
 	uint receiver = net_get_sender_addr(DEFAULT_NETWRITE_PORT);
 	uint receiverPort = net_get_sender_port(DEFAULT_NETWRITE_PORT);
+	if(sz == 0)
+	{
+		net_send(DEFAULT_NETWRITE_PORT, receiver, receiverPort, 0, 0); //Send empty packet
+	}
+	else
+	{
+		uint ptr = malloc(sz);
+		net_packet_data(DEFAULT_NETWRITE_PORT, ptr);
+		net_send(DEFAULT_NETWRITE_PORT, receiver, receiverPort, ptr, sz);
+		//Free Packet Buffer
+		free(ptr);
+	}
+	
+	
 
 
 	net_consume(DEFAULT_NETWRITE_PORT);
 
 
-	net_send(DEFAULT_NETWRITE_PORT, receiver, receiverPort, ptr, sz);
-
-	//Free Packet Buffer
-	free(ptr);
 }
 
-private static void Loop(uint addr, uint addrL)
+private static void Loop()
 {
-	string strConnectTo = "[NET] Connecting To: ";
-	kprint(&strConnectTo, size_of(strConnectTo));
-	kprintl(addr, addrL);
-	uint targetAddr = dns_resolve(addr, addrL);
-	string strResolveTo = "[NET] Resolved: ";
-	kprint(&strResolveTo, size_of(strResolveTo));
-	kprintl(addr, addrL);
 
 	net_open_port(DEFAULT_NETWRITE_PORT); //Open Port in order to receive Packages
 
@@ -107,6 +102,8 @@ private static void Loop(uint addr, uint addrL)
 	{
 		if(net_has_packet(DEFAULT_NETWRITE_PORT))
 		{
+			string strNetEchoReceived = "[NETECHO] Received Packet";
+			kprintl(&strNetEchoReceived, size_of(strNetEchoReceived));
 			ProcessPacket();
 		}
 	}
@@ -133,6 +130,6 @@ public static void APP_START(uint args, uint argc)
 	uint argStart = firstSep + 1;
 	uint argLen = argc - argStart;
 
-	Loop(argStart+args, argLen);
+	Loop();
 
 }

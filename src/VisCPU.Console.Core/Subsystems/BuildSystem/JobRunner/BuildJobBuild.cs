@@ -21,6 +21,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem.JobRunner
         {
             string old = Directory.GetCurrentDirectory();
             Directory.SetCurrentDirectory( projectRoot );
+
             ProgramBuilder.Build( job.Arguments );
             Directory.SetCurrentDirectory( old );
         }

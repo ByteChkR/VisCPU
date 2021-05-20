@@ -51,8 +51,10 @@ namespace VisCPU.HL
                                       HlExpressionCompiler < HlUnaryOp > >
                                   {
                                       { HlTokenType.OpBang, new BoolNotExpressionCompiler() },
-                                      { HlTokenType.OpUnaryIncrement, new IncrementExpressionCompiler() },
-                                      { HlTokenType.OpUnaryDecrement, new DecrementExpressionCompiler() },
+                                      { HlTokenType.OpUnaryPostfixIncrement, new PostfixIncrementExpressionCompiler() },
+                                      { HlTokenType.OpUnaryPostfixDecrement, new PostfixDecrementExpressionCompiler() },
+                                      { HlTokenType.OpUnaryPrefixIncrement, new PrefixIncrementExpressionCompiler() },
+                                      { HlTokenType.OpUnaryPrefixDecrement, new PrefixDecrementExpressionCompiler() },
                                       { HlTokenType.OpReference, new ReferenceExpressionCompiler() },
                                       { HlTokenType.OpDeReference, new DereferenceExpressionCompiler() },
                                       { HlTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },

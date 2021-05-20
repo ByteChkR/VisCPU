@@ -33,8 +33,8 @@ vis project clean ./KernelApps/netwrite >$null 2>&1
 echo "[15/18] -> time"
 vis project clean .\KernelLibs\time >$null 2>&1
 echo "[16/18] -> networking"
-vis project clean ./KernelLibs/consoletools >$null 2>&1
+vis project clean ./KernelLibs/networking >$null 2>&1
 echo "[17/18] -> networking.dns"
-vis project clean ./KernelLibs/time >$null 2>&1
+vis project clean ./KernelLibs/networking.dns >$null 2>&1
 echo "[18/18] -> dnsreg"
 vis project clean ./KernelApps/dnsreg >$null 2>&1

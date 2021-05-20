@@ -68,7 +68,7 @@ namespace VisCPU.Utility.SharedBase
                 Labels[labelKeys] = item;
             }
 
-            foreach ( string labelKeys in DataSectionHeader.Keys.ToArray())
+            foreach ( string labelKeys in DataSectionHeader.Keys.ToArray() )
             {
                 AddressItem item = DataSectionHeader[labelKeys];
                 item.Address += offset;

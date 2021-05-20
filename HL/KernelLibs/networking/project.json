@@ -1,6 +1,6 @@
 {
   "ProjectName": "networking",
-  "ProjectVersion": "0.0.0.1",
+  "ProjectVersion": "2021.5.20.0",
   "Dependencies": [],
   "DefaultTarget": "Debug",
   "BuildTargets": {

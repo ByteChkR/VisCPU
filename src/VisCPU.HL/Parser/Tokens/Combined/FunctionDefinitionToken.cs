@@ -1,4 +1,7 @@
-﻿using VisCPU.HL.TypeSystem;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using VisCPU.HL.TypeSystem;
 
 namespace VisCPU.HL.Parser.Tokens.Combined
 {
@@ -14,7 +17,9 @@ namespace VisCPU.HL.Parser.Tokens.Combined
 
         public IHlToken FunctionReturnType { get; }
 
-        public IHlToken[] Mods { get; }
+        public IHlToken[] Mods => m_Modifiers.ToArray();
+
+        private List < IHlToken > m_Modifiers;
 
         public HlTypeDefinition Parent { get; }
 
@@ -40,10 +45,16 @@ namespace VisCPU.HL.Parser.Tokens.Combined
             Parent = parent;
             FunctionName = name;
             FunctionReturnType = retType;
-            Mods = mods;
+            m_Modifiers = mods.ToList();
             Arguments = args;
             Block = subtokens;
         }
+        public void MakeInternal()
+        {
+            if (m_Modifiers.All(x => x.Type != HlTokenType.OpInternalMod))
+                m_Modifiers.Add(new HlTextToken(HlTokenType.OpInternalMod, "internal", -1));
+        }
+
 
         #endregion
 

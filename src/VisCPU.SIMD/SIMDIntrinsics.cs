@@ -231,7 +231,7 @@ namespace VisCPU.SIMD
         {
             m_Importer.AddApi(
                               m_Start,
-                              new FunctionData( name, true, true, null, argC, HLBaseTypeNames.s_UintTypeName )
+                              new FunctionData( name, true, true, true, null, argC, HLBaseTypeNames.s_UintTypeName )
                              );
 
             ApiImporterDevice d = new ApiImporterDevice( m_Start, func );

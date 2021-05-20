@@ -1,11 +1,11 @@
 #include "../../Console.vhl"
 
-private const uint A_PRESENT = 0xFFFF6000;
-private const uint A_GEZ_SZ = 0xFFFF6001;
-private const uint A_WRITE = 0xFFFF6002;
-private const uint A_WRITEBUF = 0xFFFF6003;
-private const uint A_READ = 0xFFFF6004;
-private const uint A_READBUF = 0xFFFF6005;
+private internal const uint A_PRESENT = 0xFFFF6000;
+private internal const uint A_GEZ_SZ = 0xFFFF6001;
+private internal const uint A_WRITE = 0xFFFF6002;
+private internal const uint A_WRITEBUF = 0xFFFF6003;
+private internal const uint A_READ = 0xFFFF6004;
+private internal const uint A_READBUF = 0xFFFF6005;
 
 public class STOREDRV
 {

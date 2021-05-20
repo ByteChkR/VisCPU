@@ -33,8 +33,6 @@ namespace VisCPU
         #endregion
 
         #region Public
-        public void Add(Peripheral p) => m_Peripherals.Add(p);
-
 
         public MemoryBus() : this( new List < Peripheral >() { new MemoryBusDriver() } )
         {
@@ -58,6 +56,11 @@ namespace VisCPU
             {
                 m_Peripherals.Add( new MemoryBusDriver() );
             }
+        }
+
+        public void Add( Peripheral p )
+        {
+            m_Peripherals.Add( p );
         }
 
         public void Dump()

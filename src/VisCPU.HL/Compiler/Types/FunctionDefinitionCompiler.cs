@@ -20,7 +20,8 @@ namespace VisCPU.HL.Compiler.Types
         {
             bool isPublic = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpPublicMod );
             bool isStatic = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpStaticMod );
-            bool isAbstract = expr.FunctionDefinition.Mods.Any( x => x.Type == HlTokenType.OpAbstractMod );
+            bool isAbstract = expr.FunctionDefinition.Mods.Any(x => x.Type == HlTokenType.OpAbstractMod);
+            bool isInternal = expr.FunctionDefinition.Mods.Any(x => x.Type == HlTokenType.OpInternalMod);
 
             string funcName = expr.FunctionDefinition.Parent == null
                                   ? expr.FunctionDefinition.FunctionName.ToString()
@@ -72,7 +73,7 @@ namespace VisCPU.HL.Compiler.Types
                                             );
 
                                parsedVal.Add( "RET ; Compiler Safeguard." );
-                               parsedVal.Insert( 0, "." + funcName + ( isPublic ? "" : " linker:hide" ) );
+                               parsedVal.Insert( 0, "." + funcName + (isPublic ? "" : " linker:hide") + (isInternal ? " linker:internal" : ""));
 
                                return parsedVal.ToArray();
                            };
@@ -84,6 +85,7 @@ namespace VisCPU.HL.Compiler.Types
                                                          funcName,
                                                          isPublic,
                                                          isStatic,
+                                                         isInternal,
                                                          compiler,
                                                          expr.FunctionDefinition.Arguments.Length,
                                                          expr.FunctionDefinition.FunctionReturnType.ToString()

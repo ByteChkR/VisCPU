@@ -99,6 +99,7 @@ private static void v3pic_patch_symtable(uint libPtr)
 			kprintc('-');
 			kprintc('>');
 			kprintnl(newSite);
+			
 		}
 		symStart[1] = newSite;
 		symStart += v3pic_get_sym_entry_size(symStart);

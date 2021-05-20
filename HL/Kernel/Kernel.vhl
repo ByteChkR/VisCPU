@@ -111,7 +111,7 @@ public static void kernel_make_startup(uint s, uint l)
 public static void kernel_shutdown()
 {
 
-	string strKStart = "[Kernel] Shutdown Kernel...";
+	string strKStart = "[Kernel] Shutdown PROJECTNAME...";
 	kprintl(&strKStart, size_of(strKStart));
 	fs_unload(0);
 
@@ -128,8 +128,12 @@ public static void kernel_shutdown()
 
 public static void kernel_init()
 {
-	string strKStart = "[Kernel] Starting Kernel...";
+	string strKStart = "[Kernel] Starting PROJECTNAME...";
+	string strKTarget = "[Kernel] Target: PROJECTTARGET";
+	string strKVersion = "[Kernel] Version: PROJECTVERSION";
 	kprintl(&strKStart, size_of(strKStart));
+	kprintl(&strKTarget, size_of(strKTarget));
+	kprintl(&strKVersion, size_of(strKVersion));
 	fs_core_init();
 	dlr_init();
 	s_KernelDiskTable = malloc(size_of(DiskTable));

@@ -1,14 +1,14 @@
 #include "hfs_commands.vhl"
 
 // Status IDS
-private const uint HFS_STATUS_READY = 0x01;
-private const uint HFS_STATUS_FILE_OPEN = 0x02;
+private internal const uint HFS_STATUS_READY = 0x01;
+private internal const uint HFS_STATUS_FILE_OPEN = 0x02;
 
 // ADDRESSES
-private const uint HFS_ADDRESS_PRESENT = 0xFFFF3000;
-private const uint HFS_ADDRESS_STATUS = 0xFFFF3001;
-private const uint HFS_ADDRESS_DATA = 0xFFFF3002;
-private const uint HFS_ADDRESS_CMD = 0xFFFF3003;
+private internal const uint HFS_ADDRESS_PRESENT = 0xFFFF3000;
+private internal const uint HFS_ADDRESS_STATUS = 0xFFFF3001;
+private internal const uint HFS_ADDRESS_DATA = 0xFFFF3002;
+private internal const uint HFS_ADDRESS_CMD = 0xFFFF3003;
 
 public class HFS
 {

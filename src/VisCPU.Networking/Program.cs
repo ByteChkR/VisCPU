@@ -1,24 +1,29 @@
 ﻿using System;
-using System.Text;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
+
 using VisCPU.Peripherals.Network;
 using VisCPU.Peripherals.Network.Internal;
+using VisCPU.Utility;
 using VisCPU.Utility.Logging;
 
 namespace VisCPU.Networking
 {
-    class Program
+
+    internal class Program
     {
+
         private struct Command
         {
+
             private CommandFunc CommandFunction;
             private int ArgCount;
             public readonly string HelpText;
             public readonly string CommandName;
 
-            public Command(string name, CommandFunc fnc, string helpText, int argCount)
+            public Command( string name, CommandFunc fnc, string helpText, int argCount )
             {
                 CommandName = name;
                 CommandFunction = fnc;
@@ -26,154 +31,248 @@ namespace VisCPU.Networking
                 ArgCount = argCount;
             }
 
-            public bool TryExecute(string[] args)
+            public bool TryExecute( string[] args )
             {
-                if (ArgCount != args.Length)
+                if ( ArgCount != args.Length )
                 {
-                    Console.WriteLine("Expected {0} arguments but got {1} for Command '{2}'", ArgCount, args.Length, CommandName);
+                    Console.WriteLine(
+                                      "Expected {0} arguments but got {1} for Command '{2}'",
+                                      ArgCount,
+                                      args.Length,
+                                      CommandName
+                                     );
+
                     return false;
                 }
+
                 try
                 {
-                    CommandFunction(args);
+                    CommandFunction( args );
+
                     return true;
                 }
-                catch (Exception ex)
+                catch ( Exception ex )
                 {
-                    Console.WriteLine(ex.ToString());
+                    Console.WriteLine( ex.ToString() );
+
                     return false;
                 }
             }
+
         }
-        private delegate void CommandFunc(string[] args);
 
-        private static void ListAdapterNames(LocalNetworkNode node)
+        private delegate void CommandFunc( string[] args );
+
+        #region Private
+
+        private static void ClearDNSName( DNSNetworkAdapter nad, string[] names )
         {
-            NetworkAdapter[] entries = node.GetAllAdapters();
-            Console.WriteLine("Adapters: ");
-
-            for (int i = 0; i < entries.Length; i++)
+            foreach ( string name in names )
             {
-                NetworkAdapter entry = entries[i];
-                Console.WriteLine("{0}:\n\tEntry Address: {1}\n\tEntry GUID: {2}\n\tEntry Connected: {3}",
-                    i, entry.NetworkAddress, entry.GUID, entry.IsConnected);
+                nad.Unregister( name );
             }
         }
 
-        private static NetworkAdapter Find(LocalNetworkNode node, string guid)
+        private static NetworkAdapter Find( LocalNetworkNode node, string guid )
         {
-            return node.GetAllAdapters().FirstOrDefault(x => x.GUID.StartsWith(guid));
+            return node.GetAllAdapters().FirstOrDefault( x => x.GUID.StartsWith( guid ) );
         }
 
-        private static void ListAdapterPorts(LocalNetworkNode node, string guid)
-        {
-            NetworkAdapter adapter = Find(node, guid);
-            NetworkPortListener[] entries = adapter.GetAllPortListeners();
-            Console.WriteLine("Ports for Adapter: {0}", guid);
-
-            for (int i = 0; i < entries.Length; i++)
-            {
-                NetworkPortListener entry = entries[i];
-                Console.WriteLine("{0}\n\tIs Open: {1}\n\tPacket Count: {2}",
-                    entry.GetIdentity(), entry.IsOpen, entry.PacketCount);
-            }
-        }
-        private static void ListActiveTunnels(NetworkTunnelService service)
+        private static void ListActiveTunnels( NetworkTunnelService service )
         {
             NetworkTunnel[] entries = service.GetActiveNetworkTunnels();
-            Console.WriteLine("Active Tunnels: ");
+            Console.WriteLine( "Active Tunnels: " );
 
-            for (int i = 0; i < entries.Length; i++)
+            for ( int i = 0; i < entries.Length; i++ )
             {
                 NetworkTunnel entry = entries[i];
                 StringBuilder sb = new StringBuilder();
 
                 int[] remotes = entry.GetRemoteAdapters();
-                if (remotes.Length != 0)
+
+                if ( remotes.Length != 0 )
                 {
-                    sb.Append(remotes[0]);
-                    for(int adapterIndex = 1; adapterIndex < remotes.Length; adapterIndex++)
+                    sb.Append( remotes[0] );
+
+                    for ( int adapterIndex = 1; adapterIndex < remotes.Length; adapterIndex++ )
                     {
-                        sb.AppendFormat(", {0}", remotes[i]);
+                        sb.AppendFormat( ", {0}", remotes[i] );
                     }
                 }
 
-                Console.WriteLine("{0}\n\tIs Running: {1}\n\tEndpoint: {2}\n\tRemote Adapters: {3}",
-                    i, entry.IsRunning, entry.Endpoint, sb);
+                Console.WriteLine(
+                                  "{0}\n\tIs Running: {1}\n\tEndpoint: {2}\n\tRemote Adapters: {3}",
+                                  i,
+                                  entry.IsRunning,
+                                  entry.Endpoint,
+                                  sb
+                                 );
             }
         }
 
-        private static void ListDnsNames(DNSNetworkAdapter ad)
+        private static void ListAdapterNames( LocalNetworkNode node )
+        {
+            NetworkAdapter[] entries = node.GetAllAdapters();
+            Console.WriteLine( "Adapters: " );
+
+            for ( int i = 0; i < entries.Length; i++ )
+            {
+                NetworkAdapter entry = entries[i];
+
+                Console.WriteLine(
+                                  "{0}:\n\tEntry Address: {1}\n\tEntry GUID: {2}\n\tEntry Connected: {3}",
+                                  i,
+                                  entry.NetworkAddress,
+                                  entry.GUID,
+                                  entry.IsConnected
+                                 );
+            }
+        }
+
+        private static void ListAdapterPorts( LocalNetworkNode node, string guid )
+        {
+            NetworkAdapter adapter = Find( node, guid );
+            NetworkPortListener[] entries = adapter.GetAllPortListeners();
+            Console.WriteLine( "Ports for Adapter: {0}", guid );
+
+            for ( int i = 0; i < entries.Length; i++ )
+            {
+                NetworkPortListener entry = entries[i];
+
+                Console.WriteLine(
+                                  "{0}\n\tIs Open: {1}\n\tPacket Count: {2}",
+                                  entry.GetIdentity(),
+                                  entry.IsOpen,
+                                  entry.PacketCount
+                                 );
+            }
+        }
+
+        private static void ListDnsNames( DNSNetworkAdapter ad )
         {
             DNSNetworkAdapter.DNSEntry[] entries = ad.GetEntries();
-            Console.WriteLine("DNS Entries: ");
+            Console.WriteLine( "DNS Entries: " );
 
-            for (int i = 0; i < entries.Length; i++)
+            for ( int i = 0; i < entries.Length; i++ )
             {
                 DNSNetworkAdapter.DNSEntry entry = entries[i];
-                Console.WriteLine("{0}:\n\tEntry Name: {1}\n\tEntry Address: {2}\n\tEntry GUID: {3}",
-                    i, entry.Name, entry.CurrentAddress, entry.GUID);
+
+                Console.WriteLine(
+                                  "{0}:\n\tEntry Name: {1}\n\tEntry Address: {2}\n\tEntry GUID: {3}",
+                                  i,
+                                  entry.Name,
+                                  entry.CurrentAddress,
+                                  entry.GUID
+                                 );
             }
         }
 
-        static void Main(string[] args)
+        private static void Main( string[] args )
         {
-            Dictionary<string, Command> cmds = new Dictionary<string, Command>();
+            Dictionary < string, Command > cmds = new Dictionary < string, Command >();
 
-            Utility.AppRootHelper.SetAppDomainBase();
-            Logger.OnLogReceive += (x, y) => System.Console.WriteLine($"[{x}] {y}");
-            int port = args.Length > 0 ? int.Parse(args[0]) : 42069;
+            AppRootHelper.SetAppDomainBase();
+            Logger.OnLogReceive += ( x, y ) => Console.WriteLine( $"[{x}] {y}" );
+            int port = args.Length > 0 ? int.Parse( args[0] ) : 42069;
             LocalNetworkNode node = new LocalNetworkNode();
-            NetworkTunnelService tService = new NetworkTunnelService(node, port);
+            NetworkTunnelService tService = new NetworkTunnelService( node, port );
 
+            cmds.Add(
+                     "dns-names",
+                     new Command(
+                                 "dns-names",
+                                 ( s ) => ListDnsNames( node.DNSAdapter ),
+                                 "Lists all known hostnames",
+                                 0
+                                )
+                    );
 
-            cmds.Add("dns-names", new Command("dns-names", (s) => ListDnsNames(node.DNSAdapter), "Lists all known hostnames", 0));
-            cmds.Add("adapters", new Command("adapters", (s) => ListAdapterNames(node), "Lists all known adatpers", 0));
-            cmds.Add("ports", new Command("ports", (s) => ListAdapterPorts(node, s[0]), "Lists all Ports of the Adapter specified by partical or complete GUID", 1));
-            cmds.Add("clear", new Command("clear", (s) => Console.Clear(), "Clears the Console", 0));
-            cmds.Add("tunnels", new Command("tunnels", (s) => ListActiveTunnels(tService), "Lists all Active Tunnel Connections", 0));
+            cmds.Add(
+                     "adapters",
+                     new Command( "adapters", ( s ) => ListAdapterNames( node ), "Lists all known adatpers", 0 )
+                    );
 
+            cmds.Add(
+                     "ports",
+                     new Command(
+                                 "ports",
+                                 ( s ) => ListAdapterPorts( node, s[0] ),
+                                 "Lists all Ports of the Adapter specified by partical or complete GUID",
+                                 1
+                                )
+                    );
+
+            cmds.Add( "clear", new Command( "clear", ( s ) => Console.Clear(), "Clears the Console", 0 ) );
+
+            cmds.Add(
+                     "tunnels",
+                     new Command(
+                                 "tunnels",
+                                 ( s ) => ListActiveTunnels( tService ),
+                                 "Lists all Active Tunnel Connections",
+                                 0
+                                )
+                    );
+
+            cmds.Add(
+                     "dns-rem",
+                     new Command(
+                                 "dns-rem",
+                                 ( s ) => ClearDNSName( node.DNSAdapter, s ),
+                                 "Removes all specified DNS Names",
+                                 0
+                                )
+                    );
 
             tService.Start();
-            Thread.Sleep(1000);
+            Thread.Sleep( 1000 );
             string cmd = null;
-            Console.WriteLine("Type 'help' to display a list of commands.");
-            while (true)
+            Console.WriteLine( "Type 'help' to display a list of commands." );
+
+            while ( true )
             {
-                Console.Write("visnet> ");
+                Console.Write( "visnet> " );
                 cmd = Console.ReadLine();
-                if(cmd.ToLower() == "help")
+
+                if ( cmd.ToLower() == "help" )
                 {
-                    Console.WriteLine("Commands: ");
-                    Console.WriteLine("\texit => Exits visnet");
-                    Console.WriteLine("\thelp => Displays this Help Text");
-                    foreach (KeyValuePair<string, Command> kvp in cmds)
+                    Console.WriteLine( "Commands: " );
+                    Console.WriteLine( "\texit => Exits visnet" );
+                    Console.WriteLine( "\thelp => Displays this Help Text" );
+
+                    foreach ( KeyValuePair < string, Command > kvp in cmds )
                     {
-                        Console.WriteLine("\t{0} => {1}", kvp.Key, kvp.Value.HelpText);
+                        Console.WriteLine( "\t{0} => {1}", kvp.Key, kvp.Value.HelpText );
                     }
                 }
-                else if (cmd.ToLower() == "exit")
+                else if ( cmd.ToLower() == "exit" )
                 {
                     break;
                 }
 
-                string[] ar = cmd.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                string[] ar = cmd.Split( ' ', StringSplitOptions.RemoveEmptyEntries );
 
-                if(ar.Length == 0 || !cmds.ContainsKey(ar[0]))
+                if ( ar.Length == 0 || !cmds.ContainsKey( ar[0] ) )
                 {
-                    Console.WriteLine("Invalid Command: " + cmd);
+                    Console.WriteLine( "Invalid Command: " + cmd );
                 }
                 else
                 {
                     Command command = cmds[ar[0]];
-                    if(!command.TryExecute(ar.Skip(1).ToArray()))
+
+                    if ( !command.TryExecute( ar.Skip( 1 ).ToArray() ) )
                     {
-                        Console.WriteLine("Command Failed.");
+                        Console.WriteLine( "Command Failed." );
                     }
                 }
             }
+
             node.UnloadNode();
             tService.Stop();
         }
+
+        #endregion
+
     }
+
 }

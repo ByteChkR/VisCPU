@@ -1,4 +1,7 @@
-﻿namespace VisCPU.HL.Parser.Tokens.Combined
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace VisCPU.HL.Parser.Tokens.Combined
 {
 
     /// <summary>
@@ -15,7 +18,9 @@
         /// <summary>
         ///     Variable Modifiers
         /// </summary>
-        public IHlToken[] Modifiers { get; }
+        public IHlToken[] Modifiers => m_Modifiers.ToArray();
+
+        private List <IHlToken> m_Modifiers;
 
         /// <summary>
         ///     Variable Name
@@ -68,7 +73,7 @@
                                    typeName.SourceIndex
                                   )
         {
-            Modifiers = modifiers;
+            m_Modifiers = modifiers.ToList();
             Name = name;
             TypeName = typeName;
             InitializerExpression = initializerExpression;
@@ -82,6 +87,12 @@
         public override string ToString()
         {
             return $"{Unpack( Modifiers )} {TypeName} {Name}";
+        }
+
+        public void MakeInternal()
+        {
+            if (m_Modifiers.All( x => x.Type != HlTokenType.OpInternalMod ) )
+                m_Modifiers.Add( new HlTextToken( HlTokenType.OpInternalMod, "internal", -1 ) );
         }
 
         #endregion

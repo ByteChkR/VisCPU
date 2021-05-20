@@ -1,6 +1,6 @@
 {
   "ProjectName": "Kernel",
-  "ProjectVersion": "0.0.0.1",
+  "ProjectVersion": "2021.5.20.0",
   "Dependencies": [],
   "DefaultTarget": "Debug",
   "BuildTargets": {
@@ -20,7 +20,8 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/debug_build.json",
-            "build:input": "Program.vhl"
+            "build:input": "Program.vhl",
+            "imp:args": "PROJECTNAME=%NAME% PROJECTVERSION=%VERSION% PROJECTTARGET=%TARGET%"
           }
         }
       ]
@@ -70,7 +71,8 @@
           "BuildJobRunner": "merged",
           "Arguments": {
             "merge:include": "%VISDIR%common/jobs/release_build.json",
-            "build:input": "Program.vhl"
+            "build:input": "Program.vhl",
+            "imp:args": "PROJECTNAME=%NAME% PROJECTVERSION=%VERSION% PROJECTTARGET=%TARGET%"
           }
         }
       ]

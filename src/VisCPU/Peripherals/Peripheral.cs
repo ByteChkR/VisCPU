@@ -13,7 +13,8 @@ namespace VisCPU.Peripherals
     public abstract class Peripheral : VisBase
     {
 
-        public static readonly List<PeripheralImporter> DefaultPeripheralImporters = new List<PeripheralImporter>();
+        public static readonly List < PeripheralImporter > DefaultPeripheralImporters =
+            new List < PeripheralImporter >();
 
         public static SettingsCategory PeripheralCategory => CpuSettings.CpuCategory.AddCategory( "peripherals" );
 
@@ -48,7 +49,8 @@ namespace VisCPU.Peripherals
             return ExtensionLoader.LoadFrom < PeripheralImporter >(
                                                                    PeripheralExtensions.GetCategoryDirectory(),
                                                                    true
-                                                                  ).Concat(DefaultPeripheralImporters);
+                                                                  ).
+                                   Concat( DefaultPeripheralImporters );
         }
 
         public abstract bool CanRead( uint address );

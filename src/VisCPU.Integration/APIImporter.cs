@@ -62,7 +62,7 @@ namespace VisCPU.Integration
                             devAddr.ToHexString()
                            );
 
-            sb.AppendFormat( "public {1} {0}(", data.GetFinalName(), HLBaseTypeNames.s_UintTypeName );
+            sb.AppendFormat( "public internal {1} {0}(", data.GetFinalName(), HLBaseTypeNames.s_UintTypeName );
 
             for ( int i = 0; i < data.ParameterCount; i++ )
             {

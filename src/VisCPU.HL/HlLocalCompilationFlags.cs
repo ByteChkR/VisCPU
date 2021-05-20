@@ -8,6 +8,7 @@
         HL_LOC_MAKE_GLOBAL,
         HL_OPT_STRIP_PUBLIC,
         HL_OPT_NO_STRIP,
+        HL_EXPORT_CLASS,
 
     }
 

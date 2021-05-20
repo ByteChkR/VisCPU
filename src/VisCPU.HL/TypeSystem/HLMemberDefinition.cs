@@ -22,6 +22,8 @@ namespace VisCPU.HL.TypeSystem
 
         public bool IsAbstract { get; }
 
+        public bool IsInternal { get; }
+
         public string Name { get; }
 
         public int SourceIndex { get; }
@@ -50,7 +52,8 @@ namespace VisCPU.HL.TypeSystem
             IsPublic = mods.Any( x => x.Type == HlTokenType.OpPublicMod );
             IsVirtual = mods.Any( x => x.Type == HlTokenType.OpVirtualMod );
             IsOverride = mods.Any( x => x.Type == HlTokenType.OpOverrideMod );
-            IsAbstract = mods.Any( x => x.Type == HlTokenType.OpAbstractMod );
+            IsAbstract = mods.Any(x => x.Type == HlTokenType.OpAbstractMod);
+            IsInternal = mods.Any(x => x.Type == HlTokenType.OpInternalMod);
         }
 
         #endregion

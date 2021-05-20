@@ -161,7 +161,8 @@ namespace VisCPU.HL.Importer
                     data.Add(
                              new FunctionData(
                                               $"I{instruction.ArgumentCount}_{instruction.Key}",
-                                              false,
+                                              true,
+                                              true,
                                               true,
                                               null,
                                               ( int ) instruction.ArgumentCount,
@@ -175,6 +176,7 @@ namespace VisCPU.HL.Importer
 
             IExternalData d = new FunctionData(
                                                $"I{target.ArgumentCount}_{target.Key}",
+                                               true,
                                                true,
                                                true,
                                                null,

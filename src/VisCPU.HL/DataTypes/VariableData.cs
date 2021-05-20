@@ -110,7 +110,7 @@ namespace VisCPU.HL.DataTypes
         {
             string linkerArgs = "";
 
-            if ( IsVisible )
+            if ( !IsVisible )
             {
                 linkerArgs += "linker:hide ";
             }

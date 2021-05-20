@@ -7,7 +7,7 @@
 #include "InterruptHandler/InterruptHandler.vasm" int_set_hl_addr int_set_addr int_get_addr
 #include "Utils/CPUTools.vasm" cpu_restart
 
-public static void k_int_handler(uint code)
+private static void k_int_handler(uint code)
 {
 	string strKInt = "[KERNEL] Received Interrupt. Cleaning up and Restarting CPU...";
 	kprintl(&strKInt, size_of(strKInt));

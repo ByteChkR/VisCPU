@@ -105,25 +105,30 @@ namespace VisCPU.Utility.IO.Settings
         public static object GetSettings( Type t )
         {
             //Ensure that the static constructor of the type has ran.
-            RuntimeHelpers.RunClassConstructor(t.TypeHandle);
+            RuntimeHelpers.RunClassConstructor( t.TypeHandle );
 
-            if (s_DefaultLoaderMap.ContainsKey(t))
+            if ( s_DefaultLoaderMap.ContainsKey( t ) )
             {
-                if (s_DefaultLoaderMap[t].CachedObject != null)
+                if ( s_DefaultLoaderMap[t].CachedObject != null )
                 {
                     return s_DefaultLoaderMap[t].CachedObject;
                 }
 
                 SettingsEntry e = s_DefaultLoaderMap[t];
-                if(e.CachedObject==null)
-                    e.CachedObject = GetSettings(s_DefaultLoaderMap[t].FileLoader, t, s_DefaultLoaderMap[t].DefaultFile);
+
+                if ( e.CachedObject == null )
+                {
+                    e.CachedObject = GetSettings(
+                                                 s_DefaultLoaderMap[t].FileLoader,
+                                                 t,
+                                                 s_DefaultLoaderMap[t].DefaultFile
+                                                );
+                }
+
                 s_DefaultLoaderMap[t] = e;
 
                 return e.CachedObject;
             }
-
-
-           
 
             EventManager < ErrorEvent >.SendEvent( new SettingsLoaderNotFoundEvent( t ) );
 

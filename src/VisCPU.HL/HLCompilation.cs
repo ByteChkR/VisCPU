@@ -909,7 +909,7 @@ namespace VisCPU.HL
             foreach ( KeyValuePair < string, ConstantValueItem > keyValuePair in ConstValTypes )
             {
                 sb.AppendLine(
-                              $":const {keyValuePair.Key} {keyValuePair.Value.Value} {( keyValuePair.Value.IsPublic ? "" : "linker:hide" )}"
+                              $":const {keyValuePair.Key} {keyValuePair.Value.Value} {(keyValuePair.Value.IsPublic ? "" : "linker:hide") + (keyValuePair.Value.IsInternal ? " linker:internal" : "")}"
                              );
             }
 
@@ -970,6 +970,7 @@ namespace VisCPU.HL
             HlFunctionType type,
             string funcName,
             bool isStatic,
+            bool isInternal,
             HlTypeDefinition tdef,
             HlFuncDefOperand fdef )
         {
@@ -1011,7 +1012,8 @@ namespace VisCPU.HL
                                                           x => x.Type == HlTokenType.OpPublicMod
                                                          )
                                                          ? ""
-                                                         : " linker:hide" )
+                                                         : " linker:hide" ) +
+                                                   ( isInternal ? " linker:internal" : "" )
                                                   );
             }
 
@@ -1030,7 +1032,8 @@ namespace VisCPU.HL
                                                       x => x.Type == HlTokenType.OpPublicMod
                                                      )
                                                      ? ""
-                                                     : " linker:hide" )
+                                                     : " linker:hide") +
+                                               (isInternal ? " linker:internal" : "")
                                               );
 
             for ( int i = fdef.FunctionDefinition.
@@ -1607,6 +1610,8 @@ namespace VisCPU.HL
             {
                 if ( hlToken is HlVarDefOperand t )
                 {
+                    if (!HasFlag(HlLocalCompilationFlags.HL_EXPORT_CLASS))
+                        t.VariableDefinition.MakeInternal();
                     HlTypeDefinition tt = ts.GetType( Root, t.VariableDefinition.TypeName.ToString() );
 
                     uint arrSize = t.VariableDefinition.Size?.ToString().ParseUInt() ?? 1;
@@ -1661,6 +1666,8 @@ namespace VisCPU.HL
                 }
                 else if ( hlToken is HlFuncDefOperand fdef )
                 {
+                    if(!HasFlag(HlLocalCompilationFlags.HL_EXPORT_CLASS))
+                     fdef.FunctionDefinition.MakeInternal();
                     HlFunctionDefinition funcDef = new HlFunctionDefinition(
                                                                             fdef.FunctionDefinition.FunctionName.
                                                                                 ToString(),
@@ -1699,6 +1706,9 @@ namespace VisCPU.HL
                     bool isAbstract = fdef.FunctionDefinition.Mods.Any(
                                                                        x => x.Type == HlTokenType.OpAbstractMod
                                                                       );
+                    bool isInternal = fdef.FunctionDefinition.Mods.Any(
+                                                                       x => x.Type == HlTokenType.OpInternalMod
+                                                                      );
 
                     Func < string[] > compiler = null;
 
@@ -1710,6 +1720,7 @@ namespace VisCPU.HL
                                                                fdef.FunctionDefinition.FunctionType,
                                                                funcName,
                                                                isStatic,
+                                                               isInternal,
                                                                tdef,
                                                                fdef
                                                               );
@@ -1723,6 +1734,7 @@ namespace VisCPU.HL
                                                           x => x.Type == HlTokenType.OpPublicMod
                                                          ),
                                                      isStatic,
+                                                     isInternal,
                                                      compiler,
                                                      fdef.FunctionDefinition.Arguments.Length,
                                                      fdef.FunctionDefinition.FunctionReturnType.ToString()
@@ -1757,6 +1769,11 @@ namespace VisCPU.HL
                                                                                HlTokenType.OpStaticMod,
                                                                                "static",
                                                                                -1
+                                                                              ),
+                                                                          new HlTextToken(
+                                                                               HlTokenType.OpInternalMod,
+                                                                               "internal",
+                                                                               -1
                                                                               )
                                                                       }
                                                                      );
@@ -1784,10 +1801,10 @@ namespace VisCPU.HL
                                                      );
 
                                                  List < string > parsedVal = fComp.EmitterResult.Get().ToList();
-                                                 parsedVal.Insert( 0, "." + tdef.GetInternalConstructor( fComp ) );
+                                                 parsedVal.Insert( 0, "." + tdef.GetInternalConstructor( fComp ) + (sctor.IsInternal ? " linker:internal": ""));
                                                  parsedVal.InsertRange( 0, fComp.EmitVariables( false ) );
 
-                                                 parsedVal.Add( "." + funcName );
+                                                 parsedVal.Add( "." + funcName + (sctor.IsInternal ? " linker:internal" : ""));
                                                  parsedVal.Add( "PUSH 0" );
                                                  parsedVal.Add( "RET" );
 
@@ -1800,6 +1817,7 @@ namespace VisCPU.HL
                                                  funcName,
                                                  true,
                                                  true,
+                                                 false,
                                                  compiler,
                                                  1,
                                                  "void"

@@ -19,6 +19,8 @@ namespace VisCPU.HL.DataTypes
 
         public bool Static { get; }
 
+        public bool Internal { get; }
+
         public int UseCount { get; private set; } = 0;
 
         public ExternalDataType DataType => ExternalDataType.Function;
@@ -29,6 +31,7 @@ namespace VisCPU.HL.DataTypes
             string name,
             bool isPublic,
             bool isStatic,
+            bool isInternal,
             Func < string[] > funcCompiler,
             int parameterCount,
             string returnType )
@@ -36,6 +39,7 @@ namespace VisCPU.HL.DataTypes
             m_Name = name;
             Public = isPublic;
             Static = isStatic;
+            Internal = isInternal;
             m_FunctionCompiler = funcCompiler;
             m_CompiledOutput = null;
             ParameterCount = parameterCount;

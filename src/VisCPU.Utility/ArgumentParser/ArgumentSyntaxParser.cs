@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+
+using VisCPU.Utility.Logging;
 
 namespace VisCPU.Utility.ArgumentParser
 {
@@ -50,6 +53,28 @@ namespace VisCPU.Utility.ArgumentParser
             return ret.Distinct();
         }
 
+        private static void Resolve(Dictionary <string, string[]> parts)
+        {
+            foreach ( string key in parts.Keys )
+            {
+                List < string > keyParts = new List < string >( parts[key] );
+
+                for ( int i = 0; i < keyParts.Count; i++ )
+                {
+                    if ( keyParts[i].Length != 0 && keyParts[i][0] == '@' )
+                    {
+                        string file = keyParts[i].Remove( 0, 1 );
+                        Logger.LogMessage(LoggerSystems.Debug, "Resolving File: {0}", file);
+                        keyParts.RemoveAt( i );
+                        string content = File.ReadAllText( file );
+                        IEnumerable < string> contentParts = content.Split( ' ', '\n' ).Select(x=>x.Trim());
+                        keyParts.AddRange( contentParts );
+                        i--;
+                    }
+                }
+            }
+        }
+
         public static void Parse( Dictionary < string, string > args, params object[] objs )
         {
             Dictionary < string, string[] > parts = new Dictionary < string, string[] >();
@@ -64,6 +89,7 @@ namespace VisCPU.Utility.ArgumentParser
 
         public static void Parse( Dictionary < string, string[] > parts, params object[] objs )
         {
+            Resolve( parts );
             foreach ( object o in objs )
             {
                 Type t = o.GetType();

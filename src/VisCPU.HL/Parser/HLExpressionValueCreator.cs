@@ -33,11 +33,32 @@ namespace VisCPU.HL.Parser
                  parser.CurrentToken.Type == HlTokenType.OpPlus ||
                  parser.CurrentToken.Type == HlTokenType.OpMinus )
             {
-                HlTokenType t = parser.CurrentToken.Type;
-                parser.Eat( t );
-                HlExpression token = new HlUnaryOp( parser.ParseExpr(), t );
+                if ( parser.Reader.PeekNext().Type == HlTokenType.OpPlus )
+                {
+                    parser.Eat( HlTokenType.OpPlus );
+                    parser.Eat( HlTokenType.OpPlus );
+                    HlTokenType t = HlTokenType.OpUnaryPrefixIncrement;
+                    HlExpression token = new HlUnaryOp( parser.ParseExpr(), t );
 
-                return token;
+                    return token;
+                }
+                else if ( parser.Reader.PeekNext().Type == HlTokenType.OpMinus )
+                {
+                    parser.Eat( HlTokenType.OpMinus );
+                    parser.Eat( HlTokenType.OpMinus );
+                    HlTokenType t = HlTokenType.OpUnaryPrefixDecrement;
+                    HlExpression token = new HlUnaryOp( parser.ParseExpr(), t );
+
+                    return token;
+                }
+                else
+                {
+                    HlTokenType t = parser.CurrentToken.Type;
+                    parser.Eat( t );
+                    HlExpression token = new HlUnaryOp( parser.ParseExpr(), t );
+
+                    return token;
+                }
             }
 
             if ( parser.CurrentToken.Type == HlTokenType.OpAnd )

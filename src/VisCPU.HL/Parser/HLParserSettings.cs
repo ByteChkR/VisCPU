@@ -60,6 +60,7 @@ namespace VisCPU.HL.Parser
         private readonly char m_OperatorTilde = '~';
         private readonly string m_OverrideModifier = "override";
         private readonly string m_PrivateModifier = "private";
+        private readonly string m_InternalModifier = "internal";
         private readonly string m_ProtectedModifier = "protected";
 
         private readonly string m_PublicModifier = "public";
@@ -115,7 +116,8 @@ namespace VisCPU.HL.Parser
                 { m_ConstModifier, HlTokenType.OpConstMod },
                 { m_ReturnKey, HlTokenType.OpReturn },
                 { m_VoidKey, HlTokenType.OpTypeVoid },
-                { m_OperatorKey, HlTokenType.OpOperatorImpl }
+                { m_OperatorKey, HlTokenType.OpOperatorImpl },
+                { m_InternalModifier, HlTokenType.OpInternalMod }
             };
 
         /// <summary>
@@ -131,7 +133,8 @@ namespace VisCPU.HL.Parser
                 { m_AbstractModifier, HlTokenType.OpAbstractMod },
                 { m_VirtualModifier, HlTokenType.OpVirtualMod },
                 { m_OverrideModifier, HlTokenType.OpOverrideMod },
-                { m_PrivateModifier, HlTokenType.OpPrivateMod }
+                { m_PrivateModifier, HlTokenType.OpPrivateMod },
+                { m_InternalModifier, HlTokenType.OpInternalMod }
             };
 
         /// <summary>
