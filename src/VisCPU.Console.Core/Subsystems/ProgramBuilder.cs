@@ -83,7 +83,7 @@ namespace VisCPU.Console.Core.Subsystems
         public static void Build( BuilderSettings settings, IEnumerable < string > importerArgs )
         {
             TextImporter.ParseImporterArgs( importerArgs.ToArray() );
-            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter(), new RawFileImporter() );
+            ImporterSystem.Add( new InstructionDataImporter(), new LinkerImporter(), new RawFileImporter(), new StringFileImporter() );
 
             foreach ( PeripheralImporter peripheralImporter in Peripheral.GetPeripheralImporters() )
             {

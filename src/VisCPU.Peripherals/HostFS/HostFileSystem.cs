@@ -80,8 +80,10 @@ namespace VisCPU.Peripherals.HostFS
                 if ( m_ReadFileSize )
                 {
                     m_ReadFileSize = false;
+                    uint sz = ( uint ) m_CurrentFile.Length / sizeof( uint );
+                    uint rem = ( uint ) m_CurrentFile.Length % sizeof( uint );
 
-                    return ( uint ) m_CurrentFile.Length / sizeof( uint );
+                    return rem == 0 ? sz : sz + 1;
                 }
 
                 if ( m_ReadFileExists )
@@ -106,14 +108,14 @@ namespace VisCPU.Peripherals.HostFS
                     byte[] buf = new byte[sizeof( uint )];
                     int read = m_CurrentFileStream.Read( buf, 0, sizeof( uint ) );
 
-                    if ( read != sizeof( uint ) )
-                    {
-                        EventManager < ErrorEvent >.SendEvent(
-                                                              new HostFileSystemReadFailureEvent(
-                                                                   "Did not read full uint size."
-                                                                  )
-                                                             );
-                    }
+                    //if ( read != sizeof( uint ) )
+                    //{
+                    //    EventManager < ErrorEvent >.SendEvent(
+                    //                                          new HostFileSystemReadFailureEvent(
+                    //                                               "Did not read full uint size."
+                    //                                              )
+                    //                                         );
+                    //}
 
                     return BitConverter.ToUInt32( buf, 0 );
                 }
