@@ -1,1 +1,0 @@
-%SystemRoot%\explorer.exe ".\src\VisCPU.Console\bin\Debug\net5.0"

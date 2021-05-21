@@ -1,7 +1,0 @@
-#define inj_hfs(fsPath, hfsPath)
-{
-	kal_inject_from_hfs(&fsPath, 
-					size_of(fsPath), 
-					&hfsPath,
-					size_of(hfsPath))
-}

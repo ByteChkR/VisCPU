@@ -1,8 +1,0 @@
-#include "System/System.vhl"
-#include "BootLoader.vhl"
-
-
-SET_ENABLE_THROW_ERRORS(1); //Enable Throwing Exceptions
-SET_ENABLE_RANGE_CHECK(1); //Enable Range Checking on Arrays and LinkedLists
-
-BootLoader.Load();

@@ -1,6 +1,0 @@
-
-//Kernel Files
-#define K_STARTUP_CONFIG "0:configs/os/startup.cfg"
-
-//DLR App Start
-#define DLR_APP_START "APP_START"

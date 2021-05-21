@@ -1,6 +1,0 @@
-#import "link D:\Users\Tim\Documents\viscpu\HL\Kernel\Program.vbin"
-
-public static void APP_START(uint args, uint argc)
-{
-	kclear();
-}
