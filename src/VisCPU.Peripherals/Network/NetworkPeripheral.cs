@@ -43,6 +43,10 @@ namespace VisCPU.Peripherals.Network
 
         public override uint PresentPin => 0xFFFF8000;
 
+        public override uint AddressRangeStart => PresentPin;
+
+        public override uint AddressRangeEnd => m_ArgumentPin;
+
         private uint m_CommandPin => PresentPin + 1;
 
         private uint m_ArgumentPin => PresentPin + 2;
@@ -64,16 +68,7 @@ namespace VisCPU.Peripherals.Network
             m_Adapter = new NetworkAdapter( settings.GetNode() );
             m_Adapter.GUID = settings.NodeAdapterGUID;
         }
-
-        public override bool CanRead( uint address )
-        {
-            return address == m_CommandPin || address == PresentPin;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return address == m_CommandPin || address == m_ArgumentPin;
-        }
+        
 
         public override uint ReadData( uint address )
         {
@@ -84,6 +79,8 @@ namespace VisCPU.Peripherals.Network
 
             if ( address == m_CommandPin )
             {
+                if ( m_ReturnQueue.Count == 0 )
+                    AttachedCpu.FireInterrupt( 1 );
                 return m_ReturnQueue.Dequeue();
             }
 

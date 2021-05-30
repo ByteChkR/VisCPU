@@ -13,6 +13,8 @@ namespace VisCPU.Peripherals
     public abstract class Peripheral : VisBase
     {
 
+        public bool ContainsInRange( uint addr ) => AddressRangeStart <= addr && AddressRangeEnd >= addr;
+
         public static readonly List < PeripheralImporter > DefaultPeripheralImporters =
             new List < PeripheralImporter >();
 
@@ -26,6 +28,9 @@ namespace VisCPU.Peripherals
         public abstract PeripheralType PeripheralType { get; }
 
         public abstract uint PresentPin { get; }
+
+        public abstract uint AddressRangeStart { get; }
+        public abstract uint AddressRangeEnd { get; }
 
         protected Cpu AttachedCpu { get; private set; }
 
@@ -52,10 +57,11 @@ namespace VisCPU.Peripherals
                                                                   ).
                                    Concat( DefaultPeripheralImporters );
         }
+        
 
-        public abstract bool CanRead( uint address );
+        //public abstract bool CanRead( uint address );
 
-        public abstract bool CanWrite( uint address );
+        //public abstract bool CanWrite( uint address );
 
         public abstract uint ReadData( uint address );
 

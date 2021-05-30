@@ -21,12 +21,13 @@ namespace VisCPU.HL.Compiler.Special
                                        $".{startLabel} linker:hide"
                                       ); //Unused, makes clear where the for compiler started emitting code.
 
-            ExpressionTarget
-                target = subFor.Parse( expr.VDecl ).MakeAddress( subFor ); //Declare Variable(left)
+            ExpressionTarget targetVal = subFor.Parse( expr.VDecl );
+            ExpressionTarget target = targetVal.MakeAddress( subFor ); //Declare Variable(left)
 
             subFor.EmitterResult.Store( $".{condLabel} linker:hide" ); //Label to jumpto
 
-            ExpressionTarget cond = subFor.Parse( expr.Condition ).MakeAddress( subFor ); //Check Condition
+            ExpressionTarget condVal = subFor.Parse(expr.Condition); //Check Condition
+            ExpressionTarget cond = condVal.MakeAddress(subFor); //Check Condition
 
             subFor.EmitterResult.Emit(
                                       $"BEZ",
@@ -50,8 +51,10 @@ namespace VisCPU.HL.Compiler.Special
                                        $".{endLabel} linker:hide"
                                       ); //End label that we jump to if we exit the loop
 
-            subFor.ReleaseTempVar( target.ResultAddress );
-            subFor.ReleaseTempVar( cond.ResultAddress );
+            subFor.ReleaseTempVar(target.ResultAddress);
+            subFor.ReleaseTempVar(targetVal.ResultAddress);
+            subFor.ReleaseTempVar(cond.ResultAddress);
+            subFor.ReleaseTempVar(condVal.ResultAddress);
 
             compilation.EmitterResult.Store( subFor.EmitVariables( false ) );
             compilation.EmitterResult.Store( subFor.EmitterResult.Get() );

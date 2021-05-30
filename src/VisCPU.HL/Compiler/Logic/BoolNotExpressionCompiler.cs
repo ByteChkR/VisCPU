@@ -15,9 +15,10 @@ namespace VisCPU.HL.Compiler.Logic
             HlUnaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
+            ExpressionTarget targetVal = compilation.Parse(
+                                                           expr.Left
+                                                          );
+            ExpressionTarget target = targetVal.
                                                   MakeAddress( compilation );
 
             //BNE target rTarget if_b0_fail
@@ -29,6 +30,7 @@ namespace VisCPU.HL.Compiler.Logic
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "0" );
             compilation.EmitterResult.Store( $".{label} linker:hide" );
             compilation.ReleaseTempVar( target.ResultAddress );
+            compilation.ReleaseTempVar( targetVal.ResultAddress );
 
             return outputTarget;
         }

@@ -17,10 +17,12 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
 
-            ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
-                                                   MakeAddress( compilation );
+            ExpressionTarget rTargetVal = compilation.Parse(
+                                                            expr.Left
+                                                           );
+            ExpressionTarget rTarget = rTargetVal.
+                MakeAddress(compilation);
+
 
             if ( target.ResultAddress == outputTarget.ResultAddress )
             {
@@ -30,7 +32,8 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
                                                rTarget.ResultAddress
                                               );
 
-                compilation.ReleaseTempVar( rTarget.ResultAddress );
+                compilation.ReleaseTempVar(rTarget.ResultAddress);
+                compilation.ReleaseTempVar(rTargetVal.ResultAddress);
             }
             else
             {
@@ -43,6 +46,7 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
 
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
                 compilation.ReleaseTempVar( target.ResultAddress );
+                compilation.ReleaseTempVar(rTargetVal.ResultAddress);
 
                 return outputTarget;
             }

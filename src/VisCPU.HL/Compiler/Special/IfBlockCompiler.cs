@@ -38,7 +38,8 @@ namespace VisCPU.HL.Compiler.Special
 
                         foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
                         {
-                            subIf.Parse( hlExpression );
+                            ExpressionTarget e = subIf.Parse(hlExpression);
+                            compilation.ReleaseTempVar(e.ResultAddress);
                         }
 
                         compilation.EmitterResult.Store( subIf.EmitVariables( false ) );
@@ -60,10 +61,10 @@ namespace VisCPU.HL.Compiler.Special
                     subIf.EmitterResult.Store( $".{thisLabel} linker:hide" );
                 }
 
-                ExpressionTarget exprTarget = subIf.Parse(
+                ExpressionTarget exprTargetVal = subIf.Parse(
                                                           expr.ConditionMap[i].Item1
-                                                         ).
-                                                    MakeAddress( subIf );
+                                                         );
+                ExpressionTarget exprTarget = exprTargetVal.MakeAddress( subIf );
 
                 string nextLabel;
 
@@ -80,11 +81,13 @@ namespace VisCPU.HL.Compiler.Special
 
                 foreach ( HlExpression hlExpression in expr.ConditionMap[i].Item2 )
                 {
-                    subIf.Parse( hlExpression );
+                    ExpressionTarget e = subIf.Parse(hlExpression);
+                    compilation.ReleaseTempVar(e.ResultAddress);
                 }
 
                 subIf.EmitterResult.Emit( $"JMP", endLabel );
-                subIf.ReleaseTempVar( exprTarget.ResultAddress );
+                subIf.ReleaseTempVar(exprTarget.ResultAddress);
+                subIf.ReleaseTempVar(exprTargetVal.ResultAddress);
 
                 compilation.EmitterResult.Store( subIf.EmitVariables( false ) );
                 compilation.EmitterResult.Store( subIf.EmitterResult.Get() );
@@ -97,7 +100,8 @@ namespace VisCPU.HL.Compiler.Special
 
                 foreach ( HlExpression hlExpression in expr.ElseBranch )
                 {
-                    subIf.Parse( hlExpression );
+                    ExpressionTarget e = subIf.Parse( hlExpression );
+                    compilation.ReleaseTempVar( e.ResultAddress );
                 }
 
                 compilation.EmitterResult.Store( subIf.EmitVariables( false ) );

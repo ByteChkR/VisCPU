@@ -5,9 +5,7 @@
     {
 
         MemoryBusDriver,
-        ConsoleOutput,
-        ConsoleInput,
-        ConsoleManagement,
+        Console,
         Memory,
         Drive,
         Time,

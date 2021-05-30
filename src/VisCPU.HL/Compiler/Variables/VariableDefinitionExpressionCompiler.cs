@@ -49,6 +49,16 @@ namespace VisCPU.HL.Compiler.Variables
                     vdef = new ArrayTypeDefintion( compilation.Root, vdef, arrSize );
                 }
 
+                HlExpression init = expr.Initializer.FirstOrDefault();
+
+                if (vdef.GetSize() > 1)
+                {
+                    if ( init is HlVarOperand vo )
+                    {
+
+                    }
+                }
+
                 compilation.CreateVariable(
                                            asmVarName,
                                            arrSize,
@@ -60,7 +70,6 @@ namespace VisCPU.HL.Compiler.Variables
                                                : VariableDataEmitFlags.None
                                           );
 
-                HlExpression init = expr.Initializer.FirstOrDefault();
 
                 if ( init != null )
                 {
@@ -102,13 +111,17 @@ namespace VisCPU.HL.Compiler.Variables
 
                 if ( init != null )
                 {
-                    return compilation.Parse( init, dvar ).CopyIfNotNull( compilation, dvar );
+                    ExpressionTarget initVal =  compilation.Parse( init, dvar );
+
+                    ExpressionTarget initRet= initVal.CopyIfNotNull( compilation, dvar );
+                    compilation.ReleaseTempVar( initVal.ResultAddress );
+
+                    return initRet;
                 }
 
                 return dvar;
             }
-
-            if ( expr.VariableDefinition.Modifiers.Any( x => x.Type == HlTokenType.OpConstMod ) )
+            else 
             {
                 string asmVarName = expr.VariableDefinition.Name.ToString();
 

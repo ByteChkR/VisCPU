@@ -17,10 +17,10 @@ namespace VisCPU.HL.Compiler.Math
         {
             ExpressionTarget target = compilation.Parse( expr.Left );
 
-            ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
-                                                   MakeAddress( compilation );
+            ExpressionTarget rTargetVal = compilation.Parse(
+                                                            expr.Right
+                                                           );
+                ExpressionTarget rTarget = rTargetVal.MakeAddress(compilation);
 
             string instrKey =
                 target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName ||
@@ -34,7 +34,8 @@ namespace VisCPU.HL.Compiler.Math
                                            rTarget.ResultAddress
                                           );
 
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(rTargetVal.ResultAddress);
 
             return target;
         }

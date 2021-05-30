@@ -16,6 +16,9 @@ namespace VisCPU.Peripherals.Time
 
         public override uint PresentPin => m_Settings.PresentPin;
 
+        public override uint AddressRangeStart => m_Settings.PresentPin;
+        public override uint AddressRangeEnd => m_Settings.TimePin;
+
         #region Unity Event Functions
 
         public override void Reset()
@@ -34,16 +37,6 @@ namespace VisCPU.Peripherals.Time
         public TimeDevice( TimeDeviceSettings settings )
         {
             m_Settings = settings;
-        }
-
-        public override bool CanRead( uint address )
-        {
-            return m_Settings.PresentPin == address || m_Settings.TimePin == address;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return false;
         }
 
         public override uint ReadData( uint address )

@@ -127,8 +127,9 @@ namespace VisCPU.HL.Compiler.Types
                                  data
                                 );
 
-                    ExpressionTarget t = compilation.Parse( inv, outputTarget ).
-                                                     CopyIfNotNull( compilation, outputTarget );
+                    ExpressionTarget tVal = compilation.Parse( inv, outputTarget );
+                    ExpressionTarget t = tVal.CopyIfNotNull( compilation, outputTarget );
+
 
                     return t;
                 }

@@ -26,6 +26,10 @@
 
         public override uint PresentPin => m_Settings.PresentAddress;
 
+        public override uint AddressRangeStart => m_Settings.PresentAddress;
+
+        public override uint AddressRangeEnd => m_Settings.ReadBufferAddress;
+
         #region Public
 
         public abstract uint GetSize();
@@ -37,22 +41,6 @@
         public abstract void Write( uint address, uint data );
 
         public abstract void WriteBuffer( uint address, uint destination, uint length );
-
-        public override bool CanRead( uint address )
-        {
-            return m_Settings.GetSizeAddress == address ||
-                   m_Settings.PresentAddress == address ||
-                   m_Settings.ReadAddress == address;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return m_Settings.GetSizeAddress == address ||
-                   m_Settings.ReadAddress == address ||
-                   m_Settings.ReadBufferAddress == address ||
-                   m_Settings.WriteAddress == address ||
-                   m_Settings.WriteBufferAddress == address;
-        }
 
         public override uint ReadData( uint address )
         {

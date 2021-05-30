@@ -14,6 +14,8 @@ namespace VisCPU.Utility.SharedBase
         public bool Internal => LinkerArguments.Contains("linker:internal");
 
         public uint Address { get; set; }
+        public uint Size { get; set; }
+        public bool IsEmpty { get; set; }
 
         public object[] LinkerArguments { get; set; }
 
@@ -22,7 +24,9 @@ namespace VisCPU.Utility.SharedBase
             return new AddressItem
                    {
                        Address = ( uint ) ( Address + off ),
-                       LinkerArguments = LinkerArguments
+                       LinkerArguments = LinkerArguments,
+                       IsEmpty = IsEmpty,
+                       Size = Size
                    };
         }
 

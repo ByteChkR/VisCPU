@@ -25,6 +25,11 @@ namespace VisCPU.Peripherals.HostFS
 
         public override PeripheralType PeripheralType => PeripheralType.Custom;
 
+
+        public override uint AddressRangeStart => m_Settings.PinPresent;
+
+        public override uint AddressRangeEnd => m_Settings.PinCmd;
+
         public override uint PresentPin => m_Settings.PinPresent;
 
         #region Unity Event Functions
@@ -51,16 +56,6 @@ namespace VisCPU.Peripherals.HostFS
 
         public HostFileSystem() : this( SettingsManager.GetSettings < HostFileSystemSettings >() )
         {
-        }
-
-        public override bool CanRead( uint address )
-        {
-            return address == m_Settings.PinData || address == m_Settings.PinPresent || address == m_Settings.PinStatus;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return address == m_Settings.PinCmd || address == m_Settings.PinData;
         }
 
         public override uint ReadData( uint address )

@@ -31,6 +31,10 @@ namespace VisCPU
         private uint m_PeripheralNameId;
         private uint m_PeripheralNameIndex;
 
+        public override uint AddressRangeStart => ( uint ) AddressPins.PeripheralPresent;
+
+        public override uint AddressRangeEnd => (uint)AddressPins.PeripheralNameLength;
+
         //Peripheral Info
         // Name
         // Device Type
@@ -57,23 +61,6 @@ namespace VisCPU
 
         #region Public
 
-        public override bool CanRead( uint address )
-        {
-            return address == PresentPin ||
-                   address == ( uint ) AddressPins.PeripheralCount ||
-                   address == ( uint ) AddressPins.PeripheralAddress ||
-                   address == ( uint ) AddressPins.PeripheralType ||
-                   address == ( uint ) AddressPins.PeripheralName ||
-                   address == ( uint ) AddressPins.PeripheralNameLength;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return address == ( uint ) AddressPins.PeripheralAddress ||
-                   address == ( uint ) AddressPins.PeripheralType ||
-                   address == ( uint ) AddressPins.PeripheralName ||
-                   address == ( uint ) AddressPins.PeripheralNameLength;
-        }
 
         public override uint ReadData( uint address )
         {

@@ -12,14 +12,16 @@ namespace VisCPU.HL.Compiler.Special
         {
             if ( expr.Right != null )
             {
-                ExpressionTarget pt = compilation.Parse(
-                                                        expr.Right
-                                                       ).
+                ExpressionTarget ptVal = compilation.Parse(
+                                                           expr.Right
+                                                          );
+                ExpressionTarget pt = ptVal.
                                                   MakeAddress( compilation );
 
                 compilation.EmitterResult.Emit( $"PUSH", pt.ResultAddress );
 
-                compilation.ReleaseTempVar( pt.ResultAddress );
+                compilation.ReleaseTempVar(pt.ResultAddress);
+                compilation.ReleaseTempVar(ptVal.ResultAddress);
             }
             else
             {

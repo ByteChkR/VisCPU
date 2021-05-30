@@ -17,12 +17,12 @@ namespace VisCPU.HL.Compiler.Special
 
             HlCompilation whileComp = new HlCompilation( compilation, HlCompilation.GetUniqueName( "while" ) );
             whileComp.EmitterResult.Store( $".{startLabel} linker:hide" );
-            ExpressionTarget target = whileComp.Parse( expr.Condition );
+            ExpressionTarget targetVal = whileComp.Parse( expr.Condition );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeWhileConditionExpressions &&
-                 !target.IsAddress )
+                 !targetVal.IsAddress )
             {
-                if ( target.StaticParse() != 0 )
+                if (targetVal.StaticParse() != 0 )
 
                     //If True we parse body without check and directly jump to condition
                     //If False we omit the whole loop entirely
@@ -36,13 +36,14 @@ namespace VisCPU.HL.Compiler.Special
                 return new ExpressionTarget();
             }
 
-            target = target.MakeAddress( whileComp ); //Make sure we have an address and not a static value
+            ExpressionTarget target = targetVal.MakeAddress( whileComp ); //Make sure we have an address and not a static value
 
             whileComp.EmitterResult.Emit( $"BEZ", target.ResultAddress, endLabel );
 
             ParseBody( whileComp, expr, startLabel, endLabel );
 
-            whileComp.ReleaseTempVar( target.ResultAddress );
+            whileComp.ReleaseTempVar(target.ResultAddress);
+            whileComp.ReleaseTempVar(targetVal.ResultAddress);
 
             compilation.EmitterResult.Store( whileComp.EmitVariables( false ) );
             compilation.EmitterResult.Store( whileComp.EmitterResult.Get() );
@@ -65,7 +66,8 @@ namespace VisCPU.HL.Compiler.Special
         {
             foreach ( HlExpression hlExpression in expr.Block )
             {
-                compilation.Parse( hlExpression );
+                ExpressionTarget e = compilation.Parse( hlExpression );
+               compilation.ReleaseTempVar(e.ResultAddress);
             }
 
             compilation.EmitterResult.Emit( $"JMP", start );

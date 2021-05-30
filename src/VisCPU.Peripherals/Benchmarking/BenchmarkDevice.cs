@@ -51,6 +51,10 @@ namespace VisCPU.Peripherals.Benchmarking
 
         public override PeripheralType PeripheralType => PeripheralType.Custom;
 
+        public override uint AddressRangeStart => DevicePresent;
+
+        public override uint AddressRangeEnd => RunSetName;
+
         public override uint PresentPin => DevicePresent;
 
         #region Unity Event Functions
@@ -64,16 +68,7 @@ namespace VisCPU.Peripherals.Benchmarking
         #endregion
 
         #region Public
-
-        public override bool CanRead( uint address )
-        {
-            return address == DevicePresent;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return address == RunSetName || address == RunClearName || address == RunEnd || address == RunBegin;
-        }
+        
 
         public override uint ReadData( uint address )
         {

@@ -25,10 +25,10 @@ namespace VisCPU.HL.Compiler.Special
                                                             true
                                                            );
 
-            ExpressionTarget pn = compilation.Parse(
-                                                    expr.ParameterList[0]
-                                                   ).
-                                              MakeAddress( compilation );
+            ExpressionTarget pnVal = compilation.Parse(
+                                                       expr.ParameterList[0]
+                                                      );
+            ExpressionTarget pn = pnVal.MakeAddress( compilation );
 
             if ( tempPtrVar.TypeDefinition is ArrayTypeDefintion adef )
             {
@@ -57,13 +57,15 @@ namespace VisCPU.HL.Compiler.Special
 
                 compilation.ReleaseTempVar( tempPtr.ResultAddress );
                 compilation.ReleaseTempVar( tempPtrVar.ResultAddress );
-                compilation.ReleaseTempVar( pn.ResultAddress );
+                compilation.ReleaseTempVar(pn.ResultAddress);
+                compilation.ReleaseTempVar(pnVal.ResultAddress);
 
                 return outputTarget;
             }
 
             compilation.ReleaseTempVar( tempPtrVar.ResultAddress );
             compilation.ReleaseTempVar( pn.ResultAddress );
+            compilation.ReleaseTempVar(pnVal.ResultAddress);
 
             return tempPtr;
         }

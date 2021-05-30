@@ -4,12 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using VisCPU.Compiler.Assembler;
 using VisCPU.Compiler.Compiler.Events;
+using VisCPU.Compiler.Linking;
 using VisCPU.Compiler.Parser;
 using VisCPU.Compiler.Parser.Tokens;
 using VisCPU.Utility;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
 
@@ -54,7 +57,26 @@ namespace VisCPU.Compiler.Compiler
             Tokens = Tokenizer.Tokenize( Source );
             ResolveConstantItems();
             ProcessFileReferences();
-            CreateDataSection();
+
+            AssemblyGeneratorSettings s = SettingsManager.GetSettings < AssemblyGeneratorSettings >();
+            if (s.Format.Contains("-ovars"))
+            {
+                (string name, AddressItem item)[] emptyItems = CreateDataSection_Reduced();
+
+                uint currentAddr = (uint)DataSection.Count;
+                for ( int i = 0; i < emptyItems.Length; i++ )
+                {
+                    (string name, AddressItem item) = emptyItems[i];
+                    item.Address = currentAddr;
+                    item.IsEmpty = true;
+                    DataSectionHeader[name] = item;
+                    currentAddr += item.Size;
+                }
+            }
+            else
+            {
+                CreateDataSection_Full();
+            }
             ProcessLabels();
         }
 
@@ -127,10 +149,11 @@ namespace VisCPU.Compiler.Compiler
                 {
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 3 ) );
 
-                    DataSectionHeader[name.GetValue()] = new AddressItem
+                    AddressItem item = new AddressItem
                                                          {
                                                              Address = ( uint ) DataSection.Count,
-                                                             LinkerArguments = linkerArgs
+                                                             LinkerArguments = linkerArgs,
+                                                             IsEmpty = false,
                                                          };
 
                     WordToken tFile = Tokens[i][2] as WordToken;
@@ -148,6 +171,8 @@ namespace VisCPU.Compiler.Compiler
                     string p = Tokens[i][2] is StringToken st ? st.GetContent() : Tokens[i][2].ToString();
 
                     uint[] data = File.ReadAllBytes( p ).ToUInt();
+                    item.Size = (uint)data.Length;
+                    DataSectionHeader[name.GetValue()] = item;
                     DataSection.AddRange( data );
 
                     DataSectionHeader[name.GetValue() + "_LEN"] = new AddressItem
@@ -157,7 +182,9 @@ namespace VisCPU.Compiler.Compiler
                                                                           new[]
                                                                           {
                                                                               "linker:autogen", "linker:file_length"
-                                                                          }
+                                                                          },
+                                                                      IsEmpty = false,
+                                                                      Size = 1
                                                                   };
 
                     DataSection.Add( ( uint ) data.Length );
@@ -168,7 +195,91 @@ namespace VisCPU.Compiler.Compiler
             }
         }
 
-        private void CreateDataSection()
+        private (string, AddressItem)[] CreateDataSection_Reduced()
+        {
+            List < (string, AddressItem) > emptyItems = new List < (string, AddressItem) >();
+            for (int i = 0; i < Tokens.Count; i++)
+            {
+                if (Tokens[i].Length >= 3 &&
+                     Tokens[i][1] is WordToken name &&
+                     Tokens[i][0] is WordToken word &&
+                     word.GetValue() == ":data")
+                {
+                    object[] linkerArgs = ParseLinkerArgs(Tokens[i].Skip(3));
+
+                    AddressItem item = new AddressItem
+                    {
+                        Address = (uint)DataSection.Count,
+                        LinkerArguments = linkerArgs,
+                        IsEmpty = false
+                    };
+
+                    if (Tokens[i][2] is StringToken str)
+                    {
+                        bool compress = linkerArgs.Contains("string:packed");
+                        bool nullTerm = linkerArgs.Contains("string:c-style");
+                        string data = str.GetContent();
+
+                        if (nullTerm)
+                        {
+                            data = data + '\0';
+                        }
+
+                        if (compress)
+                        {
+                            List<byte> cData = Encoding.ASCII.GetBytes(data).ToList();
+                            cData.AddRange(Enumerable.Repeat((byte)0, cData.Count % sizeof(uint)));
+
+                            item.Size = (uint)(cData.Count / sizeof(uint));
+
+                            for (int j = 0; j < cData.Count / sizeof(uint); j++)
+                            {
+                                DataSection.Add(BitConverter.ToUInt32(cData.ToArray(), j));
+                            }
+                        }
+                        else
+                        {
+                            item.Size = ( uint ) data.Length;
+                            DataSection.AddRange(data.Select(x => (uint)x));
+                        }
+                    }
+                    else if (Tokens[i][2] is ValueToken val)
+                    {
+                        uint defVal = Tokens[i].Length == 4 && Tokens[i][3] is ValueToken defV
+                                          ? defV.Value
+                                          : 0;
+
+                        item.Size = val.Value;
+                        if (defVal == 0)
+                        {
+                            item.IsEmpty = true;
+                            emptyItems.Add( ( name.GetValue(), item ) );
+
+                            Tokens.RemoveAt(i);
+                            i--;
+                            continue;
+                        }
+                        DataSection.AddRange(Enumerable.Repeat(defVal, (int)val.Value));
+                    }
+                    else
+                    {
+                        EventManager<ErrorEvent>.SendEvent(
+                                                              new InvalidDataDefinitionEvent(name.GetValue())
+                                                             );
+                    }
+
+                    DataSectionHeader[name.GetValue()] = item;
+                    Tokens.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            AppendFileSection();
+
+            return emptyItems.ToArray();
+        }
+
+        private void CreateDataSection_Full()
         {
             for ( int i = 0; i < Tokens.Count; i++ )
             {
@@ -179,10 +290,11 @@ namespace VisCPU.Compiler.Compiler
                 {
                     object[] linkerArgs = ParseLinkerArgs( Tokens[i].Skip( 3 ) );
 
-                    DataSectionHeader[name.GetValue()] = new AddressItem
+                    AddressItem item = new AddressItem
                                                          {
                                                              Address = ( uint ) DataSection.Count,
-                                                             LinkerArguments = linkerArgs
+                                                             LinkerArguments = linkerArgs,
+                                                             IsEmpty = false
                                                          };
 
                     if ( Tokens[i][2] is StringToken str )
@@ -201,6 +313,7 @@ namespace VisCPU.Compiler.Compiler
                             List < byte > cData = Encoding.ASCII.GetBytes( data ).ToList();
                             cData.AddRange( Enumerable.Repeat( ( byte ) 0, cData.Count % sizeof( uint ) ) );
 
+                            item.Size =(uint)(cData.Count / sizeof(uint));
                             for ( int j = 0; j < cData.Count / sizeof( uint ); j++ )
                             {
                                 DataSection.Add( BitConverter.ToUInt32( cData.ToArray(), j ) );
@@ -208,6 +321,7 @@ namespace VisCPU.Compiler.Compiler
                         }
                         else
                         {
+                            item.Size=( uint ) data.Length;
                             DataSection.AddRange( data.Select( x => ( uint ) x ) );
                         }
                     }
@@ -216,6 +330,8 @@ namespace VisCPU.Compiler.Compiler
                         uint defVal = Tokens[i].Length == 4 && Tokens[i][3] is ValueToken defV
                                           ? defV.Value
                                           : 0;
+
+                        item.Size = val.Value;
 
                         DataSection.AddRange( Enumerable.Repeat( defVal, ( int ) val.Value ) );
                     }
@@ -226,6 +342,7 @@ namespace VisCPU.Compiler.Compiler
                                                              );
                     }
 
+                    DataSectionHeader[name.GetValue()] = item;
                     Tokens.RemoveAt( i );
                     i--;
                 }
@@ -307,7 +424,7 @@ namespace VisCPU.Compiler.Compiler
                                                                              ( uint ) ( i *
                                                                                          CpuSettings.InstructionSize
                                                                                  ),
-                                                                         LinkerArguments = linkerArgs
+                                                                         LinkerArguments = linkerArgs,
                                                                      };
 
                     Tokens.RemoveAt( i );

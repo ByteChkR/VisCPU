@@ -28,17 +28,20 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                 uint amount = GetPowLevel( rTarget.StaticParse() );
                 string tmp = compilation.GetTempVarLoad( amount.ToString() );
 
+                ExpressionTarget taddr = target.MakeAddress( compilation );
                 compilation.EmitterResult.Emit(
                                                "SHR",
-                                               target.MakeAddress( compilation ).ResultAddress,
+                                               taddr.ResultAddress,
                                                tmp
                                               );
 
-                compilation.ReleaseTempVar( tmp );
+                compilation.ReleaseTempVar(tmp);
+                compilation.ReleaseTempVar(taddr.ResultAddress);
 
                 return target;
             }
 
+            string rtOrig = rTarget.ResultAddress;
             rTarget = rTarget.MakeAddress( compilation );
 
             string instrKey =
@@ -53,7 +56,9 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                                            rTarget.ResultAddress
                                           );
 
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+
+            compilation.ReleaseTempVar(rtOrig);
 
             return target;
         }

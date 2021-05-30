@@ -15,15 +15,20 @@ namespace VisCPU.HL.Compiler.Math.Bitwise
             HlUnaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
-                                                  MakeAddress( compilation );
+            ExpressionTarget targetVal = compilation.Parse(
+                                                            expr.Left
+                                                           );
+            ExpressionTarget target = targetVal.
+                MakeAddress(compilation);
 
             string tmp = compilation.GetTempVar( ~( uint ) 0 );
             compilation.EmitterResult.Emit( $"XOR", target.ResultAddress, tmp );
 
-            return target.CopyIfNotNull( compilation, outputTarget );
+            ExpressionTarget ret = target.CopyIfNotNull( compilation, outputTarget );
+            compilation.ReleaseTempVar(tmp);
+            compilation.ReleaseTempVar( target.ResultAddress );
+
+            return ret;
         }
 
         #endregion

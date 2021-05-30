@@ -17,14 +17,14 @@ namespace VisCPU.HL.Compiler.Math.Full
             HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse( expr.Left );
-            ExpressionTarget rTarget = compilation.Parse( expr.Right );
+            ExpressionTarget targetVal = compilation.Parse( expr.Left );
+            ExpressionTarget rTargetVal = compilation.Parse( expr.Right );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
-                 !target.IsAddress &&
-                 !rTarget.IsAddress )
+                 !targetVal.IsAddress &&
+                 !rTargetVal.IsAddress )
             {
-                return ComputeStatic( compilation, target, rTarget );
+                return ComputeStatic( compilation, targetVal, rTargetVal);
             }
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeReduceExpressions )
@@ -32,10 +32,10 @@ namespace VisCPU.HL.Compiler.Math.Full
                 uint amount = 0;
                 ExpressionTarget baseExpr = default;
 
-                if ( IsReducable( rTarget ) )
+                if ( IsReducable(rTargetVal) )
                 {
-                    baseExpr = target.MakeAddress( compilation );
-                    amount = GetPowLevel( rTarget.StaticParse() );
+                    baseExpr = targetVal.MakeAddress( compilation );
+                    amount = GetPowLevel(rTargetVal.StaticParse() );
                 }
 
                 if ( amount != 0 )
@@ -49,14 +49,17 @@ namespace VisCPU.HL.Compiler.Math.Full
                                                    outputTarget.ResultAddress
                                                   );
 
+                    compilation.ReleaseTempVar(baseExpr.ResultAddress);
+                    compilation.ReleaseTempVar(targetVal.ResultAddress);
+                    compilation.ReleaseTempVar(rTargetVal.ResultAddress);
                     compilation.ReleaseTempVar( tmp );
 
                     return outputTarget;
                 }
             }
 
-            target = target.MakeAddress( compilation );
-            rTarget = rTarget.MakeAddress( compilation );
+           ExpressionTarget  target = targetVal.MakeAddress( compilation );
+           ExpressionTarget rTarget = rTargetVal.MakeAddress( compilation );
 
             string instrKey =
                 target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName ||
@@ -80,6 +83,8 @@ namespace VisCPU.HL.Compiler.Math.Full
                                               );
 
                 compilation.ReleaseTempVar( et.ResultAddress );
+                compilation.ReleaseTempVar(rTargetVal.ResultAddress);
+                compilation.ReleaseTempVar(targetVal.ResultAddress);
                 compilation.ReleaseTempVar( rTarget.ResultAddress );
                 compilation.ReleaseTempVar( target.ResultAddress );
 
@@ -93,8 +98,10 @@ namespace VisCPU.HL.Compiler.Math.Full
                                            outputTarget.ResultAddress
                                           );
 
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
-            compilation.ReleaseTempVar( target.ResultAddress );
+            compilation.ReleaseTempVar(rTargetVal.ResultAddress);
+            compilation.ReleaseTempVar(targetVal.ResultAddress);
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(target.ResultAddress);
 
             return outputTarget;
         }

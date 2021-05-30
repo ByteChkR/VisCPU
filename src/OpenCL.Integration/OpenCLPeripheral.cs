@@ -34,6 +34,8 @@ namespace OpenCL.Integration
         public override PeripheralType PeripheralType => PeripheralType.Custom;
 
         public override uint PresentPin => 0xFFFF7000;
+        public override uint AddressRangeStart => PresentPin;
+        public override uint AddressRangeEnd => CreateCommandQueuePin;
 
         public uint GetPlatformCountPin => 0xFFFF7001;
 
@@ -63,25 +65,7 @@ namespace OpenCL.Integration
 
         #region Public
 
-        public override bool CanRead( uint address )
-        {
-            return PresentPin == address ||
-                   GetPlatformCountPin == address ||
-                   GetPlatformPin == address ||
-                   GetDeviceCountPin == address ||
-                   GetDevicePin == address ||
-                   CreateContextPin == address ||
-                   CreateCommandQueuePin == address;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return GetPlatformPin == address ||
-                   GetDeviceCountPin == address ||
-                   GetDevicePin == address ||
-                   CreateContextPin == address ||
-                   CreateCommandQueuePin == address;
-        }
+        
 
         public override uint ReadData( uint address )
         {

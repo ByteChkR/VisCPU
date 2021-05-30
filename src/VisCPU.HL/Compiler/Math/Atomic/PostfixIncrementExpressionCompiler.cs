@@ -29,34 +29,9 @@ namespace VisCPU.HL.Compiler.Math.Atomic
                                            instrKey,
                                            target.ResultAddress
                                           );
+            compilation.ReleaseTempVar(target.ResultAddress);
 
             return copy;
-        }
-
-        #endregion
-
-    }
-
-    public class PrefixIncrementExpressionCompiler : HlExpressionCompiler < HlUnaryOp >
-    {
-
-        #region Public
-
-        public override ExpressionTarget ParseExpression( HlCompilation compilation, HlUnaryOp expr )
-        {
-            ExpressionTarget target = compilation.Parse( expr.Left );
-
-            string instrKey =
-                target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName
-                    ? "INC.F"
-                    : "INC";
-
-            compilation.EmitterResult.Emit(
-                                           instrKey,
-                                           target.ResultAddress
-                                          );
-
-            return target;
         }
 
         #endregion

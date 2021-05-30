@@ -15,15 +15,17 @@ namespace VisCPU.HL.Compiler.Logic
             HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse(
-                                                        expr.Left
-                                                       ).
-                                                  MakeAddress( compilation );
+            ExpressionTarget targetVal = compilation.Parse(
+                                                           expr.Left
+                                                          );
+            ExpressionTarget target = targetVal.
+                MakeAddress(compilation);
 
-            ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right
-                                                        ).
-                                                   MakeAddress( compilation );
+            ExpressionTarget rTargetVal = compilation.Parse(
+                                                            expr.Right
+                                                           );
+            ExpressionTarget rTarget = rTargetVal.
+                                                   MakeAddress(compilation);
 
             //BNE target rTarget if_b0_fail
             //LOAD possibleTarget 0x1; True Value
@@ -35,8 +37,11 @@ namespace VisCPU.HL.Compiler.Logic
             compilation.EmitterResult.Store( $".{label} linker:hide" );
             compilation.EmitterResult.Emit( $"LOAD", outputTarget.ResultAddress, "1" );
             compilation.EmitterResult.Store( $".{labelF} linker:hide" );
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
-            compilation.ReleaseTempVar( target.ResultAddress );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(target.ResultAddress);
+
+            compilation.ReleaseTempVar(rTargetVal.ResultAddress);
+            compilation.ReleaseTempVar(targetVal.ResultAddress);
 
             return outputTarget;
         }

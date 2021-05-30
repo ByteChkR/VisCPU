@@ -1,4 +1,6 @@
-﻿using VisCPU.HL.Compiler.Events;
+﻿using System;
+
+using VisCPU.HL.Compiler.Events;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.Utility.EventSystem;
 using VisCPU.Utility.EventSystem.Events;
@@ -22,10 +24,10 @@ namespace VisCPU.HL.Compiler.Math.Atomic
             HlUnaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse(
+            ExpressionTarget targetVal = compilation.Parse(
                                                         expr.Left
-                                                       ).
-                                                  MakeAddress( compilation );
+                                                       );
+            ExpressionTarget target = targetVal.MakeAddress( compilation );
 
             if ( target.TypeDefinition.Name != HLBaseTypeNames.s_FloatTypeName )
             {
@@ -45,8 +47,9 @@ namespace VisCPU.HL.Compiler.Math.Atomic
             else
             {
                 compilation.EmitterResult.Emit( "INV.F", target.ResultAddress, outputTarget.ResultAddress );
-
-                return target.CopyIfNotNull( compilation, outputTarget );
+                ExpressionTarget ret = target.CopyIfNotNull( compilation, outputTarget );
+                compilation.ReleaseTempVar( target.ResultAddress );
+                return ret;
             }
         }
 

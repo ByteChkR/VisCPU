@@ -11,13 +11,20 @@ namespace VisCPU.HL.Compiler.Logic
 
         public override ExpressionTarget ParseExpression( HlCompilation compilation, HlBinaryOp expr )
         {
-            ExpressionTarget target = compilation.Parse( expr.Left ).MakeAddress( compilation );
 
-            ExpressionTarget rTarget = compilation.Parse(
-                                                         expr.Right,
-                                                         !target.IsPointer ? target : default
-                                                        ).
-                                                   MakeAddress( compilation );
+
+            ExpressionTarget targetVal = compilation.Parse(
+                                                           expr.Left
+                                                          );
+            ExpressionTarget target = targetVal.
+                MakeAddress(compilation);
+
+            ExpressionTarget rTargetVal = compilation.Parse(
+                                                            expr.Right,
+                                                            !target.IsPointer ? target : default
+                                                           );
+            ExpressionTarget rTarget = rTargetVal.
+                MakeAddress(compilation);
 
             if ( rTarget.ResultAddress == target.ResultAddress )
             {
@@ -31,6 +38,9 @@ namespace VisCPU.HL.Compiler.Logic
                                                target.ResultAddress,
                                                rTarget.ResultAddress
                                               );
+
+                compilation.ReleaseTempVar(rTarget.ResultAddress);
+                compilation.ReleaseTempVar(rTargetVal.ResultAddress);
 
                 return target;
             }
@@ -64,7 +74,7 @@ namespace VisCPU.HL.Compiler.Logic
                                                    target.ResultAddress
                                                   );
 
-                    compilation.ReleaseTempVar( tmpTarget.ResultAddress );
+                    compilation.ReleaseTempVar(tmpTarget.ResultAddress);
                 }
             }
             else
@@ -100,7 +110,8 @@ namespace VisCPU.HL.Compiler.Logic
                 }
             }
 
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(rTargetVal.ResultAddress);
 
             return target;
         }

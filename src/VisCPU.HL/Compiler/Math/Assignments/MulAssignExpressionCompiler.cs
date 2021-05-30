@@ -28,13 +28,15 @@ namespace VisCPU.HL.Compiler.Math.Assignments
                 uint amount = GetPowLevel( rTarget.StaticParse() );
                 string tmp = compilation.GetTempVarLoad( amount.ToString() );
 
+                ExpressionTarget taddr = target.MakeAddress(compilation);
                 compilation.EmitterResult.Emit(
                                                "SHL",
-                                               target.MakeAddress( compilation ).ResultAddress,
+                                               taddr.ResultAddress,
                                                tmp
                                               );
 
                 compilation.ReleaseTempVar( tmp );
+                compilation.ReleaseTempVar( taddr.ResultAddress );
 
                 return target;
             }

@@ -28,6 +28,20 @@ namespace VisCPU.SIMD
             m_Start = 0xFFFF9000;
         }
 
+        public uint Compare( uint s1, uint s1L, uint s2, uint s2L )
+        {
+            if ( s1L != s2L )
+                return 0;
+
+            for ( int i = 0; i < s1L; i++ )
+            {
+                if ( m_Data[s1 + i] != m_Data[s2 + i] )
+                    return 0;
+            }
+
+            return 1;
+        }
+
         public void Add( uint a, uint b, uint r, uint l )
         {
             for ( uint i = 0; i < l; i++ )
@@ -85,7 +99,8 @@ namespace VisCPU.SIMD
             r.Add( ExposeApi( Set, "SIMD_HW_Set", 3 ) );
             r.Add( ExposeApi( Copy, "SIMD_HW_Copy", 3 ) );
             r.Add( ExposeApi( Move, "SIMD_HW_Move", 3 ) );
-            r.Add( ExposeApi( Swap, "SIMD_HW_Swap", 3 ) );
+            r.Add(ExposeApi(Swap, "SIMD_HW_Swap", 3));
+            r.Add(ExposeApi(Compare, "SIMD_HW_Compare", 4));
 
             return r;
         }
@@ -173,13 +188,13 @@ namespace VisCPU.SIMD
 
         #region Private
 
-        private uint Add( Cpu i )
+        private uint Add(Cpu i)
         {
             uint l = i.Pop();
             uint r = i.Pop();
             uint b = i.Pop();
             uint a = i.Pop();
-            Add( a, b, r, l );
+            Add(a, b, r, l);
 
             return 0;
         }
@@ -326,14 +341,24 @@ namespace VisCPU.SIMD
             return 0;
         }
 
-        private uint Swap( Cpu i )
+        private uint Swap(Cpu i)
         {
             uint l = i.Pop();
             uint dst = i.Pop();
             uint src = i.Pop();
-            Swap( src, dst, l );
+            Swap(src, dst, l);
 
             return 0;
+        }
+        private uint Compare(Cpu i)
+        {
+            uint s2L = i.Pop();
+            uint s2 = i.Pop();
+            uint s1L = i.Pop();
+            uint s1 = i.Pop();
+
+
+            return Compare(s1, s1L, s2, s2L);
         }
 
         #endregion

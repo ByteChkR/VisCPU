@@ -19,20 +19,20 @@ namespace VisCPU.HL.Compiler.Math
             HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget target = compilation.Parse( expr.Left );
-            ExpressionTarget rTarget = compilation.Parse( expr.Right );
+            ExpressionTarget targetVal = compilation.Parse(expr.Left);
+            ExpressionTarget rTargetVal = compilation.Parse(expr.Right);
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
-                 !target.IsAddress &&
-                 !rTarget.IsAddress &&
-                 target.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName &&
-                 rTarget.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName )
+                 !targetVal.IsAddress &&
+                 !rTargetVal.IsAddress &&
+                 targetVal.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName &&
+                 rTargetVal.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName )
             {
-                return ComputeStatic( compilation, target, rTarget );
+                return ComputeStatic( compilation, targetVal, rTargetVal);
             }
 
-            target = target.MakeAddress( compilation );
-            rTarget = rTarget.MakeAddress( compilation );
+            ExpressionTarget target = targetVal.MakeAddress( compilation );
+            ExpressionTarget rTarget = rTargetVal.MakeAddress( compilation );
 
             string instrKey =
                 target.TypeDefinition.Name == HLBaseTypeNames.s_FloatTypeName ||
@@ -56,8 +56,10 @@ namespace VisCPU.HL.Compiler.Math
                                               );
 
                 compilation.ReleaseTempVar( et.ResultAddress );
-                compilation.ReleaseTempVar( rTarget.ResultAddress );
-                compilation.ReleaseTempVar( target.ResultAddress );
+                compilation.ReleaseTempVar(rTarget.ResultAddress);
+                compilation.ReleaseTempVar(target.ResultAddress);
+                compilation.ReleaseTempVar(targetVal.ResultAddress);
+                compilation.ReleaseTempVar(rTargetVal.ResultAddress);
 
                 return outputTarget;
             }
@@ -69,8 +71,10 @@ namespace VisCPU.HL.Compiler.Math
                                            outputTarget.ResultAddress
                                           );
 
-            compilation.ReleaseTempVar( rTarget.ResultAddress );
-            compilation.ReleaseTempVar( target.ResultAddress );
+            compilation.ReleaseTempVar(rTarget.ResultAddress);
+            compilation.ReleaseTempVar(target.ResultAddress);
+            compilation.ReleaseTempVar(targetVal.ResultAddress);
+            compilation.ReleaseTempVar(rTargetVal.ResultAddress);
 
             return outputTarget;
         }

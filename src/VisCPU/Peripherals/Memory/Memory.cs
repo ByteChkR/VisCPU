@@ -16,15 +16,16 @@ namespace VisCPU.Peripherals.Memory
 
         private readonly MemorySettings m_Settings;
 
-        public uint EndAddress => m_Settings.Start + ( uint ) m_InternalMemory.Length;
+        public override uint AddressRangeStart => m_Settings.Start;
 
-        public uint StartAddress => m_Settings.Start;
+        public override uint AddressRangeEnd => m_Settings.Start + (uint)m_InternalMemory.Length;
+
 
         public override string PeripheralName => "Mapped Array Memory";
 
         public override PeripheralType PeripheralType => PeripheralType.Memory;
 
-        public override uint PresentPin => StartAddress;
+        public override uint PresentPin => AddressRangeStart;
 
         #region Unity Event Functions
 
@@ -81,15 +82,6 @@ namespace VisCPU.Peripherals.Memory
             }
         }
 
-        public override bool CanRead( uint address )
-        {
-            return m_Settings.EnableRead && address < EndAddress && address >= m_Settings.Start;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return m_Settings.EnableWrite && address < EndAddress && address >= m_Settings.Start;
-        }
 
         public override void Dump( Stream str )
         {

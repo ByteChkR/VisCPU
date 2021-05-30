@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -18,6 +19,7 @@ namespace VisCPU
     {
 
         private readonly List < Peripheral > m_Peripherals;
+        private readonly CpuSettings m_Settings;
 
         public int PeripheralCount => m_Peripherals.Count;
 
@@ -46,16 +48,13 @@ namespace VisCPU
             {
                 m_Peripherals.Add( new MemoryBusDriver() );
             }
+
+            m_Settings=  SettingsManager.GetSettings < CpuSettings >();
         }
 
-        public MemoryBus( params Peripheral[] peripherals )
+        public MemoryBus( params Peripheral[] peripherals ): this((IEnumerable <Peripheral>)peripherals)
         {
-            m_Peripherals = peripherals.ToList();
-
-            if ( m_Peripherals.All( x => x.PeripheralType != PeripheralType.MemoryBusDriver ) )
-            {
-                m_Peripherals.Add( new MemoryBusDriver() );
-            }
+            
         }
 
         public void Add( Peripheral p )
@@ -92,7 +91,8 @@ namespace VisCPU
 
             foreach ( Peripheral peripheral in m_Peripherals )
             {
-                if ( !peripheral.CanRead( address ) )
+                if (peripheral.AddressRangeEnd < address ||
+                    peripheral.AddressRangeStart > address)
                 {
                     continue;
                 }
@@ -105,7 +105,7 @@ namespace VisCPU
                 receivers++;
             }
 
-            if ( SettingsManager.GetSettings < CpuSettings >().WarnOnUnmappedAccess && receivers == 0 )
+            if (receivers == 0 && m_Settings.WarnOnUnmappedAccess )
             {
                 EventManager < WarningEvent >.SendEvent( new ReadFromUnmappedAddressEvent( address ) );
             }
@@ -127,9 +127,11 @@ namespace VisCPU
         {
             bool hasReceiver = false;
 
+            
             foreach ( Peripheral peripheral in m_Peripherals )
             {
-                if ( !peripheral.CanWrite( address ) )
+                if ( peripheral.AddressRangeEnd < address ||
+                     peripheral.AddressRangeStart > address)
                 {
                     continue;
                 }
@@ -138,7 +140,7 @@ namespace VisCPU
                 peripheral.WriteData( address, data );
             }
 
-            if ( SettingsManager.GetSettings < CpuSettings >().WarnOnUnmappedAccess && !hasReceiver )
+            if ( m_Settings.WarnOnUnmappedAccess && !hasReceiver )
             {
                 EventManager < WarningEvent >.SendEvent( new WriteToUnmappedAddressEvent( address, data ) );
             }

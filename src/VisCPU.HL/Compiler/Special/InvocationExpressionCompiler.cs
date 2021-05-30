@@ -57,17 +57,19 @@ namespace VisCPU.HL.Compiler.Special
 
             foreach ( HlExpression parameter in expr.ParameterList )
             {
-                ExpressionTarget arg = compilation.Parse(
-                                                         parameter
-                                                        ).
-                                                   MakeAddress( compilation );
+                ExpressionTarget argVal = compilation.Parse(
+                                                            parameter
+                                                           );
+                ExpressionTarget arg = argVal.MakeAddress( compilation );
 
                 compilation.EmitterResult.Emit(
                                                $"PUSH",
                                                arg.ResultAddress
                                               );
 
-                compilation.ReleaseTempVar( arg.ResultAddress );
+                compilation.ReleaseTempVar(arg.ResultAddress);
+
+                compilation.ReleaseTempVar(argVal.ResultAddress);
             }
 
             compilation.EmitterResult.Emit( jumpInstruction, functionName );
@@ -84,11 +86,30 @@ namespace VisCPU.HL.Compiler.Special
             return tempReturn;
         }
 
-        public static void WriteConstructorInvocationProlog(
+
+        public static bool NeedsConstructorInvocationProlog(HlTypeDefinition tdef)
+        {
+            bool processed = false;
+            foreach (HlFunctionDefinition tdefAbstractFunction in tdef.OverridableFunctions)
+            {
+                HlFunctionDefinition test =
+                    (HlFunctionDefinition)tdef.GetPrivateOrPublicMember(tdefAbstractFunction.Name);
+
+                if (test.IsVirtual || test.IsOverride)
+                {
+                    processed = true;
+                }
+                
+            }
+
+            return processed;
+        }
+        public static bool WriteConstructorInvocationProlog(
             HlCompilation compilation,
             HlTypeDefinition tdef,
             string ret )
         {
+            bool processed = false;
             foreach ( HlFunctionDefinition tdefAbstractFunction in tdef.OverridableFunctions )
             {
                 HlFunctionDefinition test =
@@ -96,6 +117,7 @@ namespace VisCPU.HL.Compiler.Special
 
                 if ( test.IsVirtual || test.IsOverride )
                 {
+                    processed = true;
                     uint off = tdef.GetOffset( tdefAbstractFunction.Name );
 
                     compilation.EmitterResult.Store(
@@ -144,6 +166,8 @@ namespace VisCPU.HL.Compiler.Special
                                                            );
                 }
             }
+
+            return processed;
         }
 
         public static void WriteInlineConstructorInvocationProlog(
@@ -151,6 +175,8 @@ namespace VisCPU.HL.Compiler.Special
             HlTypeDefinition tdef,
             HlFuncDefOperand fdef )
         {
+            if ( !NeedsConstructorInvocationProlog( tdef ) )
+                return;
             for ( int i = fdef.FunctionDefinition.
                                Arguments.Length -
                           1;
@@ -426,14 +452,16 @@ namespace VisCPU.HL.Compiler.Special
             {
                 foreach ( HlExpression parameter in expr.ParameterList )
                 {
-                    ExpressionTarget tt = compilation.Parse( parameter ).MakeAddress( compilation );
+                    ExpressionTarget ttVal = compilation.Parse( parameter );
+                    ExpressionTarget tt = ttVal.MakeAddress( compilation );
 
                     compilation.EmitterResult.Emit(
                                                    $"PUSH",
                                                    tt.ResultAddress
                                                   );
 
-                    compilation.ReleaseTempVar( tt.ResultAddress );
+                    compilation.ReleaseTempVar(tt.ResultAddress);
+                    compilation.ReleaseTempVar(ttVal.ResultAddress);
                 }
 
                 if ( compilation.ContainsVariable( target ) )

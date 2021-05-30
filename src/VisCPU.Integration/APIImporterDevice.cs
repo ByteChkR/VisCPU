@@ -17,6 +17,9 @@ namespace VisCPU.Integration
 
         public override uint PresentPin => m_ListenAddr;
 
+        public override uint AddressRangeStart => m_ListenAddr;
+        public override uint AddressRangeEnd => m_ListenAddr;
+
         #region Unity Event Functions
 
         public override void Reset()
@@ -32,16 +35,7 @@ namespace VisCPU.Integration
             m_ListenAddr = addr;
             m_InvokeExec = invokeExec;
         }
-
-        public override bool CanRead( uint address )
-        {
-            return address == m_ListenAddr;
-        }
-
-        public override bool CanWrite( uint address )
-        {
-            return address == m_ListenAddr;
-        }
+        
 
         public override uint ReadData( uint address )
         {
