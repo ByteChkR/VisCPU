@@ -133,6 +133,10 @@ namespace VisCPU.Console.Core
                 {
                     System.Console.WriteLine( e );
 
+                    if ( settings.LogFile != null )
+                    {
+                        File.WriteAllText( settings.LogFile, e.ToString() );
+                    }
                     if ( !settings.Continuous )
                     {
                         throw;

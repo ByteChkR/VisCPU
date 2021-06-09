@@ -16,6 +16,7 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU.Compiler.Implementations
 {
 
+    
     public class DefaultAssemblyGenerator : AssemblyGenerator
     {
 

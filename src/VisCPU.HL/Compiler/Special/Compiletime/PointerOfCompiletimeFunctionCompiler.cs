@@ -2,6 +2,7 @@
 
 using VisCPU.HL.Compiler.Memory;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Compiler.Special.Compiletime
@@ -22,7 +23,9 @@ namespace VisCPU.HL.Compiler.Special.Compiletime
                                                                     compilation,
                                                                     et,
                                                                     new ExpressionTarget(
-                                                                         compilation.GetTempVar( 0 ),
+                                                                         SettingsManager.GetSettings<HlCompilerSettings>().OmitTempVarInit
+                                                                             ? compilation.GetTempVar()
+                                                                             : compilation.GetTempVar(0),
                                                                          true,
                                                                          compilation.TypeSystem.GetType(
                                                                               compilation.Root,

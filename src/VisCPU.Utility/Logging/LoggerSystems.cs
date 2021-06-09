@@ -57,7 +57,8 @@ namespace VisCPU.Utility.Logging
                   Hl |
                   Compiler |
                   DriveImageSystems |
-                  Network
+                  Network |
+                  MemoryBus
 
     }
 

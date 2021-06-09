@@ -34,8 +34,12 @@ namespace VisCPU.HL
         [field: Argument( Name = "compiler:strip-unused-functions" )]
         public bool StripUnusedFunctions { get; set; }
 
-        [field: Argument( Name = "compiler:constructor-prolog-mode" )]
+        [field: Argument(Name = "compiler:constructor-prolog-mode")]
         public HlTypeConstructorPrologMode ConstructorPrologMode { get; set; }
+        [field: Argument(Name = "compiler:omit-temp-var-init")]
+        public bool OmitTempVarInit { get; set; }
+        [field: Argument(Name = "compiler:aggressive-math-var-optimization")]
+        public bool AggressiveMathVarOptimization { get; set; }
 
         [JsonIgnore]
         public bool OptimizeAll
@@ -46,14 +50,18 @@ namespace VisCPU.HL
                 OptimizeReduceExpressions &&
                 OptimizeIfConditionExpressions &&
                 OptimizeWhileConditionExpressions &&
-                StripUnusedFunctions;
+                StripUnusedFunctions && 
+                OmitTempVarInit &&
+                AggressiveMathVarOptimization;
             set =>
                 OptimizeReduceExpressions =
                     OptimizeWhileConditionExpressions =
                         OptimizeConstExpressions =
                             OptimizeIfConditionExpressions =
                                 StripUnusedFunctions =
-                                    OptimizeTempVarUsage = value;
+                                    OmitTempVarInit =
+                                        AggressiveMathVarOptimization =
+                                            OptimizeTempVarUsage = value;
         }
 
         #region Private

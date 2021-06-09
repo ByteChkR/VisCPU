@@ -1,6 +1,7 @@
 ﻿using System;
 
 using VisCPU.HL.Parser.Tokens.Expressions;
+using VisCPU.Utility.IO.Settings;
 using VisCPU.Utility.Logging;
 using VisCPU.Utility.SharedBase;
 
@@ -44,11 +45,13 @@ namespace VisCPU.HL.Compiler
             if ( NeedsOutput )
             {
                 ExpressionTarget target = outputTarget;
-
+                
                 if ( outputTarget.ResultAddress == null || !outputTarget.IsAddress )
                 {
                     target = new ExpressionTarget(
-                                                  compilation.GetTempVar( 0 ),
+                                                  SettingsManager.GetSettings < HlCompilerSettings >().OmitTempVarInit
+                                                      ? compilation.GetTempVar()
+                                                      : compilation.GetTempVar( 0 ),
                                                   true,
                                                   compilation.TypeSystem.GetType(
                                                        compilation.Root,

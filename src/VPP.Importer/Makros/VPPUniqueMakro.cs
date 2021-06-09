@@ -13,11 +13,26 @@ namespace VPP.Importer
 
         }
 
+        private static string Sanitize( string str )
+        {
+            char[] arr = str.ToCharArray();
+
+            for ( int i = 0; i < arr.Length; i++ )
+            {
+                if ( !char.IsLetterOrDigit( arr[i] ) )
+                    arr[i] = '_';
+            }
+
+            return new string( arr );
+        }
+
         public override string GenerateValue(string[] args)
         {
-            if (s_UniqueMap.ContainsKey(args[0]))
-                return s_UniqueMap[args[0]];
-            return s_UniqueMap[args[0]] = $"{args[0]}_{s_UniqueId++}";
+            string cleanStr = Sanitize(args[0]);
+            
+            if (s_UniqueMap.ContainsKey(cleanStr))
+                return s_UniqueMap[cleanStr];
+            return s_UniqueMap[cleanStr] = $"{cleanStr}_{s_UniqueId++}";
         }
 
     }

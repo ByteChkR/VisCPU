@@ -104,6 +104,8 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "false";
             debugBuildJob.Arguments["compiler:strip-unused-functions"] = "false";
 
+            debugBuildJob.Arguments["compiler:omit-temp-var-init"] = "false";
+            debugBuildJob.Arguments["compiler:aggressive-math-var-optimization"] = "false";
             debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Inline";
 
             return debugBuildJob;
@@ -198,6 +200,8 @@ namespace VisCPU.Utility.ProjectSystem.BuildSystem
             debugBuildJob.Arguments["compiler:optimize-while-expr"] = "true";
             debugBuildJob.Arguments["compiler:strip-unused-functions"] = "false";
             debugBuildJob.Arguments["compiler:constructor-prolog-mode"] = "Inline";
+            debugBuildJob.Arguments["compiler:omit-temp-var-init"] = "true";
+            debugBuildJob.Arguments["compiler:aggressive-math-var-optimization"] = "false";
 
             return debugBuildJob;
         }

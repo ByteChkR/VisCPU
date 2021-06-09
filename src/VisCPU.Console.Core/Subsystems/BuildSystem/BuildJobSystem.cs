@@ -50,6 +50,7 @@ namespace VisCPU.Console.Core.Subsystems.BuildSystem
             ProjectConfig.AddRunner( new BuildJobAddOrigin() );
             ProjectConfig.AddRunner( new BuildJobRemoveOrigin() );
             ProjectConfig.AddRunner( new BuildJobMergedJobs() );
+            ProjectConfig.AddRunner(new BuildJobMakeHeader());
 
             ProjectConfig config = ProjectConfig.Load( src );
 

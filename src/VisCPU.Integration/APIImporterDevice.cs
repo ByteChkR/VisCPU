@@ -8,10 +8,12 @@ namespace VisCPU.Integration
     public class ApiImporterDevice : Peripheral
     {
 
+        private readonly string m_Name;
         private readonly uint m_ListenAddr;
         private readonly Func < Cpu, uint > m_InvokeExec;
+        
 
-        public override string PeripheralName => "__API_IMPORTER_" + PresentPin;
+        public override string PeripheralName => m_Name;
 
         public override PeripheralType PeripheralType => PeripheralType.Custom;
 
@@ -30,8 +32,9 @@ namespace VisCPU.Integration
 
         #region Public
 
-        public ApiImporterDevice( uint addr, Func < Cpu, uint > invokeExec )
+        public ApiImporterDevice(string apiName, uint addr, Func < Cpu, uint > invokeExec )
         {
+            m_Name = apiName ?? "_API_IMPORTER_"+addr;
             m_ListenAddr = addr;
             m_InvokeExec = invokeExec;
         }

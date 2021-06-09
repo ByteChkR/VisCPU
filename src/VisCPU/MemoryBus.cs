@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 using VisCPU.Events;
 using VisCPU.Peripherals;
@@ -15,10 +17,113 @@ using VisCPU.Utility.SharedBase;
 namespace VisCPU
 {
 
+    internal class MemoryBusPeripheralList
+    {
+
+        private struct ListItem
+        {
+
+            public int AccessCount;
+            public Peripheral Peripheral;
+
+        }
+
+        public MemoryBusPeripheralList( IEnumerable < Peripheral > peripherals )
+        {
+            m_InternalList = peripherals.Select(
+                                                x => new ListItem
+                                                     {
+                                                         AccessCount = 0,
+                                                         Peripheral = x
+                                                     }
+                                               ).
+                                         ToList();
+        }
+
+            private readonly List < ListItem > m_InternalList;
+
+        public int Count => m_InternalList.Count;
+
+        public void Add( Peripheral p ) =>
+            m_InternalList.Add(
+                               new ListItem
+                               {
+                                   AccessCount = 0,
+                                   Peripheral = p
+                               }
+                              );
+
+        public Peripheral this[ int i ] => m_InternalList[i].Peripheral;
+
+        public void ForEach( Action < Peripheral > ac ) => m_InternalList.ForEach( x => ac( x.Peripheral ) );
+
+        public bool All( Func < Peripheral, bool > f ) => m_InternalList.All( x=> f(x.Peripheral) );
+
+        public IEnumerable < T > Get < T >() where T : Peripheral => m_InternalList.Select(x=>x.Peripheral).Where(x=>x is T).Cast < T >();
+
+        public Peripheral Find( uint address )
+        {
+            Peripheral ret = null;
+            for ( int i = 0; i < m_InternalList.Count; i++ )
+            {
+                ListItem listItem = m_InternalList[i];
+                Peripheral peripheral = listItem.Peripheral;
+
+                if ( peripheral.AddressRangeEnd < address ||
+                     peripheral.AddressRangeStart > address )
+                {
+                    continue;
+                }
+
+                listItem.AccessCount++;
+                m_InternalList[i] = listItem;
+
+                ret = peripheral;
+                BubbleUp( i );
+                break;
+            }
+
+
+
+            return ret;
+        }
+
+        private void BubbleUp( int itemIndex )
+        {
+            int ac = m_InternalList[itemIndex].AccessCount;
+            for ( int i = itemIndex - 1; i >= 0; i-- )
+            {
+                if ( ac <= m_InternalList[i].AccessCount )
+                {
+                    if ( i == itemIndex - 1 )
+                        return;
+
+                    ListItem item = m_InternalList[itemIndex];
+                    m_InternalList.RemoveAt( itemIndex );
+                    m_InternalList.Insert( i + 1, item );
+                    return;
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder("Peripheral Usages: \n");
+
+            foreach ( ListItem listItem in m_InternalList )
+            {
+                sb.AppendFormat( "\t{0} : {1}\n", listItem.AccessCount, listItem.Peripheral.PeripheralName );
+            }
+
+            return sb.ToString();
+        }
+
+    }
+
     public class MemoryBus : VisBase
     {
 
-        private readonly List < Peripheral > m_Peripherals;
+        private readonly MemoryBusPeripheralList m_Peripherals;
         private readonly CpuSettings m_Settings;
 
         public int PeripheralCount => m_Peripherals.Count;
@@ -42,7 +147,7 @@ namespace VisCPU
 
         public MemoryBus( IEnumerable < Peripheral > peripherals )
         {
-            m_Peripherals = peripherals.ToList();
+            m_Peripherals = new MemoryBusPeripheralList(peripherals);
 
             if ( m_Peripherals.All( x => x.PeripheralType != PeripheralType.MemoryBusDriver ) )
             {
@@ -80,70 +185,38 @@ namespace VisCPU
 
         public IEnumerable < T > GetPeripherals < T >() where T : Peripheral
         {
-            return m_Peripherals.Where( x => x is T ).Cast < T >();
+            return m_Peripherals.Get < T >();
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public uint Read( uint address )
         {
-            uint receivers = 0;
             uint data = 0;
 
-            foreach ( Peripheral peripheral in m_Peripherals )
-            {
-                if (peripheral.AddressRangeEnd < address ||
-                    peripheral.AddressRangeStart > address)
-                {
-                    continue;
-                }
+            Peripheral receiver = m_Peripherals.Find( address );
 
-                if ( receivers == 0 )
-                {
-                    data = peripheral.ReadData( address );
-                }
-
-                receivers++;
-            }
-
-            if (receivers == 0 && m_Settings.WarnOnUnmappedAccess )
-            {
-                EventManager < WarningEvent >.SendEvent( new ReadFromUnmappedAddressEvent( address ) );
-            }
-            else if ( receivers > 1 )
-            {
-                EventManager < WarningEvent >.SendEvent( new MultipleReceiverWriteEvent( address ) );
-            }
-
+            if ( receiver != null )
+                data = receiver.ReadData( address );
+            else if(m_Settings.WarnOnUnmappedAccess)
+                EventManager<WarningEvent>.SendEvent(new ReadFromUnmappedAddressEvent(address));
+            
             return data;
         }
 
         public void Shutdown()
         {
+            Log( m_Peripherals.ToString() );
             m_Peripherals.ForEach( x => x.Shutdown() );
         }
 
         [MethodImpl( MethodImplOptions.AggressiveInlining )]
         public void Write( uint address, uint data )
         {
-            bool hasReceiver = false;
-
-            
-            foreach ( Peripheral peripheral in m_Peripherals )
-            {
-                if ( peripheral.AddressRangeEnd < address ||
-                     peripheral.AddressRangeStart > address)
-                {
-                    continue;
-                }
-
-                hasReceiver = true;
-                peripheral.WriteData( address, data );
-            }
-
-            if ( m_Settings.WarnOnUnmappedAccess && !hasReceiver )
-            {
-                EventManager < WarningEvent >.SendEvent( new WriteToUnmappedAddressEvent( address, data ) );
-            }
+            Peripheral receiver = m_Peripherals.Find( address );
+            if (receiver != null)
+                 receiver.WriteData(address, data);
+            else if(m_Settings.WarnOnUnmappedAccess)
+                EventManager<WarningEvent>.SendEvent(new WriteToUnmappedAddressEvent(address, data));
         }
 
         internal void SetCpu( Cpu cpu )

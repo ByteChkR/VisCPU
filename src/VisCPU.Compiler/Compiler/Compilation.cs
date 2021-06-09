@@ -48,7 +48,7 @@ namespace VisCPU.Compiler.Compiler
         public void Compile( string file )
         {
             FileCompilation fc = new FileCompilation( new FileReference( file ) );
-
+                
             LinkerTarget linkTarget = new LinkerTarget( fc, fc.Reference.LinkerArguments );
 
             LinkerResult linkResult = m_Linker.Link( linkTarget, this );

@@ -249,7 +249,7 @@ namespace VisCPU.SIMD
                               new FunctionData( name, true, true, true, null, argC, HLBaseTypeNames.s_UintTypeName )
                              );
 
-            ApiImporterDevice d = new ApiImporterDevice( m_Start, func );
+            ApiImporterDevice d = new ApiImporterDevice(name, m_Start, func );
             m_Start++;
 
             return d;

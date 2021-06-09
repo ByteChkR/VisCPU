@@ -19,8 +19,11 @@ namespace VisCPU.HL.Compiler.Math
             HlBinaryOp expr,
             ExpressionTarget outputTarget )
         {
-            ExpressionTarget targetVal = compilation.Parse(expr.Left);
-            ExpressionTarget rTargetVal = compilation.Parse(expr.Right);
+
+            ExpressionTarget targetVal = compilation.Parse(
+                                                           expr.Left
+                                                           );
+            ExpressionTarget rTargetVal = compilation.Parse( expr.Right );
 
             if ( SettingsManager.GetSettings < HlCompilerSettings >().OptimizeConstExpressions &&
                  !targetVal.IsAddress &&
@@ -28,7 +31,7 @@ namespace VisCPU.HL.Compiler.Math
                  targetVal.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName &&
                  rTargetVal.TypeDefinition.Name == HLBaseTypeNames.s_UintTypeName )
             {
-                return ComputeStatic( compilation, targetVal, rTargetVal);
+                return ComputeStatic( compilation, targetVal, rTargetVal );
             }
 
             ExpressionTarget target = targetVal.MakeAddress( compilation );
@@ -56,25 +59,36 @@ namespace VisCPU.HL.Compiler.Math
                                               );
 
                 compilation.ReleaseTempVar( et.ResultAddress );
-                compilation.ReleaseTempVar(rTarget.ResultAddress);
-                compilation.ReleaseTempVar(target.ResultAddress);
-                compilation.ReleaseTempVar(targetVal.ResultAddress);
-                compilation.ReleaseTempVar(rTargetVal.ResultAddress);
+                compilation.ReleaseTempVar( rTarget.ResultAddress );
+                compilation.ReleaseTempVar( target.ResultAddress );
+                compilation.ReleaseTempVar( targetVal.ResultAddress );
+                compilation.ReleaseTempVar( rTargetVal.ResultAddress );
 
                 return outputTarget;
             }
 
-            compilation.EmitterResult.Emit(
-                                           instrKey,
-                                           target.ResultAddress,
-                                           rTarget.ResultAddress,
-                                           outputTarget.ResultAddress
-                                          );
+            if ( target.ResultAddress == outputTarget.ResultAddress )
+            {
+                compilation.EmitterResult.Emit(
+                                               instrKey,
+                                               target.ResultAddress,
+                                               rTarget.ResultAddress
+                                              );
+            }
+            else
+            {
+                compilation.EmitterResult.Emit(
+                                               instrKey,
+                                               target.ResultAddress,
+                                               rTarget.ResultAddress,
+                                               outputTarget.ResultAddress
+                                              );
+            }
 
-            compilation.ReleaseTempVar(rTarget.ResultAddress);
-            compilation.ReleaseTempVar(target.ResultAddress);
-            compilation.ReleaseTempVar(targetVal.ResultAddress);
-            compilation.ReleaseTempVar(rTargetVal.ResultAddress);
+            compilation.ReleaseTempVar( rTarget.ResultAddress );
+            compilation.ReleaseTempVar( target.ResultAddress );
+            compilation.ReleaseTempVar( targetVal.ResultAddress );
+            compilation.ReleaseTempVar( rTargetVal.ResultAddress );
 
             return outputTarget;
         }

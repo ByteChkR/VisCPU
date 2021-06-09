@@ -839,10 +839,17 @@ namespace VisCPU.HL
             m_ParsedText = null;
         }
 
-        internal string GetTempVar( uint initValue )
+        internal string GetTempVar(uint initValue)
         {
-            VariableData tmp = GetFreeTempVar( initValue );
-            m_UsedTempVars.Add( tmp.GetName() );
+            VariableData tmp = GetFreeTempVar(initValue);
+            m_UsedTempVars.Add(tmp.GetName());
+
+            return tmp.GetName();
+        }
+        internal string GetTempVar()
+        {
+            VariableData tmp = GetFreeTempVar();
+            m_UsedTempVars.Add(tmp.GetName());
 
             return tmp.GetName();
         }
@@ -1175,6 +1182,29 @@ namespace VisCPU.HL
                 }
             }
         }
+        private VariableData GetFreeTempVar()
+        {
+            if (m_UnusedTempVars.Count != 0)
+            {
+                string oldName = m_UnusedTempVars.Dequeue();
+
+                return m_VariableMap.Get(oldName);
+            }
+
+            string name = GetUniqueName("tmp");
+
+            return m_VariableMap.Set(
+                                     name,
+                                     new VariableData(
+                                                      name,
+                                                      name,
+                                                      1,
+                                                      TypeSystem.GetType(Root, HLBaseTypeNames.s_UintTypeName),
+                                                      VariableDataEmitFlags.None
+                                                     )
+                                    );
+        }
+
 
         private VariableData GetFreeTempVar( uint initValue )
         {

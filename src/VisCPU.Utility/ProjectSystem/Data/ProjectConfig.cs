@@ -12,9 +12,9 @@ using VisCPU.Utility.ProjectSystem.Database;
 namespace VisCPU.Utility.ProjectSystem.Data
 {
 
+
     public class ProjectConfig
     {
-
         private static readonly Dictionary < string, BuildJobRunner > s_BuildJobRunners =
             new Dictionary < string, BuildJobRunner >();
 

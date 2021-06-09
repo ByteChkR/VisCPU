@@ -1,4 +1,5 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.HL.Compiler.Special
 {
@@ -25,7 +26,9 @@ namespace VisCPU.HL.Compiler.Special
             }
             else
             {
-                string v = compilation.GetTempVar( 0 );
+                string v = SettingsManager.GetSettings<HlCompilerSettings>().OmitTempVarInit
+                               ? compilation.GetTempVar()
+                               : compilation.GetTempVar(0);
                 compilation.EmitterResult.Emit( $"PUSH", v );
                 compilation.ReleaseTempVar( v );
             }

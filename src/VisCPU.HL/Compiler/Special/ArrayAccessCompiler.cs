@@ -1,5 +1,6 @@
 ﻿using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.IO.Settings;
 
 namespace VisCPU.HL.Compiler.Special
 {
@@ -19,7 +20,9 @@ namespace VisCPU.HL.Compiler.Special
             ExpressionTarget tempPtrVar = compilation.Parse( expr.Left );
 
             ExpressionTarget tempPtr = new ExpressionTarget(
-                                                            compilation.GetTempVar( 0 ),
+                                                            SettingsManager.GetSettings<HlCompilerSettings>().OmitTempVarInit
+                                                                ? compilation.GetTempVar()
+                                                                : compilation.GetTempVar(0),
                                                             true,
                                                             tempPtrVar.TypeDefinition,
                                                             true

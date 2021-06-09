@@ -19,6 +19,7 @@ namespace VPP.Importer
                                                                    {
                                                                        new ForKeyDirective(),
                                                                        new ForLineDirective(),
+                                                                       new ForListDirective(),
                                                                        new IfDirective()
                                                                    };
 
