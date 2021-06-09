@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -47,6 +49,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override bool IsStatic()
         {
             return false;
+        }
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return Left.GetResultType(c);
         }
 
         public override string ToString()

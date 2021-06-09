@@ -405,7 +405,13 @@ namespace VisCPU.HL.Compiler.Special
 
                 fData.SetUsed();
 
-                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" );
+                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" ).
+                    Cast(
+                         compilation.TypeSystem.GetType(
+                                                        compilation.Root,
+                                                        fData?.ReturnType ?? HLBaseTypeNames.s_UintTypeName
+                                                       )
+                        );
             }
 
             if ( externalSymbol != null )
@@ -426,7 +432,11 @@ namespace VisCPU.HL.Compiler.Special
 
                 externalSymbol.SetUsed();
 
-                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" );
+                return ParseFunctionInvocation( compilation, expr, targetLength, funcEmit, "JSR" ).
+                    Cast( compilation.TypeSystem.GetType(
+                                                         compilation.Root,
+                                                         fData?.ReturnType ?? HLBaseTypeNames.s_UintTypeName
+                                                        ));
             }
 
             //if (isInternalFunc || externalSymbol != null)

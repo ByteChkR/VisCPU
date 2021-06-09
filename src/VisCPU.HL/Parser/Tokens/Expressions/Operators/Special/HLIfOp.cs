@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -26,6 +29,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public HlTokenType OperationType { get; } = HlTokenType.OpIf;
 
         public override HlTokenType Type => OperationType;
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return c.TypeSystem.GetType(c.Root, HLBaseTypeNames.s_UintTypeName);
+        }
 
         #region Public
 

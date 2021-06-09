@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
+
 /// <summary>
 /// Contains XLangExpression Implementations
 /// </summary>
@@ -26,6 +29,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         ///     Right side of the Expression
         /// </summary>
         public HlExpression Right { get; }
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return Left.GetResultType(c) ?? Right.GetResultType(c)?? c.TypeSystem.GetType(c.Root, HLBaseTypeNames.s_UintTypeName);
+        }
 
         public override HlTokenType Type => OperationType;
 

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -34,6 +37,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         }
 
         #endregion
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return c.TypeSystem.GetType(c.Root, HLBaseTypeNames.s_UintTypeName);
+        }
 
     }
 

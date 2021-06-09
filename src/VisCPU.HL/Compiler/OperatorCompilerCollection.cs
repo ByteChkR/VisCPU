@@ -16,12 +16,14 @@ namespace VisCPU.HL.Compiler
         private readonly Dictionary < HlTokenType, HlExpressionCompiler < T > > m_OpCompilers =
             new Dictionary < HlTokenType, HlExpressionCompiler < T > >();
 
+        private readonly HlRuntimeOperatorCompiler<T> m_Fallback;
         protected override bool AllImplementations => true;
 
         #region Public
 
-        public OperatorCompilerCollection( Dictionary < HlTokenType, HlExpressionCompiler < T > > opCompilers )
+        public OperatorCompilerCollection( Dictionary < HlTokenType, HlExpressionCompiler < T > > opCompilers, HlRuntimeOperatorCompiler<T> fallback = null )
         {
+            m_Fallback = fallback;
             m_OpCompilers = opCompilers;
         }
 
@@ -35,6 +37,8 @@ namespace VisCPU.HL.Compiler
             T expr,
             ExpressionTarget outputTarget )
         {
+            if ( m_Fallback != null && m_Fallback.ContainsDefinition( compilation, expr ) )
+                return m_Fallback.ParseExpression( compilation, expr ) ;
             if ( !m_OpCompilers.ContainsKey( expr.Type ) )
             {
                 EventManager < ErrorEvent >.SendEvent( new ExpressionCompilerNotFoundEvent( expr ) );

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+
 /// <summary>
 /// Contains XLangExpressionParser Token Implementations
 /// </summary>
@@ -31,6 +33,8 @@ namespace VisCPU.HL.Parser.Tokens.Expressions
         public abstract List < IHlToken > GetChildren();
 
         public abstract bool IsStatic();
+
+        public abstract HlTypeDefinition GetResultType(HlCompilation c);
 
         #endregion
 

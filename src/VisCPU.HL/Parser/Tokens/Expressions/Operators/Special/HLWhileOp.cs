@@ -2,6 +2,9 @@
 using System.Linq;
 using System.Text;
 
+using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -32,7 +35,6 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
             Condition = condition;
             Block = block;
         }
-
         /// <summary>
         ///     Returns Child Tokens of this Token
         /// </summary>
@@ -45,6 +47,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override bool IsStatic()
         {
             return Condition.IsStatic();
+        }
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return c.TypeSystem.GetType(c.Root, HLBaseTypeNames.s_UintTypeName);
         }
 
         public override string ToString()

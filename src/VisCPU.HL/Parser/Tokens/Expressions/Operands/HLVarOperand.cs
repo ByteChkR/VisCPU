@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.DataTypes;
+using VisCPU.HL.TypeSystem;
+
 /// <summary>
 /// Contains XLangExpression Implementations for Operand Values.
 /// </summary>
@@ -41,6 +44,18 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operands
         public override bool IsStatic()
         {
             return false;
+        }
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            if ( c.ContainsVariable( Value.ToString() ) )
+            {
+              VariableData data =   c.GetVariable( Value.ToString() );
+
+              return data.TypeDefinition;
+            }
+
+            return null;
         }
 
         public override string ToString()

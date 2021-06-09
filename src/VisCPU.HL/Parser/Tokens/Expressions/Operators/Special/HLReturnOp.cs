@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -15,6 +17,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public HlExpression Right { get; }
 
         public override HlTokenType Type => HlTokenType.OpReturn;
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return Right.GetResultType(c);
+        }
 
         #region Public
 

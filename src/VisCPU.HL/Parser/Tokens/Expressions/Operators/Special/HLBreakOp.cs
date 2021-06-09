@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
 
@@ -26,6 +29,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         public override List < IHlToken > GetChildren()
         {
             return new List < IHlToken >();
+        }
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return c.TypeSystem.GetType(c.Root, HLBaseTypeNames.s_UintTypeName);
         }
 
         public override bool IsStatic()

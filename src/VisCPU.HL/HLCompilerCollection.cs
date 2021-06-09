@@ -14,14 +14,101 @@ using VisCPU.HL.Compiler.Special;
 using VisCPU.HL.Compiler.Types;
 using VisCPU.HL.Compiler.Variables;
 using VisCPU.HL.Parser;
+using VisCPU.HL.Parser.Tokens.Expressions;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators;
 using VisCPU.HL.Parser.Tokens.Expressions.Operators.Special;
 using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL
 {
+    public abstract class HlRuntimeOperatorCompiler<T> where T: HlExpression
+    {
 
+        public abstract bool ContainsDefinition( HlCompilation compilation, T e );
+
+        public abstract ExpressionTarget ParseExpression( HlCompilation compilation, T expr );
+
+    }
+    public class HlBinaryRuntimeOperatorCompiler : HlRuntimeOperatorCompiler<HlBinaryOp>
+    {
+        public override bool ContainsDefinition(HlCompilation compilation, HlBinaryOp e)
+        {
+            HlTypeDefinition tDef = e.GetResultType(compilation) ??
+                                    compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName);
+            return tDef.HasMember(e.Type.ToString());
+        }
+
+        public override ExpressionTarget ParseExpression(HlCompilation compilation, HlBinaryOp expr)
+        {
+            ExpressionTarget target = compilation.Parse(expr.Left);
+
+            HlTypeDefinition tDef = target.TypeDefinition ??
+                                    compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName);
+
+
+            string funcName = tDef.GetFinalStaticFunction(expr.OperationType.ToString());
+
+            return InvocationExpressionCompiler.ParseFunctionInvocation(
+                                                                 compilation,
+                                                                 new HlInvocationOp(
+                                                                      new HlValueOperand(
+                                                                           new HlTextToken(
+                                                                                HlTokenType.OpWord,
+                                                                                funcName,
+                                                                                0
+                                                                               )
+                                                                          ),
+                                                                      new[] { expr.Left, expr.Right }
+                                                                     ),
+                                                                 2,
+                                                                 funcName,
+                                                                 "JSR"
+                                                                ).Cast((tDef.GetPrivateOrPublicMember(expr.OperationType.ToString()) as HlFunctionDefinition).ReturnType);
+
+        }
+
+    }
+    public class HlUnaryRuntimeOperatorCompiler : HlRuntimeOperatorCompiler<HlUnaryOp>
+    {
+        public override bool ContainsDefinition(HlCompilation compilation, HlUnaryOp e)
+        {
+            HlTypeDefinition tDef = e.GetResultType(compilation) ??
+                                    compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName);
+            return tDef.HasMember(e.Type.ToString());
+        }
+
+        public override ExpressionTarget ParseExpression(HlCompilation compilation, HlUnaryOp expr)
+        {
+            ExpressionTarget target = compilation.Parse(expr.Left);
+
+            HlTypeDefinition tDef = target.TypeDefinition ??
+                                    compilation.TypeSystem.GetType(compilation.Root, HLBaseTypeNames.s_UintTypeName);
+
+
+            string funcName = tDef.GetFinalStaticFunction(expr.OperationType.ToString());
+
+            return InvocationExpressionCompiler.ParseFunctionInvocation(
+                                                                 compilation,
+                                                                 new HlInvocationOp(
+                                                                      new HlValueOperand(
+                                                                           new HlTextToken(
+                                                                                HlTokenType.OpWord,
+                                                                                funcName,
+                                                                                0
+                                                                               )
+                                                                          ),
+                                                                      new[] { expr.Left }
+                                                                     ),
+                                                                 1,
+                                                                 funcName,
+                                                                 "JSR"
+                                                                );
+
+        }
+
+    }
     public class HlCompilerCollection
     {
 
@@ -59,7 +146,7 @@ namespace VisCPU.HL
                                       { HlTokenType.OpDeReference, new DereferenceExpressionCompiler() },
                                       { HlTokenType.OpTilde, new BitwiseInvertExpressionCompiler() },
                                       { HlTokenType.OpMinus, new UnaryMinusExpressionCompiler() }
-                                  }
+                                  }, new HlUnaryRuntimeOperatorCompiler()
                                  )
                             },
                             {
@@ -172,7 +259,7 @@ namespace VisCPU.HL
                                                          HlTokenType.OpShiftRightAssign, new
                                                              ShiftRightAssignExpressionCompiler()
                                                      }
-                                                 }
+                                                 }, new HlBinaryRuntimeOperatorCompiler()
                                                 )
                             }
                         };

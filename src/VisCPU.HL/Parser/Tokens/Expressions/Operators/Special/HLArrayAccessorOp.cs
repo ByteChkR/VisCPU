@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using VisCPU.HL.TypeSystem;
+
 /// <summary>
 /// Contains Special XLangExpression Implementations
 /// </summary>
@@ -27,6 +29,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     The Operator Token
         /// </summary>
         public override HlTokenType Type => HlTokenType.OpArrayAccess;
+
+        public override HlTypeDefinition GetResultType(HlCompilation c)
+        {
+            return Left.GetResultType( c );
+        }
 
         #region Public
 

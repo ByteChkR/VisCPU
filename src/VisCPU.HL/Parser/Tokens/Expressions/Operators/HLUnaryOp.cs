@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using VisCPU.HL.TypeSystem;
+
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
 {
 
@@ -33,6 +35,11 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators
         {
             Left = left;
             OperationType = operationType;
+        }
+
+        public override HlTypeDefinition GetResultType(HlCompilation c)
+        {
+            return Left.GetResultType(c);
         }
 
         /// <summary>

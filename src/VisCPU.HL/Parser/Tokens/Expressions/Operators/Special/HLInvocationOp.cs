@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Text;
 
+using VisCPU.HL.DataTypes;
 using VisCPU.HL.Parser.Tokens.Expressions.Operands;
 using VisCPU.HL.TypeSystem;
+using VisCPU.Utility.SharedBase;
 
 namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
 {
@@ -36,6 +38,19 @@ namespace VisCPU.HL.Parser.Tokens.Expressions.Operators.Special
         ///     Operation FunctionType
         /// </summary>
         public override HlTokenType Type => HlTokenType.OpInvocation;
+
+        public override HlTypeDefinition GetResultType( HlCompilation c )
+        {
+            return MemberDefinition is HlFunctionDefinition fdef
+                       ? fdef.ReturnType
+                       : c.ExternalSymbols.Any( x => x.GetName() == Left.ToString() && x is FunctionData )
+                           ? c.TypeSystem.GetType(
+                                                  c.Root,
+                                                  ( c.ExternalSymbols.First( x => x.GetName() == Left.ToString() )
+                                                        as FunctionData ).ReturnType
+                                                 )
+                           : c.TypeSystem.GetType( c.Root, HLBaseTypeNames.s_UintTypeName );
+        }
 
         #region Public
 
