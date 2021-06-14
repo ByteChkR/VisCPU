@@ -29,7 +29,7 @@ namespace VisCPU.Peripherals.Memory
                                                                  );
 
         [field: Argument( Name = "memory:size" )]
-        public uint Size { get; set; } = 262144;
+        public uint Size { get; set; } = 1048576;
 
         #region Unity Event Functions
 

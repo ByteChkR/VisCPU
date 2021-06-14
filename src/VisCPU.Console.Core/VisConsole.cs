@@ -87,8 +87,6 @@ namespace VisCPU.Console.Core
         {
             do
             {
-                try
-                {
                     string[] subSystemKeys = { args[0] };
 
                     if ( args[0].StartsWith( "[" ) && args[0].EndsWith( "]" ) )
@@ -128,31 +126,6 @@ namespace VisCPU.Console.Core
                         System.Console.WriteLine( "Press any key to exit" );
                         System.Console.ReadLine();
                     }
-                }
-                catch ( Exception e )
-                {
-                    System.Console.WriteLine( e );
-
-                    if ( settings.LogFile != null )
-                    {
-                        File.WriteAllText( settings.LogFile, e.ToString() );
-                    }
-                    if ( !settings.Continuous )
-                    {
-                        throw;
-                    }
-                    else
-                    {
-                        System.Console.WriteLine( "Type 'exit' to close console" );
-                        System.Console.Write( "cli>" );
-                        string cmd = System.Console.ReadLine().ToUpper();
-
-                        if ( cmd == "EXIT" )
-                        {
-                            return;
-                        }
-                    }
-                }
             }
             while ( settings.Continuous );
         }
